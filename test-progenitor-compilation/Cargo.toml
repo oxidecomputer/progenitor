@@ -10,15 +10,15 @@ repository = "https://github.com/oxidecomputer/progenitor.git"
 proc-macro = true
 
 [dependencies]
-dropshot = { git = "https://github.com/oxidecomputer/dropshot", default-features = false }
-expectorate = "1.1"
-http = "0.2.9"
-hyper = "0.14.27"
-openapiv3 = "2.0.0"
-proc-macro2 = "1.0"
-progenitor-impl = { path = "../progenitor-impl" }
-quote = "1.0"
-schemars = { version = "0.8.12", features = ["chrono", "uuid1"] }
-serde_yaml = "0.9"
-serde_json = "1.0.107"
-syn = { version = "2.0", features = ["parsing"] }
+dropshot = { workspace = true }
+expectorate = { workspace = true }
+http = { workspace = true }
+hyper = { workspace = true }
+openapiv3 = { workspace = true }
+proc-macro2 = { workspace = true }
+progenitor-impl = { workspace = true }
+quote = { workspace = true }
+schemars = { workspace = true }
+serde_yaml = { workspace = true }
+serde_json = { workspace = true }
+syn = { workspace = true }

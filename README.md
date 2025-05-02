@@ -7,6 +7,10 @@ futures for `async` API calls and `Streams` for paginated interfaces.
 It generates a type called `Client` with methods that correspond to the
 operations specified in the OpenAPI document.
 
+Progenitor can also generate a CLI to interact with an OpenAPI service
+instance, and [`httpmock`](https://crates.io/crates/httpmock) helpers to
+create a strongly typed mock of the OpenAPI service.
+
 The primary target is OpenAPI documents emitted by
 [Dropshot](https://github.com/oxidecomputer/dropshot)-generated APIs, but it
 can be used for many OpenAPI documents. As OpenAPI covers a wide range of APIs,
@@ -32,40 +36,42 @@ generate_api!("path/to/openapi_document.json");
 
 You'll need to add the following to `Cargo.toml`:
 
-```diff
+```toml
 [dependencies]
-+futures = "0.3"
-+progenitor = { git = "https://github.com/oxidecomputer/progenitor" }
-+reqwest = { version = "0.11", features = ["json", "stream"] }
-+serde = { version = "1.0", features = ["derive"] }
+futures = "0.3"
+progenitor = { git = "https://github.com/oxidecomputer/progenitor" }
+reqwest = { version = "0.12", features = ["json", "stream"] }
+serde = { version = "1.0", features = ["derive"] }
 ```
 
 In addition, if the OpenAPI document contains string types with the `format`
 field set to `date` or `date-time`, include
 
-```diff
+```toml
 [dependencies]
-+chrono = { version = "0.4", features = ["serde"] }
+chrono = { version = "0.4", features = ["serde"] }
 ```
 
 Similarly, if there is a `format` field set to `uuid`:
 
-```diff
+```toml
 [dependencies]
-+uuid = { version = "1.0.0", features = ["serde", "v4"] }
+uuid = { version = "1.0.0", features = ["serde", "v4"] }
 ```
 
 And if there are any websocket channel endpoints:
-```diff
+
+```toml
 [dependencies]
-+base64 = "0.21"
-+rand = "0.8"
+base64 = "0.21"
+rand = "0.8"
 ```
 
 If types include regular expression validation:
-```diff
+
+```toml
 [dependencies]
-+regress = "0.4.1"
+regress = "0.4.1"
 ```
 
 The macro has some additional fancy options to control the generated code:
@@ -90,6 +96,8 @@ changes (when its mtime is updated).
 Progenitor includes an interface appropriate for use in a
 [`build.rs`](https://doc.rust-lang.org/cargo/reference/build-scripts.html)
 file. While slightly more onerous than the macro, a builder has the advantage of making the generated code visible.
+The capability of generating a CLI and `httpmock` helpers is only available using `build.rs`
+and the `Generator` functions `cli` and `httpmock` respectively.
 
 The `build.rs` file should look something like this:
 
@@ -121,25 +129,25 @@ include!(concat!(env!("OUT_DIR"), "/codegen.rs"));
 
 You'll need to add the following to `Cargo.toml`:
 
-```diff
+```toml
 [dependencies]
-+futures = "0.3"
-+progenitor-client = { git = "https://github.com/oxidecomputer/progenitor" }
-+reqwest = { version = "0.11", features = ["json", "stream"] }
-+serde = { version = "1.0", features = ["derive"] }
+futures = "0.3"
+progenitor-client = { git = "https://github.com/oxidecomputer/progenitor" }
+reqwest = { version = "0.12", features = ["json", "stream"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
 
 [build-dependencies]
-+prettyplease = "0.1.25"
-+progenitor = { git = "https://github.com/oxidecomputer/progenitor" }
-+serde_json = "1.0"
-+syn = "1.0"
+prettyplease = "0.2.22"
+progenitor = { git = "https://github.com/oxidecomputer/progenitor" }
+serde_json = "1.0"
+syn = "2.0"
 ```
 
 (`chrono`, `uuid`, `base64`, and `rand` as above)
 
 Note that `progenitor` is used by `build.rs`, but the generated code required
 `progenitor-client`.
-
 
 ### Static Crate
 
@@ -177,32 +185,39 @@ Options `--license` and `--registry-name` may also be used to improve metadata
 before publishing the static crate.
 
 The output will use the published `progenitor-client` crate by default
-if progenitor was built from a released version.  However, when using progenitor
-built from the repository, the `progenitor-client` will be inlined into the
-static crate by default.  The command line flag `--include-client` can be used
-to override the default behaviour.
-
-To ensure the output has no persistent dependency on Progenitor, enable `--include-client`.
+if progenitor is built in release mode. When built in debug mode, the
+`progenitor-client` will be inlined into the generated crate by default. The
+command line flag `--include-client true|false` can be used to override the
+default behavior. A value of `true` copies in the client code; a value of
+`false` includes a dependency on `progenitor-client` in the generated
+`Cargo.toml` file.
 
 Here is an excerpt from the emitted `Cargo.toml`:
 
 ```toml
 [dependencies]
-bytes = "1.3.0"
-chrono = { version = "0.4.23", default-features=false, features = ["serde"] }
-futures-core = "0.3.25"
-percent-encoding = "2.2.0"
-reqwest = { version = "0.11.13", default-features=false, features = ["json", "stream"] }
-serde = { version = "1.0.152", features = ["derive"] }
-serde_urlencoded = "0.7.1"
-
+bytes = "1.9"
+chrono = { version = "0.4", default-features=false, features = ["serde"] }
+futures-core = "0.3"
+progenitor-client = "0.9.1"
+reqwest = { version = "0.12", default-features=false, features = ["json", "stream"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_urlencoded = "0.7"
 ```
 
-The dependency versions in the generated `Cargo.toml` are the same as the
-versions that were used when progenitor was built.
+Here's another example of dependencies with `--include-client true`:
 
-Note that there is a dependency on `percent-encoding` which macro- and
-build.rs-generated clients is included from `progenitor-client`.
+```toml
+[dependencies]
+bytes = "1.9"
+chrono = { version = "0.4", default-features=false, features = ["serde"] }
+futures-core = "0.3"
+percent-encoding = "2.3"
+reqwest = { version = "0.12", default-features=false, features = ["json", "stream"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+serde_urlencoded = "0.7"
+```
 
 ## Generation Styles
 
@@ -210,7 +225,7 @@ Progenitor can generate two distinct interface styles: positional and builder
 (described below). The choice is simply a matter of preference that many vary
 by API and taste.
 
-## Positional (current default)
+### Positional (current default)
 
 The "positional" style generates `Client` methods that accept parameters in
 order, for example:
@@ -237,7 +252,7 @@ let result = client.instance_create(org, proj, body).await?;
 Note that the type of each parameter must match precisely--no conversion is
 done implicitly.
 
-## Builder
+### Builder
 
 The "builder" style generates `Client` methods that produce a builder struct.
 API parameters are applied to that builder, and then the builder is executed
@@ -332,3 +347,53 @@ let result = client
 
 Consumers do not need to specify parameters and struct properties that are not
 required or for which the API specifies defaults. Neat!
+
+#### Enabling the builder style in build.rs
+
+To enable the builder style, the `build.rs` file should look something like this:
+
+```rust
+fn main() {
+    let src = "../sample_openapi/keeper.json";
+    println!("cargo:rerun-if-changed={}", src);
+    let file = std::fs::File::open(src).unwrap();
+    let spec = serde_json::from_reader(file).unwrap();
+    let mut binding = GenerationSettings::default();
+    let settings = binding.with_interface(InterfaceStyle::Builder);
+    let mut generator = progenitor::Generator::new(&settings);
+    let tokens = generator.generate_tokens(&spec).unwrap();
+    let ast = syn::parse2(tokens).unwrap();
+    let content = prettyplease::unparse(&ast);
+
+    let mut out_file = std::path::Path::new(&std::env::var("OUT_DIR").unwrap()).to_path_buf();
+    out_file.push("codegen.rs");
+
+    std::fs::write(out_file, content).unwrap();
+}
+```
+
+## Changing default client settings
+
+Currently, the generated code doesn't deal with request headers. To add default headers to all requests, you can use the default_headers method when constructing the Client.
+
+```rust
+    let baseurl = std::env::var("API_URL").expect("$API_URL not set");
+    
+    let access_token = std::env::var("API_ACCESS_TOKEN").expect("$API_ACCESS_TOKEN not set);
+    let authorization_header = format!("Bearer {}", access_token);
+
+    let mut headers = reqwest::header::HeaderMap::new();
+    headers.insert(
+        reqwest::header::AUTHORIZATION,
+        authorization_header.parse().unwrap(),
+    );
+
+    let client_with_custom_defaults = reqwest::ClientBuilder::new()
+        .connect_timeout(Duration::from_secs(15))
+        .timeout(Duration::from_secs(15))
+        .default_headers(headers)
+        .build()
+        .unwrap();
+
+    let client = Client::new_with_client(baseurl, client_with_custom_defaults);
+```

@@ -1,6 +1,6 @@
 [package]
 name = "cargo-progenitor"
-version = "0.4.0"
+version = "0.10.0"
 edition = "2021"
 license = "MPL-2.0"
 description = "A cargo command to generate a Rust client SDK from OpenAPI"
@@ -8,22 +8,21 @@ repository = "https://github.com/oxidecomputer/progenitor.git"
 readme = "../README.md"
 keywords = ["openapi", "openapiv3", "sdk", "generator"]
 categories = ["api-bindings", "development-tools::cargo-plugins"]
-build = "build.rs"
 
 default-run = "cargo-progenitor"
 
 [dependencies]
-progenitor = { version = "0.4.0", path = "../progenitor" }
-progenitor-client = { version = "0.4.0", path = "../progenitor-client" }
-progenitor-impl = { version = "0.4.0", path = "../progenitor-impl" }
-anyhow = "1.0"
-clap = { version = "4.4.11", features = ["derive"] }
-env_logger = "0.10.1"
-openapiv3 = "2.0.0"
-rustfmt-wrapper = "0.2.1"
-serde_json = "1.0"
-serde_yaml = "0.9"
+progenitor = { workspace = true, default-features = false }
+progenitor-client = { workspace = true }
+progenitor-impl = { workspace = true }
 
-[build-dependencies]
-built = { version = "0.7", features = ["cargo-lock", "git2"] }
-project-root = "0.2"
+anyhow = { workspace = true }
+assert_cmd = { workspace = true }
+clap = { workspace = true }
+clap-cargo = { workspace = true }
+env_logger = { workspace = true }
+expectorate = { workspace = true }
+openapiv3 = { workspace = true }
+rustfmt-wrapper = { workspace = true }
+serde_json = { workspace = true }
+serde_yaml = { workspace = true }

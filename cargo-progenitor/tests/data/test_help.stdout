@@ -1,0 +1,25 @@
+Generate a stand-alone crate from an OpenAPI document
+
+Usage: cargo progenitor [OPTIONS] --input <INPUT> --output <OUTPUT> --name <NAME> --version <VERSION>
+
+Options:
+  -i, --input <INPUT>
+          OpenAPI definition document (JSON or YAML)
+  -o, --output <OUTPUT>
+          Output directory for Rust crate
+  -n, --name <NAME>
+          Target Rust crate name
+  -v, --version <VERSION>
+          Target Rust crate version
+      --registry-name <REGISTRY_NAME>
+          Target Rust crate registry
+      --license-name <LICENSE_NAME>
+          Target crate license [default: "SPECIFY A LICENSE BEFORE PUBLISHING"]
+      --interface <INTERFACE>
+          SDK interface style [default: positional] [possible values: positional, builder]
+      --tags <TAGS>
+          SDK tag style [default: merged] [possible values: merged, separate]
+      --include-client <INCLUDE_CLIENT>
+          Include client code rather than depending on progenitor-client [default: true] [possible values: true, false]
+  -h, --help
+          Print help

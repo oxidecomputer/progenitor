@@ -4,9 +4,7 @@ extern crate proc_macro;
 
 use openapiv3::OpenAPI;
 use proc_macro::TokenStream;
-use progenitor_impl::{
-    GenerationSettings, Generator, InterfaceStyle, TagStyle,
-};
+use progenitor_impl::{GenerationSettings, Generator, InterfaceStyle, TagStyle};
 use quote::quote;
 use std::{
     fs::File,
