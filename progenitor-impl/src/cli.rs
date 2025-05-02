@@ -475,7 +475,7 @@ impl Generator {
                         // Required if we can't turn the body into individual
                         // parameters.
                         .required(#required)
-                        .value_parser(::clap::value_parser!(std::path::PathBuf))
+                        .value_parser(::clap::value_parser!(String))
                         .help(#help)
                 )
                 .arg(

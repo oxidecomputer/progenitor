@@ -22,7 +22,8 @@ pub fn cli_tokens(item: TokenStream) -> TokenStream {
     let mut generator = Generator::new(
         GenerationSettings::default()
             .with_interface(InterfaceStyle::Builder)
-            .with_tag(TagStyle::Separate),
+            .with_tag(TagStyle::Separate)
+            .with_derive("schemars::JsonSchema"),
     );
 
     // Builder generation with tags.
