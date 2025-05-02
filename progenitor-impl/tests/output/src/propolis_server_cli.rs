@@ -40,8 +40,13 @@ impl<T: CliConfig> Cli<T> {
                     .long("json-body")
                     .value_name("JSON-FILE")
                     .required(true)
-                    .value_parser(::clap::value_parser!(std::path::PathBuf))
-                    .help("Path to a file that contains the full json body."),
+
+                .value_parser(::clap::value_parser!(std::path::PathBuf))
+                    .help(
+                        "Path to a file that contains the full json body (use \"-\" to read from \
+                         standard input).",
+                    ),
+
             )
             .arg(
                 ::clap::Arg::new("json-body-template")
@@ -81,8 +86,13 @@ impl<T: CliConfig> Cli<T> {
                     .long("json-body")
                     .value_name("JSON-FILE")
                     .required(false)
-                    .value_parser(::clap::value_parser!(std::path::PathBuf))
-                    .help("Path to a file that contains the full json body."),
+
+                .value_parser(::clap::value_parser!(std::path::PathBuf))
+                    .help(
+                        "Path to a file that contains the full json body (use \"-\" to read from \
+                         standard input).",
+                    ),
+
             )
             .arg(
                 ::clap::Arg::new("json-body-template")
@@ -103,8 +113,13 @@ impl<T: CliConfig> Cli<T> {
                     .long("json-body")
                     .value_name("JSON-FILE")
                     .required(true)
-                    .value_parser(::clap::value_parser!(std::path::PathBuf))
-                    .help("Path to a file that contains the full json body."),
+
+                .value_parser(::clap::value_parser!(std::path::PathBuf))
+                    .help(
+                        "Path to a file that contains the full json body (use \"-\" to read from \
+                         standard input).",
+                    ),
+
             )
             .arg(
                 ::clap::Arg::new("json-body-template")
@@ -127,8 +142,13 @@ impl<T: CliConfig> Cli<T> {
                     .long("json-body")
                     .value_name("JSON-FILE")
                     .required(false)
+
                     .value_parser(::clap::value_parser!(std::path::PathBuf))
-                    .help("Path to a file that contains the full json body."),
+                    .help(
+                        "Path to a file that contains the full json body (use \"-\" to read from \
+                         standard input).",
+                    ),
+
             )
             .arg(
                 ::clap::Arg::new("json-body-template")
@@ -184,10 +204,11 @@ impl<T: CliConfig> Cli<T> {
             request = request.body_map(|body| body.cloud_init_bytes(value.clone()))
         }
 
-        if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
-            let body_txt = std::fs::read_to_string(value).unwrap();
-            let body_value =
-                serde_json::from_str::<types::InstanceEnsureRequest>(&body_txt).unwrap();
+        if let Some(value) = matches.get_one::<String>("json-body") {
+            let body_value: types::InstanceEnsureRequest = match value.as_str() {
+                "-" => serde_json::from_reader(std::io::stdin()).unwrap(),
+                file => serde_json::from_reader(std::fs::File::open(&file).unwrap()).unwrap(),
+            };
             request = request.body(body_value);
         }
 
@@ -242,10 +263,11 @@ impl<T: CliConfig> Cli<T> {
             request = request.body_map(|body| body.migration_id(value.clone()))
         }
 
-        if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
-            let body_txt = std::fs::read_to_string(value).unwrap();
-            let body_value =
-                serde_json::from_str::<types::InstanceMigrateStatusRequest>(&body_txt).unwrap();
+        if let Some(value) = matches.get_one::<String>("json-body") {
+            let body_value: types::InstanceMigrateStatusRequest = match value.as_str() {
+                "-" => serde_json::from_reader(std::io::stdin()).unwrap(),
+                file => serde_json::from_reader(std::fs::File::open(&file).unwrap()).unwrap(),
+            };
             request = request.body(body_value);
         }
 
@@ -286,10 +308,11 @@ impl<T: CliConfig> Cli<T> {
         matches: &::clap::ArgMatches,
     ) -> anyhow::Result<()> {
         let mut request = self.client.instance_state_put();
-        if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
-            let body_txt = std::fs::read_to_string(value).unwrap();
-            let body_value =
-                serde_json::from_str::<types::InstanceStateRequested>(&body_txt).unwrap();
+        if let Some(value) = matches.get_one::<String>("json-body") {
+            let body_value: types::InstanceStateRequested = match value.as_str() {
+                "-" => serde_json::from_reader(std::io::stdin()).unwrap(),
+                file => serde_json::from_reader(std::fs::File::open(&file).unwrap()).unwrap(),
+            };
             request = request.body(body_value);
         }
 
@@ -317,10 +340,11 @@ impl<T: CliConfig> Cli<T> {
             request = request.body_map(|body| body.gen(value.clone()))
         }
 
-        if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
-            let body_txt = std::fs::read_to_string(value).unwrap();
-            let body_value =
-                serde_json::from_str::<types::InstanceStateMonitorRequest>(&body_txt).unwrap();
+        if let Some(value) = matches.get_one::<String>("json-body") {
+            let body_value: types::InstanceStateMonitorRequest = match value.as_str() {
+                "-" => serde_json::from_reader(std::io::stdin()).unwrap(),
+                file => serde_json::from_reader(std::fs::File::open(&file).unwrap()).unwrap(),
+            };
             request = request.body(body_value);
         }
 
