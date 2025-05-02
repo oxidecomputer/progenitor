@@ -14108,6 +14108,11 @@ impl Client {
             self.baseurl,
             encode_path(&id.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -14116,6 +14121,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -14143,6 +14149,11 @@ impl Client {
             self.baseurl,
             encode_path(&id.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -14151,6 +14162,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -14178,6 +14190,11 @@ impl Client {
             self.baseurl,
             encode_path(&id.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -14186,6 +14203,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -14213,6 +14231,11 @@ impl Client {
             self.baseurl,
             encode_path(&id.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -14221,6 +14244,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -14250,6 +14274,11 @@ impl Client {
             self.baseurl,
             encode_path(&id.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -14258,6 +14287,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -14287,6 +14317,11 @@ impl Client {
             self.baseurl,
             encode_path(&id.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -14295,6 +14330,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -14322,6 +14358,11 @@ impl Client {
             self.baseurl,
             encode_path(&id.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -14330,6 +14371,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -14357,6 +14399,11 @@ impl Client {
             self.baseurl,
             encode_path(&id.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -14365,6 +14412,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -14392,6 +14440,11 @@ impl Client {
             self.baseurl,
             encode_path(&id.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -14400,6 +14453,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -14427,6 +14481,11 @@ impl Client {
             self.baseurl,
             encode_path(&id.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -14435,6 +14494,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -14462,6 +14522,11 @@ impl Client {
             self.baseurl,
             encode_path(&id.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -14470,6 +14535,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -14497,8 +14563,18 @@ impl Client {
         body: &'a types::DeviceAuthRequest,
     ) -> Result<ResponseValue<ByteStream>, Error<ByteStream>> {
         let url = format!("{}/device/auth", self.baseurl,);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
-        let mut request = self.client.post(url).form_urlencoded(&body)?.build()?;
+        let mut request = self
+            .client
+            .post(url)
+            .form_urlencoded(&body)?
+            .headers(header_map)
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -14520,6 +14596,11 @@ impl Client {
         body: &'a types::DeviceAuthVerify,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!("{}/device/confirm", self.baseurl,);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -14529,6 +14610,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -14555,8 +14637,18 @@ impl Client {
         body: &'a types::DeviceAccessTokenRequest,
     ) -> Result<ResponseValue<ByteStream>, Error<ByteStream>> {
         let url = format!("{}/device/token", self.baseurl,);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
-        let mut request = self.client.post(url).form_urlencoded(&body)?.build()?;
+        let mut request = self
+            .client
+            .post(url)
+            .form_urlencoded(&body)?
+            .headers(header_map)
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -14581,6 +14673,11 @@ impl Client {
         sort_by: Option<types::IdSortMode>,
     ) -> Result<ResponseValue<types::GroupResultsPage>, Error<types::Error>> {
         let url = format!("{}/groups", self.baseurl,);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -14595,6 +14692,7 @@ impl Client {
                 &page_token,
             ))
             .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -14655,6 +14753,11 @@ impl Client {
         body: &'a types::SpoofLoginBody,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!("{}/login", self.baseurl,);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -14664,6 +14767,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -14692,8 +14796,18 @@ impl Client {
             self.baseurl,
             encode_path(&silo_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
-        let mut request = self.client.post(url).json(&body).build()?;
+        let mut request = self
+            .client
+            .post(url)
+            .json(&body)
+            .headers(header_map)
+            .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -14725,8 +14839,13 @@ impl Client {
             encode_path(&silo_name.to_string()),
             encode_path(&provider_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
-        let mut request = self.client.get(url).build()?;
+        let mut request = self.client.get(url).headers(header_map).build()?;
         let result = self.client.execute(request).await;
         let response = result?;
         match response.status().as_u16() {
@@ -14756,6 +14875,11 @@ impl Client {
             encode_path(&silo_name.to_string()),
             encode_path(&provider_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -14765,6 +14889,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/octet-stream"),
             )
             .body(body)
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -14783,6 +14908,11 @@ impl Client {
     ///Sends a `POST` request to `/logout`
     pub async fn logout<'a>(&'a self) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!("{}/logout", self.baseurl,);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -14791,6 +14921,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -14824,6 +14955,11 @@ impl Client {
         sort_by: Option<types::NameOrIdSortMode>,
     ) -> Result<ResponseValue<types::OrganizationResultsPage>, Error<types::Error>> {
         let url = format!("{}/organizations", self.baseurl,);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -14838,6 +14974,7 @@ impl Client {
                 &page_token,
             ))
             .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -14905,6 +15042,11 @@ impl Client {
         body: &'a types::OrganizationCreate,
     ) -> Result<ResponseValue<types::Organization>, Error<types::Error>> {
         let url = format!("{}/organizations", self.baseurl,);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -14914,6 +15056,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -14946,6 +15089,11 @@ impl Client {
             self.baseurl,
             encode_path(&organization_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -14954,6 +15102,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -14988,6 +15137,11 @@ impl Client {
             self.baseurl,
             encode_path(&organization_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -14997,6 +15151,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -15029,6 +15184,11 @@ impl Client {
             self.baseurl,
             encode_path(&organization_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -15037,6 +15197,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -15069,6 +15230,11 @@ impl Client {
             self.baseurl,
             encode_path(&organization_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -15077,6 +15243,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -15111,6 +15278,11 @@ impl Client {
             self.baseurl,
             encode_path(&organization_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -15120,6 +15292,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -15159,6 +15332,11 @@ impl Client {
             self.baseurl,
             encode_path(&organization_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -15173,6 +15351,7 @@ impl Client {
                 &page_token,
             ))
             .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -15251,6 +15430,11 @@ impl Client {
             self.baseurl,
             encode_path(&organization_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -15260,6 +15444,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -15296,6 +15481,11 @@ impl Client {
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -15304,6 +15494,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -15342,6 +15533,11 @@ impl Client {
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -15351,6 +15547,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -15387,6 +15584,11 @@ impl Client {
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -15395,6 +15597,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -15438,6 +15641,11 @@ impl Client {
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -15452,6 +15660,7 @@ impl Client {
                 &page_token,
             ))
             .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -15540,6 +15749,11 @@ impl Client {
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -15549,6 +15763,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -15584,6 +15799,11 @@ impl Client {
             encode_path(&project_name.to_string()),
             encode_path(&disk_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -15592,6 +15812,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -15625,6 +15846,11 @@ impl Client {
             encode_path(&project_name.to_string()),
             encode_path(&disk_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -15633,6 +15859,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -15683,6 +15910,11 @@ impl Client {
             encode_path(&disk_name.to_string()),
             encode_path(&metric_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -15701,6 +15933,7 @@ impl Client {
                 "start_time",
                 &start_time,
             ))
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -15814,6 +16047,11 @@ impl Client {
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -15828,6 +16066,7 @@ impl Client {
                 &page_token,
             ))
             .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -15919,6 +16158,11 @@ impl Client {
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -15928,6 +16172,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -15963,6 +16208,11 @@ impl Client {
             encode_path(&project_name.to_string()),
             encode_path(&image_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -15971,6 +16221,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -16008,6 +16259,11 @@ impl Client {
             encode_path(&project_name.to_string()),
             encode_path(&image_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -16016,6 +16272,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -16057,6 +16314,11 @@ impl Client {
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -16071,6 +16333,7 @@ impl Client {
                 &page_token,
             ))
             .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -16160,6 +16423,11 @@ impl Client {
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -16169,6 +16437,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -16204,6 +16473,11 @@ impl Client {
             encode_path(&project_name.to_string()),
             encode_path(&instance_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -16212,6 +16486,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -16245,6 +16520,11 @@ impl Client {
             encode_path(&project_name.to_string()),
             encode_path(&instance_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -16253,6 +16533,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -16300,6 +16581,11 @@ impl Client {
             encode_path(&project_name.to_string()),
             encode_path(&instance_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -16314,6 +16600,7 @@ impl Client {
                 &page_token,
             ))
             .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -16412,6 +16699,11 @@ impl Client {
             encode_path(&project_name.to_string()),
             encode_path(&instance_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -16421,6 +16713,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -16457,6 +16750,11 @@ impl Client {
             encode_path(&project_name.to_string()),
             encode_path(&instance_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -16466,6 +16764,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -16499,6 +16798,11 @@ impl Client {
             encode_path(&project_name.to_string()),
             encode_path(&instance_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -16507,6 +16811,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -16543,6 +16848,11 @@ impl Client {
             encode_path(&project_name.to_string()),
             encode_path(&instance_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -16552,6 +16862,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -16597,6 +16908,11 @@ impl Client {
             encode_path(&project_name.to_string()),
             encode_path(&instance_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -16611,6 +16927,7 @@ impl Client {
                 &page_token,
             ))
             .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -16706,6 +17023,11 @@ impl Client {
             encode_path(&project_name.to_string()),
             encode_path(&instance_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -16715,6 +17037,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -16750,6 +17073,11 @@ impl Client {
             encode_path(&instance_name.to_string()),
             encode_path(&interface_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -16758,6 +17086,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -16794,6 +17123,11 @@ impl Client {
             encode_path(&instance_name.to_string()),
             encode_path(&interface_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -16803,6 +17137,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -16843,6 +17178,11 @@ impl Client {
             encode_path(&instance_name.to_string()),
             encode_path(&interface_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -16851,6 +17191,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -16886,6 +17227,11 @@ impl Client {
             encode_path(&project_name.to_string()),
             encode_path(&instance_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -16894,6 +17240,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -16948,6 +17295,11 @@ impl Client {
             encode_path(&project_name.to_string()),
             encode_path(&instance_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -16965,6 +17317,7 @@ impl Client {
                 "most_recent",
                 &most_recent,
             ))
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -17000,10 +17353,16 @@ impl Client {
             encode_path(&project_name.to_string()),
             encode_path(&instance_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
             .get(url)
+            .headers(header_map)
             .header(::reqwest::header::CONNECTION, "Upgrade")
             .header(::reqwest::header::UPGRADE, "websocket")
             .header(::reqwest::header::SEC_WEBSOCKET_VERSION, "13")
@@ -17044,6 +17403,11 @@ impl Client {
             encode_path(&project_name.to_string()),
             encode_path(&instance_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -17052,6 +17416,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -17087,6 +17452,11 @@ impl Client {
             encode_path(&project_name.to_string()),
             encode_path(&instance_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -17095,6 +17465,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -17131,6 +17502,11 @@ impl Client {
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -17139,6 +17515,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -17175,6 +17552,11 @@ impl Client {
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -17184,6 +17566,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -17225,6 +17608,11 @@ impl Client {
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -17239,6 +17627,7 @@ impl Client {
                 &page_token,
             ))
             .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -17328,6 +17717,11 @@ impl Client {
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -17337,6 +17731,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -17370,6 +17765,11 @@ impl Client {
             encode_path(&project_name.to_string()),
             encode_path(&snapshot_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -17378,6 +17778,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -17411,6 +17812,11 @@ impl Client {
             encode_path(&project_name.to_string()),
             encode_path(&snapshot_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -17419,6 +17825,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -17460,6 +17867,11 @@ impl Client {
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -17474,6 +17886,7 @@ impl Client {
                 &page_token,
             ))
             .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -17560,6 +17973,11 @@ impl Client {
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -17569,6 +17987,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -17602,6 +18021,11 @@ impl Client {
             encode_path(&project_name.to_string()),
             encode_path(&vpc_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -17610,6 +18034,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -17644,6 +18069,11 @@ impl Client {
             encode_path(&project_name.to_string()),
             encode_path(&vpc_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -17653,6 +18083,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -17686,6 +18117,11 @@ impl Client {
             encode_path(&project_name.to_string()),
             encode_path(&vpc_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -17694,6 +18130,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -17727,6 +18164,11 @@ impl Client {
             encode_path(&project_name.to_string()),
             encode_path(&vpc_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -17735,6 +18177,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -17769,6 +18212,11 @@ impl Client {
             encode_path(&project_name.to_string()),
             encode_path(&vpc_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -17778,6 +18226,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -17823,6 +18272,11 @@ impl Client {
             encode_path(&project_name.to_string()),
             encode_path(&vpc_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -17837,6 +18291,7 @@ impl Client {
                 &page_token,
             ))
             .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -17932,6 +18387,11 @@ impl Client {
             encode_path(&project_name.to_string()),
             encode_path(&vpc_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -17941,6 +18401,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -17976,6 +18437,11 @@ impl Client {
             encode_path(&vpc_name.to_string()),
             encode_path(&router_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -17984,6 +18450,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -18020,6 +18487,11 @@ impl Client {
             encode_path(&vpc_name.to_string()),
             encode_path(&router_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -18029,6 +18501,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -18064,6 +18537,11 @@ impl Client {
             encode_path(&vpc_name.to_string()),
             encode_path(&router_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -18072,6 +18550,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -18122,6 +18601,11 @@ impl Client {
             encode_path(&vpc_name.to_string()),
             encode_path(&router_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -18136,6 +18620,7 @@ impl Client {
                 &page_token,
             ))
             .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -18240,6 +18725,11 @@ impl Client {
             encode_path(&vpc_name.to_string()),
             encode_path(&router_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -18249,6 +18739,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -18286,6 +18777,11 @@ impl Client {
             encode_path(&router_name.to_string()),
             encode_path(&route_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -18294,6 +18790,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -18332,6 +18829,11 @@ impl Client {
             encode_path(&router_name.to_string()),
             encode_path(&route_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -18341,6 +18843,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -18378,6 +18881,11 @@ impl Client {
             encode_path(&router_name.to_string()),
             encode_path(&route_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -18386,6 +18894,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -18431,6 +18940,11 @@ impl Client {
             encode_path(&project_name.to_string()),
             encode_path(&vpc_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -18445,6 +18959,7 @@ impl Client {
                 &page_token,
             ))
             .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -18540,6 +19055,11 @@ impl Client {
             encode_path(&project_name.to_string()),
             encode_path(&vpc_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -18549,6 +19069,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -18584,6 +19105,11 @@ impl Client {
             encode_path(&vpc_name.to_string()),
             encode_path(&subnet_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -18592,6 +19118,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -18628,6 +19155,11 @@ impl Client {
             encode_path(&vpc_name.to_string()),
             encode_path(&subnet_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -18637,6 +19169,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -18672,6 +19205,11 @@ impl Client {
             encode_path(&vpc_name.to_string()),
             encode_path(&subnet_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -18680,6 +19218,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -18728,6 +19267,11 @@ impl Client {
             encode_path(&vpc_name.to_string()),
             encode_path(&subnet_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -18742,6 +19286,7 @@ impl Client {
                 &page_token,
             ))
             .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -18830,6 +19375,11 @@ impl Client {
         &'a self,
     ) -> Result<ResponseValue<types::SiloRolePolicy>, Error<types::Error>> {
         let url = format!("{}/policy", self.baseurl,);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -18838,6 +19388,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -18861,6 +19412,11 @@ impl Client {
         body: &'a types::SiloRolePolicy,
     ) -> Result<ResponseValue<types::SiloRolePolicy>, Error<types::Error>> {
         let url = format!("{}/policy", self.baseurl,);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -18870,6 +19426,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -18899,6 +19456,11 @@ impl Client {
         page_token: Option<&'a str>,
     ) -> Result<ResponseValue<types::RoleResultsPage>, Error<types::Error>> {
         let url = format!("{}/roles", self.baseurl,);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -18912,6 +19474,7 @@ impl Client {
                 "page_token",
                 &page_token,
             ))
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -18979,6 +19542,11 @@ impl Client {
             self.baseurl,
             encode_path(&role_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -18987,6 +19555,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -19009,6 +19578,11 @@ impl Client {
         &'a self,
     ) -> Result<ResponseValue<types::User>, Error<types::Error>> {
         let url = format!("{}/session/me", self.baseurl,);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -19017,6 +19591,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -19048,6 +19623,11 @@ impl Client {
         sort_by: Option<types::IdSortMode>,
     ) -> Result<ResponseValue<types::GroupResultsPage>, Error<types::Error>> {
         let url = format!("{}/session/me/groups", self.baseurl,);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -19062,6 +19642,7 @@ impl Client {
                 &page_token,
             ))
             .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -19134,6 +19715,11 @@ impl Client {
         sort_by: Option<types::NameSortMode>,
     ) -> Result<ResponseValue<types::SshKeyResultsPage>, Error<types::Error>> {
         let url = format!("{}/session/me/sshkeys", self.baseurl,);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -19148,6 +19734,7 @@ impl Client {
                 &page_token,
             ))
             .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -19214,6 +19801,11 @@ impl Client {
         body: &'a types::SshKeyCreate,
     ) -> Result<ResponseValue<types::SshKey>, Error<types::Error>> {
         let url = format!("{}/session/me/sshkeys", self.baseurl,);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -19223,6 +19815,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -19253,6 +19846,11 @@ impl Client {
             self.baseurl,
             encode_path(&ssh_key_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -19261,6 +19859,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -19291,6 +19890,11 @@ impl Client {
             self.baseurl,
             encode_path(&ssh_key_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -19299,6 +19903,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -19326,6 +19931,11 @@ impl Client {
             self.baseurl,
             encode_path(&id.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -19334,6 +19944,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -19361,6 +19972,11 @@ impl Client {
             self.baseurl,
             encode_path(&id.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -19369,6 +19985,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -19396,6 +20013,11 @@ impl Client {
             self.baseurl,
             encode_path(&id.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -19404,6 +20026,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -19439,6 +20062,11 @@ impl Client {
         sort_by: Option<types::NameSortMode>,
     ) -> Result<ResponseValue<types::CertificateResultsPage>, Error<types::Error>> {
         let url = format!("{}/system/certificates", self.baseurl,);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -19453,6 +20081,7 @@ impl Client {
                 &page_token,
             ))
             .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -19523,6 +20152,11 @@ impl Client {
         body: &'a types::CertificateCreate,
     ) -> Result<ResponseValue<types::Certificate>, Error<types::Error>> {
         let url = format!("{}/system/certificates", self.baseurl,);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -19532,6 +20166,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -19561,6 +20196,11 @@ impl Client {
             self.baseurl,
             encode_path(&certificate.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -19569,6 +20209,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -19598,6 +20239,11 @@ impl Client {
             self.baseurl,
             encode_path(&certificate.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -19606,6 +20252,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -19637,6 +20284,11 @@ impl Client {
         sort_by: Option<types::IdSortMode>,
     ) -> Result<ResponseValue<types::PhysicalDiskResultsPage>, Error<types::Error>> {
         let url = format!("{}/system/hardware/disks", self.baseurl,);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -19651,6 +20303,7 @@ impl Client {
                 &page_token,
             ))
             .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -19722,6 +20375,11 @@ impl Client {
         sort_by: Option<types::IdSortMode>,
     ) -> Result<ResponseValue<types::RackResultsPage>, Error<types::Error>> {
         let url = format!("{}/system/hardware/racks", self.baseurl,);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -19736,6 +20394,7 @@ impl Client {
                 &page_token,
             ))
             .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -19805,6 +20464,11 @@ impl Client {
             self.baseurl,
             encode_path(&rack_id.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -19813,6 +20477,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -19844,6 +20509,11 @@ impl Client {
         sort_by: Option<types::IdSortMode>,
     ) -> Result<ResponseValue<types::SledResultsPage>, Error<types::Error>> {
         let url = format!("{}/system/hardware/sleds", self.baseurl,);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -19858,6 +20528,7 @@ impl Client {
                 &page_token,
             ))
             .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -19927,6 +20598,11 @@ impl Client {
             self.baseurl,
             encode_path(&sled_id.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -19935,6 +20611,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -19972,6 +20649,11 @@ impl Client {
             self.baseurl,
             encode_path(&sled_id.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -19986,6 +20668,7 @@ impl Client {
                 &page_token,
             ))
             .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -20064,6 +20747,11 @@ impl Client {
         sort_by: Option<types::NameSortMode>,
     ) -> Result<ResponseValue<types::GlobalImageResultsPage>, Error<types::Error>> {
         let url = format!("{}/system/images", self.baseurl,);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -20078,6 +20766,7 @@ impl Client {
                 &page_token,
             ))
             .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -20148,6 +20837,11 @@ impl Client {
         body: &'a types::GlobalImageCreate,
     ) -> Result<ResponseValue<types::GlobalImage>, Error<types::Error>> {
         let url = format!("{}/system/images", self.baseurl,);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -20157,6 +20851,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -20186,6 +20881,11 @@ impl Client {
             self.baseurl,
             encode_path(&image_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -20194,6 +20894,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -20225,6 +20926,11 @@ impl Client {
             self.baseurl,
             encode_path(&image_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -20233,6 +20939,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -20264,6 +20971,11 @@ impl Client {
         sort_by: Option<types::NameOrIdSortMode>,
     ) -> Result<ResponseValue<types::IpPoolResultsPage>, Error<types::Error>> {
         let url = format!("{}/system/ip-pools", self.baseurl,);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -20278,6 +20990,7 @@ impl Client {
                 &page_token,
             ))
             .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -20340,6 +21053,11 @@ impl Client {
         body: &'a types::IpPoolCreate,
     ) -> Result<ResponseValue<types::IpPool>, Error<types::Error>> {
         let url = format!("{}/system/ip-pools", self.baseurl,);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -20349,6 +21067,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -20376,6 +21095,11 @@ impl Client {
             self.baseurl,
             encode_path(&pool_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -20384,6 +21108,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -20412,6 +21137,11 @@ impl Client {
             self.baseurl,
             encode_path(&pool_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -20421,6 +21151,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -20448,6 +21179,11 @@ impl Client {
             self.baseurl,
             encode_path(&pool_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -20456,6 +21192,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -20493,6 +21230,11 @@ impl Client {
             self.baseurl,
             encode_path(&pool_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -20506,6 +21248,7 @@ impl Client {
                 "page_token",
                 &page_token,
             ))
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -20576,6 +21319,11 @@ impl Client {
             self.baseurl,
             encode_path(&pool_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -20585,6 +21333,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -20613,6 +21362,11 @@ impl Client {
             self.baseurl,
             encode_path(&pool_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -20622,6 +21376,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -20644,6 +21399,11 @@ impl Client {
         &'a self,
     ) -> Result<ResponseValue<types::IpPool>, Error<types::Error>> {
         let url = format!("{}/system/ip-pools-service", self.baseurl,);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -20652,6 +21412,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -20683,6 +21444,11 @@ impl Client {
         page_token: Option<&'a str>,
     ) -> Result<ResponseValue<types::IpPoolRangeResultsPage>, Error<types::Error>> {
         let url = format!("{}/system/ip-pools-service/ranges", self.baseurl,);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -20696,6 +21462,7 @@ impl Client {
                 "page_token",
                 &page_token,
             ))
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -20759,6 +21526,11 @@ impl Client {
         body: &'a types::IpRange,
     ) -> Result<ResponseValue<types::IpPoolRange>, Error<types::Error>> {
         let url = format!("{}/system/ip-pools-service/ranges/add", self.baseurl,);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -20768,6 +21540,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -20791,6 +21564,11 @@ impl Client {
         body: &'a types::IpRange,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!("{}/system/ip-pools-service/ranges/remove", self.baseurl,);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -20800,6 +21578,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -20841,6 +21620,11 @@ impl Client {
             self.baseurl,
             encode_path(&metric_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -20860,6 +21644,7 @@ impl Client {
                 "start_time",
                 &start_time,
             ))
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -20882,6 +21667,11 @@ impl Client {
         &'a self,
     ) -> Result<ResponseValue<types::FleetRolePolicy>, Error<types::Error>> {
         let url = format!("{}/system/policy", self.baseurl,);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -20890,6 +21680,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -20913,6 +21704,11 @@ impl Client {
         body: &'a types::FleetRolePolicy,
     ) -> Result<ResponseValue<types::FleetRolePolicy>, Error<types::Error>> {
         let url = format!("{}/system/policy", self.baseurl,);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -20922,6 +21718,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -20953,6 +21750,11 @@ impl Client {
         sort_by: Option<types::IdSortMode>,
     ) -> Result<ResponseValue<types::SagaResultsPage>, Error<types::Error>> {
         let url = format!("{}/system/sagas", self.baseurl,);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -20967,6 +21769,7 @@ impl Client {
                 &page_token,
             ))
             .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -21033,6 +21836,11 @@ impl Client {
             self.baseurl,
             encode_path(&saga_id.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -21041,6 +21849,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -21074,6 +21883,11 @@ impl Client {
         sort_by: Option<types::NameOrIdSortMode>,
     ) -> Result<ResponseValue<types::SiloResultsPage>, Error<types::Error>> {
         let url = format!("{}/system/silos", self.baseurl,);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -21088,6 +21902,7 @@ impl Client {
                 &page_token,
             ))
             .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -21152,6 +21967,11 @@ impl Client {
         body: &'a types::SiloCreate,
     ) -> Result<ResponseValue<types::Silo>, Error<types::Error>> {
         let url = format!("{}/system/silos", self.baseurl,);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -21161,6 +21981,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -21193,6 +22014,11 @@ impl Client {
             self.baseurl,
             encode_path(&silo_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -21201,6 +22027,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -21233,6 +22060,11 @@ impl Client {
             self.baseurl,
             encode_path(&silo_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -21241,6 +22073,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -21278,6 +22111,11 @@ impl Client {
             self.baseurl,
             encode_path(&silo_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -21292,6 +22130,7 @@ impl Client {
                 &page_token,
             ))
             .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -21372,6 +22211,11 @@ impl Client {
             self.baseurl,
             encode_path(&silo_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -21381,6 +22225,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -21415,6 +22260,11 @@ impl Client {
             encode_path(&silo_name.to_string()),
             encode_path(&user_id.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -21423,6 +22273,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -21463,6 +22314,11 @@ impl Client {
             encode_path(&silo_name.to_string()),
             encode_path(&user_id.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -21472,6 +22328,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -21505,6 +22362,11 @@ impl Client {
             self.baseurl,
             encode_path(&silo_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -21514,6 +22376,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -21548,6 +22411,11 @@ impl Client {
             encode_path(&silo_name.to_string()),
             encode_path(&provider_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -21556,6 +22424,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -21586,6 +22455,11 @@ impl Client {
             self.baseurl,
             encode_path(&silo_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -21594,6 +22468,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -21626,6 +22501,11 @@ impl Client {
             self.baseurl,
             encode_path(&silo_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -21635,6 +22515,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -21672,6 +22553,11 @@ impl Client {
             self.baseurl,
             encode_path(&silo_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -21686,6 +22572,7 @@ impl Client {
                 &page_token,
             ))
             .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -21760,6 +22647,11 @@ impl Client {
             encode_path(&silo_name.to_string()),
             encode_path(&user_id.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -21768,6 +22660,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -21799,6 +22692,11 @@ impl Client {
         sort_by: Option<types::NameSortMode>,
     ) -> Result<ResponseValue<types::UserBuiltinResultsPage>, Error<types::Error>> {
         let url = format!("{}/system/user", self.baseurl,);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -21813,6 +22711,7 @@ impl Client {
                 &page_token,
             ))
             .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -21883,6 +22782,11 @@ impl Client {
             self.baseurl,
             encode_path(&user_name.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -21891,6 +22795,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -21920,6 +22825,11 @@ impl Client {
         page_token: Option<&'a str>,
     ) -> Result<ResponseValue<types::TimeseriesSchemaResultsPage>, Error<types::Error>> {
         let url = format!("{}/timeseries/schema", self.baseurl,);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -21933,6 +22843,7 @@ impl Client {
                 "page_token",
                 &page_token,
             ))
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -22002,6 +22913,11 @@ impl Client {
         sort_by: Option<types::IdSortMode>,
     ) -> Result<ResponseValue<types::UserResultsPage>, Error<types::Error>> {
         let url = format!("{}/users", self.baseurl,);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -22016,6 +22932,7 @@ impl Client {
                 &page_token,
             ))
             .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -22090,6 +23007,11 @@ impl Client {
         sort_by: Option<types::NameOrIdSortMode>,
     ) -> Result<ResponseValue<types::DiskResultsPage>, Error<types::Error>> {
         let url = format!("{}/v1/disks", self.baseurl,);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -22109,6 +23031,7 @@ impl Client {
             ))
             .query(&progenitor_client::QueryParam::new("project", &project))
             .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -22177,6 +23100,11 @@ impl Client {
         body: &'a types::DiskCreate,
     ) -> Result<ResponseValue<types::Disk>, Error<types::Error>> {
         let url = format!("{}/v1/disks", self.baseurl,);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -22191,6 +23119,7 @@ impl Client {
                 &organization,
             ))
             .query(&progenitor_client::QueryParam::new("project", &project))
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -22220,6 +23149,11 @@ impl Client {
             self.baseurl,
             encode_path(&disk.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -22233,6 +23167,7 @@ impl Client {
                 &organization,
             ))
             .query(&progenitor_client::QueryParam::new("project", &project))
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -22262,6 +23197,11 @@ impl Client {
             self.baseurl,
             encode_path(&disk.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -22275,6 +23215,7 @@ impl Client {
                 &organization,
             ))
             .query(&progenitor_client::QueryParam::new("project", &project))
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -22310,6 +23251,11 @@ impl Client {
         sort_by: Option<types::NameOrIdSortMode>,
     ) -> Result<ResponseValue<types::InstanceResultsPage>, Error<types::Error>> {
         let url = format!("{}/v1/instances", self.baseurl,);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -22329,6 +23275,7 @@ impl Client {
             ))
             .query(&progenitor_client::QueryParam::new("project", &project))
             .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -22398,6 +23345,11 @@ impl Client {
         body: &'a types::InstanceCreate,
     ) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
         let url = format!("{}/v1/instances", self.baseurl,);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -22412,6 +23364,7 @@ impl Client {
                 &organization,
             ))
             .query(&progenitor_client::QueryParam::new("project", &project))
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -22441,6 +23394,11 @@ impl Client {
             self.baseurl,
             encode_path(&instance.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -22454,6 +23412,7 @@ impl Client {
                 &organization,
             ))
             .query(&progenitor_client::QueryParam::new("project", &project))
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -22483,6 +23442,11 @@ impl Client {
             self.baseurl,
             encode_path(&instance.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -22496,6 +23460,7 @@ impl Client {
                 &organization,
             ))
             .query(&progenitor_client::QueryParam::new("project", &project))
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -22537,6 +23502,11 @@ impl Client {
             self.baseurl,
             encode_path(&instance.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -22556,6 +23526,7 @@ impl Client {
             ))
             .query(&progenitor_client::QueryParam::new("project", &project))
             .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -22638,6 +23609,11 @@ impl Client {
             self.baseurl,
             encode_path(&instance.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -22652,6 +23628,7 @@ impl Client {
                 &organization,
             ))
             .query(&progenitor_client::QueryParam::new("project", &project))
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -22682,6 +23659,11 @@ impl Client {
             self.baseurl,
             encode_path(&instance.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -22696,6 +23678,7 @@ impl Client {
                 &organization,
             ))
             .query(&progenitor_client::QueryParam::new("project", &project))
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -22726,6 +23709,11 @@ impl Client {
             self.baseurl,
             encode_path(&instance.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -22740,6 +23728,7 @@ impl Client {
                 &organization,
             ))
             .query(&progenitor_client::QueryParam::new("project", &project))
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -22769,6 +23758,11 @@ impl Client {
             self.baseurl,
             encode_path(&instance.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -22782,6 +23776,7 @@ impl Client {
                 &organization,
             ))
             .query(&progenitor_client::QueryParam::new("project", &project))
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -22830,6 +23825,11 @@ impl Client {
             self.baseurl,
             encode_path(&instance.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -22852,6 +23852,7 @@ impl Client {
                 &organization,
             ))
             .query(&progenitor_client::QueryParam::new("project", &project))
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -22882,6 +23883,11 @@ impl Client {
             self.baseurl,
             encode_path(&instance.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -22891,6 +23897,7 @@ impl Client {
                 &organization,
             ))
             .query(&progenitor_client::QueryParam::new("project", &project))
+            .headers(header_map)
             .header(::reqwest::header::CONNECTION, "Upgrade")
             .header(::reqwest::header::UPGRADE, "websocket")
             .header(::reqwest::header::SEC_WEBSOCKET_VERSION, "13")
@@ -22925,6 +23932,11 @@ impl Client {
             self.baseurl,
             encode_path(&instance.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -22938,6 +23950,7 @@ impl Client {
                 &organization,
             ))
             .query(&progenitor_client::QueryParam::new("project", &project))
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -22967,6 +23980,11 @@ impl Client {
             self.baseurl,
             encode_path(&instance.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -22980,6 +23998,7 @@ impl Client {
                 &organization,
             ))
             .query(&progenitor_client::QueryParam::new("project", &project))
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -23011,6 +24030,11 @@ impl Client {
         sort_by: Option<types::NameOrIdSortMode>,
     ) -> Result<ResponseValue<types::OrganizationResultsPage>, Error<types::Error>> {
         let url = format!("{}/v1/organizations", self.baseurl,);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -23025,6 +24049,7 @@ impl Client {
                 &page_token,
             ))
             .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -23088,6 +24113,11 @@ impl Client {
         body: &'a types::OrganizationCreate,
     ) -> Result<ResponseValue<types::Organization>, Error<types::Error>> {
         let url = format!("{}/v1/organizations", self.baseurl,);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -23097,6 +24127,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -23124,6 +24155,11 @@ impl Client {
             self.baseurl,
             encode_path(&organization.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -23132,6 +24168,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -23160,6 +24197,11 @@ impl Client {
             self.baseurl,
             encode_path(&organization.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -23169,6 +24211,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -23196,6 +24239,11 @@ impl Client {
             self.baseurl,
             encode_path(&organization.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -23204,6 +24252,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -23231,6 +24280,11 @@ impl Client {
             self.baseurl,
             encode_path(&organization.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -23239,6 +24293,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -23267,6 +24322,11 @@ impl Client {
             self.baseurl,
             encode_path(&organization.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -23276,6 +24336,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -23309,6 +24370,11 @@ impl Client {
         sort_by: Option<types::NameOrIdSortMode>,
     ) -> Result<ResponseValue<types::ProjectResultsPage>, Error<types::Error>> {
         let url = format!("{}/v1/projects", self.baseurl,);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -23327,6 +24393,7 @@ impl Client {
                 &page_token,
             ))
             .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -23392,6 +24459,11 @@ impl Client {
         body: &'a types::ProjectCreate,
     ) -> Result<ResponseValue<types::Project>, Error<types::Error>> {
         let url = format!("{}/v1/projects", self.baseurl,);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -23405,6 +24477,7 @@ impl Client {
                 "organization",
                 &organization,
             ))
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -23433,6 +24506,11 @@ impl Client {
             self.baseurl,
             encode_path(&project.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -23445,6 +24523,7 @@ impl Client {
                 "organization",
                 &organization,
             ))
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -23474,6 +24553,11 @@ impl Client {
             self.baseurl,
             encode_path(&project.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -23487,6 +24571,7 @@ impl Client {
                 "organization",
                 &organization,
             ))
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -23515,6 +24600,11 @@ impl Client {
             self.baseurl,
             encode_path(&project.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -23527,6 +24617,7 @@ impl Client {
                 "organization",
                 &organization,
             ))
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -23555,6 +24646,11 @@ impl Client {
             self.baseurl,
             encode_path(&project.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -23567,6 +24663,7 @@ impl Client {
                 "organization",
                 &organization,
             ))
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -23596,6 +24693,11 @@ impl Client {
             self.baseurl,
             encode_path(&project.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -23609,6 +24711,7 @@ impl Client {
                 "organization",
                 &organization,
             ))
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -23640,6 +24743,11 @@ impl Client {
         sort_by: Option<types::IdSortMode>,
     ) -> Result<ResponseValue<types::UpdateableComponentResultsPage>, Error<types::Error>> {
         let url = format!("{}/v1/system/update/components", self.baseurl,);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -23654,6 +24762,7 @@ impl Client {
                 &page_token,
             ))
             .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -23725,6 +24834,11 @@ impl Client {
         sort_by: Option<types::IdSortMode>,
     ) -> Result<ResponseValue<types::UpdateDeploymentResultsPage>, Error<types::Error>> {
         let url = format!("{}/v1/system/update/deployments", self.baseurl,);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -23739,6 +24853,7 @@ impl Client {
                 &page_token,
             ))
             .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -23806,6 +24921,11 @@ impl Client {
             self.baseurl,
             encode_path(&id.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -23814,6 +24934,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -23836,6 +24957,11 @@ impl Client {
         &'a self,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!("{}/v1/system/update/refresh", self.baseurl,);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -23844,6 +24970,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -23867,6 +24994,11 @@ impl Client {
         body: &'a types::SystemUpdateStart,
     ) -> Result<ResponseValue<types::UpdateDeployment>, Error<types::Error>> {
         let url = format!("{}/v1/system/update/start", self.baseurl,);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -23876,6 +25008,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -23900,6 +25033,11 @@ impl Client {
         &'a self,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!("{}/v1/system/update/stop", self.baseurl,);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -23908,6 +25046,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -23939,6 +25078,11 @@ impl Client {
         sort_by: Option<types::IdSortMode>,
     ) -> Result<ResponseValue<types::SystemUpdateResultsPage>, Error<types::Error>> {
         let url = format!("{}/v1/system/update/updates", self.baseurl,);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -23953,6 +25097,7 @@ impl Client {
                 &page_token,
             ))
             .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -24020,6 +25165,11 @@ impl Client {
             self.baseurl,
             encode_path(&version.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -24028,6 +25178,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -24056,6 +25207,11 @@ impl Client {
             self.baseurl,
             encode_path(&version.to_string()),
         );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -24064,6 +25220,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;
@@ -24086,6 +25243,11 @@ impl Client {
         &'a self,
     ) -> Result<ResponseValue<types::SystemVersion>, Error<types::Error>> {
         let url = format!("{}/v1/system/update/version", self.baseurl,);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(self.api_version()),
+        );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -24094,6 +25256,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
+            .headers(header_map)
             .build()?;
         let result = self.client.execute(request).await;
         let response = result?;

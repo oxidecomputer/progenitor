@@ -413,6 +413,11 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let url = format!("{}/", client.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(client.api_version()),
+            );
             #[allow(unused_mut)]
             let mut request = client
                 .client
@@ -426,6 +431,7 @@ pub mod builder {
                     "page_token",
                     &page_token,
                 ))
+                .headers(header_map)
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;

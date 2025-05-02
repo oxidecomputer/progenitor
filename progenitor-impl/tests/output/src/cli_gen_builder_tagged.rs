@@ -282,12 +282,18 @@ pub mod builder {
                 .and_then(|v| types::UnoBody::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/uno", client.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(client.api_version()),
+            );
             #[allow(unused_mut)]
             let mut request = client
                 .client
                 .get(url)
                 .json(&body)
                 .query(&progenitor_client::QueryParam::new("gateway", &gateway))
+                .headers(header_map)
                 .build()?;
             let result = client.client.execute(request).await;
             let response = result?;
