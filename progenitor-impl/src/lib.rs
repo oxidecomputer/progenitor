@@ -360,16 +360,10 @@ impl Generator {
 
         let types = self.type_space.to_stream();
 
-        // Generate an implementation of a `Self::as_inner` method, if an inner
-        // type is defined.
-        let maybe_inner = self.settings.inner_type.as_ref().map(|inner| {
-            quote! {
-                /// Return a reference to the inner type stored in `self`.
-                pub fn inner(&self) -> &#inner {
-                    &self.inner
-                }
-            }
-        });
+        let (inner_type, inner_fn_value) = match self.settings.inner_type.as_ref() {
+            Some(inner_type) => (inner_type.clone(), quote! { &self.inner }),
+            None => (quote! { () }, quote! { &() }),
+        };
 
         let inner_property = self.settings.inner_type.as_ref().map(|inner| {
             quote! {
@@ -411,12 +405,21 @@ impl Generator {
         // crate.
 
         let file = quote! {
-            // Re-export ResponseValue and Error since those are used by the
-            // public interface of Client.
+            // Re-export types that are used by the public interface of Client.
             #[allow(unused_imports)]
-            pub use progenitor_client::{ByteStream, Error, ResponseValue};
+            pub use progenitor_client::{
+                ByteStream,
+                ClientInfo,
+                Error,
+                ResponseValue,
+            };
             #[allow(unused_imports)]
-            use progenitor_client::{encode_path, RequestBuilderExt};
+            use progenitor_client::{
+                encode_path,
+                ClientHooks,
+                OperationInfo,
+                RequestBuilderExt,
+            };
 
             /// Types used as operation parameters and responses.
             #[allow(clippy::all)]
@@ -473,27 +476,27 @@ impl Generator {
                         #inner_value
                     }
                 }
+            }
 
-                /// Get the base URL to which requests are made.
-                pub fn baseurl(&self) -> &String {
-                    &self.baseurl
-                }
-
-                /// Get the internal `reqwest::Client` used to make requests.
-                pub fn client(&self) -> &reqwest::Client {
-                    &self.client
-                }
-
-                /// Get the version of this API.
-                ///
-                /// This string is pulled directly from the source OpenAPI
-                /// document and may be in any format the API selects.
-                pub fn api_version(&self) -> &'static str {
+            impl ClientInfo<#inner_type> for Client {
+                fn api_version() -> &'static str {
                     #version_str
                 }
 
-                #maybe_inner
+                fn baseurl(&self) -> &str {
+                    self.baseurl.as_str()
+                }
+
+                fn client(&self) -> &reqwest::Client {
+                    &self.client
+                }
+
+                fn inner(&self) -> &#inner_type {
+                    #inner_fn_value
+                }
             }
+
+            impl ClientHooks<#inner_type> for &Client {}
 
             #operation_code
         };
@@ -559,7 +562,10 @@ impl Generator {
                 use super::{
                     encode_path,
                     ByteStream,
+                    ClientInfo,
+                    ClientHooks,
                     Error,
+                    OperationInfo,
                     RequestBuilderExt,
                     ResponseValue,
                 };
@@ -604,7 +610,10 @@ impl Generator {
                 use super::{
                     encode_path,
                     ByteStream,
+                    ClientInfo,
+                    ClientHooks,
                     Error,
+                    OperationInfo,
                     RequestBuilderExt,
                     ResponseValue,
                 };

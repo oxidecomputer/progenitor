@@ -48,6 +48,109 @@ impl DerefMut for ByteStream {
     }
 }
 
+/// Interface for which an implementation is generated for all clients.
+pub trait ClientInfo<Inner> {
+    /// Get the version of this API.
+    ///
+    /// This string is pulled directly from the source OpenAPI document and may
+    /// be in any format the API selects.
+    fn api_version() -> &'static str;
+
+    /// Get the base URL to which requests are made.
+    fn baseurl(&self) -> &str;
+
+    /// Get the internal `reqwest::Client` used to make requests.
+    fn client(&self) -> &reqwest::Client;
+
+    /// Get the inner value of type `T` if one is specified.
+    fn inner(&self) -> &Inner;
+}
+
+impl<T, Inner> ClientInfo<Inner> for &T
+where
+    T: ClientInfo<Inner>,
+{
+    fn api_version() -> &'static str {
+        T::api_version()
+    }
+
+    fn baseurl(&self) -> &str {
+        (*self).baseurl()
+    }
+
+    fn client(&self) -> &reqwest::Client {
+        (*self).client()
+    }
+
+    fn inner(&self) -> &Inner {
+        (*self).inner()
+    }
+}
+
+/// Information about an operation, consumed by hook implementations.
+pub struct OperationInfo {
+    /// The corresponding operationId from the source OpenAPI document.
+    pub operation_id: &'static str,
+}
+
+/// Interface for changing the behavior of generated clients. All clients
+/// implement this for `&Client`; to override the default behavior, implement
+/// some or all of the interfaces for the `Client` type (without the
+/// reference). This mechanism relies on so-called "auto-ref specialization".
+#[allow(async_fn_in_trait, unused)]
+pub trait ClientHooks<Inner = ()>
+where
+    Self: ClientInfo<Inner>,
+{
+    /// Runs prior to the execution of the request. This may be used to modify
+    /// the request before it is transmitted.
+    async fn pre<E>(
+        &self,
+        request: &mut reqwest::Request,
+        info: &OperationInfo,
+    ) -> std::result::Result<(), Error<E>> {
+        Ok(())
+    }
+
+    /// Runs after completion of the request.
+    async fn post<E>(
+        &self,
+        result: &reqwest::Result<reqwest::Response>,
+        info: &OperationInfo,
+    ) -> std::result::Result<(), Error<E>> {
+        Ok(())
+    }
+
+    /// Execute the request. Note that for almost any reasonable implementation
+    /// this will include code equivalent to this:
+    /// ```
+    /// # use progenitor_client::{ClientHooks, ClientInfo, OperationInfo};
+    /// # struct X;
+    /// # impl ClientInfo<()> for X {
+    /// #   fn api_version() -> &'static str { panic!() }
+    /// #   fn baseurl(&self) -> &str { panic!() }
+    /// #   fn client(&self) -> &reqwest::Client { panic!() }
+    /// #   fn inner(&self) -> &() { panic!() }
+    /// # }
+    /// # impl ClientHooks for X {
+    /// #   async fn exec(
+    /// #       &self,
+    /// #       request: reqwest::Request,
+    /// #       info: &OperationInfo,
+    /// #   ) -> reqwest::Result<reqwest::Response> {
+    ///         self.client().execute(request).await
+    /// #   }
+    /// # }
+    /// ```
+    async fn exec(
+        &self,
+        request: reqwest::Request,
+        info: &OperationInfo,
+    ) -> reqwest::Result<reqwest::Response> {
+        self.client().execute(request).await
+    }
+}
+
 /// Typed value returned by generated client methods.
 ///
 /// This is used for successful responses and may appear in error responses
@@ -244,11 +347,8 @@ pub enum Error<E = ()> {
     /// success or failure response; check `status().is_success()`.
     UnexpectedResponse(reqwest::Response),
 
-    /// An error occurred in the processing of a request pre-hook.
-    PreHookError(String),
-
-    /// An error occurred in the processing of a request post-hook.
-    PostHookError(String),
+    /// A custom error from a consumer-defined hook.
+    Custom(String),
 }
 
 impl<E> Error<E> {
@@ -256,8 +356,7 @@ impl<E> Error<E> {
     pub fn status(&self) -> Option<reqwest::StatusCode> {
         match self {
             Error::InvalidRequest(_) => None,
-            Error::PreHookError(_) => None,
-            Error::PostHookError(_) => None,
+            Error::Custom(_) => None,
             Error::CommunicationError(e) => e.status(),
             Error::ErrorResponse(rv) => Some(rv.status()),
             Error::InvalidUpgrade(e) => e.status(),
@@ -274,8 +373,7 @@ impl<E> Error<E> {
     pub fn into_untyped(self) -> Error {
         match self {
             Error::InvalidRequest(s) => Error::InvalidRequest(s),
-            Error::PreHookError(s) => Error::PreHookError(s),
-            Error::PostHookError(s) => Error::PostHookError(s),
+            Error::Custom(s) => Error::Custom(s),
             Error::CommunicationError(e) => Error::CommunicationError(e),
             Error::ErrorResponse(ResponseValue {
                 inner: _,
@@ -340,11 +438,8 @@ where
             Error::UnexpectedResponse(r) => {
                 write!(f, "Unexpected Response: {:?}", r)?;
             }
-            Error::PreHookError(s) => {
-                write!(f, "Pre-hook Error: {}", s)?;
-            }
-            Error::PostHookError(s) => {
-                write!(f, "Post-hook Error: {}", s)?;
+            Error::Custom(s) => {
+                write!(f, "Error: {}", s)?;
             }
         }
 
