@@ -48,7 +48,7 @@ impl DerefMut for ByteStream {
     }
 }
 
-/// Interface generic for all generated clients.
+/// Interface for which an implementation is generated for all clients.
 pub trait ClientInfo<Inner> {
     /// Get the version of this API.
     ///
@@ -87,7 +87,7 @@ where
     }
 }
 
-/// Information about an operation, used by hook implementations.
+/// Information about an operation, consumed by hook implementations.
 pub struct OperationInfo {
     /// The corresponding operationId from the source OpenAPI document.
     pub operation_id: &'static str,
@@ -102,7 +102,8 @@ pub trait ClientHooks<Inner = ()>
 where
     Self: ClientInfo<Inner>,
 {
-    /// Implement to execute code prior to the execution of all requests.
+    /// Runs prior to the execution of the request. This may be used to modify
+    /// the request before it is transmitted.
     async fn pre<E>(
         &self,
         request: &mut reqwest::Request,
@@ -111,7 +112,7 @@ where
         Ok(())
     }
 
-    /// Implement to execute code after the execution of all requests.
+    /// Runs after completion of the request.
     async fn post<E>(
         &self,
         result: &reqwest::Result<reqwest::Response>,
@@ -120,7 +121,27 @@ where
         Ok(())
     }
 
-    /// Implement to customize the execution of the given request.
+    /// Execute the request. Note that for almost any reasonable implementation
+    /// this will include code equivalent to this:
+    /// ```
+    /// # use progenitor_client::{ClientHooks, ClientInfo, OperationInfo};
+    /// # struct X;
+    /// # impl ClientInfo<()> for X {
+    /// #   fn api_version() -> &'static str { panic!() }
+    /// #   fn baseurl(&self) -> &str { panic!() }
+    /// #   fn client(&self) -> &reqwest::Client { panic!() }
+    /// #   fn inner(&self) -> &() { panic!() }
+    /// # }
+    /// # impl ClientHooks for X {
+    /// #   async fn exec(
+    /// #       &self,
+    /// #       request: reqwest::Request,
+    /// #       info: &OperationInfo,
+    /// #   ) -> reqwest::Result<reqwest::Response> {
+    ///         self.client().execute(request).await
+    /// #   }
+    /// # }
+    /// ```
     async fn exec(
         &self,
         request: reqwest::Request,
