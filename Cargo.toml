@@ -27,7 +27,7 @@ clap = { version = "4.5.37" }
 clap-cargo = "0.15.2"
 dropshot = { version = "0.13.0", default-features = false }
 env_logger = "0.10.2"
-expectorate = { version = "1.1.0", features = ["predicates"] }
+expectorate = { version = "1.2.0", features = ["predicates"] }
 futures = "0.3.31"
 futures-core = "0.3.31"
 heck = "0.5.0"
