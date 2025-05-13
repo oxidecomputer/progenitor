@@ -1,15 +1,13 @@
 #[allow(unused_imports)]
-use progenitor_client::{encode_path, RequestBuilderExt};
+use progenitor_client::{encode_path, ClientHooks, OperationInfo, RequestBuilderExt};
 #[allow(unused_imports)]
-pub use progenitor_client::{ByteStream, Error, ResponseValue};
-#[allow(unused_imports)]
-use reqwest::header::{HeaderMap, HeaderValue};
+pub use progenitor_client::{ByteStream, ClientInfo, Error, ResponseValue};
 /// Types used as operation parameters and responses.
 #[allow(clippy::all)]
 pub mod types {
     /// Error types.
     pub mod error {
-        /// Error from a TryFrom or FromStr implementation.
+        /// Error from a `TryFrom` or `FromStr` implementation.
         pub struct ConversionError(::std::borrow::Cow<'static, str>);
         impl ::std::error::Error for ConversionError {}
         impl ::std::fmt::Display for ConversionError {
@@ -37,7 +35,7 @@ pub mod types {
         }
     }
 
-    ///GetThingOrThingsId
+    ///`GetThingOrThingsId`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -78,7 +76,99 @@ pub mod types {
         }
     }
 
-    ///ObjWithOptionArray
+    ///`HeaderArgAcceptLanguage`
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "default": "en",
+    ///  "type": "string",
+    ///  "enum": [
+    ///    "de",
+    ///    "en"
+    ///  ]
+    ///}
+    /// ```
+    /// </details>
+    #[derive(
+        :: serde :: Deserialize,
+        :: serde :: Serialize,
+        Clone,
+        Copy,
+        Debug,
+        Eq,
+        Hash,
+        Ord,
+        PartialEq,
+        PartialOrd,
+        schemars :: JsonSchema,
+    )]
+    pub enum HeaderArgAcceptLanguage {
+        #[serde(rename = "de")]
+        De,
+        #[serde(rename = "en")]
+        En,
+    }
+
+    impl ::std::convert::From<&Self> for HeaderArgAcceptLanguage {
+        fn from(value: &HeaderArgAcceptLanguage) -> Self {
+            value.clone()
+        }
+    }
+
+    impl ::std::fmt::Display for HeaderArgAcceptLanguage {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+            match *self {
+                Self::De => write!(f, "de"),
+                Self::En => write!(f, "en"),
+            }
+        }
+    }
+
+    impl ::std::str::FromStr for HeaderArgAcceptLanguage {
+        type Err = self::error::ConversionError;
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+            match value {
+                "de" => Ok(Self::De),
+                "en" => Ok(Self::En),
+                _ => Err("invalid value".into()),
+            }
+        }
+    }
+
+    impl ::std::convert::TryFrom<&str> for HeaderArgAcceptLanguage {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+            value.parse()
+        }
+    }
+
+    impl ::std::convert::TryFrom<&::std::string::String> for HeaderArgAcceptLanguage {
+        type Error = self::error::ConversionError;
+        fn try_from(
+            value: &::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+            value.parse()
+        }
+    }
+
+    impl ::std::convert::TryFrom<::std::string::String> for HeaderArgAcceptLanguage {
+        type Error = self::error::ConversionError;
+        fn try_from(
+            value: ::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+            value.parse()
+        }
+    }
+
+    impl ::std::default::Default for HeaderArgAcceptLanguage {
+        fn default() -> Self {
+            HeaderArgAcceptLanguage::En
+        }
+    }
+
+    ///`ObjWithOptionArray`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -152,7 +242,7 @@ pub mod types {
         }
     }
 
-    ///Task
+    ///`Task`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -212,7 +302,7 @@ pub mod types {
         }
     }
 
-    ///TaskEvent
+    ///`TaskEvent`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -252,7 +342,7 @@ pub mod types {
         pub payload: ::std::string::String,
         pub seq: u32,
         pub stream: ::std::string::String,
-        pub time: chrono::DateTime<chrono::offset::Utc>,
+        pub time: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
     impl ::std::convert::From<&TaskEvent> for TaskEvent {
@@ -267,7 +357,7 @@ pub mod types {
         }
     }
 
-    ///TaskOutput
+    ///`TaskOutput`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -316,7 +406,7 @@ pub mod types {
         }
     }
 
-    ///TaskSubmit
+    ///`TaskSubmit`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -371,7 +461,7 @@ pub mod types {
         }
     }
 
-    ///TaskSubmitResult
+    ///`TaskSubmitResult`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -408,7 +498,7 @@ pub mod types {
         }
     }
 
-    ///UploadedChunk
+    ///`UploadedChunk`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -445,7 +535,7 @@ pub mod types {
         }
     }
 
-    ///UserCreate
+    ///`UserCreate`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -482,7 +572,7 @@ pub mod types {
         }
     }
 
-    ///UserCreateResult
+    ///`UserCreateResult`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -529,7 +619,7 @@ pub mod types {
         }
     }
 
-    ///WhoamiResult
+    ///`WhoamiResult`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -571,7 +661,7 @@ pub mod types {
         }
     }
 
-    ///Worker
+    ///`Worker`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -620,7 +710,7 @@ pub mod types {
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         pub instance_id: ::std::option::Option<::std::string::String>,
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-        pub lastping: ::std::option::Option<chrono::DateTime<chrono::offset::Utc>>,
+        pub lastping: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
         pub recycle: bool,
         pub tasks: ::std::vec::Vec<WorkerTask>,
     }
@@ -637,7 +727,7 @@ pub mod types {
         }
     }
 
-    ///WorkerAddOutput
+    ///`WorkerAddOutput`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -688,7 +778,7 @@ pub mod types {
         }
     }
 
-    ///WorkerAppendTask
+    ///`WorkerAppendTask`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -721,7 +811,7 @@ pub mod types {
     pub struct WorkerAppendTask {
         pub payload: ::std::string::String,
         pub stream: ::std::string::String,
-        pub time: chrono::DateTime<chrono::offset::Utc>,
+        pub time: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
     impl ::std::convert::From<&WorkerAppendTask> for WorkerAppendTask {
@@ -736,7 +826,7 @@ pub mod types {
         }
     }
 
-    ///WorkerBootstrap
+    ///`WorkerBootstrap`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -778,7 +868,7 @@ pub mod types {
         }
     }
 
-    ///WorkerBootstrapResult
+    ///`WorkerBootstrapResult`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -815,7 +905,7 @@ pub mod types {
         }
     }
 
-    ///WorkerCompleteTask
+    ///`WorkerCompleteTask`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -852,7 +942,7 @@ pub mod types {
         }
     }
 
-    ///WorkerPingResult
+    ///`WorkerPingResult`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -894,7 +984,7 @@ pub mod types {
         }
     }
 
-    ///WorkerPingTask
+    ///`WorkerPingTask`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -944,7 +1034,7 @@ pub mod types {
         }
     }
 
-    ///WorkerTask
+    ///`WorkerTask`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -991,7 +1081,7 @@ pub mod types {
         }
     }
 
-    ///WorkersResult
+    ///`WorkersResult`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -1205,8 +1295,10 @@ pub mod types {
             payload: ::std::result::Result<::std::string::String, ::std::string::String>,
             seq: ::std::result::Result<u32, ::std::string::String>,
             stream: ::std::result::Result<::std::string::String, ::std::string::String>,
-            time:
-                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
+            time: ::std::result::Result<
+                ::chrono::DateTime<::chrono::offset::Utc>,
+                ::std::string::String,
+            >,
         }
 
         impl ::std::default::Default for TaskEvent {
@@ -1253,7 +1345,7 @@ pub mod types {
             }
             pub fn time<T>(mut self, value: T) -> Self
             where
-                T: ::std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T: ::std::convert::TryInto<::chrono::DateTime<::chrono::offset::Utc>>,
                 T::Error: ::std::fmt::Display,
             {
                 self.time = value
@@ -1717,7 +1809,7 @@ pub mod types {
                 ::std::string::String,
             >,
             lastping: ::std::result::Result<
-                ::std::option::Option<chrono::DateTime<chrono::offset::Utc>>,
+                ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
                 ::std::string::String,
             >,
             recycle: ::std::result::Result<bool, ::std::string::String>,
@@ -1771,7 +1863,7 @@ pub mod types {
             pub fn lastping<T>(mut self, value: T) -> Self
             where
                 T: ::std::convert::TryInto<
-                    ::std::option::Option<chrono::DateTime<chrono::offset::Utc>>,
+                    ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
                 >,
                 T::Error: ::std::fmt::Display,
             {
@@ -1911,8 +2003,10 @@ pub mod types {
         pub struct WorkerAppendTask {
             payload: ::std::result::Result<::std::string::String, ::std::string::String>,
             stream: ::std::result::Result<::std::string::String, ::std::string::String>,
-            time:
-                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
+            time: ::std::result::Result<
+                ::chrono::DateTime<::chrono::offset::Utc>,
+                ::std::string::String,
+            >,
         }
 
         impl ::std::default::Default for WorkerAppendTask {
@@ -1948,7 +2042,7 @@ pub mod types {
             }
             pub fn time<T>(mut self, value: T) -> Self
             where
-                T: ::std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T: ::std::convert::TryInto<::chrono::DateTime<::chrono::offset::Utc>>,
                 T::Error: ::std::fmt::Display,
             {
                 self.time = value
@@ -2424,26 +2518,27 @@ impl Client {
             client,
         }
     }
+}
 
-    /// Get the base URL to which requests are made.
-    pub fn baseurl(&self) -> &String {
-        &self.baseurl
+impl ClientInfo<()> for Client {
+    fn api_version() -> &'static str {
+        "1.0"
     }
 
-    /// Get the internal `reqwest::Client` used to make requests.
-    pub fn client(&self) -> &reqwest::Client {
+    fn baseurl(&self) -> &str {
+        self.baseurl.as_str()
+    }
+
+    fn client(&self) -> &reqwest::Client {
         &self.client
     }
 
-    /// Get the version of this API.
-    ///
-    /// This string is pulled directly from the source OpenAPI
-    /// document and may be in any format the API selects.
-    pub fn api_version(&self) -> &'static str {
-        "1.0"
+    fn inner(&self) -> &() {
+        &()
     }
 }
 
+impl ClientHooks<()> for &Client {}
 impl Client {
     ///Sends a `POST` request to `/v1/control/hold`
     ///
@@ -2683,6 +2778,18 @@ impl Client {
     pub fn get_thing_or_things(&self) -> builder::GetThingOrThings {
         builder::GetThingOrThings::new(self)
     }
+
+    ///Sends a `GET` request to `/v1/header-arg`
+    ///
+    ///```ignore
+    /// let response = client.header_arg()
+    ///    .accept_language(accept_language)
+    ///    .send()
+    ///    .await;
+    /// ```
+    pub fn header_arg(&self) -> builder::HeaderArg {
+        builder::HeaderArg::new(self)
+    }
 }
 
 /// Types for composing operation parameters.
@@ -2691,14 +2798,15 @@ pub mod builder {
     use super::types;
     #[allow(unused_imports)]
     use super::{
-        encode_path, ByteStream, Error, HeaderMap, HeaderValue, RequestBuilderExt, ResponseValue,
+        encode_path, ByteStream, ClientHooks, ClientInfo, Error, OperationInfo, RequestBuilderExt,
+        ResponseValue,
     };
     pub mod built {
         use super::super::types;
         #[allow(unused_imports)]
         use super::super::{
-            encode_path, ByteStream, Error, HeaderMap, HeaderValue, RequestBuilderExt,
-            ResponseValue,
+            encode_path, ByteStream, ClientHooks, ClientInfo, Error, OperationInfo,
+            RequestBuilderExt, ResponseValue,
         };
         pub struct ControlHold<'a> {
             pub(crate) client: &'a super::super::Client,
@@ -2710,7 +2818,12 @@ pub mod builder {
                 let Self { client, request } = self;
                 #[allow(unused_mut)]
                 let mut request = request.build()?;
-                let result = client.client.execute(request).await;
+                let info = OperationInfo {
+                    operation_id: "control_hold",
+                };
+                client.pre(&mut request, &info).await?;
+                let result = client.exec(request, &info).await;
+                client.post(&result, &info).await?;
                 let response = result?;
                 match response.status().as_u16() {
                     200u16 => ResponseValue::from_response(response).await,
@@ -2738,7 +2851,12 @@ pub mod builder {
                 let Self { client, request } = self;
                 #[allow(unused_mut)]
                 let mut request = request.build()?;
-                let result = client.client.execute(request).await;
+                let info = OperationInfo {
+                    operation_id: "control_resume",
+                };
+                client.pre(&mut request, &info).await?;
+                let result = client.exec(request, &info).await;
+                client.post(&result, &info).await?;
                 let response = result?;
                 match response.status().as_u16() {
                     200u16 => Ok(ResponseValue::empty(response)),
@@ -2766,7 +2884,12 @@ pub mod builder {
                 let Self { client, request } = self;
                 #[allow(unused_mut)]
                 let mut request = request.build()?;
-                let result = client.client.execute(request).await;
+                let info = OperationInfo {
+                    operation_id: "task_get",
+                };
+                client.pre(&mut request, &info).await?;
+                let result = client.exec(request, &info).await;
+                client.post(&result, &info).await?;
                 let response = result?;
                 match response.status().as_u16() {
                     200u16 => ResponseValue::from_response(response).await,
@@ -2796,7 +2919,12 @@ pub mod builder {
                 let Self { client, request } = self;
                 #[allow(unused_mut)]
                 let mut request = request.build()?;
-                let result = client.client.execute(request).await;
+                let info = OperationInfo {
+                    operation_id: "tasks_get",
+                };
+                client.pre(&mut request, &info).await?;
+                let result = client.exec(request, &info).await;
+                client.post(&result, &info).await?;
                 let response = result?;
                 match response.status().as_u16() {
                     200u16 => ResponseValue::from_response(response).await,
@@ -2824,7 +2952,12 @@ pub mod builder {
                 let Self { client, request } = self;
                 #[allow(unused_mut)]
                 let mut request = request.build()?;
-                let result = client.client.execute(request).await;
+                let info = OperationInfo {
+                    operation_id: "task_submit",
+                };
+                client.pre(&mut request, &info).await?;
+                let result = client.exec(request, &info).await;
+                client.post(&result, &info).await?;
                 let response = result?;
                 match response.status().as_u16() {
                     201u16 => ResponseValue::from_response(response).await,
@@ -2854,7 +2987,12 @@ pub mod builder {
                 let Self { client, request } = self;
                 #[allow(unused_mut)]
                 let mut request = request.build()?;
-                let result = client.client.execute(request).await;
+                let info = OperationInfo {
+                    operation_id: "task_events_get",
+                };
+                client.pre(&mut request, &info).await?;
+                let result = client.exec(request, &info).await;
+                client.post(&result, &info).await?;
                 let response = result?;
                 match response.status().as_u16() {
                     200u16 => ResponseValue::from_response(response).await,
@@ -2884,7 +3022,12 @@ pub mod builder {
                 let Self { client, request } = self;
                 #[allow(unused_mut)]
                 let mut request = request.build()?;
-                let result = client.client.execute(request).await;
+                let info = OperationInfo {
+                    operation_id: "task_outputs_get",
+                };
+                client.pre(&mut request, &info).await?;
+                let result = client.exec(request, &info).await;
+                client.post(&result, &info).await?;
                 let response = result?;
                 match response.status().as_u16() {
                     200u16 => ResponseValue::from_response(response).await,
@@ -2912,7 +3055,12 @@ pub mod builder {
                 let Self { client, request } = self;
                 #[allow(unused_mut)]
                 let mut request = request.build()?;
-                let result = client.client.execute(request).await;
+                let info = OperationInfo {
+                    operation_id: "task_output_download",
+                };
+                client.pre(&mut request, &info).await?;
+                let result = client.exec(request, &info).await;
+                client.post(&result, &info).await?;
                 let response = result?;
                 match response.status().as_u16() {
                     200..=299 => Ok(ResponseValue::stream(response)),
@@ -2940,7 +3088,12 @@ pub mod builder {
                 let Self { client, request } = self;
                 #[allow(unused_mut)]
                 let mut request = request.build()?;
-                let result = client.client.execute(request).await;
+                let info = OperationInfo {
+                    operation_id: "user_create",
+                };
+                client.pre(&mut request, &info).await?;
+                let result = client.exec(request, &info).await;
+                client.post(&result, &info).await?;
                 let response = result?;
                 match response.status().as_u16() {
                     201u16 => ResponseValue::from_response(response).await,
@@ -2968,7 +3121,12 @@ pub mod builder {
                 let Self { client, request } = self;
                 #[allow(unused_mut)]
                 let mut request = request.build()?;
-                let result = client.client.execute(request).await;
+                let info = OperationInfo {
+                    operation_id: "whoami",
+                };
+                client.pre(&mut request, &info).await?;
+                let result = client.exec(request, &info).await;
+                client.post(&result, &info).await?;
                 let response = result?;
                 match response.status().as_u16() {
                     200u16 => ResponseValue::from_response(response).await,
@@ -2996,7 +3154,12 @@ pub mod builder {
                 let Self { client, request } = self;
                 #[allow(unused_mut)]
                 let mut request = request.build()?;
-                let result = client.client.execute(request).await;
+                let info = OperationInfo {
+                    operation_id: "whoami_put_name",
+                };
+                client.pre(&mut request, &info).await?;
+                let result = client.exec(request, &info).await;
+                client.post(&result, &info).await?;
                 let response = result?;
                 match response.status().as_u16() {
                     200u16 => Ok(ResponseValue::empty(response)),
@@ -3026,7 +3189,12 @@ pub mod builder {
                 let Self { client, request } = self;
                 #[allow(unused_mut)]
                 let mut request = request.build()?;
-                let result = client.client.execute(request).await;
+                let info = OperationInfo {
+                    operation_id: "worker_bootstrap",
+                };
+                client.pre(&mut request, &info).await?;
+                let result = client.exec(request, &info).await;
+                client.post(&result, &info).await?;
                 let response = result?;
                 match response.status().as_u16() {
                     201u16 => ResponseValue::from_response(response).await,
@@ -3054,7 +3222,12 @@ pub mod builder {
                 let Self { client, request } = self;
                 #[allow(unused_mut)]
                 let mut request = request.build()?;
-                let result = client.client.execute(request).await;
+                let info = OperationInfo {
+                    operation_id: "worker_ping",
+                };
+                client.pre(&mut request, &info).await?;
+                let result = client.exec(request, &info).await;
+                client.post(&result, &info).await?;
                 let response = result?;
                 match response.status().as_u16() {
                     200u16 => ResponseValue::from_response(response).await,
@@ -3082,7 +3255,12 @@ pub mod builder {
                 let Self { client, request } = self;
                 #[allow(unused_mut)]
                 let mut request = request.build()?;
-                let result = client.client.execute(request).await;
+                let info = OperationInfo {
+                    operation_id: "worker_task_append",
+                };
+                client.pre(&mut request, &info).await?;
+                let result = client.exec(request, &info).await;
+                client.post(&result, &info).await?;
                 let response = result?;
                 match response.status().as_u16() {
                     201u16 => Ok(ResponseValue::empty(response)),
@@ -3110,7 +3288,12 @@ pub mod builder {
                 let Self { client, request } = self;
                 #[allow(unused_mut)]
                 let mut request = request.build()?;
-                let result = client.client.execute(request).await;
+                let info = OperationInfo {
+                    operation_id: "worker_task_upload_chunk",
+                };
+                client.pre(&mut request, &info).await?;
+                let result = client.exec(request, &info).await;
+                client.post(&result, &info).await?;
                 let response = result?;
                 match response.status().as_u16() {
                     201u16 => ResponseValue::from_response(response).await,
@@ -3138,7 +3321,12 @@ pub mod builder {
                 let Self { client, request } = self;
                 #[allow(unused_mut)]
                 let mut request = request.build()?;
-                let result = client.client.execute(request).await;
+                let info = OperationInfo {
+                    operation_id: "worker_task_complete",
+                };
+                client.pre(&mut request, &info).await?;
+                let result = client.exec(request, &info).await;
+                client.post(&result, &info).await?;
                 let response = result?;
                 match response.status().as_u16() {
                     200u16 => Ok(ResponseValue::empty(response)),
@@ -3166,7 +3354,12 @@ pub mod builder {
                 let Self { client, request } = self;
                 #[allow(unused_mut)]
                 let mut request = request.build()?;
-                let result = client.client.execute(request).await;
+                let info = OperationInfo {
+                    operation_id: "worker_task_add_output",
+                };
+                client.pre(&mut request, &info).await?;
+                let result = client.exec(request, &info).await;
+                client.post(&result, &info).await?;
                 let response = result?;
                 match response.status().as_u16() {
                     201u16 => Ok(ResponseValue::empty(response)),
@@ -3194,7 +3387,12 @@ pub mod builder {
                 let Self { client, request } = self;
                 #[allow(unused_mut)]
                 let mut request = request.build()?;
-                let result = client.client.execute(request).await;
+                let info = OperationInfo {
+                    operation_id: "workers_list",
+                };
+                client.pre(&mut request, &info).await?;
+                let result = client.exec(request, &info).await;
+                client.post(&result, &info).await?;
                 let response = result?;
                 match response.status().as_u16() {
                     200u16 => ResponseValue::from_response(response).await,
@@ -3222,7 +3420,12 @@ pub mod builder {
                 let Self { client, request } = self;
                 #[allow(unused_mut)]
                 let mut request = request.build()?;
-                let result = client.client.execute(request).await;
+                let info = OperationInfo {
+                    operation_id: "workers_recycle",
+                };
+                client.pre(&mut request, &info).await?;
+                let result = client.exec(request, &info).await;
+                client.post(&result, &info).await?;
                 let response = result?;
                 match response.status().as_u16() {
                     200u16 => Ok(ResponseValue::empty(response)),
@@ -3250,11 +3453,49 @@ pub mod builder {
                 let Self { client, request } = self;
                 #[allow(unused_mut)]
                 let mut request = request.build()?;
-                let result = client.client.execute(request).await;
+                let info = OperationInfo {
+                    operation_id: "get_thing_or_things",
+                };
+                client.pre(&mut request, &info).await?;
+                let result = client.exec(request, &info).await;
+                client.post(&result, &info).await?;
                 let response = result?;
                 match response.status().as_u16() {
                     200u16 => ResponseValue::from_response(response).await,
                     _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct HeaderArg<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> HeaderArg<'a> {
+            pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let info = OperationInfo {
+                    operation_id: "header_arg",
+                };
+                client.pre(&mut request, &info).await?;
+                let result = client.exec(request, &info).await;
+                client.post(&result, &info).await?;
+                let response = result?;
+                match response.status().as_u16() {
+                    200..=299 => Ok(ResponseValue::empty(response)),
+                    _ => Err(Error::ErrorResponse(ResponseValue::empty(response))),
                 }
             }
             pub fn map_request<F>(self, f: F) -> Self
@@ -3291,10 +3532,19 @@ pub mod builder {
             let Self { client } = self;
             let request = {
                 let url = format!("{}/v1/control/hold", client.baseurl,);
-                client.client.post(url).header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
+                let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+                header_map.append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
+                );
+                client
+                    .client
+                    .post(url)
+                    .header(
+                        ::reqwest::header::ACCEPT,
+                        ::reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .headers(header_map)
             };
             Ok(built::ControlHold {
                 client: client,
@@ -3325,7 +3575,12 @@ pub mod builder {
             let Self { client } = self;
             let request = {
                 let url = format!("{}/v1/control/resume", client.baseurl,);
-                client.client.post(url)
+                let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+                header_map.append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
+                );
+                client.client.post(url).headers(header_map)
             };
             Ok(built::ControlResume {
                 client: client,
@@ -3375,10 +3630,19 @@ pub mod builder {
                     client.baseurl,
                     encode_path(&task.to_string()),
                 );
-                client.client.get(url).header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
+                let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+                header_map.append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
+                );
+                client
+                    .client
+                    .get(url)
+                    .header(
+                        ::reqwest::header::ACCEPT,
+                        ::reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .headers(header_map)
             };
             Ok(built::TaskGet {
                 client: client,
@@ -3409,10 +3673,19 @@ pub mod builder {
             let Self { client } = self;
             let request = {
                 let url = format!("{}/v1/tasks", client.baseurl,);
-                client.client.get(url).header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
+                let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+                header_map.append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
+                );
+                client
+                    .client
+                    .get(url)
+                    .header(
+                        ::reqwest::header::ACCEPT,
+                        ::reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .headers(header_map)
             };
             Ok(built::TasksGet {
                 client: client,
@@ -3470,14 +3743,20 @@ pub mod builder {
                 .map_err(Error::InvalidRequest)?;
             let request = {
                 let url = format!("{}/v1/tasks", client.baseurl,);
+                let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+                header_map.append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
+                );
                 client
                     .client
                     .post(url)
                     .header(
-                        reqwest::header::ACCEPT,
-                        reqwest::header::HeaderValue::from_static("application/json"),
+                        ::reqwest::header::ACCEPT,
+                        ::reqwest::header::HeaderValue::from_static("application/json"),
                     )
                     .json(&body)
+                    .headers(header_map)
             };
             Ok(built::TaskSubmit {
                 client: client,
@@ -3547,14 +3826,20 @@ pub mod builder {
                     client.baseurl,
                     encode_path(&task.to_string()),
                 );
+                let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+                header_map.append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
+                );
                 client
                     .client
                     .get(url)
                     .header(
-                        reqwest::header::ACCEPT,
-                        reqwest::header::HeaderValue::from_static("application/json"),
+                        ::reqwest::header::ACCEPT,
+                        ::reqwest::header::HeaderValue::from_static("application/json"),
                     )
                     .query(&progenitor_client::QueryParam::new("minseq", &minseq))
+                    .headers(header_map)
             };
             Ok(built::TaskEventsGet {
                 client: client,
@@ -3606,10 +3891,19 @@ pub mod builder {
                     client.baseurl,
                     encode_path(&task.to_string()),
                 );
-                client.client.get(url).header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
+                let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+                header_map.append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
+                );
+                client
+                    .client
+                    .get(url)
+                    .header(
+                        ::reqwest::header::ACCEPT,
+                        ::reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .headers(header_map)
             };
             Ok(built::TaskOutputsGet {
                 client: client,
@@ -3677,7 +3971,12 @@ pub mod builder {
                     encode_path(&task.to_string()),
                     encode_path(&output.to_string()),
                 );
-                client.client.get(url)
+                let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+                header_map.append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
+                );
+                client.client.get(url).headers(header_map)
             };
             Ok(built::TaskOutputDownload {
                 client: client,
@@ -3735,14 +4034,20 @@ pub mod builder {
                 .map_err(Error::InvalidRequest)?;
             let request = {
                 let url = format!("{}/v1/users", client.baseurl,);
+                let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+                header_map.append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
+                );
                 client
                     .client
                     .post(url)
                     .header(
-                        reqwest::header::ACCEPT,
-                        reqwest::header::HeaderValue::from_static("application/json"),
+                        ::reqwest::header::ACCEPT,
+                        ::reqwest::header::HeaderValue::from_static("application/json"),
                     )
                     .json(&body)
+                    .headers(header_map)
             };
             Ok(built::UserCreate {
                 client: client,
@@ -3773,10 +4078,19 @@ pub mod builder {
             let Self { client } = self;
             let request = {
                 let url = format!("{}/v1/whoami", client.baseurl,);
-                client.client.get(url).header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
+                let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+                header_map.append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
+                );
+                client
+                    .client
+                    .get(url)
+                    .header(
+                        ::reqwest::header::ACCEPT,
+                        ::reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .headers(header_map)
             };
             Ok(built::Whoami {
                 client: client,
@@ -3823,14 +4137,20 @@ pub mod builder {
             let body = body.map_err(Error::InvalidRequest)?;
             let request = {
                 let url = format!("{}/v1/whoami/name", client.baseurl,);
+                let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+                header_map.append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
+                );
                 client
                     .client
                     .put(url)
                     .header(
-                        reqwest::header::CONTENT_TYPE,
-                        reqwest::header::HeaderValue::from_static("text/plain"),
+                        ::reqwest::header::CONTENT_TYPE,
+                        ::reqwest::header::HeaderValue::from_static("text/plain"),
                     )
                     .body(body)
+                    .headers(header_map)
             };
             Ok(built::WhoamiPutName {
                 client: client,
@@ -3888,14 +4208,20 @@ pub mod builder {
                 .map_err(Error::InvalidRequest)?;
             let request = {
                 let url = format!("{}/v1/worker/bootstrap", client.baseurl,);
+                let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+                header_map.append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
+                );
                 client
                     .client
                     .post(url)
                     .header(
-                        reqwest::header::ACCEPT,
-                        reqwest::header::HeaderValue::from_static("application/json"),
+                        ::reqwest::header::ACCEPT,
+                        ::reqwest::header::HeaderValue::from_static("application/json"),
                     )
                     .json(&body)
+                    .headers(header_map)
             };
             Ok(built::WorkerBootstrap {
                 client: client,
@@ -3926,10 +4252,19 @@ pub mod builder {
             let Self { client } = self;
             let request = {
                 let url = format!("{}/v1/worker/ping", client.baseurl,);
-                client.client.get(url).header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
+                let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+                header_map.append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
+                );
+                client
+                    .client
+                    .get(url)
+                    .header(
+                        ::reqwest::header::ACCEPT,
+                        ::reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .headers(header_map)
             };
             Ok(built::WorkerPing {
                 client: client,
@@ -4006,7 +4341,12 @@ pub mod builder {
                     client.baseurl,
                     encode_path(&task.to_string()),
                 );
-                client.client.post(url).json(&body)
+                let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+                header_map.append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
+                );
+                client.client.post(url).json(&body).headers(header_map)
             };
             Ok(built::WorkerTaskAppend {
                 client: client,
@@ -4069,18 +4409,24 @@ pub mod builder {
                     client.baseurl,
                     encode_path(&task.to_string()),
                 );
+                let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+                header_map.append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
+                );
                 client
                     .client
                     .post(url)
                     .header(
-                        reqwest::header::ACCEPT,
-                        reqwest::header::HeaderValue::from_static("application/json"),
+                        ::reqwest::header::ACCEPT,
+                        ::reqwest::header::HeaderValue::from_static("application/json"),
                     )
                     .header(
-                        reqwest::header::CONTENT_TYPE,
-                        reqwest::header::HeaderValue::from_static("application/octet-stream"),
+                        ::reqwest::header::CONTENT_TYPE,
+                        ::reqwest::header::HeaderValue::from_static("application/octet-stream"),
                     )
                     .body(body)
+                    .headers(header_map)
             };
             Ok(built::WorkerTaskUploadChunk {
                 client: client,
@@ -4157,7 +4503,12 @@ pub mod builder {
                     client.baseurl,
                     encode_path(&task.to_string()),
                 );
-                client.client.post(url).json(&body)
+                let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+                header_map.append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
+                );
+                client.client.post(url).json(&body).headers(header_map)
             };
             Ok(built::WorkerTaskComplete {
                 client: client,
@@ -4232,7 +4583,12 @@ pub mod builder {
                     client.baseurl,
                     encode_path(&task.to_string()),
                 );
-                client.client.post(url).json(&body)
+                let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+                header_map.append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
+                );
+                client.client.post(url).json(&body).headers(header_map)
             };
             Ok(built::WorkerTaskAddOutput {
                 client: client,
@@ -4263,10 +4619,19 @@ pub mod builder {
             let Self { client } = self;
             let request = {
                 let url = format!("{}/v1/workers", client.baseurl,);
-                client.client.get(url).header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
+                let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+                header_map.append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
+                );
+                client
+                    .client
+                    .get(url)
+                    .header(
+                        ::reqwest::header::ACCEPT,
+                        ::reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .headers(header_map)
             };
             Ok(built::WorkersList {
                 client: client,
@@ -4297,7 +4662,12 @@ pub mod builder {
             let Self { client } = self;
             let request = {
                 let url = format!("{}/v1/workers/recycle", client.baseurl,);
-                client.client.post(url)
+                let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+                header_map.append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
+                );
+                client.client.post(url).headers(header_map)
             };
             Ok(built::WorkersRecycle {
                 client: client,
@@ -4344,16 +4714,79 @@ pub mod builder {
             let id = id.map_err(Error::InvalidRequest)?;
             let request = {
                 let url = format!("{}/v1/things", client.baseurl,);
+                let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+                header_map.append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
+                );
                 client
                     .client
                     .get(url)
                     .header(
-                        reqwest::header::ACCEPT,
-                        reqwest::header::HeaderValue::from_static("application/json"),
+                        ::reqwest::header::ACCEPT,
+                        ::reqwest::header::HeaderValue::from_static("application/json"),
                     )
                     .query(&progenitor_client::QueryParam::new("id", &id))
+                    .headers(header_map)
             };
             Ok(built::GetThingOrThings {
+                client: client,
+                request,
+            })
+        }
+    }
+
+    ///Builder for [`Client::header_arg`]
+    ///
+    ///[`Client::header_arg`]: super::Client::header_arg
+    #[derive(Debug, Clone)]
+    pub struct HeaderArg<'a> {
+        client: &'a super::Client,
+        accept_language: Result<Option<types::HeaderArgAcceptLanguage>, String>,
+    }
+
+    impl<'a> HeaderArg<'a> {
+        pub fn new(client: &'a super::Client) -> Self {
+            Self {
+                client: client,
+                accept_language: Ok(None),
+            }
+        }
+
+        pub fn accept_language<V>(mut self, value: V) -> Self
+        where
+            V: std::convert::TryInto<types::HeaderArgAcceptLanguage>,
+        {
+            self.accept_language = value.try_into().map(Some).map_err(|_| {
+                "conversion to `HeaderArgAcceptLanguage` for accept_language failed".to_string()
+            });
+            self
+        }
+
+        ///Sends a `GET` request to `/v1/header-arg`
+        pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::HeaderArg<'a>, Error<()>> {
+            let Self {
+                client,
+                accept_language,
+            } = self;
+            let accept_language = accept_language.map_err(Error::InvalidRequest)?;
+            let request = {
+                let url = format!("{}/v1/header-arg", client.baseurl,);
+                let mut header_map = ::reqwest::header::HeaderMap::with_capacity(2usize);
+                header_map.append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
+                );
+                if let Some(value) = accept_language {
+                    header_map.append("accept-language", value.to_string().try_into()?);
+                }
+                client.client.get(url).headers(header_map)
+            };
+            Ok(built::HeaderArg {
                 client: client,
                 request,
             })

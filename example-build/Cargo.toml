@@ -9,12 +9,12 @@ chrono = { version = "0.4", features = ["serde"] }
 progenitor-client = { path = "../progenitor-client" }
 reqwest = { version = "0.12.4", features = ["json", "stream"] }
 base64 = "0.22"
-rand = "0.8"
+rand = "0.9"
 serde = { version = "1.0", features = ["derive"] }
-uuid = { version = "1.11", features = ["serde", "v4"] }
+uuid = { version = "1.16", features = ["serde", "v4"] }
 
 [build-dependencies]
-prettyplease = "0.2.25"
+prettyplease = "0.2.32"
 progenitor = { path = "../progenitor", default-features = false }
 serde_json = "1.0"
 syn = "2.0"

@@ -84,6 +84,8 @@ There are seven sub-categories of error covered by the error type variants:
 
 - An unexpected status code in the response
 
+- A custom error, particular to the generated client
+
 These errors are covered by the variants of the `Error<E>` type:
 
 ```rust
@@ -95,5 +97,6 @@ pub enum Error<E = ()> {
     ResponseBodyError(reqwest::Error),
     InvalidResponsePayload(bytes::Bytes, reqwest::Error),
     UnexpectedResponse(reqwest::Response),
+    Custom(String),
 }
 ```

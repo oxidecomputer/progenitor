@@ -13,7 +13,17 @@
 
 == Unreleased changes (release date TBD)
 
-https://github.com/oxidecomputer/progenitor/compare/v0.9.1\...HEAD[Full list of commits]
+https://github.com/oxidecomputer/progenitor/compare/v0.10.0\...HEAD[Full list of commits]
+
+== 0.10.0 (released 2025-04-30)
+
+https://github.com/oxidecomputer/progenitor/compare/v0.9.1\...v0.10.0[Full list of commits]
+
+* General CLI generation and doc improvements (#1051)
+* Fix header parameters for non-string scalars (#1067)
+* Allow OAS 3.0.4 and other versions starting with '3.0.' (#1107)
+* Generate api-version headers for each request (#1120)
+* Implement From<Infallible> for client error (#1116)
 
 == 0.9.1 (released 2025-01-06)
 

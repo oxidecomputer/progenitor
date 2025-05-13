@@ -1,16 +1,14 @@
 #![allow(elided_named_lifetimes)]
 #[allow(unused_imports)]
-use progenitor_client::{encode_path, RequestBuilderExt};
+use progenitor_client::{encode_path, ClientHooks, OperationInfo, RequestBuilderExt};
 #[allow(unused_imports)]
-pub use progenitor_client::{ByteStream, Error, ResponseValue};
-#[allow(unused_imports)]
-use reqwest::header::{HeaderMap, HeaderValue};
+pub use progenitor_client::{ByteStream, ClientInfo, Error, ResponseValue};
 /// Types used as operation parameters and responses.
 #[allow(clippy::all)]
 pub mod types {
     /// Error types.
     pub mod error {
-        /// Error from a TryFrom or FromStr implementation.
+        /// Error from a `TryFrom` or `FromStr` implementation.
         pub struct ConversionError(::std::borrow::Cow<'static, str>);
         impl ::std::error::Error for ConversionError {}
         impl ::std::fmt::Display for ConversionError {
@@ -38,7 +36,7 @@ pub mod types {
         }
     }
 
-    ///GetThingOrThingsId
+    ///`GetThingOrThingsId`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -77,7 +75,98 @@ pub mod types {
         }
     }
 
-    ///ObjWithOptionArray
+    ///`HeaderArgAcceptLanguage`
+    ///
+    /// <details><summary>JSON schema</summary>
+    ///
+    /// ```json
+    ///{
+    ///  "default": "en",
+    ///  "type": "string",
+    ///  "enum": [
+    ///    "de",
+    ///    "en"
+    ///  ]
+    ///}
+    /// ```
+    /// </details>
+    #[derive(
+        :: serde :: Deserialize,
+        :: serde :: Serialize,
+        Clone,
+        Copy,
+        Debug,
+        Eq,
+        Hash,
+        Ord,
+        PartialEq,
+        PartialOrd,
+    )]
+    pub enum HeaderArgAcceptLanguage {
+        #[serde(rename = "de")]
+        De,
+        #[serde(rename = "en")]
+        En,
+    }
+
+    impl ::std::convert::From<&Self> for HeaderArgAcceptLanguage {
+        fn from(value: &HeaderArgAcceptLanguage) -> Self {
+            value.clone()
+        }
+    }
+
+    impl ::std::fmt::Display for HeaderArgAcceptLanguage {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+            match *self {
+                Self::De => write!(f, "de"),
+                Self::En => write!(f, "en"),
+            }
+        }
+    }
+
+    impl ::std::str::FromStr for HeaderArgAcceptLanguage {
+        type Err = self::error::ConversionError;
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+            match value {
+                "de" => Ok(Self::De),
+                "en" => Ok(Self::En),
+                _ => Err("invalid value".into()),
+            }
+        }
+    }
+
+    impl ::std::convert::TryFrom<&str> for HeaderArgAcceptLanguage {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+            value.parse()
+        }
+    }
+
+    impl ::std::convert::TryFrom<&::std::string::String> for HeaderArgAcceptLanguage {
+        type Error = self::error::ConversionError;
+        fn try_from(
+            value: &::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+            value.parse()
+        }
+    }
+
+    impl ::std::convert::TryFrom<::std::string::String> for HeaderArgAcceptLanguage {
+        type Error = self::error::ConversionError;
+        fn try_from(
+            value: ::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+            value.parse()
+        }
+    }
+
+    impl ::std::default::Default for HeaderArgAcceptLanguage {
+        fn default() -> Self {
+            HeaderArgAcceptLanguage::En
+        }
+    }
+
+    ///`ObjWithOptionArray`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -143,7 +232,7 @@ pub mod types {
         }
     }
 
-    ///Task
+    ///`Task`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -195,7 +284,7 @@ pub mod types {
         }
     }
 
-    ///TaskEvent
+    ///`TaskEvent`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -233,7 +322,7 @@ pub mod types {
         pub payload: ::std::string::String,
         pub seq: u32,
         pub stream: ::std::string::String,
-        pub time: chrono::DateTime<chrono::offset::Utc>,
+        pub time: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
     impl ::std::convert::From<&TaskEvent> for TaskEvent {
@@ -242,7 +331,7 @@ pub mod types {
         }
     }
 
-    ///TaskOutput
+    ///`TaskOutput`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -283,7 +372,7 @@ pub mod types {
         }
     }
 
-    ///TaskSubmit
+    ///`TaskSubmit`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -330,7 +419,7 @@ pub mod types {
         }
     }
 
-    ///TaskSubmitResult
+    ///`TaskSubmitResult`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -359,7 +448,7 @@ pub mod types {
         }
     }
 
-    ///UploadedChunk
+    ///`UploadedChunk`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -388,7 +477,7 @@ pub mod types {
         }
     }
 
-    ///UserCreate
+    ///`UserCreate`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -417,7 +506,7 @@ pub mod types {
         }
     }
 
-    ///UserCreateResult
+    ///`UserCreateResult`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -456,7 +545,7 @@ pub mod types {
         }
     }
 
-    ///WhoamiResult
+    ///`WhoamiResult`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -490,7 +579,7 @@ pub mod types {
         }
     }
 
-    ///Worker
+    ///`Worker`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -537,7 +626,7 @@ pub mod types {
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         pub instance_id: ::std::option::Option<::std::string::String>,
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-        pub lastping: ::std::option::Option<chrono::DateTime<chrono::offset::Utc>>,
+        pub lastping: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
         pub recycle: bool,
         pub tasks: ::std::vec::Vec<WorkerTask>,
     }
@@ -548,7 +637,7 @@ pub mod types {
         }
     }
 
-    ///WorkerAddOutput
+    ///`WorkerAddOutput`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -591,7 +680,7 @@ pub mod types {
         }
     }
 
-    ///WorkerAppendTask
+    ///`WorkerAppendTask`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -622,7 +711,7 @@ pub mod types {
     pub struct WorkerAppendTask {
         pub payload: ::std::string::String,
         pub stream: ::std::string::String,
-        pub time: chrono::DateTime<chrono::offset::Utc>,
+        pub time: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
     impl ::std::convert::From<&WorkerAppendTask> for WorkerAppendTask {
@@ -631,7 +720,7 @@ pub mod types {
         }
     }
 
-    ///WorkerBootstrap
+    ///`WorkerBootstrap`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -665,7 +754,7 @@ pub mod types {
         }
     }
 
-    ///WorkerBootstrapResult
+    ///`WorkerBootstrapResult`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -694,7 +783,7 @@ pub mod types {
         }
     }
 
-    ///WorkerCompleteTask
+    ///`WorkerCompleteTask`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -723,7 +812,7 @@ pub mod types {
         }
     }
 
-    ///WorkerPingResult
+    ///`WorkerPingResult`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -757,7 +846,7 @@ pub mod types {
         }
     }
 
-    ///WorkerPingTask
+    ///`WorkerPingTask`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -799,7 +888,7 @@ pub mod types {
         }
     }
 
-    ///WorkerTask
+    ///`WorkerTask`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -838,7 +927,7 @@ pub mod types {
         }
     }
 
-    ///WorkersResult
+    ///`WorkersResult`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -911,26 +1000,27 @@ impl Client {
             client,
         }
     }
+}
 
-    /// Get the base URL to which requests are made.
-    pub fn baseurl(&self) -> &String {
-        &self.baseurl
+impl ClientInfo<()> for Client {
+    fn api_version() -> &'static str {
+        "1.0"
     }
 
-    /// Get the internal `reqwest::Client` used to make requests.
-    pub fn client(&self) -> &reqwest::Client {
+    fn baseurl(&self) -> &str {
+        self.baseurl.as_str()
+    }
+
+    fn client(&self) -> &reqwest::Client {
         &self.client
     }
 
-    /// Get the version of this API.
-    ///
-    /// This string is pulled directly from the source OpenAPI
-    /// document and may be in any format the API selects.
-    pub fn api_version(&self) -> &'static str {
-        "1.0"
+    fn inner(&self) -> &() {
+        &()
     }
 }
 
+impl ClientHooks<()> for &Client {}
 #[allow(clippy::all)]
 #[allow(elided_named_lifetimes)]
 impl Client {
@@ -939,14 +1029,27 @@ impl Client {
         #[allow(unused_mut)]
         let mut request = {
             let url = format!("{}/v1/control/hold", self.baseurl,);
-            self.client.post(url).header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
-            )
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .post(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
         }
 
         .build()?;
-        let result = self.client.execute(request).await;
+        let info = OperationInfo {
+            operation_id: "control_hold",
+        };
+        self.pre(&mut request, &info).await?;
+        let result = self.exec(request, &info).await;
+        self.post(&result, &info).await?;
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
@@ -959,11 +1062,21 @@ impl Client {
         #[allow(unused_mut)]
         let mut request = {
             let url = format!("{}/v1/control/resume", self.baseurl,);
-            self.client.post(url)
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client.post(url).headers(header_map)
         }
 
         .build()?;
-        let result = self.client.execute(request).await;
+        let info = OperationInfo {
+            operation_id: "control_resume",
+        };
+        self.pre(&mut request, &info).await?;
+        let result = self.exec(request, &info).await;
+        self.post(&result, &info).await?;
         let response = result?;
         match response.status().as_u16() {
             200u16 => Ok(ResponseValue::empty(response)),
@@ -983,14 +1096,27 @@ impl Client {
                 self.baseurl,
                 encode_path(&task.to_string()),
             );
-            self.client.get(url).header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
-            )
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
         }
 
         .build()?;
-        let result = self.client.execute(request).await;
+        let info = OperationInfo {
+            operation_id: "task_get",
+        };
+        self.pre(&mut request, &info).await?;
+        let result = self.exec(request, &info).await;
+        self.post(&result, &info).await?;
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
@@ -1005,14 +1131,27 @@ impl Client {
         #[allow(unused_mut)]
         let mut request = {
             let url = format!("{}/v1/tasks", self.baseurl,);
-            self.client.get(url).header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
-            )
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
         }
 
         .build()?;
-        let result = self.client.execute(request).await;
+        let info = OperationInfo {
+            operation_id: "tasks_get",
+        };
+        self.pre(&mut request, &info).await?;
+        let result = self.exec(request, &info).await;
+        self.post(&result, &info).await?;
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
@@ -1028,17 +1167,28 @@ impl Client {
         #[allow(unused_mut)]
         let mut request = {
             let url = format!("{}/v1/tasks", self.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
             self.client
                 .post(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
+                .headers(header_map)
         }
 
         .build()?;
-        let result = self.client.execute(request).await;
+        let info = OperationInfo {
+            operation_id: "task_submit",
+        };
+        self.pre(&mut request, &info).await?;
+        let result = self.exec(request, &info).await;
+        self.post(&result, &info).await?;
         let response = result?;
         match response.status().as_u16() {
             201u16 => ResponseValue::from_response(response).await,
@@ -1059,17 +1209,28 @@ impl Client {
                 self.baseurl,
                 encode_path(&task.to_string()),
             );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
             self.client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .query(&progenitor_client::QueryParam::new("minseq", &minseq))
+                .headers(header_map)
         }
 
         .build()?;
-        let result = self.client.execute(request).await;
+        let info = OperationInfo {
+            operation_id: "task_events_get",
+        };
+        self.pre(&mut request, &info).await?;
+        let result = self.exec(request, &info).await;
+        self.post(&result, &info).await?;
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
@@ -1089,14 +1250,27 @@ impl Client {
                 self.baseurl,
                 encode_path(&task.to_string()),
             );
-            self.client.get(url).header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
-            )
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
         }
 
         .build()?;
-        let result = self.client.execute(request).await;
+        let info = OperationInfo {
+            operation_id: "task_outputs_get",
+        };
+        self.pre(&mut request, &info).await?;
+        let result = self.exec(request, &info).await;
+        self.post(&result, &info).await?;
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
@@ -1118,11 +1292,21 @@ impl Client {
                 encode_path(&task.to_string()),
                 encode_path(&output.to_string()),
             );
-            self.client.get(url)
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client.get(url).headers(header_map)
         }
 
         .build()?;
-        let result = self.client.execute(request).await;
+        let info = OperationInfo {
+            operation_id: "task_output_download",
+        };
+        self.pre(&mut request, &info).await?;
+        let result = self.exec(request, &info).await;
+        self.post(&result, &info).await?;
         let response = result?;
         match response.status().as_u16() {
             200..=299 => Ok(ResponseValue::stream(response)),
@@ -1138,17 +1322,28 @@ impl Client {
         #[allow(unused_mut)]
         let mut request = {
             let url = format!("{}/v1/users", self.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
             self.client
                 .post(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
+                .headers(header_map)
         }
 
         .build()?;
-        let result = self.client.execute(request).await;
+        let info = OperationInfo {
+            operation_id: "user_create",
+        };
+        self.pre(&mut request, &info).await?;
+        let result = self.exec(request, &info).await;
+        self.post(&result, &info).await?;
         let response = result?;
         match response.status().as_u16() {
             201u16 => ResponseValue::from_response(response).await,
@@ -1161,14 +1356,27 @@ impl Client {
         #[allow(unused_mut)]
         let mut request = {
             let url = format!("{}/v1/whoami", self.baseurl,);
-            self.client.get(url).header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
-            )
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
         }
 
         .build()?;
-        let result = self.client.execute(request).await;
+        let info = OperationInfo {
+            operation_id: "whoami",
+        };
+        self.pre(&mut request, &info).await?;
+        let result = self.exec(request, &info).await;
+        self.post(&result, &info).await?;
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
@@ -1184,17 +1392,28 @@ impl Client {
         #[allow(unused_mut)]
         let mut request = {
             let url = format!("{}/v1/whoami/name", self.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
             self.client
                 .put(url)
                 .header(
-                    reqwest::header::CONTENT_TYPE,
-                    reqwest::header::HeaderValue::from_static("text/plain"),
+                    ::reqwest::header::CONTENT_TYPE,
+                    ::reqwest::header::HeaderValue::from_static("text/plain"),
                 )
                 .body(body)
+                .headers(header_map)
         }
 
         .build()?;
-        let result = self.client.execute(request).await;
+        let info = OperationInfo {
+            operation_id: "whoami_put_name",
+        };
+        self.pre(&mut request, &info).await?;
+        let result = self.exec(request, &info).await;
+        self.post(&result, &info).await?;
         let response = result?;
         match response.status().as_u16() {
             200u16 => Ok(ResponseValue::empty(response)),
@@ -1210,17 +1429,28 @@ impl Client {
         #[allow(unused_mut)]
         let mut request = {
             let url = format!("{}/v1/worker/bootstrap", self.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
             self.client
                 .post(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
+                .headers(header_map)
         }
 
         .build()?;
-        let result = self.client.execute(request).await;
+        let info = OperationInfo {
+            operation_id: "worker_bootstrap",
+        };
+        self.pre(&mut request, &info).await?;
+        let result = self.exec(request, &info).await;
+        self.post(&result, &info).await?;
         let response = result?;
         match response.status().as_u16() {
             201u16 => ResponseValue::from_response(response).await,
@@ -1235,14 +1465,27 @@ impl Client {
         #[allow(unused_mut)]
         let mut request = {
             let url = format!("{}/v1/worker/ping", self.baseurl,);
-            self.client.get(url).header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
-            )
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
         }
 
         .build()?;
-        let result = self.client.execute(request).await;
+        let info = OperationInfo {
+            operation_id: "worker_ping",
+        };
+        self.pre(&mut request, &info).await?;
+        let result = self.exec(request, &info).await;
+        self.post(&result, &info).await?;
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
@@ -1263,11 +1506,21 @@ impl Client {
                 self.baseurl,
                 encode_path(&task.to_string()),
             );
-            self.client.post(url).json(&body)
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client.post(url).json(&body).headers(header_map)
         }
 
         .build()?;
-        let result = self.client.execute(request).await;
+        let info = OperationInfo {
+            operation_id: "worker_task_append",
+        };
+        self.pre(&mut request, &info).await?;
+        let result = self.exec(request, &info).await;
+        self.post(&result, &info).await?;
         let response = result?;
         match response.status().as_u16() {
             201u16 => Ok(ResponseValue::empty(response)),
@@ -1288,21 +1541,32 @@ impl Client {
                 self.baseurl,
                 encode_path(&task.to_string()),
             );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
             self.client
                 .post(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .header(
-                    reqwest::header::CONTENT_TYPE,
-                    reqwest::header::HeaderValue::from_static("application/octet-stream"),
+                    ::reqwest::header::CONTENT_TYPE,
+                    ::reqwest::header::HeaderValue::from_static("application/octet-stream"),
                 )
                 .body(body)
+                .headers(header_map)
         }
 
         .build()?;
-        let result = self.client.execute(request).await;
+        let info = OperationInfo {
+            operation_id: "worker_task_upload_chunk",
+        };
+        self.pre(&mut request, &info).await?;
+        let result = self.exec(request, &info).await;
+        self.post(&result, &info).await?;
         let response = result?;
         match response.status().as_u16() {
             201u16 => ResponseValue::from_response(response).await,
@@ -1323,11 +1587,21 @@ impl Client {
                 self.baseurl,
                 encode_path(&task.to_string()),
             );
-            self.client.post(url).json(&body)
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client.post(url).json(&body).headers(header_map)
         }
 
         .build()?;
-        let result = self.client.execute(request).await;
+        let info = OperationInfo {
+            operation_id: "worker_task_complete",
+        };
+        self.pre(&mut request, &info).await?;
+        let result = self.exec(request, &info).await;
+        self.post(&result, &info).await?;
         let response = result?;
         match response.status().as_u16() {
             200u16 => Ok(ResponseValue::empty(response)),
@@ -1348,11 +1622,21 @@ impl Client {
                 self.baseurl,
                 encode_path(&task.to_string()),
             );
-            self.client.post(url).json(&body)
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client.post(url).json(&body).headers(header_map)
         }
 
         .build()?;
-        let result = self.client.execute(request).await;
+        let info = OperationInfo {
+            operation_id: "worker_task_add_output",
+        };
+        self.pre(&mut request, &info).await?;
+        let result = self.exec(request, &info).await;
+        self.post(&result, &info).await?;
         let response = result?;
         match response.status().as_u16() {
             201u16 => Ok(ResponseValue::empty(response)),
@@ -1367,14 +1651,27 @@ impl Client {
         #[allow(unused_mut)]
         let mut request = {
             let url = format!("{}/v1/workers", self.baseurl,);
-            self.client.get(url).header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
-            )
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
         }
 
         .build()?;
-        let result = self.client.execute(request).await;
+        let info = OperationInfo {
+            operation_id: "workers_list",
+        };
+        self.pre(&mut request, &info).await?;
+        let result = self.exec(request, &info).await;
+        self.post(&result, &info).await?;
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
@@ -1387,11 +1684,21 @@ impl Client {
         #[allow(unused_mut)]
         let mut request = {
             let url = format!("{}/v1/workers/recycle", self.baseurl,);
-            self.client.post(url)
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client.post(url).headers(header_map)
         }
 
         .build()?;
-        let result = self.client.execute(request).await;
+        let info = OperationInfo {
+            operation_id: "workers_recycle",
+        };
+        self.pre(&mut request, &info).await?;
+        let result = self.exec(request, &info).await;
+        self.post(&result, &info).await?;
         let response = result?;
         match response.status().as_u16() {
             200u16 => Ok(ResponseValue::empty(response)),
@@ -1407,21 +1714,65 @@ impl Client {
         #[allow(unused_mut)]
         let mut request = {
             let url = format!("{}/v1/things", self.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
             self.client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .query(&progenitor_client::QueryParam::new("id", &id))
+                .headers(header_map)
         }
 
         .build()?;
-        let result = self.client.execute(request).await;
+        let info = OperationInfo {
+            operation_id: "get_thing_or_things",
+        };
+        self.pre(&mut request, &info).await?;
+        let result = self.exec(request, &info).await;
+        self.post(&result, &info).await?;
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
             _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    ///Sends a `GET` request to `/v1/header-arg`
+    pub async fn header_arg<'a>(
+        &'a self,
+        accept_language: Option<types::HeaderArgAcceptLanguage>,
+    ) -> Result<ResponseValue<()>, Error<()>> {
+        #[allow(unused_mut)]
+        let mut request = {
+            let url = format!("{}/v1/header-arg", self.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(2usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            if let Some(value) = accept_language {
+                header_map.append("accept-language", value.to_string().try_into()?);
+            }
+            self.client.get(url).headers(header_map)
+        }
+
+        .build()?;
+        let info = OperationInfo {
+            operation_id: "header_arg",
+        };
+        self.pre(&mut request, &info).await?;
+        let result = self.exec(request, &info).await;
+        self.post(&result, &info).await?;
+        let response = result?;
+        match response.status().as_u16() {
+            200..=299 => Ok(ResponseValue::empty(response)),
+            _ => Err(Error::ErrorResponse(ResponseValue::empty(response))),
         }
     }
 }

@@ -1,16 +1,14 @@
 #![allow(elided_named_lifetimes)]
 #[allow(unused_imports)]
-use progenitor_client::{encode_path, RequestBuilderExt};
+use progenitor_client::{encode_path, ClientHooks, OperationInfo, RequestBuilderExt};
 #[allow(unused_imports)]
-pub use progenitor_client::{ByteStream, Error, ResponseValue};
-#[allow(unused_imports)]
-use reqwest::header::{HeaderMap, HeaderValue};
+pub use progenitor_client::{ByteStream, ClientInfo, Error, ResponseValue};
 /// Types used as operation parameters and responses.
 #[allow(clippy::all)]
 pub mod types {
     /// Error types.
     pub mod error {
-        /// Error from a TryFrom or FromStr implementation.
+        /// Error from a `TryFrom` or `FromStr` implementation.
         pub struct ConversionError(::std::borrow::Cow<'static, str>);
         impl ::std::error::Error for ConversionError {}
         impl ::std::fmt::Display for ConversionError {
@@ -38,7 +36,7 @@ pub mod types {
         }
     }
 
-    ///EnrolBody
+    ///`EnrolBody`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -73,7 +71,7 @@ pub mod types {
         }
     }
 
-    ///GlobalJobsResult
+    ///`GlobalJobsResult`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -106,7 +104,7 @@ pub mod types {
         }
     }
 
-    ///OutputRecord
+    ///`OutputRecord`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -137,7 +135,7 @@ pub mod types {
     pub struct OutputRecord {
         pub msg: ::std::string::String,
         pub stream: ::std::string::String,
-        pub time: chrono::DateTime<chrono::offset::Utc>,
+        pub time: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
     impl ::std::convert::From<&OutputRecord> for OutputRecord {
@@ -146,7 +144,7 @@ pub mod types {
         }
     }
 
-    ///PingResult
+    ///`PingResult`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -181,7 +179,7 @@ pub mod types {
         }
     }
 
-    ///ReportFinishBody
+    ///`ReportFinishBody`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -218,7 +216,7 @@ pub mod types {
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct ReportFinishBody {
         pub duration_millis: i32,
-        pub end_time: chrono::DateTime<chrono::offset::Utc>,
+        pub end_time: ::chrono::DateTime<::chrono::offset::Utc>,
         pub exit_status: i32,
         pub id: ReportId,
     }
@@ -229,7 +227,7 @@ pub mod types {
         }
     }
 
-    ///ReportId
+    ///`ReportId`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -271,7 +269,7 @@ pub mod types {
         pub host: ::std::string::String,
         pub job: ::std::string::String,
         pub pid: u64,
-        pub time: chrono::DateTime<chrono::offset::Utc>,
+        pub time: ::chrono::DateTime<::chrono::offset::Utc>,
         pub uuid: ::std::string::String,
     }
 
@@ -281,7 +279,7 @@ pub mod types {
         }
     }
 
-    ///ReportOutputBody
+    ///`ReportOutputBody`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -316,7 +314,7 @@ pub mod types {
         }
     }
 
-    ///ReportResult
+    ///`ReportResult`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -346,7 +344,7 @@ pub mod types {
         }
     }
 
-    ///ReportStartBody
+    ///`ReportStartBody`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -378,7 +376,7 @@ pub mod types {
     pub struct ReportStartBody {
         pub id: ReportId,
         pub script: ::std::string::String,
-        pub start_time: chrono::DateTime<chrono::offset::Utc>,
+        pub start_time: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
     impl ::std::convert::From<&ReportStartBody> for ReportStartBody {
@@ -387,7 +385,7 @@ pub mod types {
         }
     }
 
-    ///ReportSummary
+    ///`ReportSummary`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -436,7 +434,7 @@ pub mod types {
         pub host: ::std::string::String,
         pub job: ::std::string::String,
         pub status: i32,
-        pub when: chrono::DateTime<chrono::offset::Utc>,
+        pub when: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
     impl ::std::convert::From<&ReportSummary> for ReportSummary {
@@ -488,26 +486,27 @@ impl Client {
             client,
         }
     }
+}
 
-    /// Get the base URL to which requests are made.
-    pub fn baseurl(&self) -> &String {
-        &self.baseurl
+impl ClientInfo<()> for Client {
+    fn api_version() -> &'static str {
+        "1.0"
     }
 
-    /// Get the internal `reqwest::Client` used to make requests.
-    pub fn client(&self) -> &reqwest::Client {
+    fn baseurl(&self) -> &str {
+        self.baseurl.as_str()
+    }
+
+    fn client(&self) -> &reqwest::Client {
         &self.client
     }
 
-    /// Get the version of this API.
-    ///
-    /// This string is pulled directly from the source OpenAPI
-    /// document and may be in any format the API selects.
-    pub fn api_version(&self) -> &'static str {
-        "1.0"
+    fn inner(&self) -> &() {
+        &()
     }
 }
 
+impl ClientHooks<()> for &Client {}
 #[allow(clippy::all)]
 #[allow(elided_named_lifetimes)]
 impl Client {
@@ -524,13 +523,22 @@ impl Client {
         #[allow(unused_mut)]
         let mut request = {
             let url = format!("{}/enrol", self.baseurl,);
-            let mut header_map = HeaderMap::with_capacity(1usize);
-            header_map.append("Authorization", HeaderValue::try_from(authorization)?);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(2usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            header_map.append("Authorization", authorization.to_string().try_into()?);
             self.client.post(url).json(&body).headers(header_map)
         }
 
         .build()?;
-        let result = self.client.execute(request).await;
+        let info = OperationInfo {
+            operation_id: "enrol",
+        };
+        self.pre(&mut request, &info).await?;
+        let result = self.exec(request, &info).await;
+        self.post(&result, &info).await?;
         let response = result?;
         match response.status().as_u16() {
             201u16 => Ok(ResponseValue::empty(response)),
@@ -549,19 +557,28 @@ impl Client {
         #[allow(unused_mut)]
         let mut request = {
             let url = format!("{}/global/jobs", self.baseurl,);
-            let mut header_map = HeaderMap::with_capacity(1usize);
-            header_map.append("Authorization", HeaderValue::try_from(authorization)?);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(2usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            header_map.append("Authorization", authorization.to_string().try_into()?);
             self.client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .headers(header_map)
         }
 
         .build()?;
-        let result = self.client.execute(request).await;
+        let info = OperationInfo {
+            operation_id: "global_jobs",
+        };
+        self.pre(&mut request, &info).await?;
+        let result = self.exec(request, &info).await;
+        self.post(&result, &info).await?;
         let response = result?;
         match response.status().as_u16() {
             201u16 => ResponseValue::from_response(response).await,
@@ -580,19 +597,28 @@ impl Client {
         #[allow(unused_mut)]
         let mut request = {
             let url = format!("{}/ping", self.baseurl,);
-            let mut header_map = HeaderMap::with_capacity(1usize);
-            header_map.append("Authorization", HeaderValue::try_from(authorization)?);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(2usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            header_map.append("Authorization", authorization.to_string().try_into()?);
             self.client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .headers(header_map)
         }
 
         .build()?;
-        let result = self.client.execute(request).await;
+        let info = OperationInfo {
+            operation_id: "ping",
+        };
+        self.pre(&mut request, &info).await?;
+        let result = self.exec(request, &info).await;
+        self.post(&result, &info).await?;
         let response = result?;
         match response.status().as_u16() {
             201u16 => ResponseValue::from_response(response).await,
@@ -613,20 +639,29 @@ impl Client {
         #[allow(unused_mut)]
         let mut request = {
             let url = format!("{}/report/finish", self.baseurl,);
-            let mut header_map = HeaderMap::with_capacity(1usize);
-            header_map.append("Authorization", HeaderValue::try_from(authorization)?);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(2usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            header_map.append("Authorization", authorization.to_string().try_into()?);
             self.client
                 .post(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
                 .headers(header_map)
         }
 
         .build()?;
-        let result = self.client.execute(request).await;
+        let info = OperationInfo {
+            operation_id: "report_finish",
+        };
+        self.pre(&mut request, &info).await?;
+        let result = self.exec(request, &info).await;
+        self.post(&result, &info).await?;
         let response = result?;
         match response.status().as_u16() {
             201u16 => ResponseValue::from_response(response).await,
@@ -647,20 +682,29 @@ impl Client {
         #[allow(unused_mut)]
         let mut request = {
             let url = format!("{}/report/output", self.baseurl,);
-            let mut header_map = HeaderMap::with_capacity(1usize);
-            header_map.append("Authorization", HeaderValue::try_from(authorization)?);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(2usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            header_map.append("Authorization", authorization.to_string().try_into()?);
             self.client
                 .post(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
                 .headers(header_map)
         }
 
         .build()?;
-        let result = self.client.execute(request).await;
+        let info = OperationInfo {
+            operation_id: "report_output",
+        };
+        self.pre(&mut request, &info).await?;
+        let result = self.exec(request, &info).await;
+        self.post(&result, &info).await?;
         let response = result?;
         match response.status().as_u16() {
             201u16 => ResponseValue::from_response(response).await,
@@ -681,20 +725,29 @@ impl Client {
         #[allow(unused_mut)]
         let mut request = {
             let url = format!("{}/report/start", self.baseurl,);
-            let mut header_map = HeaderMap::with_capacity(1usize);
-            header_map.append("Authorization", HeaderValue::try_from(authorization)?);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(2usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            header_map.append("Authorization", authorization.to_string().try_into()?);
             self.client
                 .post(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
                 .headers(header_map)
         }
 
         .build()?;
-        let result = self.client.execute(request).await;
+        let info = OperationInfo {
+            operation_id: "report_start",
+        };
+        self.pre(&mut request, &info).await?;
+        let result = self.exec(request, &info).await;
+        self.post(&result, &info).await?;
         let response = result?;
         match response.status().as_u16() {
             201u16 => ResponseValue::from_response(response).await,

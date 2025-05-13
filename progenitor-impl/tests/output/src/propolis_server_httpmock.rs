@@ -132,7 +132,7 @@ pub mod operations {
             self.0
         }
 
-        pub fn id(self, value: &uuid::Uuid) -> Self {
+        pub fn id(self, value: &::uuid::Uuid) -> Self {
             let re = regex::Regex::new(&format!(
                 "^/instance/disk/{}/snapshot/.*$",
                 value.to_string()
@@ -141,7 +141,7 @@ pub mod operations {
             Self(self.0.path_matches(re))
         }
 
-        pub fn snapshot_id(self, value: &uuid::Uuid) -> Self {
+        pub fn snapshot_id(self, value: &::uuid::Uuid) -> Self {
             let re = regex::Regex::new(&format!(
                 "^/instance/disk/.*/snapshot/{}$",
                 value.to_string()

@@ -1,15 +1,13 @@
 #[allow(unused_imports)]
-use progenitor_client::{encode_path, RequestBuilderExt};
+use progenitor_client::{encode_path, ClientHooks, OperationInfo, RequestBuilderExt};
 #[allow(unused_imports)]
-pub use progenitor_client::{ByteStream, Error, ResponseValue};
-#[allow(unused_imports)]
-use reqwest::header::{HeaderMap, HeaderValue};
+pub use progenitor_client::{ByteStream, ClientInfo, Error, ResponseValue};
 /// Types used as operation parameters and responses.
 #[allow(clippy::all)]
 pub mod types {
     /// Error types.
     pub mod error {
-        /// Error from a TryFrom or FromStr implementation.
+        /// Error from a `TryFrom` or `FromStr` implementation.
         pub struct ConversionError(::std::borrow::Cow<'static, str>);
         impl ::std::error::Error for ConversionError {}
         impl ::std::fmt::Display for ConversionError {
@@ -37,7 +35,7 @@ pub mod types {
         }
     }
 
-    ///CrucibleOpts
+    ///`CrucibleOpts`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -119,7 +117,7 @@ pub mod types {
         pub control: ::std::option::Option<::std::string::String>,
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         pub flush_timeout: ::std::option::Option<u32>,
-        pub id: uuid::Uuid,
+        pub id: ::uuid::Uuid,
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         pub key: ::std::option::Option<::std::string::String>,
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -143,7 +141,7 @@ pub mod types {
         }
     }
 
-    ///DiskAttachment
+    ///`DiskAttachment`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -176,7 +174,7 @@ pub mod types {
         :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
     )]
     pub struct DiskAttachment {
-        pub disk_id: uuid::Uuid,
+        pub disk_id: ::uuid::Uuid,
         pub generation_id: u64,
         pub state: DiskAttachmentState,
     }
@@ -193,7 +191,7 @@ pub mod types {
         }
     }
 
-    ///DiskAttachmentState
+    ///`DiskAttachmentState`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -232,7 +230,7 @@ pub mod types {
         Detached,
         Destroyed,
         Faulted,
-        Attached(uuid::Uuid),
+        Attached(::uuid::Uuid),
     }
 
     impl ::std::convert::From<&Self> for DiskAttachmentState {
@@ -241,13 +239,13 @@ pub mod types {
         }
     }
 
-    impl ::std::convert::From<uuid::Uuid> for DiskAttachmentState {
-        fn from(value: uuid::Uuid) -> Self {
+    impl ::std::convert::From<::uuid::Uuid> for DiskAttachmentState {
+        fn from(value: ::uuid::Uuid) -> Self {
             Self::Attached(value)
         }
     }
 
-    ///DiskRequest
+    ///`DiskRequest`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -359,7 +357,7 @@ pub mod types {
         }
     }
 
-    ///Instance
+    ///`Instance`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -417,7 +415,7 @@ pub mod types {
         }
     }
 
-    ///InstanceEnsureRequest
+    ///`InstanceEnsureRequest`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -497,7 +495,7 @@ pub mod types {
         }
     }
 
-    ///InstanceEnsureResponse
+    ///`InstanceEnsureResponse`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -552,7 +550,7 @@ pub mod types {
         }
     }
 
-    ///InstanceGetResponse
+    ///`InstanceGetResponse`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -589,7 +587,7 @@ pub mod types {
         }
     }
 
-    ///InstanceMigrateInitiateRequest
+    ///`InstanceMigrateInitiateRequest`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -621,9 +619,9 @@ pub mod types {
         :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
     )]
     pub struct InstanceMigrateInitiateRequest {
-        pub migration_id: uuid::Uuid,
+        pub migration_id: ::uuid::Uuid,
         pub src_addr: ::std::string::String,
-        pub src_uuid: uuid::Uuid,
+        pub src_uuid: ::uuid::Uuid,
     }
 
     impl ::std::convert::From<&InstanceMigrateInitiateRequest> for InstanceMigrateInitiateRequest {
@@ -638,7 +636,7 @@ pub mod types {
         }
     }
 
-    ///InstanceMigrateInitiateResponse
+    ///`InstanceMigrateInitiateResponse`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -661,7 +659,7 @@ pub mod types {
         :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
     )]
     pub struct InstanceMigrateInitiateResponse {
-        pub migration_id: uuid::Uuid,
+        pub migration_id: ::uuid::Uuid,
     }
 
     impl ::std::convert::From<&InstanceMigrateInitiateResponse> for InstanceMigrateInitiateResponse {
@@ -676,7 +674,7 @@ pub mod types {
         }
     }
 
-    ///InstanceMigrateStatusRequest
+    ///`InstanceMigrateStatusRequest`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -699,7 +697,7 @@ pub mod types {
         :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
     )]
     pub struct InstanceMigrateStatusRequest {
-        pub migration_id: uuid::Uuid,
+        pub migration_id: ::uuid::Uuid,
     }
 
     impl ::std::convert::From<&InstanceMigrateStatusRequest> for InstanceMigrateStatusRequest {
@@ -714,7 +712,7 @@ pub mod types {
         }
     }
 
-    ///InstanceMigrateStatusResponse
+    ///`InstanceMigrateStatusResponse`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -751,7 +749,7 @@ pub mod types {
         }
     }
 
-    ///InstanceProperties
+    ///`InstanceProperties`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -813,13 +811,13 @@ pub mod types {
     )]
     pub struct InstanceProperties {
         ///ID of the bootrom used to initialize this Instance.
-        pub bootrom_id: uuid::Uuid,
+        pub bootrom_id: ::uuid::Uuid,
         ///Free-form text description of an Instance.
         pub description: ::std::string::String,
         ///Unique identifier for this Instance.
-        pub id: uuid::Uuid,
+        pub id: ::uuid::Uuid,
         ///ID of the image used to initialize this Instance.
-        pub image_id: uuid::Uuid,
+        pub image_id: ::uuid::Uuid,
         ///Size of memory allocated to the Instance, in MiB.
         pub memory: u64,
         ///Human-readable name of the Instance.
@@ -956,7 +954,7 @@ pub mod types {
         }
     }
 
-    ///InstanceStateMonitorRequest
+    ///`InstanceStateMonitorRequest`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -995,7 +993,7 @@ pub mod types {
         }
     }
 
-    ///InstanceStateMonitorResponse
+    ///`InstanceStateMonitorResponse`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -1039,7 +1037,7 @@ pub mod types {
         }
     }
 
-    ///InstanceStateRequested
+    ///`InstanceStateRequested`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -1130,7 +1128,7 @@ pub mod types {
         }
     }
 
-    ///MigrationState
+    ///`MigrationState`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -1245,7 +1243,7 @@ pub mod types {
         }
     }
 
-    ///NetworkInterface
+    ///`NetworkInterface`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -1287,7 +1285,7 @@ pub mod types {
         }
     }
 
-    ///NetworkInterfaceAttachmentState
+    ///`NetworkInterfaceAttachmentState`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -1338,7 +1336,7 @@ pub mod types {
         }
     }
 
-    ///NetworkInterfaceRequest
+    ///`NetworkInterfaceRequest`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -1459,7 +1457,7 @@ pub mod types {
         }
     }
 
-    ///VolumeConstructionRequest
+    ///`VolumeConstructionRequest`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -1613,7 +1611,7 @@ pub mod types {
         #[serde(rename = "volume")]
         Volume {
             block_size: u64,
-            id: uuid::Uuid,
+            id: ::uuid::Uuid,
             #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
             read_only_parent: ::std::option::Option<::std::boxed::Box<VolumeConstructionRequest>>,
             sub_volumes: ::std::vec::Vec<VolumeConstructionRequest>,
@@ -1621,7 +1619,7 @@ pub mod types {
         #[serde(rename = "url")]
         Url {
             block_size: u64,
-            id: uuid::Uuid,
+            id: ::uuid::Uuid,
             url: ::std::string::String,
         },
         #[serde(rename = "region")]
@@ -1633,7 +1631,7 @@ pub mod types {
         #[serde(rename = "file")]
         File {
             block_size: u64,
-            id: uuid::Uuid,
+            id: ::uuid::Uuid,
             path: ::std::string::String,
         },
     }
@@ -1657,7 +1655,7 @@ pub mod types {
                 ::std::string::String,
             >,
             flush_timeout: ::std::result::Result<::std::option::Option<u32>, ::std::string::String>,
-            id: ::std::result::Result<uuid::Uuid, ::std::string::String>,
+            id: ::std::result::Result<::uuid::Uuid, ::std::string::String>,
             key: ::std::result::Result<
                 ::std::option::Option<::std::string::String>,
                 ::std::string::String,
@@ -1728,7 +1726,7 @@ pub mod types {
             }
             pub fn id<T>(mut self, value: T) -> Self
             where
-                T: ::std::convert::TryInto<uuid::Uuid>,
+                T: ::std::convert::TryInto<::uuid::Uuid>,
                 T::Error: ::std::fmt::Display,
             {
                 self.id = value
@@ -1837,7 +1835,7 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct DiskAttachment {
-            disk_id: ::std::result::Result<uuid::Uuid, ::std::string::String>,
+            disk_id: ::std::result::Result<::uuid::Uuid, ::std::string::String>,
             generation_id: ::std::result::Result<u64, ::std::string::String>,
             state: ::std::result::Result<super::DiskAttachmentState, ::std::string::String>,
         }
@@ -1855,7 +1853,7 @@ pub mod types {
         impl DiskAttachment {
             pub fn disk_id<T>(mut self, value: T) -> Self
             where
-                T: ::std::convert::TryInto<uuid::Uuid>,
+                T: ::std::convert::TryInto<::uuid::Uuid>,
                 T::Error: ::std::fmt::Display,
             {
                 self.disk_id = value
@@ -2411,9 +2409,9 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct InstanceMigrateInitiateRequest {
-            migration_id: ::std::result::Result<uuid::Uuid, ::std::string::String>,
+            migration_id: ::std::result::Result<::uuid::Uuid, ::std::string::String>,
             src_addr: ::std::result::Result<::std::string::String, ::std::string::String>,
-            src_uuid: ::std::result::Result<uuid::Uuid, ::std::string::String>,
+            src_uuid: ::std::result::Result<::uuid::Uuid, ::std::string::String>,
         }
 
         impl ::std::default::Default for InstanceMigrateInitiateRequest {
@@ -2429,7 +2427,7 @@ pub mod types {
         impl InstanceMigrateInitiateRequest {
             pub fn migration_id<T>(mut self, value: T) -> Self
             where
-                T: ::std::convert::TryInto<uuid::Uuid>,
+                T: ::std::convert::TryInto<::uuid::Uuid>,
                 T::Error: ::std::fmt::Display,
             {
                 self.migration_id = value.try_into().map_err(|e| {
@@ -2449,7 +2447,7 @@ pub mod types {
             }
             pub fn src_uuid<T>(mut self, value: T) -> Self
             where
-                T: ::std::convert::TryInto<uuid::Uuid>,
+                T: ::std::convert::TryInto<::uuid::Uuid>,
                 T::Error: ::std::fmt::Display,
             {
                 self.src_uuid = value
@@ -2488,7 +2486,7 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct InstanceMigrateInitiateResponse {
-            migration_id: ::std::result::Result<uuid::Uuid, ::std::string::String>,
+            migration_id: ::std::result::Result<::uuid::Uuid, ::std::string::String>,
         }
 
         impl ::std::default::Default for InstanceMigrateInitiateResponse {
@@ -2502,7 +2500,7 @@ pub mod types {
         impl InstanceMigrateInitiateResponse {
             pub fn migration_id<T>(mut self, value: T) -> Self
             where
-                T: ::std::convert::TryInto<uuid::Uuid>,
+                T: ::std::convert::TryInto<::uuid::Uuid>,
                 T::Error: ::std::fmt::Display,
             {
                 self.migration_id = value.try_into().map_err(|e| {
@@ -2537,7 +2535,7 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct InstanceMigrateStatusRequest {
-            migration_id: ::std::result::Result<uuid::Uuid, ::std::string::String>,
+            migration_id: ::std::result::Result<::uuid::Uuid, ::std::string::String>,
         }
 
         impl ::std::default::Default for InstanceMigrateStatusRequest {
@@ -2551,7 +2549,7 @@ pub mod types {
         impl InstanceMigrateStatusRequest {
             pub fn migration_id<T>(mut self, value: T) -> Self
             where
-                T: ::std::convert::TryInto<uuid::Uuid>,
+                T: ::std::convert::TryInto<::uuid::Uuid>,
                 T::Error: ::std::fmt::Display,
             {
                 self.migration_id = value.try_into().map_err(|e| {
@@ -2629,10 +2627,10 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct InstanceProperties {
-            bootrom_id: ::std::result::Result<uuid::Uuid, ::std::string::String>,
+            bootrom_id: ::std::result::Result<::uuid::Uuid, ::std::string::String>,
             description: ::std::result::Result<::std::string::String, ::std::string::String>,
-            id: ::std::result::Result<uuid::Uuid, ::std::string::String>,
-            image_id: ::std::result::Result<uuid::Uuid, ::std::string::String>,
+            id: ::std::result::Result<::uuid::Uuid, ::std::string::String>,
+            image_id: ::std::result::Result<::uuid::Uuid, ::std::string::String>,
             memory: ::std::result::Result<u64, ::std::string::String>,
             name: ::std::result::Result<::std::string::String, ::std::string::String>,
             vcpus: ::std::result::Result<u8, ::std::string::String>,
@@ -2655,7 +2653,7 @@ pub mod types {
         impl InstanceProperties {
             pub fn bootrom_id<T>(mut self, value: T) -> Self
             where
-                T: ::std::convert::TryInto<uuid::Uuid>,
+                T: ::std::convert::TryInto<::uuid::Uuid>,
                 T::Error: ::std::fmt::Display,
             {
                 self.bootrom_id = value
@@ -2675,7 +2673,7 @@ pub mod types {
             }
             pub fn id<T>(mut self, value: T) -> Self
             where
-                T: ::std::convert::TryInto<uuid::Uuid>,
+                T: ::std::convert::TryInto<::uuid::Uuid>,
                 T::Error: ::std::fmt::Display,
             {
                 self.id = value
@@ -2685,7 +2683,7 @@ pub mod types {
             }
             pub fn image_id<T>(mut self, value: T) -> Self
             where
-                T: ::std::convert::TryInto<uuid::Uuid>,
+                T: ::std::convert::TryInto<::uuid::Uuid>,
                 T::Error: ::std::fmt::Display,
             {
                 self.image_id = value
@@ -3021,26 +3019,27 @@ impl Client {
             client,
         }
     }
+}
 
-    /// Get the base URL to which requests are made.
-    pub fn baseurl(&self) -> &String {
-        &self.baseurl
+impl ClientInfo<()> for Client {
+    fn api_version() -> &'static str {
+        "0.0.1"
     }
 
-    /// Get the internal `reqwest::Client` used to make requests.
-    pub fn client(&self) -> &reqwest::Client {
+    fn baseurl(&self) -> &str {
+        self.baseurl.as_str()
+    }
+
+    fn client(&self) -> &reqwest::Client {
         &self.client
     }
 
-    /// Get the version of this API.
-    ///
-    /// This string is pulled directly from the source OpenAPI
-    /// document and may be in any format the API selects.
-    pub fn api_version(&self) -> &'static str {
-        "0.0.1"
+    fn inner(&self) -> &() {
+        &()
     }
 }
 
+impl ClientHooks<()> for &Client {}
 impl Client {
     ///Sends a `GET` request to `/instance`
     ///
@@ -3136,14 +3135,15 @@ pub mod builder {
     use super::types;
     #[allow(unused_imports)]
     use super::{
-        encode_path, ByteStream, Error, HeaderMap, HeaderValue, RequestBuilderExt, ResponseValue,
+        encode_path, ByteStream, ClientHooks, ClientInfo, Error, OperationInfo, RequestBuilderExt,
+        ResponseValue,
     };
     pub mod built {
         use super::super::types;
         #[allow(unused_imports)]
         use super::super::{
-            encode_path, ByteStream, Error, HeaderMap, HeaderValue, RequestBuilderExt,
-            ResponseValue,
+            encode_path, ByteStream, ClientHooks, ClientInfo, Error, OperationInfo,
+            RequestBuilderExt, ResponseValue,
         };
         pub struct InstanceGet<'a> {
             pub(crate) client: &'a super::super::Client,
@@ -3158,7 +3158,12 @@ pub mod builder {
                 let Self { client, request } = self;
                 #[allow(unused_mut)]
                 let mut request = request.build()?;
-                let result = client.client.execute(request).await;
+                let info = OperationInfo {
+                    operation_id: "instance_get",
+                };
+                client.pre(&mut request, &info).await?;
+                let result = client.exec(request, &info).await;
+                client.post(&result, &info).await?;
                 let response = result?;
                 match response.status().as_u16() {
                     200u16 => ResponseValue::from_response(response).await,
@@ -3195,7 +3200,12 @@ pub mod builder {
                 let Self { client, request } = self;
                 #[allow(unused_mut)]
                 let mut request = request.build()?;
-                let result = client.client.execute(request).await;
+                let info = OperationInfo {
+                    operation_id: "instance_ensure",
+                };
+                client.pre(&mut request, &info).await?;
+                let result = client.exec(request, &info).await;
+                client.post(&result, &info).await?;
                 let response = result?;
                 match response.status().as_u16() {
                     201u16 => ResponseValue::from_response(response).await,
@@ -3229,7 +3239,12 @@ pub mod builder {
                 let Self { client, request } = self;
                 #[allow(unused_mut)]
                 let mut request = request.build()?;
-                let result = client.client.execute(request).await;
+                let info = OperationInfo {
+                    operation_id: "instance_issue_crucible_snapshot_request",
+                };
+                client.pre(&mut request, &info).await?;
+                let result = client.exec(request, &info).await;
+                client.post(&result, &info).await?;
                 let response = result?;
                 match response.status().as_u16() {
                     200u16 => ResponseValue::from_response(response).await,
@@ -3266,7 +3281,12 @@ pub mod builder {
                 let Self { client, request } = self;
                 #[allow(unused_mut)]
                 let mut request = request.build()?;
-                let result = client.client.execute(request).await;
+                let info = OperationInfo {
+                    operation_id: "instance_migrate_status",
+                };
+                client.pre(&mut request, &info).await?;
+                let result = client.exec(request, &info).await;
+                client.post(&result, &info).await?;
                 let response = result?;
                 match response.status().as_u16() {
                     200u16 => ResponseValue::from_response(response).await,
@@ -3302,7 +3322,12 @@ pub mod builder {
                 let Self { client, request } = self;
                 #[allow(unused_mut)]
                 let mut request = request.build()?;
-                let result = client.client.execute(request).await;
+                let info = OperationInfo {
+                    operation_id: "instance_serial",
+                };
+                client.pre(&mut request, &info).await?;
+                let result = client.exec(request, &info).await;
+                client.post(&result, &info).await?;
                 let response = result?;
                 match response.status().as_u16() {
                     101u16 => ResponseValue::upgrade(response).await,
@@ -3331,7 +3356,12 @@ pub mod builder {
                 let Self { client, request } = self;
                 #[allow(unused_mut)]
                 let mut request = request.build()?;
-                let result = client.client.execute(request).await;
+                let info = OperationInfo {
+                    operation_id: "instance_state_put",
+                };
+                client.pre(&mut request, &info).await?;
+                let result = client.exec(request, &info).await;
+                client.post(&result, &info).await?;
                 let response = result?;
                 match response.status().as_u16() {
                     204u16 => Ok(ResponseValue::empty(response)),
@@ -3368,7 +3398,12 @@ pub mod builder {
                 let Self { client, request } = self;
                 #[allow(unused_mut)]
                 let mut request = request.build()?;
-                let result = client.client.execute(request).await;
+                let info = OperationInfo {
+                    operation_id: "instance_state_monitor",
+                };
+                client.pre(&mut request, &info).await?;
+                let result = client.exec(request, &info).await;
+                client.post(&result, &info).await?;
                 let response = result?;
                 match response.status().as_u16() {
                     200u16 => ResponseValue::from_response(response).await,
@@ -3417,10 +3452,19 @@ pub mod builder {
             let Self { client } = self;
             let request = {
                 let url = format!("{}/instance", client.baseurl,);
-                client.client.get(url).header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
+                let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+                header_map.append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
+                );
+                client
+                    .client
+                    .get(url)
+                    .header(
+                        ::reqwest::header::ACCEPT,
+                        ::reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .headers(header_map)
             };
             Ok(built::InstanceGet {
                 client: client,
@@ -3484,14 +3528,20 @@ pub mod builder {
                 .map_err(Error::InvalidRequest)?;
             let request = {
                 let url = format!("{}/instance", client.baseurl,);
+                let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+                header_map.append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
+                );
                 client
                     .client
                     .put(url)
                     .header(
-                        reqwest::header::ACCEPT,
-                        reqwest::header::HeaderValue::from_static("application/json"),
+                        ::reqwest::header::ACCEPT,
+                        ::reqwest::header::HeaderValue::from_static("application/json"),
                     )
                     .json(&body)
+                    .headers(header_map)
             };
             Ok(built::InstanceEnsure {
                 client: client,
@@ -3506,8 +3556,8 @@ pub mod builder {
     #[derive(Debug, Clone)]
     pub struct InstanceIssueCrucibleSnapshotRequest<'a> {
         client: &'a super::Client,
-        id: Result<uuid::Uuid, String>,
-        snapshot_id: Result<uuid::Uuid, String>,
+        id: Result<::uuid::Uuid, String>,
+        snapshot_id: Result<::uuid::Uuid, String>,
     }
 
     impl<'a> InstanceIssueCrucibleSnapshotRequest<'a> {
@@ -3521,21 +3571,21 @@ pub mod builder {
 
         pub fn id<V>(mut self, value: V) -> Self
         where
-            V: std::convert::TryInto<uuid::Uuid>,
+            V: std::convert::TryInto<::uuid::Uuid>,
         {
             self.id = value
                 .try_into()
-                .map_err(|_| "conversion to `uuid :: Uuid` for id failed".to_string());
+                .map_err(|_| "conversion to `:: uuid :: Uuid` for id failed".to_string());
             self
         }
 
         pub fn snapshot_id<V>(mut self, value: V) -> Self
         where
-            V: std::convert::TryInto<uuid::Uuid>,
+            V: std::convert::TryInto<::uuid::Uuid>,
         {
             self.snapshot_id = value
                 .try_into()
-                .map_err(|_| "conversion to `uuid :: Uuid` for snapshot_id failed".to_string());
+                .map_err(|_| "conversion to `:: uuid :: Uuid` for snapshot_id failed".to_string());
             self
         }
 
@@ -3562,10 +3612,19 @@ pub mod builder {
                     encode_path(&id.to_string()),
                     encode_path(&snapshot_id.to_string()),
                 );
-                client.client.post(url).header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
-                )
+                let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+                header_map.append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
+                );
+                client
+                    .client
+                    .post(url)
+                    .header(
+                        ::reqwest::header::ACCEPT,
+                        ::reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .headers(header_map)
             };
             Ok(built::InstanceIssueCrucibleSnapshotRequest {
                 client: client,
@@ -3633,14 +3692,20 @@ pub mod builder {
                 .map_err(Error::InvalidRequest)?;
             let request = {
                 let url = format!("{}/instance/migrate/status", client.baseurl,);
+                let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+                header_map.append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
+                );
                 client
                     .client
                     .get(url)
                     .header(
-                        reqwest::header::ACCEPT,
-                        reqwest::header::HeaderValue::from_static("application/json"),
+                        ::reqwest::header::ACCEPT,
+                        ::reqwest::header::HeaderValue::from_static("application/json"),
                     )
                     .json(&body)
+                    .headers(header_map)
             };
             Ok(built::InstanceMigrateStatus {
                 client: client,
@@ -3673,17 +3738,23 @@ pub mod builder {
             let Self { client } = self;
             let request = {
                 let url = format!("{}/instance/serial", client.baseurl,);
+                let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+                header_map.append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
+                );
                 client
                     .client
                     .get(url)
-                    .header(reqwest::header::CONNECTION, "Upgrade")
-                    .header(reqwest::header::UPGRADE, "websocket")
-                    .header(reqwest::header::SEC_WEBSOCKET_VERSION, "13")
+                    .headers(header_map)
+                    .header(::reqwest::header::CONNECTION, "Upgrade")
+                    .header(::reqwest::header::UPGRADE, "websocket")
+                    .header(::reqwest::header::SEC_WEBSOCKET_VERSION, "13")
                     .header(
-                        reqwest::header::SEC_WEBSOCKET_KEY,
-                        base64::Engine::encode(
-                            &base64::engine::general_purpose::STANDARD,
-                            rand::random::<[u8; 16]>(),
+                        ::reqwest::header::SEC_WEBSOCKET_KEY,
+                        ::base64::Engine::encode(
+                            &::base64::engine::general_purpose::STANDARD,
+                            ::rand::random::<[u8; 16]>(),
                         ),
                     )
             };
@@ -3731,14 +3802,20 @@ pub mod builder {
             let body = body.map_err(Error::InvalidRequest)?;
             let request = {
                 let url = format!("{}/instance/state", client.baseurl,);
+                let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+                header_map.append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
+                );
                 client
                     .client
                     .put(url)
                     .header(
-                        reqwest::header::ACCEPT,
-                        reqwest::header::HeaderValue::from_static("application/json"),
+                        ::reqwest::header::ACCEPT,
+                        ::reqwest::header::HeaderValue::from_static("application/json"),
                     )
                     .json(&body)
+                    .headers(header_map)
             };
             Ok(built::InstanceStatePut {
                 client: client,
@@ -3806,14 +3883,20 @@ pub mod builder {
                 .map_err(Error::InvalidRequest)?;
             let request = {
                 let url = format!("{}/instance/state-monitor", client.baseurl,);
+                let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+                header_map.append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
+                );
                 client
                     .client
                     .get(url)
                     .header(
-                        reqwest::header::ACCEPT,
-                        reqwest::header::HeaderValue::from_static("application/json"),
+                        ::reqwest::header::ACCEPT,
+                        ::reqwest::header::HeaderValue::from_static("application/json"),
                     )
                     .json(&body)
+                    .headers(header_map)
             };
             Ok(built::InstanceStateMonitor {
                 client: client,

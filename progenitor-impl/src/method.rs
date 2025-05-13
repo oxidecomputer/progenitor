@@ -1,4 +1,4 @@
-// Copyright 2024 Oxide Computer Company
+// Copyright 2025 Oxide Computer Company
 
 use std::{
     cmp::Ordering,
@@ -611,7 +611,7 @@ impl Generator {
             error: error_type,
             build,
             send,
-        } = self.method_sig_body(method, quote! { self }, has_inner)?;
+        } = self.method_sig_body(method, quote! { Self }, quote! { self }, has_inner)?;
 
         let method_impl = quote! {
             #[doc = #doc_comment]
@@ -772,7 +772,8 @@ impl Generator {
     fn method_sig_body(
         &self,
         method: &OperationMethod,
-        client: TokenStream,
+        client_type: TokenStream,
+        client_value: TokenStream,
         has_inner: bool,
     ) -> Result<MethodSigBody> {
         let param_names = method
@@ -811,12 +812,18 @@ impl Generator {
                     let hn_ident = format_ident!("{}", &param.name);
                     let res = if *required {
                         quote! {
-                            header_map.append(#hn, HeaderValue::try_from(#hn_ident)?);
+                            header_map.append(
+                                #hn,
+                                #hn_ident.to_string().try_into()?
+                            );
                         }
                     } else {
                         quote! {
-                            if let Some(v) = #hn_ident {
-                                header_map.append(#hn, HeaderValue::try_from(v)?);
+                            if let Some(value) = #hn_ident {
+                                header_map.append(
+                                    #hn,
+                                    value.to_string().try_into()?
+                                );
                             }
                         }
                     };
@@ -826,31 +833,31 @@ impl Generator {
             })
             .collect::<Vec<_>>();
 
-        let (headers_build, headers_use) = if headers.is_empty() {
-            (quote! {}, quote! {})
-        } else {
-            let size = headers.len();
-            let headers_build = quote! {
-                let mut header_map = HeaderMap::with_capacity(#size);
-                #(#headers)*
-            };
-            let headers_use = quote! {
-                .headers(header_map)
-            };
+        let headers_size = headers.len() + 1;
+        let headers_build = quote! {
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(#headers_size);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(#client_type::api_version()),
+            );
 
-            (headers_build, headers_use)
+            #(#headers)*
+        };
+
+        let headers_use = quote! {
+            .headers(header_map)
         };
 
         let websock_hdrs = if method.dropshot_websocket {
             quote! {
-                .header(reqwest::header::CONNECTION, "Upgrade")
-                .header(reqwest::header::UPGRADE, "websocket")
-                .header(reqwest::header::SEC_WEBSOCKET_VERSION, "13")
+                .header(::reqwest::header::CONNECTION, "Upgrade")
+                .header(::reqwest::header::UPGRADE, "websocket")
+                .header(::reqwest::header::SEC_WEBSOCKET_VERSION, "13")
                 .header(
-                    reqwest::header::SEC_WEBSOCKET_KEY,
-                    base64::Engine::encode(
-                        &base64::engine::general_purpose::STANDARD,
-                        rand::random::<[u8; 16]>(),
+                    ::reqwest::header::SEC_WEBSOCKET_KEY,
+                    ::base64::Engine::encode(
+                        &::base64::engine::general_purpose::STANDARD,
+                        ::rand::random::<[u8; 16]>(),
                     )
                 )
             }
@@ -869,7 +876,7 @@ impl Generator {
             })
             .collect();
 
-        let url_path = method.path.compile(url_renames, client.clone());
+        let url_path = method.path.compile(url_renames, client_value.clone());
         let url_path = quote! {
             let #url_ident = #url_path;
         };
@@ -884,8 +891,8 @@ impl Generator {
                     // Set the content type (this is handled by helper
                     // functions for other MIME types).
                     .header(
-                        reqwest::header::CONTENT_TYPE,
-                        reqwest::header::HeaderValue::from_static("application/octet-stream"),
+                        ::reqwest::header::CONTENT_TYPE,
+                        ::reqwest::header::HeaderValue::from_static("application/octet-stream"),
                     )
                     .body(body)
                 }),
@@ -896,8 +903,8 @@ impl Generator {
                     // Set the content type (this is handled by helper
                     // functions for other MIME types).
                     .header(
-                        reqwest::header::CONTENT_TYPE,
-                        reqwest::header::HeaderValue::from_static(#mime_type),
+                        ::reqwest::header::CONTENT_TYPE,
+                        ::reqwest::header::HeaderValue::from_static(#mime_type),
                     )
                     .body(body)
                 }),
@@ -1028,8 +1035,8 @@ impl Generator {
         .then(|| {
             quote! {
                     .header(
-                        reqwest::header::ACCEPT,
-                        reqwest::header::HeaderValue::from_static(
+                        ::reqwest::header::ACCEPT,
+                        ::reqwest::header::HeaderValue::from_static(
                             "application/json",
                         ),
                     )
@@ -1050,7 +1057,7 @@ impl Generator {
         };
 
         let inner = match has_inner {
-            true => quote! { &#client.inner, },
+            true => quote! { &#client_value.inner, },
             false => quote! {},
         };
         let pre_hook = self.settings.pre_hook.as_ref().map(|hook| {
@@ -1062,7 +1069,7 @@ impl Generator {
             quote! {
                 match (#hook)(#inner &mut request).await {
                     Ok(_) => (),
-                    Err(e) => return Err(Error::PreHookError(e.to_string())),
+                    Err(e) => return Err(Error::Custom(e.to_string())),
                 }
             }
         });
@@ -1075,11 +1082,12 @@ impl Generator {
             quote! {
                 match (#hook)(#inner &#result_ident).await {
                     Ok(_) => (),
-                    Err(e) => return Err(Error::PostHookError(e.to_string())),
+                    Err(e) => return Err(Error::Custom(e.to_string())),
                 }
             }
         });
 
+        let operation_id = &method.operation_id;
         let method_func = format_ident!("{}", method.method.as_str());
 
         let build_impl = quote! {
@@ -1087,7 +1095,7 @@ impl Generator {
 
             #headers_build
 
-            #client.client
+            #client_value.client
                 . #method_func (#url_ident)
                 #accept_header
                 #(#body_func)*
@@ -1098,13 +1106,25 @@ impl Generator {
 
         // Assumes `request: reqwest::Request`
         let send_impl = quote! {
+            let info = OperationInfo {
+                operation_id: #operation_id,
+            };
+
             #pre_hook
             #pre_hook_async
-            let #result_ident = #client.client
-                .execute(request)
+            #client_value
+                .pre(&mut request, &info)
+                .await?;
+
+            let #result_ident = #client_value
+                .exec(request, &info)
                 .await;
-            #post_hook
+
+            #client_value
+                .post(&#result_ident, &info)
+                .await?;
             #post_hook_async
+            #post_hook
 
             let #response_ident = #result_ident?;
 
@@ -1641,7 +1661,12 @@ impl Generator {
             error,
             build,
             send,
-        } = self.method_sig_body(method, quote! { client }, has_inner)?;
+        } = self.method_sig_body(
+            method,
+            quote! { super::Client },
+            quote! { client },
+            has_inner,
+        )?;
 
         let send_doc = format!(
             "Sends a `{}` request to `{}`",
@@ -1727,9 +1752,9 @@ impl Generator {
                     #item_type,
                     Error<#error>,
                 >> + Unpin + 'a {
-                    use futures::StreamExt;
-                    use futures::TryFutureExt;
-                    use futures::TryStreamExt;
+                    use ::futures::StreamExt;
+                    use ::futures::TryFutureExt;
+                    use ::futures::TryStreamExt;
 
                     // This is the builder template we'll use for iterative
                     // steps past the first; it has all query params set to

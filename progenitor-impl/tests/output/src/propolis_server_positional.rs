@@ -1,16 +1,14 @@
 #![allow(elided_named_lifetimes)]
 #[allow(unused_imports)]
-use progenitor_client::{encode_path, RequestBuilderExt};
+use progenitor_client::{encode_path, ClientHooks, OperationInfo, RequestBuilderExt};
 #[allow(unused_imports)]
-pub use progenitor_client::{ByteStream, Error, ResponseValue};
-#[allow(unused_imports)]
-use reqwest::header::{HeaderMap, HeaderValue};
+pub use progenitor_client::{ByteStream, ClientInfo, Error, ResponseValue};
 /// Types used as operation parameters and responses.
 #[allow(clippy::all)]
 pub mod types {
     /// Error types.
     pub mod error {
-        /// Error from a TryFrom or FromStr implementation.
+        /// Error from a `TryFrom` or `FromStr` implementation.
         pub struct ConversionError(::std::borrow::Cow<'static, str>);
         impl ::std::error::Error for ConversionError {}
         impl ::std::fmt::Display for ConversionError {
@@ -38,7 +36,7 @@ pub mod types {
         }
     }
 
-    ///CrucibleOpts
+    ///`CrucibleOpts`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -118,7 +116,7 @@ pub mod types {
         pub control: ::std::option::Option<::std::string::String>,
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         pub flush_timeout: ::std::option::Option<u32>,
-        pub id: uuid::Uuid,
+        pub id: ::uuid::Uuid,
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         pub key: ::std::option::Option<::std::string::String>,
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -136,7 +134,7 @@ pub mod types {
         }
     }
 
-    ///DiskAttachment
+    ///`DiskAttachment`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -167,7 +165,7 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct DiskAttachment {
-        pub disk_id: uuid::Uuid,
+        pub disk_id: ::uuid::Uuid,
         pub generation_id: u64,
         pub state: DiskAttachmentState,
     }
@@ -178,7 +176,7 @@ pub mod types {
         }
     }
 
-    ///DiskAttachmentState
+    ///`DiskAttachmentState`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -215,7 +213,7 @@ pub mod types {
         Detached,
         Destroyed,
         Faulted,
-        Attached(uuid::Uuid),
+        Attached(::uuid::Uuid),
     }
 
     impl ::std::convert::From<&Self> for DiskAttachmentState {
@@ -224,13 +222,13 @@ pub mod types {
         }
     }
 
-    impl ::std::convert::From<uuid::Uuid> for DiskAttachmentState {
-        fn from(value: uuid::Uuid) -> Self {
+    impl ::std::convert::From<::uuid::Uuid> for DiskAttachmentState {
+        fn from(value: ::uuid::Uuid) -> Self {
             Self::Attached(value)
         }
     }
 
-    ///DiskRequest
+    ///`DiskRequest`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -326,7 +324,7 @@ pub mod types {
         }
     }
 
-    ///Instance
+    ///`Instance`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -376,7 +374,7 @@ pub mod types {
         }
     }
 
-    ///InstanceEnsureRequest
+    ///`InstanceEnsureRequest`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -448,7 +446,7 @@ pub mod types {
         }
     }
 
-    ///InstanceEnsureResponse
+    ///`InstanceEnsureResponse`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -495,7 +493,7 @@ pub mod types {
         }
     }
 
-    ///InstanceGetResponse
+    ///`InstanceGetResponse`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -524,7 +522,7 @@ pub mod types {
         }
     }
 
-    ///InstanceMigrateInitiateRequest
+    ///`InstanceMigrateInitiateRequest`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -554,9 +552,9 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct InstanceMigrateInitiateRequest {
-        pub migration_id: uuid::Uuid,
+        pub migration_id: ::uuid::Uuid,
         pub src_addr: ::std::string::String,
-        pub src_uuid: uuid::Uuid,
+        pub src_uuid: ::uuid::Uuid,
     }
 
     impl ::std::convert::From<&InstanceMigrateInitiateRequest> for InstanceMigrateInitiateRequest {
@@ -565,7 +563,7 @@ pub mod types {
         }
     }
 
-    ///InstanceMigrateInitiateResponse
+    ///`InstanceMigrateInitiateResponse`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -586,7 +584,7 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct InstanceMigrateInitiateResponse {
-        pub migration_id: uuid::Uuid,
+        pub migration_id: ::uuid::Uuid,
     }
 
     impl ::std::convert::From<&InstanceMigrateInitiateResponse> for InstanceMigrateInitiateResponse {
@@ -595,7 +593,7 @@ pub mod types {
         }
     }
 
-    ///InstanceMigrateStatusRequest
+    ///`InstanceMigrateStatusRequest`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -616,7 +614,7 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct InstanceMigrateStatusRequest {
-        pub migration_id: uuid::Uuid,
+        pub migration_id: ::uuid::Uuid,
     }
 
     impl ::std::convert::From<&InstanceMigrateStatusRequest> for InstanceMigrateStatusRequest {
@@ -625,7 +623,7 @@ pub mod types {
         }
     }
 
-    ///InstanceMigrateStatusResponse
+    ///`InstanceMigrateStatusResponse`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -654,7 +652,7 @@ pub mod types {
         }
     }
 
-    ///InstanceProperties
+    ///`InstanceProperties`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -714,13 +712,13 @@ pub mod types {
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct InstanceProperties {
         ///ID of the bootrom used to initialize this Instance.
-        pub bootrom_id: uuid::Uuid,
+        pub bootrom_id: ::uuid::Uuid,
         ///Free-form text description of an Instance.
         pub description: ::std::string::String,
         ///Unique identifier for this Instance.
-        pub id: uuid::Uuid,
+        pub id: ::uuid::Uuid,
         ///ID of the image used to initialize this Instance.
-        pub image_id: uuid::Uuid,
+        pub image_id: ::uuid::Uuid,
         ///Size of memory allocated to the Instance, in MiB.
         pub memory: u64,
         ///Human-readable name of the Instance.
@@ -850,7 +848,7 @@ pub mod types {
         }
     }
 
-    ///InstanceStateMonitorRequest
+    ///`InstanceStateMonitorRequest`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -881,7 +879,7 @@ pub mod types {
         }
     }
 
-    ///InstanceStateMonitorResponse
+    ///`InstanceStateMonitorResponse`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -917,7 +915,7 @@ pub mod types {
         }
     }
 
-    ///InstanceStateRequested
+    ///`InstanceStateRequested`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -1007,7 +1005,7 @@ pub mod types {
         }
     }
 
-    ///MigrationState
+    ///`MigrationState`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -1121,7 +1119,7 @@ pub mod types {
         }
     }
 
-    ///NetworkInterface
+    ///`NetworkInterface`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -1155,7 +1153,7 @@ pub mod types {
         }
     }
 
-    ///NetworkInterfaceAttachmentState
+    ///`NetworkInterfaceAttachmentState`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -1204,7 +1202,7 @@ pub mod types {
         }
     }
 
-    ///NetworkInterfaceRequest
+    ///`NetworkInterfaceRequest`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -1315,7 +1313,7 @@ pub mod types {
         }
     }
 
-    ///VolumeConstructionRequest
+    ///`VolumeConstructionRequest`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -1467,7 +1465,7 @@ pub mod types {
         #[serde(rename = "volume")]
         Volume {
             block_size: u64,
-            id: uuid::Uuid,
+            id: ::uuid::Uuid,
             #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
             read_only_parent: ::std::option::Option<::std::boxed::Box<VolumeConstructionRequest>>,
             sub_volumes: ::std::vec::Vec<VolumeConstructionRequest>,
@@ -1475,7 +1473,7 @@ pub mod types {
         #[serde(rename = "url")]
         Url {
             block_size: u64,
-            id: uuid::Uuid,
+            id: ::uuid::Uuid,
             url: ::std::string::String,
         },
         #[serde(rename = "region")]
@@ -1487,7 +1485,7 @@ pub mod types {
         #[serde(rename = "file")]
         File {
             block_size: u64,
-            id: uuid::Uuid,
+            id: ::uuid::Uuid,
             path: ::std::string::String,
         },
     }
@@ -1541,26 +1539,27 @@ impl Client {
             client,
         }
     }
+}
 
-    /// Get the base URL to which requests are made.
-    pub fn baseurl(&self) -> &String {
-        &self.baseurl
+impl ClientInfo<()> for Client {
+    fn api_version() -> &'static str {
+        "0.0.1"
     }
 
-    /// Get the internal `reqwest::Client` used to make requests.
-    pub fn client(&self) -> &reqwest::Client {
+    fn baseurl(&self) -> &str {
+        self.baseurl.as_str()
+    }
+
+    fn client(&self) -> &reqwest::Client {
         &self.client
     }
 
-    /// Get the version of this API.
-    ///
-    /// This string is pulled directly from the source OpenAPI
-    /// document and may be in any format the API selects.
-    pub fn api_version(&self) -> &'static str {
-        "0.0.1"
+    fn inner(&self) -> &() {
+        &()
     }
 }
 
+impl ClientHooks<()> for &Client {}
 #[allow(clippy::all)]
 #[allow(elided_named_lifetimes)]
 impl Client {
@@ -1571,14 +1570,27 @@ impl Client {
         #[allow(unused_mut)]
         let mut request = {
             let url = format!("{}/instance", self.baseurl,);
-            self.client.get(url).header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
-            )
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
         }
 
         .build()?;
-        let result = self.client.execute(request).await;
+        let info = OperationInfo {
+            operation_id: "instance_get",
+        };
+        self.pre(&mut request, &info).await?;
+        let result = self.exec(request, &info).await;
+        self.post(&result, &info).await?;
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
@@ -1600,17 +1612,28 @@ impl Client {
         #[allow(unused_mut)]
         let mut request = {
             let url = format!("{}/instance", self.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
             self.client
                 .put(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
+                .headers(header_map)
         }
 
         .build()?;
-        let result = self.client.execute(request).await;
+        let info = OperationInfo {
+            operation_id: "instance_ensure",
+        };
+        self.pre(&mut request, &info).await?;
+        let result = self.exec(request, &info).await;
+        self.post(&result, &info).await?;
         let response = result?;
         match response.status().as_u16() {
             201u16 => ResponseValue::from_response(response).await,
@@ -1629,8 +1652,8 @@ impl Client {
     ///Sends a `POST` request to `/instance/disk/{id}/snapshot/{snapshot_id}`
     pub async fn instance_issue_crucible_snapshot_request<'a>(
         &'a self,
-        id: &'a uuid::Uuid,
-        snapshot_id: &'a uuid::Uuid,
+        id: &'a ::uuid::Uuid,
+        snapshot_id: &'a ::uuid::Uuid,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
         #[allow(unused_mut)]
         let mut request = {
@@ -1640,14 +1663,27 @@ impl Client {
                 encode_path(&id.to_string()),
                 encode_path(&snapshot_id.to_string()),
             );
-            self.client.post(url).header(
-                reqwest::header::ACCEPT,
-                reqwest::header::HeaderValue::from_static("application/json"),
-            )
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .post(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
         }
 
         .build()?;
-        let result = self.client.execute(request).await;
+        let info = OperationInfo {
+            operation_id: "instance_issue_crucible_snapshot_request",
+        };
+        self.pre(&mut request, &info).await?;
+        let result = self.exec(request, &info).await;
+        self.post(&result, &info).await?;
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
@@ -1669,17 +1705,28 @@ impl Client {
         #[allow(unused_mut)]
         let mut request = {
             let url = format!("{}/instance/migrate/status", self.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
             self.client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
+                .headers(header_map)
         }
 
         .build()?;
-        let result = self.client.execute(request).await;
+        let info = OperationInfo {
+            operation_id: "instance_migrate_status",
+        };
+        self.pre(&mut request, &info).await?;
+        let result = self.exec(request, &info).await;
+        self.post(&result, &info).await?;
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
@@ -1700,22 +1747,33 @@ impl Client {
         #[allow(unused_mut)]
         let mut request = {
             let url = format!("{}/instance/serial", self.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
             self.client
                 .get(url)
-                .header(reqwest::header::CONNECTION, "Upgrade")
-                .header(reqwest::header::UPGRADE, "websocket")
-                .header(reqwest::header::SEC_WEBSOCKET_VERSION, "13")
+                .headers(header_map)
+                .header(::reqwest::header::CONNECTION, "Upgrade")
+                .header(::reqwest::header::UPGRADE, "websocket")
+                .header(::reqwest::header::SEC_WEBSOCKET_VERSION, "13")
                 .header(
-                    reqwest::header::SEC_WEBSOCKET_KEY,
-                    base64::Engine::encode(
-                        &base64::engine::general_purpose::STANDARD,
-                        rand::random::<[u8; 16]>(),
+                    ::reqwest::header::SEC_WEBSOCKET_KEY,
+                    ::base64::Engine::encode(
+                        &::base64::engine::general_purpose::STANDARD,
+                        ::rand::random::<[u8; 16]>(),
                     ),
                 )
         }
 
         .build()?;
-        let result = self.client.execute(request).await;
+        let info = OperationInfo {
+            operation_id: "instance_serial",
+        };
+        self.pre(&mut request, &info).await?;
+        let result = self.exec(request, &info).await;
+        self.post(&result, &info).await?;
         let response = result?;
         match response.status().as_u16() {
             101u16 => ResponseValue::upgrade(response).await,
@@ -1732,17 +1790,28 @@ impl Client {
         #[allow(unused_mut)]
         let mut request = {
             let url = format!("{}/instance/state", self.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
             self.client
                 .put(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
+                .headers(header_map)
         }
 
         .build()?;
-        let result = self.client.execute(request).await;
+        let info = OperationInfo {
+            operation_id: "instance_state_put",
+        };
+        self.pre(&mut request, &info).await?;
+        let result = self.exec(request, &info).await;
+        self.post(&result, &info).await?;
         let response = result?;
         match response.status().as_u16() {
             204u16 => Ok(ResponseValue::empty(response)),
@@ -1764,17 +1833,28 @@ impl Client {
         #[allow(unused_mut)]
         let mut request = {
             let url = format!("{}/instance/state-monitor", self.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
             self.client
                 .get(url)
                 .header(
-                    reqwest::header::ACCEPT,
-                    reqwest::header::HeaderValue::from_static("application/json"),
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
+                .headers(header_map)
         }
 
         .build()?;
-        let result = self.client.execute(request).await;
+        let info = OperationInfo {
+            operation_id: "instance_state_monitor",
+        };
+        self.pre(&mut request, &info).await?;
+        let result = self.exec(request, &info).await;
+        self.post(&result, &info).await?;
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,

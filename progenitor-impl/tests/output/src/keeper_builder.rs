@@ -1,15 +1,13 @@
 #[allow(unused_imports)]
-use progenitor_client::{encode_path, RequestBuilderExt};
+use progenitor_client::{encode_path, ClientHooks, OperationInfo, RequestBuilderExt};
 #[allow(unused_imports)]
-pub use progenitor_client::{ByteStream, Error, ResponseValue};
-#[allow(unused_imports)]
-use reqwest::header::{HeaderMap, HeaderValue};
+pub use progenitor_client::{ByteStream, ClientInfo, Error, ResponseValue};
 /// Types used as operation parameters and responses.
 #[allow(clippy::all)]
 pub mod types {
     /// Error types.
     pub mod error {
-        /// Error from a TryFrom or FromStr implementation.
+        /// Error from a `TryFrom` or `FromStr` implementation.
         pub struct ConversionError(::std::borrow::Cow<'static, str>);
         impl ::std::error::Error for ConversionError {}
         impl ::std::fmt::Display for ConversionError {
@@ -37,7 +35,7 @@ pub mod types {
         }
     }
 
-    ///EnrolBody
+    ///`EnrolBody`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -80,7 +78,7 @@ pub mod types {
         }
     }
 
-    ///GlobalJobsResult
+    ///`GlobalJobsResult`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -121,7 +119,7 @@ pub mod types {
         }
     }
 
-    ///OutputRecord
+    ///`OutputRecord`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -154,7 +152,7 @@ pub mod types {
     pub struct OutputRecord {
         pub msg: ::std::string::String,
         pub stream: ::std::string::String,
-        pub time: chrono::DateTime<chrono::offset::Utc>,
+        pub time: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
     impl ::std::convert::From<&OutputRecord> for OutputRecord {
@@ -169,7 +167,7 @@ pub mod types {
         }
     }
 
-    ///PingResult
+    ///`PingResult`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -212,7 +210,7 @@ pub mod types {
         }
     }
 
-    ///ReportFinishBody
+    ///`ReportFinishBody`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -251,7 +249,7 @@ pub mod types {
     )]
     pub struct ReportFinishBody {
         pub duration_millis: usize,
-        pub end_time: chrono::DateTime<chrono::offset::Utc>,
+        pub end_time: ::chrono::DateTime<::chrono::offset::Utc>,
         pub exit_status: usize,
         pub id: ReportId,
     }
@@ -268,7 +266,7 @@ pub mod types {
         }
     }
 
-    ///ReportId
+    ///`ReportId`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -312,7 +310,7 @@ pub mod types {
         pub host: ::std::string::String,
         pub job: ::std::string::String,
         pub pid: u64,
-        pub time: chrono::DateTime<chrono::offset::Utc>,
+        pub time: ::chrono::DateTime<::chrono::offset::Utc>,
         pub uuid: ::std::string::String,
     }
 
@@ -328,7 +326,7 @@ pub mod types {
         }
     }
 
-    ///ReportOutputBody
+    ///`ReportOutputBody`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -371,7 +369,7 @@ pub mod types {
         }
     }
 
-    ///ReportResult
+    ///`ReportResult`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -409,7 +407,7 @@ pub mod types {
         }
     }
 
-    ///ReportStartBody
+    ///`ReportStartBody`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -443,7 +441,7 @@ pub mod types {
     pub struct ReportStartBody {
         pub id: ReportId,
         pub script: ::std::string::String,
-        pub start_time: chrono::DateTime<chrono::offset::Utc>,
+        pub start_time: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
     impl ::std::convert::From<&ReportStartBody> for ReportStartBody {
@@ -458,7 +456,7 @@ pub mod types {
         }
     }
 
-    ///ReportSummary
+    ///`ReportSummary`
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -509,7 +507,7 @@ pub mod types {
         pub host: ::std::string::String,
         pub job: ::std::string::String,
         pub status: usize,
-        pub when: chrono::DateTime<chrono::offset::Utc>,
+        pub when: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
     impl ::std::convert::From<&ReportSummary> for ReportSummary {
@@ -635,8 +633,10 @@ pub mod types {
         pub struct OutputRecord {
             msg: ::std::result::Result<::std::string::String, ::std::string::String>,
             stream: ::std::result::Result<::std::string::String, ::std::string::String>,
-            time:
-                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
+            time: ::std::result::Result<
+                ::chrono::DateTime<::chrono::offset::Utc>,
+                ::std::string::String,
+            >,
         }
 
         impl ::std::default::Default for OutputRecord {
@@ -672,7 +672,7 @@ pub mod types {
             }
             pub fn time<T>(mut self, value: T) -> Self
             where
-                T: ::std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T: ::std::convert::TryInto<::chrono::DateTime<::chrono::offset::Utc>>,
                 T::Error: ::std::fmt::Display,
             {
                 self.time = value
@@ -767,8 +767,10 @@ pub mod types {
         #[derive(Clone, Debug)]
         pub struct ReportFinishBody {
             duration_millis: ::std::result::Result<usize, ::std::string::String>,
-            end_time:
-                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
+            end_time: ::std::result::Result<
+                ::chrono::DateTime<::chrono::offset::Utc>,
+                ::std::string::String,
+            >,
             exit_status: ::std::result::Result<usize, ::std::string::String>,
             id: ::std::result::Result<super::ReportId, ::std::string::String>,
         }
@@ -797,7 +799,7 @@ pub mod types {
             }
             pub fn end_time<T>(mut self, value: T) -> Self
             where
-                T: ::std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T: ::std::convert::TryInto<::chrono::DateTime<::chrono::offset::Utc>>,
                 T::Error: ::std::fmt::Display,
             {
                 self.end_time = value
@@ -857,8 +859,10 @@ pub mod types {
             host: ::std::result::Result<::std::string::String, ::std::string::String>,
             job: ::std::result::Result<::std::string::String, ::std::string::String>,
             pid: ::std::result::Result<u64, ::std::string::String>,
-            time:
-                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
+            time: ::std::result::Result<
+                ::chrono::DateTime<::chrono::offset::Utc>,
+                ::std::string::String,
+            >,
             uuid: ::std::result::Result<::std::string::String, ::std::string::String>,
         }
 
@@ -907,7 +911,7 @@ pub mod types {
             }
             pub fn time<T>(mut self, value: T) -> Self
             where
-                T: ::std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T: ::std::convert::TryInto<::chrono::DateTime<::chrono::offset::Utc>>,
                 T::Error: ::std::fmt::Display,
             {
                 self.time = value
@@ -1062,8 +1066,10 @@ pub mod types {
         pub struct ReportStartBody {
             id: ::std::result::Result<super::ReportId, ::std::string::String>,
             script: ::std::result::Result<::std::string::String, ::std::string::String>,
-            start_time:
-                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
+            start_time: ::std::result::Result<
+                ::chrono::DateTime<::chrono::offset::Utc>,
+                ::std::string::String,
+            >,
         }
 
         impl ::std::default::Default for ReportStartBody {
@@ -1099,7 +1105,7 @@ pub mod types {
             }
             pub fn start_time<T>(mut self, value: T) -> Self
             where
-                T: ::std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T: ::std::convert::TryInto<::chrono::DateTime<::chrono::offset::Utc>>,
                 T::Error: ::std::fmt::Display,
             {
                 self.start_time = value
@@ -1139,8 +1145,10 @@ pub mod types {
             host: ::std::result::Result<::std::string::String, ::std::string::String>,
             job: ::std::result::Result<::std::string::String, ::std::string::String>,
             status: ::std::result::Result<usize, ::std::string::String>,
-            when:
-                ::std::result::Result<chrono::DateTime<chrono::offset::Utc>, ::std::string::String>,
+            when: ::std::result::Result<
+                ::chrono::DateTime<::chrono::offset::Utc>,
+                ::std::string::String,
+            >,
         }
 
         impl ::std::default::Default for ReportSummary {
@@ -1212,7 +1220,7 @@ pub mod types {
             }
             pub fn when<T>(mut self, value: T) -> Self
             where
-                T: ::std::convert::TryInto<chrono::DateTime<chrono::offset::Utc>>,
+                T: ::std::convert::TryInto<::chrono::DateTime<::chrono::offset::Utc>>,
                 T::Error: ::std::fmt::Display,
             {
                 self.when = value
@@ -1295,26 +1303,27 @@ impl Client {
             client,
         }
     }
+}
 
-    /// Get the base URL to which requests are made.
-    pub fn baseurl(&self) -> &String {
-        &self.baseurl
+impl ClientInfo<()> for Client {
+    fn api_version() -> &'static str {
+        "1.0"
     }
 
-    /// Get the internal `reqwest::Client` used to make requests.
-    pub fn client(&self) -> &reqwest::Client {
+    fn baseurl(&self) -> &str {
+        self.baseurl.as_str()
+    }
+
+    fn client(&self) -> &reqwest::Client {
         &self.client
     }
 
-    /// Get the version of this API.
-    ///
-    /// This string is pulled directly from the source OpenAPI
-    /// document and may be in any format the API selects.
-    pub fn api_version(&self) -> &'static str {
-        "1.0"
+    fn inner(&self) -> &() {
+        &()
     }
 }
 
+impl ClientHooks<()> for &Client {}
 impl Client {
     ///Sends a `POST` request to `/enrol`
     ///
@@ -1415,14 +1424,15 @@ pub mod builder {
     use super::types;
     #[allow(unused_imports)]
     use super::{
-        encode_path, ByteStream, Error, HeaderMap, HeaderValue, RequestBuilderExt, ResponseValue,
+        encode_path, ByteStream, ClientHooks, ClientInfo, Error, OperationInfo, RequestBuilderExt,
+        ResponseValue,
     };
     pub mod built {
         use super::super::types;
         #[allow(unused_imports)]
         use super::super::{
-            encode_path, ByteStream, Error, HeaderMap, HeaderValue, RequestBuilderExt,
-            ResponseValue,
+            encode_path, ByteStream, ClientHooks, ClientInfo, Error, OperationInfo,
+            RequestBuilderExt, ResponseValue,
         };
         pub struct Enrol<'a> {
             pub(crate) client: &'a super::super::Client,
@@ -1434,7 +1444,12 @@ pub mod builder {
                 let Self { client, request } = self;
                 #[allow(unused_mut)]
                 let mut request = request.build()?;
-                let result = client.client.execute(request).await;
+                let info = OperationInfo {
+                    operation_id: "enrol",
+                };
+                client.pre(&mut request, &info).await?;
+                let result = client.exec(request, &info).await;
+                client.post(&result, &info).await?;
                 let response = result?;
                 match response.status().as_u16() {
                     201u16 => Ok(ResponseValue::empty(response)),
@@ -1462,7 +1477,12 @@ pub mod builder {
                 let Self { client, request } = self;
                 #[allow(unused_mut)]
                 let mut request = request.build()?;
-                let result = client.client.execute(request).await;
+                let info = OperationInfo {
+                    operation_id: "global_jobs",
+                };
+                client.pre(&mut request, &info).await?;
+                let result = client.exec(request, &info).await;
+                client.post(&result, &info).await?;
                 let response = result?;
                 match response.status().as_u16() {
                     201u16 => ResponseValue::from_response(response).await,
@@ -1490,7 +1510,12 @@ pub mod builder {
                 let Self { client, request } = self;
                 #[allow(unused_mut)]
                 let mut request = request.build()?;
-                let result = client.client.execute(request).await;
+                let info = OperationInfo {
+                    operation_id: "ping",
+                };
+                client.pre(&mut request, &info).await?;
+                let result = client.exec(request, &info).await;
+                client.post(&result, &info).await?;
                 let response = result?;
                 match response.status().as_u16() {
                     201u16 => ResponseValue::from_response(response).await,
@@ -1518,7 +1543,12 @@ pub mod builder {
                 let Self { client, request } = self;
                 #[allow(unused_mut)]
                 let mut request = request.build()?;
-                let result = client.client.execute(request).await;
+                let info = OperationInfo {
+                    operation_id: "report_finish",
+                };
+                client.pre(&mut request, &info).await?;
+                let result = client.exec(request, &info).await;
+                client.post(&result, &info).await?;
                 let response = result?;
                 match response.status().as_u16() {
                     201u16 => ResponseValue::from_response(response).await,
@@ -1546,7 +1576,12 @@ pub mod builder {
                 let Self { client, request } = self;
                 #[allow(unused_mut)]
                 let mut request = request.build()?;
-                let result = client.client.execute(request).await;
+                let info = OperationInfo {
+                    operation_id: "report_output",
+                };
+                client.pre(&mut request, &info).await?;
+                let result = client.exec(request, &info).await;
+                client.post(&result, &info).await?;
                 let response = result?;
                 match response.status().as_u16() {
                     201u16 => ResponseValue::from_response(response).await,
@@ -1574,7 +1609,12 @@ pub mod builder {
                 let Self { client, request } = self;
                 #[allow(unused_mut)]
                 let mut request = request.build()?;
-                let result = client.client.execute(request).await;
+                let info = OperationInfo {
+                    operation_id: "report_start",
+                };
+                client.pre(&mut request, &info).await?;
+                let result = client.exec(request, &info).await;
+                client.post(&result, &info).await?;
                 let response = result?;
                 match response.status().as_u16() {
                     201u16 => ResponseValue::from_response(response).await,
@@ -1659,8 +1699,12 @@ pub mod builder {
                 .map_err(Error::InvalidRequest)?;
             let request = {
                 let url = format!("{}/enrol", client.baseurl,);
-                let mut header_map = HeaderMap::with_capacity(1usize);
-                header_map.append("Authorization", HeaderValue::try_from(authorization)?);
+                let mut header_map = ::reqwest::header::HeaderMap::with_capacity(2usize);
+                header_map.append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
+                );
+                header_map.append("Authorization", authorization.to_string().try_into()?);
                 client.client.post(url).json(&body).headers(header_map)
             };
             Ok(built::Enrol {
@@ -1710,14 +1754,18 @@ pub mod builder {
             let authorization = authorization.map_err(Error::InvalidRequest)?;
             let request = {
                 let url = format!("{}/global/jobs", client.baseurl,);
-                let mut header_map = HeaderMap::with_capacity(1usize);
-                header_map.append("Authorization", HeaderValue::try_from(authorization)?);
+                let mut header_map = ::reqwest::header::HeaderMap::with_capacity(2usize);
+                header_map.append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
+                );
+                header_map.append("Authorization", authorization.to_string().try_into()?);
                 client
                     .client
                     .get(url)
                     .header(
-                        reqwest::header::ACCEPT,
-                        reqwest::header::HeaderValue::from_static("application/json"),
+                        ::reqwest::header::ACCEPT,
+                        ::reqwest::header::HeaderValue::from_static("application/json"),
                     )
                     .headers(header_map)
             };
@@ -1768,14 +1816,18 @@ pub mod builder {
             let authorization = authorization.map_err(Error::InvalidRequest)?;
             let request = {
                 let url = format!("{}/ping", client.baseurl,);
-                let mut header_map = HeaderMap::with_capacity(1usize);
-                header_map.append("Authorization", HeaderValue::try_from(authorization)?);
+                let mut header_map = ::reqwest::header::HeaderMap::with_capacity(2usize);
+                header_map.append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
+                );
+                header_map.append("Authorization", authorization.to_string().try_into()?);
                 client
                     .client
                     .get(url)
                     .header(
-                        reqwest::header::ACCEPT,
-                        reqwest::header::HeaderValue::from_static("application/json"),
+                        ::reqwest::header::ACCEPT,
+                        ::reqwest::header::HeaderValue::from_static("application/json"),
                     )
                     .headers(header_map)
             };
@@ -1854,14 +1906,18 @@ pub mod builder {
                 .map_err(Error::InvalidRequest)?;
             let request = {
                 let url = format!("{}/report/finish", client.baseurl,);
-                let mut header_map = HeaderMap::with_capacity(1usize);
-                header_map.append("Authorization", HeaderValue::try_from(authorization)?);
+                let mut header_map = ::reqwest::header::HeaderMap::with_capacity(2usize);
+                header_map.append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
+                );
+                header_map.append("Authorization", authorization.to_string().try_into()?);
                 client
                     .client
                     .post(url)
                     .header(
-                        reqwest::header::ACCEPT,
-                        reqwest::header::HeaderValue::from_static("application/json"),
+                        ::reqwest::header::ACCEPT,
+                        ::reqwest::header::HeaderValue::from_static("application/json"),
                     )
                     .json(&body)
                     .headers(header_map)
@@ -1941,14 +1997,18 @@ pub mod builder {
                 .map_err(Error::InvalidRequest)?;
             let request = {
                 let url = format!("{}/report/output", client.baseurl,);
-                let mut header_map = HeaderMap::with_capacity(1usize);
-                header_map.append("Authorization", HeaderValue::try_from(authorization)?);
+                let mut header_map = ::reqwest::header::HeaderMap::with_capacity(2usize);
+                header_map.append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
+                );
+                header_map.append("Authorization", authorization.to_string().try_into()?);
                 client
                     .client
                     .post(url)
                     .header(
-                        reqwest::header::ACCEPT,
-                        reqwest::header::HeaderValue::from_static("application/json"),
+                        ::reqwest::header::ACCEPT,
+                        ::reqwest::header::HeaderValue::from_static("application/json"),
                     )
                     .json(&body)
                     .headers(header_map)
@@ -2026,14 +2086,18 @@ pub mod builder {
                 .map_err(Error::InvalidRequest)?;
             let request = {
                 let url = format!("{}/report/start", client.baseurl,);
-                let mut header_map = HeaderMap::with_capacity(1usize);
-                header_map.append("Authorization", HeaderValue::try_from(authorization)?);
+                let mut header_map = ::reqwest::header::HeaderMap::with_capacity(2usize);
+                header_map.append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
+                );
+                header_map.append("Authorization", authorization.to_string().try_into()?);
                 client
                     .client
                     .post(url)
                     .header(
-                        reqwest::header::ACCEPT,
-                        reqwest::header::HeaderValue::from_static("application/json"),
+                        ::reqwest::header::ACCEPT,
+                        ::reqwest::header::HeaderValue::from_static("application/json"),
                     )
                     .json(&body)
                     .headers(header_map)
