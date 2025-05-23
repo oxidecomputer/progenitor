@@ -19,7 +19,7 @@ pub mod operations {
         }
 
         pub fn authorization(self, value: &str) -> Self {
-            todo!()
+            Self(self.0.header("Authorization", value.to_string()))
         }
 
         pub fn body(self, value: &types::EnrolBody) -> Self {
@@ -57,7 +57,7 @@ pub mod operations {
         }
 
         pub fn authorization(self, value: &str) -> Self {
-            todo!()
+            Self(self.0.header("Authorization", value.to_string()))
         }
     }
 
@@ -96,7 +96,7 @@ pub mod operations {
         }
 
         pub fn authorization(self, value: &str) -> Self {
-            todo!()
+            Self(self.0.header("Authorization", value.to_string()))
         }
     }
 
@@ -135,7 +135,7 @@ pub mod operations {
         }
 
         pub fn authorization(self, value: &str) -> Self {
-            todo!()
+            Self(self.0.header("Authorization", value.to_string()))
         }
 
         pub fn body(self, value: &types::ReportFinishBody) -> Self {
@@ -178,7 +178,7 @@ pub mod operations {
         }
 
         pub fn authorization(self, value: &str) -> Self {
-            todo!()
+            Self(self.0.header("Authorization", value.to_string()))
         }
 
         pub fn body(self, value: &types::ReportOutputBody) -> Self {
@@ -221,7 +221,7 @@ pub mod operations {
         }
 
         pub fn authorization(self, value: &str) -> Self {
-            todo!()
+            Self(self.0.header("Authorization", value.to_string()))
         }
 
         pub fn body(self, value: &types::ReportStartBody) -> Self {

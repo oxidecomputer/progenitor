@@ -39,12 +39,12 @@ pub mod operations {
             T: Into<Option<&'a str>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("unique_key", value.to_string()))
+                Self(self.0.query_param("uniqueKey", value.to_string()))
             } else {
                 Self(self.0.matches(|req| {
                     req.query_params
                         .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "unique_key"))
+                        .and_then(|qs| qs.iter().find(|(key, _)| key == "uniqueKey"))
                         .is_none()
                 }))
             }

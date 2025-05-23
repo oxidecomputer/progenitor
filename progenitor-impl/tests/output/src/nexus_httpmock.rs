@@ -705,7 +705,7 @@ pub mod operations {
             self.0
         }
 
-        pub fn default_response(self, status: u16, value: serde_json::Value) -> Self {
+        pub fn default_response(self, status: u16, value: ::serde_json::Value) -> Self {
             Self(
                 self.0
                     .status(status)
@@ -798,7 +798,7 @@ pub mod operations {
             self.0
         }
 
-        pub fn default_response(self, status: u16, value: serde_json::Value) -> Self {
+        pub fn default_response(self, status: u16, value: ::serde_json::Value) -> Self {
             Self(
                 self.0
                     .status(status)
@@ -1023,7 +1023,7 @@ pub mod operations {
             )
         }
 
-        pub fn success(self, status: u16, value: serde_json::Value) -> Self {
+        pub fn success(self, status: u16, value: ::serde_json::Value) -> Self {
             assert_eq!(status / 100u16, 2u16);
             Self(
                 self.0
@@ -1093,7 +1093,7 @@ pub mod operations {
             )
         }
 
-        pub fn success(self, status: u16, value: serde_json::Value) -> Self {
+        pub fn success(self, status: u16, value: ::serde_json::Value) -> Self {
             assert_eq!(status / 100u16, 2u16);
             Self(
                 self.0
@@ -1128,7 +1128,7 @@ pub mod operations {
             Self(self.0.path_matches(re))
         }
 
-        pub fn body(self, value: serde_json::Value) -> Self {
+        pub fn body(self, value: ::serde_json::Value) -> Self {
             Self(self.0.json_body(value))
         }
     }
@@ -1167,7 +1167,7 @@ pub mod operations {
             )
         }
 
-        pub fn success(self, status: u16, value: serde_json::Value) -> Self {
+        pub fn success(self, status: u16, value: ::serde_json::Value) -> Self {
             assert_eq!(status / 100u16, 2u16);
             Self(
                 self.0
