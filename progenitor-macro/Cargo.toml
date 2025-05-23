@@ -11,7 +11,7 @@ readme = "../README.md"
 proc-macro = true
 
 [dependencies]
-openapiv3 = "2.0.0"
+openapiv3 = "2.1.0"
 proc-macro2 = "1.0"
 progenitor-impl = { version = "0.10.0", path = "../progenitor-impl" }
 quote = "1.0"
