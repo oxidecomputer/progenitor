@@ -37,7 +37,7 @@ pub mod operations {
             self.0
         }
 
-        pub fn success(self, status: u16, value: serde_json::Value) -> Self {
+        pub fn success(self, status: u16, value: ::serde_json::Value) -> Self {
             assert_eq!(status / 100u16, 2u16);
             Self(
                 self.0

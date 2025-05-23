@@ -318,7 +318,7 @@ pub mod operations {
             self.0
         }
 
-        pub fn success(self, status: u16, value: serde_json::Value) -> Self {
+        pub fn success(self, status: u16, value: ::serde_json::Value) -> Self {
             assert_eq!(status / 100u16, 2u16);
             Self(
                 self.0
@@ -571,7 +571,7 @@ pub mod operations {
             Self(self.0.path_matches(re))
         }
 
-        pub fn body(self, value: serde_json::Value) -> Self {
+        pub fn body(self, value: ::serde_json::Value) -> Self {
             Self(self.0.json_body(value))
         }
     }
@@ -807,8 +807,20 @@ pub mod operations {
             self.0
         }
 
-        pub fn accept_language(self, value: types::HeaderArgAcceptLanguage) -> Self {
-            todo!()
+        pub fn accept_language<T>(self, value: T) -> Self
+        where
+            T: Into<Option<types::HeaderArgAcceptLanguage>>,
+        {
+            if let Some(value) = value.into() {
+                Self(self.0.header("accept-language", value.to_string()))
+            } else {
+                Self(self.0.matches(|req| {
+                    req.headers
+                        .as_ref()
+                        .and_then(|hs| hs.iter().find(|(key, _)| key == "accept-language"))
+                        .is_none()
+                }))
+            }
         }
     }
 

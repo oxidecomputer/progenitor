@@ -1,4 +1,4 @@
-// Copyright 2024 Oxide Computer Company
+// Copyright 2025 Oxide Computer Company
 
 //! Generation of mocking extensions for `httpmock`
 
@@ -163,7 +163,7 @@ impl Generator {
                         .parameter_ident(),
                     OperationParameterType::RawBody => match kind {
                         OperationParameterKind::Body(BodyContentType::OctetStream) => quote! {
-                            serde_json::Value
+                            ::serde_json::Value
                         },
                         OperationParameterKind::Body(BodyContentType::Text(_)) => quote! {
                             String
@@ -173,79 +173,136 @@ impl Generator {
                 };
 
                 let name_ident = format_ident!("{}", name);
-                let handler = match kind {
+                let (required, handler) = match kind {
                     OperationParameterKind::Path => {
                         let re_fmt = method.path.as_wildcard_param(api_name);
+                        (
+                            true,
+                            quote! {
+                                let re = regex::Regex::new(
+                                    &format!(#re_fmt, value.to_string())
+                                ).unwrap();
+                                Self(self.0.path_matches(re))
+                            },
+                        )
+                    }
+                    OperationParameterKind::Query(true) => (
+                        true,
                         quote! {
-                            let re = regex::Regex::new(
-                                &format!(#re_fmt, value.to_string())
-                            ).unwrap();
-                            Self(self.0.path_matches(re))
-                        }
-                    }
-                    OperationParameterKind::Query(true) => quote! {
-                        Self(self.0.query_param(#name, value.to_string()))
-                    },
-
-                    OperationParameterKind::Query(false) => {
-                        // If the type is a ref, augment it with a lifetime that we'll also use in the function
-                        let (lifetime, arg_type_name) = if let syn::Type::Reference(mut rr) =
-                            syn::parse2::<syn::Type>(arg_type_name.clone()).unwrap()
-                        {
-                            rr.lifetime =
-                                Some(syn::Lifetime::new("'a", proc_macro2::Span::call_site()));
-                            (Some(quote! { 'a, }), rr.to_token_stream())
-                        } else {
-                            (None, arg_type_name)
-                        };
-
-                        return quote! {
-                            pub fn #name_ident<#lifetime T>(
-                                self,
-                                value: T,
-                            ) -> Self
-                            where
-                                T: Into<Option<#arg_type_name>>,
-                            {
-                                if let Some(value) = value.into() {
-                                    Self(self.0.query_param(
-                                        #name,
-                                        value.to_string(),
-                                    ))
-                                } else {
-                                    Self(self.0.matches(|req| {
-                                        req.query_params
-                                            .as_ref()
-                                            .and_then(|qs| {
-                                                qs.iter().find(
-                                                    |(key, _)| key == #name)
-                                            })
-                                            .is_none()
-                                    }))
-                                }
-                            }
-                        };
-                    }
-                    OperationParameterKind::Header(_) => quote! { todo!() },
-                    OperationParameterKind::Body(body_content_type) => match typ {
-                        OperationParameterType::Type(_) => quote! {
-                            Self(self.0.json_body_obj(value))
-
+                            Self(self.0.query_param(#api_name, value.to_string()))
                         },
+                    ),
+                    OperationParameterKind::Header(true) => (
+                        true,
+                        quote! {
+                            Self(self.0.header(#api_name, value.to_string()))
+                        },
+                    ),
+
+                    OperationParameterKind::Query(false) => (
+                        false,
+                        quote! {
+                            if let Some(value) = value.into() {
+                                Self(self.0.query_param(
+                                    #api_name,
+                                    value.to_string(),
+                                ))
+                            } else {
+                                Self(self.0.matches(|req| {
+                                    req.query_params
+                                        .as_ref()
+                                        .and_then(|qs| {
+                                            qs.iter().find(
+                                                |(key, _)| key == #api_name)
+                                        })
+                                        .is_none()
+                                }))
+                            }
+                        },
+                    ),
+                    OperationParameterKind::Header(false) => (
+                        false,
+                        quote! {
+                            if let Some(value) = value.into() {
+                                Self(self.0.header(
+                                    #api_name,
+                                    value.to_string()
+                                ))
+                            } else {
+                                Self(self.0.matches(|req| {
+                                    req.headers
+                                        .as_ref()
+                                        .and_then(|hs| {
+                                            hs.iter().find(
+                                                |(key, _)| key == #api_name
+                                            )
+                                        })
+                                        .is_none()
+                                }))
+                            }
+                        },
+                    ),
+                    OperationParameterKind::Body(body_content_type) => match typ {
+                        OperationParameterType::Type(_) => (
+                            true,
+                            quote! {
+                                Self(self.0.json_body_obj(value))
+
+                            },
+                        ),
                         OperationParameterType::RawBody => match body_content_type {
-                            BodyContentType::OctetStream => quote! {
-                                Self(self.0.json_body(value))
-                            },
-                            BodyContentType::Text(_) => quote! {
-                                Self(self.0.body(value))
-                            },
+                            BodyContentType::OctetStream => (
+                                true,
+                                quote! {
+                                    Self(self.0.json_body(value))
+                                },
+                            ),
+                            BodyContentType::Text(_) => (
+                                true,
+                                quote! {
+                                    Self(self.0.body(value))
+                                },
+                            ),
                             _ => unreachable!(),
                         },
                     },
                 };
-                quote! {
-                    pub fn #name_ident(self, value: #arg_type_name) -> Self {
-                        #handler
+
+                if required {
+                    // The value is required so we just check for a simple
+                    // match.
+                    quote! {
+                        pub fn #name_ident(self, value: #arg_type_name) -> Self {
+                            #handler
+                        }
+                    }
+                } else {
+                    // For optional values we permit an input that's an
+                    // `Into<Option<T>`. This allows callers to specify a value
+                    // or specify that the parameter must be absent with None.
+
+                    // If the type is a ref, augment it with a lifetime that
+                    // we'll also use in the function
+                    let (lifetime, arg_type_name) = if let syn::Type::Reference(mut rr) =
+                        syn::parse2::<syn::Type>(arg_type_name.clone()).unwrap()
+                    {
+                        rr.lifetime =
+                            Some(syn::Lifetime::new("'a", proc_macro2::Span::call_site()));
+                        (Some(quote! { 'a, }), rr.to_token_stream())
+                    } else {
+                        (None, arg_type_name)
+                    };
+
+                    quote! {
+                        pub fn #name_ident<#lifetime T>(
+                            self,
+                            value: T,
+                        ) -> Self
+                        where
+                            T: Into<Option<#arg_type_name>>,
+                        {
+                            #handler
+                        }
                     }
                 }
             },
@@ -291,7 +348,7 @@ impl Generator {
                     crate::method::OperationResponseKind::None => Default::default(),
                     crate::method::OperationResponseKind::Raw => (
                         quote! {
-                            value: serde_json::Value,
+                            value: ::serde_json::Value,
                         },
                         quote! {
                             .header("content-type", "application/json")
