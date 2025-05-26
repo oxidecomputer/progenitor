@@ -57,7 +57,7 @@ typify = { version = "0.4.1" }
 #typify = { git = "https://github.com/oxidecomputer/typify" }
 url = "2.5.4"
 unicode-ident = "1.0.18"
-uuid = { version = "1.16.0", features = ["serde", "v4"] }
+uuid = { version = "1.17.0", features = ["serde", "v4"] }
 
 #[patch."https://github.com/oxidecomputer/typify"]
 #typify = { path = "../typify/typify" }
