@@ -250,7 +250,7 @@ dependencies = [
 
 [[package]]
 name = "cargo-progenitor"
-version = "0.10.0"
+version = "0.11.0"
 dependencies = [
  "anyhow",
  "assert_cmd",
@@ -1585,7 +1585,7 @@ dependencies = [
 
 [[package]]
 name = "progenitor"
-version = "0.10.0"
+version = "0.11.0"
 dependencies = [
  "base64",
  "chrono",
@@ -1606,7 +1606,7 @@ dependencies = [
 
 [[package]]
 name = "progenitor-client"
-version = "0.10.0"
+version = "0.11.0"
 dependencies = [
  "bytes",
  "futures-core",
@@ -1621,7 +1621,7 @@ dependencies = [
 
 [[package]]
 name = "progenitor-impl"
-version = "0.10.0"
+version = "0.11.0"
 dependencies = [
  "dropshot",
  "expectorate",
@@ -1651,7 +1651,7 @@ dependencies = [
 
 [[package]]
 name = "progenitor-macro"
-version = "0.10.0"
+version = "0.11.0"
 dependencies = [
  "openapiv3",
  "proc-macro2",
@@ -2565,9 +2565,9 @@ checksum = "dcf81ac59edc17cc8697ff311e8f5ef2d99fcbd9817b34cec66f90b6c3dfd987"
 
 [[package]]
 name = "typify"
-version = "0.4.1"
+version = "0.4.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fcc5bec3cdff70fd542e579aa2e52967833e543a25fae0d14579043d2e868a50"
+checksum = "6c6c647a34e851cf0260ccc14687f17cdcb8302ff1a8a687a24b97ca0f82406f"
 dependencies = [
  "typify-impl",
  "typify-macro",
@@ -2575,9 +2575,9 @@ dependencies = [
 
 [[package]]
 name = "typify-impl"
-version = "0.4.1"
+version = "0.4.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b52a67305054e1da6f3d99ad94875dcd0c7c49adbd17b4b64f0eefb7ae5bf8ab"
+checksum = "741b7f1e2e1338c0bee5ad5a7d3a9bbd4e24c33765c08b7691810e68d879365d"
 dependencies = [
  "heck",
  "log",
@@ -2595,9 +2595,9 @@ dependencies = [
 
 [[package]]
 name = "typify-macro"
-version = "0.4.1"
+version = "0.4.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0ff5799be156e4f635c348c6051d165e1c59997827155133351a8c4d333d9841"
+checksum = "7560adf816a1e8dad7c63d8845ef6e31e673e39eab310d225636779230cbedeb"
 dependencies = [
  "proc-macro2",
  "quote",
