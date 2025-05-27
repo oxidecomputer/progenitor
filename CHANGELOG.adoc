@@ -15,6 +15,9 @@
 
 https://github.com/oxidecomputer/progenitor/compare/v0.10.0\...HEAD[Full list of commits]
 
+* Implement hooks via a trait and autoref specialization (#1121)
+* Update httpmock generation for header parameters (#1140)
+
 == 0.10.0 (released 2025-04-30)
 
 https://github.com/oxidecomputer/progenitor/compare/v0.9.1\...v0.10.0[Full list of commits]
