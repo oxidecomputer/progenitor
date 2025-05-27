@@ -8,3 +8,6 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+    ignore:
+      - dependency-name: "schemars"
+        versions: [">=0.9.0"]
