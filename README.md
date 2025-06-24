@@ -379,7 +379,7 @@ Currently, the generated code doesn't deal with request headers. To add default 
 ```rust
     let baseurl = std::env::var("API_URL").expect("$API_URL not set");
     
-    let access_token = std::env::var("API_ACCESS_TOKEN").expect("$API_ACCESS_TOKEN not set);
+    let access_token = std::env::var("API_ACCESS_TOKEN").expect("$API_ACCESS_TOKEN not set");
     let authorization_header = format!("Bearer {}", access_token);
 
     let mut headers = reqwest::header::HeaderMap::new();
