@@ -14,7 +14,7 @@ serde = { version = "1.0", features = ["derive"] }
 uuid = { version = "1.17", features = ["serde", "v4"] }
 
 [build-dependencies]
-prettyplease = "0.2.35"
+prettyplease = "0.2.36"
 progenitor = { path = "../progenitor", default-features = false }
 serde_json = "1.0"
 syn = "2.0"
