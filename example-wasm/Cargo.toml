@@ -9,7 +9,7 @@ progenitor-client = { path = "../progenitor-client" }
 reqwest = { version = "0.12.4", features = ["json", "stream"] }
 base64 = "0.22"
 serde = { version = "1.0", features = ["derive"] }
-uuid = { version = "1.17", features = ["serde", "v4", "js"] }
+uuid = { version = "1.18", features = ["serde", "v4", "js"] }
 
 [dev-dependencies]
 wasm-bindgen-test = "0.3.50"
