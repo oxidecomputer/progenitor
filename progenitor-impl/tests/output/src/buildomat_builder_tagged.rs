@@ -2504,7 +2504,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn control_hold(&self) -> builder::ControlHold {
+    pub fn control_hold(&self) -> builder::ControlHold<'_> {
         builder::ControlHold::new(self)
     }
 
@@ -2515,7 +2515,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn control_resume(&self) -> builder::ControlResume {
+    pub fn control_resume(&self) -> builder::ControlResume<'_> {
         builder::ControlResume::new(self)
     }
 
@@ -2527,7 +2527,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn task_get(&self) -> builder::TaskGet {
+    pub fn task_get(&self) -> builder::TaskGet<'_> {
         builder::TaskGet::new(self)
     }
 
@@ -2538,7 +2538,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn tasks_get(&self) -> builder::TasksGet {
+    pub fn tasks_get(&self) -> builder::TasksGet<'_> {
         builder::TasksGet::new(self)
     }
 
@@ -2550,7 +2550,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn task_submit(&self) -> builder::TaskSubmit {
+    pub fn task_submit(&self) -> builder::TaskSubmit<'_> {
         builder::TaskSubmit::new(self)
     }
 
@@ -2563,7 +2563,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn task_events_get(&self) -> builder::TaskEventsGet {
+    pub fn task_events_get(&self) -> builder::TaskEventsGet<'_> {
         builder::TaskEventsGet::new(self)
     }
 
@@ -2575,7 +2575,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn task_outputs_get(&self) -> builder::TaskOutputsGet {
+    pub fn task_outputs_get(&self) -> builder::TaskOutputsGet<'_> {
         builder::TaskOutputsGet::new(self)
     }
 
@@ -2588,7 +2588,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn task_output_download(&self) -> builder::TaskOutputDownload {
+    pub fn task_output_download(&self) -> builder::TaskOutputDownload<'_> {
         builder::TaskOutputDownload::new(self)
     }
 
@@ -2600,7 +2600,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn user_create(&self) -> builder::UserCreate {
+    pub fn user_create(&self) -> builder::UserCreate<'_> {
         builder::UserCreate::new(self)
     }
 
@@ -2611,7 +2611,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn whoami(&self) -> builder::Whoami {
+    pub fn whoami(&self) -> builder::Whoami<'_> {
         builder::Whoami::new(self)
     }
 
@@ -2623,7 +2623,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn whoami_put_name(&self) -> builder::WhoamiPutName {
+    pub fn whoami_put_name(&self) -> builder::WhoamiPutName<'_> {
         builder::WhoamiPutName::new(self)
     }
 
@@ -2635,7 +2635,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn worker_bootstrap(&self) -> builder::WorkerBootstrap {
+    pub fn worker_bootstrap(&self) -> builder::WorkerBootstrap<'_> {
         builder::WorkerBootstrap::new(self)
     }
 
@@ -2646,7 +2646,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn worker_ping(&self) -> builder::WorkerPing {
+    pub fn worker_ping(&self) -> builder::WorkerPing<'_> {
         builder::WorkerPing::new(self)
     }
 
@@ -2659,7 +2659,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn worker_task_append(&self) -> builder::WorkerTaskAppend {
+    pub fn worker_task_append(&self) -> builder::WorkerTaskAppend<'_> {
         builder::WorkerTaskAppend::new(self)
     }
 
@@ -2672,7 +2672,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn worker_task_upload_chunk(&self) -> builder::WorkerTaskUploadChunk {
+    pub fn worker_task_upload_chunk(&self) -> builder::WorkerTaskUploadChunk<'_> {
         builder::WorkerTaskUploadChunk::new(self)
     }
 
@@ -2685,7 +2685,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn worker_task_complete(&self) -> builder::WorkerTaskComplete {
+    pub fn worker_task_complete(&self) -> builder::WorkerTaskComplete<'_> {
         builder::WorkerTaskComplete::new(self)
     }
 
@@ -2698,7 +2698,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn worker_task_add_output(&self) -> builder::WorkerTaskAddOutput {
+    pub fn worker_task_add_output(&self) -> builder::WorkerTaskAddOutput<'_> {
         builder::WorkerTaskAddOutput::new(self)
     }
 
@@ -2709,7 +2709,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn workers_list(&self) -> builder::WorkersList {
+    pub fn workers_list(&self) -> builder::WorkersList<'_> {
         builder::WorkersList::new(self)
     }
 
@@ -2720,7 +2720,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn workers_recycle(&self) -> builder::WorkersRecycle {
+    pub fn workers_recycle(&self) -> builder::WorkersRecycle<'_> {
         builder::WorkersRecycle::new(self)
     }
 
@@ -2732,7 +2732,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn get_thing_or_things(&self) -> builder::GetThingOrThings {
+    pub fn get_thing_or_things(&self) -> builder::GetThingOrThings<'_> {
         builder::GetThingOrThings::new(self)
     }
 
@@ -2744,7 +2744,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn header_arg(&self) -> builder::HeaderArg {
+    pub fn header_arg(&self) -> builder::HeaderArg<'_> {
         builder::HeaderArg::new(self)
     }
 }

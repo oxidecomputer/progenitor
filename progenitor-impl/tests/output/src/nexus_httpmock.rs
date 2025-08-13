@@ -15607,640 +15607,640 @@ pub mod operations {
 #[doc = r" adds a method for each operation. These are the equivalent of"]
 #[doc = r" type-checked [`mock()`](::httpmock::MockServer::mock) calls."]
 pub trait MockServerExt {
-    fn disk_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn disk_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::DiskViewByIdWhen, operations::DiskViewByIdThen);
-    fn image_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn image_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ImageViewByIdWhen, operations::ImageViewByIdThen);
-    fn instance_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceViewByIdWhen, operations::InstanceViewByIdThen);
-    fn instance_network_interface_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_network_interface_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::InstanceNetworkInterfaceViewByIdWhen,
             operations::InstanceNetworkInterfaceViewByIdThen,
         );
-    fn organization_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn organization_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::OrganizationViewByIdWhen, operations::OrganizationViewByIdThen);
-    fn project_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn project_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ProjectViewByIdWhen, operations::ProjectViewByIdThen);
-    fn snapshot_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn snapshot_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SnapshotViewByIdWhen, operations::SnapshotViewByIdThen);
-    fn vpc_router_route_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn vpc_router_route_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcRouterRouteViewByIdWhen, operations::VpcRouterRouteViewByIdThen);
-    fn vpc_router_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn vpc_router_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcRouterViewByIdWhen, operations::VpcRouterViewByIdThen);
-    fn vpc_subnet_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn vpc_subnet_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcSubnetViewByIdWhen, operations::VpcSubnetViewByIdThen);
-    fn vpc_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn vpc_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcViewByIdWhen, operations::VpcViewByIdThen);
-    fn device_auth_request<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn device_auth_request<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::DeviceAuthRequestWhen, operations::DeviceAuthRequestThen);
-    fn device_auth_confirm<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn device_auth_confirm<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::DeviceAuthConfirmWhen, operations::DeviceAuthConfirmThen);
-    fn device_access_token<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn device_access_token<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::DeviceAccessTokenWhen, operations::DeviceAccessTokenThen);
-    fn group_list<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn group_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::GroupListWhen, operations::GroupListThen);
-    fn login_spoof<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn login_spoof<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::LoginSpoofWhen, operations::LoginSpoofThen);
-    fn login_local<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn login_local<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::LoginLocalWhen, operations::LoginLocalThen);
-    fn login_saml_begin<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn login_saml_begin<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::LoginSamlBeginWhen, operations::LoginSamlBeginThen);
-    fn login_saml<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn login_saml<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::LoginSamlWhen, operations::LoginSamlThen);
-    fn logout<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn logout<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::LogoutWhen, operations::LogoutThen);
-    fn organization_list<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn organization_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::OrganizationListWhen, operations::OrganizationListThen);
-    fn organization_create<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn organization_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::OrganizationCreateWhen, operations::OrganizationCreateThen);
-    fn organization_view<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn organization_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::OrganizationViewWhen, operations::OrganizationViewThen);
-    fn organization_update<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn organization_update<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::OrganizationUpdateWhen, operations::OrganizationUpdateThen);
-    fn organization_delete<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn organization_delete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::OrganizationDeleteWhen, operations::OrganizationDeleteThen);
-    fn organization_policy_view<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn organization_policy_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::OrganizationPolicyViewWhen, operations::OrganizationPolicyViewThen);
-    fn organization_policy_update<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn organization_policy_update<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::OrganizationPolicyUpdateWhen,
             operations::OrganizationPolicyUpdateThen,
         );
-    fn project_list<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn project_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ProjectListWhen, operations::ProjectListThen);
-    fn project_create<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn project_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ProjectCreateWhen, operations::ProjectCreateThen);
-    fn project_view<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn project_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ProjectViewWhen, operations::ProjectViewThen);
-    fn project_update<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn project_update<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ProjectUpdateWhen, operations::ProjectUpdateThen);
-    fn project_delete<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn project_delete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ProjectDeleteWhen, operations::ProjectDeleteThen);
-    fn disk_list<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn disk_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::DiskListWhen, operations::DiskListThen);
-    fn disk_create<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn disk_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::DiskCreateWhen, operations::DiskCreateThen);
-    fn disk_view<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn disk_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::DiskViewWhen, operations::DiskViewThen);
-    fn disk_delete<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn disk_delete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::DiskDeleteWhen, operations::DiskDeleteThen);
-    fn disk_metrics_list<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn disk_metrics_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::DiskMetricsListWhen, operations::DiskMetricsListThen);
-    fn image_list<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn image_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ImageListWhen, operations::ImageListThen);
-    fn image_create<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn image_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ImageCreateWhen, operations::ImageCreateThen);
-    fn image_view<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn image_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ImageViewWhen, operations::ImageViewThen);
-    fn image_delete<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn image_delete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ImageDeleteWhen, operations::ImageDeleteThen);
-    fn instance_list<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceListWhen, operations::InstanceListThen);
-    fn instance_create<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceCreateWhen, operations::InstanceCreateThen);
-    fn instance_view<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceViewWhen, operations::InstanceViewThen);
-    fn instance_delete<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_delete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceDeleteWhen, operations::InstanceDeleteThen);
-    fn instance_disk_list<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_disk_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceDiskListWhen, operations::InstanceDiskListThen);
-    fn instance_disk_attach<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_disk_attach<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceDiskAttachWhen, operations::InstanceDiskAttachThen);
-    fn instance_disk_detach<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_disk_detach<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceDiskDetachWhen, operations::InstanceDiskDetachThen);
-    fn instance_external_ip_list<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_external_ip_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceExternalIpListWhen, operations::InstanceExternalIpListThen);
-    fn instance_migrate<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_migrate<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceMigrateWhen, operations::InstanceMigrateThen);
-    fn instance_network_interface_list<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_network_interface_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::InstanceNetworkInterfaceListWhen,
             operations::InstanceNetworkInterfaceListThen,
         );
-    fn instance_network_interface_create<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_network_interface_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::InstanceNetworkInterfaceCreateWhen,
             operations::InstanceNetworkInterfaceCreateThen,
         );
-    fn instance_network_interface_view<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_network_interface_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::InstanceNetworkInterfaceViewWhen,
             operations::InstanceNetworkInterfaceViewThen,
         );
-    fn instance_network_interface_update<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_network_interface_update<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::InstanceNetworkInterfaceUpdateWhen,
             operations::InstanceNetworkInterfaceUpdateThen,
         );
-    fn instance_network_interface_delete<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_network_interface_delete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::InstanceNetworkInterfaceDeleteWhen,
             operations::InstanceNetworkInterfaceDeleteThen,
         );
-    fn instance_reboot<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_reboot<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceRebootWhen, operations::InstanceRebootThen);
-    fn instance_serial_console<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_serial_console<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceSerialConsoleWhen, operations::InstanceSerialConsoleThen);
-    fn instance_serial_console_stream<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_serial_console_stream<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::InstanceSerialConsoleStreamWhen,
             operations::InstanceSerialConsoleStreamThen,
         );
-    fn instance_start<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_start<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceStartWhen, operations::InstanceStartThen);
-    fn instance_stop<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_stop<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceStopWhen, operations::InstanceStopThen);
-    fn project_policy_view<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn project_policy_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ProjectPolicyViewWhen, operations::ProjectPolicyViewThen);
-    fn project_policy_update<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn project_policy_update<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ProjectPolicyUpdateWhen, operations::ProjectPolicyUpdateThen);
-    fn snapshot_list<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn snapshot_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SnapshotListWhen, operations::SnapshotListThen);
-    fn snapshot_create<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn snapshot_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SnapshotCreateWhen, operations::SnapshotCreateThen);
-    fn snapshot_view<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn snapshot_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SnapshotViewWhen, operations::SnapshotViewThen);
-    fn snapshot_delete<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn snapshot_delete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SnapshotDeleteWhen, operations::SnapshotDeleteThen);
-    fn vpc_list<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn vpc_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcListWhen, operations::VpcListThen);
-    fn vpc_create<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn vpc_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcCreateWhen, operations::VpcCreateThen);
-    fn vpc_view<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn vpc_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcViewWhen, operations::VpcViewThen);
-    fn vpc_update<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn vpc_update<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcUpdateWhen, operations::VpcUpdateThen);
-    fn vpc_delete<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn vpc_delete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcDeleteWhen, operations::VpcDeleteThen);
-    fn vpc_firewall_rules_view<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn vpc_firewall_rules_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcFirewallRulesViewWhen, operations::VpcFirewallRulesViewThen);
-    fn vpc_firewall_rules_update<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn vpc_firewall_rules_update<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcFirewallRulesUpdateWhen, operations::VpcFirewallRulesUpdateThen);
-    fn vpc_router_list<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn vpc_router_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcRouterListWhen, operations::VpcRouterListThen);
-    fn vpc_router_create<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn vpc_router_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcRouterCreateWhen, operations::VpcRouterCreateThen);
-    fn vpc_router_view<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn vpc_router_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcRouterViewWhen, operations::VpcRouterViewThen);
-    fn vpc_router_update<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn vpc_router_update<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcRouterUpdateWhen, operations::VpcRouterUpdateThen);
-    fn vpc_router_delete<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn vpc_router_delete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcRouterDeleteWhen, operations::VpcRouterDeleteThen);
-    fn vpc_router_route_list<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn vpc_router_route_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcRouterRouteListWhen, operations::VpcRouterRouteListThen);
-    fn vpc_router_route_create<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn vpc_router_route_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcRouterRouteCreateWhen, operations::VpcRouterRouteCreateThen);
-    fn vpc_router_route_view<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn vpc_router_route_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcRouterRouteViewWhen, operations::VpcRouterRouteViewThen);
-    fn vpc_router_route_update<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn vpc_router_route_update<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcRouterRouteUpdateWhen, operations::VpcRouterRouteUpdateThen);
-    fn vpc_router_route_delete<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn vpc_router_route_delete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcRouterRouteDeleteWhen, operations::VpcRouterRouteDeleteThen);
-    fn vpc_subnet_list<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn vpc_subnet_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcSubnetListWhen, operations::VpcSubnetListThen);
-    fn vpc_subnet_create<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn vpc_subnet_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcSubnetCreateWhen, operations::VpcSubnetCreateThen);
-    fn vpc_subnet_view<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn vpc_subnet_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcSubnetViewWhen, operations::VpcSubnetViewThen);
-    fn vpc_subnet_update<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn vpc_subnet_update<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcSubnetUpdateWhen, operations::VpcSubnetUpdateThen);
-    fn vpc_subnet_delete<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn vpc_subnet_delete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcSubnetDeleteWhen, operations::VpcSubnetDeleteThen);
-    fn vpc_subnet_list_network_interfaces<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn vpc_subnet_list_network_interfaces<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::VpcSubnetListNetworkInterfacesWhen,
             operations::VpcSubnetListNetworkInterfacesThen,
         );
-    fn policy_view<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn policy_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::PolicyViewWhen, operations::PolicyViewThen);
-    fn policy_update<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn policy_update<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::PolicyUpdateWhen, operations::PolicyUpdateThen);
-    fn role_list<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn role_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::RoleListWhen, operations::RoleListThen);
-    fn role_view<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn role_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::RoleViewWhen, operations::RoleViewThen);
-    fn session_me<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn session_me<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SessionMeWhen, operations::SessionMeThen);
-    fn session_me_groups<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn session_me_groups<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SessionMeGroupsWhen, operations::SessionMeGroupsThen);
-    fn session_sshkey_list<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn session_sshkey_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SessionSshkeyListWhen, operations::SessionSshkeyListThen);
-    fn session_sshkey_create<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn session_sshkey_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SessionSshkeyCreateWhen, operations::SessionSshkeyCreateThen);
-    fn session_sshkey_view<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn session_sshkey_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SessionSshkeyViewWhen, operations::SessionSshkeyViewThen);
-    fn session_sshkey_delete<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn session_sshkey_delete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SessionSshkeyDeleteWhen, operations::SessionSshkeyDeleteThen);
-    fn system_image_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn system_image_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SystemImageViewByIdWhen, operations::SystemImageViewByIdThen);
-    fn ip_pool_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn ip_pool_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::IpPoolViewByIdWhen, operations::IpPoolViewByIdThen);
-    fn silo_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn silo_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SiloViewByIdWhen, operations::SiloViewByIdThen);
-    fn certificate_list<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn certificate_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::CertificateListWhen, operations::CertificateListThen);
-    fn certificate_create<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn certificate_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::CertificateCreateWhen, operations::CertificateCreateThen);
-    fn certificate_view<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn certificate_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::CertificateViewWhen, operations::CertificateViewThen);
-    fn certificate_delete<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn certificate_delete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::CertificateDeleteWhen, operations::CertificateDeleteThen);
-    fn physical_disk_list<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn physical_disk_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::PhysicalDiskListWhen, operations::PhysicalDiskListThen);
-    fn rack_list<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn rack_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::RackListWhen, operations::RackListThen);
-    fn rack_view<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn rack_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::RackViewWhen, operations::RackViewThen);
-    fn sled_list<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn sled_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SledListWhen, operations::SledListThen);
-    fn sled_view<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn sled_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SledViewWhen, operations::SledViewThen);
-    fn sled_physical_disk_list<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn sled_physical_disk_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SledPhysicalDiskListWhen, operations::SledPhysicalDiskListThen);
-    fn system_image_list<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn system_image_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SystemImageListWhen, operations::SystemImageListThen);
-    fn system_image_create<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn system_image_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SystemImageCreateWhen, operations::SystemImageCreateThen);
-    fn system_image_view<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn system_image_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SystemImageViewWhen, operations::SystemImageViewThen);
-    fn system_image_delete<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn system_image_delete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SystemImageDeleteWhen, operations::SystemImageDeleteThen);
-    fn ip_pool_list<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn ip_pool_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::IpPoolListWhen, operations::IpPoolListThen);
-    fn ip_pool_create<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn ip_pool_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::IpPoolCreateWhen, operations::IpPoolCreateThen);
-    fn ip_pool_view<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn ip_pool_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::IpPoolViewWhen, operations::IpPoolViewThen);
-    fn ip_pool_update<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn ip_pool_update<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::IpPoolUpdateWhen, operations::IpPoolUpdateThen);
-    fn ip_pool_delete<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn ip_pool_delete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::IpPoolDeleteWhen, operations::IpPoolDeleteThen);
-    fn ip_pool_range_list<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn ip_pool_range_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::IpPoolRangeListWhen, operations::IpPoolRangeListThen);
-    fn ip_pool_range_add<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn ip_pool_range_add<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::IpPoolRangeAddWhen, operations::IpPoolRangeAddThen);
-    fn ip_pool_range_remove<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn ip_pool_range_remove<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::IpPoolRangeRemoveWhen, operations::IpPoolRangeRemoveThen);
-    fn ip_pool_service_view<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn ip_pool_service_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::IpPoolServiceViewWhen, operations::IpPoolServiceViewThen);
-    fn ip_pool_service_range_list<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn ip_pool_service_range_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::IpPoolServiceRangeListWhen, operations::IpPoolServiceRangeListThen);
-    fn ip_pool_service_range_add<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn ip_pool_service_range_add<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::IpPoolServiceRangeAddWhen, operations::IpPoolServiceRangeAddThen);
-    fn ip_pool_service_range_remove<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn ip_pool_service_range_remove<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::IpPoolServiceRangeRemoveWhen,
             operations::IpPoolServiceRangeRemoveThen,
         );
-    fn system_metric<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn system_metric<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SystemMetricWhen, operations::SystemMetricThen);
-    fn system_policy_view<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn system_policy_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SystemPolicyViewWhen, operations::SystemPolicyViewThen);
-    fn system_policy_update<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn system_policy_update<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SystemPolicyUpdateWhen, operations::SystemPolicyUpdateThen);
-    fn saga_list<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn saga_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SagaListWhen, operations::SagaListThen);
-    fn saga_view<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn saga_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SagaViewWhen, operations::SagaViewThen);
-    fn silo_list<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn silo_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SiloListWhen, operations::SiloListThen);
-    fn silo_create<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn silo_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SiloCreateWhen, operations::SiloCreateThen);
-    fn silo_view<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn silo_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SiloViewWhen, operations::SiloViewThen);
-    fn silo_delete<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn silo_delete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SiloDeleteWhen, operations::SiloDeleteThen);
-    fn silo_identity_provider_list<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn silo_identity_provider_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::SiloIdentityProviderListWhen,
             operations::SiloIdentityProviderListThen,
         );
-    fn local_idp_user_create<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn local_idp_user_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::LocalIdpUserCreateWhen, operations::LocalIdpUserCreateThen);
-    fn local_idp_user_delete<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn local_idp_user_delete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::LocalIdpUserDeleteWhen, operations::LocalIdpUserDeleteThen);
-    fn local_idp_user_set_password<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn local_idp_user_set_password<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::LocalIdpUserSetPasswordWhen, operations::LocalIdpUserSetPasswordThen);
-    fn saml_identity_provider_create<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn saml_identity_provider_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::SamlIdentityProviderCreateWhen,
             operations::SamlIdentityProviderCreateThen,
         );
-    fn saml_identity_provider_view<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn saml_identity_provider_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::SamlIdentityProviderViewWhen,
             operations::SamlIdentityProviderViewThen,
         );
-    fn silo_policy_view<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn silo_policy_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SiloPolicyViewWhen, operations::SiloPolicyViewThen);
-    fn silo_policy_update<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn silo_policy_update<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SiloPolicyUpdateWhen, operations::SiloPolicyUpdateThen);
-    fn silo_users_list<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn silo_users_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SiloUsersListWhen, operations::SiloUsersListThen);
-    fn silo_user_view<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn silo_user_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SiloUserViewWhen, operations::SiloUserViewThen);
-    fn system_user_list<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn system_user_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SystemUserListWhen, operations::SystemUserListThen);
-    fn system_user_view<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn system_user_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SystemUserViewWhen, operations::SystemUserViewThen);
-    fn timeseries_schema_get<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn timeseries_schema_get<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::TimeseriesSchemaGetWhen, operations::TimeseriesSchemaGetThen);
-    fn user_list<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn user_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::UserListWhen, operations::UserListThen);
-    fn disk_list_v1<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn disk_list_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::DiskListV1When, operations::DiskListV1Then);
-    fn disk_create_v1<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn disk_create_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::DiskCreateV1When, operations::DiskCreateV1Then);
-    fn disk_view_v1<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn disk_view_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::DiskViewV1When, operations::DiskViewV1Then);
-    fn disk_delete_v1<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn disk_delete_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::DiskDeleteV1When, operations::DiskDeleteV1Then);
-    fn instance_list_v1<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_list_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceListV1When, operations::InstanceListV1Then);
-    fn instance_create_v1<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_create_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceCreateV1When, operations::InstanceCreateV1Then);
-    fn instance_view_v1<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_view_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceViewV1When, operations::InstanceViewV1Then);
-    fn instance_delete_v1<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_delete_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceDeleteV1When, operations::InstanceDeleteV1Then);
-    fn instance_disk_list_v1<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_disk_list_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceDiskListV1When, operations::InstanceDiskListV1Then);
-    fn instance_disk_attach_v1<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_disk_attach_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceDiskAttachV1When, operations::InstanceDiskAttachV1Then);
-    fn instance_disk_detach_v1<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_disk_detach_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceDiskDetachV1When, operations::InstanceDiskDetachV1Then);
-    fn instance_migrate_v1<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_migrate_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceMigrateV1When, operations::InstanceMigrateV1Then);
-    fn instance_reboot_v1<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_reboot_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceRebootV1When, operations::InstanceRebootV1Then);
-    fn instance_serial_console_v1<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_serial_console_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceSerialConsoleV1When, operations::InstanceSerialConsoleV1Then);
-    fn instance_serial_console_stream_v1<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_serial_console_stream_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::InstanceSerialConsoleStreamV1When,
             operations::InstanceSerialConsoleStreamV1Then,
         );
-    fn instance_start_v1<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_start_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceStartV1When, operations::InstanceStartV1Then);
-    fn instance_stop_v1<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_stop_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceStopV1When, operations::InstanceStopV1Then);
-    fn organization_list_v1<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn organization_list_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::OrganizationListV1When, operations::OrganizationListV1Then);
-    fn organization_create_v1<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn organization_create_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::OrganizationCreateV1When, operations::OrganizationCreateV1Then);
-    fn organization_view_v1<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn organization_view_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::OrganizationViewV1When, operations::OrganizationViewV1Then);
-    fn organization_update_v1<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn organization_update_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::OrganizationUpdateV1When, operations::OrganizationUpdateV1Then);
-    fn organization_delete_v1<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn organization_delete_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::OrganizationDeleteV1When, operations::OrganizationDeleteV1Then);
-    fn organization_policy_view_v1<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn organization_policy_view_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::OrganizationPolicyViewV1When,
             operations::OrganizationPolicyViewV1Then,
         );
-    fn organization_policy_update_v1<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn organization_policy_update_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::OrganizationPolicyUpdateV1When,
             operations::OrganizationPolicyUpdateV1Then,
         );
-    fn project_list_v1<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn project_list_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ProjectListV1When, operations::ProjectListV1Then);
-    fn project_create_v1<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn project_create_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ProjectCreateV1When, operations::ProjectCreateV1Then);
-    fn project_view_v1<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn project_view_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ProjectViewV1When, operations::ProjectViewV1Then);
-    fn project_update_v1<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn project_update_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ProjectUpdateV1When, operations::ProjectUpdateV1Then);
-    fn project_delete_v1<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn project_delete_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ProjectDeleteV1When, operations::ProjectDeleteV1Then);
-    fn project_policy_view_v1<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn project_policy_view_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ProjectPolicyViewV1When, operations::ProjectPolicyViewV1Then);
-    fn project_policy_update_v1<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn project_policy_update_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ProjectPolicyUpdateV1When, operations::ProjectPolicyUpdateV1Then);
-    fn system_component_version_list<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn system_component_version_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::SystemComponentVersionListWhen,
             operations::SystemComponentVersionListThen,
         );
-    fn update_deployments_list<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn update_deployments_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::UpdateDeploymentsListWhen, operations::UpdateDeploymentsListThen);
-    fn update_deployment_view<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn update_deployment_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::UpdateDeploymentViewWhen, operations::UpdateDeploymentViewThen);
-    fn system_update_refresh<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn system_update_refresh<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SystemUpdateRefreshWhen, operations::SystemUpdateRefreshThen);
-    fn system_update_start<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn system_update_start<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SystemUpdateStartWhen, operations::SystemUpdateStartThen);
-    fn system_update_stop<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn system_update_stop<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SystemUpdateStopWhen, operations::SystemUpdateStopThen);
-    fn system_update_list<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn system_update_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SystemUpdateListWhen, operations::SystemUpdateListThen);
-    fn system_update_view<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn system_update_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SystemUpdateViewWhen, operations::SystemUpdateViewThen);
-    fn system_update_components_list<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn system_update_components_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::SystemUpdateComponentsListWhen,
             operations::SystemUpdateComponentsListThen,
         );
-    fn system_version<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn system_version<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SystemVersionWhen, operations::SystemVersionThen);
 }
 
 impl MockServerExt for ::httpmock::MockServer {
-    fn disk_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn disk_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::DiskViewByIdWhen, operations::DiskViewByIdThen),
     {
@@ -16252,7 +16252,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn image_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn image_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ImageViewByIdWhen, operations::ImageViewByIdThen),
     {
@@ -16264,7 +16264,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn instance_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceViewByIdWhen, operations::InstanceViewByIdThen),
     {
@@ -16276,7 +16276,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn instance_network_interface_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_network_interface_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::InstanceNetworkInterfaceViewByIdWhen,
@@ -16291,7 +16291,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn organization_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn organization_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::OrganizationViewByIdWhen, operations::OrganizationViewByIdThen),
     {
@@ -16303,7 +16303,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn project_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn project_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ProjectViewByIdWhen, operations::ProjectViewByIdThen),
     {
@@ -16315,7 +16315,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn snapshot_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn snapshot_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SnapshotViewByIdWhen, operations::SnapshotViewByIdThen),
     {
@@ -16327,7 +16327,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn vpc_router_route_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn vpc_router_route_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcRouterRouteViewByIdWhen, operations::VpcRouterRouteViewByIdThen),
     {
@@ -16339,7 +16339,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn vpc_router_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn vpc_router_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcRouterViewByIdWhen, operations::VpcRouterViewByIdThen),
     {
@@ -16351,7 +16351,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn vpc_subnet_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn vpc_subnet_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcSubnetViewByIdWhen, operations::VpcSubnetViewByIdThen),
     {
@@ -16363,7 +16363,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn vpc_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn vpc_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcViewByIdWhen, operations::VpcViewByIdThen),
     {
@@ -16375,7 +16375,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn device_auth_request<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn device_auth_request<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::DeviceAuthRequestWhen, operations::DeviceAuthRequestThen),
     {
@@ -16387,7 +16387,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn device_auth_confirm<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn device_auth_confirm<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::DeviceAuthConfirmWhen, operations::DeviceAuthConfirmThen),
     {
@@ -16399,7 +16399,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn device_access_token<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn device_access_token<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::DeviceAccessTokenWhen, operations::DeviceAccessTokenThen),
     {
@@ -16411,7 +16411,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn group_list<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn group_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::GroupListWhen, operations::GroupListThen),
     {
@@ -16423,7 +16423,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn login_spoof<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn login_spoof<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::LoginSpoofWhen, operations::LoginSpoofThen),
     {
@@ -16435,7 +16435,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn login_local<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn login_local<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::LoginLocalWhen, operations::LoginLocalThen),
     {
@@ -16447,7 +16447,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn login_saml_begin<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn login_saml_begin<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::LoginSamlBeginWhen, operations::LoginSamlBeginThen),
     {
@@ -16459,7 +16459,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn login_saml<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn login_saml<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::LoginSamlWhen, operations::LoginSamlThen),
     {
@@ -16471,7 +16471,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn logout<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn logout<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::LogoutWhen, operations::LogoutThen),
     {
@@ -16483,7 +16483,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn organization_list<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn organization_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::OrganizationListWhen, operations::OrganizationListThen),
     {
@@ -16495,7 +16495,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn organization_create<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn organization_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::OrganizationCreateWhen, operations::OrganizationCreateThen),
     {
@@ -16507,7 +16507,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn organization_view<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn organization_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::OrganizationViewWhen, operations::OrganizationViewThen),
     {
@@ -16519,7 +16519,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn organization_update<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn organization_update<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::OrganizationUpdateWhen, operations::OrganizationUpdateThen),
     {
@@ -16531,7 +16531,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn organization_delete<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn organization_delete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::OrganizationDeleteWhen, operations::OrganizationDeleteThen),
     {
@@ -16543,7 +16543,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn organization_policy_view<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn organization_policy_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::OrganizationPolicyViewWhen, operations::OrganizationPolicyViewThen),
     {
@@ -16555,7 +16555,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn organization_policy_update<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn organization_policy_update<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::OrganizationPolicyUpdateWhen,
@@ -16570,7 +16570,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn project_list<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn project_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ProjectListWhen, operations::ProjectListThen),
     {
@@ -16582,7 +16582,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn project_create<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn project_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ProjectCreateWhen, operations::ProjectCreateThen),
     {
@@ -16594,7 +16594,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn project_view<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn project_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ProjectViewWhen, operations::ProjectViewThen),
     {
@@ -16606,7 +16606,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn project_update<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn project_update<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ProjectUpdateWhen, operations::ProjectUpdateThen),
     {
@@ -16618,7 +16618,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn project_delete<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn project_delete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ProjectDeleteWhen, operations::ProjectDeleteThen),
     {
@@ -16630,7 +16630,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn disk_list<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn disk_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::DiskListWhen, operations::DiskListThen),
     {
@@ -16642,7 +16642,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn disk_create<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn disk_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::DiskCreateWhen, operations::DiskCreateThen),
     {
@@ -16654,7 +16654,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn disk_view<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn disk_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::DiskViewWhen, operations::DiskViewThen),
     {
@@ -16666,7 +16666,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn disk_delete<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn disk_delete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::DiskDeleteWhen, operations::DiskDeleteThen),
     {
@@ -16678,7 +16678,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn disk_metrics_list<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn disk_metrics_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::DiskMetricsListWhen, operations::DiskMetricsListThen),
     {
@@ -16690,7 +16690,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn image_list<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn image_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ImageListWhen, operations::ImageListThen),
     {
@@ -16702,7 +16702,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn image_create<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn image_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ImageCreateWhen, operations::ImageCreateThen),
     {
@@ -16714,7 +16714,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn image_view<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn image_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ImageViewWhen, operations::ImageViewThen),
     {
@@ -16726,7 +16726,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn image_delete<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn image_delete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ImageDeleteWhen, operations::ImageDeleteThen),
     {
@@ -16738,7 +16738,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn instance_list<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceListWhen, operations::InstanceListThen),
     {
@@ -16750,7 +16750,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn instance_create<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceCreateWhen, operations::InstanceCreateThen),
     {
@@ -16762,7 +16762,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn instance_view<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceViewWhen, operations::InstanceViewThen),
     {
@@ -16774,7 +16774,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn instance_delete<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_delete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceDeleteWhen, operations::InstanceDeleteThen),
     {
@@ -16786,7 +16786,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn instance_disk_list<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_disk_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceDiskListWhen, operations::InstanceDiskListThen),
     {
@@ -16798,7 +16798,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn instance_disk_attach<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_disk_attach<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceDiskAttachWhen, operations::InstanceDiskAttachThen),
     {
@@ -16810,7 +16810,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn instance_disk_detach<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_disk_detach<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceDiskDetachWhen, operations::InstanceDiskDetachThen),
     {
@@ -16822,7 +16822,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn instance_external_ip_list<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_external_ip_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceExternalIpListWhen, operations::InstanceExternalIpListThen),
     {
@@ -16834,7 +16834,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn instance_migrate<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_migrate<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceMigrateWhen, operations::InstanceMigrateThen),
     {
@@ -16846,7 +16846,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn instance_network_interface_list<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_network_interface_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::InstanceNetworkInterfaceListWhen,
@@ -16861,7 +16861,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn instance_network_interface_create<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_network_interface_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::InstanceNetworkInterfaceCreateWhen,
@@ -16876,7 +16876,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn instance_network_interface_view<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_network_interface_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::InstanceNetworkInterfaceViewWhen,
@@ -16891,7 +16891,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn instance_network_interface_update<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_network_interface_update<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::InstanceNetworkInterfaceUpdateWhen,
@@ -16906,7 +16906,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn instance_network_interface_delete<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_network_interface_delete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::InstanceNetworkInterfaceDeleteWhen,
@@ -16921,7 +16921,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn instance_reboot<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_reboot<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceRebootWhen, operations::InstanceRebootThen),
     {
@@ -16933,7 +16933,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn instance_serial_console<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_serial_console<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceSerialConsoleWhen, operations::InstanceSerialConsoleThen),
     {
@@ -16945,7 +16945,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn instance_serial_console_stream<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_serial_console_stream<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::InstanceSerialConsoleStreamWhen,
@@ -16960,7 +16960,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn instance_start<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_start<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceStartWhen, operations::InstanceStartThen),
     {
@@ -16972,7 +16972,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn instance_stop<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_stop<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceStopWhen, operations::InstanceStopThen),
     {
@@ -16984,7 +16984,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn project_policy_view<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn project_policy_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ProjectPolicyViewWhen, operations::ProjectPolicyViewThen),
     {
@@ -16996,7 +16996,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn project_policy_update<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn project_policy_update<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ProjectPolicyUpdateWhen, operations::ProjectPolicyUpdateThen),
     {
@@ -17008,7 +17008,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn snapshot_list<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn snapshot_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SnapshotListWhen, operations::SnapshotListThen),
     {
@@ -17020,7 +17020,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn snapshot_create<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn snapshot_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SnapshotCreateWhen, operations::SnapshotCreateThen),
     {
@@ -17032,7 +17032,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn snapshot_view<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn snapshot_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SnapshotViewWhen, operations::SnapshotViewThen),
     {
@@ -17044,7 +17044,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn snapshot_delete<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn snapshot_delete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SnapshotDeleteWhen, operations::SnapshotDeleteThen),
     {
@@ -17056,7 +17056,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn vpc_list<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn vpc_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcListWhen, operations::VpcListThen),
     {
@@ -17068,7 +17068,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn vpc_create<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn vpc_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcCreateWhen, operations::VpcCreateThen),
     {
@@ -17080,7 +17080,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn vpc_view<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn vpc_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcViewWhen, operations::VpcViewThen),
     {
@@ -17092,7 +17092,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn vpc_update<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn vpc_update<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcUpdateWhen, operations::VpcUpdateThen),
     {
@@ -17104,7 +17104,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn vpc_delete<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn vpc_delete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcDeleteWhen, operations::VpcDeleteThen),
     {
@@ -17116,7 +17116,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn vpc_firewall_rules_view<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn vpc_firewall_rules_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcFirewallRulesViewWhen, operations::VpcFirewallRulesViewThen),
     {
@@ -17128,7 +17128,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn vpc_firewall_rules_update<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn vpc_firewall_rules_update<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcFirewallRulesUpdateWhen, operations::VpcFirewallRulesUpdateThen),
     {
@@ -17140,7 +17140,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn vpc_router_list<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn vpc_router_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcRouterListWhen, operations::VpcRouterListThen),
     {
@@ -17152,7 +17152,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn vpc_router_create<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn vpc_router_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcRouterCreateWhen, operations::VpcRouterCreateThen),
     {
@@ -17164,7 +17164,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn vpc_router_view<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn vpc_router_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcRouterViewWhen, operations::VpcRouterViewThen),
     {
@@ -17176,7 +17176,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn vpc_router_update<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn vpc_router_update<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcRouterUpdateWhen, operations::VpcRouterUpdateThen),
     {
@@ -17188,7 +17188,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn vpc_router_delete<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn vpc_router_delete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcRouterDeleteWhen, operations::VpcRouterDeleteThen),
     {
@@ -17200,7 +17200,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn vpc_router_route_list<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn vpc_router_route_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcRouterRouteListWhen, operations::VpcRouterRouteListThen),
     {
@@ -17212,7 +17212,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn vpc_router_route_create<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn vpc_router_route_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcRouterRouteCreateWhen, operations::VpcRouterRouteCreateThen),
     {
@@ -17224,7 +17224,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn vpc_router_route_view<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn vpc_router_route_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcRouterRouteViewWhen, operations::VpcRouterRouteViewThen),
     {
@@ -17236,7 +17236,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn vpc_router_route_update<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn vpc_router_route_update<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcRouterRouteUpdateWhen, operations::VpcRouterRouteUpdateThen),
     {
@@ -17248,7 +17248,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn vpc_router_route_delete<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn vpc_router_route_delete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcRouterRouteDeleteWhen, operations::VpcRouterRouteDeleteThen),
     {
@@ -17260,7 +17260,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn vpc_subnet_list<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn vpc_subnet_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcSubnetListWhen, operations::VpcSubnetListThen),
     {
@@ -17272,7 +17272,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn vpc_subnet_create<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn vpc_subnet_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcSubnetCreateWhen, operations::VpcSubnetCreateThen),
     {
@@ -17284,7 +17284,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn vpc_subnet_view<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn vpc_subnet_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcSubnetViewWhen, operations::VpcSubnetViewThen),
     {
@@ -17296,7 +17296,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn vpc_subnet_update<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn vpc_subnet_update<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcSubnetUpdateWhen, operations::VpcSubnetUpdateThen),
     {
@@ -17308,7 +17308,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn vpc_subnet_delete<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn vpc_subnet_delete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcSubnetDeleteWhen, operations::VpcSubnetDeleteThen),
     {
@@ -17320,7 +17320,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn vpc_subnet_list_network_interfaces<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn vpc_subnet_list_network_interfaces<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::VpcSubnetListNetworkInterfacesWhen,
@@ -17335,7 +17335,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn policy_view<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn policy_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::PolicyViewWhen, operations::PolicyViewThen),
     {
@@ -17347,7 +17347,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn policy_update<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn policy_update<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::PolicyUpdateWhen, operations::PolicyUpdateThen),
     {
@@ -17359,7 +17359,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn role_list<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn role_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::RoleListWhen, operations::RoleListThen),
     {
@@ -17371,7 +17371,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn role_view<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn role_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::RoleViewWhen, operations::RoleViewThen),
     {
@@ -17383,7 +17383,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn session_me<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn session_me<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SessionMeWhen, operations::SessionMeThen),
     {
@@ -17395,7 +17395,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn session_me_groups<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn session_me_groups<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SessionMeGroupsWhen, operations::SessionMeGroupsThen),
     {
@@ -17407,7 +17407,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn session_sshkey_list<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn session_sshkey_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SessionSshkeyListWhen, operations::SessionSshkeyListThen),
     {
@@ -17419,7 +17419,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn session_sshkey_create<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn session_sshkey_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SessionSshkeyCreateWhen, operations::SessionSshkeyCreateThen),
     {
@@ -17431,7 +17431,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn session_sshkey_view<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn session_sshkey_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SessionSshkeyViewWhen, operations::SessionSshkeyViewThen),
     {
@@ -17443,7 +17443,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn session_sshkey_delete<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn session_sshkey_delete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SessionSshkeyDeleteWhen, operations::SessionSshkeyDeleteThen),
     {
@@ -17455,7 +17455,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn system_image_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn system_image_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SystemImageViewByIdWhen, operations::SystemImageViewByIdThen),
     {
@@ -17467,7 +17467,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn ip_pool_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn ip_pool_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::IpPoolViewByIdWhen, operations::IpPoolViewByIdThen),
     {
@@ -17479,7 +17479,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn silo_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn silo_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SiloViewByIdWhen, operations::SiloViewByIdThen),
     {
@@ -17491,7 +17491,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn certificate_list<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn certificate_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::CertificateListWhen, operations::CertificateListThen),
     {
@@ -17503,7 +17503,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn certificate_create<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn certificate_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::CertificateCreateWhen, operations::CertificateCreateThen),
     {
@@ -17515,7 +17515,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn certificate_view<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn certificate_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::CertificateViewWhen, operations::CertificateViewThen),
     {
@@ -17527,7 +17527,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn certificate_delete<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn certificate_delete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::CertificateDeleteWhen, operations::CertificateDeleteThen),
     {
@@ -17539,7 +17539,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn physical_disk_list<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn physical_disk_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::PhysicalDiskListWhen, operations::PhysicalDiskListThen),
     {
@@ -17551,7 +17551,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn rack_list<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn rack_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::RackListWhen, operations::RackListThen),
     {
@@ -17563,7 +17563,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn rack_view<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn rack_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::RackViewWhen, operations::RackViewThen),
     {
@@ -17575,7 +17575,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn sled_list<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn sled_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SledListWhen, operations::SledListThen),
     {
@@ -17587,7 +17587,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn sled_view<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn sled_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SledViewWhen, operations::SledViewThen),
     {
@@ -17599,7 +17599,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn sled_physical_disk_list<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn sled_physical_disk_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SledPhysicalDiskListWhen, operations::SledPhysicalDiskListThen),
     {
@@ -17611,7 +17611,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn system_image_list<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn system_image_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SystemImageListWhen, operations::SystemImageListThen),
     {
@@ -17623,7 +17623,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn system_image_create<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn system_image_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SystemImageCreateWhen, operations::SystemImageCreateThen),
     {
@@ -17635,7 +17635,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn system_image_view<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn system_image_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SystemImageViewWhen, operations::SystemImageViewThen),
     {
@@ -17647,7 +17647,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn system_image_delete<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn system_image_delete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SystemImageDeleteWhen, operations::SystemImageDeleteThen),
     {
@@ -17659,7 +17659,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn ip_pool_list<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn ip_pool_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::IpPoolListWhen, operations::IpPoolListThen),
     {
@@ -17671,7 +17671,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn ip_pool_create<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn ip_pool_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::IpPoolCreateWhen, operations::IpPoolCreateThen),
     {
@@ -17683,7 +17683,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn ip_pool_view<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn ip_pool_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::IpPoolViewWhen, operations::IpPoolViewThen),
     {
@@ -17695,7 +17695,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn ip_pool_update<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn ip_pool_update<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::IpPoolUpdateWhen, operations::IpPoolUpdateThen),
     {
@@ -17707,7 +17707,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn ip_pool_delete<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn ip_pool_delete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::IpPoolDeleteWhen, operations::IpPoolDeleteThen),
     {
@@ -17719,7 +17719,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn ip_pool_range_list<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn ip_pool_range_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::IpPoolRangeListWhen, operations::IpPoolRangeListThen),
     {
@@ -17731,7 +17731,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn ip_pool_range_add<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn ip_pool_range_add<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::IpPoolRangeAddWhen, operations::IpPoolRangeAddThen),
     {
@@ -17743,7 +17743,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn ip_pool_range_remove<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn ip_pool_range_remove<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::IpPoolRangeRemoveWhen, operations::IpPoolRangeRemoveThen),
     {
@@ -17755,7 +17755,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn ip_pool_service_view<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn ip_pool_service_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::IpPoolServiceViewWhen, operations::IpPoolServiceViewThen),
     {
@@ -17767,7 +17767,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn ip_pool_service_range_list<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn ip_pool_service_range_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::IpPoolServiceRangeListWhen, operations::IpPoolServiceRangeListThen),
     {
@@ -17779,7 +17779,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn ip_pool_service_range_add<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn ip_pool_service_range_add<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::IpPoolServiceRangeAddWhen, operations::IpPoolServiceRangeAddThen),
     {
@@ -17791,7 +17791,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn ip_pool_service_range_remove<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn ip_pool_service_range_remove<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::IpPoolServiceRangeRemoveWhen,
@@ -17806,7 +17806,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn system_metric<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn system_metric<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SystemMetricWhen, operations::SystemMetricThen),
     {
@@ -17818,7 +17818,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn system_policy_view<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn system_policy_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SystemPolicyViewWhen, operations::SystemPolicyViewThen),
     {
@@ -17830,7 +17830,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn system_policy_update<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn system_policy_update<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SystemPolicyUpdateWhen, operations::SystemPolicyUpdateThen),
     {
@@ -17842,7 +17842,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn saga_list<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn saga_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SagaListWhen, operations::SagaListThen),
     {
@@ -17854,7 +17854,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn saga_view<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn saga_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SagaViewWhen, operations::SagaViewThen),
     {
@@ -17866,7 +17866,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn silo_list<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn silo_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SiloListWhen, operations::SiloListThen),
     {
@@ -17878,7 +17878,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn silo_create<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn silo_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SiloCreateWhen, operations::SiloCreateThen),
     {
@@ -17890,7 +17890,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn silo_view<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn silo_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SiloViewWhen, operations::SiloViewThen),
     {
@@ -17902,7 +17902,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn silo_delete<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn silo_delete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SiloDeleteWhen, operations::SiloDeleteThen),
     {
@@ -17914,7 +17914,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn silo_identity_provider_list<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn silo_identity_provider_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::SiloIdentityProviderListWhen,
@@ -17929,7 +17929,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn local_idp_user_create<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn local_idp_user_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::LocalIdpUserCreateWhen, operations::LocalIdpUserCreateThen),
     {
@@ -17941,7 +17941,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn local_idp_user_delete<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn local_idp_user_delete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::LocalIdpUserDeleteWhen, operations::LocalIdpUserDeleteThen),
     {
@@ -17953,7 +17953,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn local_idp_user_set_password<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn local_idp_user_set_password<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::LocalIdpUserSetPasswordWhen, operations::LocalIdpUserSetPasswordThen),
     {
@@ -17965,7 +17965,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn saml_identity_provider_create<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn saml_identity_provider_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::SamlIdentityProviderCreateWhen,
@@ -17980,7 +17980,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn saml_identity_provider_view<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn saml_identity_provider_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::SamlIdentityProviderViewWhen,
@@ -17995,7 +17995,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn silo_policy_view<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn silo_policy_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SiloPolicyViewWhen, operations::SiloPolicyViewThen),
     {
@@ -18007,7 +18007,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn silo_policy_update<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn silo_policy_update<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SiloPolicyUpdateWhen, operations::SiloPolicyUpdateThen),
     {
@@ -18019,7 +18019,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn silo_users_list<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn silo_users_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SiloUsersListWhen, operations::SiloUsersListThen),
     {
@@ -18031,7 +18031,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn silo_user_view<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn silo_user_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SiloUserViewWhen, operations::SiloUserViewThen),
     {
@@ -18043,7 +18043,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn system_user_list<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn system_user_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SystemUserListWhen, operations::SystemUserListThen),
     {
@@ -18055,7 +18055,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn system_user_view<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn system_user_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SystemUserViewWhen, operations::SystemUserViewThen),
     {
@@ -18067,7 +18067,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn timeseries_schema_get<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn timeseries_schema_get<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::TimeseriesSchemaGetWhen, operations::TimeseriesSchemaGetThen),
     {
@@ -18079,7 +18079,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn user_list<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn user_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::UserListWhen, operations::UserListThen),
     {
@@ -18091,7 +18091,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn disk_list_v1<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn disk_list_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::DiskListV1When, operations::DiskListV1Then),
     {
@@ -18103,7 +18103,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn disk_create_v1<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn disk_create_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::DiskCreateV1When, operations::DiskCreateV1Then),
     {
@@ -18115,7 +18115,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn disk_view_v1<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn disk_view_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::DiskViewV1When, operations::DiskViewV1Then),
     {
@@ -18127,7 +18127,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn disk_delete_v1<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn disk_delete_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::DiskDeleteV1When, operations::DiskDeleteV1Then),
     {
@@ -18139,7 +18139,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn instance_list_v1<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_list_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceListV1When, operations::InstanceListV1Then),
     {
@@ -18151,7 +18151,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn instance_create_v1<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_create_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceCreateV1When, operations::InstanceCreateV1Then),
     {
@@ -18163,7 +18163,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn instance_view_v1<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_view_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceViewV1When, operations::InstanceViewV1Then),
     {
@@ -18175,7 +18175,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn instance_delete_v1<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_delete_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceDeleteV1When, operations::InstanceDeleteV1Then),
     {
@@ -18187,7 +18187,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn instance_disk_list_v1<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_disk_list_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceDiskListV1When, operations::InstanceDiskListV1Then),
     {
@@ -18199,7 +18199,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn instance_disk_attach_v1<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_disk_attach_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceDiskAttachV1When, operations::InstanceDiskAttachV1Then),
     {
@@ -18211,7 +18211,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn instance_disk_detach_v1<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_disk_detach_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceDiskDetachV1When, operations::InstanceDiskDetachV1Then),
     {
@@ -18223,7 +18223,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn instance_migrate_v1<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_migrate_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceMigrateV1When, operations::InstanceMigrateV1Then),
     {
@@ -18235,7 +18235,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn instance_reboot_v1<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_reboot_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceRebootV1When, operations::InstanceRebootV1Then),
     {
@@ -18247,7 +18247,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn instance_serial_console_v1<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_serial_console_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceSerialConsoleV1When, operations::InstanceSerialConsoleV1Then),
     {
@@ -18259,7 +18259,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn instance_serial_console_stream_v1<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_serial_console_stream_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::InstanceSerialConsoleStreamV1When,
@@ -18274,7 +18274,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn instance_start_v1<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_start_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceStartV1When, operations::InstanceStartV1Then),
     {
@@ -18286,7 +18286,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn instance_stop_v1<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_stop_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceStopV1When, operations::InstanceStopV1Then),
     {
@@ -18298,7 +18298,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn organization_list_v1<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn organization_list_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::OrganizationListV1When, operations::OrganizationListV1Then),
     {
@@ -18310,7 +18310,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn organization_create_v1<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn organization_create_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::OrganizationCreateV1When, operations::OrganizationCreateV1Then),
     {
@@ -18322,7 +18322,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn organization_view_v1<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn organization_view_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::OrganizationViewV1When, operations::OrganizationViewV1Then),
     {
@@ -18334,7 +18334,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn organization_update_v1<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn organization_update_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::OrganizationUpdateV1When, operations::OrganizationUpdateV1Then),
     {
@@ -18346,7 +18346,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn organization_delete_v1<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn organization_delete_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::OrganizationDeleteV1When, operations::OrganizationDeleteV1Then),
     {
@@ -18358,7 +18358,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn organization_policy_view_v1<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn organization_policy_view_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::OrganizationPolicyViewV1When,
@@ -18373,7 +18373,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn organization_policy_update_v1<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn organization_policy_update_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::OrganizationPolicyUpdateV1When,
@@ -18388,7 +18388,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn project_list_v1<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn project_list_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ProjectListV1When, operations::ProjectListV1Then),
     {
@@ -18400,7 +18400,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn project_create_v1<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn project_create_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ProjectCreateV1When, operations::ProjectCreateV1Then),
     {
@@ -18412,7 +18412,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn project_view_v1<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn project_view_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ProjectViewV1When, operations::ProjectViewV1Then),
     {
@@ -18424,7 +18424,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn project_update_v1<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn project_update_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ProjectUpdateV1When, operations::ProjectUpdateV1Then),
     {
@@ -18436,7 +18436,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn project_delete_v1<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn project_delete_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ProjectDeleteV1When, operations::ProjectDeleteV1Then),
     {
@@ -18448,7 +18448,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn project_policy_view_v1<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn project_policy_view_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ProjectPolicyViewV1When, operations::ProjectPolicyViewV1Then),
     {
@@ -18460,7 +18460,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn project_policy_update_v1<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn project_policy_update_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ProjectPolicyUpdateV1When, operations::ProjectPolicyUpdateV1Then),
     {
@@ -18472,7 +18472,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn system_component_version_list<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn system_component_version_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::SystemComponentVersionListWhen,
@@ -18487,7 +18487,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn update_deployments_list<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn update_deployments_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::UpdateDeploymentsListWhen, operations::UpdateDeploymentsListThen),
     {
@@ -18499,7 +18499,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn update_deployment_view<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn update_deployment_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::UpdateDeploymentViewWhen, operations::UpdateDeploymentViewThen),
     {
@@ -18511,7 +18511,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn system_update_refresh<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn system_update_refresh<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SystemUpdateRefreshWhen, operations::SystemUpdateRefreshThen),
     {
@@ -18523,7 +18523,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn system_update_start<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn system_update_start<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SystemUpdateStartWhen, operations::SystemUpdateStartThen),
     {
@@ -18535,7 +18535,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn system_update_stop<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn system_update_stop<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SystemUpdateStopWhen, operations::SystemUpdateStopThen),
     {
@@ -18547,7 +18547,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn system_update_list<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn system_update_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SystemUpdateListWhen, operations::SystemUpdateListThen),
     {
@@ -18559,7 +18559,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn system_update_view<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn system_update_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SystemUpdateViewWhen, operations::SystemUpdateViewThen),
     {
@@ -18571,7 +18571,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn system_update_components_list<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn system_update_components_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::SystemUpdateComponentsListWhen,
@@ -18586,7 +18586,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn system_version<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn system_version<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SystemVersionWhen, operations::SystemVersionThen),
     {

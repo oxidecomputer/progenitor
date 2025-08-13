@@ -254,28 +254,28 @@ pub mod operations {
 #[doc = r" adds a method for each operation. These are the equivalent of"]
 #[doc = r" type-checked [`mock()`](::httpmock::MockServer::mock) calls."]
 pub trait MockServerExt {
-    fn enrol<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn enrol<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::EnrolWhen, operations::EnrolThen);
-    fn global_jobs<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn global_jobs<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::GlobalJobsWhen, operations::GlobalJobsThen);
-    fn ping<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn ping<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::PingWhen, operations::PingThen);
-    fn report_finish<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn report_finish<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ReportFinishWhen, operations::ReportFinishThen);
-    fn report_output<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn report_output<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ReportOutputWhen, operations::ReportOutputThen);
-    fn report_start<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn report_start<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ReportStartWhen, operations::ReportStartThen);
 }
 
 impl MockServerExt for ::httpmock::MockServer {
-    fn enrol<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn enrol<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::EnrolWhen, operations::EnrolThen),
     {
@@ -287,7 +287,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn global_jobs<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn global_jobs<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::GlobalJobsWhen, operations::GlobalJobsThen),
     {
@@ -299,7 +299,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn ping<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn ping<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::PingWhen, operations::PingThen),
     {
@@ -311,7 +311,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn report_finish<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn report_finish<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ReportFinishWhen, operations::ReportFinishThen),
     {
@@ -323,7 +323,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn report_output<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn report_output<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ReportOutputWhen, operations::ReportOutputThen),
     {
@@ -335,7 +335,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn report_start<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn report_start<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ReportStartWhen, operations::ReportStartThen),
     {

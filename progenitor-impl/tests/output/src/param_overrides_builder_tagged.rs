@@ -116,7 +116,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn key_get(&self) -> builder::KeyGet {
+    pub fn key_get(&self) -> builder::KeyGet<'_> {
         builder::KeyGet::new(self)
     }
 }

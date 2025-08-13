@@ -695,7 +695,7 @@ impl Generator {
                 ) -> impl futures::Stream<Item = Result<
                     #item_type,
                     Error<#error_type>,
-                >> + Unpin + '_ {
+                >> + Unpin + 'a {
                     use futures::StreamExt;
                     use futures::TryFutureExt;
                     use futures::TryStreamExt;
@@ -1906,7 +1906,7 @@ impl Generator {
         let doc = format!("{}```ignore\n{}\n```", make_doc_comment(method), eg);
 
         let sig = quote! {
-            fn #operation_id(&self) -> builder:: #struct_ident
+            fn #operation_id(&self) -> builder:: #struct_ident <'_>
         };
 
         let body = quote! {

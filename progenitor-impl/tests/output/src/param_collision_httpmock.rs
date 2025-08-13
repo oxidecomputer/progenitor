@@ -64,13 +64,13 @@ pub mod operations {
 #[doc = r" adds a method for each operation. These are the equivalent of"]
 #[doc = r" type-checked [`mock()`](::httpmock::MockServer::mock) calls."]
 pub trait MockServerExt {
-    fn key_get<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn key_get<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::KeyGetWhen, operations::KeyGetThen);
 }
 
 impl MockServerExt for ::httpmock::MockServer {
-    fn key_get<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn key_get<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::KeyGetWhen, operations::KeyGetThen),
     {

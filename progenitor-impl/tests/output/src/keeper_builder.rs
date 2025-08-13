@@ -1337,7 +1337,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn enrol(&self) -> builder::Enrol {
+    pub fn enrol(&self) -> builder::Enrol<'_> {
         builder::Enrol::new(self)
     }
 
@@ -1351,7 +1351,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn global_jobs(&self) -> builder::GlobalJobs {
+    pub fn global_jobs(&self) -> builder::GlobalJobs<'_> {
         builder::GlobalJobs::new(self)
     }
 
@@ -1365,7 +1365,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn ping(&self) -> builder::Ping {
+    pub fn ping(&self) -> builder::Ping<'_> {
         builder::Ping::new(self)
     }
 
@@ -1381,7 +1381,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn report_finish(&self) -> builder::ReportFinish {
+    pub fn report_finish(&self) -> builder::ReportFinish<'_> {
         builder::ReportFinish::new(self)
     }
 
@@ -1397,7 +1397,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn report_output(&self) -> builder::ReportOutput {
+    pub fn report_output(&self) -> builder::ReportOutput<'_> {
         builder::ReportOutput::new(self)
     }
 
@@ -1413,7 +1413,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn report_start(&self) -> builder::ReportStart {
+    pub fn report_start(&self) -> builder::ReportStart<'_> {
         builder::ReportStart::new(self)
     }
 }

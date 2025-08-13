@@ -186,7 +186,6 @@ impl ClientInfo<()> for Client {
 
 impl ClientHooks<()> for &Client {}
 #[allow(clippy::all)]
-#[allow(elided_named_lifetimes)]
 impl Client {
     ///Sends a `GET` request to `/`
     ///
@@ -246,7 +245,7 @@ impl Client {
     pub fn paginated_u32s_stream<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
-    ) -> impl futures::Stream<Item = Result<u32, Error<types::Error>>> + Unpin + '_ {
+    ) -> impl futures::Stream<Item = Result<u32, Error<types::Error>>> + Unpin + 'a {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;

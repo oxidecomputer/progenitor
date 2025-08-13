@@ -391,7 +391,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn default_params(&self) -> builder::DefaultParams {
+    pub fn default_params(&self) -> builder::DefaultParams<'_> {
         builder::DefaultParams::new(self)
     }
 }

@@ -213,7 +213,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn uno(&self) -> builder::Uno {
+    pub fn uno(&self) -> builder::Uno<'_> {
         builder::Uno::new(self)
     }
 }

@@ -138,7 +138,6 @@ impl ClientInfo<()> for Client {
 
 impl ClientHooks<()> for &Client {}
 #[allow(clippy::all)]
-#[allow(elided_named_lifetimes)]
 impl Client {
     ///Sends a `GET` request to `/`
     pub async fn freeform_response<'a>(

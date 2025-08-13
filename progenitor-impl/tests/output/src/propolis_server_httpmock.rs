@@ -402,34 +402,34 @@ pub mod operations {
 #[doc = r" adds a method for each operation. These are the equivalent of"]
 #[doc = r" type-checked [`mock()`](::httpmock::MockServer::mock) calls."]
 pub trait MockServerExt {
-    fn instance_get<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_get<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceGetWhen, operations::InstanceGetThen);
-    fn instance_ensure<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_ensure<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceEnsureWhen, operations::InstanceEnsureThen);
-    fn instance_issue_crucible_snapshot_request<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_issue_crucible_snapshot_request<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::InstanceIssueCrucibleSnapshotRequestWhen,
             operations::InstanceIssueCrucibleSnapshotRequestThen,
         );
-    fn instance_migrate_status<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_migrate_status<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceMigrateStatusWhen, operations::InstanceMigrateStatusThen);
-    fn instance_serial<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_serial<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceSerialWhen, operations::InstanceSerialThen);
-    fn instance_state_put<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_state_put<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceStatePutWhen, operations::InstanceStatePutThen);
-    fn instance_state_monitor<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_state_monitor<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceStateMonitorWhen, operations::InstanceStateMonitorThen);
 }
 
 impl MockServerExt for ::httpmock::MockServer {
-    fn instance_get<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_get<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceGetWhen, operations::InstanceGetThen),
     {
@@ -441,7 +441,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn instance_ensure<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_ensure<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceEnsureWhen, operations::InstanceEnsureThen),
     {
@@ -453,7 +453,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn instance_issue_crucible_snapshot_request<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_issue_crucible_snapshot_request<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::InstanceIssueCrucibleSnapshotRequestWhen,
@@ -468,7 +468,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn instance_migrate_status<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_migrate_status<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceMigrateStatusWhen, operations::InstanceMigrateStatusThen),
     {
@@ -480,7 +480,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn instance_serial<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_serial<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceSerialWhen, operations::InstanceSerialThen),
     {
@@ -492,7 +492,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn instance_state_put<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_state_put<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceStatePutWhen, operations::InstanceStatePutThen),
     {
@@ -504,7 +504,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn instance_state_monitor<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn instance_state_monitor<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceStateMonitorWhen, operations::InstanceStateMonitorThen),
     {
