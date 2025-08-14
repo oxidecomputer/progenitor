@@ -8,6 +8,7 @@ members = [
 	"progenitor-client",
 	"progenitor-impl",
 	"progenitor-macro",
+	"test-progenitor-compilation"
 ]
 
 resolver = "2"
