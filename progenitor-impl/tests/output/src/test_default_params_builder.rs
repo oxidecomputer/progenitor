@@ -93,52 +93,6 @@ pub mod types {
         }
     }
 
-    ///Error information from a response.
-    ///
-    /// <details><summary>JSON schema</summary>
-    ///
-    /// ```json
-    ///{
-    ///  "description": "Error information from a response.",
-    ///  "type": "object",
-    ///  "required": [
-    ///    "message",
-    ///    "request_id"
-    ///  ],
-    ///  "properties": {
-    ///    "error_code": {
-    ///      "type": "string"
-    ///    },
-    ///    "message": {
-    ///      "type": "string"
-    ///    },
-    ///    "request_id": {
-    ///      "type": "string"
-    ///    }
-    ///  }
-    ///}
-    /// ```
-    /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
-    pub struct Error {
-        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-        pub error_code: ::std::option::Option<::std::string::String>,
-        pub message: ::std::string::String,
-        pub request_id: ::std::string::String,
-    }
-
-    impl ::std::convert::From<&Error> for Error {
-        fn from(value: &Error) -> Self {
-            value.clone()
-        }
-    }
-
-    impl Error {
-        pub fn builder() -> builder::Error {
-            Default::default()
-        }
-    }
-
     /// Types for composing complex structures.
     pub mod builder {
         #[derive(Clone, Debug)]
@@ -224,82 +178,6 @@ pub mod types {
                     s: Ok(value.s),
                     something: Ok(value.something),
                     yes: Ok(value.yes),
-                }
-            }
-        }
-
-        #[derive(Clone, Debug)]
-        pub struct Error {
-            error_code: ::std::result::Result<
-                ::std::option::Option<::std::string::String>,
-                ::std::string::String,
-            >,
-            message: ::std::result::Result<::std::string::String, ::std::string::String>,
-            request_id: ::std::result::Result<::std::string::String, ::std::string::String>,
-        }
-
-        impl ::std::default::Default for Error {
-            fn default() -> Self {
-                Self {
-                    error_code: Ok(Default::default()),
-                    message: Err("no value supplied for message".to_string()),
-                    request_id: Err("no value supplied for request_id".to_string()),
-                }
-            }
-        }
-
-        impl Error {
-            pub fn error_code<T>(mut self, value: T) -> Self
-            where
-                T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
-                T::Error: ::std::fmt::Display,
-            {
-                self.error_code = value
-                    .try_into()
-                    .map_err(|e| format!("error converting supplied value for error_code: {}", e));
-                self
-            }
-            pub fn message<T>(mut self, value: T) -> Self
-            where
-                T: ::std::convert::TryInto<::std::string::String>,
-                T::Error: ::std::fmt::Display,
-            {
-                self.message = value
-                    .try_into()
-                    .map_err(|e| format!("error converting supplied value for message: {}", e));
-                self
-            }
-            pub fn request_id<T>(mut self, value: T) -> Self
-            where
-                T: ::std::convert::TryInto<::std::string::String>,
-                T::Error: ::std::fmt::Display,
-            {
-                self.request_id = value
-                    .try_into()
-                    .map_err(|e| format!("error converting supplied value for request_id: {}", e));
-                self
-            }
-        }
-
-        impl ::std::convert::TryFrom<Error> for super::Error {
-            type Error = super::error::ConversionError;
-            fn try_from(
-                value: Error,
-            ) -> ::std::result::Result<Self, super::error::ConversionError> {
-                Ok(Self {
-                    error_code: value.error_code?,
-                    message: value.message?,
-                    request_id: value.request_id?,
-                })
-            }
-        }
-
-        impl ::std::convert::From<super::Error> for Error {
-            fn from(value: super::Error) -> Self {
-                Self {
-                    error_code: Ok(value.error_code),
-                    message: Ok(value.message),
-                    request_id: Ok(value.request_id),
                 }
             }
         }

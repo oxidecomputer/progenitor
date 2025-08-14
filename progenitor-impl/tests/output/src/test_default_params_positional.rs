@@ -87,46 +87,6 @@ pub mod types {
         }
     }
 
-    ///Error information from a response.
-    ///
-    /// <details><summary>JSON schema</summary>
-    ///
-    /// ```json
-    ///{
-    ///  "description": "Error information from a response.",
-    ///  "type": "object",
-    ///  "required": [
-    ///    "message",
-    ///    "request_id"
-    ///  ],
-    ///  "properties": {
-    ///    "error_code": {
-    ///      "type": "string"
-    ///    },
-    ///    "message": {
-    ///      "type": "string"
-    ///    },
-    ///    "request_id": {
-    ///      "type": "string"
-    ///    }
-    ///  }
-    ///}
-    /// ```
-    /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
-    pub struct Error {
-        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-        pub error_code: ::std::option::Option<::std::string::String>,
-        pub message: ::std::string::String,
-        pub request_id: ::std::string::String,
-    }
-
-    impl ::std::convert::From<&Error> for Error {
-        fn from(value: &Error) -> Self {
-            value.clone()
-        }
-    }
-
     /// Generation of default values for serde.
     pub mod defaults {
         pub(super) fn default_u64<T, const V: u64>() -> T
