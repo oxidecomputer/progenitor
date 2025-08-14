@@ -3048,7 +3048,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn instance_get(&self) -> builder::InstanceGet {
+    pub fn instance_get(&self) -> builder::InstanceGet<'_> {
         builder::InstanceGet::new(self)
     }
 
@@ -3060,7 +3060,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn instance_ensure(&self) -> builder::InstanceEnsure {
+    pub fn instance_ensure(&self) -> builder::InstanceEnsure<'_> {
         builder::InstanceEnsure::new(self)
     }
 
@@ -3077,7 +3077,7 @@ impl Client {
     /// ```
     pub fn instance_issue_crucible_snapshot_request(
         &self,
-    ) -> builder::InstanceIssueCrucibleSnapshotRequest {
+    ) -> builder::InstanceIssueCrucibleSnapshotRequest<'_> {
         builder::InstanceIssueCrucibleSnapshotRequest::new(self)
     }
 
@@ -3089,7 +3089,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn instance_migrate_status(&self) -> builder::InstanceMigrateStatus {
+    pub fn instance_migrate_status(&self) -> builder::InstanceMigrateStatus<'_> {
         builder::InstanceMigrateStatus::new(self)
     }
 
@@ -3100,7 +3100,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn instance_serial(&self) -> builder::InstanceSerial {
+    pub fn instance_serial(&self) -> builder::InstanceSerial<'_> {
         builder::InstanceSerial::new(self)
     }
 
@@ -3112,7 +3112,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn instance_state_put(&self) -> builder::InstanceStatePut {
+    pub fn instance_state_put(&self) -> builder::InstanceStatePut<'_> {
         builder::InstanceStatePut::new(self)
     }
 
@@ -3124,7 +3124,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn instance_state_monitor(&self) -> builder::InstanceStateMonitor {
+    pub fn instance_state_monitor(&self) -> builder::InstanceStateMonitor<'_> {
         builder::InstanceStateMonitor::new(self)
     }
 }

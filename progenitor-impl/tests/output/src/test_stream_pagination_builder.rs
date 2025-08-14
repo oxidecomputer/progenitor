@@ -352,7 +352,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn paginated_u32s(&self) -> builder::PaginatedU32s {
+    pub fn paginated_u32s(&self) -> builder::PaginatedU32s<'_> {
         builder::PaginatedU32s::new(self)
     }
 }

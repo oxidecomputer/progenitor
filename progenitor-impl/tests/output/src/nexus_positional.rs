@@ -1,4 +1,3 @@
-#![allow(elided_named_lifetimes)]
 #[allow(unused_imports)]
 use progenitor_client::{encode_path, ClientHooks, OperationInfo, RequestBuilderExt};
 #[allow(unused_imports)]
@@ -14108,7 +14107,6 @@ impl ClientInfo<()> for Client {
 
 impl ClientHooks<()> for &Client {}
 #[allow(clippy::all)]
-#[allow(elided_named_lifetimes)]
 impl Client {
     ///Fetch a disk by id
     ///
@@ -14811,7 +14809,7 @@ impl Client {
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::IdSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::Group, Error<types::Error>>> + Unpin + '_ {
+    ) -> impl futures::Stream<Item = Result<types::Group, Error<types::Error>>> + Unpin + 'a {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
@@ -15125,7 +15123,7 @@ impl Client {
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::NameOrIdSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::Organization, Error<types::Error>>> + Unpin + '_
+    ) -> impl futures::Stream<Item = Result<types::Organization, Error<types::Error>>> + Unpin + 'a
     {
         use futures::StreamExt;
         use futures::TryFutureExt;
@@ -15540,7 +15538,7 @@ impl Client {
         organization_name: &'a types::Name,
         limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::NameOrIdSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::Project, Error<types::Error>>> + Unpin + '_ {
+    ) -> impl futures::Stream<Item = Result<types::Project, Error<types::Error>>> + Unpin + 'a {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
@@ -15876,7 +15874,7 @@ impl Client {
         project_name: &'a types::Name,
         limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::NameSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::Disk, Error<types::Error>>> + Unpin + '_ {
+    ) -> impl futures::Stream<Item = Result<types::Disk, Error<types::Error>>> + Unpin + 'a {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
@@ -16173,7 +16171,7 @@ impl Client {
         end_time: Option<&'a ::chrono::DateTime<::chrono::offset::Utc>>,
         limit: Option<::std::num::NonZeroU32>,
         start_time: Option<&'a ::chrono::DateTime<::chrono::offset::Utc>>,
-    ) -> impl futures::Stream<Item = Result<types::Measurement, Error<types::Error>>> + Unpin + '_
+    ) -> impl futures::Stream<Item = Result<types::Measurement, Error<types::Error>>> + Unpin + 'a
     {
         use futures::StreamExt;
         use futures::TryFutureExt;
@@ -16308,7 +16306,7 @@ impl Client {
         project_name: &'a types::Name,
         limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::NameSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::Image, Error<types::Error>>> + Unpin + '_ {
+    ) -> impl futures::Stream<Item = Result<types::Image, Error<types::Error>>> + Unpin + 'a {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
@@ -16592,7 +16590,7 @@ impl Client {
         project_name: &'a types::Name,
         limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::NameSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::Instance, Error<types::Error>>> + Unpin + '_
+    ) -> impl futures::Stream<Item = Result<types::Instance, Error<types::Error>>> + Unpin + 'a
     {
         use futures::StreamExt;
         use futures::TryFutureExt;
@@ -16883,7 +16881,7 @@ impl Client {
         instance_name: &'a types::Name,
         limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::NameSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::Disk, Error<types::Error>>> + Unpin + '_ {
+    ) -> impl futures::Stream<Item = Result<types::Disk, Error<types::Error>>> + Unpin + 'a {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
@@ -17233,7 +17231,7 @@ impl Client {
         instance_name: &'a types::Name,
         limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::NameSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::NetworkInterface, Error<types::Error>>> + Unpin + '_
+    ) -> impl futures::Stream<Item = Result<types::NetworkInterface, Error<types::Error>>> + Unpin + 'a
     {
         use futures::StreamExt;
         use futures::TryFutureExt;
@@ -17991,7 +17989,7 @@ impl Client {
         project_name: &'a types::Name,
         limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::NameSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::Snapshot, Error<types::Error>>> + Unpin + '_
+    ) -> impl futures::Stream<Item = Result<types::Snapshot, Error<types::Error>>> + Unpin + 'a
     {
         use futures::StreamExt;
         use futures::TryFutureExt;
@@ -18270,7 +18268,7 @@ impl Client {
         project_name: &'a types::Name,
         limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::NameSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::Vpc, Error<types::Error>>> + Unpin + '_ {
+    ) -> impl futures::Stream<Item = Result<types::Vpc, Error<types::Error>>> + Unpin + 'a {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
@@ -18712,7 +18710,7 @@ impl Client {
         vpc_name: &'a types::Name,
         limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::NameSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::VpcRouter, Error<types::Error>>> + Unpin + '_
+    ) -> impl futures::Stream<Item = Result<types::VpcRouter, Error<types::Error>>> + Unpin + 'a
     {
         use futures::StreamExt;
         use futures::TryFutureExt;
@@ -19071,7 +19069,7 @@ impl Client {
         router_name: &'a types::Name,
         limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::NameSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::RouterRoute, Error<types::Error>>> + Unpin + '_
+    ) -> impl futures::Stream<Item = Result<types::RouterRoute, Error<types::Error>>> + Unpin + 'a
     {
         use futures::StreamExt;
         use futures::TryFutureExt;
@@ -19430,7 +19428,7 @@ impl Client {
         vpc_name: &'a types::Name,
         limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::NameSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::VpcSubnet, Error<types::Error>>> + Unpin + '_
+    ) -> impl futures::Stream<Item = Result<types::VpcSubnet, Error<types::Error>>> + Unpin + 'a
     {
         use futures::StreamExt;
         use futures::TryFutureExt;
@@ -19785,7 +19783,7 @@ impl Client {
         subnet_name: &'a types::Name,
         limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::NameSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::NetworkInterface, Error<types::Error>>> + Unpin + '_
+    ) -> impl futures::Stream<Item = Result<types::NetworkInterface, Error<types::Error>>> + Unpin + 'a
     {
         use futures::StreamExt;
         use futures::TryFutureExt;
@@ -19976,7 +19974,7 @@ impl Client {
     pub fn role_list_stream<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
-    ) -> impl futures::Stream<Item = Result<types::Role, Error<types::Error>>> + Unpin + '_ {
+    ) -> impl futures::Stream<Item = Result<types::Role, Error<types::Error>>> + Unpin + 'a {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
@@ -20161,7 +20159,7 @@ impl Client {
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::IdSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::Group, Error<types::Error>>> + Unpin + '_ {
+    ) -> impl futures::Stream<Item = Result<types::Group, Error<types::Error>>> + Unpin + 'a {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
@@ -20260,7 +20258,7 @@ impl Client {
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::NameSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::SshKey, Error<types::Error>>> + Unpin + '_ {
+    ) -> impl futures::Stream<Item = Result<types::SshKey, Error<types::Error>>> + Unpin + 'a {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
@@ -20644,7 +20642,7 @@ impl Client {
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::NameSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::Certificate, Error<types::Error>>> + Unpin + '_
+    ) -> impl futures::Stream<Item = Result<types::Certificate, Error<types::Error>>> + Unpin + 'a
     {
         use futures::StreamExt;
         use futures::TryFutureExt;
@@ -20882,7 +20880,7 @@ impl Client {
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::IdSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::PhysicalDisk, Error<types::Error>>> + Unpin + '_
+    ) -> impl futures::Stream<Item = Result<types::PhysicalDisk, Error<types::Error>>> + Unpin + 'a
     {
         use futures::StreamExt;
         use futures::TryFutureExt;
@@ -20978,7 +20976,7 @@ impl Client {
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::IdSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::Rack, Error<types::Error>>> + Unpin + '_ {
+    ) -> impl futures::Stream<Item = Result<types::Rack, Error<types::Error>>> + Unpin + 'a {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
@@ -21122,7 +21120,7 @@ impl Client {
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::IdSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::Sled, Error<types::Error>>> + Unpin + '_ {
+    ) -> impl futures::Stream<Item = Result<types::Sled, Error<types::Error>>> + Unpin + 'a {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
@@ -21275,7 +21273,7 @@ impl Client {
         sled_id: &'a ::uuid::Uuid,
         limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::IdSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::PhysicalDisk, Error<types::Error>>> + Unpin + '_
+    ) -> impl futures::Stream<Item = Result<types::PhysicalDisk, Error<types::Error>>> + Unpin + 'a
     {
         use futures::StreamExt;
         use futures::TryFutureExt;
@@ -21379,7 +21377,7 @@ impl Client {
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::NameSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::GlobalImage, Error<types::Error>>> + Unpin + '_
+    ) -> impl futures::Stream<Item = Result<types::GlobalImage, Error<types::Error>>> + Unpin + 'a
     {
         use futures::StreamExt;
         use futures::TryFutureExt;
@@ -21619,7 +21617,7 @@ impl Client {
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::NameOrIdSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::IpPool, Error<types::Error>>> + Unpin + '_ {
+    ) -> impl futures::Stream<Item = Result<types::IpPool, Error<types::Error>>> + Unpin + 'a {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
@@ -21904,7 +21902,7 @@ impl Client {
         &'a self,
         pool_name: &'a types::Name,
         limit: Option<::std::num::NonZeroU32>,
-    ) -> impl futures::Stream<Item = Result<types::IpPoolRange, Error<types::Error>>> + Unpin + '_
+    ) -> impl futures::Stream<Item = Result<types::IpPoolRange, Error<types::Error>>> + Unpin + 'a
     {
         use futures::StreamExt;
         use futures::TryFutureExt;
@@ -22136,7 +22134,7 @@ impl Client {
     pub fn ip_pool_service_range_list_stream<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
-    ) -> impl futures::Stream<Item = Result<types::IpPoolRange, Error<types::Error>>> + Unpin + '_
+    ) -> impl futures::Stream<Item = Result<types::IpPoolRange, Error<types::Error>>> + Unpin + 'a
     {
         use futures::StreamExt;
         use futures::TryFutureExt;
@@ -22473,7 +22471,7 @@ impl Client {
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::IdSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::Saga, Error<types::Error>>> + Unpin + '_ {
+    ) -> impl futures::Stream<Item = Result<types::Saga, Error<types::Error>>> + Unpin + 'a {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
@@ -22618,7 +22616,7 @@ impl Client {
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::NameOrIdSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::Silo, Error<types::Error>>> + Unpin + '_ {
+    ) -> impl futures::Stream<Item = Result<types::Silo, Error<types::Error>>> + Unpin + 'a {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
@@ -22867,7 +22865,7 @@ impl Client {
         silo_name: &'a types::Name,
         limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::NameSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::IdentityProvider, Error<types::Error>>> + Unpin + '_
+    ) -> impl futures::Stream<Item = Result<types::IdentityProvider, Error<types::Error>>> + Unpin + 'a
     {
         use futures::StreamExt;
         use futures::TryFutureExt;
@@ -23348,7 +23346,7 @@ impl Client {
         silo_name: &'a types::Name,
         limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::IdSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::User, Error<types::Error>>> + Unpin + '_ {
+    ) -> impl futures::Stream<Item = Result<types::User, Error<types::Error>>> + Unpin + 'a {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
@@ -23495,7 +23493,7 @@ impl Client {
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::NameSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::UserBuiltin, Error<types::Error>>> + Unpin + '_
+    ) -> impl futures::Stream<Item = Result<types::UserBuiltin, Error<types::Error>>> + Unpin + 'a
     {
         use futures::StreamExt;
         use futures::TryFutureExt;
@@ -23635,7 +23633,7 @@ impl Client {
     pub fn timeseries_schema_get_stream<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
-    ) -> impl futures::Stream<Item = Result<types::TimeseriesSchema, Error<types::Error>>> + Unpin + '_
+    ) -> impl futures::Stream<Item = Result<types::TimeseriesSchema, Error<types::Error>>> + Unpin + 'a
     {
         use futures::StreamExt;
         use futures::TryFutureExt;
@@ -23731,7 +23729,7 @@ impl Client {
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::IdSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::User, Error<types::Error>>> + Unpin + '_ {
+    ) -> impl futures::Stream<Item = Result<types::User, Error<types::Error>>> + Unpin + 'a {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
@@ -23839,7 +23837,7 @@ impl Client {
         organization: Option<&'a types::NameOrId>,
         project: Option<&'a types::NameOrId>,
         sort_by: Option<types::NameOrIdSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::Disk, Error<types::Error>>> + Unpin + '_ {
+    ) -> impl futures::Stream<Item = Result<types::Disk, Error<types::Error>>> + Unpin + 'a {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
@@ -24103,7 +24101,7 @@ impl Client {
         organization: Option<&'a types::NameOrId>,
         project: Option<&'a types::NameOrId>,
         sort_by: Option<types::NameOrIdSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::Instance, Error<types::Error>>> + Unpin + '_
+    ) -> impl futures::Stream<Item = Result<types::Instance, Error<types::Error>>> + Unpin + 'a
     {
         use futures::StreamExt;
         use futures::TryFutureExt;
@@ -24376,7 +24374,7 @@ impl Client {
         organization: Option<&'a types::NameOrId>,
         project: Option<&'a types::NameOrId>,
         sort_by: Option<types::NameOrIdSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::Disk, Error<types::Error>>> + Unpin + '_ {
+    ) -> impl futures::Stream<Item = Result<types::Disk, Error<types::Error>>> + Unpin + 'a {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
@@ -24938,7 +24936,7 @@ impl Client {
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::NameOrIdSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::Organization, Error<types::Error>>> + Unpin + '_
+    ) -> impl futures::Stream<Item = Result<types::Organization, Error<types::Error>>> + Unpin + 'a
     {
         use futures::StreamExt;
         use futures::TryFutureExt;
@@ -25319,7 +25317,7 @@ impl Client {
         limit: Option<::std::num::NonZeroU32>,
         organization: Option<&'a types::NameOrId>,
         sort_by: Option<types::NameOrIdSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::Project, Error<types::Error>>> + Unpin + '_ {
+    ) -> impl futures::Stream<Item = Result<types::Project, Error<types::Error>>> + Unpin + 'a {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
@@ -25721,7 +25719,7 @@ impl Client {
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::IdSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::UpdateableComponent, Error<types::Error>>> + Unpin + '_
+    ) -> impl futures::Stream<Item = Result<types::UpdateableComponent, Error<types::Error>>> + Unpin + 'a
     {
         use futures::StreamExt;
         use futures::TryFutureExt;
@@ -25817,7 +25815,7 @@ impl Client {
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::IdSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::UpdateDeployment, Error<types::Error>>> + Unpin + '_
+    ) -> impl futures::Stream<Item = Result<types::UpdateDeployment, Error<types::Error>>> + Unpin + 'a
     {
         use futures::StreamExt;
         use futures::TryFutureExt;
@@ -26086,7 +26084,7 @@ impl Client {
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::IdSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::SystemUpdate, Error<types::Error>>> + Unpin + '_
+    ) -> impl futures::Stream<Item = Result<types::SystemUpdate, Error<types::Error>>> + Unpin + 'a
     {
         use futures::StreamExt;
         use futures::TryFutureExt;

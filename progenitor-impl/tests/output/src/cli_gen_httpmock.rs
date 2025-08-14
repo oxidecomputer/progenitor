@@ -53,13 +53,13 @@ pub mod operations {
 #[doc = r" adds a method for each operation. These are the equivalent of"]
 #[doc = r" type-checked [`mock()`](::httpmock::MockServer::mock) calls."]
 pub trait MockServerExt {
-    fn uno<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn uno<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::UnoWhen, operations::UnoThen);
 }
 
 impl MockServerExt for ::httpmock::MockServer {
-    fn uno<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn uno<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::UnoWhen, operations::UnoThen),
     {

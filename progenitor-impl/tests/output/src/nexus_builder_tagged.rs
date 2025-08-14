@@ -25972,7 +25972,7 @@ pub trait ClientDisksExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn disk_view_by_id(&self) -> builder::DiskViewById;
+    fn disk_view_by_id(&self) -> builder::DiskViewById<'_>;
     ///List disks
     ///
     ///Use `GET /v1/disks` instead
@@ -25997,7 +25997,7 @@ pub trait ClientDisksExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn disk_list(&self) -> builder::DiskList;
+    fn disk_list(&self) -> builder::DiskList<'_>;
     ///Use `POST /v1/disks` instead
     ///
     ///Sends a `POST` request to
@@ -26015,7 +26015,7 @@ pub trait ClientDisksExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn disk_create(&self) -> builder::DiskCreate;
+    fn disk_create(&self) -> builder::DiskCreate<'_>;
     ///Fetch a disk
     ///
     ///Use `GET /v1/disks/{disk}` instead
@@ -26032,7 +26032,7 @@ pub trait ClientDisksExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn disk_view(&self) -> builder::DiskView;
+    fn disk_view(&self) -> builder::DiskView<'_>;
     ///Use `DELETE /v1/disks/{disk}` instead
     ///
     ///Sends a `DELETE` request to
@@ -26047,7 +26047,7 @@ pub trait ClientDisksExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn disk_delete(&self) -> builder::DiskDelete;
+    fn disk_delete(&self) -> builder::DiskDelete<'_>;
     ///Fetch disk metrics
     ///
     ///Sends a `GET` request to
@@ -26077,7 +26077,7 @@ pub trait ClientDisksExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn disk_metrics_list(&self) -> builder::DiskMetricsList;
+    fn disk_metrics_list(&self) -> builder::DiskMetricsList<'_>;
     ///List disks
     ///
     ///Sends a `GET` request to `/v1/disks`
@@ -26099,7 +26099,7 @@ pub trait ClientDisksExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn disk_list_v1(&self) -> builder::DiskListV1;
+    fn disk_list_v1(&self) -> builder::DiskListV1<'_>;
     ///Create a disk
     ///
     ///Sends a `POST` request to `/v1/disks`
@@ -26112,7 +26112,7 @@ pub trait ClientDisksExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn disk_create_v1(&self) -> builder::DiskCreateV1;
+    fn disk_create_v1(&self) -> builder::DiskCreateV1<'_>;
     ///Fetch a disk
     ///
     ///Sends a `GET` request to `/v1/disks/{disk}`
@@ -26125,7 +26125,7 @@ pub trait ClientDisksExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn disk_view_v1(&self) -> builder::DiskViewV1;
+    fn disk_view_v1(&self) -> builder::DiskViewV1<'_>;
     ///Delete a disk
     ///
     ///Sends a `DELETE` request to `/v1/disks/{disk}`
@@ -26138,47 +26138,47 @@ pub trait ClientDisksExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn disk_delete_v1(&self) -> builder::DiskDeleteV1;
+    fn disk_delete_v1(&self) -> builder::DiskDeleteV1<'_>;
 }
 
 impl ClientDisksExt for Client {
-    fn disk_view_by_id(&self) -> builder::DiskViewById {
+    fn disk_view_by_id(&self) -> builder::DiskViewById<'_> {
         builder::DiskViewById::new(self)
     }
 
-    fn disk_list(&self) -> builder::DiskList {
+    fn disk_list(&self) -> builder::DiskList<'_> {
         builder::DiskList::new(self)
     }
 
-    fn disk_create(&self) -> builder::DiskCreate {
+    fn disk_create(&self) -> builder::DiskCreate<'_> {
         builder::DiskCreate::new(self)
     }
 
-    fn disk_view(&self) -> builder::DiskView {
+    fn disk_view(&self) -> builder::DiskView<'_> {
         builder::DiskView::new(self)
     }
 
-    fn disk_delete(&self) -> builder::DiskDelete {
+    fn disk_delete(&self) -> builder::DiskDelete<'_> {
         builder::DiskDelete::new(self)
     }
 
-    fn disk_metrics_list(&self) -> builder::DiskMetricsList {
+    fn disk_metrics_list(&self) -> builder::DiskMetricsList<'_> {
         builder::DiskMetricsList::new(self)
     }
 
-    fn disk_list_v1(&self) -> builder::DiskListV1 {
+    fn disk_list_v1(&self) -> builder::DiskListV1<'_> {
         builder::DiskListV1::new(self)
     }
 
-    fn disk_create_v1(&self) -> builder::DiskCreateV1 {
+    fn disk_create_v1(&self) -> builder::DiskCreateV1<'_> {
         builder::DiskCreateV1::new(self)
     }
 
-    fn disk_view_v1(&self) -> builder::DiskViewV1 {
+    fn disk_view_v1(&self) -> builder::DiskViewV1<'_> {
         builder::DiskViewV1::new(self)
     }
 
-    fn disk_delete_v1(&self) -> builder::DiskDeleteV1 {
+    fn disk_delete_v1(&self) -> builder::DiskDeleteV1<'_> {
         builder::DiskDeleteV1::new(self)
     }
 }
@@ -26199,7 +26199,7 @@ pub trait ClientHiddenExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn device_auth_request(&self) -> builder::DeviceAuthRequest;
+    fn device_auth_request(&self) -> builder::DeviceAuthRequest<'_>;
     ///Confirm an OAuth 2.0 Device Authorization Grant
     ///
     ///This endpoint is designed to be accessed by the user agent (browser),
@@ -26215,7 +26215,7 @@ pub trait ClientHiddenExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn device_auth_confirm(&self) -> builder::DeviceAuthConfirm;
+    fn device_auth_confirm(&self) -> builder::DeviceAuthConfirm<'_>;
     ///Request a device access token
     ///
     ///This endpoint should be polled by the client until the user code is
@@ -26229,7 +26229,7 @@ pub trait ClientHiddenExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn device_access_token(&self) -> builder::DeviceAccessToken;
+    fn device_access_token(&self) -> builder::DeviceAccessToken<'_>;
     ///Sends a `POST` request to `/login`
     ///
     ///```ignore
@@ -26238,7 +26238,7 @@ pub trait ClientHiddenExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn login_spoof(&self) -> builder::LoginSpoof;
+    fn login_spoof(&self) -> builder::LoginSpoof<'_>;
     ///Sends a `POST` request to `/logout`
     ///
     ///```ignore
@@ -26246,7 +26246,7 @@ pub trait ClientHiddenExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn logout(&self) -> builder::Logout;
+    fn logout(&self) -> builder::Logout<'_>;
     ///Fetch the user associated with the current session
     ///
     ///Sends a `GET` request to `/session/me`
@@ -26256,7 +26256,7 @@ pub trait ClientHiddenExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn session_me(&self) -> builder::SessionMe;
+    fn session_me(&self) -> builder::SessionMe<'_>;
     ///Fetch the silo groups the current user belongs to
     ///
     ///Sends a `GET` request to `/session/me/groups`
@@ -26274,35 +26274,35 @@ pub trait ClientHiddenExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn session_me_groups(&self) -> builder::SessionMeGroups;
+    fn session_me_groups(&self) -> builder::SessionMeGroups<'_>;
 }
 
 impl ClientHiddenExt for Client {
-    fn device_auth_request(&self) -> builder::DeviceAuthRequest {
+    fn device_auth_request(&self) -> builder::DeviceAuthRequest<'_> {
         builder::DeviceAuthRequest::new(self)
     }
 
-    fn device_auth_confirm(&self) -> builder::DeviceAuthConfirm {
+    fn device_auth_confirm(&self) -> builder::DeviceAuthConfirm<'_> {
         builder::DeviceAuthConfirm::new(self)
     }
 
-    fn device_access_token(&self) -> builder::DeviceAccessToken {
+    fn device_access_token(&self) -> builder::DeviceAccessToken<'_> {
         builder::DeviceAccessToken::new(self)
     }
 
-    fn login_spoof(&self) -> builder::LoginSpoof {
+    fn login_spoof(&self) -> builder::LoginSpoof<'_> {
         builder::LoginSpoof::new(self)
     }
 
-    fn logout(&self) -> builder::Logout {
+    fn logout(&self) -> builder::Logout<'_> {
         builder::Logout::new(self)
     }
 
-    fn session_me(&self) -> builder::SessionMe {
+    fn session_me(&self) -> builder::SessionMe<'_> {
         builder::SessionMe::new(self)
     }
 
-    fn session_me_groups(&self) -> builder::SessionMeGroups {
+    fn session_me_groups(&self) -> builder::SessionMeGroups<'_> {
         builder::SessionMeGroups::new(self)
     }
 }
@@ -26319,7 +26319,7 @@ pub trait ClientImagesExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn image_view_by_id(&self) -> builder::ImageViewById;
+    fn image_view_by_id(&self) -> builder::ImageViewById<'_>;
     ///List images
     ///
     ///List images in a project. The images are returned sorted by creation
@@ -26345,7 +26345,7 @@ pub trait ClientImagesExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn image_list(&self) -> builder::ImageList;
+    fn image_list(&self) -> builder::ImageList<'_>;
     ///Create an image
     ///
     ///Create a new image in a project.
@@ -26365,7 +26365,7 @@ pub trait ClientImagesExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn image_create(&self) -> builder::ImageCreate;
+    fn image_create(&self) -> builder::ImageCreate<'_>;
     ///Fetch an image
     ///
     ///Fetch the details for a specific image in a project.
@@ -26382,7 +26382,7 @@ pub trait ClientImagesExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn image_view(&self) -> builder::ImageView;
+    fn image_view(&self) -> builder::ImageView<'_>;
     ///Delete an image
     ///
     ///Permanently delete an image from a project. This operation cannot be
@@ -26401,27 +26401,27 @@ pub trait ClientImagesExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn image_delete(&self) -> builder::ImageDelete;
+    fn image_delete(&self) -> builder::ImageDelete<'_>;
 }
 
 impl ClientImagesExt for Client {
-    fn image_view_by_id(&self) -> builder::ImageViewById {
+    fn image_view_by_id(&self) -> builder::ImageViewById<'_> {
         builder::ImageViewById::new(self)
     }
 
-    fn image_list(&self) -> builder::ImageList {
+    fn image_list(&self) -> builder::ImageList<'_> {
         builder::ImageList::new(self)
     }
 
-    fn image_create(&self) -> builder::ImageCreate {
+    fn image_create(&self) -> builder::ImageCreate<'_> {
         builder::ImageCreate::new(self)
     }
 
-    fn image_view(&self) -> builder::ImageView {
+    fn image_view(&self) -> builder::ImageView<'_> {
         builder::ImageView::new(self)
     }
 
-    fn image_delete(&self) -> builder::ImageDelete {
+    fn image_delete(&self) -> builder::ImageDelete<'_> {
         builder::ImageDelete::new(self)
     }
 }
@@ -26439,7 +26439,7 @@ pub trait ClientInstancesExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn instance_view_by_id(&self) -> builder::InstanceViewById;
+    fn instance_view_by_id(&self) -> builder::InstanceViewById<'_>;
     ///Fetch a network interface by id
     ///
     ///Sends a `GET` request to `/by-id/network-interfaces/{id}`
@@ -26450,7 +26450,9 @@ pub trait ClientInstancesExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn instance_network_interface_view_by_id(&self) -> builder::InstanceNetworkInterfaceViewById;
+    fn instance_network_interface_view_by_id(
+        &self,
+    ) -> builder::InstanceNetworkInterfaceViewById<'_>;
     ///List instances
     ///
     ///Sends a `GET` request to
@@ -26473,7 +26475,7 @@ pub trait ClientInstancesExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn instance_list(&self) -> builder::InstanceList;
+    fn instance_list(&self) -> builder::InstanceList<'_>;
     ///Create an instance
     ///
     ///Use `POST /v1/instances` instead
@@ -26493,7 +26495,7 @@ pub trait ClientInstancesExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn instance_create(&self) -> builder::InstanceCreate;
+    fn instance_create(&self) -> builder::InstanceCreate<'_>;
     ///Fetch an instance
     ///
     ///Use `GET /v1/instances/{instance}` instead
@@ -26510,7 +26512,7 @@ pub trait ClientInstancesExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn instance_view(&self) -> builder::InstanceView;
+    fn instance_view(&self) -> builder::InstanceView<'_>;
     ///Delete an instance
     ///
     ///Sends a `DELETE` request to
@@ -26525,7 +26527,7 @@ pub trait ClientInstancesExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn instance_delete(&self) -> builder::InstanceDelete;
+    fn instance_delete(&self) -> builder::InstanceDelete<'_>;
     ///List an instance's disks
     ///
     ///Use `GET /v1/instances/{instance}/disks` instead
@@ -26553,7 +26555,7 @@ pub trait ClientInstancesExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn instance_disk_list(&self) -> builder::InstanceDiskList;
+    fn instance_disk_list(&self) -> builder::InstanceDiskList<'_>;
     ///Attach a disk to an instance
     ///
     ///Use `POST /v1/instances/{instance}/disks/attach` instead
@@ -26571,7 +26573,7 @@ pub trait ClientInstancesExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn instance_disk_attach(&self) -> builder::InstanceDiskAttach;
+    fn instance_disk_attach(&self) -> builder::InstanceDiskAttach<'_>;
     ///Detach a disk from an instance
     ///
     ///Use `POST /v1/disks/{disk}/detach` instead
@@ -26589,7 +26591,7 @@ pub trait ClientInstancesExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn instance_disk_detach(&self) -> builder::InstanceDiskDetach;
+    fn instance_disk_detach(&self) -> builder::InstanceDiskDetach<'_>;
     ///List external IP addresses
     ///
     ///Sends a `GET` request to
@@ -26604,7 +26606,7 @@ pub trait ClientInstancesExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn instance_external_ip_list(&self) -> builder::InstanceExternalIpList;
+    fn instance_external_ip_list(&self) -> builder::InstanceExternalIpList<'_>;
     ///Migrate an instance
     ///
     ///Use `POST /v1/instances/{instance}/migrate` instead
@@ -26622,7 +26624,7 @@ pub trait ClientInstancesExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn instance_migrate(&self) -> builder::InstanceMigrate;
+    fn instance_migrate(&self) -> builder::InstanceMigrate<'_>;
     ///List network interfaces
     ///
     ///Sends a `GET` request to
@@ -26648,7 +26650,7 @@ pub trait ClientInstancesExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn instance_network_interface_list(&self) -> builder::InstanceNetworkInterfaceList;
+    fn instance_network_interface_list(&self) -> builder::InstanceNetworkInterfaceList<'_>;
     ///Create a network interface
     ///
     ///Sends a `POST` request to
@@ -26664,7 +26666,7 @@ pub trait ClientInstancesExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn instance_network_interface_create(&self) -> builder::InstanceNetworkInterfaceCreate;
+    fn instance_network_interface_create(&self) -> builder::InstanceNetworkInterfaceCreate<'_>;
     ///Fetch a network interface
     ///
     ///Sends a `GET` request to
@@ -26680,7 +26682,7 @@ pub trait ClientInstancesExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn instance_network_interface_view(&self) -> builder::InstanceNetworkInterfaceView;
+    fn instance_network_interface_view(&self) -> builder::InstanceNetworkInterfaceView<'_>;
     ///Update a network interface
     ///
     ///Sends a `PUT` request to
@@ -26697,7 +26699,7 @@ pub trait ClientInstancesExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn instance_network_interface_update(&self) -> builder::InstanceNetworkInterfaceUpdate;
+    fn instance_network_interface_update(&self) -> builder::InstanceNetworkInterfaceUpdate<'_>;
     ///Delete a network interface
     ///
     ///Note that the primary interface for an instance cannot be deleted if
@@ -26718,7 +26720,7 @@ pub trait ClientInstancesExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn instance_network_interface_delete(&self) -> builder::InstanceNetworkInterfaceDelete;
+    fn instance_network_interface_delete(&self) -> builder::InstanceNetworkInterfaceDelete<'_>;
     ///Reboot an instance
     ///
     ///Use `POST /v1/instances/{instance}/reboot` instead
@@ -26735,7 +26737,7 @@ pub trait ClientInstancesExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn instance_reboot(&self) -> builder::InstanceReboot;
+    fn instance_reboot(&self) -> builder::InstanceReboot<'_>;
     ///Fetch an instance's serial console
     ///
     ///Use `GET /v1/instances/{instance}/serial-console` instead
@@ -26770,7 +26772,7 @@ pub trait ClientInstancesExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn instance_serial_console(&self) -> builder::InstanceSerialConsole;
+    fn instance_serial_console(&self) -> builder::InstanceSerialConsole<'_>;
     ///Connect to an instance's serial console
     ///
     ///Use `GET /v1/instances/{instance}/serial-console/stream` instead
@@ -26787,7 +26789,7 @@ pub trait ClientInstancesExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn instance_serial_console_stream(&self) -> builder::InstanceSerialConsoleStream;
+    fn instance_serial_console_stream(&self) -> builder::InstanceSerialConsoleStream<'_>;
     ///Boot an instance
     ///
     ///Use `POST /v1/instances/{instance}/start` instead
@@ -26804,7 +26806,7 @@ pub trait ClientInstancesExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn instance_start(&self) -> builder::InstanceStart;
+    fn instance_start(&self) -> builder::InstanceStart<'_>;
     ///Halt an instance
     ///
     ///Use `POST /v1/instances/{instance}/stop` instead
@@ -26821,7 +26823,7 @@ pub trait ClientInstancesExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn instance_stop(&self) -> builder::InstanceStop;
+    fn instance_stop(&self) -> builder::InstanceStop<'_>;
     ///List instances
     ///
     ///Sends a `GET` request to `/v1/instances`
@@ -26843,7 +26845,7 @@ pub trait ClientInstancesExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn instance_list_v1(&self) -> builder::InstanceListV1;
+    fn instance_list_v1(&self) -> builder::InstanceListV1<'_>;
     ///Create an instance
     ///
     ///Sends a `POST` request to `/v1/instances`
@@ -26856,7 +26858,7 @@ pub trait ClientInstancesExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn instance_create_v1(&self) -> builder::InstanceCreateV1;
+    fn instance_create_v1(&self) -> builder::InstanceCreateV1<'_>;
     ///Fetch an instance
     ///
     ///Sends a `GET` request to `/v1/instances/{instance}`
@@ -26869,7 +26871,7 @@ pub trait ClientInstancesExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn instance_view_v1(&self) -> builder::InstanceViewV1;
+    fn instance_view_v1(&self) -> builder::InstanceViewV1<'_>;
     ///Delete an instance
     ///
     ///Sends a `DELETE` request to `/v1/instances/{instance}`
@@ -26882,7 +26884,7 @@ pub trait ClientInstancesExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn instance_delete_v1(&self) -> builder::InstanceDeleteV1;
+    fn instance_delete_v1(&self) -> builder::InstanceDeleteV1<'_>;
     ///List an instance's disks
     ///
     ///Sends a `GET` request to `/v1/instances/{instance}/disks`
@@ -26906,7 +26908,7 @@ pub trait ClientInstancesExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn instance_disk_list_v1(&self) -> builder::InstanceDiskListV1;
+    fn instance_disk_list_v1(&self) -> builder::InstanceDiskListV1<'_>;
     ///Attach a disk to an instance
     ///
     ///Sends a `POST` request to `/v1/instances/{instance}/disks/attach`
@@ -26920,7 +26922,7 @@ pub trait ClientInstancesExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn instance_disk_attach_v1(&self) -> builder::InstanceDiskAttachV1;
+    fn instance_disk_attach_v1(&self) -> builder::InstanceDiskAttachV1<'_>;
     ///Detach a disk from an instance
     ///
     ///Sends a `POST` request to `/v1/instances/{instance}/disks/detach`
@@ -26934,7 +26936,7 @@ pub trait ClientInstancesExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn instance_disk_detach_v1(&self) -> builder::InstanceDiskDetachV1;
+    fn instance_disk_detach_v1(&self) -> builder::InstanceDiskDetachV1<'_>;
     ///Migrate an instance
     ///
     ///Sends a `POST` request to `/v1/instances/{instance}/migrate`
@@ -26948,7 +26950,7 @@ pub trait ClientInstancesExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn instance_migrate_v1(&self) -> builder::InstanceMigrateV1;
+    fn instance_migrate_v1(&self) -> builder::InstanceMigrateV1<'_>;
     ///Reboot an instance
     ///
     ///Sends a `POST` request to `/v1/instances/{instance}/reboot`
@@ -26961,7 +26963,7 @@ pub trait ClientInstancesExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn instance_reboot_v1(&self) -> builder::InstanceRebootV1;
+    fn instance_reboot_v1(&self) -> builder::InstanceRebootV1<'_>;
     ///Fetch an instance's serial console
     ///
     ///Sends a `GET` request to `/v1/instances/{instance}/serial-console`
@@ -26992,7 +26994,7 @@ pub trait ClientInstancesExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn instance_serial_console_v1(&self) -> builder::InstanceSerialConsoleV1;
+    fn instance_serial_console_v1(&self) -> builder::InstanceSerialConsoleV1<'_>;
     ///Stream an instance's serial console
     ///
     ///Sends a `GET` request to
@@ -27006,7 +27008,7 @@ pub trait ClientInstancesExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn instance_serial_console_stream_v1(&self) -> builder::InstanceSerialConsoleStreamV1;
+    fn instance_serial_console_stream_v1(&self) -> builder::InstanceSerialConsoleStreamV1<'_>;
     ///Boot an instance
     ///
     ///Sends a `POST` request to `/v1/instances/{instance}/start`
@@ -27019,7 +27021,7 @@ pub trait ClientInstancesExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn instance_start_v1(&self) -> builder::InstanceStartV1;
+    fn instance_start_v1(&self) -> builder::InstanceStartV1<'_>;
     ///Stop an instance
     ///
     ///Sends a `POST` request to `/v1/instances/{instance}/stop`
@@ -27032,143 +27034,145 @@ pub trait ClientInstancesExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn instance_stop_v1(&self) -> builder::InstanceStopV1;
+    fn instance_stop_v1(&self) -> builder::InstanceStopV1<'_>;
 }
 
 impl ClientInstancesExt for Client {
-    fn instance_view_by_id(&self) -> builder::InstanceViewById {
+    fn instance_view_by_id(&self) -> builder::InstanceViewById<'_> {
         builder::InstanceViewById::new(self)
     }
 
-    fn instance_network_interface_view_by_id(&self) -> builder::InstanceNetworkInterfaceViewById {
+    fn instance_network_interface_view_by_id(
+        &self,
+    ) -> builder::InstanceNetworkInterfaceViewById<'_> {
         builder::InstanceNetworkInterfaceViewById::new(self)
     }
 
-    fn instance_list(&self) -> builder::InstanceList {
+    fn instance_list(&self) -> builder::InstanceList<'_> {
         builder::InstanceList::new(self)
     }
 
-    fn instance_create(&self) -> builder::InstanceCreate {
+    fn instance_create(&self) -> builder::InstanceCreate<'_> {
         builder::InstanceCreate::new(self)
     }
 
-    fn instance_view(&self) -> builder::InstanceView {
+    fn instance_view(&self) -> builder::InstanceView<'_> {
         builder::InstanceView::new(self)
     }
 
-    fn instance_delete(&self) -> builder::InstanceDelete {
+    fn instance_delete(&self) -> builder::InstanceDelete<'_> {
         builder::InstanceDelete::new(self)
     }
 
-    fn instance_disk_list(&self) -> builder::InstanceDiskList {
+    fn instance_disk_list(&self) -> builder::InstanceDiskList<'_> {
         builder::InstanceDiskList::new(self)
     }
 
-    fn instance_disk_attach(&self) -> builder::InstanceDiskAttach {
+    fn instance_disk_attach(&self) -> builder::InstanceDiskAttach<'_> {
         builder::InstanceDiskAttach::new(self)
     }
 
-    fn instance_disk_detach(&self) -> builder::InstanceDiskDetach {
+    fn instance_disk_detach(&self) -> builder::InstanceDiskDetach<'_> {
         builder::InstanceDiskDetach::new(self)
     }
 
-    fn instance_external_ip_list(&self) -> builder::InstanceExternalIpList {
+    fn instance_external_ip_list(&self) -> builder::InstanceExternalIpList<'_> {
         builder::InstanceExternalIpList::new(self)
     }
 
-    fn instance_migrate(&self) -> builder::InstanceMigrate {
+    fn instance_migrate(&self) -> builder::InstanceMigrate<'_> {
         builder::InstanceMigrate::new(self)
     }
 
-    fn instance_network_interface_list(&self) -> builder::InstanceNetworkInterfaceList {
+    fn instance_network_interface_list(&self) -> builder::InstanceNetworkInterfaceList<'_> {
         builder::InstanceNetworkInterfaceList::new(self)
     }
 
-    fn instance_network_interface_create(&self) -> builder::InstanceNetworkInterfaceCreate {
+    fn instance_network_interface_create(&self) -> builder::InstanceNetworkInterfaceCreate<'_> {
         builder::InstanceNetworkInterfaceCreate::new(self)
     }
 
-    fn instance_network_interface_view(&self) -> builder::InstanceNetworkInterfaceView {
+    fn instance_network_interface_view(&self) -> builder::InstanceNetworkInterfaceView<'_> {
         builder::InstanceNetworkInterfaceView::new(self)
     }
 
-    fn instance_network_interface_update(&self) -> builder::InstanceNetworkInterfaceUpdate {
+    fn instance_network_interface_update(&self) -> builder::InstanceNetworkInterfaceUpdate<'_> {
         builder::InstanceNetworkInterfaceUpdate::new(self)
     }
 
-    fn instance_network_interface_delete(&self) -> builder::InstanceNetworkInterfaceDelete {
+    fn instance_network_interface_delete(&self) -> builder::InstanceNetworkInterfaceDelete<'_> {
         builder::InstanceNetworkInterfaceDelete::new(self)
     }
 
-    fn instance_reboot(&self) -> builder::InstanceReboot {
+    fn instance_reboot(&self) -> builder::InstanceReboot<'_> {
         builder::InstanceReboot::new(self)
     }
 
-    fn instance_serial_console(&self) -> builder::InstanceSerialConsole {
+    fn instance_serial_console(&self) -> builder::InstanceSerialConsole<'_> {
         builder::InstanceSerialConsole::new(self)
     }
 
-    fn instance_serial_console_stream(&self) -> builder::InstanceSerialConsoleStream {
+    fn instance_serial_console_stream(&self) -> builder::InstanceSerialConsoleStream<'_> {
         builder::InstanceSerialConsoleStream::new(self)
     }
 
-    fn instance_start(&self) -> builder::InstanceStart {
+    fn instance_start(&self) -> builder::InstanceStart<'_> {
         builder::InstanceStart::new(self)
     }
 
-    fn instance_stop(&self) -> builder::InstanceStop {
+    fn instance_stop(&self) -> builder::InstanceStop<'_> {
         builder::InstanceStop::new(self)
     }
 
-    fn instance_list_v1(&self) -> builder::InstanceListV1 {
+    fn instance_list_v1(&self) -> builder::InstanceListV1<'_> {
         builder::InstanceListV1::new(self)
     }
 
-    fn instance_create_v1(&self) -> builder::InstanceCreateV1 {
+    fn instance_create_v1(&self) -> builder::InstanceCreateV1<'_> {
         builder::InstanceCreateV1::new(self)
     }
 
-    fn instance_view_v1(&self) -> builder::InstanceViewV1 {
+    fn instance_view_v1(&self) -> builder::InstanceViewV1<'_> {
         builder::InstanceViewV1::new(self)
     }
 
-    fn instance_delete_v1(&self) -> builder::InstanceDeleteV1 {
+    fn instance_delete_v1(&self) -> builder::InstanceDeleteV1<'_> {
         builder::InstanceDeleteV1::new(self)
     }
 
-    fn instance_disk_list_v1(&self) -> builder::InstanceDiskListV1 {
+    fn instance_disk_list_v1(&self) -> builder::InstanceDiskListV1<'_> {
         builder::InstanceDiskListV1::new(self)
     }
 
-    fn instance_disk_attach_v1(&self) -> builder::InstanceDiskAttachV1 {
+    fn instance_disk_attach_v1(&self) -> builder::InstanceDiskAttachV1<'_> {
         builder::InstanceDiskAttachV1::new(self)
     }
 
-    fn instance_disk_detach_v1(&self) -> builder::InstanceDiskDetachV1 {
+    fn instance_disk_detach_v1(&self) -> builder::InstanceDiskDetachV1<'_> {
         builder::InstanceDiskDetachV1::new(self)
     }
 
-    fn instance_migrate_v1(&self) -> builder::InstanceMigrateV1 {
+    fn instance_migrate_v1(&self) -> builder::InstanceMigrateV1<'_> {
         builder::InstanceMigrateV1::new(self)
     }
 
-    fn instance_reboot_v1(&self) -> builder::InstanceRebootV1 {
+    fn instance_reboot_v1(&self) -> builder::InstanceRebootV1<'_> {
         builder::InstanceRebootV1::new(self)
     }
 
-    fn instance_serial_console_v1(&self) -> builder::InstanceSerialConsoleV1 {
+    fn instance_serial_console_v1(&self) -> builder::InstanceSerialConsoleV1<'_> {
         builder::InstanceSerialConsoleV1::new(self)
     }
 
-    fn instance_serial_console_stream_v1(&self) -> builder::InstanceSerialConsoleStreamV1 {
+    fn instance_serial_console_stream_v1(&self) -> builder::InstanceSerialConsoleStreamV1<'_> {
         builder::InstanceSerialConsoleStreamV1::new(self)
     }
 
-    fn instance_start_v1(&self) -> builder::InstanceStartV1 {
+    fn instance_start_v1(&self) -> builder::InstanceStartV1<'_> {
         builder::InstanceStartV1::new(self)
     }
 
-    fn instance_stop_v1(&self) -> builder::InstanceStopV1 {
+    fn instance_stop_v1(&self) -> builder::InstanceStopV1<'_> {
         builder::InstanceStopV1::new(self)
     }
 }
@@ -27186,7 +27190,7 @@ pub trait ClientLoginExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn login_local(&self) -> builder::LoginLocal;
+    fn login_local(&self) -> builder::LoginLocal<'_>;
     ///Prompt user login
     ///
     ///Either display a page asking a user for their credentials, or redirect
@@ -27201,7 +27205,7 @@ pub trait ClientLoginExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn login_saml_begin(&self) -> builder::LoginSamlBegin;
+    fn login_saml_begin(&self) -> builder::LoginSamlBegin<'_>;
     ///Authenticate a user (i.e., log in) via SAML
     ///
     ///Sends a `POST` request to `/login/{silo_name}/saml/{provider_name}`
@@ -27214,19 +27218,19 @@ pub trait ClientLoginExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn login_saml(&self) -> builder::LoginSaml;
+    fn login_saml(&self) -> builder::LoginSaml<'_>;
 }
 
 impl ClientLoginExt for Client {
-    fn login_local(&self) -> builder::LoginLocal {
+    fn login_local(&self) -> builder::LoginLocal<'_> {
         builder::LoginLocal::new(self)
     }
 
-    fn login_saml_begin(&self) -> builder::LoginSamlBegin {
+    fn login_saml_begin(&self) -> builder::LoginSamlBegin<'_> {
         builder::LoginSamlBegin::new(self)
     }
 
-    fn login_saml(&self) -> builder::LoginSaml {
+    fn login_saml(&self) -> builder::LoginSaml<'_> {
         builder::LoginSaml::new(self)
     }
 }
@@ -27250,11 +27254,11 @@ pub trait ClientMetricsExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn timeseries_schema_get(&self) -> builder::TimeseriesSchemaGet;
+    fn timeseries_schema_get(&self) -> builder::TimeseriesSchemaGet<'_>;
 }
 
 impl ClientMetricsExt for Client {
-    fn timeseries_schema_get(&self) -> builder::TimeseriesSchemaGet {
+    fn timeseries_schema_get(&self) -> builder::TimeseriesSchemaGet<'_> {
         builder::TimeseriesSchemaGet::new(self)
     }
 }
@@ -27274,7 +27278,7 @@ pub trait ClientOrganizationsExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn organization_view_by_id(&self) -> builder::OrganizationViewById;
+    fn organization_view_by_id(&self) -> builder::OrganizationViewById<'_>;
     ///List organizations
     ///
     ///Use `GET /v1/organizations` instead
@@ -27294,7 +27298,7 @@ pub trait ClientOrganizationsExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn organization_list(&self) -> builder::OrganizationList;
+    fn organization_list(&self) -> builder::OrganizationList<'_>;
     ///Create an organization
     ///
     ///Use `POST /v1/organizations` instead
@@ -27307,7 +27311,7 @@ pub trait ClientOrganizationsExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn organization_create(&self) -> builder::OrganizationCreate;
+    fn organization_create(&self) -> builder::OrganizationCreate<'_>;
     ///Fetch an organization
     ///
     ///Use `GET /v1/organizations/{organization}` instead
@@ -27322,7 +27326,7 @@ pub trait ClientOrganizationsExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn organization_view(&self) -> builder::OrganizationView;
+    fn organization_view(&self) -> builder::OrganizationView<'_>;
     ///Update an organization
     ///
     ///Use `PUT /v1/organizations/{organization}` instead
@@ -27339,7 +27343,7 @@ pub trait ClientOrganizationsExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn organization_update(&self) -> builder::OrganizationUpdate;
+    fn organization_update(&self) -> builder::OrganizationUpdate<'_>;
     ///Delete an organization
     ///
     ///Use `DELETE /v1/organizations/{organization}` instead
@@ -27354,7 +27358,7 @@ pub trait ClientOrganizationsExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn organization_delete(&self) -> builder::OrganizationDelete;
+    fn organization_delete(&self) -> builder::OrganizationDelete<'_>;
     ///Fetch an organization's IAM policy
     ///
     ///Use `GET /v1/organizations/{organization}/policy` instead
@@ -27369,7 +27373,7 @@ pub trait ClientOrganizationsExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn organization_policy_view(&self) -> builder::OrganizationPolicyView;
+    fn organization_policy_view(&self) -> builder::OrganizationPolicyView<'_>;
     ///Update an organization's IAM policy
     ///
     ///Use `PUT /v1/organizations/{organization}/policy` instead
@@ -27386,7 +27390,7 @@ pub trait ClientOrganizationsExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn organization_policy_update(&self) -> builder::OrganizationPolicyUpdate;
+    fn organization_policy_update(&self) -> builder::OrganizationPolicyUpdate<'_>;
     ///List organizations
     ///
     ///Sends a `GET` request to `/v1/organizations`
@@ -27404,7 +27408,7 @@ pub trait ClientOrganizationsExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn organization_list_v1(&self) -> builder::OrganizationListV1;
+    fn organization_list_v1(&self) -> builder::OrganizationListV1<'_>;
     ///Create an organization
     ///
     ///Sends a `POST` request to `/v1/organizations`
@@ -27415,7 +27419,7 @@ pub trait ClientOrganizationsExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn organization_create_v1(&self) -> builder::OrganizationCreateV1;
+    fn organization_create_v1(&self) -> builder::OrganizationCreateV1<'_>;
     ///Fetch an organization
     ///
     ///Sends a `GET` request to `/v1/organizations/{organization}`
@@ -27426,7 +27430,7 @@ pub trait ClientOrganizationsExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn organization_view_v1(&self) -> builder::OrganizationViewV1;
+    fn organization_view_v1(&self) -> builder::OrganizationViewV1<'_>;
     ///Update an organization
     ///
     ///Sends a `PUT` request to `/v1/organizations/{organization}`
@@ -27438,7 +27442,7 @@ pub trait ClientOrganizationsExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn organization_update_v1(&self) -> builder::OrganizationUpdateV1;
+    fn organization_update_v1(&self) -> builder::OrganizationUpdateV1<'_>;
     ///Delete an organization
     ///
     ///Sends a `DELETE` request to `/v1/organizations/{organization}`
@@ -27449,7 +27453,7 @@ pub trait ClientOrganizationsExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn organization_delete_v1(&self) -> builder::OrganizationDeleteV1;
+    fn organization_delete_v1(&self) -> builder::OrganizationDeleteV1<'_>;
     ///Fetch an organization's IAM policy
     ///
     ///Sends a `GET` request to `/v1/organizations/{organization}/policy`
@@ -27460,7 +27464,7 @@ pub trait ClientOrganizationsExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn organization_policy_view_v1(&self) -> builder::OrganizationPolicyViewV1;
+    fn organization_policy_view_v1(&self) -> builder::OrganizationPolicyViewV1<'_>;
     ///Update an organization's IAM policy
     ///
     ///Sends a `PUT` request to `/v1/organizations/{organization}/policy`
@@ -27472,67 +27476,67 @@ pub trait ClientOrganizationsExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn organization_policy_update_v1(&self) -> builder::OrganizationPolicyUpdateV1;
+    fn organization_policy_update_v1(&self) -> builder::OrganizationPolicyUpdateV1<'_>;
 }
 
 impl ClientOrganizationsExt for Client {
-    fn organization_view_by_id(&self) -> builder::OrganizationViewById {
+    fn organization_view_by_id(&self) -> builder::OrganizationViewById<'_> {
         builder::OrganizationViewById::new(self)
     }
 
-    fn organization_list(&self) -> builder::OrganizationList {
+    fn organization_list(&self) -> builder::OrganizationList<'_> {
         builder::OrganizationList::new(self)
     }
 
-    fn organization_create(&self) -> builder::OrganizationCreate {
+    fn organization_create(&self) -> builder::OrganizationCreate<'_> {
         builder::OrganizationCreate::new(self)
     }
 
-    fn organization_view(&self) -> builder::OrganizationView {
+    fn organization_view(&self) -> builder::OrganizationView<'_> {
         builder::OrganizationView::new(self)
     }
 
-    fn organization_update(&self) -> builder::OrganizationUpdate {
+    fn organization_update(&self) -> builder::OrganizationUpdate<'_> {
         builder::OrganizationUpdate::new(self)
     }
 
-    fn organization_delete(&self) -> builder::OrganizationDelete {
+    fn organization_delete(&self) -> builder::OrganizationDelete<'_> {
         builder::OrganizationDelete::new(self)
     }
 
-    fn organization_policy_view(&self) -> builder::OrganizationPolicyView {
+    fn organization_policy_view(&self) -> builder::OrganizationPolicyView<'_> {
         builder::OrganizationPolicyView::new(self)
     }
 
-    fn organization_policy_update(&self) -> builder::OrganizationPolicyUpdate {
+    fn organization_policy_update(&self) -> builder::OrganizationPolicyUpdate<'_> {
         builder::OrganizationPolicyUpdate::new(self)
     }
 
-    fn organization_list_v1(&self) -> builder::OrganizationListV1 {
+    fn organization_list_v1(&self) -> builder::OrganizationListV1<'_> {
         builder::OrganizationListV1::new(self)
     }
 
-    fn organization_create_v1(&self) -> builder::OrganizationCreateV1 {
+    fn organization_create_v1(&self) -> builder::OrganizationCreateV1<'_> {
         builder::OrganizationCreateV1::new(self)
     }
 
-    fn organization_view_v1(&self) -> builder::OrganizationViewV1 {
+    fn organization_view_v1(&self) -> builder::OrganizationViewV1<'_> {
         builder::OrganizationViewV1::new(self)
     }
 
-    fn organization_update_v1(&self) -> builder::OrganizationUpdateV1 {
+    fn organization_update_v1(&self) -> builder::OrganizationUpdateV1<'_> {
         builder::OrganizationUpdateV1::new(self)
     }
 
-    fn organization_delete_v1(&self) -> builder::OrganizationDeleteV1 {
+    fn organization_delete_v1(&self) -> builder::OrganizationDeleteV1<'_> {
         builder::OrganizationDeleteV1::new(self)
     }
 
-    fn organization_policy_view_v1(&self) -> builder::OrganizationPolicyViewV1 {
+    fn organization_policy_view_v1(&self) -> builder::OrganizationPolicyViewV1<'_> {
         builder::OrganizationPolicyViewV1::new(self)
     }
 
-    fn organization_policy_update_v1(&self) -> builder::OrganizationPolicyUpdateV1 {
+    fn organization_policy_update_v1(&self) -> builder::OrganizationPolicyUpdateV1<'_> {
         builder::OrganizationPolicyUpdateV1::new(self)
     }
 }
@@ -27548,7 +27552,7 @@ pub trait ClientPolicyExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn system_policy_view(&self) -> builder::SystemPolicyView;
+    fn system_policy_view(&self) -> builder::SystemPolicyView<'_>;
     ///Update the top-level IAM policy
     ///
     ///Sends a `PUT` request to `/system/policy`
@@ -27559,15 +27563,15 @@ pub trait ClientPolicyExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn system_policy_update(&self) -> builder::SystemPolicyUpdate;
+    fn system_policy_update(&self) -> builder::SystemPolicyUpdate<'_>;
 }
 
 impl ClientPolicyExt for Client {
-    fn system_policy_view(&self) -> builder::SystemPolicyView {
+    fn system_policy_view(&self) -> builder::SystemPolicyView<'_> {
         builder::SystemPolicyView::new(self)
     }
 
-    fn system_policy_update(&self) -> builder::SystemPolicyUpdate {
+    fn system_policy_update(&self) -> builder::SystemPolicyUpdate<'_> {
         builder::SystemPolicyUpdate::new(self)
     }
 }
@@ -27587,7 +27591,7 @@ pub trait ClientProjectsExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn project_view_by_id(&self) -> builder::ProjectViewById;
+    fn project_view_by_id(&self) -> builder::ProjectViewById<'_>;
     ///List projects
     ///
     ///Use `GET /v1/projects` instead
@@ -27609,7 +27613,7 @@ pub trait ClientProjectsExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn project_list(&self) -> builder::ProjectList;
+    fn project_list(&self) -> builder::ProjectList<'_>;
     ///Create a project
     ///
     ///Use `POST /v1/projects` instead
@@ -27626,7 +27630,7 @@ pub trait ClientProjectsExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn project_create(&self) -> builder::ProjectCreate;
+    fn project_create(&self) -> builder::ProjectCreate<'_>;
     ///Fetch a project
     ///
     ///Use `GET /v1/projects/{project}` instead
@@ -27644,7 +27648,7 @@ pub trait ClientProjectsExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn project_view(&self) -> builder::ProjectView;
+    fn project_view(&self) -> builder::ProjectView<'_>;
     ///Update a project
     ///
     ///Use `PUT /v1/projects/{project}` instead
@@ -27664,7 +27668,7 @@ pub trait ClientProjectsExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn project_update(&self) -> builder::ProjectUpdate;
+    fn project_update(&self) -> builder::ProjectUpdate<'_>;
     ///Delete a project
     ///
     ///Use `DELETE /v1/projects/{project}` instead
@@ -27682,7 +27686,7 @@ pub trait ClientProjectsExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn project_delete(&self) -> builder::ProjectDelete;
+    fn project_delete(&self) -> builder::ProjectDelete<'_>;
     ///Fetch a project's IAM policy
     ///
     ///Use `GET /v1/projects/{project}/policy` instead
@@ -27700,7 +27704,7 @@ pub trait ClientProjectsExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn project_policy_view(&self) -> builder::ProjectPolicyView;
+    fn project_policy_view(&self) -> builder::ProjectPolicyView<'_>;
     ///Update a project's IAM policy
     ///
     ///Sends a `PUT` request to
@@ -27718,7 +27722,7 @@ pub trait ClientProjectsExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn project_policy_update(&self) -> builder::ProjectPolicyUpdate;
+    fn project_policy_update(&self) -> builder::ProjectPolicyUpdate<'_>;
     ///List projects
     ///
     ///Sends a `GET` request to `/v1/projects`
@@ -27738,7 +27742,7 @@ pub trait ClientProjectsExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn project_list_v1(&self) -> builder::ProjectListV1;
+    fn project_list_v1(&self) -> builder::ProjectListV1<'_>;
     ///Create a project
     ///
     ///Sends a `POST` request to `/v1/projects`
@@ -27750,7 +27754,7 @@ pub trait ClientProjectsExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn project_create_v1(&self) -> builder::ProjectCreateV1;
+    fn project_create_v1(&self) -> builder::ProjectCreateV1<'_>;
     ///Fetch a project
     ///
     ///Sends a `GET` request to `/v1/projects/{project}`
@@ -27762,7 +27766,7 @@ pub trait ClientProjectsExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn project_view_v1(&self) -> builder::ProjectViewV1;
+    fn project_view_v1(&self) -> builder::ProjectViewV1<'_>;
     ///Update a project
     ///
     ///Sends a `PUT` request to `/v1/projects/{project}`
@@ -27775,7 +27779,7 @@ pub trait ClientProjectsExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn project_update_v1(&self) -> builder::ProjectUpdateV1;
+    fn project_update_v1(&self) -> builder::ProjectUpdateV1<'_>;
     ///Delete a project
     ///
     ///Sends a `DELETE` request to `/v1/projects/{project}`
@@ -27787,7 +27791,7 @@ pub trait ClientProjectsExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn project_delete_v1(&self) -> builder::ProjectDeleteV1;
+    fn project_delete_v1(&self) -> builder::ProjectDeleteV1<'_>;
     ///Fetch a project's IAM policy
     ///
     ///Sends a `GET` request to `/v1/projects/{project}/policy`
@@ -27799,7 +27803,7 @@ pub trait ClientProjectsExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn project_policy_view_v1(&self) -> builder::ProjectPolicyViewV1;
+    fn project_policy_view_v1(&self) -> builder::ProjectPolicyViewV1<'_>;
     ///Update a project's IAM policy
     ///
     ///Sends a `PUT` request to `/v1/projects/{project}/policy`
@@ -27812,67 +27816,67 @@ pub trait ClientProjectsExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn project_policy_update_v1(&self) -> builder::ProjectPolicyUpdateV1;
+    fn project_policy_update_v1(&self) -> builder::ProjectPolicyUpdateV1<'_>;
 }
 
 impl ClientProjectsExt for Client {
-    fn project_view_by_id(&self) -> builder::ProjectViewById {
+    fn project_view_by_id(&self) -> builder::ProjectViewById<'_> {
         builder::ProjectViewById::new(self)
     }
 
-    fn project_list(&self) -> builder::ProjectList {
+    fn project_list(&self) -> builder::ProjectList<'_> {
         builder::ProjectList::new(self)
     }
 
-    fn project_create(&self) -> builder::ProjectCreate {
+    fn project_create(&self) -> builder::ProjectCreate<'_> {
         builder::ProjectCreate::new(self)
     }
 
-    fn project_view(&self) -> builder::ProjectView {
+    fn project_view(&self) -> builder::ProjectView<'_> {
         builder::ProjectView::new(self)
     }
 
-    fn project_update(&self) -> builder::ProjectUpdate {
+    fn project_update(&self) -> builder::ProjectUpdate<'_> {
         builder::ProjectUpdate::new(self)
     }
 
-    fn project_delete(&self) -> builder::ProjectDelete {
+    fn project_delete(&self) -> builder::ProjectDelete<'_> {
         builder::ProjectDelete::new(self)
     }
 
-    fn project_policy_view(&self) -> builder::ProjectPolicyView {
+    fn project_policy_view(&self) -> builder::ProjectPolicyView<'_> {
         builder::ProjectPolicyView::new(self)
     }
 
-    fn project_policy_update(&self) -> builder::ProjectPolicyUpdate {
+    fn project_policy_update(&self) -> builder::ProjectPolicyUpdate<'_> {
         builder::ProjectPolicyUpdate::new(self)
     }
 
-    fn project_list_v1(&self) -> builder::ProjectListV1 {
+    fn project_list_v1(&self) -> builder::ProjectListV1<'_> {
         builder::ProjectListV1::new(self)
     }
 
-    fn project_create_v1(&self) -> builder::ProjectCreateV1 {
+    fn project_create_v1(&self) -> builder::ProjectCreateV1<'_> {
         builder::ProjectCreateV1::new(self)
     }
 
-    fn project_view_v1(&self) -> builder::ProjectViewV1 {
+    fn project_view_v1(&self) -> builder::ProjectViewV1<'_> {
         builder::ProjectViewV1::new(self)
     }
 
-    fn project_update_v1(&self) -> builder::ProjectUpdateV1 {
+    fn project_update_v1(&self) -> builder::ProjectUpdateV1<'_> {
         builder::ProjectUpdateV1::new(self)
     }
 
-    fn project_delete_v1(&self) -> builder::ProjectDeleteV1 {
+    fn project_delete_v1(&self) -> builder::ProjectDeleteV1<'_> {
         builder::ProjectDeleteV1::new(self)
     }
 
-    fn project_policy_view_v1(&self) -> builder::ProjectPolicyViewV1 {
+    fn project_policy_view_v1(&self) -> builder::ProjectPolicyViewV1<'_> {
         builder::ProjectPolicyViewV1::new(self)
     }
 
-    fn project_policy_update_v1(&self) -> builder::ProjectPolicyUpdateV1 {
+    fn project_policy_update_v1(&self) -> builder::ProjectPolicyUpdateV1<'_> {
         builder::ProjectPolicyUpdateV1::new(self)
     }
 }
@@ -27895,7 +27899,7 @@ pub trait ClientRolesExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn role_list(&self) -> builder::RoleList;
+    fn role_list(&self) -> builder::RoleList<'_>;
     ///Fetch a built-in role
     ///
     ///Sends a `GET` request to `/roles/{role_name}`
@@ -27908,15 +27912,15 @@ pub trait ClientRolesExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn role_view(&self) -> builder::RoleView;
+    fn role_view(&self) -> builder::RoleView<'_>;
 }
 
 impl ClientRolesExt for Client {
-    fn role_list(&self) -> builder::RoleList {
+    fn role_list(&self) -> builder::RoleList<'_> {
         builder::RoleList::new(self)
     }
 
-    fn role_view(&self) -> builder::RoleView {
+    fn role_view(&self) -> builder::RoleView<'_> {
         builder::RoleView::new(self)
     }
 }
@@ -27942,7 +27946,7 @@ pub trait ClientSessionExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn session_sshkey_list(&self) -> builder::SessionSshkeyList;
+    fn session_sshkey_list(&self) -> builder::SessionSshkeyList<'_>;
     ///Create an SSH public key
     ///
     ///Create an SSH public key for the currently authenticated user.
@@ -27955,7 +27959,7 @@ pub trait ClientSessionExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn session_sshkey_create(&self) -> builder::SessionSshkeyCreate;
+    fn session_sshkey_create(&self) -> builder::SessionSshkeyCreate<'_>;
     ///Fetch an SSH public key
     ///
     ///Fetch an SSH public key associated with the currently authenticated
@@ -27969,7 +27973,7 @@ pub trait ClientSessionExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn session_sshkey_view(&self) -> builder::SessionSshkeyView;
+    fn session_sshkey_view(&self) -> builder::SessionSshkeyView<'_>;
     ///Delete an SSH public key
     ///
     ///Delete an SSH public key associated with the currently authenticated
@@ -27983,23 +27987,23 @@ pub trait ClientSessionExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn session_sshkey_delete(&self) -> builder::SessionSshkeyDelete;
+    fn session_sshkey_delete(&self) -> builder::SessionSshkeyDelete<'_>;
 }
 
 impl ClientSessionExt for Client {
-    fn session_sshkey_list(&self) -> builder::SessionSshkeyList {
+    fn session_sshkey_list(&self) -> builder::SessionSshkeyList<'_> {
         builder::SessionSshkeyList::new(self)
     }
 
-    fn session_sshkey_create(&self) -> builder::SessionSshkeyCreate {
+    fn session_sshkey_create(&self) -> builder::SessionSshkeyCreate<'_> {
         builder::SessionSshkeyCreate::new(self)
     }
 
-    fn session_sshkey_view(&self) -> builder::SessionSshkeyView {
+    fn session_sshkey_view(&self) -> builder::SessionSshkeyView<'_> {
         builder::SessionSshkeyView::new(self)
     }
 
-    fn session_sshkey_delete(&self) -> builder::SessionSshkeyDelete {
+    fn session_sshkey_delete(&self) -> builder::SessionSshkeyDelete<'_> {
         builder::SessionSshkeyDelete::new(self)
     }
 }
@@ -28023,7 +28027,7 @@ pub trait ClientSilosExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn group_list(&self) -> builder::GroupList;
+    fn group_list(&self) -> builder::GroupList<'_>;
     ///Fetch the current silo's IAM policy
     ///
     ///Sends a `GET` request to `/policy`
@@ -28033,7 +28037,7 @@ pub trait ClientSilosExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn policy_view(&self) -> builder::PolicyView;
+    fn policy_view(&self) -> builder::PolicyView<'_>;
     ///Update the current silo's IAM policy
     ///
     ///Sends a `PUT` request to `/policy`
@@ -28044,7 +28048,7 @@ pub trait ClientSilosExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn policy_update(&self) -> builder::PolicyUpdate;
+    fn policy_update(&self) -> builder::PolicyUpdate<'_>;
     ///List users
     ///
     ///Sends a `GET` request to `/users`
@@ -28062,23 +28066,23 @@ pub trait ClientSilosExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn user_list(&self) -> builder::UserList;
+    fn user_list(&self) -> builder::UserList<'_>;
 }
 
 impl ClientSilosExt for Client {
-    fn group_list(&self) -> builder::GroupList {
+    fn group_list(&self) -> builder::GroupList<'_> {
         builder::GroupList::new(self)
     }
 
-    fn policy_view(&self) -> builder::PolicyView {
+    fn policy_view(&self) -> builder::PolicyView<'_> {
         builder::PolicyView::new(self)
     }
 
-    fn policy_update(&self) -> builder::PolicyUpdate {
+    fn policy_update(&self) -> builder::PolicyUpdate<'_> {
         builder::PolicyUpdate::new(self)
     }
 
-    fn user_list(&self) -> builder::UserList {
+    fn user_list(&self) -> builder::UserList<'_> {
         builder::UserList::new(self)
     }
 }
@@ -28095,7 +28099,7 @@ pub trait ClientSnapshotsExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn snapshot_view_by_id(&self) -> builder::SnapshotViewById;
+    fn snapshot_view_by_id(&self) -> builder::SnapshotViewById<'_>;
     ///List snapshots
     ///
     ///Sends a `GET` request to
@@ -28118,7 +28122,7 @@ pub trait ClientSnapshotsExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn snapshot_list(&self) -> builder::SnapshotList;
+    fn snapshot_list(&self) -> builder::SnapshotList<'_>;
     ///Create a snapshot
     ///
     ///Creates a point-in-time snapshot from a disk.
@@ -28138,7 +28142,7 @@ pub trait ClientSnapshotsExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn snapshot_create(&self) -> builder::SnapshotCreate;
+    fn snapshot_create(&self) -> builder::SnapshotCreate<'_>;
     ///Fetch a snapshot
     ///
     ///Sends a `GET` request to
@@ -28153,7 +28157,7 @@ pub trait ClientSnapshotsExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn snapshot_view(&self) -> builder::SnapshotView;
+    fn snapshot_view(&self) -> builder::SnapshotView<'_>;
     ///Delete a snapshot
     ///
     ///Sends a `DELETE` request to
@@ -28168,27 +28172,27 @@ pub trait ClientSnapshotsExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn snapshot_delete(&self) -> builder::SnapshotDelete;
+    fn snapshot_delete(&self) -> builder::SnapshotDelete<'_>;
 }
 
 impl ClientSnapshotsExt for Client {
-    fn snapshot_view_by_id(&self) -> builder::SnapshotViewById {
+    fn snapshot_view_by_id(&self) -> builder::SnapshotViewById<'_> {
         builder::SnapshotViewById::new(self)
     }
 
-    fn snapshot_list(&self) -> builder::SnapshotList {
+    fn snapshot_list(&self) -> builder::SnapshotList<'_> {
         builder::SnapshotList::new(self)
     }
 
-    fn snapshot_create(&self) -> builder::SnapshotCreate {
+    fn snapshot_create(&self) -> builder::SnapshotCreate<'_> {
         builder::SnapshotCreate::new(self)
     }
 
-    fn snapshot_view(&self) -> builder::SnapshotView {
+    fn snapshot_view(&self) -> builder::SnapshotView<'_> {
         builder::SnapshotView::new(self)
     }
 
-    fn snapshot_delete(&self) -> builder::SnapshotDelete {
+    fn snapshot_delete(&self) -> builder::SnapshotDelete<'_> {
         builder::SnapshotDelete::new(self)
     }
 }
@@ -28205,7 +28209,7 @@ pub trait ClientSystemExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn system_image_view_by_id(&self) -> builder::SystemImageViewById;
+    fn system_image_view_by_id(&self) -> builder::SystemImageViewById<'_>;
     ///Fetch an IP pool by id
     ///
     ///Sends a `GET` request to `/system/by-id/ip-pools/{id}`
@@ -28216,7 +28220,7 @@ pub trait ClientSystemExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn ip_pool_view_by_id(&self) -> builder::IpPoolViewById;
+    fn ip_pool_view_by_id(&self) -> builder::IpPoolViewById<'_>;
     ///Fetch a silo by id
     ///
     ///Sends a `GET` request to `/system/by-id/silos/{id}`
@@ -28227,7 +28231,7 @@ pub trait ClientSystemExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn silo_view_by_id(&self) -> builder::SiloViewById;
+    fn silo_view_by_id(&self) -> builder::SiloViewById<'_>;
     ///List system-wide certificates
     ///
     ///Returns a list of all the system-wide certificates. System-wide
@@ -28249,7 +28253,7 @@ pub trait ClientSystemExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn certificate_list(&self) -> builder::CertificateList;
+    fn certificate_list(&self) -> builder::CertificateList<'_>;
     ///Create a new system-wide x.509 certificate
     ///
     ///This certificate is automatically used by the Oxide Control plane to
@@ -28263,7 +28267,7 @@ pub trait ClientSystemExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn certificate_create(&self) -> builder::CertificateCreate;
+    fn certificate_create(&self) -> builder::CertificateCreate<'_>;
     ///Fetch a certificate
     ///
     ///Returns the details of a specific certificate
@@ -28276,7 +28280,7 @@ pub trait ClientSystemExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn certificate_view(&self) -> builder::CertificateView;
+    fn certificate_view(&self) -> builder::CertificateView<'_>;
     ///Delete a certificate
     ///
     ///Permanently delete a certificate. This operation cannot be undone.
@@ -28289,7 +28293,7 @@ pub trait ClientSystemExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn certificate_delete(&self) -> builder::CertificateDelete;
+    fn certificate_delete(&self) -> builder::CertificateDelete<'_>;
     ///List physical disks
     ///
     ///Sends a `GET` request to `/system/hardware/disks`
@@ -28307,7 +28311,7 @@ pub trait ClientSystemExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn physical_disk_list(&self) -> builder::PhysicalDiskList;
+    fn physical_disk_list(&self) -> builder::PhysicalDiskList<'_>;
     ///List racks
     ///
     ///Sends a `GET` request to `/system/hardware/racks`
@@ -28325,7 +28329,7 @@ pub trait ClientSystemExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn rack_list(&self) -> builder::RackList;
+    fn rack_list(&self) -> builder::RackList<'_>;
     ///Fetch a rack
     ///
     ///Sends a `GET` request to `/system/hardware/racks/{rack_id}`
@@ -28338,7 +28342,7 @@ pub trait ClientSystemExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn rack_view(&self) -> builder::RackView;
+    fn rack_view(&self) -> builder::RackView<'_>;
     ///List sleds
     ///
     ///Sends a `GET` request to `/system/hardware/sleds`
@@ -28356,7 +28360,7 @@ pub trait ClientSystemExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn sled_list(&self) -> builder::SledList;
+    fn sled_list(&self) -> builder::SledList<'_>;
     ///Fetch a sled
     ///
     ///Sends a `GET` request to `/system/hardware/sleds/{sled_id}`
@@ -28369,7 +28373,7 @@ pub trait ClientSystemExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn sled_view(&self) -> builder::SledView;
+    fn sled_view(&self) -> builder::SledView<'_>;
     ///List physical disks attached to sleds
     ///
     ///Sends a `GET` request to `/system/hardware/sleds/{sled_id}/disks`
@@ -28389,7 +28393,7 @@ pub trait ClientSystemExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn sled_physical_disk_list(&self) -> builder::SledPhysicalDiskList;
+    fn sled_physical_disk_list(&self) -> builder::SledPhysicalDiskList<'_>;
     ///List system-wide images
     ///
     ///Returns a list of all the system-wide images. System-wide images are
@@ -28411,7 +28415,7 @@ pub trait ClientSystemExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn system_image_list(&self) -> builder::SystemImageList;
+    fn system_image_list(&self) -> builder::SystemImageList<'_>;
     ///Create a system-wide image
     ///
     ///Create a new system-wide image. This image can then be used by any user
@@ -28425,7 +28429,7 @@ pub trait ClientSystemExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn system_image_create(&self) -> builder::SystemImageCreate;
+    fn system_image_create(&self) -> builder::SystemImageCreate<'_>;
     ///Fetch a system-wide image
     ///
     ///Returns the details of a specific system-wide image.
@@ -28438,7 +28442,7 @@ pub trait ClientSystemExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn system_image_view(&self) -> builder::SystemImageView;
+    fn system_image_view(&self) -> builder::SystemImageView<'_>;
     ///Delete a system-wide image
     ///
     ///Permanently delete a system-wide image. This operation cannot be undone.
@@ -28453,7 +28457,7 @@ pub trait ClientSystemExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn system_image_delete(&self) -> builder::SystemImageDelete;
+    fn system_image_delete(&self) -> builder::SystemImageDelete<'_>;
     ///List IP pools
     ///
     ///Sends a `GET` request to `/system/ip-pools`
@@ -28471,7 +28475,7 @@ pub trait ClientSystemExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn ip_pool_list(&self) -> builder::IpPoolList;
+    fn ip_pool_list(&self) -> builder::IpPoolList<'_>;
     ///Create an IP pool
     ///
     ///Sends a `POST` request to `/system/ip-pools`
@@ -28482,7 +28486,7 @@ pub trait ClientSystemExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn ip_pool_create(&self) -> builder::IpPoolCreate;
+    fn ip_pool_create(&self) -> builder::IpPoolCreate<'_>;
     ///Fetch an IP pool
     ///
     ///Sends a `GET` request to `/system/ip-pools/{pool_name}`
@@ -28493,7 +28497,7 @@ pub trait ClientSystemExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn ip_pool_view(&self) -> builder::IpPoolView;
+    fn ip_pool_view(&self) -> builder::IpPoolView<'_>;
     ///Update an IP Pool
     ///
     ///Sends a `PUT` request to `/system/ip-pools/{pool_name}`
@@ -28505,7 +28509,7 @@ pub trait ClientSystemExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn ip_pool_update(&self) -> builder::IpPoolUpdate;
+    fn ip_pool_update(&self) -> builder::IpPoolUpdate<'_>;
     ///Delete an IP Pool
     ///
     ///Sends a `DELETE` request to `/system/ip-pools/{pool_name}`
@@ -28516,7 +28520,7 @@ pub trait ClientSystemExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn ip_pool_delete(&self) -> builder::IpPoolDelete;
+    fn ip_pool_delete(&self) -> builder::IpPoolDelete<'_>;
     ///List ranges for an IP pool
     ///
     ///Ranges are ordered by their first address.
@@ -28536,7 +28540,7 @@ pub trait ClientSystemExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn ip_pool_range_list(&self) -> builder::IpPoolRangeList;
+    fn ip_pool_range_list(&self) -> builder::IpPoolRangeList<'_>;
     ///Add a range to an IP pool
     ///
     ///Sends a `POST` request to `/system/ip-pools/{pool_name}/ranges/add`
@@ -28548,7 +28552,7 @@ pub trait ClientSystemExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn ip_pool_range_add(&self) -> builder::IpPoolRangeAdd;
+    fn ip_pool_range_add(&self) -> builder::IpPoolRangeAdd<'_>;
     ///Remove a range from an IP pool
     ///
     ///Sends a `POST` request to `/system/ip-pools/{pool_name}/ranges/remove`
@@ -28560,7 +28564,7 @@ pub trait ClientSystemExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn ip_pool_range_remove(&self) -> builder::IpPoolRangeRemove;
+    fn ip_pool_range_remove(&self) -> builder::IpPoolRangeRemove<'_>;
     ///Fetch the IP pool used for Oxide services
     ///
     ///Sends a `GET` request to `/system/ip-pools-service`
@@ -28570,7 +28574,7 @@ pub trait ClientSystemExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn ip_pool_service_view(&self) -> builder::IpPoolServiceView;
+    fn ip_pool_service_view(&self) -> builder::IpPoolServiceView<'_>;
     ///List ranges for the IP pool used for Oxide services
     ///
     ///Ranges are ordered by their first address.
@@ -28588,7 +28592,7 @@ pub trait ClientSystemExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn ip_pool_service_range_list(&self) -> builder::IpPoolServiceRangeList;
+    fn ip_pool_service_range_list(&self) -> builder::IpPoolServiceRangeList<'_>;
     ///Add a range to an IP pool used for Oxide services
     ///
     ///Sends a `POST` request to `/system/ip-pools-service/ranges/add`
@@ -28599,7 +28603,7 @@ pub trait ClientSystemExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn ip_pool_service_range_add(&self) -> builder::IpPoolServiceRangeAdd;
+    fn ip_pool_service_range_add(&self) -> builder::IpPoolServiceRangeAdd<'_>;
     ///Remove a range from an IP pool used for Oxide services
     ///
     ///Sends a `POST` request to `/system/ip-pools-service/ranges/remove`
@@ -28610,7 +28614,7 @@ pub trait ClientSystemExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn ip_pool_service_range_remove(&self) -> builder::IpPoolServiceRangeRemove;
+    fn ip_pool_service_range_remove(&self) -> builder::IpPoolServiceRangeRemove<'_>;
     ///Access metrics data
     ///
     ///Sends a `GET` request to `/system/metrics/{metric_name}`
@@ -28634,7 +28638,7 @@ pub trait ClientSystemExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn system_metric(&self) -> builder::SystemMetric;
+    fn system_metric(&self) -> builder::SystemMetric<'_>;
     ///List sagas
     ///
     ///Sends a `GET` request to `/system/sagas`
@@ -28652,7 +28656,7 @@ pub trait ClientSystemExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn saga_list(&self) -> builder::SagaList;
+    fn saga_list(&self) -> builder::SagaList<'_>;
     ///Fetch a saga
     ///
     ///Sends a `GET` request to `/system/sagas/{saga_id}`
@@ -28663,7 +28667,7 @@ pub trait ClientSystemExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn saga_view(&self) -> builder::SagaView;
+    fn saga_view(&self) -> builder::SagaView<'_>;
     ///List silos
     ///
     ///Lists silos that are discoverable based on the current permissions.
@@ -28683,7 +28687,7 @@ pub trait ClientSystemExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn silo_list(&self) -> builder::SiloList;
+    fn silo_list(&self) -> builder::SiloList<'_>;
     ///Create a silo
     ///
     ///Sends a `POST` request to `/system/silos`
@@ -28694,7 +28698,7 @@ pub trait ClientSystemExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn silo_create(&self) -> builder::SiloCreate;
+    fn silo_create(&self) -> builder::SiloCreate<'_>;
     ///Fetch a silo
     ///
     ///Fetch a silo by name.
@@ -28709,7 +28713,7 @@ pub trait ClientSystemExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn silo_view(&self) -> builder::SiloView;
+    fn silo_view(&self) -> builder::SiloView<'_>;
     ///Delete a silo
     ///
     ///Delete a silo by name.
@@ -28724,7 +28728,7 @@ pub trait ClientSystemExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn silo_delete(&self) -> builder::SiloDelete;
+    fn silo_delete(&self) -> builder::SiloDelete<'_>;
     ///List a silo's IDPs
     ///
     ///Sends a `GET` request to `/system/silos/{silo_name}/identity-providers`
@@ -28744,7 +28748,7 @@ pub trait ClientSystemExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn silo_identity_provider_list(&self) -> builder::SiloIdentityProviderList;
+    fn silo_identity_provider_list(&self) -> builder::SiloIdentityProviderList<'_>;
     ///Create a user
     ///
     ///Users can only be created in Silos with `provision_type` == `Fixed`.
@@ -28764,7 +28768,7 @@ pub trait ClientSystemExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn local_idp_user_create(&self) -> builder::LocalIdpUserCreate;
+    fn local_idp_user_create(&self) -> builder::LocalIdpUserCreate<'_>;
     ///Delete a user
     ///
     ///Sends a `DELETE` request to
@@ -28780,7 +28784,7 @@ pub trait ClientSystemExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn local_idp_user_delete(&self) -> builder::LocalIdpUserDelete;
+    fn local_idp_user_delete(&self) -> builder::LocalIdpUserDelete<'_>;
     ///Set or invalidate a user's password
     ///
     ///Passwords can only be updated for users in Silos with identity mode
@@ -28802,7 +28806,7 @@ pub trait ClientSystemExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn local_idp_user_set_password(&self) -> builder::LocalIdpUserSetPassword;
+    fn local_idp_user_set_password(&self) -> builder::LocalIdpUserSetPassword<'_>;
     ///Create a SAML IDP
     ///
     ///Sends a `POST` request to
@@ -28818,7 +28822,7 @@ pub trait ClientSystemExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn saml_identity_provider_create(&self) -> builder::SamlIdentityProviderCreate;
+    fn saml_identity_provider_create(&self) -> builder::SamlIdentityProviderCreate<'_>;
     ///Fetch a SAML IDP
     ///
     ///Sends a `GET` request to
@@ -28834,7 +28838,7 @@ pub trait ClientSystemExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn saml_identity_provider_view(&self) -> builder::SamlIdentityProviderView;
+    fn saml_identity_provider_view(&self) -> builder::SamlIdentityProviderView<'_>;
     ///Fetch a silo's IAM policy
     ///
     ///Sends a `GET` request to `/system/silos/{silo_name}/policy`
@@ -28847,7 +28851,7 @@ pub trait ClientSystemExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn silo_policy_view(&self) -> builder::SiloPolicyView;
+    fn silo_policy_view(&self) -> builder::SiloPolicyView<'_>;
     ///Update a silo's IAM policy
     ///
     ///Sends a `PUT` request to `/system/silos/{silo_name}/policy`
@@ -28862,7 +28866,7 @@ pub trait ClientSystemExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn silo_policy_update(&self) -> builder::SiloPolicyUpdate;
+    fn silo_policy_update(&self) -> builder::SiloPolicyUpdate<'_>;
     ///List users in a silo
     ///
     ///Sends a `GET` request to `/system/silos/{silo_name}/users/all`
@@ -28882,7 +28886,7 @@ pub trait ClientSystemExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn silo_users_list(&self) -> builder::SiloUsersList;
+    fn silo_users_list(&self) -> builder::SiloUsersList<'_>;
     ///Fetch a user
     ///
     ///Sends a `GET` request to `/system/silos/{silo_name}/users/id/{user_id}`
@@ -28897,7 +28901,7 @@ pub trait ClientSystemExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn silo_user_view(&self) -> builder::SiloUserView;
+    fn silo_user_view(&self) -> builder::SiloUserView<'_>;
     ///List built-in users
     ///
     ///Sends a `GET` request to `/system/user`
@@ -28915,7 +28919,7 @@ pub trait ClientSystemExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn system_user_list(&self) -> builder::SystemUserList;
+    fn system_user_list(&self) -> builder::SystemUserList<'_>;
     ///Fetch a built-in user
     ///
     ///Sends a `GET` request to `/system/user/{user_name}`
@@ -28928,7 +28932,7 @@ pub trait ClientSystemExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn system_user_view(&self) -> builder::SystemUserView;
+    fn system_user_view(&self) -> builder::SystemUserView<'_>;
     ///View version and update status of component tree
     ///
     ///Sends a `GET` request to `/v1/system/update/components`
@@ -28946,7 +28950,7 @@ pub trait ClientSystemExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn system_component_version_list(&self) -> builder::SystemComponentVersionList;
+    fn system_component_version_list(&self) -> builder::SystemComponentVersionList<'_>;
     ///List all update deployments
     ///
     ///Sends a `GET` request to `/v1/system/update/deployments`
@@ -28964,7 +28968,7 @@ pub trait ClientSystemExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn update_deployments_list(&self) -> builder::UpdateDeploymentsList;
+    fn update_deployments_list(&self) -> builder::UpdateDeploymentsList<'_>;
     ///Fetch a system update deployment
     ///
     ///Sends a `GET` request to `/v1/system/update/deployments/{id}`
@@ -28975,7 +28979,7 @@ pub trait ClientSystemExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn update_deployment_view(&self) -> builder::UpdateDeploymentView;
+    fn update_deployment_view(&self) -> builder::UpdateDeploymentView<'_>;
     ///Refresh update data
     ///
     ///Sends a `POST` request to `/v1/system/update/refresh`
@@ -28985,7 +28989,7 @@ pub trait ClientSystemExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn system_update_refresh(&self) -> builder::SystemUpdateRefresh;
+    fn system_update_refresh(&self) -> builder::SystemUpdateRefresh<'_>;
     ///Start system update
     ///
     ///Sends a `POST` request to `/v1/system/update/start`
@@ -28996,7 +29000,7 @@ pub trait ClientSystemExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn system_update_start(&self) -> builder::SystemUpdateStart;
+    fn system_update_start(&self) -> builder::SystemUpdateStart<'_>;
     ///Stop system update
     ///
     ///If there is no update in progress, do nothing.
@@ -29008,7 +29012,7 @@ pub trait ClientSystemExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn system_update_stop(&self) -> builder::SystemUpdateStop;
+    fn system_update_stop(&self) -> builder::SystemUpdateStop<'_>;
     ///List all updates
     ///
     ///Sends a `GET` request to `/v1/system/update/updates`
@@ -29026,7 +29030,7 @@ pub trait ClientSystemExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn system_update_list(&self) -> builder::SystemUpdateList;
+    fn system_update_list(&self) -> builder::SystemUpdateList<'_>;
     ///View system update
     ///
     ///Sends a `GET` request to `/v1/system/update/updates/{version}`
@@ -29037,7 +29041,7 @@ pub trait ClientSystemExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn system_update_view(&self) -> builder::SystemUpdateView;
+    fn system_update_view(&self) -> builder::SystemUpdateView<'_>;
     ///View system update component tree
     ///
     ///Sends a `GET` request to
@@ -29049,7 +29053,7 @@ pub trait ClientSystemExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn system_update_components_list(&self) -> builder::SystemUpdateComponentsList;
+    fn system_update_components_list(&self) -> builder::SystemUpdateComponentsList<'_>;
     ///View system version and update status
     ///
     ///Sends a `GET` request to `/v1/system/update/version`
@@ -29059,239 +29063,239 @@ pub trait ClientSystemExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn system_version(&self) -> builder::SystemVersion;
+    fn system_version(&self) -> builder::SystemVersion<'_>;
 }
 
 impl ClientSystemExt for Client {
-    fn system_image_view_by_id(&self) -> builder::SystemImageViewById {
+    fn system_image_view_by_id(&self) -> builder::SystemImageViewById<'_> {
         builder::SystemImageViewById::new(self)
     }
 
-    fn ip_pool_view_by_id(&self) -> builder::IpPoolViewById {
+    fn ip_pool_view_by_id(&self) -> builder::IpPoolViewById<'_> {
         builder::IpPoolViewById::new(self)
     }
 
-    fn silo_view_by_id(&self) -> builder::SiloViewById {
+    fn silo_view_by_id(&self) -> builder::SiloViewById<'_> {
         builder::SiloViewById::new(self)
     }
 
-    fn certificate_list(&self) -> builder::CertificateList {
+    fn certificate_list(&self) -> builder::CertificateList<'_> {
         builder::CertificateList::new(self)
     }
 
-    fn certificate_create(&self) -> builder::CertificateCreate {
+    fn certificate_create(&self) -> builder::CertificateCreate<'_> {
         builder::CertificateCreate::new(self)
     }
 
-    fn certificate_view(&self) -> builder::CertificateView {
+    fn certificate_view(&self) -> builder::CertificateView<'_> {
         builder::CertificateView::new(self)
     }
 
-    fn certificate_delete(&self) -> builder::CertificateDelete {
+    fn certificate_delete(&self) -> builder::CertificateDelete<'_> {
         builder::CertificateDelete::new(self)
     }
 
-    fn physical_disk_list(&self) -> builder::PhysicalDiskList {
+    fn physical_disk_list(&self) -> builder::PhysicalDiskList<'_> {
         builder::PhysicalDiskList::new(self)
     }
 
-    fn rack_list(&self) -> builder::RackList {
+    fn rack_list(&self) -> builder::RackList<'_> {
         builder::RackList::new(self)
     }
 
-    fn rack_view(&self) -> builder::RackView {
+    fn rack_view(&self) -> builder::RackView<'_> {
         builder::RackView::new(self)
     }
 
-    fn sled_list(&self) -> builder::SledList {
+    fn sled_list(&self) -> builder::SledList<'_> {
         builder::SledList::new(self)
     }
 
-    fn sled_view(&self) -> builder::SledView {
+    fn sled_view(&self) -> builder::SledView<'_> {
         builder::SledView::new(self)
     }
 
-    fn sled_physical_disk_list(&self) -> builder::SledPhysicalDiskList {
+    fn sled_physical_disk_list(&self) -> builder::SledPhysicalDiskList<'_> {
         builder::SledPhysicalDiskList::new(self)
     }
 
-    fn system_image_list(&self) -> builder::SystemImageList {
+    fn system_image_list(&self) -> builder::SystemImageList<'_> {
         builder::SystemImageList::new(self)
     }
 
-    fn system_image_create(&self) -> builder::SystemImageCreate {
+    fn system_image_create(&self) -> builder::SystemImageCreate<'_> {
         builder::SystemImageCreate::new(self)
     }
 
-    fn system_image_view(&self) -> builder::SystemImageView {
+    fn system_image_view(&self) -> builder::SystemImageView<'_> {
         builder::SystemImageView::new(self)
     }
 
-    fn system_image_delete(&self) -> builder::SystemImageDelete {
+    fn system_image_delete(&self) -> builder::SystemImageDelete<'_> {
         builder::SystemImageDelete::new(self)
     }
 
-    fn ip_pool_list(&self) -> builder::IpPoolList {
+    fn ip_pool_list(&self) -> builder::IpPoolList<'_> {
         builder::IpPoolList::new(self)
     }
 
-    fn ip_pool_create(&self) -> builder::IpPoolCreate {
+    fn ip_pool_create(&self) -> builder::IpPoolCreate<'_> {
         builder::IpPoolCreate::new(self)
     }
 
-    fn ip_pool_view(&self) -> builder::IpPoolView {
+    fn ip_pool_view(&self) -> builder::IpPoolView<'_> {
         builder::IpPoolView::new(self)
     }
 
-    fn ip_pool_update(&self) -> builder::IpPoolUpdate {
+    fn ip_pool_update(&self) -> builder::IpPoolUpdate<'_> {
         builder::IpPoolUpdate::new(self)
     }
 
-    fn ip_pool_delete(&self) -> builder::IpPoolDelete {
+    fn ip_pool_delete(&self) -> builder::IpPoolDelete<'_> {
         builder::IpPoolDelete::new(self)
     }
 
-    fn ip_pool_range_list(&self) -> builder::IpPoolRangeList {
+    fn ip_pool_range_list(&self) -> builder::IpPoolRangeList<'_> {
         builder::IpPoolRangeList::new(self)
     }
 
-    fn ip_pool_range_add(&self) -> builder::IpPoolRangeAdd {
+    fn ip_pool_range_add(&self) -> builder::IpPoolRangeAdd<'_> {
         builder::IpPoolRangeAdd::new(self)
     }
 
-    fn ip_pool_range_remove(&self) -> builder::IpPoolRangeRemove {
+    fn ip_pool_range_remove(&self) -> builder::IpPoolRangeRemove<'_> {
         builder::IpPoolRangeRemove::new(self)
     }
 
-    fn ip_pool_service_view(&self) -> builder::IpPoolServiceView {
+    fn ip_pool_service_view(&self) -> builder::IpPoolServiceView<'_> {
         builder::IpPoolServiceView::new(self)
     }
 
-    fn ip_pool_service_range_list(&self) -> builder::IpPoolServiceRangeList {
+    fn ip_pool_service_range_list(&self) -> builder::IpPoolServiceRangeList<'_> {
         builder::IpPoolServiceRangeList::new(self)
     }
 
-    fn ip_pool_service_range_add(&self) -> builder::IpPoolServiceRangeAdd {
+    fn ip_pool_service_range_add(&self) -> builder::IpPoolServiceRangeAdd<'_> {
         builder::IpPoolServiceRangeAdd::new(self)
     }
 
-    fn ip_pool_service_range_remove(&self) -> builder::IpPoolServiceRangeRemove {
+    fn ip_pool_service_range_remove(&self) -> builder::IpPoolServiceRangeRemove<'_> {
         builder::IpPoolServiceRangeRemove::new(self)
     }
 
-    fn system_metric(&self) -> builder::SystemMetric {
+    fn system_metric(&self) -> builder::SystemMetric<'_> {
         builder::SystemMetric::new(self)
     }
 
-    fn saga_list(&self) -> builder::SagaList {
+    fn saga_list(&self) -> builder::SagaList<'_> {
         builder::SagaList::new(self)
     }
 
-    fn saga_view(&self) -> builder::SagaView {
+    fn saga_view(&self) -> builder::SagaView<'_> {
         builder::SagaView::new(self)
     }
 
-    fn silo_list(&self) -> builder::SiloList {
+    fn silo_list(&self) -> builder::SiloList<'_> {
         builder::SiloList::new(self)
     }
 
-    fn silo_create(&self) -> builder::SiloCreate {
+    fn silo_create(&self) -> builder::SiloCreate<'_> {
         builder::SiloCreate::new(self)
     }
 
-    fn silo_view(&self) -> builder::SiloView {
+    fn silo_view(&self) -> builder::SiloView<'_> {
         builder::SiloView::new(self)
     }
 
-    fn silo_delete(&self) -> builder::SiloDelete {
+    fn silo_delete(&self) -> builder::SiloDelete<'_> {
         builder::SiloDelete::new(self)
     }
 
-    fn silo_identity_provider_list(&self) -> builder::SiloIdentityProviderList {
+    fn silo_identity_provider_list(&self) -> builder::SiloIdentityProviderList<'_> {
         builder::SiloIdentityProviderList::new(self)
     }
 
-    fn local_idp_user_create(&self) -> builder::LocalIdpUserCreate {
+    fn local_idp_user_create(&self) -> builder::LocalIdpUserCreate<'_> {
         builder::LocalIdpUserCreate::new(self)
     }
 
-    fn local_idp_user_delete(&self) -> builder::LocalIdpUserDelete {
+    fn local_idp_user_delete(&self) -> builder::LocalIdpUserDelete<'_> {
         builder::LocalIdpUserDelete::new(self)
     }
 
-    fn local_idp_user_set_password(&self) -> builder::LocalIdpUserSetPassword {
+    fn local_idp_user_set_password(&self) -> builder::LocalIdpUserSetPassword<'_> {
         builder::LocalIdpUserSetPassword::new(self)
     }
 
-    fn saml_identity_provider_create(&self) -> builder::SamlIdentityProviderCreate {
+    fn saml_identity_provider_create(&self) -> builder::SamlIdentityProviderCreate<'_> {
         builder::SamlIdentityProviderCreate::new(self)
     }
 
-    fn saml_identity_provider_view(&self) -> builder::SamlIdentityProviderView {
+    fn saml_identity_provider_view(&self) -> builder::SamlIdentityProviderView<'_> {
         builder::SamlIdentityProviderView::new(self)
     }
 
-    fn silo_policy_view(&self) -> builder::SiloPolicyView {
+    fn silo_policy_view(&self) -> builder::SiloPolicyView<'_> {
         builder::SiloPolicyView::new(self)
     }
 
-    fn silo_policy_update(&self) -> builder::SiloPolicyUpdate {
+    fn silo_policy_update(&self) -> builder::SiloPolicyUpdate<'_> {
         builder::SiloPolicyUpdate::new(self)
     }
 
-    fn silo_users_list(&self) -> builder::SiloUsersList {
+    fn silo_users_list(&self) -> builder::SiloUsersList<'_> {
         builder::SiloUsersList::new(self)
     }
 
-    fn silo_user_view(&self) -> builder::SiloUserView {
+    fn silo_user_view(&self) -> builder::SiloUserView<'_> {
         builder::SiloUserView::new(self)
     }
 
-    fn system_user_list(&self) -> builder::SystemUserList {
+    fn system_user_list(&self) -> builder::SystemUserList<'_> {
         builder::SystemUserList::new(self)
     }
 
-    fn system_user_view(&self) -> builder::SystemUserView {
+    fn system_user_view(&self) -> builder::SystemUserView<'_> {
         builder::SystemUserView::new(self)
     }
 
-    fn system_component_version_list(&self) -> builder::SystemComponentVersionList {
+    fn system_component_version_list(&self) -> builder::SystemComponentVersionList<'_> {
         builder::SystemComponentVersionList::new(self)
     }
 
-    fn update_deployments_list(&self) -> builder::UpdateDeploymentsList {
+    fn update_deployments_list(&self) -> builder::UpdateDeploymentsList<'_> {
         builder::UpdateDeploymentsList::new(self)
     }
 
-    fn update_deployment_view(&self) -> builder::UpdateDeploymentView {
+    fn update_deployment_view(&self) -> builder::UpdateDeploymentView<'_> {
         builder::UpdateDeploymentView::new(self)
     }
 
-    fn system_update_refresh(&self) -> builder::SystemUpdateRefresh {
+    fn system_update_refresh(&self) -> builder::SystemUpdateRefresh<'_> {
         builder::SystemUpdateRefresh::new(self)
     }
 
-    fn system_update_start(&self) -> builder::SystemUpdateStart {
+    fn system_update_start(&self) -> builder::SystemUpdateStart<'_> {
         builder::SystemUpdateStart::new(self)
     }
 
-    fn system_update_stop(&self) -> builder::SystemUpdateStop {
+    fn system_update_stop(&self) -> builder::SystemUpdateStop<'_> {
         builder::SystemUpdateStop::new(self)
     }
 
-    fn system_update_list(&self) -> builder::SystemUpdateList {
+    fn system_update_list(&self) -> builder::SystemUpdateList<'_> {
         builder::SystemUpdateList::new(self)
     }
 
-    fn system_update_view(&self) -> builder::SystemUpdateView {
+    fn system_update_view(&self) -> builder::SystemUpdateView<'_> {
         builder::SystemUpdateView::new(self)
     }
 
-    fn system_update_components_list(&self) -> builder::SystemUpdateComponentsList {
+    fn system_update_components_list(&self) -> builder::SystemUpdateComponentsList<'_> {
         builder::SystemUpdateComponentsList::new(self)
     }
 
-    fn system_version(&self) -> builder::SystemVersion {
+    fn system_version(&self) -> builder::SystemVersion<'_> {
         builder::SystemVersion::new(self)
     }
 }
@@ -29309,7 +29313,7 @@ pub trait ClientVpcsExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn vpc_router_route_view_by_id(&self) -> builder::VpcRouterRouteViewById;
+    fn vpc_router_route_view_by_id(&self) -> builder::VpcRouterRouteViewById<'_>;
     ///Get a router by id
     ///
     ///Sends a `GET` request to `/by-id/vpc-routers/{id}`
@@ -29320,7 +29324,7 @@ pub trait ClientVpcsExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn vpc_router_view_by_id(&self) -> builder::VpcRouterViewById;
+    fn vpc_router_view_by_id(&self) -> builder::VpcRouterViewById<'_>;
     ///Fetch a subnet by id
     ///
     ///Sends a `GET` request to `/by-id/vpc-subnets/{id}`
@@ -29331,7 +29335,7 @@ pub trait ClientVpcsExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn vpc_subnet_view_by_id(&self) -> builder::VpcSubnetViewById;
+    fn vpc_subnet_view_by_id(&self) -> builder::VpcSubnetViewById<'_>;
     ///Fetch a VPC
     ///
     ///Sends a `GET` request to `/by-id/vpcs/{id}`
@@ -29342,7 +29346,7 @@ pub trait ClientVpcsExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn vpc_view_by_id(&self) -> builder::VpcViewById;
+    fn vpc_view_by_id(&self) -> builder::VpcViewById<'_>;
     ///List VPCs
     ///
     ///Sends a `GET` request to
@@ -29365,7 +29369,7 @@ pub trait ClientVpcsExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn vpc_list(&self) -> builder::VpcList;
+    fn vpc_list(&self) -> builder::VpcList<'_>;
     ///Create a VPC
     ///
     ///Sends a `POST` request to
@@ -29383,7 +29387,7 @@ pub trait ClientVpcsExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn vpc_create(&self) -> builder::VpcCreate;
+    fn vpc_create(&self) -> builder::VpcCreate<'_>;
     ///Fetch a VPC
     ///
     ///Sends a `GET` request to
@@ -29398,7 +29402,7 @@ pub trait ClientVpcsExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn vpc_view(&self) -> builder::VpcView;
+    fn vpc_view(&self) -> builder::VpcView<'_>;
     ///Update a VPC
     ///
     ///Sends a `PUT` request to
@@ -29414,7 +29418,7 @@ pub trait ClientVpcsExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn vpc_update(&self) -> builder::VpcUpdate;
+    fn vpc_update(&self) -> builder::VpcUpdate<'_>;
     ///Delete a VPC
     ///
     ///Sends a `DELETE` request to
@@ -29429,7 +29433,7 @@ pub trait ClientVpcsExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn vpc_delete(&self) -> builder::VpcDelete;
+    fn vpc_delete(&self) -> builder::VpcDelete<'_>;
     ///List firewall rules
     ///
     ///Sends a `GET` request to
@@ -29444,7 +29448,7 @@ pub trait ClientVpcsExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn vpc_firewall_rules_view(&self) -> builder::VpcFirewallRulesView;
+    fn vpc_firewall_rules_view(&self) -> builder::VpcFirewallRulesView<'_>;
     ///Replace firewall rules
     ///
     ///Sends a `PUT` request to
@@ -29460,7 +29464,7 @@ pub trait ClientVpcsExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn vpc_firewall_rules_update(&self) -> builder::VpcFirewallRulesUpdate;
+    fn vpc_firewall_rules_update(&self) -> builder::VpcFirewallRulesUpdate<'_>;
     ///List routers
     ///
     ///Sends a `GET` request to
@@ -29486,7 +29490,7 @@ pub trait ClientVpcsExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn vpc_router_list(&self) -> builder::VpcRouterList;
+    fn vpc_router_list(&self) -> builder::VpcRouterList<'_>;
     ///Create a router
     ///
     ///Sends a `POST` request to
@@ -29502,7 +29506,7 @@ pub trait ClientVpcsExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn vpc_router_create(&self) -> builder::VpcRouterCreate;
+    fn vpc_router_create(&self) -> builder::VpcRouterCreate<'_>;
     ///Get a router
     ///
     ///Sends a `GET` request to
@@ -29518,7 +29522,7 @@ pub trait ClientVpcsExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn vpc_router_view(&self) -> builder::VpcRouterView;
+    fn vpc_router_view(&self) -> builder::VpcRouterView<'_>;
     ///Update a router
     ///
     ///Sends a `PUT` request to
@@ -29535,7 +29539,7 @@ pub trait ClientVpcsExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn vpc_router_update(&self) -> builder::VpcRouterUpdate;
+    fn vpc_router_update(&self) -> builder::VpcRouterUpdate<'_>;
     ///Delete a router
     ///
     ///Sends a `DELETE` request to
@@ -29551,7 +29555,7 @@ pub trait ClientVpcsExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn vpc_router_delete(&self) -> builder::VpcRouterDelete;
+    fn vpc_router_delete(&self) -> builder::VpcRouterDelete<'_>;
     ///List routes
     ///
     ///List the routes associated with a router in a particular VPC.
@@ -29581,7 +29585,7 @@ pub trait ClientVpcsExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn vpc_router_route_list(&self) -> builder::VpcRouterRouteList;
+    fn vpc_router_route_list(&self) -> builder::VpcRouterRouteList<'_>;
     ///Create a router
     ///
     ///Sends a `POST` request to
@@ -29598,7 +29602,7 @@ pub trait ClientVpcsExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn vpc_router_route_create(&self) -> builder::VpcRouterRouteCreate;
+    fn vpc_router_route_create(&self) -> builder::VpcRouterRouteCreate<'_>;
     ///Fetch a route
     ///
     ///Sends a `GET` request to
@@ -29615,7 +29619,7 @@ pub trait ClientVpcsExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn vpc_router_route_view(&self) -> builder::VpcRouterRouteView;
+    fn vpc_router_route_view(&self) -> builder::VpcRouterRouteView<'_>;
     ///Update a route
     ///
     ///Sends a `PUT` request to
@@ -29633,7 +29637,7 @@ pub trait ClientVpcsExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn vpc_router_route_update(&self) -> builder::VpcRouterRouteUpdate;
+    fn vpc_router_route_update(&self) -> builder::VpcRouterRouteUpdate<'_>;
     ///Delete a route
     ///
     ///Sends a `DELETE` request to
@@ -29650,7 +29654,7 @@ pub trait ClientVpcsExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn vpc_router_route_delete(&self) -> builder::VpcRouterRouteDelete;
+    fn vpc_router_route_delete(&self) -> builder::VpcRouterRouteDelete<'_>;
     ///List subnets
     ///
     ///Sends a `GET` request to
@@ -29676,7 +29680,7 @@ pub trait ClientVpcsExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn vpc_subnet_list(&self) -> builder::VpcSubnetList;
+    fn vpc_subnet_list(&self) -> builder::VpcSubnetList<'_>;
     ///Create a subnet
     ///
     ///Sends a `POST` request to
@@ -29692,7 +29696,7 @@ pub trait ClientVpcsExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn vpc_subnet_create(&self) -> builder::VpcSubnetCreate;
+    fn vpc_subnet_create(&self) -> builder::VpcSubnetCreate<'_>;
     ///Fetch a subnet
     ///
     ///Sends a `GET` request to
@@ -29708,7 +29712,7 @@ pub trait ClientVpcsExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn vpc_subnet_view(&self) -> builder::VpcSubnetView;
+    fn vpc_subnet_view(&self) -> builder::VpcSubnetView<'_>;
     ///Update a subnet
     ///
     ///Sends a `PUT` request to
@@ -29725,7 +29729,7 @@ pub trait ClientVpcsExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn vpc_subnet_update(&self) -> builder::VpcSubnetUpdate;
+    fn vpc_subnet_update(&self) -> builder::VpcSubnetUpdate<'_>;
     ///Delete a subnet
     ///
     ///Sends a `DELETE` request to
@@ -29741,7 +29745,7 @@ pub trait ClientVpcsExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn vpc_subnet_delete(&self) -> builder::VpcSubnetDelete;
+    fn vpc_subnet_delete(&self) -> builder::VpcSubnetDelete<'_>;
     ///List network interfaces
     ///
     ///Sends a `GET` request to
@@ -29769,115 +29773,115 @@ pub trait ClientVpcsExt {
     ///    .send()
     ///    .await;
     /// ```
-    fn vpc_subnet_list_network_interfaces(&self) -> builder::VpcSubnetListNetworkInterfaces;
+    fn vpc_subnet_list_network_interfaces(&self) -> builder::VpcSubnetListNetworkInterfaces<'_>;
 }
 
 impl ClientVpcsExt for Client {
-    fn vpc_router_route_view_by_id(&self) -> builder::VpcRouterRouteViewById {
+    fn vpc_router_route_view_by_id(&self) -> builder::VpcRouterRouteViewById<'_> {
         builder::VpcRouterRouteViewById::new(self)
     }
 
-    fn vpc_router_view_by_id(&self) -> builder::VpcRouterViewById {
+    fn vpc_router_view_by_id(&self) -> builder::VpcRouterViewById<'_> {
         builder::VpcRouterViewById::new(self)
     }
 
-    fn vpc_subnet_view_by_id(&self) -> builder::VpcSubnetViewById {
+    fn vpc_subnet_view_by_id(&self) -> builder::VpcSubnetViewById<'_> {
         builder::VpcSubnetViewById::new(self)
     }
 
-    fn vpc_view_by_id(&self) -> builder::VpcViewById {
+    fn vpc_view_by_id(&self) -> builder::VpcViewById<'_> {
         builder::VpcViewById::new(self)
     }
 
-    fn vpc_list(&self) -> builder::VpcList {
+    fn vpc_list(&self) -> builder::VpcList<'_> {
         builder::VpcList::new(self)
     }
 
-    fn vpc_create(&self) -> builder::VpcCreate {
+    fn vpc_create(&self) -> builder::VpcCreate<'_> {
         builder::VpcCreate::new(self)
     }
 
-    fn vpc_view(&self) -> builder::VpcView {
+    fn vpc_view(&self) -> builder::VpcView<'_> {
         builder::VpcView::new(self)
     }
 
-    fn vpc_update(&self) -> builder::VpcUpdate {
+    fn vpc_update(&self) -> builder::VpcUpdate<'_> {
         builder::VpcUpdate::new(self)
     }
 
-    fn vpc_delete(&self) -> builder::VpcDelete {
+    fn vpc_delete(&self) -> builder::VpcDelete<'_> {
         builder::VpcDelete::new(self)
     }
 
-    fn vpc_firewall_rules_view(&self) -> builder::VpcFirewallRulesView {
+    fn vpc_firewall_rules_view(&self) -> builder::VpcFirewallRulesView<'_> {
         builder::VpcFirewallRulesView::new(self)
     }
 
-    fn vpc_firewall_rules_update(&self) -> builder::VpcFirewallRulesUpdate {
+    fn vpc_firewall_rules_update(&self) -> builder::VpcFirewallRulesUpdate<'_> {
         builder::VpcFirewallRulesUpdate::new(self)
     }
 
-    fn vpc_router_list(&self) -> builder::VpcRouterList {
+    fn vpc_router_list(&self) -> builder::VpcRouterList<'_> {
         builder::VpcRouterList::new(self)
     }
 
-    fn vpc_router_create(&self) -> builder::VpcRouterCreate {
+    fn vpc_router_create(&self) -> builder::VpcRouterCreate<'_> {
         builder::VpcRouterCreate::new(self)
     }
 
-    fn vpc_router_view(&self) -> builder::VpcRouterView {
+    fn vpc_router_view(&self) -> builder::VpcRouterView<'_> {
         builder::VpcRouterView::new(self)
     }
 
-    fn vpc_router_update(&self) -> builder::VpcRouterUpdate {
+    fn vpc_router_update(&self) -> builder::VpcRouterUpdate<'_> {
         builder::VpcRouterUpdate::new(self)
     }
 
-    fn vpc_router_delete(&self) -> builder::VpcRouterDelete {
+    fn vpc_router_delete(&self) -> builder::VpcRouterDelete<'_> {
         builder::VpcRouterDelete::new(self)
     }
 
-    fn vpc_router_route_list(&self) -> builder::VpcRouterRouteList {
+    fn vpc_router_route_list(&self) -> builder::VpcRouterRouteList<'_> {
         builder::VpcRouterRouteList::new(self)
     }
 
-    fn vpc_router_route_create(&self) -> builder::VpcRouterRouteCreate {
+    fn vpc_router_route_create(&self) -> builder::VpcRouterRouteCreate<'_> {
         builder::VpcRouterRouteCreate::new(self)
     }
 
-    fn vpc_router_route_view(&self) -> builder::VpcRouterRouteView {
+    fn vpc_router_route_view(&self) -> builder::VpcRouterRouteView<'_> {
         builder::VpcRouterRouteView::new(self)
     }
 
-    fn vpc_router_route_update(&self) -> builder::VpcRouterRouteUpdate {
+    fn vpc_router_route_update(&self) -> builder::VpcRouterRouteUpdate<'_> {
         builder::VpcRouterRouteUpdate::new(self)
     }
 
-    fn vpc_router_route_delete(&self) -> builder::VpcRouterRouteDelete {
+    fn vpc_router_route_delete(&self) -> builder::VpcRouterRouteDelete<'_> {
         builder::VpcRouterRouteDelete::new(self)
     }
 
-    fn vpc_subnet_list(&self) -> builder::VpcSubnetList {
+    fn vpc_subnet_list(&self) -> builder::VpcSubnetList<'_> {
         builder::VpcSubnetList::new(self)
     }
 
-    fn vpc_subnet_create(&self) -> builder::VpcSubnetCreate {
+    fn vpc_subnet_create(&self) -> builder::VpcSubnetCreate<'_> {
         builder::VpcSubnetCreate::new(self)
     }
 
-    fn vpc_subnet_view(&self) -> builder::VpcSubnetView {
+    fn vpc_subnet_view(&self) -> builder::VpcSubnetView<'_> {
         builder::VpcSubnetView::new(self)
     }
 
-    fn vpc_subnet_update(&self) -> builder::VpcSubnetUpdate {
+    fn vpc_subnet_update(&self) -> builder::VpcSubnetUpdate<'_> {
         builder::VpcSubnetUpdate::new(self)
     }
 
-    fn vpc_subnet_delete(&self) -> builder::VpcSubnetDelete {
+    fn vpc_subnet_delete(&self) -> builder::VpcSubnetDelete<'_> {
         builder::VpcSubnetDelete::new(self)
     }
 
-    fn vpc_subnet_list_network_interfaces(&self) -> builder::VpcSubnetListNetworkInterfaces {
+    fn vpc_subnet_list_network_interfaces(&self) -> builder::VpcSubnetListNetworkInterfaces<'_> {
         builder::VpcSubnetListNetworkInterfaces::new(self)
     }
 }

@@ -101,7 +101,7 @@ impl Generator {
             /// type-checked [`mock()`](::httpmock::MockServer::mock) calls.
             pub trait MockServerExt {
                 #(
-                    fn #op<F>(&self, config_fn: F) -> ::httpmock::Mock
+                    fn #op<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
                     where
                         F: FnOnce(operations::#when, operations::#then);
                 )*
@@ -109,7 +109,7 @@ impl Generator {
 
             impl MockServerExt for ::httpmock::MockServer {
                 #(
-                    fn #op<F>(&self, config_fn: F) -> ::httpmock::Mock
+                    fn #op<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
                     where
                         F: FnOnce(operations::#when, operations::#then)
                     {

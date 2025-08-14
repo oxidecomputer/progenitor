@@ -844,73 +844,73 @@ pub mod operations {
 #[doc = r" adds a method for each operation. These are the equivalent of"]
 #[doc = r" type-checked [`mock()`](::httpmock::MockServer::mock) calls."]
 pub trait MockServerExt {
-    fn control_hold<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn control_hold<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ControlHoldWhen, operations::ControlHoldThen);
-    fn control_resume<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn control_resume<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ControlResumeWhen, operations::ControlResumeThen);
-    fn task_get<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn task_get<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::TaskGetWhen, operations::TaskGetThen);
-    fn tasks_get<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn tasks_get<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::TasksGetWhen, operations::TasksGetThen);
-    fn task_submit<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn task_submit<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::TaskSubmitWhen, operations::TaskSubmitThen);
-    fn task_events_get<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn task_events_get<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::TaskEventsGetWhen, operations::TaskEventsGetThen);
-    fn task_outputs_get<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn task_outputs_get<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::TaskOutputsGetWhen, operations::TaskOutputsGetThen);
-    fn task_output_download<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn task_output_download<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::TaskOutputDownloadWhen, operations::TaskOutputDownloadThen);
-    fn user_create<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn user_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::UserCreateWhen, operations::UserCreateThen);
-    fn whoami<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn whoami<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::WhoamiWhen, operations::WhoamiThen);
-    fn whoami_put_name<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn whoami_put_name<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::WhoamiPutNameWhen, operations::WhoamiPutNameThen);
-    fn worker_bootstrap<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn worker_bootstrap<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::WorkerBootstrapWhen, operations::WorkerBootstrapThen);
-    fn worker_ping<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn worker_ping<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::WorkerPingWhen, operations::WorkerPingThen);
-    fn worker_task_append<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn worker_task_append<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::WorkerTaskAppendWhen, operations::WorkerTaskAppendThen);
-    fn worker_task_upload_chunk<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn worker_task_upload_chunk<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::WorkerTaskUploadChunkWhen, operations::WorkerTaskUploadChunkThen);
-    fn worker_task_complete<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn worker_task_complete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::WorkerTaskCompleteWhen, operations::WorkerTaskCompleteThen);
-    fn worker_task_add_output<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn worker_task_add_output<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::WorkerTaskAddOutputWhen, operations::WorkerTaskAddOutputThen);
-    fn workers_list<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn workers_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::WorkersListWhen, operations::WorkersListThen);
-    fn workers_recycle<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn workers_recycle<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::WorkersRecycleWhen, operations::WorkersRecycleThen);
-    fn get_thing_or_things<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn get_thing_or_things<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::GetThingOrThingsWhen, operations::GetThingOrThingsThen);
-    fn header_arg<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn header_arg<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::HeaderArgWhen, operations::HeaderArgThen);
 }
 
 impl MockServerExt for ::httpmock::MockServer {
-    fn control_hold<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn control_hold<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ControlHoldWhen, operations::ControlHoldThen),
     {
@@ -922,7 +922,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn control_resume<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn control_resume<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ControlResumeWhen, operations::ControlResumeThen),
     {
@@ -934,7 +934,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn task_get<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn task_get<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::TaskGetWhen, operations::TaskGetThen),
     {
@@ -946,7 +946,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn tasks_get<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn tasks_get<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::TasksGetWhen, operations::TasksGetThen),
     {
@@ -958,7 +958,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn task_submit<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn task_submit<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::TaskSubmitWhen, operations::TaskSubmitThen),
     {
@@ -970,7 +970,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn task_events_get<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn task_events_get<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::TaskEventsGetWhen, operations::TaskEventsGetThen),
     {
@@ -982,7 +982,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn task_outputs_get<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn task_outputs_get<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::TaskOutputsGetWhen, operations::TaskOutputsGetThen),
     {
@@ -994,7 +994,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn task_output_download<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn task_output_download<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::TaskOutputDownloadWhen, operations::TaskOutputDownloadThen),
     {
@@ -1006,7 +1006,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn user_create<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn user_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::UserCreateWhen, operations::UserCreateThen),
     {
@@ -1018,7 +1018,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn whoami<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn whoami<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::WhoamiWhen, operations::WhoamiThen),
     {
@@ -1030,7 +1030,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn whoami_put_name<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn whoami_put_name<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::WhoamiPutNameWhen, operations::WhoamiPutNameThen),
     {
@@ -1042,7 +1042,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn worker_bootstrap<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn worker_bootstrap<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::WorkerBootstrapWhen, operations::WorkerBootstrapThen),
     {
@@ -1054,7 +1054,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn worker_ping<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn worker_ping<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::WorkerPingWhen, operations::WorkerPingThen),
     {
@@ -1066,7 +1066,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn worker_task_append<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn worker_task_append<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::WorkerTaskAppendWhen, operations::WorkerTaskAppendThen),
     {
@@ -1078,7 +1078,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn worker_task_upload_chunk<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn worker_task_upload_chunk<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::WorkerTaskUploadChunkWhen, operations::WorkerTaskUploadChunkThen),
     {
@@ -1090,7 +1090,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn worker_task_complete<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn worker_task_complete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::WorkerTaskCompleteWhen, operations::WorkerTaskCompleteThen),
     {
@@ -1102,7 +1102,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn worker_task_add_output<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn worker_task_add_output<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::WorkerTaskAddOutputWhen, operations::WorkerTaskAddOutputThen),
     {
@@ -1114,7 +1114,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn workers_list<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn workers_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::WorkersListWhen, operations::WorkersListThen),
     {
@@ -1126,7 +1126,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn workers_recycle<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn workers_recycle<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::WorkersRecycleWhen, operations::WorkersRecycleThen),
     {
@@ -1138,7 +1138,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn get_thing_or_things<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn get_thing_or_things<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::GetThingOrThingsWhen, operations::GetThingOrThingsThen),
     {
@@ -1150,7 +1150,7 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn header_arg<F>(&self, config_fn: F) -> ::httpmock::Mock
+    fn header_arg<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::HeaderArgWhen, operations::HeaderArgThen),
     {

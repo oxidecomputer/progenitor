@@ -26407,7 +26407,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn disk_view_by_id(&self) -> builder::DiskViewById {
+    pub fn disk_view_by_id(&self) -> builder::DiskViewById<'_> {
         builder::DiskViewById::new(self)
     }
 
@@ -26421,7 +26421,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn image_view_by_id(&self) -> builder::ImageViewById {
+    pub fn image_view_by_id(&self) -> builder::ImageViewById<'_> {
         builder::ImageViewById::new(self)
     }
 
@@ -26435,7 +26435,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn instance_view_by_id(&self) -> builder::InstanceViewById {
+    pub fn instance_view_by_id(&self) -> builder::InstanceViewById<'_> {
         builder::InstanceViewById::new(self)
     }
 
@@ -26451,7 +26451,7 @@ impl Client {
     /// ```
     pub fn instance_network_interface_view_by_id(
         &self,
-    ) -> builder::InstanceNetworkInterfaceViewById {
+    ) -> builder::InstanceNetworkInterfaceViewById<'_> {
         builder::InstanceNetworkInterfaceViewById::new(self)
     }
 
@@ -26467,7 +26467,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn organization_view_by_id(&self) -> builder::OrganizationViewById {
+    pub fn organization_view_by_id(&self) -> builder::OrganizationViewById<'_> {
         builder::OrganizationViewById::new(self)
     }
 
@@ -26483,7 +26483,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn project_view_by_id(&self) -> builder::ProjectViewById {
+    pub fn project_view_by_id(&self) -> builder::ProjectViewById<'_> {
         builder::ProjectViewById::new(self)
     }
 
@@ -26497,7 +26497,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn snapshot_view_by_id(&self) -> builder::SnapshotViewById {
+    pub fn snapshot_view_by_id(&self) -> builder::SnapshotViewById<'_> {
         builder::SnapshotViewById::new(self)
     }
 
@@ -26511,7 +26511,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn vpc_router_route_view_by_id(&self) -> builder::VpcRouterRouteViewById {
+    pub fn vpc_router_route_view_by_id(&self) -> builder::VpcRouterRouteViewById<'_> {
         builder::VpcRouterRouteViewById::new(self)
     }
 
@@ -26525,7 +26525,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn vpc_router_view_by_id(&self) -> builder::VpcRouterViewById {
+    pub fn vpc_router_view_by_id(&self) -> builder::VpcRouterViewById<'_> {
         builder::VpcRouterViewById::new(self)
     }
 
@@ -26539,7 +26539,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn vpc_subnet_view_by_id(&self) -> builder::VpcSubnetViewById {
+    pub fn vpc_subnet_view_by_id(&self) -> builder::VpcSubnetViewById<'_> {
         builder::VpcSubnetViewById::new(self)
     }
 
@@ -26553,7 +26553,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn vpc_view_by_id(&self) -> builder::VpcViewById {
+    pub fn vpc_view_by_id(&self) -> builder::VpcViewById<'_> {
         builder::VpcViewById::new(self)
     }
 
@@ -26571,7 +26571,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn device_auth_request(&self) -> builder::DeviceAuthRequest {
+    pub fn device_auth_request(&self) -> builder::DeviceAuthRequest<'_> {
         builder::DeviceAuthRequest::new(self)
     }
 
@@ -26590,7 +26590,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn device_auth_confirm(&self) -> builder::DeviceAuthConfirm {
+    pub fn device_auth_confirm(&self) -> builder::DeviceAuthConfirm<'_> {
         builder::DeviceAuthConfirm::new(self)
     }
 
@@ -26607,7 +26607,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn device_access_token(&self) -> builder::DeviceAccessToken {
+    pub fn device_access_token(&self) -> builder::DeviceAccessToken<'_> {
         builder::DeviceAccessToken::new(self)
     }
 
@@ -26628,7 +26628,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn group_list(&self) -> builder::GroupList {
+    pub fn group_list(&self) -> builder::GroupList<'_> {
         builder::GroupList::new(self)
     }
 
@@ -26640,7 +26640,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn login_spoof(&self) -> builder::LoginSpoof {
+    pub fn login_spoof(&self) -> builder::LoginSpoof<'_> {
         builder::LoginSpoof::new(self)
     }
 
@@ -26655,7 +26655,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn login_local(&self) -> builder::LoginLocal {
+    pub fn login_local(&self) -> builder::LoginLocal<'_> {
         builder::LoginLocal::new(self)
     }
 
@@ -26673,7 +26673,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn login_saml_begin(&self) -> builder::LoginSamlBegin {
+    pub fn login_saml_begin(&self) -> builder::LoginSamlBegin<'_> {
         builder::LoginSamlBegin::new(self)
     }
 
@@ -26689,7 +26689,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn login_saml(&self) -> builder::LoginSaml {
+    pub fn login_saml(&self) -> builder::LoginSaml<'_> {
         builder::LoginSaml::new(self)
     }
 
@@ -26700,7 +26700,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn logout(&self) -> builder::Logout {
+    pub fn logout(&self) -> builder::Logout<'_> {
         builder::Logout::new(self)
     }
 
@@ -26723,7 +26723,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn organization_list(&self) -> builder::OrganizationList {
+    pub fn organization_list(&self) -> builder::OrganizationList<'_> {
         builder::OrganizationList::new(self)
     }
 
@@ -26739,7 +26739,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn organization_create(&self) -> builder::OrganizationCreate {
+    pub fn organization_create(&self) -> builder::OrganizationCreate<'_> {
         builder::OrganizationCreate::new(self)
     }
 
@@ -26757,7 +26757,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn organization_view(&self) -> builder::OrganizationView {
+    pub fn organization_view(&self) -> builder::OrganizationView<'_> {
         builder::OrganizationView::new(self)
     }
 
@@ -26777,7 +26777,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn organization_update(&self) -> builder::OrganizationUpdate {
+    pub fn organization_update(&self) -> builder::OrganizationUpdate<'_> {
         builder::OrganizationUpdate::new(self)
     }
 
@@ -26795,7 +26795,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn organization_delete(&self) -> builder::OrganizationDelete {
+    pub fn organization_delete(&self) -> builder::OrganizationDelete<'_> {
         builder::OrganizationDelete::new(self)
     }
 
@@ -26813,7 +26813,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn organization_policy_view(&self) -> builder::OrganizationPolicyView {
+    pub fn organization_policy_view(&self) -> builder::OrganizationPolicyView<'_> {
         builder::OrganizationPolicyView::new(self)
     }
 
@@ -26833,7 +26833,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn organization_policy_update(&self) -> builder::OrganizationPolicyUpdate {
+    pub fn organization_policy_update(&self) -> builder::OrganizationPolicyUpdate<'_> {
         builder::OrganizationPolicyUpdate::new(self)
     }
 
@@ -26858,7 +26858,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn project_list(&self) -> builder::ProjectList {
+    pub fn project_list(&self) -> builder::ProjectList<'_> {
         builder::ProjectList::new(self)
     }
 
@@ -26878,7 +26878,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn project_create(&self) -> builder::ProjectCreate {
+    pub fn project_create(&self) -> builder::ProjectCreate<'_> {
         builder::ProjectCreate::new(self)
     }
 
@@ -26899,7 +26899,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn project_view(&self) -> builder::ProjectView {
+    pub fn project_view(&self) -> builder::ProjectView<'_> {
         builder::ProjectView::new(self)
     }
 
@@ -26922,7 +26922,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn project_update(&self) -> builder::ProjectUpdate {
+    pub fn project_update(&self) -> builder::ProjectUpdate<'_> {
         builder::ProjectUpdate::new(self)
     }
 
@@ -26943,7 +26943,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn project_delete(&self) -> builder::ProjectDelete {
+    pub fn project_delete(&self) -> builder::ProjectDelete<'_> {
         builder::ProjectDelete::new(self)
     }
 
@@ -26971,7 +26971,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn disk_list(&self) -> builder::DiskList {
+    pub fn disk_list(&self) -> builder::DiskList<'_> {
         builder::DiskList::new(self)
     }
 
@@ -26992,7 +26992,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn disk_create(&self) -> builder::DiskCreate {
+    pub fn disk_create(&self) -> builder::DiskCreate<'_> {
         builder::DiskCreate::new(self)
     }
 
@@ -27012,7 +27012,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn disk_view(&self) -> builder::DiskView {
+    pub fn disk_view(&self) -> builder::DiskView<'_> {
         builder::DiskView::new(self)
     }
 
@@ -27030,7 +27030,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn disk_delete(&self) -> builder::DiskDelete {
+    pub fn disk_delete(&self) -> builder::DiskDelete<'_> {
         builder::DiskDelete::new(self)
     }
 
@@ -27063,7 +27063,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn disk_metrics_list(&self) -> builder::DiskMetricsList {
+    pub fn disk_metrics_list(&self) -> builder::DiskMetricsList<'_> {
         builder::DiskMetricsList::new(self)
     }
 
@@ -27092,7 +27092,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn image_list(&self) -> builder::ImageList {
+    pub fn image_list(&self) -> builder::ImageList<'_> {
         builder::ImageList::new(self)
     }
 
@@ -27115,7 +27115,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn image_create(&self) -> builder::ImageCreate {
+    pub fn image_create(&self) -> builder::ImageCreate<'_> {
         builder::ImageCreate::new(self)
     }
 
@@ -27135,7 +27135,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn image_view(&self) -> builder::ImageView {
+    pub fn image_view(&self) -> builder::ImageView<'_> {
         builder::ImageView::new(self)
     }
 
@@ -27157,7 +27157,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn image_delete(&self) -> builder::ImageDelete {
+    pub fn image_delete(&self) -> builder::ImageDelete<'_> {
         builder::ImageDelete::new(self)
     }
 
@@ -27183,7 +27183,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn instance_list(&self) -> builder::InstanceList {
+    pub fn instance_list(&self) -> builder::InstanceList<'_> {
         builder::InstanceList::new(self)
     }
 
@@ -27206,7 +27206,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn instance_create(&self) -> builder::InstanceCreate {
+    pub fn instance_create(&self) -> builder::InstanceCreate<'_> {
         builder::InstanceCreate::new(self)
     }
 
@@ -27226,7 +27226,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn instance_view(&self) -> builder::InstanceView {
+    pub fn instance_view(&self) -> builder::InstanceView<'_> {
         builder::InstanceView::new(self)
     }
 
@@ -27244,7 +27244,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn instance_delete(&self) -> builder::InstanceDelete {
+    pub fn instance_delete(&self) -> builder::InstanceDelete<'_> {
         builder::InstanceDelete::new(self)
     }
 
@@ -27275,7 +27275,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn instance_disk_list(&self) -> builder::InstanceDiskList {
+    pub fn instance_disk_list(&self) -> builder::InstanceDiskList<'_> {
         builder::InstanceDiskList::new(self)
     }
 
@@ -27296,7 +27296,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn instance_disk_attach(&self) -> builder::InstanceDiskAttach {
+    pub fn instance_disk_attach(&self) -> builder::InstanceDiskAttach<'_> {
         builder::InstanceDiskAttach::new(self)
     }
 
@@ -27317,7 +27317,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn instance_disk_detach(&self) -> builder::InstanceDiskDetach {
+    pub fn instance_disk_detach(&self) -> builder::InstanceDiskDetach<'_> {
         builder::InstanceDiskDetach::new(self)
     }
 
@@ -27335,7 +27335,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn instance_external_ip_list(&self) -> builder::InstanceExternalIpList {
+    pub fn instance_external_ip_list(&self) -> builder::InstanceExternalIpList<'_> {
         builder::InstanceExternalIpList::new(self)
     }
 
@@ -27356,7 +27356,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn instance_migrate(&self) -> builder::InstanceMigrate {
+    pub fn instance_migrate(&self) -> builder::InstanceMigrate<'_> {
         builder::InstanceMigrate::new(self)
     }
 
@@ -27385,7 +27385,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn instance_network_interface_list(&self) -> builder::InstanceNetworkInterfaceList {
+    pub fn instance_network_interface_list(&self) -> builder::InstanceNetworkInterfaceList<'_> {
         builder::InstanceNetworkInterfaceList::new(self)
     }
 
@@ -27404,7 +27404,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn instance_network_interface_create(&self) -> builder::InstanceNetworkInterfaceCreate {
+    pub fn instance_network_interface_create(&self) -> builder::InstanceNetworkInterfaceCreate<'_> {
         builder::InstanceNetworkInterfaceCreate::new(self)
     }
 
@@ -27423,7 +27423,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn instance_network_interface_view(&self) -> builder::InstanceNetworkInterfaceView {
+    pub fn instance_network_interface_view(&self) -> builder::InstanceNetworkInterfaceView<'_> {
         builder::InstanceNetworkInterfaceView::new(self)
     }
 
@@ -27443,7 +27443,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn instance_network_interface_update(&self) -> builder::InstanceNetworkInterfaceUpdate {
+    pub fn instance_network_interface_update(&self) -> builder::InstanceNetworkInterfaceUpdate<'_> {
         builder::InstanceNetworkInterfaceUpdate::new(self)
     }
 
@@ -27467,7 +27467,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn instance_network_interface_delete(&self) -> builder::InstanceNetworkInterfaceDelete {
+    pub fn instance_network_interface_delete(&self) -> builder::InstanceNetworkInterfaceDelete<'_> {
         builder::InstanceNetworkInterfaceDelete::new(self)
     }
 
@@ -27487,7 +27487,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn instance_reboot(&self) -> builder::InstanceReboot {
+    pub fn instance_reboot(&self) -> builder::InstanceReboot<'_> {
         builder::InstanceReboot::new(self)
     }
 
@@ -27525,7 +27525,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn instance_serial_console(&self) -> builder::InstanceSerialConsole {
+    pub fn instance_serial_console(&self) -> builder::InstanceSerialConsole<'_> {
         builder::InstanceSerialConsole::new(self)
     }
 
@@ -27545,7 +27545,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn instance_serial_console_stream(&self) -> builder::InstanceSerialConsoleStream {
+    pub fn instance_serial_console_stream(&self) -> builder::InstanceSerialConsoleStream<'_> {
         builder::InstanceSerialConsoleStream::new(self)
     }
 
@@ -27565,7 +27565,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn instance_start(&self) -> builder::InstanceStart {
+    pub fn instance_start(&self) -> builder::InstanceStart<'_> {
         builder::InstanceStart::new(self)
     }
 
@@ -27585,7 +27585,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn instance_stop(&self) -> builder::InstanceStop {
+    pub fn instance_stop(&self) -> builder::InstanceStop<'_> {
         builder::InstanceStop::new(self)
     }
 
@@ -27606,7 +27606,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn project_policy_view(&self) -> builder::ProjectPolicyView {
+    pub fn project_policy_view(&self) -> builder::ProjectPolicyView<'_> {
         builder::ProjectPolicyView::new(self)
     }
 
@@ -27627,7 +27627,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn project_policy_update(&self) -> builder::ProjectPolicyUpdate {
+    pub fn project_policy_update(&self) -> builder::ProjectPolicyUpdate<'_> {
         builder::ProjectPolicyUpdate::new(self)
     }
 
@@ -27653,7 +27653,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn snapshot_list(&self) -> builder::SnapshotList {
+    pub fn snapshot_list(&self) -> builder::SnapshotList<'_> {
         builder::SnapshotList::new(self)
     }
 
@@ -27676,7 +27676,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn snapshot_create(&self) -> builder::SnapshotCreate {
+    pub fn snapshot_create(&self) -> builder::SnapshotCreate<'_> {
         builder::SnapshotCreate::new(self)
     }
 
@@ -27694,7 +27694,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn snapshot_view(&self) -> builder::SnapshotView {
+    pub fn snapshot_view(&self) -> builder::SnapshotView<'_> {
         builder::SnapshotView::new(self)
     }
 
@@ -27712,7 +27712,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn snapshot_delete(&self) -> builder::SnapshotDelete {
+    pub fn snapshot_delete(&self) -> builder::SnapshotDelete<'_> {
         builder::SnapshotDelete::new(self)
     }
 
@@ -27738,7 +27738,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn vpc_list(&self) -> builder::VpcList {
+    pub fn vpc_list(&self) -> builder::VpcList<'_> {
         builder::VpcList::new(self)
     }
 
@@ -27759,7 +27759,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn vpc_create(&self) -> builder::VpcCreate {
+    pub fn vpc_create(&self) -> builder::VpcCreate<'_> {
         builder::VpcCreate::new(self)
     }
 
@@ -27777,7 +27777,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn vpc_view(&self) -> builder::VpcView {
+    pub fn vpc_view(&self) -> builder::VpcView<'_> {
         builder::VpcView::new(self)
     }
 
@@ -27796,7 +27796,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn vpc_update(&self) -> builder::VpcUpdate {
+    pub fn vpc_update(&self) -> builder::VpcUpdate<'_> {
         builder::VpcUpdate::new(self)
     }
 
@@ -27814,7 +27814,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn vpc_delete(&self) -> builder::VpcDelete {
+    pub fn vpc_delete(&self) -> builder::VpcDelete<'_> {
         builder::VpcDelete::new(self)
     }
 
@@ -27832,7 +27832,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn vpc_firewall_rules_view(&self) -> builder::VpcFirewallRulesView {
+    pub fn vpc_firewall_rules_view(&self) -> builder::VpcFirewallRulesView<'_> {
         builder::VpcFirewallRulesView::new(self)
     }
 
@@ -27851,7 +27851,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn vpc_firewall_rules_update(&self) -> builder::VpcFirewallRulesUpdate {
+    pub fn vpc_firewall_rules_update(&self) -> builder::VpcFirewallRulesUpdate<'_> {
         builder::VpcFirewallRulesUpdate::new(self)
     }
 
@@ -27880,7 +27880,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn vpc_router_list(&self) -> builder::VpcRouterList {
+    pub fn vpc_router_list(&self) -> builder::VpcRouterList<'_> {
         builder::VpcRouterList::new(self)
     }
 
@@ -27899,7 +27899,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn vpc_router_create(&self) -> builder::VpcRouterCreate {
+    pub fn vpc_router_create(&self) -> builder::VpcRouterCreate<'_> {
         builder::VpcRouterCreate::new(self)
     }
 
@@ -27918,7 +27918,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn vpc_router_view(&self) -> builder::VpcRouterView {
+    pub fn vpc_router_view(&self) -> builder::VpcRouterView<'_> {
         builder::VpcRouterView::new(self)
     }
 
@@ -27938,7 +27938,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn vpc_router_update(&self) -> builder::VpcRouterUpdate {
+    pub fn vpc_router_update(&self) -> builder::VpcRouterUpdate<'_> {
         builder::VpcRouterUpdate::new(self)
     }
 
@@ -27957,7 +27957,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn vpc_router_delete(&self) -> builder::VpcRouterDelete {
+    pub fn vpc_router_delete(&self) -> builder::VpcRouterDelete<'_> {
         builder::VpcRouterDelete::new(self)
     }
 
@@ -27990,7 +27990,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn vpc_router_route_list(&self) -> builder::VpcRouterRouteList {
+    pub fn vpc_router_route_list(&self) -> builder::VpcRouterRouteList<'_> {
         builder::VpcRouterRouteList::new(self)
     }
 
@@ -28010,7 +28010,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn vpc_router_route_create(&self) -> builder::VpcRouterRouteCreate {
+    pub fn vpc_router_route_create(&self) -> builder::VpcRouterRouteCreate<'_> {
         builder::VpcRouterRouteCreate::new(self)
     }
 
@@ -28030,7 +28030,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn vpc_router_route_view(&self) -> builder::VpcRouterRouteView {
+    pub fn vpc_router_route_view(&self) -> builder::VpcRouterRouteView<'_> {
         builder::VpcRouterRouteView::new(self)
     }
 
@@ -28051,7 +28051,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn vpc_router_route_update(&self) -> builder::VpcRouterRouteUpdate {
+    pub fn vpc_router_route_update(&self) -> builder::VpcRouterRouteUpdate<'_> {
         builder::VpcRouterRouteUpdate::new(self)
     }
 
@@ -28071,7 +28071,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn vpc_router_route_delete(&self) -> builder::VpcRouterRouteDelete {
+    pub fn vpc_router_route_delete(&self) -> builder::VpcRouterRouteDelete<'_> {
         builder::VpcRouterRouteDelete::new(self)
     }
 
@@ -28100,7 +28100,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn vpc_subnet_list(&self) -> builder::VpcSubnetList {
+    pub fn vpc_subnet_list(&self) -> builder::VpcSubnetList<'_> {
         builder::VpcSubnetList::new(self)
     }
 
@@ -28119,7 +28119,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn vpc_subnet_create(&self) -> builder::VpcSubnetCreate {
+    pub fn vpc_subnet_create(&self) -> builder::VpcSubnetCreate<'_> {
         builder::VpcSubnetCreate::new(self)
     }
 
@@ -28138,7 +28138,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn vpc_subnet_view(&self) -> builder::VpcSubnetView {
+    pub fn vpc_subnet_view(&self) -> builder::VpcSubnetView<'_> {
         builder::VpcSubnetView::new(self)
     }
 
@@ -28158,7 +28158,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn vpc_subnet_update(&self) -> builder::VpcSubnetUpdate {
+    pub fn vpc_subnet_update(&self) -> builder::VpcSubnetUpdate<'_> {
         builder::VpcSubnetUpdate::new(self)
     }
 
@@ -28177,7 +28177,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn vpc_subnet_delete(&self) -> builder::VpcSubnetDelete {
+    pub fn vpc_subnet_delete(&self) -> builder::VpcSubnetDelete<'_> {
         builder::VpcSubnetDelete::new(self)
     }
 
@@ -28208,7 +28208,9 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn vpc_subnet_list_network_interfaces(&self) -> builder::VpcSubnetListNetworkInterfaces {
+    pub fn vpc_subnet_list_network_interfaces(
+        &self,
+    ) -> builder::VpcSubnetListNetworkInterfaces<'_> {
         builder::VpcSubnetListNetworkInterfaces::new(self)
     }
 
@@ -28221,7 +28223,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn policy_view(&self) -> builder::PolicyView {
+    pub fn policy_view(&self) -> builder::PolicyView<'_> {
         builder::PolicyView::new(self)
     }
 
@@ -28235,7 +28237,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn policy_update(&self) -> builder::PolicyUpdate {
+    pub fn policy_update(&self) -> builder::PolicyUpdate<'_> {
         builder::PolicyUpdate::new(self)
     }
 
@@ -28254,7 +28256,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn role_list(&self) -> builder::RoleList {
+    pub fn role_list(&self) -> builder::RoleList<'_> {
         builder::RoleList::new(self)
     }
 
@@ -28270,7 +28272,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn role_view(&self) -> builder::RoleView {
+    pub fn role_view(&self) -> builder::RoleView<'_> {
         builder::RoleView::new(self)
     }
 
@@ -28283,7 +28285,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn session_me(&self) -> builder::SessionMe {
+    pub fn session_me(&self) -> builder::SessionMe<'_> {
         builder::SessionMe::new(self)
     }
 
@@ -28304,7 +28306,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn session_me_groups(&self) -> builder::SessionMeGroups {
+    pub fn session_me_groups(&self) -> builder::SessionMeGroups<'_> {
         builder::SessionMeGroups::new(self)
     }
 
@@ -28327,7 +28329,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn session_sshkey_list(&self) -> builder::SessionSshkeyList {
+    pub fn session_sshkey_list(&self) -> builder::SessionSshkeyList<'_> {
         builder::SessionSshkeyList::new(self)
     }
 
@@ -28343,7 +28345,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn session_sshkey_create(&self) -> builder::SessionSshkeyCreate {
+    pub fn session_sshkey_create(&self) -> builder::SessionSshkeyCreate<'_> {
         builder::SessionSshkeyCreate::new(self)
     }
 
@@ -28360,7 +28362,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn session_sshkey_view(&self) -> builder::SessionSshkeyView {
+    pub fn session_sshkey_view(&self) -> builder::SessionSshkeyView<'_> {
         builder::SessionSshkeyView::new(self)
     }
 
@@ -28377,7 +28379,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn session_sshkey_delete(&self) -> builder::SessionSshkeyDelete {
+    pub fn session_sshkey_delete(&self) -> builder::SessionSshkeyDelete<'_> {
         builder::SessionSshkeyDelete::new(self)
     }
 
@@ -28391,7 +28393,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn system_image_view_by_id(&self) -> builder::SystemImageViewById {
+    pub fn system_image_view_by_id(&self) -> builder::SystemImageViewById<'_> {
         builder::SystemImageViewById::new(self)
     }
 
@@ -28405,7 +28407,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn ip_pool_view_by_id(&self) -> builder::IpPoolViewById {
+    pub fn ip_pool_view_by_id(&self) -> builder::IpPoolViewById<'_> {
         builder::IpPoolViewById::new(self)
     }
 
@@ -28419,7 +28421,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn silo_view_by_id(&self) -> builder::SiloViewById {
+    pub fn silo_view_by_id(&self) -> builder::SiloViewById<'_> {
         builder::SiloViewById::new(self)
     }
 
@@ -28444,7 +28446,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn certificate_list(&self) -> builder::CertificateList {
+    pub fn certificate_list(&self) -> builder::CertificateList<'_> {
         builder::CertificateList::new(self)
     }
 
@@ -28461,7 +28463,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn certificate_create(&self) -> builder::CertificateCreate {
+    pub fn certificate_create(&self) -> builder::CertificateCreate<'_> {
         builder::CertificateCreate::new(self)
     }
 
@@ -28477,7 +28479,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn certificate_view(&self) -> builder::CertificateView {
+    pub fn certificate_view(&self) -> builder::CertificateView<'_> {
         builder::CertificateView::new(self)
     }
 
@@ -28493,7 +28495,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn certificate_delete(&self) -> builder::CertificateDelete {
+    pub fn certificate_delete(&self) -> builder::CertificateDelete<'_> {
         builder::CertificateDelete::new(self)
     }
 
@@ -28514,7 +28516,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn physical_disk_list(&self) -> builder::PhysicalDiskList {
+    pub fn physical_disk_list(&self) -> builder::PhysicalDiskList<'_> {
         builder::PhysicalDiskList::new(self)
     }
 
@@ -28535,7 +28537,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn rack_list(&self) -> builder::RackList {
+    pub fn rack_list(&self) -> builder::RackList<'_> {
         builder::RackList::new(self)
     }
 
@@ -28551,7 +28553,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn rack_view(&self) -> builder::RackView {
+    pub fn rack_view(&self) -> builder::RackView<'_> {
         builder::RackView::new(self)
     }
 
@@ -28572,7 +28574,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn sled_list(&self) -> builder::SledList {
+    pub fn sled_list(&self) -> builder::SledList<'_> {
         builder::SledList::new(self)
     }
 
@@ -28588,7 +28590,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn sled_view(&self) -> builder::SledView {
+    pub fn sled_view(&self) -> builder::SledView<'_> {
         builder::SledView::new(self)
     }
 
@@ -28611,7 +28613,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn sled_physical_disk_list(&self) -> builder::SledPhysicalDiskList {
+    pub fn sled_physical_disk_list(&self) -> builder::SledPhysicalDiskList<'_> {
         builder::SledPhysicalDiskList::new(self)
     }
 
@@ -28636,7 +28638,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn system_image_list(&self) -> builder::SystemImageList {
+    pub fn system_image_list(&self) -> builder::SystemImageList<'_> {
         builder::SystemImageList::new(self)
     }
 
@@ -28653,7 +28655,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn system_image_create(&self) -> builder::SystemImageCreate {
+    pub fn system_image_create(&self) -> builder::SystemImageCreate<'_> {
         builder::SystemImageCreate::new(self)
     }
 
@@ -28669,7 +28671,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn system_image_view(&self) -> builder::SystemImageView {
+    pub fn system_image_view(&self) -> builder::SystemImageView<'_> {
         builder::SystemImageView::new(self)
     }
 
@@ -28687,7 +28689,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn system_image_delete(&self) -> builder::SystemImageDelete {
+    pub fn system_image_delete(&self) -> builder::SystemImageDelete<'_> {
         builder::SystemImageDelete::new(self)
     }
 
@@ -28708,7 +28710,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn ip_pool_list(&self) -> builder::IpPoolList {
+    pub fn ip_pool_list(&self) -> builder::IpPoolList<'_> {
         builder::IpPoolList::new(self)
     }
 
@@ -28722,7 +28724,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn ip_pool_create(&self) -> builder::IpPoolCreate {
+    pub fn ip_pool_create(&self) -> builder::IpPoolCreate<'_> {
         builder::IpPoolCreate::new(self)
     }
 
@@ -28736,7 +28738,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn ip_pool_view(&self) -> builder::IpPoolView {
+    pub fn ip_pool_view(&self) -> builder::IpPoolView<'_> {
         builder::IpPoolView::new(self)
     }
 
@@ -28751,7 +28753,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn ip_pool_update(&self) -> builder::IpPoolUpdate {
+    pub fn ip_pool_update(&self) -> builder::IpPoolUpdate<'_> {
         builder::IpPoolUpdate::new(self)
     }
 
@@ -28765,7 +28767,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn ip_pool_delete(&self) -> builder::IpPoolDelete {
+    pub fn ip_pool_delete(&self) -> builder::IpPoolDelete<'_> {
         builder::IpPoolDelete::new(self)
     }
 
@@ -28788,7 +28790,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn ip_pool_range_list(&self) -> builder::IpPoolRangeList {
+    pub fn ip_pool_range_list(&self) -> builder::IpPoolRangeList<'_> {
         builder::IpPoolRangeList::new(self)
     }
 
@@ -28803,7 +28805,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn ip_pool_range_add(&self) -> builder::IpPoolRangeAdd {
+    pub fn ip_pool_range_add(&self) -> builder::IpPoolRangeAdd<'_> {
         builder::IpPoolRangeAdd::new(self)
     }
 
@@ -28818,7 +28820,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn ip_pool_range_remove(&self) -> builder::IpPoolRangeRemove {
+    pub fn ip_pool_range_remove(&self) -> builder::IpPoolRangeRemove<'_> {
         builder::IpPoolRangeRemove::new(self)
     }
 
@@ -28831,7 +28833,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn ip_pool_service_view(&self) -> builder::IpPoolServiceView {
+    pub fn ip_pool_service_view(&self) -> builder::IpPoolServiceView<'_> {
         builder::IpPoolServiceView::new(self)
     }
 
@@ -28852,7 +28854,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn ip_pool_service_range_list(&self) -> builder::IpPoolServiceRangeList {
+    pub fn ip_pool_service_range_list(&self) -> builder::IpPoolServiceRangeList<'_> {
         builder::IpPoolServiceRangeList::new(self)
     }
 
@@ -28866,7 +28868,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn ip_pool_service_range_add(&self) -> builder::IpPoolServiceRangeAdd {
+    pub fn ip_pool_service_range_add(&self) -> builder::IpPoolServiceRangeAdd<'_> {
         builder::IpPoolServiceRangeAdd::new(self)
     }
 
@@ -28880,7 +28882,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn ip_pool_service_range_remove(&self) -> builder::IpPoolServiceRangeRemove {
+    pub fn ip_pool_service_range_remove(&self) -> builder::IpPoolServiceRangeRemove<'_> {
         builder::IpPoolServiceRangeRemove::new(self)
     }
 
@@ -28907,7 +28909,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn system_metric(&self) -> builder::SystemMetric {
+    pub fn system_metric(&self) -> builder::SystemMetric<'_> {
         builder::SystemMetric::new(self)
     }
 
@@ -28920,7 +28922,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn system_policy_view(&self) -> builder::SystemPolicyView {
+    pub fn system_policy_view(&self) -> builder::SystemPolicyView<'_> {
         builder::SystemPolicyView::new(self)
     }
 
@@ -28934,7 +28936,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn system_policy_update(&self) -> builder::SystemPolicyUpdate {
+    pub fn system_policy_update(&self) -> builder::SystemPolicyUpdate<'_> {
         builder::SystemPolicyUpdate::new(self)
     }
 
@@ -28955,7 +28957,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn saga_list(&self) -> builder::SagaList {
+    pub fn saga_list(&self) -> builder::SagaList<'_> {
         builder::SagaList::new(self)
     }
 
@@ -28969,7 +28971,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn saga_view(&self) -> builder::SagaView {
+    pub fn saga_view(&self) -> builder::SagaView<'_> {
         builder::SagaView::new(self)
     }
 
@@ -28992,7 +28994,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn silo_list(&self) -> builder::SiloList {
+    pub fn silo_list(&self) -> builder::SiloList<'_> {
         builder::SiloList::new(self)
     }
 
@@ -29006,7 +29008,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn silo_create(&self) -> builder::SiloCreate {
+    pub fn silo_create(&self) -> builder::SiloCreate<'_> {
         builder::SiloCreate::new(self)
     }
 
@@ -29024,7 +29026,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn silo_view(&self) -> builder::SiloView {
+    pub fn silo_view(&self) -> builder::SiloView<'_> {
         builder::SiloView::new(self)
     }
 
@@ -29042,7 +29044,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn silo_delete(&self) -> builder::SiloDelete {
+    pub fn silo_delete(&self) -> builder::SiloDelete<'_> {
         builder::SiloDelete::new(self)
     }
 
@@ -29065,7 +29067,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn silo_identity_provider_list(&self) -> builder::SiloIdentityProviderList {
+    pub fn silo_identity_provider_list(&self) -> builder::SiloIdentityProviderList<'_> {
         builder::SiloIdentityProviderList::new(self)
     }
 
@@ -29088,7 +29090,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn local_idp_user_create(&self) -> builder::LocalIdpUserCreate {
+    pub fn local_idp_user_create(&self) -> builder::LocalIdpUserCreate<'_> {
         builder::LocalIdpUserCreate::new(self)
     }
 
@@ -29107,7 +29109,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn local_idp_user_delete(&self) -> builder::LocalIdpUserDelete {
+    pub fn local_idp_user_delete(&self) -> builder::LocalIdpUserDelete<'_> {
         builder::LocalIdpUserDelete::new(self)
     }
 
@@ -29132,7 +29134,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn local_idp_user_set_password(&self) -> builder::LocalIdpUserSetPassword {
+    pub fn local_idp_user_set_password(&self) -> builder::LocalIdpUserSetPassword<'_> {
         builder::LocalIdpUserSetPassword::new(self)
     }
 
@@ -29151,7 +29153,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn saml_identity_provider_create(&self) -> builder::SamlIdentityProviderCreate {
+    pub fn saml_identity_provider_create(&self) -> builder::SamlIdentityProviderCreate<'_> {
         builder::SamlIdentityProviderCreate::new(self)
     }
 
@@ -29170,7 +29172,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn saml_identity_provider_view(&self) -> builder::SamlIdentityProviderView {
+    pub fn saml_identity_provider_view(&self) -> builder::SamlIdentityProviderView<'_> {
         builder::SamlIdentityProviderView::new(self)
     }
 
@@ -29186,7 +29188,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn silo_policy_view(&self) -> builder::SiloPolicyView {
+    pub fn silo_policy_view(&self) -> builder::SiloPolicyView<'_> {
         builder::SiloPolicyView::new(self)
     }
 
@@ -29204,7 +29206,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn silo_policy_update(&self) -> builder::SiloPolicyUpdate {
+    pub fn silo_policy_update(&self) -> builder::SiloPolicyUpdate<'_> {
         builder::SiloPolicyUpdate::new(self)
     }
 
@@ -29227,7 +29229,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn silo_users_list(&self) -> builder::SiloUsersList {
+    pub fn silo_users_list(&self) -> builder::SiloUsersList<'_> {
         builder::SiloUsersList::new(self)
     }
 
@@ -29245,7 +29247,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn silo_user_view(&self) -> builder::SiloUserView {
+    pub fn silo_user_view(&self) -> builder::SiloUserView<'_> {
         builder::SiloUserView::new(self)
     }
 
@@ -29266,7 +29268,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn system_user_list(&self) -> builder::SystemUserList {
+    pub fn system_user_list(&self) -> builder::SystemUserList<'_> {
         builder::SystemUserList::new(self)
     }
 
@@ -29282,7 +29284,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn system_user_view(&self) -> builder::SystemUserView {
+    pub fn system_user_view(&self) -> builder::SystemUserView<'_> {
         builder::SystemUserView::new(self)
     }
 
@@ -29301,7 +29303,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn timeseries_schema_get(&self) -> builder::TimeseriesSchemaGet {
+    pub fn timeseries_schema_get(&self) -> builder::TimeseriesSchemaGet<'_> {
         builder::TimeseriesSchemaGet::new(self)
     }
 
@@ -29322,7 +29324,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn user_list(&self) -> builder::UserList {
+    pub fn user_list(&self) -> builder::UserList<'_> {
         builder::UserList::new(self)
     }
 
@@ -29347,7 +29349,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn disk_list_v1(&self) -> builder::DiskListV1 {
+    pub fn disk_list_v1(&self) -> builder::DiskListV1<'_> {
         builder::DiskListV1::new(self)
     }
 
@@ -29363,7 +29365,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn disk_create_v1(&self) -> builder::DiskCreateV1 {
+    pub fn disk_create_v1(&self) -> builder::DiskCreateV1<'_> {
         builder::DiskCreateV1::new(self)
     }
 
@@ -29379,7 +29381,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn disk_view_v1(&self) -> builder::DiskViewV1 {
+    pub fn disk_view_v1(&self) -> builder::DiskViewV1<'_> {
         builder::DiskViewV1::new(self)
     }
 
@@ -29395,7 +29397,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn disk_delete_v1(&self) -> builder::DiskDeleteV1 {
+    pub fn disk_delete_v1(&self) -> builder::DiskDeleteV1<'_> {
         builder::DiskDeleteV1::new(self)
     }
 
@@ -29420,7 +29422,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn instance_list_v1(&self) -> builder::InstanceListV1 {
+    pub fn instance_list_v1(&self) -> builder::InstanceListV1<'_> {
         builder::InstanceListV1::new(self)
     }
 
@@ -29436,7 +29438,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn instance_create_v1(&self) -> builder::InstanceCreateV1 {
+    pub fn instance_create_v1(&self) -> builder::InstanceCreateV1<'_> {
         builder::InstanceCreateV1::new(self)
     }
 
@@ -29452,7 +29454,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn instance_view_v1(&self) -> builder::InstanceViewV1 {
+    pub fn instance_view_v1(&self) -> builder::InstanceViewV1<'_> {
         builder::InstanceViewV1::new(self)
     }
 
@@ -29468,7 +29470,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn instance_delete_v1(&self) -> builder::InstanceDeleteV1 {
+    pub fn instance_delete_v1(&self) -> builder::InstanceDeleteV1<'_> {
         builder::InstanceDeleteV1::new(self)
     }
 
@@ -29495,7 +29497,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn instance_disk_list_v1(&self) -> builder::InstanceDiskListV1 {
+    pub fn instance_disk_list_v1(&self) -> builder::InstanceDiskListV1<'_> {
         builder::InstanceDiskListV1::new(self)
     }
 
@@ -29512,7 +29514,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn instance_disk_attach_v1(&self) -> builder::InstanceDiskAttachV1 {
+    pub fn instance_disk_attach_v1(&self) -> builder::InstanceDiskAttachV1<'_> {
         builder::InstanceDiskAttachV1::new(self)
     }
 
@@ -29529,7 +29531,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn instance_disk_detach_v1(&self) -> builder::InstanceDiskDetachV1 {
+    pub fn instance_disk_detach_v1(&self) -> builder::InstanceDiskDetachV1<'_> {
         builder::InstanceDiskDetachV1::new(self)
     }
 
@@ -29546,7 +29548,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn instance_migrate_v1(&self) -> builder::InstanceMigrateV1 {
+    pub fn instance_migrate_v1(&self) -> builder::InstanceMigrateV1<'_> {
         builder::InstanceMigrateV1::new(self)
     }
 
@@ -29562,7 +29564,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn instance_reboot_v1(&self) -> builder::InstanceRebootV1 {
+    pub fn instance_reboot_v1(&self) -> builder::InstanceRebootV1<'_> {
         builder::InstanceRebootV1::new(self)
     }
 
@@ -29596,7 +29598,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn instance_serial_console_v1(&self) -> builder::InstanceSerialConsoleV1 {
+    pub fn instance_serial_console_v1(&self) -> builder::InstanceSerialConsoleV1<'_> {
         builder::InstanceSerialConsoleV1::new(self)
     }
 
@@ -29613,7 +29615,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn instance_serial_console_stream_v1(&self) -> builder::InstanceSerialConsoleStreamV1 {
+    pub fn instance_serial_console_stream_v1(&self) -> builder::InstanceSerialConsoleStreamV1<'_> {
         builder::InstanceSerialConsoleStreamV1::new(self)
     }
 
@@ -29629,7 +29631,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn instance_start_v1(&self) -> builder::InstanceStartV1 {
+    pub fn instance_start_v1(&self) -> builder::InstanceStartV1<'_> {
         builder::InstanceStartV1::new(self)
     }
 
@@ -29645,7 +29647,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn instance_stop_v1(&self) -> builder::InstanceStopV1 {
+    pub fn instance_stop_v1(&self) -> builder::InstanceStopV1<'_> {
         builder::InstanceStopV1::new(self)
     }
 
@@ -29666,7 +29668,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn organization_list_v1(&self) -> builder::OrganizationListV1 {
+    pub fn organization_list_v1(&self) -> builder::OrganizationListV1<'_> {
         builder::OrganizationListV1::new(self)
     }
 
@@ -29680,7 +29682,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn organization_create_v1(&self) -> builder::OrganizationCreateV1 {
+    pub fn organization_create_v1(&self) -> builder::OrganizationCreateV1<'_> {
         builder::OrganizationCreateV1::new(self)
     }
 
@@ -29694,7 +29696,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn organization_view_v1(&self) -> builder::OrganizationViewV1 {
+    pub fn organization_view_v1(&self) -> builder::OrganizationViewV1<'_> {
         builder::OrganizationViewV1::new(self)
     }
 
@@ -29709,7 +29711,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn organization_update_v1(&self) -> builder::OrganizationUpdateV1 {
+    pub fn organization_update_v1(&self) -> builder::OrganizationUpdateV1<'_> {
         builder::OrganizationUpdateV1::new(self)
     }
 
@@ -29723,7 +29725,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn organization_delete_v1(&self) -> builder::OrganizationDeleteV1 {
+    pub fn organization_delete_v1(&self) -> builder::OrganizationDeleteV1<'_> {
         builder::OrganizationDeleteV1::new(self)
     }
 
@@ -29737,7 +29739,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn organization_policy_view_v1(&self) -> builder::OrganizationPolicyViewV1 {
+    pub fn organization_policy_view_v1(&self) -> builder::OrganizationPolicyViewV1<'_> {
         builder::OrganizationPolicyViewV1::new(self)
     }
 
@@ -29752,7 +29754,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn organization_policy_update_v1(&self) -> builder::OrganizationPolicyUpdateV1 {
+    pub fn organization_policy_update_v1(&self) -> builder::OrganizationPolicyUpdateV1<'_> {
         builder::OrganizationPolicyUpdateV1::new(self)
     }
 
@@ -29775,7 +29777,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn project_list_v1(&self) -> builder::ProjectListV1 {
+    pub fn project_list_v1(&self) -> builder::ProjectListV1<'_> {
         builder::ProjectListV1::new(self)
     }
 
@@ -29790,7 +29792,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn project_create_v1(&self) -> builder::ProjectCreateV1 {
+    pub fn project_create_v1(&self) -> builder::ProjectCreateV1<'_> {
         builder::ProjectCreateV1::new(self)
     }
 
@@ -29805,7 +29807,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn project_view_v1(&self) -> builder::ProjectViewV1 {
+    pub fn project_view_v1(&self) -> builder::ProjectViewV1<'_> {
         builder::ProjectViewV1::new(self)
     }
 
@@ -29821,7 +29823,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn project_update_v1(&self) -> builder::ProjectUpdateV1 {
+    pub fn project_update_v1(&self) -> builder::ProjectUpdateV1<'_> {
         builder::ProjectUpdateV1::new(self)
     }
 
@@ -29836,7 +29838,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn project_delete_v1(&self) -> builder::ProjectDeleteV1 {
+    pub fn project_delete_v1(&self) -> builder::ProjectDeleteV1<'_> {
         builder::ProjectDeleteV1::new(self)
     }
 
@@ -29851,7 +29853,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn project_policy_view_v1(&self) -> builder::ProjectPolicyViewV1 {
+    pub fn project_policy_view_v1(&self) -> builder::ProjectPolicyViewV1<'_> {
         builder::ProjectPolicyViewV1::new(self)
     }
 
@@ -29867,7 +29869,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn project_policy_update_v1(&self) -> builder::ProjectPolicyUpdateV1 {
+    pub fn project_policy_update_v1(&self) -> builder::ProjectPolicyUpdateV1<'_> {
         builder::ProjectPolicyUpdateV1::new(self)
     }
 
@@ -29888,7 +29890,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn system_component_version_list(&self) -> builder::SystemComponentVersionList {
+    pub fn system_component_version_list(&self) -> builder::SystemComponentVersionList<'_> {
         builder::SystemComponentVersionList::new(self)
     }
 
@@ -29909,7 +29911,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn update_deployments_list(&self) -> builder::UpdateDeploymentsList {
+    pub fn update_deployments_list(&self) -> builder::UpdateDeploymentsList<'_> {
         builder::UpdateDeploymentsList::new(self)
     }
 
@@ -29923,7 +29925,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn update_deployment_view(&self) -> builder::UpdateDeploymentView {
+    pub fn update_deployment_view(&self) -> builder::UpdateDeploymentView<'_> {
         builder::UpdateDeploymentView::new(self)
     }
 
@@ -29936,7 +29938,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn system_update_refresh(&self) -> builder::SystemUpdateRefresh {
+    pub fn system_update_refresh(&self) -> builder::SystemUpdateRefresh<'_> {
         builder::SystemUpdateRefresh::new(self)
     }
 
@@ -29950,7 +29952,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn system_update_start(&self) -> builder::SystemUpdateStart {
+    pub fn system_update_start(&self) -> builder::SystemUpdateStart<'_> {
         builder::SystemUpdateStart::new(self)
     }
 
@@ -29965,7 +29967,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn system_update_stop(&self) -> builder::SystemUpdateStop {
+    pub fn system_update_stop(&self) -> builder::SystemUpdateStop<'_> {
         builder::SystemUpdateStop::new(self)
     }
 
@@ -29986,7 +29988,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn system_update_list(&self) -> builder::SystemUpdateList {
+    pub fn system_update_list(&self) -> builder::SystemUpdateList<'_> {
         builder::SystemUpdateList::new(self)
     }
 
@@ -30000,7 +30002,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn system_update_view(&self) -> builder::SystemUpdateView {
+    pub fn system_update_view(&self) -> builder::SystemUpdateView<'_> {
         builder::SystemUpdateView::new(self)
     }
 
@@ -30015,7 +30017,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn system_update_components_list(&self) -> builder::SystemUpdateComponentsList {
+    pub fn system_update_components_list(&self) -> builder::SystemUpdateComponentsList<'_> {
         builder::SystemUpdateComponentsList::new(self)
     }
 
@@ -30028,7 +30030,7 @@ impl Client {
     ///    .send()
     ///    .await;
     /// ```
-    pub fn system_version(&self) -> builder::SystemVersion {
+    pub fn system_version(&self) -> builder::SystemVersion<'_> {
         builder::SystemVersion::new(self)
     }
 }
