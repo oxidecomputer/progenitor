@@ -896,16 +896,16 @@ pub mod types {
     impl ::std::fmt::Display for InstanceState {
         fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::Creating => write!(f, "Creating"),
-                Self::Starting => write!(f, "Starting"),
-                Self::Running => write!(f, "Running"),
-                Self::Stopping => write!(f, "Stopping"),
-                Self::Stopped => write!(f, "Stopped"),
-                Self::Rebooting => write!(f, "Rebooting"),
-                Self::Migrating => write!(f, "Migrating"),
-                Self::Repairing => write!(f, "Repairing"),
-                Self::Failed => write!(f, "Failed"),
-                Self::Destroyed => write!(f, "Destroyed"),
+                Self::Creating => f.write_str("Creating"),
+                Self::Starting => f.write_str("Starting"),
+                Self::Running => f.write_str("Running"),
+                Self::Stopping => f.write_str("Stopping"),
+                Self::Stopped => f.write_str("Stopped"),
+                Self::Rebooting => f.write_str("Rebooting"),
+                Self::Migrating => f.write_str("Migrating"),
+                Self::Repairing => f.write_str("Repairing"),
+                Self::Failed => f.write_str("Failed"),
+                Self::Destroyed => f.write_str("Destroyed"),
             }
         }
     }
@@ -1082,10 +1082,10 @@ pub mod types {
     impl ::std::fmt::Display for InstanceStateRequested {
         fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::Run => write!(f, "Run"),
-                Self::Stop => write!(f, "Stop"),
-                Self::Reboot => write!(f, "Reboot"),
-                Self::MigrateStart => write!(f, "MigrateStart"),
+                Self::Run => f.write_str("Run"),
+                Self::Stop => f.write_str("Stop"),
+                Self::Reboot => f.write_str("Reboot"),
+                Self::MigrateStart => f.write_str("MigrateStart"),
             }
         }
     }
@@ -1185,16 +1185,16 @@ pub mod types {
     impl ::std::fmt::Display for MigrationState {
         fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::Sync => write!(f, "Sync"),
-                Self::RamPush => write!(f, "RamPush"),
-                Self::Pause => write!(f, "Pause"),
-                Self::RamPushDirty => write!(f, "RamPushDirty"),
-                Self::Device => write!(f, "Device"),
-                Self::Arch => write!(f, "Arch"),
-                Self::Resume => write!(f, "Resume"),
-                Self::RamPull => write!(f, "RamPull"),
-                Self::Finish => write!(f, "Finish"),
-                Self::Error => write!(f, "Error"),
+                Self::Sync => f.write_str("Sync"),
+                Self::RamPush => f.write_str("RamPush"),
+                Self::Pause => f.write_str("Pause"),
+                Self::RamPushDirty => f.write_str("RamPushDirty"),
+                Self::Device => f.write_str("Device"),
+                Self::Arch => f.write_str("Arch"),
+                Self::Resume => f.write_str("Resume"),
+                Self::RamPull => f.write_str("RamPull"),
+                Self::Finish => f.write_str("Finish"),
+                Self::Error => f.write_str("Error"),
             }
         }
     }
