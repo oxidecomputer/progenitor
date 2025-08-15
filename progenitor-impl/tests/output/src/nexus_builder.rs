@@ -1317,15 +1317,15 @@ pub mod types {
     impl ::std::fmt::Display for DatumType {
         fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::Bool => write!(f, "bool"),
-                Self::I64 => write!(f, "i64"),
-                Self::F64 => write!(f, "f64"),
-                Self::String => write!(f, "string"),
-                Self::Bytes => write!(f, "bytes"),
-                Self::CumulativeI64 => write!(f, "cumulative_i64"),
-                Self::CumulativeF64 => write!(f, "cumulative_f64"),
-                Self::HistogramI64 => write!(f, "histogram_i64"),
-                Self::HistogramF64 => write!(f, "histogram_f64"),
+                Self::Bool => f.write_str("bool"),
+                Self::I64 => f.write_str("i64"),
+                Self::F64 => f.write_str("f64"),
+                Self::String => f.write_str("string"),
+                Self::Bytes => f.write_str("bytes"),
+                Self::CumulativeI64 => f.write_str("cumulative_i64"),
+                Self::CumulativeF64 => f.write_str("cumulative_f64"),
+                Self::HistogramI64 => f.write_str("histogram_i64"),
+                Self::HistogramF64 => f.write_str("histogram_f64"),
             }
         }
     }
@@ -1873,12 +1873,12 @@ pub mod types {
     impl ::std::fmt::Display for DiskMetricName {
         fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::Activated => write!(f, "activated"),
-                Self::Flush => write!(f, "flush"),
-                Self::Read => write!(f, "read"),
-                Self::ReadBytes => write!(f, "read_bytes"),
-                Self::Write => write!(f, "write"),
-                Self::WriteBytes => write!(f, "write_bytes"),
+                Self::Activated => f.write_str("activated"),
+                Self::Flush => f.write_str("flush"),
+                Self::Read => f.write_str("read"),
+                Self::ReadBytes => f.write_str("read_bytes"),
+                Self::Write => f.write_str("write"),
+                Self::WriteBytes => f.write_str("write_bytes"),
             }
         }
     }
@@ -2659,8 +2659,8 @@ pub mod types {
     impl ::std::fmt::Display for FieldSource {
         fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::Target => write!(f, "target"),
-                Self::Metric => write!(f, "metric"),
+                Self::Target => f.write_str("target"),
+                Self::Metric => f.write_str("metric"),
             }
         }
     }
@@ -2755,11 +2755,11 @@ pub mod types {
     impl ::std::fmt::Display for FieldType {
         fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::String => write!(f, "string"),
-                Self::I64 => write!(f, "i64"),
-                Self::IpAddr => write!(f, "ip_addr"),
-                Self::Uuid => write!(f, "uuid"),
-                Self::Bool => write!(f, "bool"),
+                Self::String => f.write_str("string"),
+                Self::I64 => f.write_str("i64"),
+                Self::IpAddr => f.write_str("ip_addr"),
+                Self::Uuid => f.write_str("uuid"),
+                Self::Bool => f.write_str("bool"),
             }
         }
     }
@@ -2849,9 +2849,9 @@ pub mod types {
     impl ::std::fmt::Display for FleetRole {
         fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::Admin => write!(f, "admin"),
-                Self::Collaborator => write!(f, "collaborator"),
-                Self::Viewer => write!(f, "viewer"),
+                Self::Admin => f.write_str("admin"),
+                Self::Collaborator => f.write_str("collaborator"),
+                Self::Viewer => f.write_str("viewer"),
             }
         }
     }
@@ -3685,7 +3685,7 @@ pub mod types {
     impl ::std::fmt::Display for IdSortMode {
         fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::IdAscending => write!(f, "id_ascending"),
+                Self::IdAscending => f.write_str("id_ascending"),
             }
         }
     }
@@ -3913,7 +3913,7 @@ pub mod types {
     impl ::std::fmt::Display for IdentityProviderType {
         fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::Saml => write!(f, "saml"),
+                Self::Saml => f.write_str("saml"),
             }
         }
     }
@@ -3997,8 +3997,8 @@ pub mod types {
     impl ::std::fmt::Display for IdentityType {
         fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::SiloUser => write!(f, "silo_user"),
-                Self::SiloGroup => write!(f, "silo_group"),
+                Self::SiloUser => f.write_str("silo_user"),
+                Self::SiloGroup => f.write_str("silo_group"),
             }
         }
     }
@@ -5302,16 +5302,16 @@ pub mod types {
     impl ::std::fmt::Display for InstanceState {
         fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::Creating => write!(f, "creating"),
-                Self::Starting => write!(f, "starting"),
-                Self::Running => write!(f, "running"),
-                Self::Stopping => write!(f, "stopping"),
-                Self::Stopped => write!(f, "stopped"),
-                Self::Rebooting => write!(f, "rebooting"),
-                Self::Migrating => write!(f, "migrating"),
-                Self::Repairing => write!(f, "repairing"),
-                Self::Failed => write!(f, "failed"),
-                Self::Destroyed => write!(f, "destroyed"),
+                Self::Creating => f.write_str("creating"),
+                Self::Starting => f.write_str("starting"),
+                Self::Running => f.write_str("running"),
+                Self::Stopping => f.write_str("stopping"),
+                Self::Stopped => f.write_str("stopped"),
+                Self::Rebooting => f.write_str("rebooting"),
+                Self::Migrating => f.write_str("migrating"),
+                Self::Repairing => f.write_str("repairing"),
+                Self::Failed => f.write_str("failed"),
+                Self::Destroyed => f.write_str("destroyed"),
             }
         }
     }
@@ -5404,8 +5404,8 @@ pub mod types {
     impl ::std::fmt::Display for IpKind {
         fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::Ephemeral => write!(f, "ephemeral"),
-                Self::Floating => write!(f, "floating"),
+                Self::Ephemeral => f.write_str("ephemeral"),
+                Self::Floating => f.write_str("floating"),
             }
         }
     }
@@ -6010,7 +6010,7 @@ pub mod types {
                     )
                     .unwrap()
                 });
-            if (&*PATTERN).find(value).is_none() {
+            if PATTERN.find(value).is_none() {
                 return Err("doesn't match pattern \
                             \"^(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\\.\
                             ){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])/\
@@ -6169,7 +6169,7 @@ pub mod types {
                     )
                     .unwrap()
                 });
-            if (&*PATTERN).find(value).is_none() {
+            if PATTERN.find(value).is_none() {
                 return Err("doesn't match pattern \
                             \"^([fF][dD])[0-9a-fA-F]{2}:(([0-9a-fA-F]{1,4}:){6}[0-9a-fA-F]{1,\
                             4}|([0-9a-fA-F]{1,4}:){1,6}:)\\/\
@@ -6332,7 +6332,7 @@ pub mod types {
                 ::std::sync::LazyLock::new(|| {
                     ::regress::Regex::new("^[0-9]{1,5}(-[0-9]{1,5})?$").unwrap()
                 });
-            if (&*PATTERN).find(value).is_none() {
+            if PATTERN.find(value).is_none() {
                 return Err("doesn't match pattern \"^[0-9]{1,5}(-[0-9]{1,5})?$\"".into());
             }
             Ok(Self(value.to_string()))
@@ -6440,7 +6440,7 @@ pub mod types {
                 ::std::sync::LazyLock::new(|| {
                     ::regress::Regex::new("^([0-9a-fA-F]{2}:){5}[0-9a-fA-F]{2}$").unwrap()
                 });
-            if (&*PATTERN).find(value).is_none() {
+            if PATTERN.find(value).is_none() {
                 return Err(
                     "doesn't match pattern \"^([0-9a-fA-F]{2}:){5}[0-9a-fA-F]{2}$\"".into(),
                 );
@@ -6650,7 +6650,7 @@ pub mod types {
                     :: regress :: Regex :: new ("^(?![0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$)^[a-z][a-z0-9-]*[a-zA-Z0-9]$") . unwrap ()
                 },
             );
-            if (&*PATTERN).find(value).is_none() {
+            if PATTERN.find(value).is_none() {
                 return Err ("doesn't match pattern \"^(?![0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$)^[a-z][a-z0-9-]*[a-zA-Z0-9]$\"" . into ()) ;
             }
             Ok(Self(value.to_string()))
@@ -6865,9 +6865,9 @@ pub mod types {
     impl ::std::fmt::Display for NameOrIdSortMode {
         fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::NameAscending => write!(f, "name_ascending"),
-                Self::NameDescending => write!(f, "name_descending"),
-                Self::IdAscending => write!(f, "id_ascending"),
+                Self::NameAscending => f.write_str("name_ascending"),
+                Self::NameDescending => f.write_str("name_descending"),
+                Self::IdAscending => f.write_str("id_ascending"),
             }
         }
     }
@@ -6959,7 +6959,7 @@ pub mod types {
     impl ::std::fmt::Display for NameSortMode {
         fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::NameAscending => write!(f, "name_ascending"),
+                Self::NameAscending => f.write_str("name_ascending"),
             }
         }
     }
@@ -7652,9 +7652,9 @@ pub mod types {
     impl ::std::fmt::Display for OrganizationRole {
         fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::Admin => write!(f, "admin"),
-                Self::Collaborator => write!(f, "collaborator"),
-                Self::Viewer => write!(f, "viewer"),
+                Self::Admin => f.write_str("admin"),
+                Self::Collaborator => f.write_str("collaborator"),
+                Self::Viewer => f.write_str("viewer"),
             }
         }
     }
@@ -8150,8 +8150,8 @@ pub mod types {
     impl ::std::fmt::Display for PhysicalDiskType {
         fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::Internal => write!(f, "internal"),
-                Self::External => write!(f, "external"),
+                Self::Internal => f.write_str("internal"),
+                Self::External => f.write_str("external"),
             }
         }
     }
@@ -8420,9 +8420,9 @@ pub mod types {
     impl ::std::fmt::Display for ProjectRole {
         fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::Admin => write!(f, "admin"),
-                Self::Collaborator => write!(f, "collaborator"),
-                Self::Viewer => write!(f, "viewer"),
+                Self::Admin => f.write_str("admin"),
+                Self::Collaborator => f.write_str("collaborator"),
+                Self::Viewer => f.write_str("viewer"),
             }
         }
     }
@@ -8849,7 +8849,7 @@ pub mod types {
             }
             static PATTERN: ::std::sync::LazyLock<::regress::Regex> =
                 ::std::sync::LazyLock::new(|| ::regress::Regex::new("[a-z-]+\\.[a-z-]+").unwrap());
-            if (&*PATTERN).find(value).is_none() {
+            if PATTERN.find(value).is_none() {
                 return Err("doesn't match pattern \"[a-z-]+\\.[a-z-]+\"".into());
             }
             Ok(Self(value.to_string()))
@@ -9487,10 +9487,10 @@ pub mod types {
     impl ::std::fmt::Display for RouterRouteKind {
         fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::Default => write!(f, "default"),
-                Self::VpcSubnet => write!(f, "vpc_subnet"),
-                Self::VpcPeering => write!(f, "vpc_peering"),
-                Self::Custom => write!(f, "custom"),
+                Self::Default => f.write_str("default"),
+                Self::VpcSubnet => f.write_str("vpc_subnet"),
+                Self::VpcPeering => f.write_str("vpc_peering"),
+                Self::Custom => f.write_str("custom"),
             }
         }
     }
@@ -10256,7 +10256,7 @@ pub mod types {
                 ::std::sync::LazyLock::new(|| {
                     ::regress::Regex::new("^\\d+\\.\\d+\\.\\d+([\\-\\+].+)?$").unwrap()
                 });
-            if (&*PATTERN).find(value).is_none() {
+            if PATTERN.find(value).is_none() {
                 return Err("doesn't match pattern \"^\\d+\\.\\d+\\.\\d+([\\-\\+].+)?$\"".into());
             }
             Ok(Self(value.to_string()))
@@ -10349,7 +10349,7 @@ pub mod types {
     impl ::std::fmt::Display for ServiceUsingCertificate {
         fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::ExternalApi => write!(f, "external_api"),
+                Self::ExternalApi => f.write_str("external_api"),
             }
         }
     }
@@ -10630,8 +10630,8 @@ pub mod types {
     impl ::std::fmt::Display for SiloIdentityMode {
         fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::SamlJit => write!(f, "saml_jit"),
-                Self::LocalOnly => write!(f, "local_only"),
+                Self::SamlJit => f.write_str("saml_jit"),
+                Self::LocalOnly => f.write_str("local_only"),
             }
         }
     }
@@ -10772,9 +10772,9 @@ pub mod types {
     impl ::std::fmt::Display for SiloRole {
         fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::Admin => write!(f, "admin"),
-                Self::Collaborator => write!(f, "collaborator"),
-                Self::Viewer => write!(f, "viewer"),
+                Self::Admin => f.write_str("admin"),
+                Self::Collaborator => f.write_str("collaborator"),
+                Self::Viewer => f.write_str("viewer"),
             }
         }
     }
@@ -11305,10 +11305,10 @@ pub mod types {
     impl ::std::fmt::Display for SnapshotState {
         fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::Creating => write!(f, "creating"),
-                Self::Ready => write!(f, "ready"),
-                Self::Faulted => write!(f, "faulted"),
-                Self::Destroyed => write!(f, "destroyed"),
+                Self::Creating => f.write_str("creating"),
+                Self::Ready => f.write_str("ready"),
+                Self::Faulted => f.write_str("faulted"),
+                Self::Destroyed => f.write_str("destroyed"),
             }
         }
     }
@@ -11634,9 +11634,9 @@ pub mod types {
     impl ::std::fmt::Display for SystemMetricName {
         fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::VirtualDiskSpaceProvisioned => write!(f, "virtual_disk_space_provisioned"),
-                Self::CpusProvisioned => write!(f, "cpus_provisioned"),
-                Self::RamProvisioned => write!(f, "ram_provisioned"),
+                Self::VirtualDiskSpaceProvisioned => f.write_str("virtual_disk_space_provisioned"),
+                Self::CpusProvisioned => f.write_str("cpus_provisioned"),
+                Self::RamProvisioned => f.write_str("ram_provisioned"),
             }
         }
     }
@@ -11936,7 +11936,7 @@ pub mod types {
                     )
                     .unwrap()
                 });
-            if (&*PATTERN).find(value).is_none() {
+            if PATTERN.find(value).is_none() {
                 return Err("doesn't match pattern \
                             \"(([a-z]+[a-z0-9]*)(_([a-z0-9]+))*):(([a-z]+[a-z0-9]*\
                             )(_([a-z0-9]+))*)\""
@@ -12293,8 +12293,8 @@ pub mod types {
     impl ::std::fmt::Display for UpdateStatus {
         fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::Updating => write!(f, "updating"),
-                Self::Steady => write!(f, "steady"),
+                Self::Updating => f.write_str("updating"),
+                Self::Steady => f.write_str("steady"),
             }
         }
     }
@@ -12547,18 +12547,18 @@ pub mod types {
     impl ::std::fmt::Display for UpdateableComponentType {
         fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::BootloaderForRot => write!(f, "bootloader_for_rot"),
-                Self::BootloaderForSp => write!(f, "bootloader_for_sp"),
-                Self::BootloaderForHostProc => write!(f, "bootloader_for_host_proc"),
-                Self::HubrisForPscRot => write!(f, "hubris_for_psc_rot"),
-                Self::HubrisForPscSp => write!(f, "hubris_for_psc_sp"),
-                Self::HubrisForSidecarRot => write!(f, "hubris_for_sidecar_rot"),
-                Self::HubrisForSidecarSp => write!(f, "hubris_for_sidecar_sp"),
-                Self::HubrisForGimletRot => write!(f, "hubris_for_gimlet_rot"),
-                Self::HubrisForGimletSp => write!(f, "hubris_for_gimlet_sp"),
-                Self::HeliosHostPhase1 => write!(f, "helios_host_phase1"),
-                Self::HeliosHostPhase2 => write!(f, "helios_host_phase2"),
-                Self::HostOmicron => write!(f, "host_omicron"),
+                Self::BootloaderForRot => f.write_str("bootloader_for_rot"),
+                Self::BootloaderForSp => f.write_str("bootloader_for_sp"),
+                Self::BootloaderForHostProc => f.write_str("bootloader_for_host_proc"),
+                Self::HubrisForPscRot => f.write_str("hubris_for_psc_rot"),
+                Self::HubrisForPscSp => f.write_str("hubris_for_psc_sp"),
+                Self::HubrisForSidecarRot => f.write_str("hubris_for_sidecar_rot"),
+                Self::HubrisForSidecarSp => f.write_str("hubris_for_sidecar_sp"),
+                Self::HubrisForGimletRot => f.write_str("hubris_for_gimlet_rot"),
+                Self::HubrisForGimletSp => f.write_str("hubris_for_gimlet_sp"),
+                Self::HeliosHostPhase1 => f.write_str("helios_host_phase1"),
+                Self::HeliosHostPhase2 => f.write_str("helios_host_phase2"),
+                Self::HostOmicron => f.write_str("host_omicron"),
             }
         }
     }
@@ -12914,7 +12914,7 @@ pub mod types {
                     :: regress :: Regex :: new ("^(?![0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$)^[a-z][a-z0-9-]*[a-zA-Z0-9]$") . unwrap ()
                 },
             );
-            if (&*PATTERN).find(value).is_none() {
+            if PATTERN.find(value).is_none() {
                 return Err ("doesn't match pattern \"^(?![0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$)^[a-z][a-z0-9-]*[a-zA-Z0-9]$\"" . into ()) ;
             }
             Ok(Self(value.to_string()))
@@ -13555,8 +13555,8 @@ pub mod types {
     impl ::std::fmt::Display for VpcFirewallRuleAction {
         fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::Allow => write!(f, "allow"),
-                Self::Deny => write!(f, "deny"),
+                Self::Allow => f.write_str("allow"),
+                Self::Deny => f.write_str("deny"),
             }
         }
     }
@@ -13640,8 +13640,8 @@ pub mod types {
     impl ::std::fmt::Display for VpcFirewallRuleDirection {
         fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::Inbound => write!(f, "inbound"),
-                Self::Outbound => write!(f, "outbound"),
+                Self::Inbound => f.write_str("inbound"),
+                Self::Outbound => f.write_str("outbound"),
             }
         }
     }
@@ -13973,9 +13973,9 @@ pub mod types {
     impl ::std::fmt::Display for VpcFirewallRuleProtocol {
         fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::Tcp => write!(f, "TCP"),
-                Self::Udp => write!(f, "UDP"),
-                Self::Icmp => write!(f, "ICMP"),
+                Self::Tcp => f.write_str("TCP"),
+                Self::Udp => f.write_str("UDP"),
+                Self::Icmp => f.write_str("ICMP"),
             }
         }
     }
@@ -14060,8 +14060,8 @@ pub mod types {
     impl ::std::fmt::Display for VpcFirewallRuleStatus {
         fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::Disabled => write!(f, "disabled"),
-                Self::Enabled => write!(f, "enabled"),
+                Self::Disabled => f.write_str("disabled"),
+                Self::Enabled => f.write_str("enabled"),
             }
         }
     }
@@ -14690,8 +14690,8 @@ pub mod types {
     impl ::std::fmt::Display for VpcRouterKind {
         fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::System => write!(f, "system"),
-                Self::Custom => write!(f, "custom"),
+                Self::System => f.write_str("system"),
+                Self::Custom => f.write_str("custom"),
             }
         }
     }

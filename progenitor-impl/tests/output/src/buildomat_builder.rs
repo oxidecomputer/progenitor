@@ -120,8 +120,8 @@ pub mod types {
     impl ::std::fmt::Display for HeaderArgAcceptLanguage {
         fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::De => write!(f, "de"),
-                Self::En => write!(f, "en"),
+                Self::De => f.write_str("de"),
+                Self::En => f.write_str("en"),
             }
         }
     }
