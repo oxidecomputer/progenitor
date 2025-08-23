@@ -1641,6 +1641,10 @@ dependencies = [
 name = "progenitor-impl"
 version = "0.11.0"
 dependencies = [
+ "anyhow",
+ "base64",
+ "chrono",
+ "clap",
  "dropshot",
  "expectorate",
  "futures",
@@ -1652,7 +1656,9 @@ dependencies = [
  "proc-macro2",
  "progenitor-client",
  "quote",
+ "rand",
  "regex",
+ "regress",
  "reqwest",
  "rustfmt-wrapper",
  "schemars",
@@ -1661,10 +1667,12 @@ dependencies = [
  "serde_json",
  "serde_yaml",
  "syn",
+ "test-progenitor-compilation",
  "thiserror 2.0.12",
  "tokio",
  "typify",
  "unicode-ident",
+ "uuid",
 ]
 
 [[package]]
@@ -2370,6 +2378,24 @@ name = "termtree"
 version = "0.5.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8f50febec83f5ee1df3015341d8bd429f2d1cc62bcba7ea2076759d315084683"
+
+[[package]]
+name = "test-progenitor-compilation"
+version = "0.1.0"
+dependencies = [
+ "dropshot",
+ "expectorate",
+ "http",
+ "hyper",
+ "openapiv3",
+ "proc-macro2",
+ "progenitor-impl",
+ "quote",
+ "schemars",
+ "serde_json",
+ "serde_yaml",
+ "syn",
+]
 
 [[package]]
 name = "thiserror"
