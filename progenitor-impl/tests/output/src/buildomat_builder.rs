@@ -2801,6 +2801,715 @@ pub mod builder {
         encode_path, ByteStream, ClientHooks, ClientInfo, Error, OperationInfo, RequestBuilderExt,
         ResponseValue,
     };
+    pub mod built {
+        use super::super::types;
+        #[allow(unused_imports)]
+        use super::super::{
+            encode_path, ByteStream, ClientHooks, ClientInfo, Error, OperationInfo,
+            RequestBuilderExt, ResponseValue,
+        };
+        pub struct ControlHold<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> ControlHold<'a> {
+            pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let info = OperationInfo {
+                    operation_id: "control_hold",
+                };
+                client.pre(&mut request, &info).await?;
+                let result = client.exec(request, &info).await;
+                client.post(&result, &info).await?;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct ControlResume<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> ControlResume<'a> {
+            pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let info = OperationInfo {
+                    operation_id: "control_resume",
+                };
+                client.pre(&mut request, &info).await?;
+                let result = client.exec(request, &info).await;
+                client.post(&result, &info).await?;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => Ok(ResponseValue::empty(response)),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct TaskGet<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> TaskGet<'a> {
+            pub async fn send(self) -> Result<ResponseValue<types::Task>, Error<()>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let info = OperationInfo {
+                    operation_id: "task_get",
+                };
+                client.pre(&mut request, &info).await?;
+                let result = client.exec(request, &info).await;
+                client.post(&result, &info).await?;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct TasksGet<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> TasksGet<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<::std::vec::Vec<types::Task>>, Error<()>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let info = OperationInfo {
+                    operation_id: "tasks_get",
+                };
+                client.pre(&mut request, &info).await?;
+                let result = client.exec(request, &info).await;
+                client.post(&result, &info).await?;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct TaskSubmit<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> TaskSubmit<'a> {
+            pub async fn send(self) -> Result<ResponseValue<types::TaskSubmitResult>, Error<()>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let info = OperationInfo {
+                    operation_id: "task_submit",
+                };
+                client.pre(&mut request, &info).await?;
+                let result = client.exec(request, &info).await;
+                client.post(&result, &info).await?;
+                let response = result?;
+                match response.status().as_u16() {
+                    201u16 => ResponseValue::from_response(response).await,
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct TaskEventsGet<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> TaskEventsGet<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<::std::vec::Vec<types::TaskEvent>>, Error<()>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let info = OperationInfo {
+                    operation_id: "task_events_get",
+                };
+                client.pre(&mut request, &info).await?;
+                let result = client.exec(request, &info).await;
+                client.post(&result, &info).await?;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct TaskOutputsGet<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> TaskOutputsGet<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<::std::vec::Vec<types::TaskOutput>>, Error<()>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let info = OperationInfo {
+                    operation_id: "task_outputs_get",
+                };
+                client.pre(&mut request, &info).await?;
+                let result = client.exec(request, &info).await;
+                client.post(&result, &info).await?;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct TaskOutputDownload<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> TaskOutputDownload<'a> {
+            pub async fn send(self) -> Result<ResponseValue<ByteStream>, Error<()>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let info = OperationInfo {
+                    operation_id: "task_output_download",
+                };
+                client.pre(&mut request, &info).await?;
+                let result = client.exec(request, &info).await;
+                client.post(&result, &info).await?;
+                let response = result?;
+                match response.status().as_u16() {
+                    200..=299 => Ok(ResponseValue::stream(response)),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct UserCreate<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> UserCreate<'a> {
+            pub async fn send(self) -> Result<ResponseValue<types::UserCreateResult>, Error<()>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let info = OperationInfo {
+                    operation_id: "user_create",
+                };
+                client.pre(&mut request, &info).await?;
+                let result = client.exec(request, &info).await;
+                client.post(&result, &info).await?;
+                let response = result?;
+                match response.status().as_u16() {
+                    201u16 => ResponseValue::from_response(response).await,
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct Whoami<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> Whoami<'a> {
+            pub async fn send(self) -> Result<ResponseValue<types::WhoamiResult>, Error<()>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let info = OperationInfo {
+                    operation_id: "whoami",
+                };
+                client.pre(&mut request, &info).await?;
+                let result = client.exec(request, &info).await;
+                client.post(&result, &info).await?;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct WhoamiPutName<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> WhoamiPutName<'a> {
+            pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let info = OperationInfo {
+                    operation_id: "whoami_put_name",
+                };
+                client.pre(&mut request, &info).await?;
+                let result = client.exec(request, &info).await;
+                client.post(&result, &info).await?;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => Ok(ResponseValue::empty(response)),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct WorkerBootstrap<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> WorkerBootstrap<'a> {
+            pub async fn send(
+                self,
+            ) -> Result<ResponseValue<types::WorkerBootstrapResult>, Error<()>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let info = OperationInfo {
+                    operation_id: "worker_bootstrap",
+                };
+                client.pre(&mut request, &info).await?;
+                let result = client.exec(request, &info).await;
+                client.post(&result, &info).await?;
+                let response = result?;
+                match response.status().as_u16() {
+                    201u16 => ResponseValue::from_response(response).await,
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct WorkerPing<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> WorkerPing<'a> {
+            pub async fn send(self) -> Result<ResponseValue<types::WorkerPingResult>, Error<()>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let info = OperationInfo {
+                    operation_id: "worker_ping",
+                };
+                client.pre(&mut request, &info).await?;
+                let result = client.exec(request, &info).await;
+                client.post(&result, &info).await?;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct WorkerTaskAppend<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> WorkerTaskAppend<'a> {
+            pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let info = OperationInfo {
+                    operation_id: "worker_task_append",
+                };
+                client.pre(&mut request, &info).await?;
+                let result = client.exec(request, &info).await;
+                client.post(&result, &info).await?;
+                let response = result?;
+                match response.status().as_u16() {
+                    201u16 => Ok(ResponseValue::empty(response)),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct WorkerTaskUploadChunk<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> WorkerTaskUploadChunk<'a> {
+            pub async fn send(self) -> Result<ResponseValue<types::UploadedChunk>, Error<()>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let info = OperationInfo {
+                    operation_id: "worker_task_upload_chunk",
+                };
+                client.pre(&mut request, &info).await?;
+                let result = client.exec(request, &info).await;
+                client.post(&result, &info).await?;
+                let response = result?;
+                match response.status().as_u16() {
+                    201u16 => ResponseValue::from_response(response).await,
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct WorkerTaskComplete<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> WorkerTaskComplete<'a> {
+            pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let info = OperationInfo {
+                    operation_id: "worker_task_complete",
+                };
+                client.pre(&mut request, &info).await?;
+                let result = client.exec(request, &info).await;
+                client.post(&result, &info).await?;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => Ok(ResponseValue::empty(response)),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct WorkerTaskAddOutput<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> WorkerTaskAddOutput<'a> {
+            pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let info = OperationInfo {
+                    operation_id: "worker_task_add_output",
+                };
+                client.pre(&mut request, &info).await?;
+                let result = client.exec(request, &info).await;
+                client.post(&result, &info).await?;
+                let response = result?;
+                match response.status().as_u16() {
+                    201u16 => Ok(ResponseValue::empty(response)),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct WorkersList<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> WorkersList<'a> {
+            pub async fn send(self) -> Result<ResponseValue<types::WorkersResult>, Error<()>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let info = OperationInfo {
+                    operation_id: "workers_list",
+                };
+                client.pre(&mut request, &info).await?;
+                let result = client.exec(request, &info).await;
+                client.post(&result, &info).await?;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct WorkersRecycle<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> WorkersRecycle<'a> {
+            pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let info = OperationInfo {
+                    operation_id: "workers_recycle",
+                };
+                client.pre(&mut request, &info).await?;
+                let result = client.exec(request, &info).await;
+                client.post(&result, &info).await?;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => Ok(ResponseValue::empty(response)),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct GetThingOrThings<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> GetThingOrThings<'a> {
+            pub async fn send(self) -> Result<ResponseValue<::std::string::String>, Error<()>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let info = OperationInfo {
+                    operation_id: "get_thing_or_things",
+                };
+                client.pre(&mut request, &info).await?;
+                let result = client.exec(request, &info).await;
+                client.post(&result, &info).await?;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => ResponseValue::from_response(response).await,
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+
+        pub struct HeaderArg<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> HeaderArg<'a> {
+            pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let info = OperationInfo {
+                    operation_id: "header_arg",
+                };
+                client.pre(&mut request, &info).await?;
+                let result = client.exec(request, &info).await;
+                client.post(&result, &info).await?;
+                let response = result?;
+                match response.status().as_u16() {
+                    200..=299 => Ok(ResponseValue::empty(response)),
+                    _ => Err(Error::ErrorResponse(ResponseValue::empty(response))),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+    }
+
     ///Builder for [`Client::control_hold`]
     ///
     ///[`Client::control_hold`]: super::Client::control_hold
@@ -2816,34 +3525,31 @@ pub mod builder {
 
         ///Sends a `POST` request to `/v1/control/hold`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::ControlHold<'a>, Error<()>> {
             let Self { client } = self;
-            let url = format!("{}/v1/control/hold", client.baseurl,);
-            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-            header_map.append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .post(url)
-                .header(
-                    ::reqwest::header::ACCEPT,
-                    ::reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .headers(header_map)
-                .build()?;
-            let info = OperationInfo {
-                operation_id: "control_hold",
+            let request = {
+                let url = format!("{}/v1/control/hold", client.baseurl,);
+                let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+                header_map.append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
+                );
+                client
+                    .client
+                    .post(url)
+                    .header(
+                        ::reqwest::header::ACCEPT,
+                        ::reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .headers(header_map)
             };
-            client.pre(&mut request, &info).await?;
-            let result = client.exec(request, &info).await;
-            client.post(&result, &info).await?;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            Ok(built::ControlHold {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -2862,26 +3568,24 @@ pub mod builder {
 
         ///Sends a `POST` request to `/v1/control/resume`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::ControlResume<'a>, Error<()>> {
             let Self { client } = self;
-            let url = format!("{}/v1/control/resume", client.baseurl,);
-            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-            header_map.append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client.client.post(url).headers(header_map).build()?;
-            let info = OperationInfo {
-                operation_id: "control_resume",
+            let request = {
+                let url = format!("{}/v1/control/resume", client.baseurl,);
+                let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+                header_map.append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
+                );
+                client.client.post(url).headers(header_map)
             };
-            client.pre(&mut request, &info).await?;
-            let result = client.exec(request, &info).await;
-            client.post(&result, &info).await?;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => Ok(ResponseValue::empty(response)),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            Ok(built::ControlResume {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -2914,39 +3618,36 @@ pub mod builder {
 
         ///Sends a `GET` request to `/v1/task/{Task}`
         pub async fn send(self) -> Result<ResponseValue<types::Task>, Error<()>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::TaskGet<'a>, Error<()>> {
             let Self { client, task } = self;
             let task = task.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/v1/task/{}",
-                client.baseurl,
-                encode_path(&task.to_string()),
-            );
-            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-            header_map.append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
-                    ::reqwest::header::ACCEPT,
-                    ::reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .headers(header_map)
-                .build()?;
-            let info = OperationInfo {
-                operation_id: "task_get",
+            let request = {
+                let url = format!(
+                    "{}/v1/task/{}",
+                    client.baseurl,
+                    encode_path(&task.to_string()),
+                );
+                let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+                header_map.append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
+                );
+                client
+                    .client
+                    .get(url)
+                    .header(
+                        ::reqwest::header::ACCEPT,
+                        ::reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .headers(header_map)
             };
-            client.pre(&mut request, &info).await?;
-            let result = client.exec(request, &info).await;
-            client.post(&result, &info).await?;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            Ok(built::TaskGet {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -2965,34 +3666,31 @@ pub mod builder {
 
         ///Sends a `GET` request to `/v1/tasks`
         pub async fn send(self) -> Result<ResponseValue<::std::vec::Vec<types::Task>>, Error<()>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::TasksGet<'a>, Error<()>> {
             let Self { client } = self;
-            let url = format!("{}/v1/tasks", client.baseurl,);
-            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-            header_map.append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
-                    ::reqwest::header::ACCEPT,
-                    ::reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .headers(header_map)
-                .build()?;
-            let info = OperationInfo {
-                operation_id: "tasks_get",
+            let request = {
+                let url = format!("{}/v1/tasks", client.baseurl,);
+                let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+                header_map.append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
+                );
+                client
+                    .client
+                    .get(url)
+                    .header(
+                        ::reqwest::header::ACCEPT,
+                        ::reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .headers(header_map)
             };
-            client.pre(&mut request, &info).await?;
-            let result = client.exec(request, &info).await;
-            client.post(&result, &info).await?;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            Ok(built::TasksGet {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -3035,38 +3733,35 @@ pub mod builder {
 
         ///Sends a `POST` request to `/v1/tasks`
         pub async fn send(self) -> Result<ResponseValue<types::TaskSubmitResult>, Error<()>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::TaskSubmit<'a>, Error<()>> {
             let Self { client, body } = self;
             let body = body
                 .and_then(|v| types::TaskSubmit::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!("{}/v1/tasks", client.baseurl,);
-            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-            header_map.append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .post(url)
-                .header(
-                    ::reqwest::header::ACCEPT,
-                    ::reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .json(&body)
-                .headers(header_map)
-                .build()?;
-            let info = OperationInfo {
-                operation_id: "task_submit",
+            let request = {
+                let url = format!("{}/v1/tasks", client.baseurl,);
+                let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+                header_map.append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
+                );
+                client
+                    .client
+                    .post(url)
+                    .header(
+                        ::reqwest::header::ACCEPT,
+                        ::reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .json(&body)
+                    .headers(header_map)
             };
-            client.pre(&mut request, &info).await?;
-            let result = client.exec(request, &info).await;
-            client.post(&result, &info).await?;
-            let response = result?;
-            match response.status().as_u16() {
-                201u16 => ResponseValue::from_response(response).await,
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            Ok(built::TaskSubmit {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -3114,6 +3809,10 @@ pub mod builder {
         pub async fn send(
             self,
         ) -> Result<ResponseValue<::std::vec::Vec<types::TaskEvent>>, Error<()>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::TaskEventsGet<'a>, Error<()>> {
             let Self {
                 client,
                 task,
@@ -3121,38 +3820,31 @@ pub mod builder {
             } = self;
             let task = task.map_err(Error::InvalidRequest)?;
             let minseq = minseq.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/v1/tasks/{}/events",
-                client.baseurl,
-                encode_path(&task.to_string()),
-            );
-            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-            header_map.append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
-                    ::reqwest::header::ACCEPT,
-                    ::reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .query(&progenitor_client::QueryParam::new("minseq", &minseq))
-                .headers(header_map)
-                .build()?;
-            let info = OperationInfo {
-                operation_id: "task_events_get",
+            let request = {
+                let url = format!(
+                    "{}/v1/tasks/{}/events",
+                    client.baseurl,
+                    encode_path(&task.to_string()),
+                );
+                let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+                header_map.append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
+                );
+                client
+                    .client
+                    .get(url)
+                    .header(
+                        ::reqwest::header::ACCEPT,
+                        ::reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .query(&progenitor_client::QueryParam::new("minseq", &minseq))
+                    .headers(header_map)
             };
-            client.pre(&mut request, &info).await?;
-            let result = client.exec(request, &info).await;
-            client.post(&result, &info).await?;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            Ok(built::TaskEventsGet {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -3187,39 +3879,36 @@ pub mod builder {
         pub async fn send(
             self,
         ) -> Result<ResponseValue<::std::vec::Vec<types::TaskOutput>>, Error<()>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::TaskOutputsGet<'a>, Error<()>> {
             let Self { client, task } = self;
             let task = task.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/v1/tasks/{}/outputs",
-                client.baseurl,
-                encode_path(&task.to_string()),
-            );
-            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-            header_map.append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
-                    ::reqwest::header::ACCEPT,
-                    ::reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .headers(header_map)
-                .build()?;
-            let info = OperationInfo {
-                operation_id: "task_outputs_get",
+            let request = {
+                let url = format!(
+                    "{}/v1/tasks/{}/outputs",
+                    client.baseurl,
+                    encode_path(&task.to_string()),
+                );
+                let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+                header_map.append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
+                );
+                client
+                    .client
+                    .get(url)
+                    .header(
+                        ::reqwest::header::ACCEPT,
+                        ::reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .headers(header_map)
             };
-            client.pre(&mut request, &info).await?;
-            let result = client.exec(request, &info).await;
-            client.post(&result, &info).await?;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            Ok(built::TaskOutputsGet {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -3264,6 +3953,10 @@ pub mod builder {
 
         ///Sends a `GET` request to `/v1/tasks/{task}/outputs/{output}`
         pub async fn send(self) -> Result<ResponseValue<ByteStream>, Error<()>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::TaskOutputDownload<'a>, Error<()>> {
             let Self {
                 client,
                 task,
@@ -3271,30 +3964,24 @@ pub mod builder {
             } = self;
             let task = task.map_err(Error::InvalidRequest)?;
             let output = output.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/v1/tasks/{}/outputs/{}",
-                client.baseurl,
-                encode_path(&task.to_string()),
-                encode_path(&output.to_string()),
-            );
-            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-            header_map.append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client.client.get(url).headers(header_map).build()?;
-            let info = OperationInfo {
-                operation_id: "task_output_download",
+            let request = {
+                let url = format!(
+                    "{}/v1/tasks/{}/outputs/{}",
+                    client.baseurl,
+                    encode_path(&task.to_string()),
+                    encode_path(&output.to_string()),
+                );
+                let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+                header_map.append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
+                );
+                client.client.get(url).headers(header_map)
             };
-            client.pre(&mut request, &info).await?;
-            let result = client.exec(request, &info).await;
-            client.post(&result, &info).await?;
-            let response = result?;
-            match response.status().as_u16() {
-                200..=299 => Ok(ResponseValue::stream(response)),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            Ok(built::TaskOutputDownload {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -3337,38 +4024,35 @@ pub mod builder {
 
         ///Sends a `POST` request to `/v1/users`
         pub async fn send(self) -> Result<ResponseValue<types::UserCreateResult>, Error<()>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::UserCreate<'a>, Error<()>> {
             let Self { client, body } = self;
             let body = body
                 .and_then(|v| types::UserCreate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!("{}/v1/users", client.baseurl,);
-            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-            header_map.append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .post(url)
-                .header(
-                    ::reqwest::header::ACCEPT,
-                    ::reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .json(&body)
-                .headers(header_map)
-                .build()?;
-            let info = OperationInfo {
-                operation_id: "user_create",
+            let request = {
+                let url = format!("{}/v1/users", client.baseurl,);
+                let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+                header_map.append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
+                );
+                client
+                    .client
+                    .post(url)
+                    .header(
+                        ::reqwest::header::ACCEPT,
+                        ::reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .json(&body)
+                    .headers(header_map)
             };
-            client.pre(&mut request, &info).await?;
-            let result = client.exec(request, &info).await;
-            client.post(&result, &info).await?;
-            let response = result?;
-            match response.status().as_u16() {
-                201u16 => ResponseValue::from_response(response).await,
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            Ok(built::UserCreate {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -3387,34 +4071,31 @@ pub mod builder {
 
         ///Sends a `GET` request to `/v1/whoami`
         pub async fn send(self) -> Result<ResponseValue<types::WhoamiResult>, Error<()>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::Whoami<'a>, Error<()>> {
             let Self { client } = self;
-            let url = format!("{}/v1/whoami", client.baseurl,);
-            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-            header_map.append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
-                    ::reqwest::header::ACCEPT,
-                    ::reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .headers(header_map)
-                .build()?;
-            let info = OperationInfo {
-                operation_id: "whoami",
+            let request = {
+                let url = format!("{}/v1/whoami", client.baseurl,);
+                let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+                header_map.append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
+                );
+                client
+                    .client
+                    .get(url)
+                    .header(
+                        ::reqwest::header::ACCEPT,
+                        ::reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .headers(header_map)
             };
-            client.pre(&mut request, &info).await?;
-            let result = client.exec(request, &info).await;
-            client.post(&result, &info).await?;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            Ok(built::Whoami {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -3448,36 +4129,33 @@ pub mod builder {
 
         ///Sends a `PUT` request to `/v1/whoami/name`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::WhoamiPutName<'a>, Error<()>> {
             let Self { client, body } = self;
             let body = body.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/v1/whoami/name", client.baseurl,);
-            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-            header_map.append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .put(url)
-                .header(
-                    ::reqwest::header::CONTENT_TYPE,
-                    ::reqwest::header::HeaderValue::from_static("text/plain"),
-                )
-                .body(body)
-                .headers(header_map)
-                .build()?;
-            let info = OperationInfo {
-                operation_id: "whoami_put_name",
+            let request = {
+                let url = format!("{}/v1/whoami/name", client.baseurl,);
+                let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+                header_map.append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
+                );
+                client
+                    .client
+                    .put(url)
+                    .header(
+                        ::reqwest::header::CONTENT_TYPE,
+                        ::reqwest::header::HeaderValue::from_static("text/plain"),
+                    )
+                    .body(body)
+                    .headers(header_map)
             };
-            client.pre(&mut request, &info).await?;
-            let result = client.exec(request, &info).await;
-            client.post(&result, &info).await?;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => Ok(ResponseValue::empty(response)),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            Ok(built::WhoamiPutName {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -3520,38 +4198,35 @@ pub mod builder {
 
         ///Sends a `POST` request to `/v1/worker/bootstrap`
         pub async fn send(self) -> Result<ResponseValue<types::WorkerBootstrapResult>, Error<()>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::WorkerBootstrap<'a>, Error<()>> {
             let Self { client, body } = self;
             let body = body
                 .and_then(|v| types::WorkerBootstrap::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!("{}/v1/worker/bootstrap", client.baseurl,);
-            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-            header_map.append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .post(url)
-                .header(
-                    ::reqwest::header::ACCEPT,
-                    ::reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .json(&body)
-                .headers(header_map)
-                .build()?;
-            let info = OperationInfo {
-                operation_id: "worker_bootstrap",
+            let request = {
+                let url = format!("{}/v1/worker/bootstrap", client.baseurl,);
+                let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+                header_map.append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
+                );
+                client
+                    .client
+                    .post(url)
+                    .header(
+                        ::reqwest::header::ACCEPT,
+                        ::reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .json(&body)
+                    .headers(header_map)
             };
-            client.pre(&mut request, &info).await?;
-            let result = client.exec(request, &info).await;
-            client.post(&result, &info).await?;
-            let response = result?;
-            match response.status().as_u16() {
-                201u16 => ResponseValue::from_response(response).await,
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            Ok(built::WorkerBootstrap {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -3570,34 +4245,31 @@ pub mod builder {
 
         ///Sends a `GET` request to `/v1/worker/ping`
         pub async fn send(self) -> Result<ResponseValue<types::WorkerPingResult>, Error<()>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::WorkerPing<'a>, Error<()>> {
             let Self { client } = self;
-            let url = format!("{}/v1/worker/ping", client.baseurl,);
-            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-            header_map.append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
-                    ::reqwest::header::ACCEPT,
-                    ::reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .headers(header_map)
-                .build()?;
-            let info = OperationInfo {
-                operation_id: "worker_ping",
+            let request = {
+                let url = format!("{}/v1/worker/ping", client.baseurl,);
+                let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+                header_map.append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
+                );
+                client
+                    .client
+                    .get(url)
+                    .header(
+                        ::reqwest::header::ACCEPT,
+                        ::reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .headers(header_map)
             };
-            client.pre(&mut request, &info).await?;
-            let result = client.exec(request, &info).await;
-            client.post(&result, &info).await?;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            Ok(built::WorkerPing {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -3654,39 +4326,32 @@ pub mod builder {
 
         ///Sends a `POST` request to `/v1/worker/task/{task}/append`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::WorkerTaskAppend<'a>, Error<()>> {
             let Self { client, task, body } = self;
             let task = task.map_err(Error::InvalidRequest)?;
             let body = body
                 .and_then(|v| types::WorkerAppendTask::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/v1/worker/task/{}/append",
-                client.baseurl,
-                encode_path(&task.to_string()),
-            );
-            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-            header_map.append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .post(url)
-                .json(&body)
-                .headers(header_map)
-                .build()?;
-            let info = OperationInfo {
-                operation_id: "worker_task_append",
+            let request = {
+                let url = format!(
+                    "{}/v1/worker/task/{}/append",
+                    client.baseurl,
+                    encode_path(&task.to_string()),
+                );
+                let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+                header_map.append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
+                );
+                client.client.post(url).json(&body).headers(header_map)
             };
-            client.pre(&mut request, &info).await?;
-            let result = client.exec(request, &info).await;
-            client.post(&result, &info).await?;
-            let response = result?;
-            match response.status().as_u16() {
-                201u16 => Ok(ResponseValue::empty(response)),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            Ok(built::WorkerTaskAppend {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -3731,45 +4396,42 @@ pub mod builder {
 
         ///Sends a `POST` request to `/v1/worker/task/{task}/chunk`
         pub async fn send(self) -> Result<ResponseValue<types::UploadedChunk>, Error<()>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::WorkerTaskUploadChunk<'a>, Error<()>> {
             let Self { client, task, body } = self;
             let task = task.map_err(Error::InvalidRequest)?;
             let body = body.map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/v1/worker/task/{}/chunk",
-                client.baseurl,
-                encode_path(&task.to_string()),
-            );
-            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-            header_map.append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .post(url)
-                .header(
-                    ::reqwest::header::ACCEPT,
-                    ::reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .header(
-                    ::reqwest::header::CONTENT_TYPE,
-                    ::reqwest::header::HeaderValue::from_static("application/octet-stream"),
-                )
-                .body(body)
-                .headers(header_map)
-                .build()?;
-            let info = OperationInfo {
-                operation_id: "worker_task_upload_chunk",
+            let request = {
+                let url = format!(
+                    "{}/v1/worker/task/{}/chunk",
+                    client.baseurl,
+                    encode_path(&task.to_string()),
+                );
+                let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+                header_map.append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
+                );
+                client
+                    .client
+                    .post(url)
+                    .header(
+                        ::reqwest::header::ACCEPT,
+                        ::reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .header(
+                        ::reqwest::header::CONTENT_TYPE,
+                        ::reqwest::header::HeaderValue::from_static("application/octet-stream"),
+                    )
+                    .body(body)
+                    .headers(header_map)
             };
-            client.pre(&mut request, &info).await?;
-            let result = client.exec(request, &info).await;
-            client.post(&result, &info).await?;
-            let response = result?;
-            match response.status().as_u16() {
-                201u16 => ResponseValue::from_response(response).await,
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            Ok(built::WorkerTaskUploadChunk {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -3826,39 +4488,32 @@ pub mod builder {
 
         ///Sends a `POST` request to `/v1/worker/task/{task}/complete`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::WorkerTaskComplete<'a>, Error<()>> {
             let Self { client, task, body } = self;
             let task = task.map_err(Error::InvalidRequest)?;
             let body = body
                 .and_then(|v| types::WorkerCompleteTask::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/v1/worker/task/{}/complete",
-                client.baseurl,
-                encode_path(&task.to_string()),
-            );
-            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-            header_map.append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .post(url)
-                .json(&body)
-                .headers(header_map)
-                .build()?;
-            let info = OperationInfo {
-                operation_id: "worker_task_complete",
+            let request = {
+                let url = format!(
+                    "{}/v1/worker/task/{}/complete",
+                    client.baseurl,
+                    encode_path(&task.to_string()),
+                );
+                let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+                header_map.append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
+                );
+                client.client.post(url).json(&body).headers(header_map)
             };
-            client.pre(&mut request, &info).await?;
-            let result = client.exec(request, &info).await;
-            client.post(&result, &info).await?;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => Ok(ResponseValue::empty(response)),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            Ok(built::WorkerTaskComplete {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -3913,39 +4568,32 @@ pub mod builder {
 
         ///Sends a `POST` request to `/v1/worker/task/{task}/output`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::WorkerTaskAddOutput<'a>, Error<()>> {
             let Self { client, task, body } = self;
             let task = task.map_err(Error::InvalidRequest)?;
             let body = body
                 .and_then(|v| types::WorkerAddOutput::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!(
-                "{}/v1/worker/task/{}/output",
-                client.baseurl,
-                encode_path(&task.to_string()),
-            );
-            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-            header_map.append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .post(url)
-                .json(&body)
-                .headers(header_map)
-                .build()?;
-            let info = OperationInfo {
-                operation_id: "worker_task_add_output",
+            let request = {
+                let url = format!(
+                    "{}/v1/worker/task/{}/output",
+                    client.baseurl,
+                    encode_path(&task.to_string()),
+                );
+                let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+                header_map.append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
+                );
+                client.client.post(url).json(&body).headers(header_map)
             };
-            client.pre(&mut request, &info).await?;
-            let result = client.exec(request, &info).await;
-            client.post(&result, &info).await?;
-            let response = result?;
-            match response.status().as_u16() {
-                201u16 => Ok(ResponseValue::empty(response)),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            Ok(built::WorkerTaskAddOutput {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -3964,34 +4612,31 @@ pub mod builder {
 
         ///Sends a `GET` request to `/v1/workers`
         pub async fn send(self) -> Result<ResponseValue<types::WorkersResult>, Error<()>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::WorkersList<'a>, Error<()>> {
             let Self { client } = self;
-            let url = format!("{}/v1/workers", client.baseurl,);
-            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-            header_map.append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
-                    ::reqwest::header::ACCEPT,
-                    ::reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .headers(header_map)
-                .build()?;
-            let info = OperationInfo {
-                operation_id: "workers_list",
+            let request = {
+                let url = format!("{}/v1/workers", client.baseurl,);
+                let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+                header_map.append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
+                );
+                client
+                    .client
+                    .get(url)
+                    .header(
+                        ::reqwest::header::ACCEPT,
+                        ::reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .headers(header_map)
             };
-            client.pre(&mut request, &info).await?;
-            let result = client.exec(request, &info).await;
-            client.post(&result, &info).await?;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            Ok(built::WorkersList {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -4010,26 +4655,24 @@ pub mod builder {
 
         ///Sends a `POST` request to `/v1/workers/recycle`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::WorkersRecycle<'a>, Error<()>> {
             let Self { client } = self;
-            let url = format!("{}/v1/workers/recycle", client.baseurl,);
-            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-            header_map.append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client.client.post(url).headers(header_map).build()?;
-            let info = OperationInfo {
-                operation_id: "workers_recycle",
+            let request = {
+                let url = format!("{}/v1/workers/recycle", client.baseurl,);
+                let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+                header_map.append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
+                );
+                client.client.post(url).headers(header_map)
             };
-            client.pre(&mut request, &info).await?;
-            let result = client.exec(request, &info).await;
-            client.post(&result, &info).await?;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => Ok(ResponseValue::empty(response)),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            Ok(built::WorkersRecycle {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -4063,36 +4706,33 @@ pub mod builder {
 
         ///Sends a `GET` request to `/v1/things`
         pub async fn send(self) -> Result<ResponseValue<::std::string::String>, Error<()>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::GetThingOrThings<'a>, Error<()>> {
             let Self { client, id } = self;
             let id = id.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/v1/things", client.baseurl,);
-            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-            header_map.append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .header(
-                    ::reqwest::header::ACCEPT,
-                    ::reqwest::header::HeaderValue::from_static("application/json"),
-                )
-                .query(&progenitor_client::QueryParam::new("id", &id))
-                .headers(header_map)
-                .build()?;
-            let info = OperationInfo {
-                operation_id: "get_thing_or_things",
+            let request = {
+                let url = format!("{}/v1/things", client.baseurl,);
+                let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+                header_map.append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
+                );
+                client
+                    .client
+                    .get(url)
+                    .header(
+                        ::reqwest::header::ACCEPT,
+                        ::reqwest::header::HeaderValue::from_static("application/json"),
+                    )
+                    .query(&progenitor_client::QueryParam::new("id", &id))
+                    .headers(header_map)
             };
-            client.pre(&mut request, &info).await?;
-            let result = client.exec(request, &info).await;
-            client.post(&result, &info).await?;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => ResponseValue::from_response(response).await,
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            Ok(built::GetThingOrThings {
+                client: client,
+                request,
+            })
         }
     }
 
@@ -4125,33 +4765,31 @@ pub mod builder {
 
         ///Sends a `GET` request to `/v1/header-arg`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::HeaderArg<'a>, Error<()>> {
             let Self {
                 client,
                 accept_language,
             } = self;
             let accept_language = accept_language.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/v1/header-arg", client.baseurl,);
-            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(2usize);
-            header_map.append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
-            );
-            if let Some(value) = accept_language {
-                header_map.append("accept-language", value.to_string().try_into()?);
-            }
-            #[allow(unused_mut)]
-            let mut request = client.client.get(url).headers(header_map).build()?;
-            let info = OperationInfo {
-                operation_id: "header_arg",
+            let request = {
+                let url = format!("{}/v1/header-arg", client.baseurl,);
+                let mut header_map = ::reqwest::header::HeaderMap::with_capacity(2usize);
+                header_map.append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
+                );
+                if let Some(value) = accept_language {
+                    header_map.append("accept-language", value.to_string().try_into()?);
+                }
+                client.client.get(url).headers(header_map)
             };
-            client.pre(&mut request, &info).await?;
-            let result = client.exec(request, &info).await;
-            client.post(&result, &info).await?;
-            let response = result?;
-            match response.status().as_u16() {
-                200..=299 => Ok(ResponseValue::empty(response)),
-                _ => Err(Error::ErrorResponse(ResponseValue::empty(response))),
-            }
+            Ok(built::HeaderArg {
+                client: client,
+                request,
+            })
         }
     }
 }
