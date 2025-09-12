@@ -53,8 +53,8 @@ syn = { version = "2.0.106", features = ["parsing"] }
 thiserror = "2.0.16"
 tokio = { version = "1.45.1", features = ["rt", "net"] }
 # change when publishing
-#typify = { version = "0.4.2" }
-typify = { git = "https://github.com/oxidecomputer/typify" }
+typify = { version = "0.4.3" }
+# typify = { git = "https://github.com/oxidecomputer/typify" }
 url = "2.5.4"
 unicode-ident = "1.0.18"
 uuid = { version = "1.18.0", features = ["serde", "v4"] }
