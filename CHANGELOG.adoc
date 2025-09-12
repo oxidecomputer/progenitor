@@ -13,7 +13,11 @@
 
 == Unreleased changes (release date TBD)
 
-https://github.com/oxidecomputer/progenitor/compare/v0.11.0\...HEAD[Full list of commits]
+https://github.com/oxidecomputer/progenitor/compare/v0.11.1\...HEAD[Full list of commits]
+
+== 0.11.1 (released 2025-09-12)
+
+https://github.com/oxidecomputer/progenitor/compare/v0.11.0\...v0.11.1[Full list of commits]
 
 * Avoid clippy warnings under Rust 1.89 (#1171 and #1172)
 
