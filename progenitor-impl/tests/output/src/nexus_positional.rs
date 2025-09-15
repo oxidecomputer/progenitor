@@ -14117,26 +14117,28 @@ impl Client {
         &'a self,
         id: &'a ::uuid::Uuid,
     ) -> Result<ResponseValue<types::Disk>, Error<types::Error>> {
-        let url = format!(
-            "{}/by-id/disks/{}",
-            self.baseurl,
-            encode_path(&id.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/by-id/disks/{}",
+                self.baseurl,
+                encode_path(&id.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "disk_view_by_id",
         };
@@ -14163,26 +14165,28 @@ impl Client {
         &'a self,
         id: &'a ::uuid::Uuid,
     ) -> Result<ResponseValue<types::Image>, Error<types::Error>> {
-        let url = format!(
-            "{}/by-id/images/{}",
-            self.baseurl,
-            encode_path(&id.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/by-id/images/{}",
+                self.baseurl,
+                encode_path(&id.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "image_view_by_id",
         };
@@ -14209,26 +14213,28 @@ impl Client {
         &'a self,
         id: &'a ::uuid::Uuid,
     ) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
-        let url = format!(
-            "{}/by-id/instances/{}",
-            self.baseurl,
-            encode_path(&id.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/by-id/instances/{}",
+                self.baseurl,
+                encode_path(&id.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "instance_view_by_id",
         };
@@ -14255,26 +14261,28 @@ impl Client {
         &'a self,
         id: &'a ::uuid::Uuid,
     ) -> Result<ResponseValue<types::NetworkInterface>, Error<types::Error>> {
-        let url = format!(
-            "{}/by-id/network-interfaces/{}",
-            self.baseurl,
-            encode_path(&id.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/by-id/network-interfaces/{}",
+                self.baseurl,
+                encode_path(&id.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "instance_network_interface_view_by_id",
         };
@@ -14303,26 +14311,28 @@ impl Client {
         &'a self,
         id: &'a ::uuid::Uuid,
     ) -> Result<ResponseValue<types::Organization>, Error<types::Error>> {
-        let url = format!(
-            "{}/by-id/organizations/{}",
-            self.baseurl,
-            encode_path(&id.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/by-id/organizations/{}",
+                self.baseurl,
+                encode_path(&id.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "organization_view_by_id",
         };
@@ -14351,26 +14361,28 @@ impl Client {
         &'a self,
         id: &'a ::uuid::Uuid,
     ) -> Result<ResponseValue<types::Project>, Error<types::Error>> {
-        let url = format!(
-            "{}/by-id/projects/{}",
-            self.baseurl,
-            encode_path(&id.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/by-id/projects/{}",
+                self.baseurl,
+                encode_path(&id.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "project_view_by_id",
         };
@@ -14397,26 +14409,28 @@ impl Client {
         &'a self,
         id: &'a ::uuid::Uuid,
     ) -> Result<ResponseValue<types::Snapshot>, Error<types::Error>> {
-        let url = format!(
-            "{}/by-id/snapshots/{}",
-            self.baseurl,
-            encode_path(&id.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/by-id/snapshots/{}",
+                self.baseurl,
+                encode_path(&id.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "snapshot_view_by_id",
         };
@@ -14443,26 +14457,28 @@ impl Client {
         &'a self,
         id: &'a ::uuid::Uuid,
     ) -> Result<ResponseValue<types::RouterRoute>, Error<types::Error>> {
-        let url = format!(
-            "{}/by-id/vpc-router-routes/{}",
-            self.baseurl,
-            encode_path(&id.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/by-id/vpc-router-routes/{}",
+                self.baseurl,
+                encode_path(&id.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "vpc_router_route_view_by_id",
         };
@@ -14489,26 +14505,28 @@ impl Client {
         &'a self,
         id: &'a ::uuid::Uuid,
     ) -> Result<ResponseValue<types::VpcRouter>, Error<types::Error>> {
-        let url = format!(
-            "{}/by-id/vpc-routers/{}",
-            self.baseurl,
-            encode_path(&id.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/by-id/vpc-routers/{}",
+                self.baseurl,
+                encode_path(&id.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "vpc_router_view_by_id",
         };
@@ -14535,26 +14553,28 @@ impl Client {
         &'a self,
         id: &'a ::uuid::Uuid,
     ) -> Result<ResponseValue<types::VpcSubnet>, Error<types::Error>> {
-        let url = format!(
-            "{}/by-id/vpc-subnets/{}",
-            self.baseurl,
-            encode_path(&id.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/by-id/vpc-subnets/{}",
+                self.baseurl,
+                encode_path(&id.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "vpc_subnet_view_by_id",
         };
@@ -14581,26 +14601,28 @@ impl Client {
         &'a self,
         id: &'a ::uuid::Uuid,
     ) -> Result<ResponseValue<types::Vpc>, Error<types::Error>> {
-        let url = format!(
-            "{}/by-id/vpcs/{}",
-            self.baseurl,
-            encode_path(&id.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/by-id/vpcs/{}",
+                self.baseurl,
+                encode_path(&id.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "vpc_view_by_id",
         };
@@ -14631,19 +14653,21 @@ impl Client {
         &'a self,
         body: &'a types::DeviceAuthRequest,
     ) -> Result<ResponseValue<ByteStream>, Error<ByteStream>> {
-        let url = format!("{}/device/auth", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .post(url)
-            .form_urlencoded(&body)?
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!("{}/device/auth", self.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .post(url)
+                .form_urlencoded(&body)?
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "device_auth_request",
         };
@@ -14669,23 +14693,25 @@ impl Client {
         &'a self,
         body: &'a types::DeviceAuthVerify,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
-        let url = format!("{}/device/confirm", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .post(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .json(&body)
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!("{}/device/confirm", self.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .post(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .json(&body)
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "device_auth_confirm",
         };
@@ -14715,19 +14741,21 @@ impl Client {
         &'a self,
         body: &'a types::DeviceAccessTokenRequest,
     ) -> Result<ResponseValue<ByteStream>, Error<ByteStream>> {
-        let url = format!("{}/device/token", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .post(url)
-            .form_urlencoded(&body)?
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!("{}/device/token", self.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .post(url)
+                .form_urlencoded(&body)?
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "device_access_token",
         };
@@ -14756,28 +14784,30 @@ impl Client {
         page_token: Option<&'a str>,
         sort_by: Option<types::IdSortMode>,
     ) -> Result<ResponseValue<types::GroupResultsPage>, Error<types::Error>> {
-        let url = format!("{}/groups", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
-            .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!("{}/groups", self.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .query(&progenitor_client::QueryParam::new("limit", &limit))
+                .query(&progenitor_client::QueryParam::new(
+                    "page_token",
+                    &page_token,
+                ))
+                .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "group_list",
         };
@@ -14841,23 +14871,25 @@ impl Client {
         &'a self,
         body: &'a types::SpoofLoginBody,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
-        let url = format!("{}/login", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .post(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .json(&body)
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!("{}/login", self.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .post(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .json(&body)
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "login_spoof",
         };
@@ -14885,23 +14917,22 @@ impl Client {
         silo_name: &'a types::Name,
         body: &'a types::UsernamePasswordCredentials,
     ) -> Result<ResponseValue<ByteStream>, Error<types::Error>> {
-        let url = format!(
-            "{}/login/{}/local",
-            self.baseurl,
-            encode_path(&silo_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .post(url)
-            .json(&body)
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/login/{}/local",
+                self.baseurl,
+                encode_path(&silo_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client.post(url).json(&body).headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "login_local",
         };
@@ -14932,19 +14963,23 @@ impl Client {
         silo_name: &'a types::Name,
         provider_name: &'a types::Name,
     ) -> Result<ResponseValue<ByteStream>, Error<types::Error>> {
-        let url = format!(
-            "{}/login/{}/saml/{}",
-            self.baseurl,
-            encode_path(&silo_name.to_string()),
-            encode_path(&provider_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self.client.get(url).headers(header_map).build()?;
+        let mut request = {
+            let url = format!(
+                "{}/login/{}/saml/{}",
+                self.baseurl,
+                encode_path(&silo_name.to_string()),
+                encode_path(&provider_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client.get(url).headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "login_saml_begin",
         };
@@ -14973,28 +15008,30 @@ impl Client {
         provider_name: &'a types::Name,
         body: B,
     ) -> Result<ResponseValue<ByteStream>, Error<types::Error>> {
-        let url = format!(
-            "{}/login/{}/saml/{}",
-            self.baseurl,
-            encode_path(&silo_name.to_string()),
-            encode_path(&provider_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .post(url)
-            .header(
-                ::reqwest::header::CONTENT_TYPE,
-                ::reqwest::header::HeaderValue::from_static("application/octet-stream"),
-            )
-            .body(body)
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/login/{}/saml/{}",
+                self.baseurl,
+                encode_path(&silo_name.to_string()),
+                encode_path(&provider_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .post(url)
+                .header(
+                    ::reqwest::header::CONTENT_TYPE,
+                    ::reqwest::header::HeaderValue::from_static("application/octet-stream"),
+                )
+                .body(body)
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "login_saml",
         };
@@ -15016,22 +15053,24 @@ impl Client {
 
     ///Sends a `POST` request to `/logout`
     pub async fn logout<'a>(&'a self) -> Result<ResponseValue<()>, Error<types::Error>> {
-        let url = format!("{}/logout", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .post(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!("{}/logout", self.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .post(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "logout",
         };
@@ -15068,28 +15107,30 @@ impl Client {
         page_token: Option<&'a str>,
         sort_by: Option<types::NameOrIdSortMode>,
     ) -> Result<ResponseValue<types::OrganizationResultsPage>, Error<types::Error>> {
-        let url = format!("{}/organizations", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
-            .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!("{}/organizations", self.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .query(&progenitor_client::QueryParam::new("limit", &limit))
+                .query(&progenitor_client::QueryParam::new(
+                    "page_token",
+                    &page_token,
+                ))
+                .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "organization_list",
         };
@@ -15160,23 +15201,25 @@ impl Client {
         &'a self,
         body: &'a types::OrganizationCreate,
     ) -> Result<ResponseValue<types::Organization>, Error<types::Error>> {
-        let url = format!("{}/organizations", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .post(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .json(&body)
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!("{}/organizations", self.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .post(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .json(&body)
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "organization_create",
         };
@@ -15208,26 +15251,28 @@ impl Client {
         &'a self,
         organization_name: &'a types::Name,
     ) -> Result<ResponseValue<types::Organization>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/organizations/{}",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "organization_view",
         };
@@ -15261,27 +15306,29 @@ impl Client {
         organization_name: &'a types::Name,
         body: &'a types::OrganizationUpdate,
     ) -> Result<ResponseValue<types::Organization>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .put(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .json(&body)
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/organizations/{}",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .put(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .json(&body)
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "organization_update",
         };
@@ -15313,26 +15360,28 @@ impl Client {
         &'a self,
         organization_name: &'a types::Name,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .delete(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/organizations/{}",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .delete(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "organization_delete",
         };
@@ -15364,26 +15413,28 @@ impl Client {
         &'a self,
         organization_name: &'a types::Name,
     ) -> Result<ResponseValue<types::OrganizationRolePolicy>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/policy",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/organizations/{}/policy",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "organization_policy_view",
         };
@@ -15417,27 +15468,29 @@ impl Client {
         organization_name: &'a types::Name,
         body: &'a types::OrganizationRolePolicy,
     ) -> Result<ResponseValue<types::OrganizationRolePolicy>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/policy",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .put(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .json(&body)
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/organizations/{}/policy",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .put(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .json(&body)
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "organization_policy_update",
         };
@@ -15476,32 +15529,34 @@ impl Client {
         page_token: Option<&'a str>,
         sort_by: Option<types::NameOrIdSortMode>,
     ) -> Result<ResponseValue<types::ProjectResultsPage>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
-            .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/organizations/{}/projects",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .query(&progenitor_client::QueryParam::new("limit", &limit))
+                .query(&progenitor_client::QueryParam::new(
+                    "page_token",
+                    &page_token,
+                ))
+                .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "project_list",
         };
@@ -15579,27 +15634,29 @@ impl Client {
         organization_name: &'a types::Name,
         body: &'a types::ProjectCreate,
     ) -> Result<ResponseValue<types::Project>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .post(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .json(&body)
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/organizations/{}/projects",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .post(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .json(&body)
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "project_create",
         };
@@ -15634,27 +15691,29 @@ impl Client {
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
     ) -> Result<ResponseValue<types::Project>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/organizations/{}/projects/{}",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "project_view",
         };
@@ -15691,28 +15750,30 @@ impl Client {
         project_name: &'a types::Name,
         body: &'a types::ProjectUpdate,
     ) -> Result<ResponseValue<types::Project>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .put(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .json(&body)
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/organizations/{}/projects/{}",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .put(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .json(&body)
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "project_update",
         };
@@ -15747,27 +15808,29 @@ impl Client {
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .delete(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/organizations/{}/projects/{}",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .delete(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "project_delete",
         };
@@ -15809,33 +15872,35 @@ impl Client {
         page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
     ) -> Result<ResponseValue<types::DiskResultsPage>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/disks",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
-            .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/organizations/{}/projects/{}/disks",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .query(&progenitor_client::QueryParam::new("limit", &limit))
+                .query(&progenitor_client::QueryParam::new(
+                    "page_token",
+                    &page_token,
+                ))
+                .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "disk_list",
         };
@@ -15922,28 +15987,30 @@ impl Client {
         project_name: &'a types::Name,
         body: &'a types::DiskCreate,
     ) -> Result<ResponseValue<types::Disk>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/disks",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .post(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .json(&body)
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/organizations/{}/projects/{}/disks",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .post(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .json(&body)
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "disk_create",
         };
@@ -15976,28 +16043,30 @@ impl Client {
         project_name: &'a types::Name,
         disk_name: &'a types::Name,
     ) -> Result<ResponseValue<types::Disk>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/disks/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&disk_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/organizations/{}/projects/{}/disks/{}",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&disk_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "disk_view",
         };
@@ -16028,28 +16097,30 @@ impl Client {
         project_name: &'a types::Name,
         disk_name: &'a types::Name,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/disks/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&disk_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .delete(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/organizations/{}/projects/{}/disks/{}",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&disk_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .delete(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "disk_delete",
         };
@@ -16096,39 +16167,41 @@ impl Client {
         page_token: Option<&'a str>,
         start_time: Option<&'a ::chrono::DateTime<::chrono::offset::Utc>>,
     ) -> Result<ResponseValue<types::MeasurementResultsPage>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/disks/{}/metrics/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&disk_name.to_string()),
-            encode_path(&metric_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .query(&progenitor_client::QueryParam::new("end_time", &end_time))
-            .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
-            .query(&progenitor_client::QueryParam::new(
-                "start_time",
-                &start_time,
-            ))
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/organizations/{}/projects/{}/disks/{}/metrics/{}",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&disk_name.to_string()),
+                encode_path(&metric_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .query(&progenitor_client::QueryParam::new("end_time", &end_time))
+                .query(&progenitor_client::QueryParam::new("limit", &limit))
+                .query(&progenitor_client::QueryParam::new(
+                    "page_token",
+                    &page_token,
+                ))
+                .query(&progenitor_client::QueryParam::new(
+                    "start_time",
+                    &start_time,
+                ))
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "disk_metrics_list",
         };
@@ -16240,33 +16313,35 @@ impl Client {
         page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
     ) -> Result<ResponseValue<types::ImageResultsPage>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/images",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
-            .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/organizations/{}/projects/{}/images",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .query(&progenitor_client::QueryParam::new("limit", &limit))
+                .query(&progenitor_client::QueryParam::new(
+                    "page_token",
+                    &page_token,
+                ))
+                .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "image_list",
         };
@@ -16356,28 +16431,30 @@ impl Client {
         project_name: &'a types::Name,
         body: &'a types::ImageCreate,
     ) -> Result<ResponseValue<types::Image>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/images",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .post(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .json(&body)
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/organizations/{}/projects/{}/images",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .post(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .json(&body)
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "image_create",
         };
@@ -16410,28 +16487,30 @@ impl Client {
         project_name: &'a types::Name,
         image_name: &'a types::Name,
     ) -> Result<ResponseValue<types::Image>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/images/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&image_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/organizations/{}/projects/{}/images/{}",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&image_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "image_view",
         };
@@ -16466,28 +16545,30 @@ impl Client {
         project_name: &'a types::Name,
         image_name: &'a types::Name,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/images/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&image_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .delete(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/organizations/{}/projects/{}/images/{}",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&image_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .delete(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "image_delete",
         };
@@ -16527,33 +16608,35 @@ impl Client {
         page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
     ) -> Result<ResponseValue<types::InstanceResultsPage>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/instances",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
-            .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/organizations/{}/projects/{}/instances",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .query(&progenitor_client::QueryParam::new("limit", &limit))
+                .query(&progenitor_client::QueryParam::new(
+                    "page_token",
+                    &page_token,
+                ))
+                .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "instance_list",
         };
@@ -16641,28 +16724,30 @@ impl Client {
         project_name: &'a types::Name,
         body: &'a types::InstanceCreate,
     ) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/instances",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .post(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .json(&body)
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/organizations/{}/projects/{}/instances",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .post(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .json(&body)
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "instance_create",
         };
@@ -16695,28 +16780,30 @@ impl Client {
         project_name: &'a types::Name,
         instance_name: &'a types::Name,
     ) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/instances/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&instance_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/organizations/{}/projects/{}/instances/{}",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&instance_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "instance_view",
         };
@@ -16747,28 +16834,30 @@ impl Client {
         project_name: &'a types::Name,
         instance_name: &'a types::Name,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/instances/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&instance_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .delete(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/organizations/{}/projects/{}/instances/{}",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&instance_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .delete(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "instance_delete",
         };
@@ -16813,34 +16902,36 @@ impl Client {
         page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
     ) -> Result<ResponseValue<types::DiskResultsPage>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/instances/{}/disks",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&instance_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
-            .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/organizations/{}/projects/{}/instances/{}/disks",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&instance_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .query(&progenitor_client::QueryParam::new("limit", &limit))
+                .query(&progenitor_client::QueryParam::new(
+                    "page_token",
+                    &page_token,
+                ))
+                .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "instance_disk_list",
         };
@@ -16936,29 +17027,31 @@ impl Client {
         instance_name: &'a types::Name,
         body: &'a types::DiskIdentifier,
     ) -> Result<ResponseValue<types::Disk>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/instances/{}/disks/attach",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&instance_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .post(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .json(&body)
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/organizations/{}/projects/{}/instances/{}/disks/attach",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&instance_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .post(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .json(&body)
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "instance_disk_attach",
         };
@@ -16992,29 +17085,31 @@ impl Client {
         instance_name: &'a types::Name,
         body: &'a types::DiskIdentifier,
     ) -> Result<ResponseValue<types::Disk>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/instances/{}/disks/detach",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&instance_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .post(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .json(&body)
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/organizations/{}/projects/{}/instances/{}/disks/detach",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&instance_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .post(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .json(&body)
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "instance_disk_detach",
         };
@@ -17045,28 +17140,30 @@ impl Client {
         project_name: &'a types::Name,
         instance_name: &'a types::Name,
     ) -> Result<ResponseValue<types::ExternalIpResultsPage>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/instances/{}/external-ips",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&instance_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/organizations/{}/projects/{}/instances/{}/external-ips",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&instance_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "instance_external_ip_list",
         };
@@ -17100,29 +17197,31 @@ impl Client {
         instance_name: &'a types::Name,
         body: &'a types::InstanceMigrate,
     ) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/instances/{}/migrate",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&instance_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .post(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .json(&body)
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/organizations/{}/projects/{}/instances/{}/migrate",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&instance_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .post(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .json(&body)
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "instance_migrate",
         };
@@ -17165,34 +17264,36 @@ impl Client {
         page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
     ) -> Result<ResponseValue<types::NetworkInterfaceResultsPage>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/instances/{}/network-interfaces",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&instance_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
-            .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/organizations/{}/projects/{}/instances/{}/network-interfaces",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&instance_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .query(&progenitor_client::QueryParam::new("limit", &limit))
+                .query(&progenitor_client::QueryParam::new(
+                    "page_token",
+                    &page_token,
+                ))
+                .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "instance_network_interface_list",
         };
@@ -17285,29 +17386,31 @@ impl Client {
         instance_name: &'a types::Name,
         body: &'a types::NetworkInterfaceCreate,
     ) -> Result<ResponseValue<types::NetworkInterface>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/instances/{}/network-interfaces",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&instance_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .post(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .json(&body)
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/organizations/{}/projects/{}/instances/{}/network-interfaces",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&instance_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .post(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .json(&body)
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "instance_network_interface_create",
         };
@@ -17339,29 +17442,31 @@ impl Client {
         instance_name: &'a types::Name,
         interface_name: &'a types::Name,
     ) -> Result<ResponseValue<types::NetworkInterface>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/instances/{}/network-interfaces/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&instance_name.to_string()),
-            encode_path(&interface_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/organizations/{}/projects/{}/instances/{}/network-interfaces/{}",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&instance_name.to_string()),
+                encode_path(&interface_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "instance_network_interface_view",
         };
@@ -17394,30 +17499,32 @@ impl Client {
         interface_name: &'a types::Name,
         body: &'a types::NetworkInterfaceUpdate,
     ) -> Result<ResponseValue<types::NetworkInterface>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/instances/{}/network-interfaces/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&instance_name.to_string()),
-            encode_path(&interface_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .put(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .json(&body)
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/organizations/{}/projects/{}/instances/{}/network-interfaces/{}",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&instance_name.to_string()),
+                encode_path(&interface_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .put(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .json(&body)
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "instance_network_interface_update",
         };
@@ -17454,29 +17561,31 @@ impl Client {
         instance_name: &'a types::Name,
         interface_name: &'a types::Name,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/instances/{}/network-interfaces/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&instance_name.to_string()),
-            encode_path(&interface_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .delete(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/organizations/{}/projects/{}/instances/{}/network-interfaces/{}",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&instance_name.to_string()),
+                encode_path(&interface_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .delete(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "instance_network_interface_delete",
         };
@@ -17509,28 +17618,30 @@ impl Client {
         project_name: &'a types::Name,
         instance_name: &'a types::Name,
     ) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/instances/{}/reboot",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&instance_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .post(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/organizations/{}/projects/{}/instances/{}/reboot",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&instance_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .post(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "instance_reboot",
         };
@@ -17582,37 +17693,39 @@ impl Client {
         max_bytes: Option<u64>,
         most_recent: Option<u64>,
     ) -> Result<ResponseValue<types::InstanceSerialConsoleData>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/instances/{}/serial-console",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&instance_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .query(&progenitor_client::QueryParam::new(
-                "from_start",
-                &from_start,
-            ))
-            .query(&progenitor_client::QueryParam::new("max_bytes", &max_bytes))
-            .query(&progenitor_client::QueryParam::new(
-                "most_recent",
-                &most_recent,
-            ))
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/organizations/{}/projects/{}/instances/{}/serial-console",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&instance_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .query(&progenitor_client::QueryParam::new(
+                    "from_start",
+                    &from_start,
+                ))
+                .query(&progenitor_client::QueryParam::new("max_bytes", &max_bytes))
+                .query(&progenitor_client::QueryParam::new(
+                    "most_recent",
+                    &most_recent,
+                ))
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "instance_serial_console",
         };
@@ -17645,34 +17758,36 @@ impl Client {
         project_name: &'a types::Name,
         instance_name: &'a types::Name,
     ) -> Result<ResponseValue<reqwest::Upgraded>, Error<reqwest::Upgraded>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/instances/{}/serial-console/stream",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&instance_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .headers(header_map)
-            .header(::reqwest::header::CONNECTION, "Upgrade")
-            .header(::reqwest::header::UPGRADE, "websocket")
-            .header(::reqwest::header::SEC_WEBSOCKET_VERSION, "13")
-            .header(
-                ::reqwest::header::SEC_WEBSOCKET_KEY,
-                ::base64::Engine::encode(
-                    &::base64::engine::general_purpose::STANDARD,
-                    ::rand::random::<[u8; 16]>(),
-                ),
-            )
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/organizations/{}/projects/{}/instances/{}/serial-console/stream",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&instance_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .headers(header_map)
+                .header(::reqwest::header::CONNECTION, "Upgrade")
+                .header(::reqwest::header::UPGRADE, "websocket")
+                .header(::reqwest::header::SEC_WEBSOCKET_VERSION, "13")
+                .header(
+                    ::reqwest::header::SEC_WEBSOCKET_KEY,
+                    ::base64::Engine::encode(
+                        &::base64::engine::general_purpose::STANDARD,
+                        ::rand::random::<[u8; 16]>(),
+                    ),
+                )
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "instance_serial_console_stream",
         };
@@ -17700,28 +17815,30 @@ impl Client {
         project_name: &'a types::Name,
         instance_name: &'a types::Name,
     ) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/instances/{}/start",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&instance_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .post(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/organizations/{}/projects/{}/instances/{}/start",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&instance_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .post(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "instance_start",
         };
@@ -17754,28 +17871,30 @@ impl Client {
         project_name: &'a types::Name,
         instance_name: &'a types::Name,
     ) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/instances/{}/stop",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&instance_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .post(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/organizations/{}/projects/{}/instances/{}/stop",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&instance_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .post(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "instance_stop",
         };
@@ -17810,27 +17929,29 @@ impl Client {
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
     ) -> Result<ResponseValue<types::ProjectRolePolicy>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/policy",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/organizations/{}/projects/{}/policy",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "project_policy_view",
         };
@@ -17865,28 +17986,30 @@ impl Client {
         project_name: &'a types::Name,
         body: &'a types::ProjectRolePolicy,
     ) -> Result<ResponseValue<types::ProjectRolePolicy>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/policy",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .put(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .json(&body)
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/organizations/{}/projects/{}/policy",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .put(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .json(&body)
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "project_policy_update",
         };
@@ -17926,33 +18049,35 @@ impl Client {
         page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
     ) -> Result<ResponseValue<types::SnapshotResultsPage>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/snapshots",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
-            .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/organizations/{}/projects/{}/snapshots",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .query(&progenitor_client::QueryParam::new("limit", &limit))
+                .query(&progenitor_client::QueryParam::new(
+                    "page_token",
+                    &page_token,
+                ))
+                .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "snapshot_list",
         };
@@ -18040,28 +18165,30 @@ impl Client {
         project_name: &'a types::Name,
         body: &'a types::SnapshotCreate,
     ) -> Result<ResponseValue<types::Snapshot>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/snapshots",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .post(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .json(&body)
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/organizations/{}/projects/{}/snapshots",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .post(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .json(&body)
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "snapshot_create",
         };
@@ -18092,28 +18219,30 @@ impl Client {
         project_name: &'a types::Name,
         snapshot_name: &'a types::Name,
     ) -> Result<ResponseValue<types::Snapshot>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/snapshots/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&snapshot_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/organizations/{}/projects/{}/snapshots/{}",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&snapshot_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "snapshot_view",
         };
@@ -18144,28 +18273,30 @@ impl Client {
         project_name: &'a types::Name,
         snapshot_name: &'a types::Name,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/snapshots/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&snapshot_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .delete(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/organizations/{}/projects/{}/snapshots/{}",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&snapshot_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .delete(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "snapshot_delete",
         };
@@ -18205,33 +18336,35 @@ impl Client {
         page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
     ) -> Result<ResponseValue<types::VpcResultsPage>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/vpcs",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
-            .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/organizations/{}/projects/{}/vpcs",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .query(&progenitor_client::QueryParam::new("limit", &limit))
+                .query(&progenitor_client::QueryParam::new(
+                    "page_token",
+                    &page_token,
+                ))
+                .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "vpc_list",
         };
@@ -18316,28 +18449,30 @@ impl Client {
         project_name: &'a types::Name,
         body: &'a types::VpcCreate,
     ) -> Result<ResponseValue<types::Vpc>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/vpcs",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .post(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .json(&body)
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/organizations/{}/projects/{}/vpcs",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .post(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .json(&body)
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "vpc_create",
         };
@@ -18368,28 +18503,30 @@ impl Client {
         project_name: &'a types::Name,
         vpc_name: &'a types::Name,
     ) -> Result<ResponseValue<types::Vpc>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/vpcs/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&vpc_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/organizations/{}/projects/{}/vpcs/{}",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&vpc_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "vpc_view",
         };
@@ -18421,29 +18558,31 @@ impl Client {
         vpc_name: &'a types::Name,
         body: &'a types::VpcUpdate,
     ) -> Result<ResponseValue<types::Vpc>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/vpcs/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&vpc_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .put(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .json(&body)
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/organizations/{}/projects/{}/vpcs/{}",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&vpc_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .put(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .json(&body)
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "vpc_update",
         };
@@ -18474,28 +18613,30 @@ impl Client {
         project_name: &'a types::Name,
         vpc_name: &'a types::Name,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/vpcs/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&vpc_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .delete(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/organizations/{}/projects/{}/vpcs/{}",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&vpc_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .delete(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "vpc_delete",
         };
@@ -18526,28 +18667,30 @@ impl Client {
         project_name: &'a types::Name,
         vpc_name: &'a types::Name,
     ) -> Result<ResponseValue<types::VpcFirewallRules>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/vpcs/{}/firewall/rules",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&vpc_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/organizations/{}/projects/{}/vpcs/{}/firewall/rules",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&vpc_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "vpc_firewall_rules_view",
         };
@@ -18579,29 +18722,31 @@ impl Client {
         vpc_name: &'a types::Name,
         body: &'a types::VpcFirewallRuleUpdateParams,
     ) -> Result<ResponseValue<types::VpcFirewallRules>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/vpcs/{}/firewall/rules",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&vpc_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .put(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .json(&body)
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/organizations/{}/projects/{}/vpcs/{}/firewall/rules",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&vpc_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .put(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .json(&body)
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "vpc_firewall_rules_update",
         };
@@ -18644,34 +18789,36 @@ impl Client {
         page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
     ) -> Result<ResponseValue<types::VpcRouterResultsPage>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/vpcs/{}/routers",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&vpc_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
-            .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/organizations/{}/projects/{}/vpcs/{}/routers",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&vpc_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .query(&progenitor_client::QueryParam::new("limit", &limit))
+                .query(&progenitor_client::QueryParam::new(
+                    "page_token",
+                    &page_token,
+                ))
+                .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "vpc_router_list",
         };
@@ -18764,29 +18911,31 @@ impl Client {
         vpc_name: &'a types::Name,
         body: &'a types::VpcRouterCreate,
     ) -> Result<ResponseValue<types::VpcRouter>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/vpcs/{}/routers",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&vpc_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .post(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .json(&body)
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/organizations/{}/projects/{}/vpcs/{}/routers",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&vpc_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .post(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .json(&body)
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "vpc_router_create",
         };
@@ -18818,29 +18967,31 @@ impl Client {
         vpc_name: &'a types::Name,
         router_name: &'a types::Name,
     ) -> Result<ResponseValue<types::VpcRouter>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&vpc_name.to_string()),
-            encode_path(&router_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&vpc_name.to_string()),
+                encode_path(&router_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "vpc_router_view",
         };
@@ -18873,30 +19024,32 @@ impl Client {
         router_name: &'a types::Name,
         body: &'a types::VpcRouterUpdate,
     ) -> Result<ResponseValue<types::VpcRouter>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&vpc_name.to_string()),
-            encode_path(&router_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .put(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .json(&body)
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&vpc_name.to_string()),
+                encode_path(&router_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .put(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .json(&body)
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "vpc_router_update",
         };
@@ -18928,29 +19081,31 @@ impl Client {
         vpc_name: &'a types::Name,
         router_name: &'a types::Name,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&vpc_name.to_string()),
-            encode_path(&router_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .delete(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&vpc_name.to_string()),
+                encode_path(&router_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .delete(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "vpc_router_delete",
         };
@@ -18997,35 +19152,37 @@ impl Client {
         page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
     ) -> Result<ResponseValue<types::RouterRouteResultsPage>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}/routes",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&vpc_name.to_string()),
-            encode_path(&router_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
-            .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}/routes",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&vpc_name.to_string()),
+                encode_path(&router_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .query(&progenitor_client::QueryParam::new("limit", &limit))
+                .query(&progenitor_client::QueryParam::new(
+                    "page_token",
+                    &page_token,
+                ))
+                .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "vpc_router_route_list",
         };
@@ -19126,30 +19283,32 @@ impl Client {
         router_name: &'a types::Name,
         body: &'a types::RouterRouteCreateParams,
     ) -> Result<ResponseValue<types::RouterRoute>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}/routes",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&vpc_name.to_string()),
-            encode_path(&router_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .post(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .json(&body)
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}/routes",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&vpc_name.to_string()),
+                encode_path(&router_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .post(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .json(&body)
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "vpc_router_route_create",
         };
@@ -19182,30 +19341,32 @@ impl Client {
         router_name: &'a types::Name,
         route_name: &'a types::Name,
     ) -> Result<ResponseValue<types::RouterRoute>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}/routes/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&vpc_name.to_string()),
-            encode_path(&router_name.to_string()),
-            encode_path(&route_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}/routes/{}",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&vpc_name.to_string()),
+                encode_path(&router_name.to_string()),
+                encode_path(&route_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "vpc_router_route_view",
         };
@@ -19239,31 +19400,33 @@ impl Client {
         route_name: &'a types::Name,
         body: &'a types::RouterRouteUpdateParams,
     ) -> Result<ResponseValue<types::RouterRoute>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}/routes/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&vpc_name.to_string()),
-            encode_path(&router_name.to_string()),
-            encode_path(&route_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .put(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .json(&body)
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}/routes/{}",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&vpc_name.to_string()),
+                encode_path(&router_name.to_string()),
+                encode_path(&route_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .put(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .json(&body)
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "vpc_router_route_update",
         };
@@ -19296,30 +19459,32 @@ impl Client {
         router_name: &'a types::Name,
         route_name: &'a types::Name,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}/routes/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&vpc_name.to_string()),
-            encode_path(&router_name.to_string()),
-            encode_path(&route_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .delete(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}/routes/{}",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&vpc_name.to_string()),
+                encode_path(&router_name.to_string()),
+                encode_path(&route_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .delete(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "vpc_router_route_delete",
         };
@@ -19362,34 +19527,36 @@ impl Client {
         page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
     ) -> Result<ResponseValue<types::VpcSubnetResultsPage>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/vpcs/{}/subnets",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&vpc_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
-            .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/organizations/{}/projects/{}/vpcs/{}/subnets",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&vpc_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .query(&progenitor_client::QueryParam::new("limit", &limit))
+                .query(&progenitor_client::QueryParam::new(
+                    "page_token",
+                    &page_token,
+                ))
+                .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "vpc_subnet_list",
         };
@@ -19482,29 +19649,31 @@ impl Client {
         vpc_name: &'a types::Name,
         body: &'a types::VpcSubnetCreate,
     ) -> Result<ResponseValue<types::VpcSubnet>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/vpcs/{}/subnets",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&vpc_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .post(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .json(&body)
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/organizations/{}/projects/{}/vpcs/{}/subnets",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&vpc_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .post(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .json(&body)
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "vpc_subnet_create",
         };
@@ -19536,29 +19705,31 @@ impl Client {
         vpc_name: &'a types::Name,
         subnet_name: &'a types::Name,
     ) -> Result<ResponseValue<types::VpcSubnet>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/vpcs/{}/subnets/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&vpc_name.to_string()),
-            encode_path(&subnet_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/organizations/{}/projects/{}/vpcs/{}/subnets/{}",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&vpc_name.to_string()),
+                encode_path(&subnet_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "vpc_subnet_view",
         };
@@ -19591,30 +19762,32 @@ impl Client {
         subnet_name: &'a types::Name,
         body: &'a types::VpcSubnetUpdate,
     ) -> Result<ResponseValue<types::VpcSubnet>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/vpcs/{}/subnets/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&vpc_name.to_string()),
-            encode_path(&subnet_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .put(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .json(&body)
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/organizations/{}/projects/{}/vpcs/{}/subnets/{}",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&vpc_name.to_string()),
+                encode_path(&subnet_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .put(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .json(&body)
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "vpc_subnet_update",
         };
@@ -19646,29 +19819,31 @@ impl Client {
         vpc_name: &'a types::Name,
         subnet_name: &'a types::Name,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/vpcs/{}/subnets/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&vpc_name.to_string()),
-            encode_path(&subnet_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .delete(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/organizations/{}/projects/{}/vpcs/{}/subnets/{}",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&vpc_name.to_string()),
+                encode_path(&subnet_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .delete(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "vpc_subnet_delete",
         };
@@ -19713,35 +19888,37 @@ impl Client {
         page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
     ) -> Result<ResponseValue<types::NetworkInterfaceResultsPage>, Error<types::Error>> {
-        let url = format!(
-            "{}/organizations/{}/projects/{}/vpcs/{}/subnets/{}/network-interfaces",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&vpc_name.to_string()),
-            encode_path(&subnet_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
-            .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/organizations/{}/projects/{}/vpcs/{}/subnets/{}/network-interfaces",
+                self.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&vpc_name.to_string()),
+                encode_path(&subnet_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .query(&progenitor_client::QueryParam::new("limit", &limit))
+                .query(&progenitor_client::QueryParam::new(
+                    "page_token",
+                    &page_token,
+                ))
+                .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "vpc_subnet_list_network_interfaces",
         };
@@ -19833,22 +20010,24 @@ impl Client {
     pub async fn policy_view<'a>(
         &'a self,
     ) -> Result<ResponseValue<types::SiloRolePolicy>, Error<types::Error>> {
-        let url = format!("{}/policy", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!("{}/policy", self.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "policy_view",
         };
@@ -19875,23 +20054,25 @@ impl Client {
         &'a self,
         body: &'a types::SiloRolePolicy,
     ) -> Result<ResponseValue<types::SiloRolePolicy>, Error<types::Error>> {
-        let url = format!("{}/policy", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .put(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .json(&body)
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!("{}/policy", self.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .put(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .json(&body)
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "policy_update",
         };
@@ -19924,27 +20105,29 @@ impl Client {
         limit: Option<::std::num::NonZeroU32>,
         page_token: Option<&'a str>,
     ) -> Result<ResponseValue<types::RoleResultsPage>, Error<types::Error>> {
-        let url = format!("{}/roles", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!("{}/roles", self.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .query(&progenitor_client::QueryParam::new("limit", &limit))
+                .query(&progenitor_client::QueryParam::new(
+                    "page_token",
+                    &page_token,
+                ))
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "role_list",
         };
@@ -20011,26 +20194,28 @@ impl Client {
         &'a self,
         role_name: &'a str,
     ) -> Result<ResponseValue<types::Role>, Error<types::Error>> {
-        let url = format!(
-            "{}/roles/{}",
-            self.baseurl,
-            encode_path(&role_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/roles/{}",
+                self.baseurl,
+                encode_path(&role_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "role_view",
         };
@@ -20056,22 +20241,24 @@ impl Client {
     pub async fn session_me<'a>(
         &'a self,
     ) -> Result<ResponseValue<types::User>, Error<types::Error>> {
-        let url = format!("{}/session/me", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!("{}/session/me", self.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "session_me",
         };
@@ -20106,28 +20293,30 @@ impl Client {
         page_token: Option<&'a str>,
         sort_by: Option<types::IdSortMode>,
     ) -> Result<ResponseValue<types::GroupResultsPage>, Error<types::Error>> {
-        let url = format!("{}/session/me/groups", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
-            .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!("{}/session/me/groups", self.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .query(&progenitor_client::QueryParam::new("limit", &limit))
+                .query(&progenitor_client::QueryParam::new(
+                    "page_token",
+                    &page_token,
+                ))
+                .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "session_me_groups",
         };
@@ -20203,28 +20392,30 @@ impl Client {
         page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
     ) -> Result<ResponseValue<types::SshKeyResultsPage>, Error<types::Error>> {
-        let url = format!("{}/session/me/sshkeys", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
-            .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!("{}/session/me/sshkeys", self.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .query(&progenitor_client::QueryParam::new("limit", &limit))
+                .query(&progenitor_client::QueryParam::new(
+                    "page_token",
+                    &page_token,
+                ))
+                .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "session_sshkey_list",
         };
@@ -20294,23 +20485,25 @@ impl Client {
         &'a self,
         body: &'a types::SshKeyCreate,
     ) -> Result<ResponseValue<types::SshKey>, Error<types::Error>> {
-        let url = format!("{}/session/me/sshkeys", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .post(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .json(&body)
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!("{}/session/me/sshkeys", self.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .post(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .json(&body)
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "session_sshkey_create",
         };
@@ -20340,26 +20533,28 @@ impl Client {
         &'a self,
         ssh_key_name: &'a types::Name,
     ) -> Result<ResponseValue<types::SshKey>, Error<types::Error>> {
-        let url = format!(
-            "{}/session/me/sshkeys/{}",
-            self.baseurl,
-            encode_path(&ssh_key_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/session/me/sshkeys/{}",
+                self.baseurl,
+                encode_path(&ssh_key_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "session_sshkey_view",
         };
@@ -20389,26 +20584,28 @@ impl Client {
         &'a self,
         ssh_key_name: &'a types::Name,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
-        let url = format!(
-            "{}/session/me/sshkeys/{}",
-            self.baseurl,
-            encode_path(&ssh_key_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .delete(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/session/me/sshkeys/{}",
+                self.baseurl,
+                encode_path(&ssh_key_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .delete(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "session_sshkey_delete",
         };
@@ -20435,26 +20632,28 @@ impl Client {
         &'a self,
         id: &'a ::uuid::Uuid,
     ) -> Result<ResponseValue<types::GlobalImage>, Error<types::Error>> {
-        let url = format!(
-            "{}/system/by-id/images/{}",
-            self.baseurl,
-            encode_path(&id.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/system/by-id/images/{}",
+                self.baseurl,
+                encode_path(&id.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "system_image_view_by_id",
         };
@@ -20481,26 +20680,28 @@ impl Client {
         &'a self,
         id: &'a ::uuid::Uuid,
     ) -> Result<ResponseValue<types::IpPool>, Error<types::Error>> {
-        let url = format!(
-            "{}/system/by-id/ip-pools/{}",
-            self.baseurl,
-            encode_path(&id.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/system/by-id/ip-pools/{}",
+                self.baseurl,
+                encode_path(&id.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "ip_pool_view_by_id",
         };
@@ -20527,26 +20728,28 @@ impl Client {
         &'a self,
         id: &'a ::uuid::Uuid,
     ) -> Result<ResponseValue<types::Silo>, Error<types::Error>> {
-        let url = format!(
-            "{}/system/by-id/silos/{}",
-            self.baseurl,
-            encode_path(&id.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/system/by-id/silos/{}",
+                self.baseurl,
+                encode_path(&id.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "silo_view_by_id",
         };
@@ -20585,28 +20788,30 @@ impl Client {
         page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
     ) -> Result<ResponseValue<types::CertificateResultsPage>, Error<types::Error>> {
-        let url = format!("{}/system/certificates", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
-            .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!("{}/system/certificates", self.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .query(&progenitor_client::QueryParam::new("limit", &limit))
+                .query(&progenitor_client::QueryParam::new(
+                    "page_token",
+                    &page_token,
+                ))
+                .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "certificate_list",
         };
@@ -20680,23 +20885,25 @@ impl Client {
         &'a self,
         body: &'a types::CertificateCreate,
     ) -> Result<ResponseValue<types::Certificate>, Error<types::Error>> {
-        let url = format!("{}/system/certificates", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .post(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .json(&body)
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!("{}/system/certificates", self.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .post(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .json(&body)
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "certificate_create",
         };
@@ -20725,26 +20932,28 @@ impl Client {
         &'a self,
         certificate: &'a types::NameOrId,
     ) -> Result<ResponseValue<types::Certificate>, Error<types::Error>> {
-        let url = format!(
-            "{}/system/certificates/{}",
-            self.baseurl,
-            encode_path(&certificate.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/system/certificates/{}",
+                self.baseurl,
+                encode_path(&certificate.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "certificate_view",
         };
@@ -20773,26 +20982,28 @@ impl Client {
         &'a self,
         certificate: &'a types::NameOrId,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
-        let url = format!(
-            "{}/system/certificates/{}",
-            self.baseurl,
-            encode_path(&certificate.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .delete(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/system/certificates/{}",
+                self.baseurl,
+                encode_path(&certificate.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .delete(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "certificate_delete",
         };
@@ -20827,28 +21038,30 @@ impl Client {
         page_token: Option<&'a str>,
         sort_by: Option<types::IdSortMode>,
     ) -> Result<ResponseValue<types::PhysicalDiskResultsPage>, Error<types::Error>> {
-        let url = format!("{}/system/hardware/disks", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
-            .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!("{}/system/hardware/disks", self.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .query(&progenitor_client::QueryParam::new("limit", &limit))
+                .query(&progenitor_client::QueryParam::new(
+                    "page_token",
+                    &page_token,
+                ))
+                .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "physical_disk_list",
         };
@@ -20923,28 +21136,30 @@ impl Client {
         page_token: Option<&'a str>,
         sort_by: Option<types::IdSortMode>,
     ) -> Result<ResponseValue<types::RackResultsPage>, Error<types::Error>> {
-        let url = format!("{}/system/hardware/racks", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
-            .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!("{}/system/hardware/racks", self.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .query(&progenitor_client::QueryParam::new("limit", &limit))
+                .query(&progenitor_client::QueryParam::new(
+                    "page_token",
+                    &page_token,
+                ))
+                .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "rack_list",
         };
@@ -21013,26 +21228,28 @@ impl Client {
         &'a self,
         rack_id: &'a ::uuid::Uuid,
     ) -> Result<ResponseValue<types::Rack>, Error<types::Error>> {
-        let url = format!(
-            "{}/system/hardware/racks/{}",
-            self.baseurl,
-            encode_path(&rack_id.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/system/hardware/racks/{}",
+                self.baseurl,
+                encode_path(&rack_id.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "rack_view",
         };
@@ -21067,28 +21284,30 @@ impl Client {
         page_token: Option<&'a str>,
         sort_by: Option<types::IdSortMode>,
     ) -> Result<ResponseValue<types::SledResultsPage>, Error<types::Error>> {
-        let url = format!("{}/system/hardware/sleds", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
-            .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!("{}/system/hardware/sleds", self.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .query(&progenitor_client::QueryParam::new("limit", &limit))
+                .query(&progenitor_client::QueryParam::new(
+                    "page_token",
+                    &page_token,
+                ))
+                .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "sled_list",
         };
@@ -21157,26 +21376,28 @@ impl Client {
         &'a self,
         sled_id: &'a ::uuid::Uuid,
     ) -> Result<ResponseValue<types::Sled>, Error<types::Error>> {
-        let url = format!(
-            "{}/system/hardware/sleds/{}",
-            self.baseurl,
-            encode_path(&sled_id.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/system/hardware/sleds/{}",
+                self.baseurl,
+                encode_path(&sled_id.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "sled_view",
         };
@@ -21213,32 +21434,34 @@ impl Client {
         page_token: Option<&'a str>,
         sort_by: Option<types::IdSortMode>,
     ) -> Result<ResponseValue<types::PhysicalDiskResultsPage>, Error<types::Error>> {
-        let url = format!(
-            "{}/system/hardware/sleds/{}/disks",
-            self.baseurl,
-            encode_path(&sled_id.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
-            .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/system/hardware/sleds/{}/disks",
+                self.baseurl,
+                encode_path(&sled_id.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .query(&progenitor_client::QueryParam::new("limit", &limit))
+                .query(&progenitor_client::QueryParam::new(
+                    "page_token",
+                    &page_token,
+                ))
+                .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "sled_physical_disk_list",
         };
@@ -21320,28 +21543,30 @@ impl Client {
         page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
     ) -> Result<ResponseValue<types::GlobalImageResultsPage>, Error<types::Error>> {
-        let url = format!("{}/system/images", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
-            .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!("{}/system/images", self.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .query(&progenitor_client::QueryParam::new("limit", &limit))
+                .query(&progenitor_client::QueryParam::new(
+                    "page_token",
+                    &page_token,
+                ))
+                .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "system_image_list",
         };
@@ -21415,23 +21640,25 @@ impl Client {
         &'a self,
         body: &'a types::GlobalImageCreate,
     ) -> Result<ResponseValue<types::GlobalImage>, Error<types::Error>> {
-        let url = format!("{}/system/images", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .post(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .json(&body)
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!("{}/system/images", self.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .post(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .json(&body)
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "system_image_create",
         };
@@ -21460,26 +21687,28 @@ impl Client {
         &'a self,
         image_name: &'a types::Name,
     ) -> Result<ResponseValue<types::GlobalImage>, Error<types::Error>> {
-        let url = format!(
-            "{}/system/images/{}",
-            self.baseurl,
-            encode_path(&image_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/system/images/{}",
+                self.baseurl,
+                encode_path(&image_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "system_image_view",
         };
@@ -21510,26 +21739,28 @@ impl Client {
         &'a self,
         image_name: &'a types::Name,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
-        let url = format!(
-            "{}/system/images/{}",
-            self.baseurl,
-            encode_path(&image_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .delete(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/system/images/{}",
+                self.baseurl,
+                encode_path(&image_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .delete(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "system_image_delete",
         };
@@ -21564,28 +21795,30 @@ impl Client {
         page_token: Option<&'a str>,
         sort_by: Option<types::NameOrIdSortMode>,
     ) -> Result<ResponseValue<types::IpPoolResultsPage>, Error<types::Error>> {
-        let url = format!("{}/system/ip-pools", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
-            .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!("{}/system/ip-pools", self.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .query(&progenitor_client::QueryParam::new("limit", &limit))
+                .query(&progenitor_client::QueryParam::new(
+                    "page_token",
+                    &page_token,
+                ))
+                .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "ip_pool_list",
         };
@@ -21651,23 +21884,25 @@ impl Client {
         &'a self,
         body: &'a types::IpPoolCreate,
     ) -> Result<ResponseValue<types::IpPool>, Error<types::Error>> {
-        let url = format!("{}/system/ip-pools", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .post(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .json(&body)
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!("{}/system/ip-pools", self.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .post(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .json(&body)
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "ip_pool_create",
         };
@@ -21694,26 +21929,28 @@ impl Client {
         &'a self,
         pool_name: &'a types::Name,
     ) -> Result<ResponseValue<types::IpPool>, Error<types::Error>> {
-        let url = format!(
-            "{}/system/ip-pools/{}",
-            self.baseurl,
-            encode_path(&pool_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/system/ip-pools/{}",
+                self.baseurl,
+                encode_path(&pool_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "ip_pool_view",
         };
@@ -21741,27 +21978,29 @@ impl Client {
         pool_name: &'a types::Name,
         body: &'a types::IpPoolUpdate,
     ) -> Result<ResponseValue<types::IpPool>, Error<types::Error>> {
-        let url = format!(
-            "{}/system/ip-pools/{}",
-            self.baseurl,
-            encode_path(&pool_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .put(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .json(&body)
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/system/ip-pools/{}",
+                self.baseurl,
+                encode_path(&pool_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .put(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .json(&body)
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "ip_pool_update",
         };
@@ -21788,26 +22027,28 @@ impl Client {
         &'a self,
         pool_name: &'a types::Name,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
-        let url = format!(
-            "{}/system/ip-pools/{}",
-            self.baseurl,
-            encode_path(&pool_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .delete(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/system/ip-pools/{}",
+                self.baseurl,
+                encode_path(&pool_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .delete(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "ip_pool_delete",
         };
@@ -21844,31 +22085,33 @@ impl Client {
         limit: Option<::std::num::NonZeroU32>,
         page_token: Option<&'a str>,
     ) -> Result<ResponseValue<types::IpPoolRangeResultsPage>, Error<types::Error>> {
-        let url = format!(
-            "{}/system/ip-pools/{}/ranges",
-            self.baseurl,
-            encode_path(&pool_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/system/ip-pools/{}/ranges",
+                self.baseurl,
+                encode_path(&pool_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .query(&progenitor_client::QueryParam::new("limit", &limit))
+                .query(&progenitor_client::QueryParam::new(
+                    "page_token",
+                    &page_token,
+                ))
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "ip_pool_range_list",
         };
@@ -21938,27 +22181,29 @@ impl Client {
         pool_name: &'a types::Name,
         body: &'a types::IpRange,
     ) -> Result<ResponseValue<types::IpPoolRange>, Error<types::Error>> {
-        let url = format!(
-            "{}/system/ip-pools/{}/ranges/add",
-            self.baseurl,
-            encode_path(&pool_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .post(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .json(&body)
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/system/ip-pools/{}/ranges/add",
+                self.baseurl,
+                encode_path(&pool_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .post(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .json(&body)
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "ip_pool_range_add",
         };
@@ -21986,27 +22231,29 @@ impl Client {
         pool_name: &'a types::Name,
         body: &'a types::IpRange,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
-        let url = format!(
-            "{}/system/ip-pools/{}/ranges/remove",
-            self.baseurl,
-            encode_path(&pool_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .post(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .json(&body)
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/system/ip-pools/{}/ranges/remove",
+                self.baseurl,
+                encode_path(&pool_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .post(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .json(&body)
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "ip_pool_range_remove",
         };
@@ -22032,22 +22279,24 @@ impl Client {
     pub async fn ip_pool_service_view<'a>(
         &'a self,
     ) -> Result<ResponseValue<types::IpPool>, Error<types::Error>> {
-        let url = format!("{}/system/ip-pools-service", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!("{}/system/ip-pools-service", self.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "ip_pool_service_view",
         };
@@ -22082,27 +22331,29 @@ impl Client {
         limit: Option<::std::num::NonZeroU32>,
         page_token: Option<&'a str>,
     ) -> Result<ResponseValue<types::IpPoolRangeResultsPage>, Error<types::Error>> {
-        let url = format!("{}/system/ip-pools-service/ranges", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!("{}/system/ip-pools-service/ranges", self.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .query(&progenitor_client::QueryParam::new("limit", &limit))
+                .query(&progenitor_client::QueryParam::new(
+                    "page_token",
+                    &page_token,
+                ))
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "ip_pool_service_range_list",
         };
@@ -22169,23 +22420,25 @@ impl Client {
         &'a self,
         body: &'a types::IpRange,
     ) -> Result<ResponseValue<types::IpPoolRange>, Error<types::Error>> {
-        let url = format!("{}/system/ip-pools-service/ranges/add", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .post(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .json(&body)
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!("{}/system/ip-pools-service/ranges/add", self.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .post(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .json(&body)
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "ip_pool_service_range_add",
         };
@@ -22212,23 +22465,25 @@ impl Client {
         &'a self,
         body: &'a types::IpRange,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
-        let url = format!("{}/system/ip-pools-service/ranges/remove", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .post(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .json(&body)
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!("{}/system/ip-pools-service/ranges/remove", self.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .post(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .json(&body)
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "ip_pool_service_range_remove",
         };
@@ -22269,37 +22524,39 @@ impl Client {
         page_token: Option<&'a str>,
         start_time: Option<&'a ::chrono::DateTime<::chrono::offset::Utc>>,
     ) -> Result<ResponseValue<types::MeasurementResultsPage>, Error<types::Error>> {
-        let url = format!(
-            "{}/system/metrics/{}",
-            self.baseurl,
-            encode_path(&metric_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .query(&progenitor_client::QueryParam::new("end_time", &end_time))
-            .query(&progenitor_client::QueryParam::new("id", &id))
-            .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
-            .query(&progenitor_client::QueryParam::new(
-                "start_time",
-                &start_time,
-            ))
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/system/metrics/{}",
+                self.baseurl,
+                encode_path(&metric_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .query(&progenitor_client::QueryParam::new("end_time", &end_time))
+                .query(&progenitor_client::QueryParam::new("id", &id))
+                .query(&progenitor_client::QueryParam::new("limit", &limit))
+                .query(&progenitor_client::QueryParam::new(
+                    "page_token",
+                    &page_token,
+                ))
+                .query(&progenitor_client::QueryParam::new(
+                    "start_time",
+                    &start_time,
+                ))
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "system_metric",
         };
@@ -22325,22 +22582,24 @@ impl Client {
     pub async fn system_policy_view<'a>(
         &'a self,
     ) -> Result<ResponseValue<types::FleetRolePolicy>, Error<types::Error>> {
-        let url = format!("{}/system/policy", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!("{}/system/policy", self.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "system_policy_view",
         };
@@ -22367,23 +22626,25 @@ impl Client {
         &'a self,
         body: &'a types::FleetRolePolicy,
     ) -> Result<ResponseValue<types::FleetRolePolicy>, Error<types::Error>> {
-        let url = format!("{}/system/policy", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .put(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .json(&body)
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!("{}/system/policy", self.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .put(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .json(&body)
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "system_policy_update",
         };
@@ -22418,28 +22679,30 @@ impl Client {
         page_token: Option<&'a str>,
         sort_by: Option<types::IdSortMode>,
     ) -> Result<ResponseValue<types::SagaResultsPage>, Error<types::Error>> {
-        let url = format!("{}/system/sagas", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
-            .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!("{}/system/sagas", self.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .query(&progenitor_client::QueryParam::new("limit", &limit))
+                .query(&progenitor_client::QueryParam::new(
+                    "page_token",
+                    &page_token,
+                ))
+                .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "saga_list",
         };
@@ -22505,26 +22768,28 @@ impl Client {
         &'a self,
         saga_id: &'a ::uuid::Uuid,
     ) -> Result<ResponseValue<types::Saga>, Error<types::Error>> {
-        let url = format!(
-            "{}/system/sagas/{}",
-            self.baseurl,
-            encode_path(&saga_id.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/system/sagas/{}",
+                self.baseurl,
+                encode_path(&saga_id.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "saga_view",
         };
@@ -22561,28 +22826,30 @@ impl Client {
         page_token: Option<&'a str>,
         sort_by: Option<types::NameOrIdSortMode>,
     ) -> Result<ResponseValue<types::SiloResultsPage>, Error<types::Error>> {
-        let url = format!("{}/system/silos", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
-            .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!("{}/system/silos", self.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .query(&progenitor_client::QueryParam::new("limit", &limit))
+                .query(&progenitor_client::QueryParam::new(
+                    "page_token",
+                    &page_token,
+                ))
+                .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "silo_list",
         };
@@ -22650,23 +22917,25 @@ impl Client {
         &'a self,
         body: &'a types::SiloCreate,
     ) -> Result<ResponseValue<types::Silo>, Error<types::Error>> {
-        let url = format!("{}/system/silos", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .post(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .json(&body)
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!("{}/system/silos", self.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .post(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .json(&body)
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "silo_create",
         };
@@ -22698,26 +22967,28 @@ impl Client {
         &'a self,
         silo_name: &'a types::Name,
     ) -> Result<ResponseValue<types::Silo>, Error<types::Error>> {
-        let url = format!(
-            "{}/system/silos/{}",
-            self.baseurl,
-            encode_path(&silo_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/system/silos/{}",
+                self.baseurl,
+                encode_path(&silo_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "silo_view",
         };
@@ -22749,26 +23020,28 @@ impl Client {
         &'a self,
         silo_name: &'a types::Name,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
-        let url = format!(
-            "{}/system/silos/{}",
-            self.baseurl,
-            encode_path(&silo_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .delete(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/system/silos/{}",
+                self.baseurl,
+                encode_path(&silo_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .delete(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "silo_delete",
         };
@@ -22805,32 +23078,34 @@ impl Client {
         page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
     ) -> Result<ResponseValue<types::IdentityProviderResultsPage>, Error<types::Error>> {
-        let url = format!(
-            "{}/system/silos/{}/identity-providers",
-            self.baseurl,
-            encode_path(&silo_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
-            .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/system/silos/{}/identity-providers",
+                self.baseurl,
+                encode_path(&silo_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .query(&progenitor_client::QueryParam::new("limit", &limit))
+                .query(&progenitor_client::QueryParam::new(
+                    "page_token",
+                    &page_token,
+                ))
+                .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "silo_identity_provider_list",
         };
@@ -22910,27 +23185,29 @@ impl Client {
         silo_name: &'a types::Name,
         body: &'a types::UserCreate,
     ) -> Result<ResponseValue<types::User>, Error<types::Error>> {
-        let url = format!(
-            "{}/system/silos/{}/identity-providers/local/users",
-            self.baseurl,
-            encode_path(&silo_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .post(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .json(&body)
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/system/silos/{}/identity-providers/local/users",
+                self.baseurl,
+                encode_path(&silo_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .post(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .json(&body)
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "local_idp_user_create",
         };
@@ -22963,27 +23240,29 @@ impl Client {
         silo_name: &'a types::Name,
         user_id: &'a ::uuid::Uuid,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
-        let url = format!(
-            "{}/system/silos/{}/identity-providers/local/users/{}",
-            self.baseurl,
-            encode_path(&silo_name.to_string()),
-            encode_path(&user_id.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .delete(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/system/silos/{}/identity-providers/local/users/{}",
+                self.baseurl,
+                encode_path(&silo_name.to_string()),
+                encode_path(&user_id.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .delete(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "local_idp_user_delete",
         };
@@ -23022,28 +23301,30 @@ impl Client {
         user_id: &'a ::uuid::Uuid,
         body: &'a types::UserPassword,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
-        let url = format!(
-            "{}/system/silos/{}/identity-providers/local/users/{}/set-password",
-            self.baseurl,
-            encode_path(&silo_name.to_string()),
-            encode_path(&user_id.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .post(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .json(&body)
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/system/silos/{}/identity-providers/local/users/{}/set-password",
+                self.baseurl,
+                encode_path(&silo_name.to_string()),
+                encode_path(&user_id.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .post(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .json(&body)
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "local_idp_user_set_password",
         };
@@ -23076,27 +23357,29 @@ impl Client {
         silo_name: &'a types::Name,
         body: &'a types::SamlIdentityProviderCreate,
     ) -> Result<ResponseValue<types::SamlIdentityProvider>, Error<types::Error>> {
-        let url = format!(
-            "{}/system/silos/{}/identity-providers/saml",
-            self.baseurl,
-            encode_path(&silo_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .post(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .json(&body)
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/system/silos/{}/identity-providers/saml",
+                self.baseurl,
+                encode_path(&silo_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .post(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .json(&body)
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "saml_identity_provider_create",
         };
@@ -23129,27 +23412,29 @@ impl Client {
         silo_name: &'a types::Name,
         provider_name: &'a types::Name,
     ) -> Result<ResponseValue<types::SamlIdentityProvider>, Error<types::Error>> {
-        let url = format!(
-            "{}/system/silos/{}/identity-providers/saml/{}",
-            self.baseurl,
-            encode_path(&silo_name.to_string()),
-            encode_path(&provider_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/system/silos/{}/identity-providers/saml/{}",
+                self.baseurl,
+                encode_path(&silo_name.to_string()),
+                encode_path(&provider_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "saml_identity_provider_view",
         };
@@ -23179,26 +23464,28 @@ impl Client {
         &'a self,
         silo_name: &'a types::Name,
     ) -> Result<ResponseValue<types::SiloRolePolicy>, Error<types::Error>> {
-        let url = format!(
-            "{}/system/silos/{}/policy",
-            self.baseurl,
-            encode_path(&silo_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/system/silos/{}/policy",
+                self.baseurl,
+                encode_path(&silo_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "silo_policy_view",
         };
@@ -23230,27 +23517,29 @@ impl Client {
         silo_name: &'a types::Name,
         body: &'a types::SiloRolePolicy,
     ) -> Result<ResponseValue<types::SiloRolePolicy>, Error<types::Error>> {
-        let url = format!(
-            "{}/system/silos/{}/policy",
-            self.baseurl,
-            encode_path(&silo_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .put(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .json(&body)
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/system/silos/{}/policy",
+                self.baseurl,
+                encode_path(&silo_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .put(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .json(&body)
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "silo_policy_update",
         };
@@ -23287,32 +23576,34 @@ impl Client {
         page_token: Option<&'a str>,
         sort_by: Option<types::IdSortMode>,
     ) -> Result<ResponseValue<types::UserResultsPage>, Error<types::Error>> {
-        let url = format!(
-            "{}/system/silos/{}/users/all",
-            self.baseurl,
-            encode_path(&silo_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
-            .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/system/silos/{}/users/all",
+                self.baseurl,
+                encode_path(&silo_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .query(&progenitor_client::QueryParam::new("limit", &limit))
+                .query(&progenitor_client::QueryParam::new(
+                    "page_token",
+                    &page_token,
+                ))
+                .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "silo_users_list",
         };
@@ -23385,27 +23676,29 @@ impl Client {
         silo_name: &'a types::Name,
         user_id: &'a ::uuid::Uuid,
     ) -> Result<ResponseValue<types::User>, Error<types::Error>> {
-        let url = format!(
-            "{}/system/silos/{}/users/id/{}",
-            self.baseurl,
-            encode_path(&silo_name.to_string()),
-            encode_path(&user_id.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/system/silos/{}/users/id/{}",
+                self.baseurl,
+                encode_path(&silo_name.to_string()),
+                encode_path(&user_id.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "silo_user_view",
         };
@@ -23440,28 +23733,30 @@ impl Client {
         page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
     ) -> Result<ResponseValue<types::UserBuiltinResultsPage>, Error<types::Error>> {
-        let url = format!("{}/system/user", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
-            .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!("{}/system/user", self.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .query(&progenitor_client::QueryParam::new("limit", &limit))
+                .query(&progenitor_client::QueryParam::new(
+                    "page_token",
+                    &page_token,
+                ))
+                .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "system_user_list",
         };
@@ -23531,26 +23826,28 @@ impl Client {
         &'a self,
         user_name: &'a types::Name,
     ) -> Result<ResponseValue<types::UserBuiltin>, Error<types::Error>> {
-        let url = format!(
-            "{}/system/user/{}",
-            self.baseurl,
-            encode_path(&user_name.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/system/user/{}",
+                self.baseurl,
+                encode_path(&user_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "system_user_view",
         };
@@ -23583,27 +23880,29 @@ impl Client {
         limit: Option<::std::num::NonZeroU32>,
         page_token: Option<&'a str>,
     ) -> Result<ResponseValue<types::TimeseriesSchemaResultsPage>, Error<types::Error>> {
-        let url = format!("{}/timeseries/schema", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!("{}/timeseries/schema", self.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .query(&progenitor_client::QueryParam::new("limit", &limit))
+                .query(&progenitor_client::QueryParam::new(
+                    "page_token",
+                    &page_token,
+                ))
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "timeseries_schema_get",
         };
@@ -23676,28 +23975,30 @@ impl Client {
         page_token: Option<&'a str>,
         sort_by: Option<types::IdSortMode>,
     ) -> Result<ResponseValue<types::UserResultsPage>, Error<types::Error>> {
-        let url = format!("{}/users", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
-            .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!("{}/users", self.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .query(&progenitor_client::QueryParam::new("limit", &limit))
+                .query(&progenitor_client::QueryParam::new(
+                    "page_token",
+                    &page_token,
+                ))
+                .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "user_list",
         };
@@ -23775,33 +24076,35 @@ impl Client {
         project: Option<&'a types::NameOrId>,
         sort_by: Option<types::NameOrIdSortMode>,
     ) -> Result<ResponseValue<types::DiskResultsPage>, Error<types::Error>> {
-        let url = format!("{}/v1/disks", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "organization",
-                &organization,
-            ))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
-            .query(&progenitor_client::QueryParam::new("project", &project))
-            .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!("{}/v1/disks", self.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .query(&progenitor_client::QueryParam::new("limit", &limit))
+                .query(&progenitor_client::QueryParam::new(
+                    "organization",
+                    &organization,
+                ))
+                .query(&progenitor_client::QueryParam::new(
+                    "page_token",
+                    &page_token,
+                ))
+                .query(&progenitor_client::QueryParam::new("project", &project))
+                .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "disk_list_v1",
         };
@@ -23873,28 +24176,30 @@ impl Client {
         project: &'a types::NameOrId,
         body: &'a types::DiskCreate,
     ) -> Result<ResponseValue<types::Disk>, Error<types::Error>> {
-        let url = format!("{}/v1/disks", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .post(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .json(&body)
-            .query(&progenitor_client::QueryParam::new(
-                "organization",
-                &organization,
-            ))
-            .query(&progenitor_client::QueryParam::new("project", &project))
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!("{}/v1/disks", self.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .post(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .json(&body)
+                .query(&progenitor_client::QueryParam::new(
+                    "organization",
+                    &organization,
+                ))
+                .query(&progenitor_client::QueryParam::new("project", &project))
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "disk_create_v1",
         };
@@ -23923,31 +24228,33 @@ impl Client {
         organization: Option<&'a types::NameOrId>,
         project: Option<&'a types::NameOrId>,
     ) -> Result<ResponseValue<types::Disk>, Error<types::Error>> {
-        let url = format!(
-            "{}/v1/disks/{}",
-            self.baseurl,
-            encode_path(&disk.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .query(&progenitor_client::QueryParam::new(
-                "organization",
-                &organization,
-            ))
-            .query(&progenitor_client::QueryParam::new("project", &project))
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/v1/disks/{}",
+                self.baseurl,
+                encode_path(&disk.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .query(&progenitor_client::QueryParam::new(
+                    "organization",
+                    &organization,
+                ))
+                .query(&progenitor_client::QueryParam::new("project", &project))
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "disk_view_v1",
         };
@@ -23976,31 +24283,33 @@ impl Client {
         organization: Option<&'a types::NameOrId>,
         project: Option<&'a types::NameOrId>,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
-        let url = format!(
-            "{}/v1/disks/{}",
-            self.baseurl,
-            encode_path(&disk.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .delete(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .query(&progenitor_client::QueryParam::new(
-                "organization",
-                &organization,
-            ))
-            .query(&progenitor_client::QueryParam::new("project", &project))
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/v1/disks/{}",
+                self.baseurl,
+                encode_path(&disk.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .delete(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .query(&progenitor_client::QueryParam::new(
+                    "organization",
+                    &organization,
+                ))
+                .query(&progenitor_client::QueryParam::new("project", &project))
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "disk_delete_v1",
         };
@@ -24039,33 +24348,35 @@ impl Client {
         project: Option<&'a types::NameOrId>,
         sort_by: Option<types::NameOrIdSortMode>,
     ) -> Result<ResponseValue<types::InstanceResultsPage>, Error<types::Error>> {
-        let url = format!("{}/v1/instances", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "organization",
-                &organization,
-            ))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
-            .query(&progenitor_client::QueryParam::new("project", &project))
-            .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!("{}/v1/instances", self.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .query(&progenitor_client::QueryParam::new("limit", &limit))
+                .query(&progenitor_client::QueryParam::new(
+                    "organization",
+                    &organization,
+                ))
+                .query(&progenitor_client::QueryParam::new(
+                    "page_token",
+                    &page_token,
+                ))
+                .query(&progenitor_client::QueryParam::new("project", &project))
+                .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "instance_list_v1",
         };
@@ -24138,28 +24449,30 @@ impl Client {
         project: &'a types::NameOrId,
         body: &'a types::InstanceCreate,
     ) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
-        let url = format!("{}/v1/instances", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .post(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .json(&body)
-            .query(&progenitor_client::QueryParam::new(
-                "organization",
-                &organization,
-            ))
-            .query(&progenitor_client::QueryParam::new("project", &project))
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!("{}/v1/instances", self.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .post(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .json(&body)
+                .query(&progenitor_client::QueryParam::new(
+                    "organization",
+                    &organization,
+                ))
+                .query(&progenitor_client::QueryParam::new("project", &project))
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "instance_create_v1",
         };
@@ -24188,31 +24501,33 @@ impl Client {
         organization: Option<&'a types::NameOrId>,
         project: Option<&'a types::NameOrId>,
     ) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
-        let url = format!(
-            "{}/v1/instances/{}",
-            self.baseurl,
-            encode_path(&instance.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .query(&progenitor_client::QueryParam::new(
-                "organization",
-                &organization,
-            ))
-            .query(&progenitor_client::QueryParam::new("project", &project))
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/v1/instances/{}",
+                self.baseurl,
+                encode_path(&instance.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .query(&progenitor_client::QueryParam::new(
+                    "organization",
+                    &organization,
+                ))
+                .query(&progenitor_client::QueryParam::new("project", &project))
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "instance_view_v1",
         };
@@ -24241,31 +24556,33 @@ impl Client {
         organization: Option<&'a types::NameOrId>,
         project: Option<&'a types::NameOrId>,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
-        let url = format!(
-            "{}/v1/instances/{}",
-            self.baseurl,
-            encode_path(&instance.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .delete(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .query(&progenitor_client::QueryParam::new(
-                "organization",
-                &organization,
-            ))
-            .query(&progenitor_client::QueryParam::new("project", &project))
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/v1/instances/{}",
+                self.baseurl,
+                encode_path(&instance.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .delete(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .query(&progenitor_client::QueryParam::new(
+                    "organization",
+                    &organization,
+                ))
+                .query(&progenitor_client::QueryParam::new("project", &project))
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "instance_delete_v1",
         };
@@ -24306,37 +24623,39 @@ impl Client {
         project: Option<&'a types::NameOrId>,
         sort_by: Option<types::NameOrIdSortMode>,
     ) -> Result<ResponseValue<types::DiskResultsPage>, Error<types::Error>> {
-        let url = format!(
-            "{}/v1/instances/{}/disks",
-            self.baseurl,
-            encode_path(&instance.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "organization",
-                &organization,
-            ))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
-            .query(&progenitor_client::QueryParam::new("project", &project))
-            .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/v1/instances/{}/disks",
+                self.baseurl,
+                encode_path(&instance.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .query(&progenitor_client::QueryParam::new("limit", &limit))
+                .query(&progenitor_client::QueryParam::new(
+                    "organization",
+                    &organization,
+                ))
+                .query(&progenitor_client::QueryParam::new(
+                    "page_token",
+                    &page_token,
+                ))
+                .query(&progenitor_client::QueryParam::new("project", &project))
+                .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "instance_disk_list_v1",
         };
@@ -24418,32 +24737,34 @@ impl Client {
         project: Option<&'a types::NameOrId>,
         body: &'a types::DiskPath,
     ) -> Result<ResponseValue<types::Disk>, Error<types::Error>> {
-        let url = format!(
-            "{}/v1/instances/{}/disks/attach",
-            self.baseurl,
-            encode_path(&instance.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .post(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .json(&body)
-            .query(&progenitor_client::QueryParam::new(
-                "organization",
-                &organization,
-            ))
-            .query(&progenitor_client::QueryParam::new("project", &project))
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/v1/instances/{}/disks/attach",
+                self.baseurl,
+                encode_path(&instance.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .post(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .json(&body)
+                .query(&progenitor_client::QueryParam::new(
+                    "organization",
+                    &organization,
+                ))
+                .query(&progenitor_client::QueryParam::new("project", &project))
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "instance_disk_attach_v1",
         };
@@ -24473,32 +24794,34 @@ impl Client {
         project: Option<&'a types::NameOrId>,
         body: &'a types::DiskPath,
     ) -> Result<ResponseValue<types::Disk>, Error<types::Error>> {
-        let url = format!(
-            "{}/v1/instances/{}/disks/detach",
-            self.baseurl,
-            encode_path(&instance.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .post(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .json(&body)
-            .query(&progenitor_client::QueryParam::new(
-                "organization",
-                &organization,
-            ))
-            .query(&progenitor_client::QueryParam::new("project", &project))
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/v1/instances/{}/disks/detach",
+                self.baseurl,
+                encode_path(&instance.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .post(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .json(&body)
+                .query(&progenitor_client::QueryParam::new(
+                    "organization",
+                    &organization,
+                ))
+                .query(&progenitor_client::QueryParam::new("project", &project))
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "instance_disk_detach_v1",
         };
@@ -24528,32 +24851,34 @@ impl Client {
         project: Option<&'a types::NameOrId>,
         body: &'a types::InstanceMigrate,
     ) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
-        let url = format!(
-            "{}/v1/instances/{}/migrate",
-            self.baseurl,
-            encode_path(&instance.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .post(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .json(&body)
-            .query(&progenitor_client::QueryParam::new(
-                "organization",
-                &organization,
-            ))
-            .query(&progenitor_client::QueryParam::new("project", &project))
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/v1/instances/{}/migrate",
+                self.baseurl,
+                encode_path(&instance.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .post(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .json(&body)
+                .query(&progenitor_client::QueryParam::new(
+                    "organization",
+                    &organization,
+                ))
+                .query(&progenitor_client::QueryParam::new("project", &project))
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "instance_migrate_v1",
         };
@@ -24582,31 +24907,33 @@ impl Client {
         organization: Option<&'a types::NameOrId>,
         project: Option<&'a types::NameOrId>,
     ) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
-        let url = format!(
-            "{}/v1/instances/{}/reboot",
-            self.baseurl,
-            encode_path(&instance.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .post(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .query(&progenitor_client::QueryParam::new(
-                "organization",
-                &organization,
-            ))
-            .query(&progenitor_client::QueryParam::new("project", &project))
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/v1/instances/{}/reboot",
+                self.baseurl,
+                encode_path(&instance.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .post(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .query(&progenitor_client::QueryParam::new(
+                    "organization",
+                    &organization,
+                ))
+                .query(&progenitor_client::QueryParam::new("project", &project))
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "instance_reboot_v1",
         };
@@ -24654,40 +24981,42 @@ impl Client {
         organization: Option<&'a types::NameOrId>,
         project: Option<&'a types::NameOrId>,
     ) -> Result<ResponseValue<types::InstanceSerialConsoleData>, Error<types::Error>> {
-        let url = format!(
-            "{}/v1/instances/{}/serial-console",
-            self.baseurl,
-            encode_path(&instance.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .query(&progenitor_client::QueryParam::new(
-                "from_start",
-                &from_start,
-            ))
-            .query(&progenitor_client::QueryParam::new("max_bytes", &max_bytes))
-            .query(&progenitor_client::QueryParam::new(
-                "most_recent",
-                &most_recent,
-            ))
-            .query(&progenitor_client::QueryParam::new(
-                "organization",
-                &organization,
-            ))
-            .query(&progenitor_client::QueryParam::new("project", &project))
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/v1/instances/{}/serial-console",
+                self.baseurl,
+                encode_path(&instance.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .query(&progenitor_client::QueryParam::new(
+                    "from_start",
+                    &from_start,
+                ))
+                .query(&progenitor_client::QueryParam::new("max_bytes", &max_bytes))
+                .query(&progenitor_client::QueryParam::new(
+                    "most_recent",
+                    &most_recent,
+                ))
+                .query(&progenitor_client::QueryParam::new(
+                    "organization",
+                    &organization,
+                ))
+                .query(&progenitor_client::QueryParam::new("project", &project))
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "instance_serial_console_v1",
         };
@@ -24717,37 +25046,39 @@ impl Client {
         organization: Option<&'a types::NameOrId>,
         project: Option<&'a types::NameOrId>,
     ) -> Result<ResponseValue<reqwest::Upgraded>, Error<reqwest::Upgraded>> {
-        let url = format!(
-            "{}/v1/instances/{}/serial-console/stream",
-            self.baseurl,
-            encode_path(&instance.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .query(&progenitor_client::QueryParam::new(
-                "organization",
-                &organization,
-            ))
-            .query(&progenitor_client::QueryParam::new("project", &project))
-            .headers(header_map)
-            .header(::reqwest::header::CONNECTION, "Upgrade")
-            .header(::reqwest::header::UPGRADE, "websocket")
-            .header(::reqwest::header::SEC_WEBSOCKET_VERSION, "13")
-            .header(
-                ::reqwest::header::SEC_WEBSOCKET_KEY,
-                ::base64::Engine::encode(
-                    &::base64::engine::general_purpose::STANDARD,
-                    ::rand::random::<[u8; 16]>(),
-                ),
-            )
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/v1/instances/{}/serial-console/stream",
+                self.baseurl,
+                encode_path(&instance.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .query(&progenitor_client::QueryParam::new(
+                    "organization",
+                    &organization,
+                ))
+                .query(&progenitor_client::QueryParam::new("project", &project))
+                .headers(header_map)
+                .header(::reqwest::header::CONNECTION, "Upgrade")
+                .header(::reqwest::header::UPGRADE, "websocket")
+                .header(::reqwest::header::SEC_WEBSOCKET_VERSION, "13")
+                .header(
+                    ::reqwest::header::SEC_WEBSOCKET_KEY,
+                    ::base64::Engine::encode(
+                        &::base64::engine::general_purpose::STANDARD,
+                        ::rand::random::<[u8; 16]>(),
+                    ),
+                )
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "instance_serial_console_stream_v1",
         };
@@ -24771,31 +25102,33 @@ impl Client {
         organization: Option<&'a types::NameOrId>,
         project: Option<&'a types::NameOrId>,
     ) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
-        let url = format!(
-            "{}/v1/instances/{}/start",
-            self.baseurl,
-            encode_path(&instance.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .post(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .query(&progenitor_client::QueryParam::new(
-                "organization",
-                &organization,
-            ))
-            .query(&progenitor_client::QueryParam::new("project", &project))
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/v1/instances/{}/start",
+                self.baseurl,
+                encode_path(&instance.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .post(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .query(&progenitor_client::QueryParam::new(
+                    "organization",
+                    &organization,
+                ))
+                .query(&progenitor_client::QueryParam::new("project", &project))
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "instance_start_v1",
         };
@@ -24824,31 +25157,33 @@ impl Client {
         organization: Option<&'a types::NameOrId>,
         project: Option<&'a types::NameOrId>,
     ) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
-        let url = format!(
-            "{}/v1/instances/{}/stop",
-            self.baseurl,
-            encode_path(&instance.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .post(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .query(&progenitor_client::QueryParam::new(
-                "organization",
-                &organization,
-            ))
-            .query(&progenitor_client::QueryParam::new("project", &project))
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/v1/instances/{}/stop",
+                self.baseurl,
+                encode_path(&instance.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .post(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .query(&progenitor_client::QueryParam::new(
+                    "organization",
+                    &organization,
+                ))
+                .query(&progenitor_client::QueryParam::new("project", &project))
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "instance_stop_v1",
         };
@@ -24883,28 +25218,30 @@ impl Client {
         page_token: Option<&'a str>,
         sort_by: Option<types::NameOrIdSortMode>,
     ) -> Result<ResponseValue<types::OrganizationResultsPage>, Error<types::Error>> {
-        let url = format!("{}/v1/organizations", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
-            .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!("{}/v1/organizations", self.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .query(&progenitor_client::QueryParam::new("limit", &limit))
+                .query(&progenitor_client::QueryParam::new(
+                    "page_token",
+                    &page_token,
+                ))
+                .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "organization_list_v1",
         };
@@ -24971,23 +25308,25 @@ impl Client {
         &'a self,
         body: &'a types::OrganizationCreate,
     ) -> Result<ResponseValue<types::Organization>, Error<types::Error>> {
-        let url = format!("{}/v1/organizations", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .post(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .json(&body)
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!("{}/v1/organizations", self.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .post(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .json(&body)
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "organization_create_v1",
         };
@@ -25014,26 +25353,28 @@ impl Client {
         &'a self,
         organization: &'a types::NameOrId,
     ) -> Result<ResponseValue<types::Organization>, Error<types::Error>> {
-        let url = format!(
-            "{}/v1/organizations/{}",
-            self.baseurl,
-            encode_path(&organization.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/v1/organizations/{}",
+                self.baseurl,
+                encode_path(&organization.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "organization_view_v1",
         };
@@ -25061,27 +25402,29 @@ impl Client {
         organization: &'a types::NameOrId,
         body: &'a types::OrganizationUpdate,
     ) -> Result<ResponseValue<types::Organization>, Error<types::Error>> {
-        let url = format!(
-            "{}/v1/organizations/{}",
-            self.baseurl,
-            encode_path(&organization.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .put(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .json(&body)
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/v1/organizations/{}",
+                self.baseurl,
+                encode_path(&organization.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .put(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .json(&body)
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "organization_update_v1",
         };
@@ -25108,26 +25451,28 @@ impl Client {
         &'a self,
         organization: &'a types::NameOrId,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
-        let url = format!(
-            "{}/v1/organizations/{}",
-            self.baseurl,
-            encode_path(&organization.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .delete(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/v1/organizations/{}",
+                self.baseurl,
+                encode_path(&organization.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .delete(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "organization_delete_v1",
         };
@@ -25154,26 +25499,28 @@ impl Client {
         &'a self,
         organization: &'a types::NameOrId,
     ) -> Result<ResponseValue<types::OrganizationRolePolicy>, Error<types::Error>> {
-        let url = format!(
-            "{}/v1/organizations/{}/policy",
-            self.baseurl,
-            encode_path(&organization.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/v1/organizations/{}/policy",
+                self.baseurl,
+                encode_path(&organization.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "organization_policy_view_v1",
         };
@@ -25201,27 +25548,29 @@ impl Client {
         organization: &'a types::NameOrId,
         body: &'a types::OrganizationRolePolicy,
     ) -> Result<ResponseValue<types::OrganizationRolePolicy>, Error<types::Error>> {
-        let url = format!(
-            "{}/v1/organizations/{}/policy",
-            self.baseurl,
-            encode_path(&organization.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .put(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .json(&body)
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/v1/organizations/{}/policy",
+                self.baseurl,
+                encode_path(&organization.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .put(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .json(&body)
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "organization_policy_update_v1",
         };
@@ -25258,32 +25607,34 @@ impl Client {
         page_token: Option<&'a str>,
         sort_by: Option<types::NameOrIdSortMode>,
     ) -> Result<ResponseValue<types::ProjectResultsPage>, Error<types::Error>> {
-        let url = format!("{}/v1/projects", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "organization",
-                &organization,
-            ))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
-            .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!("{}/v1/projects", self.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .query(&progenitor_client::QueryParam::new("limit", &limit))
+                .query(&progenitor_client::QueryParam::new(
+                    "organization",
+                    &organization,
+                ))
+                .query(&progenitor_client::QueryParam::new(
+                    "page_token",
+                    &page_token,
+                ))
+                .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "project_list_v1",
         };
@@ -25352,27 +25703,29 @@ impl Client {
         organization: &'a types::NameOrId,
         body: &'a types::ProjectCreate,
     ) -> Result<ResponseValue<types::Project>, Error<types::Error>> {
-        let url = format!("{}/v1/projects", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .post(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .json(&body)
-            .query(&progenitor_client::QueryParam::new(
-                "organization",
-                &organization,
-            ))
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!("{}/v1/projects", self.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .post(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .json(&body)
+                .query(&progenitor_client::QueryParam::new(
+                    "organization",
+                    &organization,
+                ))
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "project_create_v1",
         };
@@ -25400,30 +25753,32 @@ impl Client {
         project: &'a types::NameOrId,
         organization: Option<&'a types::NameOrId>,
     ) -> Result<ResponseValue<types::Project>, Error<types::Error>> {
-        let url = format!(
-            "{}/v1/projects/{}",
-            self.baseurl,
-            encode_path(&project.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .query(&progenitor_client::QueryParam::new(
-                "organization",
-                &organization,
-            ))
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/v1/projects/{}",
+                self.baseurl,
+                encode_path(&project.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .query(&progenitor_client::QueryParam::new(
+                    "organization",
+                    &organization,
+                ))
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "project_view_v1",
         };
@@ -25452,31 +25807,33 @@ impl Client {
         organization: Option<&'a types::NameOrId>,
         body: &'a types::ProjectUpdate,
     ) -> Result<ResponseValue<types::Project>, Error<types::Error>> {
-        let url = format!(
-            "{}/v1/projects/{}",
-            self.baseurl,
-            encode_path(&project.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .put(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .json(&body)
-            .query(&progenitor_client::QueryParam::new(
-                "organization",
-                &organization,
-            ))
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/v1/projects/{}",
+                self.baseurl,
+                encode_path(&project.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .put(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .json(&body)
+                .query(&progenitor_client::QueryParam::new(
+                    "organization",
+                    &organization,
+                ))
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "project_update_v1",
         };
@@ -25504,30 +25861,32 @@ impl Client {
         project: &'a types::NameOrId,
         organization: Option<&'a types::NameOrId>,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
-        let url = format!(
-            "{}/v1/projects/{}",
-            self.baseurl,
-            encode_path(&project.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .delete(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .query(&progenitor_client::QueryParam::new(
-                "organization",
-                &organization,
-            ))
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/v1/projects/{}",
+                self.baseurl,
+                encode_path(&project.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .delete(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .query(&progenitor_client::QueryParam::new(
+                    "organization",
+                    &organization,
+                ))
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "project_delete_v1",
         };
@@ -25555,30 +25914,32 @@ impl Client {
         project: &'a types::NameOrId,
         organization: Option<&'a types::NameOrId>,
     ) -> Result<ResponseValue<types::ProjectRolePolicy>, Error<types::Error>> {
-        let url = format!(
-            "{}/v1/projects/{}/policy",
-            self.baseurl,
-            encode_path(&project.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .query(&progenitor_client::QueryParam::new(
-                "organization",
-                &organization,
-            ))
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/v1/projects/{}/policy",
+                self.baseurl,
+                encode_path(&project.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .query(&progenitor_client::QueryParam::new(
+                    "organization",
+                    &organization,
+                ))
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "project_policy_view_v1",
         };
@@ -25607,31 +25968,33 @@ impl Client {
         organization: Option<&'a types::NameOrId>,
         body: &'a types::ProjectRolePolicy,
     ) -> Result<ResponseValue<types::ProjectRolePolicy>, Error<types::Error>> {
-        let url = format!(
-            "{}/v1/projects/{}/policy",
-            self.baseurl,
-            encode_path(&project.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .put(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .json(&body)
-            .query(&progenitor_client::QueryParam::new(
-                "organization",
-                &organization,
-            ))
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/v1/projects/{}/policy",
+                self.baseurl,
+                encode_path(&project.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .put(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .json(&body)
+                .query(&progenitor_client::QueryParam::new(
+                    "organization",
+                    &organization,
+                ))
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "project_policy_update_v1",
         };
@@ -25666,28 +26029,30 @@ impl Client {
         page_token: Option<&'a str>,
         sort_by: Option<types::IdSortMode>,
     ) -> Result<ResponseValue<types::UpdateableComponentResultsPage>, Error<types::Error>> {
-        let url = format!("{}/v1/system/update/components", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
-            .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!("{}/v1/system/update/components", self.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .query(&progenitor_client::QueryParam::new("limit", &limit))
+                .query(&progenitor_client::QueryParam::new(
+                    "page_token",
+                    &page_token,
+                ))
+                .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "system_component_version_list",
         };
@@ -25762,28 +26127,30 @@ impl Client {
         page_token: Option<&'a str>,
         sort_by: Option<types::IdSortMode>,
     ) -> Result<ResponseValue<types::UpdateDeploymentResultsPage>, Error<types::Error>> {
-        let url = format!("{}/v1/system/update/deployments", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
-            .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!("{}/v1/system/update/deployments", self.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .query(&progenitor_client::QueryParam::new("limit", &limit))
+                .query(&progenitor_client::QueryParam::new(
+                    "page_token",
+                    &page_token,
+                ))
+                .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "update_deployments_list",
         };
@@ -25850,26 +26217,28 @@ impl Client {
         &'a self,
         id: &'a ::uuid::Uuid,
     ) -> Result<ResponseValue<types::UpdateDeployment>, Error<types::Error>> {
-        let url = format!(
-            "{}/v1/system/update/deployments/{}",
-            self.baseurl,
-            encode_path(&id.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/v1/system/update/deployments/{}",
+                self.baseurl,
+                encode_path(&id.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "update_deployment_view",
         };
@@ -25895,22 +26264,24 @@ impl Client {
     pub async fn system_update_refresh<'a>(
         &'a self,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
-        let url = format!("{}/v1/system/update/refresh", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .post(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!("{}/v1/system/update/refresh", self.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .post(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "system_update_refresh",
         };
@@ -25937,23 +26308,25 @@ impl Client {
         &'a self,
         body: &'a types::SystemUpdateStart,
     ) -> Result<ResponseValue<types::UpdateDeployment>, Error<types::Error>> {
-        let url = format!("{}/v1/system/update/start", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .post(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .json(&body)
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!("{}/v1/system/update/start", self.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .post(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .json(&body)
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "system_update_start",
         };
@@ -25981,22 +26354,24 @@ impl Client {
     pub async fn system_update_stop<'a>(
         &'a self,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
-        let url = format!("{}/v1/system/update/stop", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .post(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!("{}/v1/system/update/stop", self.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .post(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "system_update_stop",
         };
@@ -26031,28 +26406,30 @@ impl Client {
         page_token: Option<&'a str>,
         sort_by: Option<types::IdSortMode>,
     ) -> Result<ResponseValue<types::SystemUpdateResultsPage>, Error<types::Error>> {
-        let url = format!("{}/v1/system/update/updates", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
-            .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!("{}/v1/system/update/updates", self.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .query(&progenitor_client::QueryParam::new("limit", &limit))
+                .query(&progenitor_client::QueryParam::new(
+                    "page_token",
+                    &page_token,
+                ))
+                .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "system_update_list",
         };
@@ -26119,26 +26496,28 @@ impl Client {
         &'a self,
         version: &'a types::SemverVersion,
     ) -> Result<ResponseValue<types::SystemUpdate>, Error<types::Error>> {
-        let url = format!(
-            "{}/v1/system/update/updates/{}",
-            self.baseurl,
-            encode_path(&version.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/v1/system/update/updates/{}",
+                self.baseurl,
+                encode_path(&version.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "system_update_view",
         };
@@ -26166,26 +26545,28 @@ impl Client {
         &'a self,
         version: &'a types::SemverVersion,
     ) -> Result<ResponseValue<types::ComponentUpdateResultsPage>, Error<types::Error>> {
-        let url = format!(
-            "{}/v1/system/update/updates/{}/components",
-            self.baseurl,
-            encode_path(&version.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/v1/system/update/updates/{}/components",
+                self.baseurl,
+                encode_path(&version.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "system_update_components_list",
         };
@@ -26211,22 +26592,24 @@ impl Client {
     pub async fn system_version<'a>(
         &'a self,
     ) -> Result<ResponseValue<types::SystemVersion>, Error<types::Error>> {
-        let url = format!("{}/v1/system/update/version", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!("{}/v1/system/update/version", self.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "system_version",
         };
