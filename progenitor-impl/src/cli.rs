@@ -24,7 +24,7 @@ struct CliOperation {
 impl Generator {
     /// Generate a `clap`-based CLI.
     pub fn cli(&mut self, spec: &OpenAPI, crate_name: &str) -> Result<TokenStream> {
-        validate_openapi(spec)?;
+        validate_openapi(spec, self.settings.operation_id_strategy)?;
 
         // Convert our components dictionary to schemars
         let schemas = spec.components.iter().flat_map(|components| {
@@ -53,6 +53,7 @@ impl Generator {
 
         let methods = raw_methods
             .iter()
+            .filter_map(|method| method.as_ref())
             .map(|method| self.cli_method(method))
             .collect::<Vec<_>>();
 
@@ -62,15 +63,18 @@ impl Generator {
 
         let cli_fns = raw_methods
             .iter()
+            .filter_map(|method| method.as_ref())
             .map(|method| format_ident!("cli_{}", sanitize(&method.operation_id, Case::Snake)))
             .collect::<Vec<_>>();
         let execute_fns = raw_methods
             .iter()
+            .filter_map(|method| method.as_ref())
             .map(|method| format_ident!("execute_{}", sanitize(&method.operation_id, Case::Snake)))
             .collect::<Vec<_>>();
 
         let cli_variants = raw_methods
             .iter()
+            .filter_map(|method| method.as_ref())
             .map(|method| format_ident!("{}", sanitize(&method.operation_id, Case::Pascal)))
             .collect::<Vec<_>>();
 

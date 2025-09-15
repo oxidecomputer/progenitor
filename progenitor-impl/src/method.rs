@@ -290,8 +290,10 @@ impl Generator {
         path: &str,
         method: &str,
         path_parameters: &[ReferenceOr<Parameter>],
-    ) -> Result<OperationMethod> {
-        let operation_id = operation.operation_id.as_ref().unwrap();
+    ) -> Result<Option<OperationMethod>> {
+        let Some(operation_id) = operation.operation_id.as_ref() else {
+            return Ok(None);
+        };
 
         let mut combined_path_parameters = parameter_map(path_parameters, components)?;
         for operation_param in items(&operation.parameters, components) {
@@ -534,7 +536,7 @@ impl Generator {
             )));
         }
 
-        Ok(OperationMethod {
+        Ok(Some(OperationMethod {
             operation_id: sanitize(operation_id, Case::Snake),
             tags: operation.tags.clone(),
             method: HttpMethod::from_str(method)?,
@@ -545,7 +547,7 @@ impl Generator {
             responses,
             dropshot_paginated,
             dropshot_websocket,
-        })
+        }))
     }
 
     pub(crate) fn positional_method(

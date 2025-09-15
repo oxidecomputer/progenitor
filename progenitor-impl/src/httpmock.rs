@@ -30,7 +30,7 @@ impl Generator {
     /// the SDK. This can include `::` and instances of `-` in the crate name
     /// should be converted to `_`.
     pub fn httpmock(&mut self, spec: &OpenAPI, crate_path: &str) -> Result<TokenStream> {
-        validate_openapi(spec)?;
+        validate_openapi(spec, self.settings.operation_id_strategy)?;
 
         // Convert our components dictionary to schemars
         let schemas = spec.components.iter().flat_map(|components| {
@@ -59,11 +59,13 @@ impl Generator {
 
         let methods = raw_methods
             .iter()
+            .filter_map(|method| method.as_ref())
             .map(|method| self.httpmock_method(method))
             .collect::<Vec<_>>();
 
         let op = raw_methods
             .iter()
+            .filter_map(|method| method.as_ref())
             .map(|method| format_ident!("{}", &method.operation_id))
             .collect::<Vec<_>>();
         let when = methods.iter().map(|op| &op.when).collect::<Vec<_>>();

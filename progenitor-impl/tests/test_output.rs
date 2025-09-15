@@ -6,7 +6,8 @@ use std::{
 };
 
 use progenitor_impl::{
-    space_out_items, GenerationSettings, Generator, InterfaceStyle, TagStyle, TypeImpl, TypePatch,
+    space_out_items, GenerationSettings, Generator, InterfaceStyle, OperationIdStrategy, TagStyle,
+    TypeImpl, TypePatch,
 };
 
 use openapiv3::OpenAPI;
@@ -41,8 +42,12 @@ fn reformat_code(content: TokenStream) -> String {
     space_out_items(rustfmt_wrapper::rustfmt_config(rustfmt_config, content).unwrap()).unwrap()
 }
 
-#[track_caller]
 fn verify_apis(openapi_file: &str) {
+    verify_apis_with_settings(openapi_file, &GenerationSettings::default())
+}
+
+#[track_caller]
+fn verify_apis_with_settings(openapi_file: &str, settings: &GenerationSettings) {
     let mut in_path = PathBuf::from("../sample_openapi");
     in_path.push(openapi_file);
     let openapi_stem = openapi_file.split('.').next().unwrap().replace('-', "_");
@@ -50,76 +55,84 @@ fn verify_apis(openapi_file: &str) {
     let spec = load_api(in_path);
 
     // Positional generation.
-    let mut generator = Generator::default();
-    let output = generate_formatted(&mut generator, &spec);
-    expectorate::assert_contents(
-        format!("tests/output/src/{}_positional.rs", openapi_stem),
-        &output,
-    );
+    {
+        let mut generator = Generator::new(settings);
+        let output = generate_formatted(&mut generator, &spec);
+        expectorate::assert_contents(
+            format!("tests/output/src/{}_positional.rs", openapi_stem),
+            &output,
+        );
+    }
 
     // Builder generation with derives and patches.
-    let mut generator = Generator::new(
-        GenerationSettings::default()
-            .with_interface(InterfaceStyle::Builder)
-            .with_tag(TagStyle::Merged)
-            .with_derive("schemars::JsonSchema")
-            .with_patch("Name", TypePatch::default().with_derive("Hash"))
-            .with_conversion(
-                schemars::schema::SchemaObject {
-                    instance_type: Some(schemars::schema::InstanceType::Integer.into()),
-                    format: Some("int32".to_string()),
-                    ..Default::default()
-                },
-                "usize",
-                [TypeImpl::Display].into_iter(),
-            ),
-    );
-    let output = generate_formatted(&mut generator, &spec);
-    expectorate::assert_contents(
-        format!("tests/output/src/{}_builder.rs", openapi_stem),
-        &output,
-    );
+    {
+        let mut settings = settings.clone();
+        let mut generator = Generator::new(
+            settings
+                .with_interface(InterfaceStyle::Builder)
+                .with_tag(TagStyle::Merged)
+                .with_derive("schemars::JsonSchema")
+                .with_patch("Name", TypePatch::default().with_derive("Hash"))
+                .with_conversion(
+                    schemars::schema::SchemaObject {
+                        instance_type: Some(schemars::schema::InstanceType::Integer.into()),
+                        format: Some("int32".to_string()),
+                        ..Default::default()
+                    },
+                    "usize",
+                    [TypeImpl::Display].into_iter(),
+                ),
+        );
+        let output = generate_formatted(&mut generator, &spec);
+        expectorate::assert_contents(
+            format!("tests/output/src/{}_builder.rs", openapi_stem),
+            &output,
+        );
+    }
 
     // Builder generation with tags.
-    let mut generator = Generator::new(
-        GenerationSettings::default()
-            .with_interface(InterfaceStyle::Builder)
-            .with_tag(TagStyle::Separate),
-    );
-    let output = generate_formatted(&mut generator, &spec);
-    expectorate::assert_contents(
-        format!("tests/output/src/{}_builder_tagged.rs", openapi_stem),
-        &output,
-    );
+    {
+        let mut settings = settings.clone();
+        let mut generator = Generator::new(
+            settings
+                .with_interface(InterfaceStyle::Builder)
+                .with_tag(TagStyle::Separate),
+        );
+        let output = generate_formatted(&mut generator, &spec);
+        expectorate::assert_contents(
+            format!("tests/output/src/{}_builder_tagged.rs", openapi_stem),
+            &output,
+        );
 
-    // CLI generation.
-    let tokens = generator
-        .cli(&spec, &format!("crate::{openapi_stem}_builder"))
+        // CLI generation.
+        let tokens = generator
+            .cli(&spec, &format!("crate::{openapi_stem}_builder"))
+            .unwrap();
+        let output = reformat_code(tokens);
+
+        expectorate::assert_contents(format!("tests/output/src/{}_cli.rs", openapi_stem), &output);
+
+        // httpmock generation.
+        let code = generator
+            .httpmock(&spec, &format!("crate::{openapi_stem}_builder"))
+            .unwrap();
+
+        // TODO pending #368
+        let output = rustfmt_wrapper::rustfmt_config(
+            rustfmt_wrapper::config::Config {
+                format_strings: Some(true),
+                ..Default::default()
+            },
+            code,
+        )
         .unwrap();
-    let output = reformat_code(tokens);
 
-    expectorate::assert_contents(format!("tests/output/src/{}_cli.rs", openapi_stem), &output);
-
-    // httpmock generation.
-    let code = generator
-        .httpmock(&spec, &format!("crate::{openapi_stem}_builder"))
-        .unwrap();
-
-    // TODO pending #368
-    let output = rustfmt_wrapper::rustfmt_config(
-        rustfmt_wrapper::config::Config {
-            format_strings: Some(true),
-            ..Default::default()
-        },
-        code,
-    )
-    .unwrap();
-
-    let output = progenitor_impl::space_out_items(output).unwrap();
-    expectorate::assert_contents(
-        format!("tests/output/src/{}_httpmock.rs", openapi_stem),
-        &output,
-    );
+        let output = progenitor_impl::space_out_items(output).unwrap();
+        expectorate::assert_contents(
+            format!("tests/output/src/{}_httpmock.rs", openapi_stem),
+            &output,
+        );
+    }
 }
 
 #[test]
@@ -160,6 +173,14 @@ fn test_param_collision() {
 #[test]
 fn test_cli_gen() {
     verify_apis("cli-gen.json");
+}
+
+#[test]
+fn test_missing_operation_id() {
+    verify_apis_with_settings(
+        "missing-operation-id.json",
+        GenerationSettings::new().with_operation_id_strategy(OperationIdStrategy::OmitMissing),
+    );
 }
 
 // TODO this file is full of inconsistencies and incorrectly specified types.
