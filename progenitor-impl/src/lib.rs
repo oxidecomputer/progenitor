@@ -67,6 +67,8 @@ pub struct GenerationSettings {
     post_hook_async: Option<TokenStream>,
     extra_derives: Vec<String>,
 
+    operation_id_strategy: OperationIdStrategy,
+
     map_type: Option<String>,
     unknown_crates: UnknownPolicy,
     crates: BTreeMap<String, CrateSpec>,
@@ -109,6 +111,23 @@ pub enum TagStyle {
 impl Default for TagStyle {
     fn default() -> Self {
         Self::Merged
+    }
+}
+
+/// Style for handing operations that do not have an operation ID.
+#[derive(Copy, Clone)]
+pub enum OperationIdStrategy {
+    /// The default behaviour. Reject when any operation on the resulting
+    /// client does not have an operation ID.
+    RejectMissing,
+    /// Omit any operation on the resulting client that does not have an
+    /// operation ID.
+    OmitMissing,
+}
+
+impl Default for OperationIdStrategy {
+    fn default() -> Self {
+        Self::RejectMissing
     }
 }
 
@@ -241,6 +260,16 @@ impl GenerationSettings {
         self.map_type = Some(map_type.to_string());
         self
     }
+
+    /// Set the strategy to be used when encountering operations that do not
+    /// have an operation ID.
+    pub fn with_operation_id_strategy(
+        &mut self,
+        operation_id_strategy: OperationIdStrategy,
+    ) -> &mut Self {
+        self.operation_id_strategy = operation_id_strategy;
+        self
+    }
 }
 
 impl Default for Generator {
@@ -306,7 +335,7 @@ impl Generator {
 
     /// Emit a [TokenStream] containing the generated client code.
     pub fn generate_tokens(&mut self, spec: &OpenAPI) -> Result<TokenStream> {
-        validate_openapi(spec)?;
+        validate_openapi(spec, self.settings.operation_id_strategy)?;
 
         // Convert our components dictionary to schemars
         let schemas = spec.components.iter().flat_map(|components| {
@@ -328,8 +357,9 @@ impl Generator {
                     (path.as_str(), method, operation, &item.parameters)
                 })
             })
-            .map(|(path, method, operation, path_parameters)| {
+            .filter_map(|(path, method, operation, path_parameters)| {
                 self.process_operation(operation, &spec.components, path, method, path_parameters)
+                    .transpose()
             })
             .collect::<Result<Vec<_>>>()?;
 
@@ -674,7 +704,7 @@ fn validate_openapi_spec_version(spec_version: &str) -> Result<()> {
 }
 
 /// Do some very basic checks of the OpenAPI documents.
-pub fn validate_openapi(spec: &OpenAPI) -> Result<()> {
+pub fn validate_openapi(spec: &OpenAPI, operation_id_strategy: OperationIdStrategy) -> Result<()> {
     validate_openapi_spec_version(spec.openapi.as_str())?;
 
     let mut opids = HashSet::new();
@@ -695,10 +725,15 @@ pub fn validate_openapi(spec: &OpenAPI) -> Result<()> {
                             )));
                         }
                     } else {
-                        return Err(Error::UnexpectedFormat(format!(
-                            "path {} is missing operation ID",
-                            p.0,
-                        )));
+                        match operation_id_strategy {
+                            OperationIdStrategy::RejectMissing => {
+                                return Err(Error::UnexpectedFormat(format!(
+                                    "path {} is missing operation ID",
+                                    p.0,
+                                )));
+                            }
+                            OperationIdStrategy::OmitMissing => {}
+                        }
                     }
                     Ok(())
                 })
