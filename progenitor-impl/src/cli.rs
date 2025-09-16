@@ -5,7 +5,7 @@ use std::collections::BTreeMap;
 use heck::ToKebabCase;
 use openapiv3::OpenAPI;
 use proc_macro2::TokenStream;
-use quote::{format_ident, quote};
+use quote::{format_ident, quote, ToTokens};
 use typify::{Type, TypeEnumVariant, TypeSpaceImpl, TypeStructPropInfo};
 
 use crate::{
@@ -79,6 +79,13 @@ impl Generator {
             path: syn::parse_str(crate_name).unwrap(),
         };
 
+        let cli_bounds: Vec<_> = self
+            .settings
+            .extra_cli_bounds
+            .iter()
+            .map(|b| syn::parse_str::<syn::Path>(b).unwrap().into_token_stream())
+            .collect();
+
         let code = quote! {
             use #crate_path::*;
 
@@ -125,24 +132,24 @@ impl Generator {
             pub trait CliConfig {
                 fn success_item<T>(&self, value: &ResponseValue<T>)
                 where
-                    T: schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
+                    T: #(#cli_bounds+)* schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
                 fn success_no_item(&self, value: &ResponseValue<()>);
                 fn error<T>(&self, value: &Error<T>)
                 where
-                    T: schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
+                    T: #(#cli_bounds+)* schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
 
                 fn list_start<T>(&self)
                 where
-                    T: schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
+                    T: #(#cli_bounds+)* schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
                 fn list_item<T>(&self, value: &T)
                 where
-                    T: schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
+                    T: #(#cli_bounds+)* schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
                 fn list_end_success<T>(&self)
                 where
-                    T: schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
+                    T: #(#cli_bounds+)* schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
                 fn list_end_error<T>(&self, value: &Error<T>)
                 where
-                    T: schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
+                    T: #(#cli_bounds+)* schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
 
                 #(#trait_ops)*
             }

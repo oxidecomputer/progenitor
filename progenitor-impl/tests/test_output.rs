@@ -84,6 +84,7 @@ fn verify_apis(openapi_file: &str) {
     let mut generator = Generator::new(
         GenerationSettings::default()
             .with_interface(InterfaceStyle::Builder)
+            .with_cli_bounds("std::clone::Clone")
             .with_tag(TagStyle::Separate),
     );
     let output = generate_formatted(&mut generator, &spec);

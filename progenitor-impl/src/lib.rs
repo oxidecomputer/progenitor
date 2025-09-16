@@ -66,6 +66,7 @@ pub struct GenerationSettings {
     post_hook: Option<TokenStream>,
     post_hook_async: Option<TokenStream>,
     extra_derives: Vec<String>,
+    extra_cli_bounds: Vec<String>,
 
     map_type: Option<String>,
     unknown_crates: UnknownPolicy,
@@ -163,6 +164,12 @@ impl GenerationSettings {
     /// Additional derive macros applied to generated types.
     pub fn with_derive(&mut self, derive: impl ToString) -> &mut Self {
         self.extra_derives.push(derive.to_string());
+        self
+    }
+
+    /// Additional trait bounds applied to `CliConfig` methods.
+    pub fn with_cli_bounds(&mut self, derive: impl ToString) -> &mut Self {
+        self.extra_cli_bounds.push(derive.to_string());
         self
     }
 
