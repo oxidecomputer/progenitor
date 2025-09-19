@@ -343,23 +343,23 @@ impl<T: CliConfig> Cli<T> {
 pub trait CliConfig {
     fn success_item<T>(&self, value: &ResponseValue<T>)
     where
-        T: schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
+        T: std::clone::Clone + schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
     fn success_no_item(&self, value: &ResponseValue<()>);
     fn error<T>(&self, value: &Error<T>)
     where
-        T: schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
+        T: std::clone::Clone + schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
     fn list_start<T>(&self)
     where
-        T: schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
+        T: std::clone::Clone + schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
     fn list_item<T>(&self, value: &T)
     where
-        T: schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
+        T: std::clone::Clone + schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
     fn list_end_success<T>(&self)
     where
-        T: schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
+        T: std::clone::Clone + schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
     fn list_end_error<T>(&self, value: &Error<T>)
     where
-        T: schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
+        T: std::clone::Clone + schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
     fn execute_instance_get(
         &self,
         matches: &::clap::ArgMatches,
