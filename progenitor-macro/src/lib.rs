@@ -52,7 +52,7 @@ mod token_utils;
 ///     [ patch = { TypeName = { [rename = NewTypeName], [derives = []] }, } ]
 ///     [ replace = { TypeName = full_path::to::other::TypeName, }]
 ///     [ convert = { { <schema> } = full_path::to::TypeName, }]
-///
+///     [ timeout = u64 ]
 /// );
 /// ```
 ///
@@ -117,6 +117,9 @@ mod token_utils;
 /// - `convert`: optional map from a JSON schema type defined in `$defs` to a
 ///   replacement type. This may be used to skip generation of the schema and
 ///   use an existing Rust type.
+///
+/// - `timeout`: the default connection timeout for the underlying reqwest
+///   client
 #[proc_macro]
 pub fn generate_api(item: TokenStream) -> TokenStream {
     match do_generate_api(item) {
@@ -155,6 +158,8 @@ struct MacroSettings {
     replace: HashMap<ParseWrapper<syn::Ident>, ParseWrapper<TypeAndImpls>>,
     #[serde(default)]
     convert: OrderedMap<SchemaObject, ParseWrapper<TypeAndImpls>>,
+    #[serde(default)]
+    timeout: Option<u64>,
 }
 
 #[derive(Deserialize)]
@@ -314,7 +319,9 @@ fn do_generate_api(item: TokenStream) -> Result<TokenStream, syn::Error> {
             patch,
             replace,
             convert,
+            timeout,
         } = serde_tokenstream::from_tokenstream(&item.into())?;
+
         let mut settings = GenerationSettings::default();
         settings.with_interface(interface);
         settings.with_tag(tags);
@@ -353,6 +360,9 @@ fn do_generate_api(item: TokenStream) -> Result<TokenStream, syn::Error> {
             let (type_name, impls) = type_and_impls.into_inner().into_name_and_impls();
             settings.with_conversion(schema, type_name, impls);
         });
+        if let Some(timeout) = timeout {
+            settings.with_timeout(timeout);
+        }
         (spec.into_inner(), settings)
     };
 
