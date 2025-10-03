@@ -173,9 +173,7 @@ fn test_nexus_with_different_timeout() {
 
     let spec = load_api(in_path);
 
-    let mut generator = Generator::new(
-        GenerationSettings::default().with_timeout(75)
-    );
+    let mut generator = Generator::new(GenerationSettings::default().with_timeout(75));
     let output = generate_formatted(&mut generator, &spec);
     expectorate::assert_contents(
         format!("tests/output/src/{}_with_timeout.rs", openapi_stem),
