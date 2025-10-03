@@ -6,7 +6,6 @@
 
 use std::{
     collections::HashMap,
-    fmt::Display,
     fs::File,
     path::{Path, PathBuf},
 };
@@ -158,19 +157,6 @@ struct MacroSettings {
 }
 
 #[derive(Deserialize)]
-enum MacroSettingsImpl {
-    Display,
-}
-
-impl Display for MacroSettingsImpl {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match self {
-            MacroSettingsImpl::Display => f.write_str("Display"),
-        }
-    }
-}
-
-#[derive(Deserialize)]
 struct MacroPatch {
     #[serde(default)]
     rename: Option<String>,
@@ -188,18 +174,6 @@ impl From<MacroPatch> for TypePatch {
             s.with_derive(derive.to_token_stream().to_string());
         });
         s
-    }
-}
-
-#[derive(Deserialize)]
-enum GenerationStyle {
-    Positional,
-    Builder,
-}
-
-impl Default for GenerationStyle {
-    fn default() -> Self {
-        Self::Positional
     }
 }
 
