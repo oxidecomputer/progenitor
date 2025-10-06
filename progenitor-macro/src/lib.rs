@@ -119,7 +119,7 @@ mod token_utils;
 ///   use an existing Rust type.
 ///
 /// - `timeout`: the default connection timeout for the underlying reqwest
-///   client
+///   client (15s if not specified)
 #[proc_macro]
 pub fn generate_api(item: TokenStream) -> TokenStream {
     match do_generate_api(item) {
