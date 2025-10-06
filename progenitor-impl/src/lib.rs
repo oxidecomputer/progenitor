@@ -462,7 +462,7 @@ impl Generator {
                 ) -> Self {
                     #[cfg(not(target_arch = "wasm32"))]
                     let client = {
-                        let dur = std::time::Duration::from_secs(#client_timeout);
+                        let dur = ::std::time::Duration::from_secs(#client_timeout);
 
                         reqwest::ClientBuilder::new()
                             .connect_timeout(dur)
