@@ -75,6 +75,7 @@ pub struct GenerationSettings {
     patch: HashMap<String, TypePatch>,
     replace: HashMap<String, (String, Vec<TypeImpl>)>,
     convert: Vec<(schemars::schema::SchemaObject, String, Vec<TypeImpl>)>,
+    timeout: Option<u64>,
 }
 
 #[derive(Debug, Clone)]
@@ -248,6 +249,12 @@ impl GenerationSettings {
         self.map_type = Some(map_type.to_string());
         self
     }
+
+    /// Set the underlying reqwest client's timeout
+    pub fn with_timeout(&mut self, timeout: u64) -> &mut Self {
+        self.timeout = Some(timeout);
+        self
+    }
 }
 
 impl Default for Generator {
@@ -387,6 +394,7 @@ impl Generator {
                 inner
             }
         });
+        let client_timeout = self.settings.timeout.unwrap_or(15);
 
         let client_docstring = {
             let mut s = format!("Client for {}", spec.info.title);
@@ -454,12 +462,13 @@ impl Generator {
                 ) -> Self {
                     #[cfg(not(target_arch = "wasm32"))]
                     let client = {
-                        let dur = std::time::Duration::from_secs(15);
+                        let dur = ::std::time::Duration::from_secs(#client_timeout);
 
                         reqwest::ClientBuilder::new()
                             .connect_timeout(dur)
                             .timeout(dur)
                     };
+
                     #[cfg(target_arch = "wasm32")]
                     let client = reqwest::ClientBuilder::new();
 

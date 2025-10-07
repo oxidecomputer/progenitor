@@ -163,6 +163,24 @@ fn test_cli_gen() {
     verify_apis("cli-gen.json");
 }
 
+#[test]
+fn test_nexus_with_different_timeout() {
+    const OPENAPI_FILE: &'static str = "nexus.json";
+
+    let mut in_path = PathBuf::from("../sample_openapi");
+    in_path.push(OPENAPI_FILE);
+    let openapi_stem = OPENAPI_FILE.split('.').next().unwrap().replace('-', "_");
+
+    let spec = load_api(in_path);
+
+    let mut generator = Generator::new(GenerationSettings::default().with_timeout(75));
+    let output = generate_formatted(&mut generator, &spec);
+    expectorate::assert_contents(
+        format!("tests/output/src/{}_with_timeout.rs", openapi_stem),
+        &output,
+    );
+}
+
 // TODO this file is full of inconsistencies and incorrectly specified types.
 // It's an interesting test to consider whether we try to do our best to
 // interpret the intent or just fail.
