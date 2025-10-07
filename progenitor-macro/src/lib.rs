@@ -158,7 +158,6 @@ struct MacroSettings {
     replace: HashMap<ParseWrapper<syn::Ident>, ParseWrapper<TypeAndImpls>>,
     #[serde(default)]
     convert: OrderedMap<SchemaObject, ParseWrapper<TypeAndImpls>>,
-    #[serde(default)]
     timeout: Option<u64>,
 }
 
