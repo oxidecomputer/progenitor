@@ -1359,10 +1359,7 @@ impl Client {
     }
 
     ///Sends a `PUT` request to `/v1/whoami/name`
-    pub async fn whoami_put_name<'a>(
-        &'a self,
-        body: String,
-    ) -> Result<ResponseValue<()>, Error<()>> {
+    pub async fn whoami_put_name(&self, body: String) -> Result<ResponseValue<()>, Error<()>> {
         let url = format!("{}/v1/whoami/name", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
