@@ -15,6 +15,8 @@
 
 https://github.com/oxidecomputer/progenitor/compare/v0.11.1\...HEAD[Full list of commits]
 
+* Make the default Client timeout value configurable (#1209)
+
 == 0.11.1 (released 2025-09-12)
 
 https://github.com/oxidecomputer/progenitor/compare/v0.11.0\...v0.11.1[Full list of commits]
