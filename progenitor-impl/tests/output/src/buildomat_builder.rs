@@ -60,8 +60,8 @@ pub mod types {
     )]
     #[serde(untagged)]
     pub enum GetThingOrThingsId {
-        Variant0(::std::string::String),
-        Variant1(::std::vec::Vec<::std::string::String>),
+        String(::std::string::String),
+        Array(::std::vec::Vec<::std::string::String>),
     }
 
     impl ::std::convert::From<&Self> for GetThingOrThingsId {
@@ -72,7 +72,7 @@ pub mod types {
 
     impl ::std::convert::From<::std::vec::Vec<::std::string::String>> for GetThingOrThingsId {
         fn from(value: ::std::vec::Vec<::std::string::String>) -> Self {
-            Self::Variant1(value)
+            Self::Array(value)
         }
     }
 
