@@ -607,7 +607,7 @@ impl Generator {
         .flatten()
         .collect::<Vec<_>>();
         let bounds = (!bounds.is_empty()).then(|| {
-            quote! { < #( #bounds  ),* > }
+            quote! { < #(#bounds),* > }
         });
         let self_bounds = needs_lifetime.then(|| quote! { 'a });
 
