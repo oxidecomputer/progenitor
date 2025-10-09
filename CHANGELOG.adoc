@@ -13,7 +13,92 @@
 
 == Unreleased changes (release date TBD)
 
-https://github.com/oxidecomputer/progenitor/compare/v0.4.0\...HEAD[Full list of commits]
+https://github.com/oxidecomputer/progenitor/compare/v0.11.2\...HEAD[Full list of commits]
+
+== 0.11.2 (released 2025-10-09)
+
+https://github.com/oxidecomputer/progenitor/compare/v0.11.1\...v0.11.2[Full list of commits]
+
+* Make the default Client timeout value configurable (#1209)
+
+== 0.11.1 (released 2025-09-12)
+
+https://github.com/oxidecomputer/progenitor/compare/v0.11.0\...v0.11.1[Full list of commits]
+
+* Avoid clippy warnings under Rust 1.89 (#1171 and #1172)
+
+== 0.11.0 (released 2025-05-27)
+
+https://github.com/oxidecomputer/progenitor/compare/v0.10.0\...v0.11.0[Full list of commits]
+
+* Implement hooks via a trait and autoref specialization (#1121)
+* Update httpmock generation for header parameters (#1140)
+
+== 0.10.0 (released 2025-04-30)
+
+https://github.com/oxidecomputer/progenitor/compare/v0.9.1\...v0.10.0[Full list of commits]
+
+* General CLI generation and doc improvements (#1051)
+* Fix header parameters for non-string scalars (#1067)
+* Allow OAS 3.0.4 and other versions starting with '3.0.' (#1107)
+* Generate api-version headers for each request (#1120)
+* Implement From<Infallible> for client error (#1116)
+
+== 0.9.1 (released 2025-01-06)
+
+https://github.com/oxidecomputer/progenitor/compare/v0.9.0\...v0.9.1[Full list of commits]
+
+* Fix regression serializing query parameter simple enums (#1033)
+
+== 0.9.0 (released 2024-12-27)
+
+https://github.com/oxidecomputer/progenitor/compare/v0.8.0\...v0.9.0[Full list of commits]
+
+* Handle array-like and map-like query parameters (#1017)
+* Support custom map types (#1011)
+* Add a progenitor feature for use of macro (and client) (#1007)
+* Add async post_hook function support (#942)
+* Fix name-collision and code-generation issues (#1019) (#993) (#933) (#941)
+
+== 0.8.0 (released 2024-09-26)
+
+https://github.com/oxidecomputer/progenitor/compare/v0.7.0\...v0.8.0[Full list of commits]
+
+* Update to `hyper` 1.0, `reqwest` 0.12 -- these are likely breaking changes
+* Improvements to CLI generation
+* Changes to type generation and traits in `typify` 0.2.0
+
+== 0.7.0 (released 2024-05-15)
+
+* Minor fixes
+* Support for `x-rust-types`` via typify (#804)
+
+https://github.com/oxidecomputer/progenitor/compare/v0.6.0\...v0.7.0[Full list of commits]
+
+== 0.6.0 (released 2024-02-28)
+
+* Include payload in error when there's a deserialization failure (#655)
+* Conversion error type
+* Rustdoc for mods and extension traits (#677)
+* Ignore clippy in generated code (#702)
+
+https://github.com/oxidecomputer/progenitor/compare/v0.5.0\...v0.6.0[Full list of commits]
+
+== 0.5.0 (released 2023-12-16)
+
+* Improve breadth of schema support (#592)
+* Various changes to avoid name collisions (#599)
+* Support for text/plain and text/x-markdown body content types (#593)
+* Upgrade to `openapiv3` v2.0.0
+* Various type generation changes from `typify` 0.0.15
+
+https://github.com/oxidecomputer/progenitor/compare/v0.4.0\...v0.5.0[Full list of commits]
+
+== 0.4.1 (released 2023-12-15)
+
+* Fixed an issue with `openapiv3` and `indexmap` dependencies
+
+https://github.com/oxidecomputer/progenitor/compare/v0.4.0\...v0.4.1[Full list of commits]
 
 == 0.4.0 (released 2023-09-25)
 

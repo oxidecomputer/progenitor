@@ -63,23 +63,28 @@ It can be used as the type `T` in most instances and extracted as a `T` using
 
 ## `Error<E>`
 
-There are five sub-categories of error covered by the error type variants:
+There are seven sub-categories of error covered by the error type variants:
 
-- A request that did not conform to API requirements. This can occur when
-  required builder or body parameters were not specified, and the error message
-  will denote the specific failure.
+- A request that did not conform to API requirements.
+  This can occur when required builder or body parameters were not specified,
+  and the error message will denote the specific failure.
 
 - A communication error
 
-- An expected error response, defined by the OpenAPI document with a 4xx or 5xx
-  status code
+- An expected error response when upgrading connection.
 
-- An expected status code (whose payload didn't deserialize as expected (this
-  could be viewed as a sub-type of communication error), but it is separately
-  identified as there's more information; note that this covers both success and
-  error status codes
+- An expected error response, defined by the OpenAPI document
+  with a 4xx or 5xx status code
+
+- An expected status code that encountered an error reading the body
+  or the payload deserialization failed
+  (this could be viewed as a sub-type of communication error),
+  but it is separately identified as there's more information;
+  note that this covers both success and error status codes
 
 - An unexpected status code in the response
+
+- A custom error, particular to the generated client
 
 These errors are covered by the variants of the `Error<E>` type:
 
@@ -87,8 +92,11 @@ These errors are covered by the variants of the `Error<E>` type:
 pub enum Error<E = ()> {
     InvalidRequest(String),
     CommunicationError(reqwest::Error),
+    InvalidUpgrade(reqwest::Error),
     ErrorResponse(ResponseValue<E>),
-    InvalidResponsePayload(reqwest::Error),
+    ResponseBodyError(reqwest::Error),
+    InvalidResponsePayload(bytes::Bytes, reqwest::Error),
     UnexpectedResponse(reqwest::Response),
+    Custom(String),
 }
 ```

@@ -3,9 +3,7 @@
 use std::collections::BTreeMap;
 
 use indexmap::IndexMap;
-use openapiv3::{
-    Components, Parameter, ReferenceOr, RequestBody, Response, Schema,
-};
+use openapiv3::{Components, Parameter, ReferenceOr, RequestBody, Response, Schema};
 use unicode_ident::{is_xid_continue, is_xid_start};
 
 use crate::Result;
@@ -14,9 +12,7 @@ pub(crate) trait ReferenceOrExt<T: ComponentLookup> {
     fn item<'a>(&'a self, components: &'a Option<Components>) -> Result<&'a T>;
 }
 pub(crate) trait ComponentLookup: Sized {
-    fn get_components(
-        components: &Components,
-    ) -> &IndexMap<String, ReferenceOr<Self>>;
+    fn get_components(components: &Components) -> &IndexMap<String, ReferenceOr<Self>>;
 }
 
 impl<T: ComponentLookup> ReferenceOrExt<T> for openapiv3::ReferenceOr<T> {
@@ -26,8 +22,7 @@ impl<T: ComponentLookup> ReferenceOrExt<T> for openapiv3::ReferenceOr<T> {
             ReferenceOr::Reference { reference } => {
                 let idx = reference.rfind('/').unwrap();
                 let key = &reference[idx + 1..];
-                let parameters =
-                    T::get_components(components.as_ref().unwrap());
+                let parameters = T::get_components(components.as_ref().unwrap());
                 parameters
                     .get(key)
                     .unwrap_or_else(|| panic!("key {} is missing", key))
@@ -57,33 +52,25 @@ pub(crate) fn parameter_map<'a>(
 }
 
 impl ComponentLookup for Parameter {
-    fn get_components(
-        components: &Components,
-    ) -> &IndexMap<String, ReferenceOr<Self>> {
+    fn get_components(components: &Components) -> &IndexMap<String, ReferenceOr<Self>> {
         &components.parameters
     }
 }
 
 impl ComponentLookup for RequestBody {
-    fn get_components(
-        components: &Components,
-    ) -> &IndexMap<String, ReferenceOr<Self>> {
+    fn get_components(components: &Components) -> &IndexMap<String, ReferenceOr<Self>> {
         &components.request_bodies
     }
 }
 
 impl ComponentLookup for Response {
-    fn get_components(
-        components: &Components,
-    ) -> &IndexMap<String, ReferenceOr<Self>> {
+    fn get_components(components: &Components) -> &IndexMap<String, ReferenceOr<Self>> {
         &components.responses
     }
 }
 
 impl ComponentLookup for Schema {
-    fn get_components(
-        components: &Components,
-    ) -> &IndexMap<String, ReferenceOr<Self>> {
+    fn get_components(components: &Components) -> &IndexMap<String, ReferenceOr<Self>> {
         &components.schemas
     }
 }
