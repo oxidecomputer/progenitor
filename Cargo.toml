@@ -70,3 +70,6 @@ uuid = { version = "1.18.1", features = ["serde", "v4"] }
 #serde_tokenstream = { path = "../serde_tokenstream" }
 #typify = { path = "../typify/typify" }
 #rustfmt-wrapper = { path = "../rustfmt-wrapper" }
+
+[workspace.lints.rust]
+unused_crate_dependencies = "forbid"
