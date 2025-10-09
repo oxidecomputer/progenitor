@@ -599,26 +599,15 @@ impl Generator {
             })
             .collect::<Vec<_>>();
 
-        let raw_body_param = method.params.iter().any(|param| {
-            param.typ == OperationParameterType::RawBody
-                && param.kind == OperationParameterKind::Body(BodyContentType::OctetStream)
-        });
-
-        let bounds = if raw_body_param {
-            quote! { <'a, B: Into<reqwest::Body> > }
-        } else {
-            quote! { <'a> }
-        };
-
-        let new_bounds = [
+        let bounds = [
             needs_lifetime.then(|| quote! { 'a }),
             needs_body.then(|| quote! { B: Into<reqwest::Body> }),
         ]
         .into_iter()
         .flatten()
         .collect::<Vec<_>>();
-        let new_bounds = (!new_bounds.is_empty()).then(|| {
-            quote! { < #( #new_bounds  ),* > }
+        let bounds = (!bounds.is_empty()).then(|| {
+            quote! { < #( #bounds  ),* > }
         });
         let self_bounds = needs_lifetime.then(|| quote! { 'a });
 
@@ -632,7 +621,7 @@ impl Generator {
 
         let method_impl = quote! {
             #[doc = #doc_comment]
-            pub async fn #operation_id #new_bounds (
+            pub async fn #operation_id #bounds (
                 & #self_bounds self,
                 #(#params),*
             ) -> Result<
@@ -709,7 +698,7 @@ impl Generator {
             quote! {
                 #[doc = #doc_comment]
                 pub fn #stream_id #bounds (
-                    &'a self,
+                    & #self_bounds self,
                     #(#stream_params),*
                 ) -> impl futures::Stream<Item = Result<
                     #item_type,
