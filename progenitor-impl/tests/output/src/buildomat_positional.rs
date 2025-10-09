@@ -1023,7 +1023,7 @@ impl ClientHooks<()> for &Client {}
 #[allow(clippy::all)]
 impl Client {
     ///Sends a `POST` request to `/v1/control/hold`
-    pub async fn control_hold<'a>(&'a self) -> Result<ResponseValue<()>, Error<()>> {
+    pub async fn control_hold(&self) -> Result<ResponseValue<()>, Error<()>> {
         let url = format!("{}/v1/control/hold", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -1054,7 +1054,7 @@ impl Client {
     }
 
     ///Sends a `POST` request to `/v1/control/resume`
-    pub async fn control_resume<'a>(&'a self) -> Result<ResponseValue<()>, Error<()>> {
+    pub async fn control_resume(&self) -> Result<ResponseValue<()>, Error<()>> {
         let url = format!("{}/v1/control/resume", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -1115,8 +1115,8 @@ impl Client {
     }
 
     ///Sends a `GET` request to `/v1/tasks`
-    pub async fn tasks_get<'a>(
-        &'a self,
+    pub async fn tasks_get(
+        &self,
     ) -> Result<ResponseValue<::std::vec::Vec<types::Task>>, Error<()>> {
         let url = format!("{}/v1/tasks", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
@@ -1328,7 +1328,7 @@ impl Client {
     }
 
     ///Sends a `GET` request to `/v1/whoami`
-    pub async fn whoami<'a>(&'a self) -> Result<ResponseValue<types::WhoamiResult>, Error<()>> {
+    pub async fn whoami(&self) -> Result<ResponseValue<types::WhoamiResult>, Error<()>> {
         let url = format!("{}/v1/whoami", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -1429,9 +1429,7 @@ impl Client {
     }
 
     ///Sends a `GET` request to `/v1/worker/ping`
-    pub async fn worker_ping<'a>(
-        &'a self,
-    ) -> Result<ResponseValue<types::WorkerPingResult>, Error<()>> {
+    pub async fn worker_ping(&self) -> Result<ResponseValue<types::WorkerPingResult>, Error<()>> {
         let url = format!("{}/v1/worker/ping", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -1614,9 +1612,7 @@ impl Client {
     }
 
     ///Sends a `GET` request to `/v1/workers`
-    pub async fn workers_list<'a>(
-        &'a self,
-    ) -> Result<ResponseValue<types::WorkersResult>, Error<()>> {
+    pub async fn workers_list(&self) -> Result<ResponseValue<types::WorkersResult>, Error<()>> {
         let url = format!("{}/v1/workers", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -1647,7 +1643,7 @@ impl Client {
     }
 
     ///Sends a `POST` request to `/v1/workers/recycle`
-    pub async fn workers_recycle<'a>(&'a self) -> Result<ResponseValue<()>, Error<()>> {
+    pub async fn workers_recycle(&self) -> Result<ResponseValue<()>, Error<()>> {
         let url = format!("{}/v1/workers/recycle", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
