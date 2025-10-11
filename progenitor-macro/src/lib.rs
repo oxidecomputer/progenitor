@@ -378,5 +378,18 @@ fn do_generate_api(item: TokenStream) -> Result<TokenStream, syn::Error> {
         const _: &str = include_str!(#path_str);
     };
 
+    println!("cargo::rerun-if-changed={}", path_str);
+
+    let output = expander::Expander::new(format!(
+        "{}",
+        std::path::PathBuf::from(spec.value())
+            .file_name()
+            .unwrap()
+            .to_string_lossy()
+    ))
+    .fmt(expander::Edition::_2021)
+    .verbose(true)
+    .write_to_out_dir(output)
+    .expect("Writing file works. qed");
     Ok(output.into())
 }

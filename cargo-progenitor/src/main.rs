@@ -243,7 +243,7 @@ pub fn dependencies(builder: Generator, include_client: bool) -> Vec<String> {
     let mut deps = vec![
         format!("bytes = \"{}\"", DEPENDENCIES.bytes),
         format!("futures-core = \"{}\"", DEPENDENCIES.futures),
-        format!("reqwest = {{ version = \"{}\", default-features=false, features = [\"json\", \"stream\"] }}", DEPENDENCIES.reqwest),
+        format!("reqwest = {{ version = \"{}\", default-features=false, features = [\"json\", \"stream\", \"multipart\"] }}", DEPENDENCIES.reqwest),
         format!("serde = {{ version = \"{}\", features = [\"derive\"] }}", DEPENDENCIES.serde),
         format!("serde_urlencoded = \"{}\"", DEPENDENCIES.serde_urlencoded),
     ];
