@@ -40,7 +40,7 @@ You'll need to add the following to `Cargo.toml`:
 [dependencies]
 futures = "0.3"
 progenitor = { git = "https://github.com/oxidecomputer/progenitor" }
-reqwest = { version = "0.12", features = ["json", "stream"] }
+reqwest = { version = "0.12", features = ["json", "stream", "multipart"] }
 serde = { version = "1.0", features = ["derive"] }
 ```
 
@@ -133,7 +133,7 @@ You'll need to add the following to `Cargo.toml`:
 [dependencies]
 futures = "0.3"
 progenitor-client = { git = "https://github.com/oxidecomputer/progenitor" }
-reqwest = { version = "0.12", features = ["json", "stream"] }
+reqwest = { version = "0.12", features = ["json", "stream", "multipart"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 
@@ -175,6 +175,7 @@ cargo progenitor -i sample_openapi/keeper.json -o keeper -n keeper -v 0.1.0
 ```
 
 ... or within the repo:
+
 ```
 cargo run --bin cargo-progenitor -- progenitor -i sample_openapi/keeper.json -o keeper -n keeper -v 0.1.0
 ```
@@ -200,7 +201,7 @@ bytes = "1.9"
 chrono = { version = "0.4", default-features=false, features = ["serde"] }
 futures-core = "0.3"
 progenitor-client = "0.9.1"
-reqwest = { version = "0.12", default-features=false, features = ["json", "stream"] }
+reqwest = { version = "0.12", default-features=false, features = ["json", "stream", "multipart"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_urlencoded = "0.7"
 ```
@@ -378,7 +379,7 @@ Currently, the generated code doesn't deal with request headers. To add default 
 
 ```rust
     let baseurl = std::env::var("API_URL").expect("$API_URL not set");
-    
+
     let access_token = std::env::var("API_ACCESS_TOKEN").expect("$API_ACCESS_TOKEN not set");
     let authorization_header = format!("Bearer {}", access_token);
 

@@ -156,7 +156,8 @@ impl Generator {
                  description: _,
              }| {
                 let arg_type_name = match typ {
-                    OperationParameterType::Type(arg_type_id) => self
+                    OperationParameterType::Type(arg_type_id)
+                    | OperationParameterType::Form(arg_type_id) => self
                         .type_space
                         .get_type(arg_type_id)
                         .unwrap()
@@ -243,11 +244,10 @@ impl Generator {
                         },
                     ),
                     OperationParameterKind::Body(body_content_type) => match typ {
-                        OperationParameterType::Type(_) => (
+                        OperationParameterType::Type(_) | OperationParameterType::Form(_) => (
                             true,
                             quote! {
                                 Self(self.0.json_body_obj(value))
-
                             },
                         ),
                         OperationParameterType::RawBody => match body_content_type {
