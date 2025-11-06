@@ -12,9 +12,10 @@ use quote::{format_ident, quote, ToTokens};
 use typify::{TypeId, TypeSpace};
 
 use crate::{
+    resolve_operation_id_with_strategy,
     template::PathTemplate,
     util::{items, parameter_map, sanitize, unique_ident_from, Case},
-    Error, Generator, Result, TagStyle,
+    Error, Generator, OperationIdStrategy, Result, TagStyle,
 };
 use crate::{to_schema::ToSchema, util::ReferenceOrExt};
 
@@ -290,8 +291,18 @@ impl Generator {
         path: &str,
         method: &str,
         path_parameters: &[ReferenceOr<Parameter>],
-    ) -> Result<OperationMethod> {
-        let operation_id = operation.operation_id.as_ref().unwrap();
+        operation_id_strategy: OperationIdStrategy,
+    ) -> Result<Option<OperationMethod>> {
+        let Some(operation_id) = resolve_operation_id_with_strategy(
+            path,
+            method,
+            operation.operation_id.as_deref(),
+            operation_id_strategy,
+        )
+        .map_err(|_| Error::UnexpectedFormat(format!("path {} is missing operation ID", path)))?
+        else {
+            return Ok(None);
+        };
 
         let mut combined_path_parameters = parameter_map(path_parameters, components)?;
         for operation_param in items(&operation.parameters, components) {
@@ -534,8 +545,8 @@ impl Generator {
             )));
         }
 
-        Ok(OperationMethod {
-            operation_id: sanitize(operation_id, Case::Snake),
+        Ok(Some(OperationMethod {
+            operation_id: sanitize(&operation_id, Case::Snake),
             tags: operation.tags.clone(),
             method: HttpMethod::from_str(method)?,
             path: tmp,
@@ -545,7 +556,7 @@ impl Generator {
             responses,
             dropshot_paginated,
             dropshot_websocket,
-        })
+        }))
     }
 
     pub(crate) fn positional_method(
@@ -1399,7 +1410,7 @@ impl Generator {
     ///             param_1,
     ///             param_2,
     ///         } = self;
-    ///     
+    ///
     ///         let param_1 = param_1.map_err(Error::InvalidRequest)?;
     ///         let param_2 = param_1.map_err(Error::InvalidRequest)?;
     ///
