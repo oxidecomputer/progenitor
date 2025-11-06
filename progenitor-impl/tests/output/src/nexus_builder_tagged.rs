@@ -64,7 +64,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct Baseboard {
         pub part: ::std::string::String,
         pub revision: i64,
@@ -170,7 +172,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     #[serde(tag = "type")]
     pub enum BinRangedouble {
         ///A range unbounded below and exclusively above, `..end`.
@@ -278,7 +282,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     #[serde(tag = "type")]
     pub enum BinRangeint64 {
         ///A range unbounded below and exclusively above, `..end`.
@@ -331,7 +337,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct Bindouble {
         ///The total count of samples in this bin.
         pub count: u64,
@@ -383,7 +391,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct Binint64 {
         ///The total count of samples in this bin.
         pub count: u64,
@@ -419,7 +429,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Serialize, Clone, Debug)]
+    #[derive(:: serde :: Serialize, Clone, Debug, schemars :: JsonSchema)]
     #[serde(transparent)]
     pub struct BlockSize(i64);
     impl ::std::ops::Deref for BlockSize {
@@ -487,7 +497,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     #[serde(transparent)]
     pub struct ByteCount(pub u64);
     impl ::std::ops::Deref for ByteCount {
@@ -602,7 +614,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct Certificate {
         ///human-readable free-form text about a resource
         pub description: ::std::string::String,
@@ -683,7 +697,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct CertificateCreate {
         ///PEM file containing public certificate chain
         pub cert: ::std::vec::Vec<u8>,
@@ -738,7 +754,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct CertificateResultsPage {
         ///list of items on this page of results
         pub items: ::std::vec::Vec<Certificate>,
@@ -803,7 +821,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct ComponentUpdate {
         pub component_type: UpdateableComponentType,
         ///unique, immutable, system-controlled identifier for each resource
@@ -858,7 +878,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct ComponentUpdateResultsPage {
         ///list of items on this page of results
         pub items: ::std::vec::Vec<ComponentUpdate>,
@@ -904,7 +926,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct Cumulativedouble {
         pub start_time: ::chrono::DateTime<::chrono::offset::Utc>,
         pub value: f64,
@@ -947,7 +971,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct Cumulativeint64 {
         pub start_time: ::chrono::DateTime<::chrono::offset::Utc>,
         pub value: i64,
@@ -1147,7 +1173,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     #[serde(tag = "type", content = "datum")]
     pub enum Datum {
         #[serde(rename = "bool")]
@@ -1257,6 +1285,7 @@ pub mod types {
         Ord,
         PartialEq,
         PartialOrd,
+        schemars :: JsonSchema,
     )]
     pub enum DatumType {
         #[serde(rename = "bool")]
@@ -1370,7 +1399,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct DerEncodedKeyPair {
         ///request signing private key (base64 encoded der file)
         pub private_key: ::std::string::String,
@@ -1417,7 +1448,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct DeviceAccessTokenRequest {
         pub client_id: ::uuid::Uuid,
         pub device_code: ::std::string::String,
@@ -1455,7 +1488,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct DeviceAuthRequest {
         pub client_id: ::uuid::Uuid,
     }
@@ -1490,7 +1525,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct DeviceAuthVerify {
         pub user_code: ::std::string::String,
     }
@@ -1536,7 +1573,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     #[serde(tag = "type", content = "value")]
     pub enum Digest {
         #[serde(rename = "sha256")]
@@ -1633,7 +1672,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct Disk {
         pub block_size: ByteCount,
         ///human-readable free-form text about a resource
@@ -1711,7 +1752,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct DiskCreate {
         pub description: ::std::string::String,
         ///initial source for this disk
@@ -1756,7 +1799,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct DiskIdentifier {
         pub name: Name,
     }
@@ -1802,6 +1847,7 @@ pub mod types {
         Ord,
         PartialEq,
         PartialOrd,
+        schemars :: JsonSchema,
     )]
     pub enum DiskMetricName {
         #[serde(rename = "activated")]
@@ -1895,7 +1941,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct DiskPath {
         pub disk: NameOrId,
     }
@@ -1943,7 +1991,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct DiskResultsPage {
         ///list of items on this page of results
         pub items: ::std::vec::Vec<Disk>,
@@ -2061,7 +2111,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     #[serde(tag = "type")]
     pub enum DiskSource {
         ///Create a blank disk
@@ -2220,7 +2272,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     #[serde(tag = "state", content = "instance")]
     pub enum DiskState {
         #[serde(rename = "creating")]
@@ -2279,7 +2333,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct Distribution {
         ///The name of the distribution (e.g. "alpine" or "ubuntu")
         pub name: Name,
@@ -2325,7 +2381,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct Error {
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         pub error_code: ::std::option::Option<::std::string::String>,
@@ -2368,7 +2426,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct ExternalIp {
         pub ip: ::std::net::IpAddr,
         pub kind: IpKind,
@@ -2430,7 +2490,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     #[serde(tag = "type")]
     pub enum ExternalIpCreate {
         ///An IP address providing both inbound and outbound access. The
@@ -2480,7 +2542,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct ExternalIpResultsPage {
         ///list of items on this page of results
         pub items: ::std::vec::Vec<ExternalIp>,
@@ -2529,7 +2593,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct FieldSchema {
         pub name: ::std::string::String,
         pub source: FieldSource,
@@ -2575,6 +2641,7 @@ pub mod types {
         Ord,
         PartialEq,
         PartialOrd,
+        schemars :: JsonSchema,
     )]
     pub enum FieldSource {
         #[serde(rename = "target")]
@@ -2664,6 +2731,7 @@ pub mod types {
         Ord,
         PartialEq,
         PartialOrd,
+        schemars :: JsonSchema,
     )]
     pub enum FieldType {
         #[serde(rename = "string")]
@@ -2761,6 +2829,7 @@ pub mod types {
         Ord,
         PartialEq,
         PartialOrd,
+        schemars :: JsonSchema,
     )]
     pub enum FleetRole {
         #[serde(rename = "admin")]
@@ -2855,7 +2924,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct FleetRolePolicy {
         ///Roles directly assigned on this resource
         pub role_assignments: ::std::vec::Vec<FleetRoleRoleAssignment>,
@@ -2910,7 +2981,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct FleetRoleRoleAssignment {
         pub identity_id: ::uuid::Uuid,
         pub identity_type: IdentityType,
@@ -3028,7 +3101,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct GlobalImage {
         ///size of blocks in bytes
         pub block_size: ByteCount,
@@ -3120,7 +3195,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct GlobalImageCreate {
         ///block size in bytes
         pub block_size: BlockSize,
@@ -3175,7 +3252,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct GlobalImageResultsPage {
         ///list of items on this page of results
         pub items: ::std::vec::Vec<GlobalImage>,
@@ -3227,7 +3306,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct Group {
         ///Human-readable name that can identify the group
         pub display_name: ::std::string::String,
@@ -3279,7 +3360,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct GroupResultsPage {
         ///list of items on this page of results
         pub items: ::std::vec::Vec<Group>,
@@ -3405,7 +3488,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct Histogramdouble {
         pub bins: ::std::vec::Vec<Bindouble>,
         pub n_samples: u64,
@@ -3529,7 +3614,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct Histogramint64 {
         pub bins: ::std::vec::Vec<Binint64>,
         pub n_samples: u64,
@@ -3581,6 +3668,7 @@ pub mod types {
         Ord,
         PartialEq,
         PartialOrd,
+        schemars :: JsonSchema,
     )]
     pub enum IdSortMode {
         ///sort in increasing order of "id"
@@ -3695,7 +3783,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct IdentityProvider {
         ///human-readable free-form text about a resource
         pub description: ::std::string::String,
@@ -3754,7 +3844,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct IdentityProviderResultsPage {
         ///list of items on this page of results
         pub items: ::std::vec::Vec<IdentityProvider>,
@@ -3804,6 +3896,7 @@ pub mod types {
         Ord,
         PartialEq,
         PartialOrd,
+        schemars :: JsonSchema,
     )]
     pub enum IdentityProviderType {
         ///SAML identity provider
@@ -3886,6 +3979,7 @@ pub mod types {
         Ord,
         PartialEq,
         PartialOrd,
+        schemars :: JsonSchema,
     )]
     pub enum IdentityType {
         #[serde(rename = "silo_user")]
@@ -3992,7 +4086,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     #[serde(tag = "type")]
     pub enum IdpMetadataSource {
         #[serde(rename = "url")]
@@ -4109,7 +4205,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct Image {
         ///size of blocks in bytes
         pub block_size: ByteCount,
@@ -4193,7 +4291,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct ImageCreate {
         ///block size in bytes
         pub block_size: BlockSize,
@@ -4246,7 +4346,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct ImageResultsPage {
         ///list of items on this page of results
         pub items: ::std::vec::Vec<Image>,
@@ -4332,7 +4434,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     #[serde(tag = "type")]
     pub enum ImageSource {
         #[serde(rename = "url")]
@@ -4436,7 +4540,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct Instance {
         ///human-readable free-form text about a resource
         pub description: ::std::string::String,
@@ -4485,7 +4591,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     #[serde(transparent)]
     pub struct InstanceCpuCount(pub u16);
     impl ::std::ops::Deref for InstanceCpuCount {
@@ -4633,7 +4741,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct InstanceCreate {
         pub description: ::std::string::String,
         ///The disks to be created or attached for this instance.
@@ -4753,7 +4863,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     #[serde(tag = "type")]
     pub enum InstanceDiskAttachment {
         ///During instance creation, create and attach disks
@@ -4802,7 +4914,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct InstanceMigrate {
         pub dst_sled_id: ::uuid::Uuid,
     }
@@ -4891,7 +5005,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     #[serde(tag = "type", content = "params")]
     pub enum InstanceNetworkInterfaceAttachment {
         ///Create one or more `NetworkInterface`s for the `Instance`.
@@ -4951,7 +5067,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct InstanceResultsPage {
         ///list of items on this page of results
         pub items: ::std::vec::Vec<Instance>,
@@ -5008,7 +5126,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct InstanceSerialConsoleData {
         ///The bytes starting from the requested offset up to either the end of
         /// the buffer or the request's `max_bytes`. Provided as a u8 array
@@ -5134,6 +5254,7 @@ pub mod types {
         Ord,
         PartialEq,
         PartialOrd,
+        schemars :: JsonSchema,
     )]
     pub enum InstanceState {
         ///The instance is being created.
@@ -5265,6 +5386,7 @@ pub mod types {
         Ord,
         PartialEq,
         PartialOrd,
+        schemars :: JsonSchema,
     )]
     pub enum IpKind {
         #[serde(rename = "ephemeral")]
@@ -5351,7 +5473,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     #[serde(untagged)]
     pub enum IpNet {
         V4(Ipv4Net),
@@ -5474,7 +5598,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct IpPool {
         ///human-readable free-form text about a resource
         pub description: ::std::string::String,
@@ -5526,7 +5652,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct IpPoolCreate {
         pub description: ::std::string::String,
         pub name: Name,
@@ -5572,7 +5700,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct IpPoolRange {
         pub id: ::uuid::Uuid,
         pub range: IpRange,
@@ -5622,7 +5752,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct IpPoolRangeResultsPage {
         ///list of items on this page of results
         pub items: ::std::vec::Vec<IpPoolRange>,
@@ -5674,7 +5806,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct IpPoolResultsPage {
         ///list of items on this page of results
         pub items: ::std::vec::Vec<IpPool>,
@@ -5728,7 +5862,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct IpPoolUpdate {
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         pub description: ::std::option::Option<::std::string::String>,
@@ -5784,7 +5920,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     #[serde(untagged)]
     pub enum IpRange {
         V4(Ipv4Range),
@@ -5828,7 +5966,17 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+    #[derive(
+        :: serde :: Serialize,
+        Clone,
+        Debug,
+        Eq,
+        Hash,
+        Ord,
+        PartialEq,
+        PartialOrd,
+        schemars :: JsonSchema,
+    )]
     #[serde(transparent)]
     pub struct Ipv4Net(::std::string::String);
     impl ::std::ops::Deref for Ipv4Net {
@@ -5940,7 +6088,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct Ipv4Range {
         pub first: ::std::net::Ipv4Addr,
         pub last: ::std::net::Ipv4Addr,
@@ -5976,7 +6126,17 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+    #[derive(
+        :: serde :: Serialize,
+        Clone,
+        Debug,
+        Eq,
+        Hash,
+        Ord,
+        PartialEq,
+        PartialOrd,
+        schemars :: JsonSchema,
+    )]
     #[serde(transparent)]
     pub struct Ipv6Net(::std::string::String);
     impl ::std::ops::Deref for Ipv6Net {
@@ -6087,7 +6247,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct Ipv6Range {
         pub first: ::std::net::Ipv6Addr,
         pub last: ::std::net::Ipv6Addr,
@@ -6125,7 +6287,17 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+    #[derive(
+        :: serde :: Serialize,
+        Clone,
+        Debug,
+        Eq,
+        Hash,
+        Ord,
+        PartialEq,
+        PartialOrd,
+        schemars :: JsonSchema,
+    )]
     #[serde(transparent)]
     pub struct L4PortRange(::std::string::String);
     impl ::std::ops::Deref for L4PortRange {
@@ -6223,7 +6395,17 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+    #[derive(
+        :: serde :: Serialize,
+        Clone,
+        Debug,
+        Eq,
+        Hash,
+        Ord,
+        PartialEq,
+        PartialOrd,
+        schemars :: JsonSchema,
+    )]
     #[serde(transparent)]
     pub struct MacAddr(::std::string::String);
     impl ::std::ops::Deref for MacAddr {
@@ -6330,7 +6512,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct Measurement {
         pub datum: Datum,
         pub timestamp: ::chrono::DateTime<::chrono::offset::Utc>,
@@ -6379,7 +6563,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct MeasurementResultsPage {
         ///list of items on this page of results
         pub items: ::std::vec::Vec<Measurement>,
@@ -6421,7 +6607,17 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+    #[derive(
+        :: serde :: Serialize,
+        Clone,
+        Debug,
+        Eq,
+        Hash,
+        Ord,
+        PartialEq,
+        PartialOrd,
+        schemars :: JsonSchema,
+    )]
     #[serde(transparent)]
     pub struct Name(::std::string::String);
     impl ::std::ops::Deref for Name {
@@ -6527,7 +6723,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     #[serde(untagged)]
     pub enum NameOrId {
         Id(::uuid::Uuid),
@@ -6644,6 +6842,7 @@ pub mod types {
         Ord,
         PartialEq,
         PartialOrd,
+        schemars :: JsonSchema,
     )]
     pub enum NameOrIdSortMode {
         ///sort in increasing order of "name"
@@ -6743,6 +6942,7 @@ pub mod types {
         Ord,
         PartialEq,
         PartialOrd,
+        schemars :: JsonSchema,
     )]
     pub enum NameSortMode {
         ///sort in increasing order of "name"
@@ -6888,7 +7088,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct NetworkInterface {
         ///human-readable free-form text about a resource
         pub description: ::std::string::String,
@@ -6978,7 +7180,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct NetworkInterfaceCreate {
         pub description: ::std::string::String,
         ///The IP address for the interface. One will be auto-assigned if not
@@ -7035,7 +7239,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct NetworkInterfaceResultsPage {
         ///list of items on this page of results
         pub items: ::std::vec::Vec<NetworkInterface>,
@@ -7108,7 +7314,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct NetworkInterfaceUpdate {
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         pub description: ::std::option::Option<::std::string::String>,
@@ -7180,6 +7388,7 @@ pub mod types {
         Ord,
         PartialEq,
         PartialOrd,
+        schemars :: JsonSchema,
     )]
     #[serde(transparent)]
     pub struct NodeName(pub ::std::string::String);
@@ -7270,7 +7479,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct Organization {
         ///human-readable free-form text about a resource
         pub description: ::std::string::String,
@@ -7321,7 +7532,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct OrganizationCreate {
         pub description: ::std::string::String,
         pub name: Name,
@@ -7370,7 +7583,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct OrganizationResultsPage {
         ///list of items on this page of results
         pub items: ::std::vec::Vec<Organization>,
@@ -7417,6 +7632,7 @@ pub mod types {
         Ord,
         PartialEq,
         PartialOrd,
+        schemars :: JsonSchema,
     )]
     pub enum OrganizationRole {
         #[serde(rename = "admin")]
@@ -7511,7 +7727,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct OrganizationRolePolicy {
         ///Roles directly assigned on this resource
         pub role_assignments: ::std::vec::Vec<OrganizationRoleRoleAssignment>,
@@ -7566,7 +7784,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct OrganizationRoleRoleAssignment {
         pub identity_id: ::uuid::Uuid,
         pub identity_type: IdentityType,
@@ -7620,7 +7840,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct OrganizationUpdate {
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         pub description: ::std::option::Option<::std::string::String>,
@@ -7662,7 +7884,17 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+    #[derive(
+        :: serde :: Serialize,
+        Clone,
+        Debug,
+        Eq,
+        Hash,
+        Ord,
+        PartialEq,
+        PartialOrd,
+        schemars :: JsonSchema,
+    )]
     #[serde(transparent)]
     pub struct Password(::std::string::String);
     impl ::std::ops::Deref for Password {
@@ -7790,7 +8022,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct PhysicalDisk {
         pub disk_type: PhysicalDiskType,
         ///unique, immutable, system-controlled identifier for each resource
@@ -7850,7 +8084,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct PhysicalDiskResultsPage {
         ///list of items on this page of results
         pub items: ::std::vec::Vec<PhysicalDisk>,
@@ -7896,6 +8132,7 @@ pub mod types {
         Ord,
         PartialEq,
         PartialOrd,
+        schemars :: JsonSchema,
     )]
     pub enum PhysicalDiskType {
         #[serde(rename = "internal")]
@@ -8009,7 +8246,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct Project {
         ///human-readable free-form text about a resource
         pub description: ::std::string::String,
@@ -8061,7 +8300,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct ProjectCreate {
         pub description: ::std::string::String,
         pub name: Name,
@@ -8110,7 +8351,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct ProjectResultsPage {
         ///list of items on this page of results
         pub items: ::std::vec::Vec<Project>,
@@ -8157,6 +8400,7 @@ pub mod types {
         Ord,
         PartialEq,
         PartialOrd,
+        schemars :: JsonSchema,
     )]
     pub enum ProjectRole {
         #[serde(rename = "admin")]
@@ -8251,7 +8495,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct ProjectRolePolicy {
         ///Roles directly assigned on this resource
         pub role_assignments: ::std::vec::Vec<ProjectRoleRoleAssignment>,
@@ -8306,7 +8552,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct ProjectRoleRoleAssignment {
         pub identity_id: ::uuid::Uuid,
         pub identity_type: IdentityType,
@@ -8360,7 +8608,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct ProjectUpdate {
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         pub description: ::std::option::Option<::std::string::String>,
@@ -8423,7 +8673,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct Rack {
         ///unique, immutable, system-controlled identifier for each resource
         pub id: ::uuid::Uuid,
@@ -8476,7 +8728,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct RackResultsPage {
         ///list of items on this page of results
         pub items: ::std::vec::Vec<Rack>,
@@ -8520,7 +8774,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct Role {
         pub description: ::std::string::String,
         pub name: RoleName,
@@ -8553,7 +8809,17 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+    #[derive(
+        :: serde :: Serialize,
+        Clone,
+        Debug,
+        Eq,
+        Hash,
+        Ord,
+        PartialEq,
+        PartialOrd,
+        schemars :: JsonSchema,
+    )]
     #[serde(transparent)]
     pub struct RoleName(::std::string::String);
     impl ::std::ops::Deref for RoleName {
@@ -8659,7 +8925,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct RoleResultsPage {
         ///list of items on this page of results
         pub items: ::std::vec::Vec<Role>,
@@ -8781,7 +9049,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     #[serde(tag = "type", content = "value")]
     pub enum RouteDestination {
         ///Route applies to traffic destined for a specific IP address
@@ -8926,7 +9196,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     #[serde(tag = "type", content = "value")]
     pub enum RouteTarget {
         ///Forward traffic to a particular IP address.
@@ -9033,7 +9305,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct RouterRoute {
         ///human-readable free-form text about a resource
         pub description: ::std::string::String,
@@ -9096,7 +9370,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct RouterRouteCreateParams {
         pub description: ::std::string::String,
         pub destination: RouteDestination,
@@ -9176,6 +9452,7 @@ pub mod types {
         Ord,
         PartialEq,
         PartialOrd,
+        schemars :: JsonSchema,
     )]
     pub enum RouterRouteKind {
         ///Determines the default destination of traffic, such as whether it
@@ -9287,7 +9564,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct RouterRouteResultsPage {
         ///list of items on this page of results
         pub items: ::std::vec::Vec<RouterRoute>,
@@ -9351,7 +9630,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct RouterRouteUpdateParams {
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         pub description: ::std::option::Option<::std::string::String>,
@@ -9396,7 +9677,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct Saga {
         pub id: ::uuid::Uuid,
         pub state: SagaState,
@@ -9509,7 +9792,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     #[serde(tag = "error")]
     pub enum SagaErrorInfo {
         #[serde(rename = "action_failed")]
@@ -9561,7 +9846,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct SagaResultsPage {
         ///list of items on this page of results
         pub items: ::std::vec::Vec<Saga>,
@@ -9643,7 +9930,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     #[serde(tag = "state")]
     pub enum SagaState {
         #[serde(rename = "running")]
@@ -9750,7 +10039,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct SamlIdentityProvider {
         ///service provider endpoint where the response will be sent
         pub acs_url: ::std::string::String,
@@ -9875,7 +10166,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct SamlIdentityProviderCreate {
         ///service provider endpoint where the response will be sent
         pub acs_url: ::std::string::String,
@@ -9924,7 +10217,17 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+    #[derive(
+        :: serde :: Serialize,
+        Clone,
+        Debug,
+        Eq,
+        Hash,
+        Ord,
+        PartialEq,
+        PartialOrd,
+        schemars :: JsonSchema,
+    )]
     #[serde(transparent)]
     pub struct SemverVersion(::std::string::String);
     impl ::std::ops::Deref for SemverVersion {
@@ -10029,6 +10332,7 @@ pub mod types {
         Ord,
         PartialEq,
         PartialOrd,
+        schemars :: JsonSchema,
     )]
     pub enum ServiceUsingCertificate {
         ///This certificate is intended for access to the external API.
@@ -10148,7 +10452,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct Silo {
         ///human-readable free-form text about a resource
         pub description: ::std::string::String,
@@ -10224,7 +10530,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct SiloCreate {
         ///If set, this group will be created during Silo creation and granted
         /// the "Silo Admin" role. Identity providers can assert that users
@@ -10298,6 +10606,7 @@ pub mod types {
         Ord,
         PartialEq,
         PartialOrd,
+        schemars :: JsonSchema,
     )]
     pub enum SiloIdentityMode {
         ///Users are authenticated with SAML using an external authentication
@@ -10394,7 +10703,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct SiloResultsPage {
         ///list of items on this page of results
         pub items: ::std::vec::Vec<Silo>,
@@ -10441,6 +10752,7 @@ pub mod types {
         Ord,
         PartialEq,
         PartialOrd,
+        schemars :: JsonSchema,
     )]
     pub enum SiloRole {
         #[serde(rename = "admin")]
@@ -10535,7 +10847,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct SiloRolePolicy {
         ///Roles directly assigned on this resource
         pub role_assignments: ::std::vec::Vec<SiloRoleRoleAssignment>,
@@ -10590,7 +10904,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct SiloRoleRoleAssignment {
         pub identity_id: ::uuid::Uuid,
         pub identity_type: IdentityType,
@@ -10651,7 +10967,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct Sled {
         pub baseboard: Baseboard,
         ///unique, immutable, system-controlled identifier for each resource
@@ -10706,7 +11024,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct SledResultsPage {
         ///list of items on this page of results
         pub items: ::std::vec::Vec<Sled>,
@@ -10794,7 +11114,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct Snapshot {
         ///human-readable free-form text about a resource
         pub description: ::std::string::String,
@@ -10858,7 +11180,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct SnapshotCreate {
         pub description: ::std::string::String,
         ///The name of the disk to be snapshotted
@@ -10909,7 +11233,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct SnapshotResultsPage {
         ///list of items on this page of results
         pub items: ::std::vec::Vec<Snapshot>,
@@ -10957,6 +11283,7 @@ pub mod types {
         Ord,
         PartialEq,
         PartialOrd,
+        schemars :: JsonSchema,
     )]
     pub enum SnapshotState {
         #[serde(rename = "creating")]
@@ -11042,7 +11369,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct SpoofLoginBody {
         pub username: ::std::string::String,
     }
@@ -11120,7 +11449,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct SshKey {
         ///human-readable free-form text about a resource
         pub description: ::std::string::String,
@@ -11181,7 +11512,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct SshKeyCreate {
         pub description: ::std::string::String,
         pub name: Name,
@@ -11232,7 +11565,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct SshKeyResultsPage {
         ///list of items on this page of results
         pub items: ::std::vec::Vec<SshKey>,
@@ -11279,6 +11614,7 @@ pub mod types {
         Ord,
         PartialEq,
         PartialOrd,
+        schemars :: JsonSchema,
     )]
     pub enum SystemMetricName {
         #[serde(rename = "virtual_disk_space_provisioned")]
@@ -11382,7 +11718,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct SystemUpdate {
         ///unique, immutable, system-controlled identifier for each resource
         pub id: ::uuid::Uuid,
@@ -11436,7 +11774,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct SystemUpdateResultsPage {
         ///list of items on this page of results
         pub items: ::std::vec::Vec<SystemUpdate>,
@@ -11475,7 +11815,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct SystemUpdateStart {
         pub version: SemverVersion,
     }
@@ -11514,7 +11856,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct SystemVersion {
         pub status: UpdateStatus,
         pub version_range: VersionRange,
@@ -11550,7 +11894,17 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+    #[derive(
+        :: serde :: Serialize,
+        Clone,
+        Debug,
+        Eq,
+        Hash,
+        Ord,
+        PartialEq,
+        PartialOrd,
+        schemars :: JsonSchema,
+    )]
     #[serde(transparent)]
     pub struct TimeseriesName(::std::string::String);
     impl ::std::ops::Deref for TimeseriesName {
@@ -11670,7 +12024,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct TimeseriesSchema {
         pub created: ::chrono::DateTime<::chrono::offset::Utc>,
         pub datum_type: DatumType,
@@ -11721,7 +12077,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct TimeseriesSchemaResultsPage {
         ///list of items on this page of results
         pub items: ::std::vec::Vec<TimeseriesSchema>,
@@ -11786,7 +12144,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct UpdateDeployment {
         ///unique, immutable, system-controlled identifier for each resource
         pub id: ::uuid::Uuid,
@@ -11841,7 +12201,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct UpdateDeploymentResultsPage {
         ///list of items on this page of results
         pub items: ::std::vec::Vec<UpdateDeployment>,
@@ -11912,6 +12274,7 @@ pub mod types {
         Ord,
         PartialEq,
         PartialOrd,
+        schemars :: JsonSchema,
     )]
     #[serde(tag = "status")]
     pub enum UpdateStatus {
@@ -12028,7 +12391,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct UpdateableComponent {
         pub component_type: UpdateableComponentType,
         pub device_id: ::std::string::String,
@@ -12086,7 +12451,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct UpdateableComponentResultsPage {
         ///list of items on this page of results
         pub items: ::std::vec::Vec<UpdateableComponent>,
@@ -12142,6 +12509,7 @@ pub mod types {
         Ord,
         PartialEq,
         PartialOrd,
+        schemars :: JsonSchema,
     )]
     pub enum UpdateableComponentType {
         #[serde(rename = "bootloader_for_rot")]
@@ -12272,7 +12640,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct User {
         ///Human-readable name that can identify the user
         pub display_name: ::std::string::String,
@@ -12342,7 +12712,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct UserBuiltin {
         ///human-readable free-form text about a resource
         pub description: ::std::string::String,
@@ -12399,7 +12771,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct UserBuiltinResultsPage {
         ///list of items on this page of results
         pub items: ::std::vec::Vec<UserBuiltin>,
@@ -12454,7 +12828,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct UserCreate {
         ///username used to log in
         pub external_id: UserId,
@@ -12495,7 +12871,17 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+    #[derive(
+        :: serde :: Serialize,
+        Clone,
+        Debug,
+        Eq,
+        Hash,
+        Ord,
+        PartialEq,
+        PartialOrd,
+        schemars :: JsonSchema,
+    )]
     #[serde(transparent)]
     pub struct UserId(::std::string::String);
     impl ::std::ops::Deref for UserId {
@@ -12620,7 +13006,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     #[serde(tag = "user_password_value", content = "details")]
     pub enum UserPassword {
         ///Sets the user's password to the provided value
@@ -12673,7 +13061,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct UserResultsPage {
         ///list of items on this page of results
         pub items: ::std::vec::Vec<User>,
@@ -12717,7 +13107,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct UsernamePasswordCredentials {
         pub password: Password,
         pub username: UserId,
@@ -12757,7 +13149,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct VersionRange {
         pub high: SemverVersion,
         pub low: SemverVersion,
@@ -12856,7 +13250,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct Vpc {
         ///human-readable free-form text about a resource
         pub description: ::std::string::String,
@@ -12936,7 +13332,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct VpcCreate {
         pub description: ::std::string::String,
         pub dns_name: Name,
@@ -13072,7 +13470,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct VpcFirewallRule {
         ///whether traffic matching the rule should be allowed or dropped
         pub action: VpcFirewallRuleAction,
@@ -13137,6 +13537,7 @@ pub mod types {
         Ord,
         PartialEq,
         PartialOrd,
+        schemars :: JsonSchema,
     )]
     pub enum VpcFirewallRuleAction {
         #[serde(rename = "allow")]
@@ -13221,6 +13622,7 @@ pub mod types {
         Ord,
         PartialEq,
         PartialOrd,
+        schemars :: JsonSchema,
     )]
     pub enum VpcFirewallRuleDirection {
         #[serde(rename = "inbound")]
@@ -13330,7 +13732,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct VpcFirewallRuleFilter {
         ///If present, the sources (if incoming) or destinations (if outgoing)
         /// this rule applies to.
@@ -13481,7 +13885,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     #[serde(tag = "type", content = "value")]
     pub enum VpcFirewallRuleHostFilter {
         ///The rule applies to traffic from/to all instances in the VPC
@@ -13547,6 +13953,7 @@ pub mod types {
         Ord,
         PartialEq,
         PartialOrd,
+        schemars :: JsonSchema,
     )]
     pub enum VpcFirewallRuleProtocol {
         #[serde(rename = "TCP")]
@@ -13635,6 +14042,7 @@ pub mod types {
         Ord,
         PartialEq,
         PartialOrd,
+        schemars :: JsonSchema,
     )]
     pub enum VpcFirewallRuleStatus {
         #[serde(rename = "disabled")]
@@ -13805,7 +14213,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     #[serde(tag = "type", content = "value")]
     pub enum VpcFirewallRuleTarget {
         ///The rule applies to all instances in the VPC
@@ -13926,7 +14336,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct VpcFirewallRuleUpdate {
         ///whether traffic matching the rule should be allowed or dropped
         pub action: VpcFirewallRuleAction,
@@ -13984,7 +14396,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct VpcFirewallRuleUpdateParams {
         pub rules: ::std::vec::Vec<VpcFirewallRuleUpdate>,
     }
@@ -14023,7 +14437,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct VpcFirewallRules {
         pub rules: ::std::vec::Vec<VpcFirewallRule>,
     }
@@ -14071,7 +14487,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct VpcResultsPage {
         ///list of items on this page of results
         pub items: ::std::vec::Vec<Vpc>,
@@ -14153,7 +14571,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct VpcRouter {
         ///human-readable free-form text about a resource
         pub description: ::std::string::String,
@@ -14207,7 +14627,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct VpcRouterCreate {
         pub description: ::std::string::String,
         pub name: Name,
@@ -14250,6 +14672,7 @@ pub mod types {
         Ord,
         PartialEq,
         PartialOrd,
+        schemars :: JsonSchema,
     )]
     pub enum VpcRouterKind {
         #[serde(rename = "system")]
@@ -14340,7 +14763,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct VpcRouterResultsPage {
         ///list of items on this page of results
         pub items: ::std::vec::Vec<VpcRouter>,
@@ -14396,7 +14821,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct VpcRouterUpdate {
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         pub description: ::std::option::Option<::std::string::String>,
@@ -14502,7 +14929,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct VpcSubnet {
         ///human-readable free-form text about a resource
         pub description: ::std::string::String,
@@ -14589,7 +15018,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct VpcSubnetCreate {
         pub description: ::std::string::String,
         ///The IPv4 address range for this subnet.
@@ -14651,7 +15082,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct VpcSubnetResultsPage {
         ///list of items on this page of results
         pub items: ::std::vec::Vec<VpcSubnet>,
@@ -14707,7 +15140,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct VpcSubnetUpdate {
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         pub description: ::std::option::Option<::std::string::String>,
@@ -14784,7 +15219,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct VpcUpdate {
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         pub description: ::std::option::Option<::std::string::String>,
