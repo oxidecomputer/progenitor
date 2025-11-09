@@ -100,11 +100,14 @@ pub struct OperationParameter {
     pub description: Option<String>,
     pub typ: OperationParameterType,
     pub kind: OperationParameterKind,
+    /// Default value from the schema, if present.
+    pub default: Option<serde_json::Value>,
 }
 
-#[derive(Eq, PartialEq)]
+#[derive(Debug, Eq, PartialEq)]
 pub enum OperationParameterType {
     Type(TypeId),
+    MultipartRelated(TypeId),
     RawBody,
 }
 
@@ -137,6 +140,7 @@ pub enum BodyContentType {
     OctetStream,
     Json,
     FormUrlencoded,
+    MultipartRelated,
     Text(String),
 }
 
@@ -149,6 +153,7 @@ impl FromStr for BodyContentType {
             "application/octet-stream" => Ok(Self::OctetStream),
             "application/json" => Ok(Self::Json),
             "application/x-www-form-urlencoded" => Ok(Self::FormUrlencoded),
+            "multipart/related" => Ok(Self::MultipartRelated),
             "text/plain" | "text/x-markdown" => Ok(Self::Text(String::from(&s[..offset]))),
             _ => Err(Error::UnexpectedFormat(format!(
                 "unexpected content type: {}",
@@ -164,6 +169,7 @@ impl std::fmt::Display for BodyContentType {
             Self::OctetStream => "application/octet-stream",
             Self::Json => "application/json",
             Self::FormUrlencoded => "application/x-www-form-urlencoded",
+            Self::MultipartRelated => "multipart/related",
             Self::Text(typ) => typ,
         })
     }
@@ -326,6 +332,7 @@ impl Generator {
                             description: parameter_data.description.clone(),
                             typ: OperationParameterType::Type(typ),
                             kind: OperationParameterKind::Path,
+                            default: None,
                         })
                     }
                     openapiv3::Parameter::Query {
@@ -334,7 +341,17 @@ impl Generator {
                         style: openapiv3::QueryStyle::Form,
                         allow_empty_value: _, // Irrelevant for this client
                     } => {
-                        let schema = parameter_data.schema()?.to_schema();
+                        let schema_ref = parameter_data.schema()?;
+                        let schema = schema_ref.to_schema();
+
+                        // Extract default value from the schema if present
+                        let default_value = match schema_ref {
+                            openapiv3::ReferenceOr::Item(schema_kind) => {
+                                schema_kind.schema_data.default.clone()
+                            }
+                            _ => None,
+                        };
+
                         let name = sanitize(
                             &format!(
                                 "{}-{}",
@@ -365,13 +382,24 @@ impl Generator {
                             description: parameter_data.description.clone(),
                             typ: OperationParameterType::Type(type_id),
                             kind: OperationParameterKind::Query(required),
+                            default: default_value,
                         })
                     }
                     openapiv3::Parameter::Header {
                         parameter_data,
                         style: openapiv3::HeaderStyle::Simple,
                     } => {
-                        let schema = parameter_data.schema()?.to_schema();
+                        let schema_ref = parameter_data.schema()?;
+                        let schema = schema_ref.to_schema();
+
+                        // Extract default value from the schema if present
+                        let default_value = match schema_ref {
+                            openapiv3::ReferenceOr::Item(schema_kind) => {
+                                schema_kind.schema_data.default.clone()
+                            }
+                            _ => None,
+                        };
+
                         let name = sanitize(
                             &format!(
                                 "{}-{}",
@@ -389,6 +417,7 @@ impl Generator {
                             description: parameter_data.description.clone(),
                             typ: OperationParameterType::Type(typ),
                             kind: OperationParameterKind::Header(parameter_data.required),
+                            default: default_value,
                         })
                     }
                     openapiv3::Parameter::Path { style, .. } => Err(Error::UnexpectedFormat(
@@ -575,8 +604,18 @@ impl Generator {
                             .parameter_ident_with_lifetime("a");
                         quote! { Option<#t> }
                     }
+                    (OperationParameterType::MultipartRelated(type_id), false) => {
+                        let t = self
+                            .type_space
+                            .get_type(type_id)
+                            .unwrap()
+                            .parameter_ident_with_lifetime("a");
+                        quote! { #t }
+                    }
+                    (OperationParameterType::MultipartRelated(_), true) => unreachable!(),
                     (OperationParameterType::RawBody, false) => match &param.kind {
-                        OperationParameterKind::Body(BodyContentType::OctetStream) => {
+                        OperationParameterKind::Body(BodyContentType::OctetStream)
+                        | OperationParameterKind::Body(BodyContentType::MultipartRelated) => {
                             quote! { B }
                         }
                         OperationParameterKind::Body(BodyContentType::Text(_)) => {
@@ -594,7 +633,11 @@ impl Generator {
 
         let raw_body_param = method.params.iter().any(|param| {
             param.typ == OperationParameterType::RawBody
-                && param.kind == OperationParameterKind::Body(BodyContentType::OctetStream)
+                && matches!(
+                    param.kind,
+                    OperationParameterKind::Body(BodyContentType::OctetStream)
+                        | OperationParameterKind::Body(BodyContentType::MultipartRelated)
+                )
         });
 
         let bounds = if raw_body_param {
@@ -892,6 +935,17 @@ impl Generator {
                     .body(body)
                 }),
                 (
+                    OperationParameterKind::Body(BodyContentType::MultipartRelated),
+                    OperationParameterType::RawBody,
+                ) => Some(quote! {
+                    // Set the content type for manual multipart/related construction
+                    .header(
+                        ::reqwest::header::CONTENT_TYPE,
+                        ::reqwest::header::HeaderValue::from_static("multipart/related"),
+                    )
+                    .body(body)
+                }),
+                (
                     OperationParameterKind::Body(BodyContentType::Text(mime_type)),
                     OperationParameterType::RawBody,
                 ) => Some(quote! {
@@ -917,6 +971,14 @@ impl Generator {
                     // This uses progenitor_client::RequestBuilderExt which
                     // returns an error in the case of a serialization failure.
                     .form_urlencoded(&body)?
+                }),
+                (
+                    OperationParameterKind::Body(BodyContentType::MultipartRelated),
+                    OperationParameterType::MultipartRelated(_),
+                ) => Some(quote! {
+                    // This uses progenitor_client::RequestBuilderExt which
+                    // constructs a multipart/related request body.
+                    .multipart_related(&body)?
                 }),
                 (OperationParameterKind::Body(_), _) => {
                     unreachable!("invalid body kind/type combination")
@@ -1420,165 +1482,416 @@ impl Generator {
         let struct_name = sanitize(&method.operation_id, Case::Pascal);
         let struct_ident = format_ident!("{}", struct_name);
 
-        // Generate an ident for each parameter.
-        let param_names = method
+        // Expanded parameters: MultipartRelated params are expanded into their
+        // constituent properties
+        #[derive(Clone)]
+        struct ExpandedParam {
+            name: String,
+            type_id: TypeId,
+            required: bool,
+            is_binary: bool,
+            default: Option<serde_json::Value>,
+        }
+
+        let expanded_params: Vec<ExpandedParam> = method
             .params
             .iter()
-            .map(|param| format_ident!("{}", param.name))
+            .flat_map(|param| {
+                match &param.typ {
+                    OperationParameterType::MultipartRelated(type_id) => {
+                        // Expand into individual properties
+                        let ty = self.type_space.get_type(type_id).unwrap();
+                        let typify::TypeDetails::Struct(struct_details) = ty.details() else {
+                            panic!("multipart type must be a struct");
+                        };
+
+                        struct_details
+                            .properties()
+                            .filter_map(|(prop_name, prop_type_id)| {
+                                // Skip content_type fields - they're metadata, not builder params
+                                if prop_name.ends_with("_content_type") {
+                                    return None;
+                                }
+
+                                // Check if this property is binary by looking at the type
+                                let prop_ty = self.type_space.get_type(&prop_type_id).ok()?;
+                                let is_binary = if let typify::TypeDetails::Vec(inner_id) = prop_ty.details() {
+                                    // Vec<u8> is binary
+                                    if let Ok(inner_ty) = self.type_space.get_type(&inner_id) {
+                                        inner_ty.ident().to_string() == "u8"
+                                    } else {
+                                        false
+                                    }
+                                } else {
+                                    false
+                                };
+
+                                Some(ExpandedParam {
+                                    name: prop_name.to_string(),
+                                    type_id: prop_type_id,
+                                    required: true, // TODO: Check if property is required
+                                    is_binary,
+                                    default: None, // Multipart properties don't have defaults
+                                })
+                            })
+                            .collect::<Vec<_>>()
+                    }
+                    OperationParameterType::Type(type_id) => {
+                        let ty = self.type_space.get_type(type_id).unwrap();
+                        // Skip body parameters with builders - they use the old approach
+                        if matches!(&param.kind, OperationParameterKind::Body(_)) && ty.builder().is_some() {
+                            vec![]
+                        } else {
+                            vec![ExpandedParam {
+                                name: param.name.clone(),
+                                type_id: type_id.clone(),
+                                required: param.kind.is_required(),
+                                is_binary: false,
+                                default: param.default.clone(),
+                            }]
+                        }
+                    }
+                    OperationParameterType::RawBody => {
+                        // RawBody doesn't have a TypeId, handle separately
+                        vec![]
+                    }
+                }
+            })
+            .collect();
+
+        // Generate an ident for each expanded parameter
+        let param_names = expanded_params
+            .iter()
+            .map(|ep| format_ident!("{}", ep.name))
+            .chain(
+                // Add content_type fields for binary expanded params
+                expanded_params.iter().filter_map(|ep| {
+                    if ep.is_binary {
+                        Some(format_ident!("{}_content_type", ep.name))
+                    } else {
+                        None
+                    }
+                })
+            )
+            .chain(
+                // Add Type params with builders
+                method.params.iter().filter_map(|param| {
+                    match &param.typ {
+                        OperationParameterType::Type(type_id) => {
+                            let ty = self.type_space.get_type(type_id).ok()?;
+                            if let (OperationParameterKind::Body(_), Some(_)) =
+                                (&param.kind, ty.builder())
+                            {
+                                Some(format_ident!("{}", param.name))
+                            } else {
+                                None
+                            }
+                        }
+                        _ => None,
+                    }
+                })
+            )
+            .chain(
+                // Add RawBody params separately
+                method.params.iter().filter_map(|param| {
+                    if param.typ == OperationParameterType::RawBody {
+                        Some(format_ident!("{}", param.name))
+                    } else {
+                        None
+                    }
+                })
+            )
             .collect::<Vec<_>>();
 
         let client_ident = unique_ident_from("client", &param_names);
 
         let mut cloneable = true;
 
-        // Generate the type for each parameter.
-        let param_types = method
-            .params
+        // Generate the type for each expanded parameter
+        let param_types = expanded_params
             .iter()
-            .map(|param| match &param.typ {
-                OperationParameterType::Type(type_id) => {
-                    let ty = self.type_space.get_type(type_id)?;
+            .map(|ep| {
+                let ty = self.type_space.get_type(&ep.type_id)?;
 
-                    // For body parameters only, if there's a builder we'll
-                    // nest that within this builder.
-                    if let (OperationParameterKind::Body(_), Some(builder_name)) =
-                        (&param.kind, ty.builder())
-                    {
-                        Ok(quote! { Result<#builder_name, String> })
-                    } else if param.kind.is_required() {
-                        let t = ty.ident();
-                        Ok(quote! { Result<#t, String> })
-                    } else {
-                        let t = ty.ident();
-                        Ok(quote! { Result<Option<#t>, String> })
-                    }
-                }
+                // For binary fields in multipart, use Vec<u8>
+                let type_token = if ep.is_binary {
+                    quote! { Vec<u8> }
+                } else {
+                    let t = ty.ident();
+                    quote! { #t }
+                };
 
-                OperationParameterType::RawBody => {
-                    cloneable = false;
-                    Ok(quote! { Result<reqwest::Body, String> })
+                if ep.required {
+                    Ok(quote! { Result<#type_token, String> })
+                } else {
+                    Ok(quote! { Result<Option<#type_token>, String> })
                 }
             })
+            .chain(
+                // Add content_type fields for binary expanded params
+                expanded_params.iter().filter_map(|ep| {
+                    if ep.is_binary {
+                        // content_type is always required (String, not Option<String>)
+                        Some(Ok(quote! { Result<String, String> }))
+                    } else {
+                        None
+                    }
+                })
+            )
+            .chain(
+                // Add Type params that weren't expanded (non-multipart bodies with builders)
+                method.params.iter().filter_map(|param| {
+                    match &param.typ {
+                        OperationParameterType::Type(type_id) => {
+                            let ty = self.type_space.get_type(type_id).ok()?;
+                            // Only handle builder-capable bodies here (others were expanded)
+                            if let (OperationParameterKind::Body(_), Some(builder_name)) =
+                                (&param.kind, ty.builder())
+                            {
+                                Some(Ok(quote! { Result<#builder_name, String> }))
+                            } else {
+                                None
+                            }
+                        }
+                        _ => None,
+                    }
+                })
+            )
+            .chain(
+                // Add RawBody params
+                method.params.iter().filter_map(|param| {
+                    if param.typ == OperationParameterType::RawBody {
+                        cloneable = false;
+                        Some(Ok(quote! { Result<reqwest::Body, String> }))
+                    } else {
+                        None
+                    }
+                })
+            )
             .collect::<Result<Vec<_>>>()?;
 
-        // Generate the default value value for each parameter. For optional
-        // parameters it's just `Ok(None)`. For builders it's
-        // `Ok(Default::default())`. For required, non-builders it's an Err(_)
-        // that indicates which field isn't initialized.
-        let param_values = method
-            .params
+        // Generate the default value for each expanded parameter
+        let param_values = expanded_params
             .iter()
-            .map(|param| match &param.typ {
-                OperationParameterType::Type(type_id) => {
-                    let ty = self.type_space.get_type(type_id)?;
-
-                    // Fill in the appropriate initial value for the
-                    // param_types generated above.
-                    if let (OperationParameterKind::Body(_), Some(_)) = (&param.kind, ty.builder())
-                    {
-                        Ok(quote! { Ok(::std::default::Default::default()) })
-                    } else if param.kind.is_required() {
-                        let err_msg = format!("{} was not initialized", param.name);
-                        Ok(quote! { Err(#err_msg.to_string()) })
-                    } else {
-                        Ok(quote! { Ok(None) })
-                    }
-                }
-
-                OperationParameterType::RawBody => {
-                    let err_msg = format!("{} was not initialized", param.name);
+            .map(|ep| {
+                if ep.required {
+                    let err_msg = format!("{} was not initialized", ep.name);
                     Ok(quote! { Err(#err_msg.to_string()) })
+                } else if ep.default.is_some() {
+                    // Optional parameter with a default value - use Default::default()
+                    Ok(quote! { Ok(Some(::std::default::Default::default())) })
+                } else {
+                    // Optional parameter without a default value
+                    Ok(quote! { Ok(None) })
                 }
             })
+            .chain(
+                // Add default values for content_type fields (all required, start uninitialized)
+                expanded_params.iter().filter_map(|ep| {
+                    if ep.is_binary {
+                        let err_msg = format!("{}_content_type was not initialized", ep.name);
+                        Some(Ok(quote! { Err(#err_msg.to_string()) }))
+                    } else {
+                        None
+                    }
+                })
+            )
+            .chain(
+                // Add default values for Type params with builders
+                method.params.iter().filter_map(|param| {
+                    match &param.typ {
+                        OperationParameterType::Type(type_id) => {
+                            let ty = self.type_space.get_type(type_id).ok()?;
+                            // Only handle builder-capable bodies here
+                            if let (OperationParameterKind::Body(_), Some(_)) =
+                                (&param.kind, ty.builder())
+                            {
+                                Some(Ok(quote! { Ok(::std::default::Default::default()) }))
+                            } else {
+                                None
+                            }
+                        }
+                        _ => None,
+                    }
+                })
+            )
+            .chain(
+                // Add RawBody params
+                method.params.iter().filter_map(|param| {
+                    if param.typ == OperationParameterType::RawBody {
+                        let err_msg = format!("{} was not initialized", param.name);
+                        Some(Ok(quote! { Err(#err_msg.to_string()) }))
+                    } else {
+                        None
+                    }
+                })
+            )
             .collect::<Result<Vec<_>>>()?;
 
-        // For builders we map `Ok` values to perform a `try_from` to attempt
-        // to convert the builder into the desired type. No "finalization" is
-        // required for non-builders (required or optional).
-        let param_finalize = method
-            .params
-            .iter()
-            .map(|param| match &param.typ {
+        // Build param_finalize: for builder-capable bodies, convert Builder → Type
+        let param_finalize = method.params.iter().flat_map(|param| {
+            match &param.typ {
+                OperationParameterType::MultipartRelated(_) => {
+                    // Multipart params were expanded into individual fields
+                    let ty = self.type_space.get_type(
+                        if let OperationParameterType::MultipartRelated(type_id) = &param.typ {
+                            type_id
+                        } else {
+                            unreachable!()
+                        }
+                    ).unwrap();
+                    let typify::TypeDetails::Struct(struct_details) = ty.details() else {
+                        panic!("multipart type must be a struct");
+                    };
+                    // Each property gets no finalization (already right type)
+                    struct_details.properties().map(|_| quote! {}).collect::<Vec<_>>()
+                }
                 OperationParameterType::Type(type_id) => {
-                    let ty = self.type_space.get_type(type_id)?;
-                    if ty.builder().is_some() {
+                    let ty = self.type_space.get_type(type_id).unwrap();
+                    if matches!(&param.kind, OperationParameterKind::Body(_)) && ty.builder().is_some() {
+                        // Builder-capable body: convert Builder → Type
                         let type_name = ty.ident();
+                        vec![quote! {
+                            .and_then(|v| #type_name::try_from(v).map_err(|e| e.to_string()))
+                        }]
+                    } else {
+                        // Non-body Type param: no finalization needed
+                        vec![quote! {}]
+                    }
+                }
+                OperationParameterType::RawBody => {
+                    // RawBody: no finalization needed
+                    vec![quote! {}]
+                }
+            }
+        }).collect::<Vec<_>>();
+
+        // For each expanded parameter, generate a setter method
+        let param_impls = expanded_params
+            .iter()
+            .map(|ep| {
+                let param_name = format_ident!("{}", ep.name);
+                let ty = self.type_space.get_type(&ep.type_id)?;
+
+                // For binary fields, generate a method that accepts both value and content_type
+                if ep.is_binary {
+                    let content_type_field = format_ident!("{}_content_type", ep.name);
+                    let err_msg = format!("conversion to Vec<u8> for {} failed", ep.name);
+                    let content_type_err = format!("conversion to String for {}_content_type failed", ep.name);
+
+                    if ep.required {
                         Ok(quote! {
-                            .and_then(|v| #type_name::try_from(v)
-                                .map_err(|e| e.to_string()))
+                            pub fn #param_name<V, C>(mut self, value: V, content_type: C) -> Self
+                            where
+                                V: std::convert::TryInto<Vec<u8>>,
+                                C: std::convert::TryInto<String>,
+                            {
+                                self.#param_name = value.try_into()
+                                    .map_err(|_| #err_msg.to_string());
+                                self.#content_type_field = content_type.try_into()
+                                    .map_err(|_| #content_type_err.to_string());
+                                self
+                            }
                         })
                     } else {
-                        Ok(quote! {})
+                        Ok(quote! {
+                            pub fn #param_name<V, C>(mut self, value: V, content_type: C) -> Self
+                            where
+                                V: std::convert::TryInto<Vec<u8>>,
+                                C: std::convert::TryInto<String>,
+                            {
+                                self.#param_name = value.try_into()
+                                    .map(Some)
+                                    .map_err(|_| #err_msg.to_string());
+                                self.#content_type_field = content_type.try_into()
+                                    .map(Some)
+                                    .map_err(|_| #content_type_err.to_string());
+                                self
+                            }
+                        })
+                    }
+                } else {
+                    // Non-binary fields: use the generated type
+                    let typ = ty.ident().to_token_stream();
+                    let err_msg = format!("conversion to `{}` for {} failed", ty.name(), ep.name);
+
+                    if ep.required {
+                        Ok(quote! {
+                            pub fn #param_name<V>(mut self, value: V) -> Self
+                            where
+                                V: std::convert::TryInto<#typ>,
+                            {
+                                self.#param_name = value.try_into()
+                                    .map_err(|_| #err_msg.to_string());
+                                self
+                            }
+                        })
+                    } else {
+                        Ok(quote! {
+                            pub fn #param_name<V>(mut self, value: V) -> Self
+                            where
+                                V: std::convert::TryInto<#typ>,
+                            {
+                                self.#param_name = value.try_into()
+                                    .map(Some)
+                                    .map_err(|_| #err_msg.to_string());
+                                self
+                            }
+                        })
                     }
                 }
-                OperationParameterType::RawBody => Ok(quote! {}),
             })
-            .collect::<Result<Vec<_>>>()?;
-
-        // For each parameter, we need an impl for the builder to let consumers
-        // provide a value.
-        let param_impls = method
-            .params
-            .iter()
-            .map(|param| {
-                let param_name = format_ident!("{}", param.name);
-                match &param.typ {
-                    OperationParameterType::Type(type_id) => {
-                        let ty = self.type_space.get_type(type_id)?;
-                        match (ty.builder(), param.kind.is_optional()) {
-                            // TODO right now optional body parameters are not
-                            // addressed
-                            (Some(_), true) => {
-                                unreachable!()
-                            }
-                            (None, true) => {
-                                let typ = ty.ident();
-                                let err_msg = format!(
-                                    "conversion to `{}` for {} failed",
-                                    ty.name(),
-                                    param.name,
-                                );
-                                Ok(quote! {
-                                    pub fn #param_name<V>(
-                                        mut self,
-                                        value: V,
-                                    ) -> Self
-                                        where V: std::convert::TryInto<#typ>,
-                                    {
-                                        self.#param_name = value.try_into()
-                                            .map(Some)
-                                            .map_err(|_| #err_msg.to_string());
-                                        self
-                                    }
-                                })
-                            }
-                            (None, false) => {
-                                let typ = ty.ident();
-                                let err_msg = format!(
-                                    "conversion to `{}` for {} failed",
-                                    ty.name(),
-                                    param.name,
-                                );
-                                Ok(quote! {
-                                    pub fn #param_name<V>(
-                                        mut self,
-                                        value: V,
-                                    ) -> Self
-                                        where V: std::convert::TryInto<#typ>,
+            .chain(
+                // Add RawBody param methods
+                method.params.iter().filter_map(|param| {
+                    if param.typ == OperationParameterType::RawBody {
+                        let param_name = format_ident!("{}", param.name);
+                        match &param.kind {
+                            OperationParameterKind::Body(BodyContentType::OctetStream)
+                            | OperationParameterKind::Body(BodyContentType::MultipartRelated) => {
+                                let err_msg = format!("conversion to `reqwest::Body` for {} failed", param.name);
+                                Some(Ok(quote! {
+                                    pub fn #param_name<B>(mut self, value: B) -> Self
+                                        where B: std::convert::TryInto<reqwest::Body>
                                     {
                                         self.#param_name = value.try_into()
                                             .map_err(|_| #err_msg.to_string());
                                         self
                                     }
-                                })
+                                }))
                             }
+                            OperationParameterKind::Body(BodyContentType::Text(_)) => {
+                                let err_msg = format!("conversion to `String` for {} failed", param.name);
+                                Some(Ok(quote! {
+                                    pub fn #param_name<V>(mut self, value: V) -> Self
+                                        where V: std::convert::TryInto<String>
+                                    {
+                                        self.#param_name = value
+                                            .try_into()
+                                            .map_err(|_| #err_msg.to_string())
+                                            .map(|v| v.into());
+                                        self
+                                    }
+                                }))
+                            }
+                            _ => None,
+                        }
+                    } else {
+                        None
+                    }
+                })
+            )
+            .chain(
+                // Add methods for Type parameters with builders (body() and body_map())
+                method.params.iter().filter_map(|param| {
+                    match &param.typ {
+                        OperationParameterType::Type(type_id) => {
+                            let ty = self.type_space.get_type(type_id).ok()?;
 
-                            // For builder-capable bodies we offer a `body()`
-                            // method that sets the full body (by constructing
-                            // a builder **from** the body type). We also offer
-                            // a `body_map()` method that operates on the
-                            // builder itself.
-                            (Some(builder_name), false) => {
+                            // For builder-capable bodies, generate both body() and body_map()
+                            if let (OperationParameterKind::Body(_), Some(builder_name)) =
+                                (&param.kind, ty.builder())
+                            {
                                 assert_eq!(param.name, "body");
                                 let typ = ty.ident();
                                 let err_msg = format!(
@@ -1586,7 +1899,7 @@ impl Generator {
                                     ty.name(),
                                     param.name,
                                 );
-                                Ok(quote! {
+                                Some(Ok(quote! {
                                     pub fn body<V>(mut self, value: V) -> Self
                                     where
                                         V: std::convert::TryInto<#typ>,
@@ -1607,46 +1920,15 @@ impl Generator {
                                         self.body = self.body.map(f);
                                         self
                                     }
-                                })
+                                }))
+                            } else {
+                                None
                             }
                         }
+                        _ => None,
                     }
-
-                    OperationParameterType::RawBody => match param.kind {
-                        OperationParameterKind::Body(BodyContentType::OctetStream) => {
-                            let err_msg =
-                                format!("conversion to `reqwest::Body` for {} failed", param.name,);
-
-                            Ok(quote! {
-                                pub fn #param_name<B>(mut self, value: B) -> Self
-                                    where B: std::convert::TryInto<reqwest::Body>
-                                {
-                                    self.#param_name = value.try_into()
-                                        .map_err(|_| #err_msg.to_string());
-                                    self
-                                }
-                            })
-                        }
-                        OperationParameterKind::Body(BodyContentType::Text(_)) => {
-                            let err_msg =
-                                format!("conversion to `String` for {} failed", param.name,);
-
-                            Ok(quote! {
-                                pub fn #param_name<V>(mut self, value: V) -> Self
-                                    where V: std::convert::TryInto<String>
-                                {
-                                    self.#param_name = value
-                                        .try_into()
-                                        .map_err(|_| #err_msg.to_string())
-                                        .map(|v| v.into());
-                                    self
-                                }
-                            })
-                        }
-                        _ => unreachable!(),
-                    },
-                }
-            })
+                })
+            )
             .collect::<Result<Vec<_>>>()?;
 
         let MethodSigBody {
@@ -1663,8 +1945,35 @@ impl Generator {
         let send_doc = format!(
             "Sends a `{}` request to `{}`",
             method.method.as_str().to_ascii_uppercase(),
-            method.path.to_string(),
+            method.path,
         );
+        // Identify which multipart structs need to be reconstructed
+        let multipart_reconstructions = method.params.iter().filter_map(|param| {
+            if let OperationParameterType::MultipartRelated(type_id) = &param.typ {
+                let ty = self.type_space.get_type(type_id).unwrap();
+                let type_name = ty.ident();
+                let parent_param_name = format_ident!("{}", param.name);
+
+                let typify::TypeDetails::Struct(struct_details) = ty.details() else {
+                    panic!("multipart type must be a struct");
+                };
+
+                // Generate field assignments
+                let field_assignments = struct_details.properties().map(|(prop_name, _)| {
+                    let prop_ident = format_ident!("{}", prop_name);
+                    quote! { #prop_ident }
+                }).collect::<Vec<_>>();
+
+                Some(quote! {
+                    let #parent_param_name = #type_name {
+                        #(#field_assignments),*
+                    };
+                })
+            } else {
+                None
+            }
+        }).collect::<Vec<_>>();
+
         let send_impl = quote! {
             #[doc = #send_doc]
             pub async fn send(self) -> Result<
@@ -1689,6 +1998,9 @@ impl Generator {
                         #param_finalize
                         .map_err(Error::InvalidRequest)?;
                 )*
+
+                // Reconstruct multipart structs from individual properties
+                #(#multipart_reconstructions)*
 
                 // Do the work.
                 #body
@@ -1724,7 +2036,7 @@ impl Generator {
             let stream_doc = format!(
                 "Streams `{}` requests to `{}`",
                 method.method.as_str().to_ascii_uppercase(),
-                method.path.to_string(),
+                method.path,
             );
 
             quote! {
@@ -2032,6 +2344,180 @@ impl Generator {
         impl_body
     }
 
+    fn parse_multipart_related_schema(
+        &mut self,
+        operation: &openapiv3::Operation,
+        _components: &Option<Components>,
+        object_type: &openapiv3::ObjectType,
+    ) -> Result<OperationParameterType> {
+        // Validate that the object has properties
+        if object_type.properties.is_empty() {
+            return Err(Error::UnexpectedFormat(
+                "multipart/related object schema must have properties".to_string(),
+            ));
+        }
+
+        // For now, we expect two properties:
+        // 1. metadata: a JSON object (the first part)
+        // 2. file/content: binary data (the second part)
+        // We'll validate that there's at least one binary property
+
+        let has_binary = object_type.properties.values().any(|prop_ref| {
+            match prop_ref {
+                openapiv3::ReferenceOr::Item(prop_schema) => {
+                    matches!(
+                        prop_schema.as_ref(),
+                        openapiv3::Schema {
+                            schema_kind: openapiv3::SchemaKind::Type(openapiv3::Type::String(
+                                openapiv3::StringType {
+                                    format: openapiv3::VariantOrUnknownOrEmpty::Item(
+                                        openapiv3::StringFormat::Binary
+                                    ),
+                                    ..
+                                }
+                            )),
+                            ..
+                        }
+                    )
+                }
+                openapiv3::ReferenceOr::Reference { .. } => false,
+            }
+        });
+
+        if !has_binary {
+            return Err(Error::UnexpectedFormat(
+                "multipart/related object schema must have at least one binary property".to_string(),
+            ));
+        }
+
+        // Generate a type for the multipart parts struct
+        let parts_name = sanitize(
+            &format!("{}-multipart-parts", operation.operation_id.as_ref().unwrap()),
+            Case::Pascal,
+        );
+
+        // Create a schema for this struct
+        let mut properties_schemas: BTreeMap<String, schemars::schema::Schema> = BTreeMap::new();
+        let mut content_type_fields: Vec<String> = Vec::new();
+        // Preserve the order of properties from the OpenAPI schema
+        let mut property_order: Vec<String> = Vec::new();
+
+        for (name, prop_ref) in &object_type.properties {
+            property_order.push(name.clone());
+            let prop_schema = match prop_ref {
+                openapiv3::ReferenceOr::Reference { reference } => {
+                    // For references, create a reference schema
+                    schemars::schema::Schema::Object(schemars::schema::SchemaObject {
+                        reference: Some(reference.clone()),
+                        ..Default::default()
+                    })
+                }
+                openapiv3::ReferenceOr::Item(item) => {
+                    // Check if this is a binary field (string with format: binary)
+                    let is_binary = matches!(
+                        item.as_ref(),
+                        openapiv3::Schema {
+                            schema_kind: openapiv3::SchemaKind::Type(openapiv3::Type::String(
+                                openapiv3::StringType {
+                                    format: openapiv3::VariantOrUnknownOrEmpty::Item(
+                                        openapiv3::StringFormat::Binary
+                                    ),
+                                    ..
+                                }
+                            )),
+                            ..
+                        }
+                    );
+
+                    if is_binary {
+                        // Track that we need a content_type field for this binary field
+                        content_type_fields.push(name.clone());
+
+                        // For binary fields, create a schema for Vec<u8>
+                        // This is an array of bytes (integers 0-255)
+                        schemars::schema::Schema::Object(schemars::schema::SchemaObject {
+                            instance_type: Some(schemars::schema::InstanceType::Array.into()),
+                            array: Some(Box::new(schemars::schema::ArrayValidation {
+                                items: Some(schemars::schema::SingleOrVec::Single(Box::new(
+                                    schemars::schema::Schema::Object(schemars::schema::SchemaObject {
+                                        instance_type: Some(schemars::schema::InstanceType::Integer.into()),
+                                        format: Some("uint8".to_string()),
+                                        number: Some(Box::new(schemars::schema::NumberValidation {
+                                            minimum: Some(0.0),
+                                            maximum: Some(255.0),
+                                            ..Default::default()
+                                        })),
+                                        ..Default::default()
+                                    })
+                                ))),
+                                ..Default::default()
+                            })),
+                            ..Default::default()
+                        })
+                    } else {
+                        item.to_schema()
+                    }
+                }
+            };
+            properties_schemas.insert(name.clone(), prop_schema);
+        }
+
+        // Add content_type fields for each binary field
+        for field_name in &content_type_fields {
+            let content_type_field_name = format!("{}_content_type", field_name);
+            properties_schemas.insert(
+                content_type_field_name,
+                schemars::schema::Schema::Object(schemars::schema::SchemaObject {
+                    instance_type: Some(schemars::schema::InstanceType::String.into()),
+                    metadata: Some(Box::new(schemars::schema::Metadata {
+                        description: Some(format!("MIME type for the {} field", field_name)),
+                        ..Default::default()
+                    })),
+                    ..Default::default()
+                }),
+            );
+        }
+
+        // Build the required fields list - includes original required fields plus content_type fields
+        // for required binary fields only
+        let mut required_fields: BTreeSet<String> = object_type.required.iter().cloned().collect();
+        for field_name in &content_type_fields {
+            // Only make content_type required if the binary field itself is required
+            if object_type.required.contains(field_name) {
+                required_fields.insert(format!("{}_content_type", field_name));
+            }
+        }
+
+        let schema = schemars::schema::SchemaObject {
+            instance_type: Some(schemars::schema::InstanceType::Object.into()),
+            object: Some(Box::new(schemars::schema::ObjectValidation {
+                properties: properties_schemas,
+                required: required_fields,
+                ..Default::default()
+            })),
+            ..Default::default()
+        };
+
+        let type_id = self.type_space.add_type_with_name(
+            &schemars::schema::Schema::Object(schema),
+            Some(parts_name),
+        )?;
+
+        // Track this type for later code generation, preserving property order and required fields
+        self.multipart_related.insert(
+            type_id.clone(),
+            crate::MultipartRelatedInfo {
+                property_order,
+                required_fields: object_type.required.iter().cloned().collect(),
+            },
+        );
+
+        // Multipart/related uses ::serde_json::to_vec() for non-binary fields
+        self.uses_serde_json = true;
+
+        Ok(OperationParameterType::MultipartRelated(type_id))
+    }
+
     fn get_body_param(
         &mut self,
         operation: &openapiv3::Operation,
@@ -2091,11 +2577,60 @@ impl Generator {
                             )),
                     } if enumeration.is_empty() => Ok(()),
                     _ => Err(Error::UnexpectedFormat(format!(
-                        "invalid schema for application/octet-stream: {:?}",
-                        schema
+                        "invalid schema for {}: {:?}",
+                        content_type, schema
                     ))),
                 }?;
                 OperationParameterType::RawBody
+            }
+            BodyContentType::MultipartRelated => {
+                // For multipart/related, we support two schemas:
+                // 1. Simple binary string (for manual construction)
+                // 2. Object with properties (for structured parts)
+                match schema.item(components)? {
+                    // Simple binary string schema
+                    openapiv3::Schema {
+                        schema_data:
+                            openapiv3::SchemaData {
+                                nullable: false,
+                                discriminator: None,
+                                default: None,
+                                ..
+                            },
+                        schema_kind:
+                            openapiv3::SchemaKind::Type(openapiv3::Type::String(
+                                openapiv3::StringType {
+                                    format:
+                                        openapiv3::VariantOrUnknownOrEmpty::Item(
+                                            openapiv3::StringFormat::Binary,
+                                        ),
+                                    pattern: None,
+                                    enumeration,
+                                    min_length: None,
+                                    max_length: None,
+                                },
+                            )),
+                    } if enumeration.is_empty() => OperationParameterType::RawBody,
+                    // Object schema with properties for structured multipart
+                    openapiv3::Schema {
+                        schema_data: _,
+                        schema_kind:
+                            openapiv3::SchemaKind::Type(openapiv3::Type::Object(object_type)),
+                    } => {
+                        // Parse the object schema to identify parts
+                        self.parse_multipart_related_schema(
+                            operation,
+                            components,
+                            object_type,
+                        )?
+                    }
+                    _ => {
+                        return Err(Error::UnexpectedFormat(format!(
+                            "invalid schema for multipart/related: {:?}",
+                            schema
+                        )))
+                    }
+                }
             }
             BodyContentType::Text(_) => {
                 // For a plain text body, we expect a simple, specific schema:
@@ -2155,6 +2690,7 @@ impl Generator {
             description: body.description.clone(),
             typ,
             kind: OperationParameterKind::Body(content_type),
+            default: None,
         }))
     }
 }
@@ -2174,7 +2710,7 @@ fn make_doc_comment(method: &OperationMethod) -> String {
     buf.push_str(&format!(
         "Sends a `{}` request to `{}`\n\n",
         method.method.as_str().to_ascii_uppercase(),
-        method.path.to_string(),
+        method.path,
     ));
 
     if method
@@ -2213,7 +2749,7 @@ fn make_stream_doc_comment(method: &OperationMethod) -> String {
     buf.push_str(&format!(
         "Sends repeated `{}` requests to `{}` until there are no more results.\n\n",
         method.method.as_str().to_ascii_uppercase(),
-        method.path.to_string(),
+        method.path,
     ));
 
     if method

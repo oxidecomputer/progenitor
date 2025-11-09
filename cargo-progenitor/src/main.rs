@@ -291,7 +291,7 @@ pub fn dependencies(builder: Generator, include_client: bool) -> Vec<String> {
         deps.push(format!("base64 = \"{}\"", DEPENDENCIES.base64));
         deps.push(format!("rand = \"{}\"", DEPENDENCIES.rand));
     }
-    if type_space.uses_serde_json() || needs_serde_json {
+    if type_space.uses_serde_json() || needs_serde_json || builder.uses_serde_json() {
         deps.push(format!("serde_json = \"{}\"", DEPENDENCIES.serde_json));
     }
     deps.sort_unstable();
