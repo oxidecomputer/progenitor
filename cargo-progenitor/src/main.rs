@@ -9,7 +9,7 @@ use std::{
 use anyhow::{bail, Result};
 use clap::{Parser, ValueEnum};
 use openapiv3::OpenAPI;
-use progenitor::{GenerationSettings, Generator, InterfaceStyle, TagStyle};
+use progenitor::{GenerationSettings, Generator, InterfaceStyle, OperationIdStrategy, TagStyle};
 use progenitor_impl::space_out_items;
 
 fn is_non_release() -> bool {
@@ -51,6 +51,9 @@ struct Args {
     /// SDK tag style
     #[clap(value_enum, long, default_value_t = TagArg::Merged)]
     tags: TagArg,
+    /// SDK operation id style
+    #[clap(value_enum, long, default_value_t = OperationIdStrategyArg::RejectMissing)]
+    operation_id_strategy: OperationIdStrategyArg,
     /// Include client code rather than depending on progenitor-client
     #[clap(default_value = match is_non_release() { true => "true", false => "false" }, long, action = clap::ArgAction::Set)]
     include_client: bool,
@@ -82,6 +85,23 @@ impl From<TagArg> for TagStyle {
         match arg {
             TagArg::Merged => TagStyle::Merged,
             TagArg::Separate => TagStyle::Separate,
+        }
+    }
+}
+
+#[derive(Copy, Clone, ValueEnum)]
+enum OperationIdStrategyArg {
+    RejectMissing,
+    OmitMissing,
+    GenerateMissing,
+}
+
+impl From<OperationIdStrategyArg> for OperationIdStrategy {
+    fn from(arg: OperationIdStrategyArg) -> Self {
+        match arg {
+            OperationIdStrategyArg::RejectMissing => OperationIdStrategy::RejectMissing,
+            OperationIdStrategyArg::OmitMissing => OperationIdStrategy::OmitMissing,
+            OperationIdStrategyArg::GenerateMissing => OperationIdStrategy::GenerateMissing,
         }
     }
 }
@@ -119,7 +139,8 @@ fn main() -> Result<()> {
     let mut builder = Generator::new(
         GenerationSettings::default()
             .with_interface(args.interface.into())
-            .with_tag(args.tags.into()),
+            .with_tag(args.tags.into())
+            .with_operation_id_strategy(args.operation_id_strategy.into()),
     );
 
     match builder.generate_tokens(&api) {

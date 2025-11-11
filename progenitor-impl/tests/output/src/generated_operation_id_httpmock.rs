@@ -1,0 +1,104 @@
+pub mod operations {
+    #![doc = r" [`When`](::httpmock::When) and [`Then`](::httpmock::Then)"]
+    #![doc = r" wrappers for each operation. Each can be converted to"]
+    #![doc = r" its inner type with a call to `into_inner()`. This can"]
+    #![doc = r" be used to explicitly deviate from permitted values."]
+    use crate::generated_operation_id_builder::*;
+    pub struct GetWhen(::httpmock::When);
+    impl GetWhen {
+        pub fn new(inner: ::httpmock::When) -> Self {
+            Self(
+                inner
+                    .method(::httpmock::Method::GET)
+                    .path_matches(regex::Regex::new("^/$").unwrap()),
+            )
+        }
+
+        pub fn into_inner(self) -> ::httpmock::When {
+            self.0
+        }
+    }
+
+    pub struct GetThen(::httpmock::Then);
+    impl GetThen {
+        pub fn new(inner: ::httpmock::Then) -> Self {
+            Self(inner)
+        }
+
+        pub fn into_inner(self) -> ::httpmock::Then {
+            self.0
+        }
+
+        pub fn ok(self) -> Self {
+            Self(self.0.status(200u16))
+        }
+    }
+
+    pub struct DoPingWhen(::httpmock::When);
+    impl DoPingWhen {
+        pub fn new(inner: ::httpmock::When) -> Self {
+            Self(
+                inner
+                    .method(::httpmock::Method::POST)
+                    .path_matches(regex::Regex::new("^/$").unwrap()),
+            )
+        }
+
+        pub fn into_inner(self) -> ::httpmock::When {
+            self.0
+        }
+    }
+
+    pub struct DoPingThen(::httpmock::Then);
+    impl DoPingThen {
+        pub fn new(inner: ::httpmock::Then) -> Self {
+            Self(inner)
+        }
+
+        pub fn into_inner(self) -> ::httpmock::Then {
+            self.0
+        }
+
+        pub fn ok(self) -> Self {
+            Self(self.0.status(200u16))
+        }
+    }
+}
+
+#[doc = r" An extension trait for [`MockServer`](::httpmock::MockServer) that"]
+#[doc = r" adds a method for each operation. These are the equivalent of"]
+#[doc = r" type-checked [`mock()`](::httpmock::MockServer::mock) calls."]
+pub trait MockServerExt {
+    fn get<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
+    where
+        F: FnOnce(operations::GetWhen, operations::GetThen);
+    fn do_ping<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
+    where
+        F: FnOnce(operations::DoPingWhen, operations::DoPingThen);
+}
+
+impl MockServerExt for ::httpmock::MockServer {
+    fn get<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
+    where
+        F: FnOnce(operations::GetWhen, operations::GetThen),
+    {
+        self.mock(|when, then| {
+            config_fn(
+                operations::GetWhen::new(when),
+                operations::GetThen::new(then),
+            )
+        })
+    }
+
+    fn do_ping<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
+    where
+        F: FnOnce(operations::DoPingWhen, operations::DoPingThen),
+    {
+        self.mock(|when, then| {
+            config_fn(
+                operations::DoPingWhen::new(when),
+                operations::DoPingThen::new(then),
+            )
+        })
+    }
+}

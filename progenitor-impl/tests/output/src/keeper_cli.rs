@@ -87,23 +87,11 @@ impl<T: CliConfig> Cli<T> {
                     .help("Authorization header (bearer token)"),
             )
             .arg(
-                ::clap::Arg::new("duration-millis")
-                    .long("duration-millis")
-                    .value_parser(::clap::value_parser!(i32))
-                    .required_unless_present("json-body"),
-            )
-            .arg(
                 ::clap::Arg::new("end-time")
                     .long("end-time")
                     .value_parser(::clap::value_parser!(
                         ::chrono::DateTime<::chrono::offset::Utc>
                     ))
-                    .required_unless_present("json-body"),
-            )
-            .arg(
-                ::clap::Arg::new("exit-status")
-                    .long("exit-status")
-                    .value_parser(::clap::value_parser!(i32))
                     .required_unless_present("json-body"),
             )
             .arg(
@@ -281,18 +269,10 @@ impl<T: CliConfig> Cli<T> {
             request = request.authorization(value.clone());
         }
 
-        if let Some(value) = matches.get_one::<i32>("duration-millis") {
-            request = request.body_map(|body| body.duration_millis(value.clone()))
-        }
-
         if let Some(value) =
             matches.get_one::<::chrono::DateTime<::chrono::offset::Utc>>("end-time")
         {
             request = request.body_map(|body| body.end_time(value.clone()))
-        }
-
-        if let Some(value) = matches.get_one::<i32>("exit-status") {
-            request = request.body_map(|body| body.exit_status(value.clone()))
         }
 
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {

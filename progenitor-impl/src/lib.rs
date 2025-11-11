@@ -6,6 +6,7 @@
 
 use std::collections::{BTreeMap, HashMap, HashSet};
 
+use heck::ToSnakeCase;
 use openapiv3::OpenAPI;
 use proc_macro2::TokenStream;
 use quote::quote;
@@ -68,6 +69,8 @@ pub struct GenerationSettings {
     extra_derives: Vec<String>,
     extra_cli_bounds: Vec<String>,
 
+    operation_id_strategy: OperationIdStrategy,
+
     map_type: Option<String>,
     unknown_crates: UnknownPolicy,
     crates: BTreeMap<String, CrateSpec>,
@@ -111,6 +114,26 @@ pub enum TagStyle {
 impl Default for TagStyle {
     fn default() -> Self {
         Self::Merged
+    }
+}
+
+/// Style for handing operations that do not have an operation ID.
+#[derive(Copy, Clone)]
+pub enum OperationIdStrategy {
+    /// The default behaviour. Reject when any operation on the resulting
+    /// client does not have an operation ID.
+    RejectMissing,
+    /// Omit any operation on the resulting client that does not have an
+    /// operation ID.
+    OmitMissing,
+    /// Generate plausible names for operations on the resulting client that
+    /// do not have an operation ID.
+    GenerateMissing,
+}
+
+impl Default for OperationIdStrategy {
+    fn default() -> Self {
+        Self::RejectMissing
     }
 }
 
@@ -255,6 +278,16 @@ impl GenerationSettings {
         self.timeout = Some(timeout);
         self
     }
+
+    /// Set the strategy to be used when encountering operations that do not
+    /// have an operation ID.
+    pub fn with_operation_id_strategy(
+        &mut self,
+        operation_id_strategy: OperationIdStrategy,
+    ) -> &mut Self {
+        self.operation_id_strategy = operation_id_strategy;
+        self
+    }
 }
 
 impl Default for Generator {
@@ -320,7 +353,7 @@ impl Generator {
 
     /// Emit a [TokenStream] containing the generated client code.
     pub fn generate_tokens(&mut self, spec: &OpenAPI) -> Result<TokenStream> {
-        validate_openapi(spec)?;
+        validate_openapi(spec, self.settings.operation_id_strategy)?;
 
         // Convert our components dictionary to schemars
         let schemas = spec.components.iter().flat_map(|components| {
@@ -342,8 +375,16 @@ impl Generator {
                     (path.as_str(), method, operation, &item.parameters)
                 })
             })
-            .map(|(path, method, operation, path_parameters)| {
-                self.process_operation(operation, &spec.components, path, method, path_parameters)
+            .filter_map(|(path, method, operation, path_parameters)| {
+                self.process_operation(
+                    operation,
+                    &spec.components,
+                    path,
+                    method,
+                    path_parameters,
+                    self.settings.operation_id_strategy,
+                )
+                .transpose()
             })
             .collect::<Result<Vec<_>>>()?;
 
@@ -690,7 +731,7 @@ fn validate_openapi_spec_version(spec_version: &str) -> Result<()> {
 }
 
 /// Do some very basic checks of the OpenAPI documents.
-pub fn validate_openapi(spec: &OpenAPI) -> Result<()> {
+pub fn validate_openapi(spec: &OpenAPI, operation_id_strategy: OperationIdStrategy) -> Result<()> {
     validate_openapi_spec_version(spec.openapi.as_str())?;
 
     let mut opids = HashSet::new();
@@ -700,21 +741,31 @@ pub fn validate_openapi(spec: &OpenAPI) -> Result<()> {
                 format!("path {} uses reference, unsupported", p.0,),
             )),
             openapiv3::ReferenceOr::Item(item) => {
-                // Make sure every operation has an operation ID, and that each
-                // operation ID is only used once in the document.
-                item.iter().try_for_each(|(_, o)| {
-                    if let Some(oid) = o.operation_id.as_ref() {
-                        if !opids.insert(oid.to_string()) {
+                // Make sure every operation has an operation ID, or that the operation id
+                // strategy allows ignoring / generating one, and that each operation ID is
+                // only used once in the document.
+                item.iter().try_for_each(|(method, o)| {
+                    match resolve_operation_id_with_strategy(
+                        p.0,
+                        method,
+                        o.operation_id.as_deref(),
+                        operation_id_strategy,
+                    ) {
+                        Ok(Some(oid)) => {
+                            if !opids.insert(oid.to_string()) {
+                                return Err(Error::UnexpectedFormat(format!(
+                                    "duplicate operation ID: {}",
+                                    oid,
+                                )));
+                            }
+                        }
+                        Ok(None) => {}
+                        Err(Rejected) => {
                             return Err(Error::UnexpectedFormat(format!(
-                                "duplicate operation ID: {}",
-                                oid,
+                                "path {} is missing operation ID",
+                                p.0,
                             )));
                         }
-                    } else {
-                        return Err(Error::UnexpectedFormat(format!(
-                            "path {} is missing operation ID",
-                            p.0,
-                        )));
                     }
                     Ok(())
                 })
@@ -725,11 +776,52 @@ pub fn validate_openapi(spec: &OpenAPI) -> Result<()> {
     Ok(())
 }
 
+/// Rejected operation ID
+// Clippy doesn't like () being used as the error type,
+// and double option is confusing.
+#[derive(PartialEq, Eq, Clone, Copy)]
+pub struct Rejected;
+
+/// Resolve the operation ID for the given operation, using the given
+/// operation ID strategy.
+///
+/// Ok(None) means none was found but that is OK
+/// Ok(Some(String)) means the operation ID was found
+/// Err(()) means the operation ID was not found and the
+///         chosen strategy rejects the operation
+pub fn resolve_operation_id_with_strategy(
+    path: &str,
+    method: &str,
+    id: Option<&str>,
+    strategy: OperationIdStrategy,
+) -> std::result::Result<Option<String>, Rejected> {
+    if let Some(oid) = id {
+        return Ok(Some(oid.to_string()));
+    }
+    match strategy {
+        OperationIdStrategy::RejectMissing => Err(Rejected),
+        OperationIdStrategy::OmitMissing => Ok(None),
+        OperationIdStrategy::GenerateMissing => {
+            let path = path.to_snake_case();
+            let method = method.to_snake_case();
+            let oid = if path.is_empty() {
+                method
+            } else {
+                format!("{}_{}", method, path)
+            };
+            Ok(Some(oid))
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use serde_json::json;
 
-    use crate::{validate_openapi_spec_version, Error};
+    use crate::{
+        resolve_operation_id_with_strategy, validate_openapi_spec_version, Error,
+        OperationIdStrategy,
+    };
 
     #[test]
     fn test_bad_value() {
@@ -775,5 +867,138 @@ mod tests {
                 .to_string(),
             "unexpected or unhandled format in the OpenAPI document invalid version: 3.1.0"
         );
+    }
+
+    #[test]
+    fn test_resolve_operation_id_with_existing_id() {
+        // When operation ID exists, all strategies should return it
+        let strategies = [
+            OperationIdStrategy::RejectMissing,
+            OperationIdStrategy::OmitMissing,
+            OperationIdStrategy::GenerateMissing,
+        ];
+
+        for strategy in strategies {
+            let result = resolve_operation_id_with_strategy(
+                "/api/users",
+                "GET",
+                Some("getUserList"),
+                strategy,
+            );
+            assert_eq!(result, Ok(Some("getUserList".to_string())));
+        }
+    }
+
+    #[test]
+    fn test_resolve_operation_id_reject_missing_strategy() {
+        // RejectMissing should return Err when no operation ID
+        let result = resolve_operation_id_with_strategy(
+            "/api/users",
+            "GET",
+            None,
+            OperationIdStrategy::RejectMissing,
+        );
+        assert_eq!(result, Err(()));
+    }
+
+    #[test]
+    fn test_resolve_operation_id_omit_missing_strategy() {
+        // OmitMissing should return Ok(None) when no operation ID
+        let result = resolve_operation_id_with_strategy(
+            "/api/users",
+            "GET",
+            None,
+            OperationIdStrategy::OmitMissing,
+        );
+        assert_eq!(result, Ok(None));
+    }
+
+    #[test]
+    fn test_resolve_operation_id_generate_missing_strategy() {
+        // GenerateMissing should generate operation IDs from method and path
+        let result = resolve_operation_id_with_strategy(
+            "/api/users",
+            "GET",
+            None,
+            OperationIdStrategy::GenerateMissing,
+        );
+        assert_eq!(result, Ok(Some("get_api_users".to_string())));
+    }
+
+    #[test]
+    fn test_resolve_operation_id_generate_with_path_params() {
+        // Test with path parameters
+        let result = resolve_operation_id_with_strategy(
+            "/api/users/{id}",
+            "GET",
+            None,
+            OperationIdStrategy::GenerateMissing,
+        );
+        assert_eq!(result, Ok(Some("get_api_users_id".to_string())));
+    }
+
+    #[test]
+    fn test_resolve_operation_id_generate_with_camel_case() {
+        // Test that camelCase paths are converted to snake_case
+        let result = resolve_operation_id_with_strategy(
+            "/api/userProfiles",
+            "POST",
+            None,
+            OperationIdStrategy::GenerateMissing,
+        );
+        assert_eq!(result, Ok(Some("post_api_user_profiles".to_string())));
+    }
+
+    #[test]
+    fn test_resolve_operation_id_generate_with_empty_path() {
+        // Test with empty path (root)
+        let result = resolve_operation_id_with_strategy(
+            "",
+            "GET",
+            None,
+            OperationIdStrategy::GenerateMissing,
+        );
+        assert_eq!(result, Ok(Some("get".to_string())));
+    }
+
+    #[test]
+    fn test_resolve_operation_id_generate_with_uppercase_method() {
+        // Test that uppercase methods are converted to lowercase
+        let result = resolve_operation_id_with_strategy(
+            "/api/users",
+            "DELETE",
+            None,
+            OperationIdStrategy::GenerateMissing,
+        );
+        assert_eq!(result, Ok(Some("delete_api_users".to_string())));
+    }
+
+    #[test]
+    fn test_resolve_operation_id_generate_with_complex_path() {
+        // Test with complex path containing multiple segments
+        let result = resolve_operation_id_with_strategy(
+            "/api/v1/organizations/{orgId}/users/{userId}/profile",
+            "PATCH",
+            None,
+            OperationIdStrategy::GenerateMissing,
+        );
+        assert_eq!(
+            result,
+            Ok(Some(
+                "patch_api_v1_organizations_org_id_users_user_id_profile".to_string()
+            ))
+        );
+    }
+
+    #[test]
+    fn test_resolve_operation_id_generate_with_hyphens() {
+        // Test that hyphens in paths are handled correctly
+        let result = resolve_operation_id_with_strategy(
+            "/api/user-profiles",
+            "GET",
+            None,
+            OperationIdStrategy::GenerateMissing,
+        );
+        assert_eq!(result, Ok(Some("get_api_user_profiles".to_string())));
     }
 }

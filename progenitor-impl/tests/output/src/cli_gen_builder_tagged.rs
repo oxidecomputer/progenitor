@@ -53,7 +53,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct UnoBody {
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         pub gateway: ::std::option::Option<::std::string::String>,
