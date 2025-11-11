@@ -88,6 +88,7 @@ impl Generator {
 
         let code = quote! {
             use #crate_path::*;
+            use anyhow::Context as _;
 
             pub struct Cli<T: CliConfig> {
                 client: Client,
@@ -510,12 +511,12 @@ impl Generator {
                 if let Some(value) =
                     matches.get_one::<std::path::PathBuf>("json-body")
                 {
-                    let body_txt = std::fs::read_to_string(value).unwrap();
+                    let body_txt = std::fs::read_to_string(value).with_context(|| format!("failed to read {}", value.display()))?;
                     let body_value =
                         serde_json::from_str::<#body_type_ident>(
                             &body_txt,
                         )
-                        .unwrap();
+                        .with_context(|| format!("failed to deserialize {} as JSON", value.display()))?;
                     request = request.body(body_value);
                 }
             }
