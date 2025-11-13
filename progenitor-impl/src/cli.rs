@@ -516,7 +516,7 @@ impl Generator {
                         serde_json::from_str::<#body_type_ident>(
                             &body_txt,
                         )
-                        .with_context(|| format!("failed to deserialize {} as JSON", value.display()))?;
+                        .with_context(|| format!("failed to parse {}", value.display()))?;
                     request = request.body(body_value);
                 }
             }

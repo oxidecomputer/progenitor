@@ -6153,7 +6153,7 @@ impl<T: CliConfig> Cli<T> {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
             let body_value = serde_json::from_str::<types::DeviceAuthRequest>(&body_txt)
-                .with_context(|| format!("failed to deserialize {} as JSON", value.display()))?;
+                .with_context(|| format!("failed to parse {}", value.display()))?;
             request = request.body(body_value);
         }
 
@@ -6183,7 +6183,7 @@ impl<T: CliConfig> Cli<T> {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
             let body_value = serde_json::from_str::<types::DeviceAuthVerify>(&body_txt)
-                .with_context(|| format!("failed to deserialize {} as JSON", value.display()))?;
+                .with_context(|| format!("failed to parse {}", value.display()))?;
             request = request.body(body_value);
         }
 
@@ -6223,7 +6223,7 @@ impl<T: CliConfig> Cli<T> {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
             let body_value = serde_json::from_str::<types::DeviceAccessTokenRequest>(&body_txt)
-                .with_context(|| format!("failed to deserialize {} as JSON", value.display()))?;
+                .with_context(|| format!("failed to parse {}", value.display()))?;
             request = request.body(body_value);
         }
 
@@ -6285,7 +6285,7 @@ impl<T: CliConfig> Cli<T> {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
             let body_value = serde_json::from_str::<types::SpoofLoginBody>(&body_txt)
-                .with_context(|| format!("failed to deserialize {} as JSON", value.display()))?;
+                .with_context(|| format!("failed to parse {}", value.display()))?;
             request = request.body(body_value);
         }
 
@@ -6321,7 +6321,7 @@ impl<T: CliConfig> Cli<T> {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
             let body_value = serde_json::from_str::<types::UsernamePasswordCredentials>(&body_txt)
-                .with_context(|| format!("failed to deserialize {} as JSON", value.display()))?;
+                .with_context(|| format!("failed to parse {}", value.display()))?;
             request = request.body(body_value);
         }
 
@@ -6461,7 +6461,7 @@ impl<T: CliConfig> Cli<T> {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
             let body_value = serde_json::from_str::<types::OrganizationCreate>(&body_txt)
-                .with_context(|| format!("failed to deserialize {} as JSON", value.display()))?;
+                .with_context(|| format!("failed to parse {}", value.display()))?;
             request = request.body(body_value);
         }
 
@@ -6525,7 +6525,7 @@ impl<T: CliConfig> Cli<T> {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
             let body_value = serde_json::from_str::<types::OrganizationUpdate>(&body_txt)
-                .with_context(|| format!("failed to deserialize {} as JSON", value.display()))?;
+                .with_context(|| format!("failed to parse {}", value.display()))?;
             request = request.body(body_value);
         }
 
@@ -6605,7 +6605,7 @@ impl<T: CliConfig> Cli<T> {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
             let body_value = serde_json::from_str::<types::OrganizationRolePolicy>(&body_txt)
-                .with_context(|| format!("failed to deserialize {} as JSON", value.display()))?;
+                .with_context(|| format!("failed to parse {}", value.display()))?;
             request = request.body(body_value);
         }
 
@@ -6681,7 +6681,7 @@ impl<T: CliConfig> Cli<T> {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
             let body_value = serde_json::from_str::<types::ProjectCreate>(&body_txt)
-                .with_context(|| format!("failed to deserialize {} as JSON", value.display()))?;
+                .with_context(|| format!("failed to parse {}", value.display()))?;
             request = request.body(body_value);
         }
 
@@ -6745,7 +6745,7 @@ impl<T: CliConfig> Cli<T> {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
             let body_value = serde_json::from_str::<types::ProjectUpdate>(&body_txt)
-                .with_context(|| format!("failed to deserialize {} as JSON", value.display()))?;
+                .with_context(|| format!("failed to parse {}", value.display()))?;
             request = request.body(body_value);
         }
 
@@ -6856,7 +6856,7 @@ impl<T: CliConfig> Cli<T> {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
             let body_value = serde_json::from_str::<types::DiskCreate>(&body_txt)
-                .with_context(|| format!("failed to deserialize {} as JSON", value.display()))?;
+                .with_context(|| format!("failed to parse {}", value.display()))?;
             request = request.body(body_value);
         }
 
@@ -7059,7 +7059,7 @@ impl<T: CliConfig> Cli<T> {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
             let body_value = serde_json::from_str::<types::ImageCreate>(&body_txt)
-                .with_context(|| format!("failed to deserialize {} as JSON", value.display()))?;
+                .with_context(|| format!("failed to parse {}", value.display()))?;
             request = request.body(body_value);
         }
 
@@ -7221,7 +7221,7 @@ impl<T: CliConfig> Cli<T> {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
             let body_value = serde_json::from_str::<types::InstanceCreate>(&body_txt)
-                .with_context(|| format!("failed to deserialize {} as JSON", value.display()))?;
+                .with_context(|| format!("failed to parse {}", value.display()))?;
             request = request.body(body_value);
         }
 
@@ -7374,7 +7374,7 @@ impl<T: CliConfig> Cli<T> {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
             let body_value = serde_json::from_str::<types::DiskIdentifier>(&body_txt)
-                .with_context(|| format!("failed to deserialize {} as JSON", value.display()))?;
+                .with_context(|| format!("failed to parse {}", value.display()))?;
             request = request.body(body_value);
         }
 
@@ -7418,7 +7418,7 @@ impl<T: CliConfig> Cli<T> {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
             let body_value = serde_json::from_str::<types::DiskIdentifier>(&body_txt)
-                .with_context(|| format!("failed to deserialize {} as JSON", value.display()))?;
+                .with_context(|| format!("failed to parse {}", value.display()))?;
             request = request.body(body_value);
         }
 
@@ -7494,7 +7494,7 @@ impl<T: CliConfig> Cli<T> {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
             let body_value = serde_json::from_str::<types::InstanceMigrate>(&body_txt)
-                .with_context(|| format!("failed to deserialize {} as JSON", value.display()))?;
+                .with_context(|| format!("failed to parse {}", value.display()))?;
             request = request.body(body_value);
         }
 
@@ -7607,7 +7607,7 @@ impl<T: CliConfig> Cli<T> {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
             let body_value = serde_json::from_str::<types::NetworkInterfaceCreate>(&body_txt)
-                .with_context(|| format!("failed to deserialize {} as JSON", value.display()))?;
+                .with_context(|| format!("failed to parse {}", value.display()))?;
             request = request.body(body_value);
         }
 
@@ -7699,7 +7699,7 @@ impl<T: CliConfig> Cli<T> {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
             let body_value = serde_json::from_str::<types::NetworkInterfaceUpdate>(&body_txt)
-                .with_context(|| format!("failed to deserialize {} as JSON", value.display()))?;
+                .with_context(|| format!("failed to parse {}", value.display()))?;
             request = request.body(body_value);
         }
 
@@ -7960,7 +7960,7 @@ impl<T: CliConfig> Cli<T> {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
             let body_value = serde_json::from_str::<types::ProjectRolePolicy>(&body_txt)
-                .with_context(|| format!("failed to deserialize {} as JSON", value.display()))?;
+                .with_context(|| format!("failed to parse {}", value.display()))?;
             request = request.body(body_value);
         }
 
@@ -8051,7 +8051,7 @@ impl<T: CliConfig> Cli<T> {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
             let body_value = serde_json::from_str::<types::SnapshotCreate>(&body_txt)
-                .with_context(|| format!("failed to deserialize {} as JSON", value.display()))?;
+                .with_context(|| format!("failed to parse {}", value.display()))?;
             request = request.body(body_value);
         }
 
@@ -8201,7 +8201,7 @@ impl<T: CliConfig> Cli<T> {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
             let body_value = serde_json::from_str::<types::VpcCreate>(&body_txt)
-                .with_context(|| format!("failed to deserialize {} as JSON", value.display()))?;
+                .with_context(|| format!("failed to parse {}", value.display()))?;
             request = request.body(body_value);
         }
 
@@ -8277,7 +8277,7 @@ impl<T: CliConfig> Cli<T> {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
             let body_value = serde_json::from_str::<types::VpcUpdate>(&body_txt)
-                .with_context(|| format!("failed to deserialize {} as JSON", value.display()))?;
+                .with_context(|| format!("failed to parse {}", value.display()))?;
             request = request.body(body_value);
         }
 
@@ -8376,7 +8376,7 @@ impl<T: CliConfig> Cli<T> {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
             let body_value = serde_json::from_str::<types::VpcFirewallRuleUpdateParams>(&body_txt)
-                .with_context(|| format!("failed to deserialize {} as JSON", value.display()))?;
+                .with_context(|| format!("failed to parse {}", value.display()))?;
             request = request.body(body_value);
         }
 
@@ -8475,7 +8475,7 @@ impl<T: CliConfig> Cli<T> {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
             let body_value = serde_json::from_str::<types::VpcRouterCreate>(&body_txt)
-                .with_context(|| format!("failed to deserialize {} as JSON", value.display()))?;
+                .with_context(|| format!("failed to parse {}", value.display()))?;
             request = request.body(body_value);
         }
 
@@ -8562,7 +8562,7 @@ impl<T: CliConfig> Cli<T> {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
             let body_value = serde_json::from_str::<types::VpcRouterUpdate>(&body_txt)
-                .with_context(|| format!("failed to deserialize {} as JSON", value.display()))?;
+                .with_context(|| format!("failed to parse {}", value.display()))?;
             request = request.body(body_value);
         }
 
@@ -8706,7 +8706,7 @@ impl<T: CliConfig> Cli<T> {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
             let body_value = serde_json::from_str::<types::RouterRouteCreateParams>(&body_txt)
-                .with_context(|| format!("failed to deserialize {} as JSON", value.display()))?;
+                .with_context(|| format!("failed to parse {}", value.display()))?;
             request = request.body(body_value);
         }
 
@@ -8802,7 +8802,7 @@ impl<T: CliConfig> Cli<T> {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
             let body_value = serde_json::from_str::<types::RouterRouteUpdateParams>(&body_txt)
-                .with_context(|| format!("failed to deserialize {} as JSON", value.display()))?;
+                .with_context(|| format!("failed to parse {}", value.display()))?;
             request = request.body(body_value);
         }
 
@@ -8949,7 +8949,7 @@ impl<T: CliConfig> Cli<T> {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
             let body_value = serde_json::from_str::<types::VpcSubnetCreate>(&body_txt)
-                .with_context(|| format!("failed to deserialize {} as JSON", value.display()))?;
+                .with_context(|| format!("failed to parse {}", value.display()))?;
             request = request.body(body_value);
         }
 
@@ -9036,7 +9036,7 @@ impl<T: CliConfig> Cli<T> {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
             let body_value = serde_json::from_str::<types::VpcSubnetUpdate>(&body_txt)
-                .with_context(|| format!("failed to deserialize {} as JSON", value.display()))?;
+                .with_context(|| format!("failed to parse {}", value.display()))?;
             request = request.body(body_value);
         }
 
@@ -9170,7 +9170,7 @@ impl<T: CliConfig> Cli<T> {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
             let body_value = serde_json::from_str::<types::SiloRolePolicy>(&body_txt)
-                .with_context(|| format!("failed to deserialize {} as JSON", value.display()))?;
+                .with_context(|| format!("failed to parse {}", value.display()))?;
             request = request.body(body_value);
         }
 
@@ -9354,7 +9354,7 @@ impl<T: CliConfig> Cli<T> {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
             let body_value = serde_json::from_str::<types::SshKeyCreate>(&body_txt)
-                .with_context(|| format!("failed to deserialize {} as JSON", value.display()))?;
+                .with_context(|| format!("failed to parse {}", value.display()))?;
             request = request.body(body_value);
         }
 
@@ -9553,7 +9553,7 @@ impl<T: CliConfig> Cli<T> {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
             let body_value = serde_json::from_str::<types::CertificateCreate>(&body_txt)
-                .with_context(|| format!("failed to deserialize {} as JSON", value.display()))?;
+                .with_context(|| format!("failed to parse {}", value.display()))?;
             request = request.body(body_value);
         }
 
@@ -9871,7 +9871,7 @@ impl<T: CliConfig> Cli<T> {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
             let body_value = serde_json::from_str::<types::GlobalImageCreate>(&body_txt)
-                .with_context(|| format!("failed to deserialize {} as JSON", value.display()))?;
+                .with_context(|| format!("failed to parse {}", value.display()))?;
             request = request.body(body_value);
         }
 
@@ -9987,7 +9987,7 @@ impl<T: CliConfig> Cli<T> {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
             let body_value = serde_json::from_str::<types::IpPoolCreate>(&body_txt)
-                .with_context(|| format!("failed to deserialize {} as JSON", value.display()))?;
+                .with_context(|| format!("failed to parse {}", value.display()))?;
             request = request.body(body_value);
         }
 
@@ -10043,7 +10043,7 @@ impl<T: CliConfig> Cli<T> {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
             let body_value = serde_json::from_str::<types::IpPoolUpdate>(&body_txt)
-                .with_context(|| format!("failed to deserialize {} as JSON", value.display()))?;
+                .with_context(|| format!("failed to parse {}", value.display()))?;
             request = request.body(body_value);
         }
 
@@ -10134,7 +10134,7 @@ impl<T: CliConfig> Cli<T> {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
             let body_value = serde_json::from_str::<types::IpRange>(&body_txt)
-                .with_context(|| format!("failed to deserialize {} as JSON", value.display()))?;
+                .with_context(|| format!("failed to parse {}", value.display()))?;
             request = request.body(body_value);
         }
 
@@ -10166,7 +10166,7 @@ impl<T: CliConfig> Cli<T> {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
             let body_value = serde_json::from_str::<types::IpRange>(&body_txt)
-                .with_context(|| format!("failed to deserialize {} as JSON", value.display()))?;
+                .with_context(|| format!("failed to parse {}", value.display()))?;
             request = request.body(body_value);
         }
 
@@ -10250,7 +10250,7 @@ impl<T: CliConfig> Cli<T> {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
             let body_value = serde_json::from_str::<types::IpRange>(&body_txt)
-                .with_context(|| format!("failed to deserialize {} as JSON", value.display()))?;
+                .with_context(|| format!("failed to parse {}", value.display()))?;
             request = request.body(body_value);
         }
 
@@ -10278,7 +10278,7 @@ impl<T: CliConfig> Cli<T> {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
             let body_value = serde_json::from_str::<types::IpRange>(&body_txt)
-                .with_context(|| format!("failed to deserialize {} as JSON", value.display()))?;
+                .with_context(|| format!("failed to parse {}", value.display()))?;
             request = request.body(body_value);
         }
 
@@ -10370,7 +10370,7 @@ impl<T: CliConfig> Cli<T> {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
             let body_value = serde_json::from_str::<types::FleetRolePolicy>(&body_txt)
-                .with_context(|| format!("failed to deserialize {} as JSON", value.display()))?;
+                .with_context(|| format!("failed to parse {}", value.display()))?;
             request = request.body(body_value);
         }
 
@@ -10505,7 +10505,7 @@ impl<T: CliConfig> Cli<T> {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
             let body_value = serde_json::from_str::<types::SiloCreate>(&body_txt)
-                .with_context(|| format!("failed to deserialize {} as JSON", value.display()))?;
+                .with_context(|| format!("failed to parse {}", value.display()))?;
             request = request.body(body_value);
         }
 
@@ -10625,7 +10625,7 @@ impl<T: CliConfig> Cli<T> {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
             let body_value = serde_json::from_str::<types::UserCreate>(&body_txt)
-                .with_context(|| format!("failed to deserialize {} as JSON", value.display()))?;
+                .with_context(|| format!("failed to parse {}", value.display()))?;
             request = request.body(body_value);
         }
 
@@ -10689,7 +10689,7 @@ impl<T: CliConfig> Cli<T> {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
             let body_value = serde_json::from_str::<types::UserPassword>(&body_txt)
-                .with_context(|| format!("failed to deserialize {} as JSON", value.display()))?;
+                .with_context(|| format!("failed to parse {}", value.display()))?;
             request = request.body(body_value);
         }
 
@@ -10753,9 +10753,7 @@ impl<T: CliConfig> Cli<T> {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
             let body_value = serde_json::from_str::<types::SamlIdentityProviderCreate>(&body_txt)
-                .with_context(|| {
-                format!("failed to deserialize {} as JSON", value.display())
-            })?;
+                .with_context(|| format!("failed to parse {}", value.display()))?;
             request = request.body(body_value);
         }
 
@@ -10839,7 +10837,7 @@ impl<T: CliConfig> Cli<T> {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
             let body_value = serde_json::from_str::<types::SiloRolePolicy>(&body_txt)
-                .with_context(|| format!("failed to deserialize {} as JSON", value.display()))?;
+                .with_context(|| format!("failed to parse {}", value.display()))?;
             request = request.body(body_value);
         }
 
@@ -11129,7 +11127,7 @@ impl<T: CliConfig> Cli<T> {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
             let body_value = serde_json::from_str::<types::DiskCreate>(&body_txt)
-                .with_context(|| format!("failed to deserialize {} as JSON", value.display()))?;
+                .with_context(|| format!("failed to parse {}", value.display()))?;
             request = request.body(body_value);
         }
 
@@ -11295,7 +11293,7 @@ impl<T: CliConfig> Cli<T> {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
             let body_value = serde_json::from_str::<types::InstanceCreate>(&body_txt)
-                .with_context(|| format!("failed to deserialize {} as JSON", value.display()))?;
+                .with_context(|| format!("failed to parse {}", value.display()))?;
             request = request.body(body_value);
         }
 
@@ -11454,7 +11452,7 @@ impl<T: CliConfig> Cli<T> {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
             let body_value = serde_json::from_str::<types::DiskPath>(&body_txt)
-                .with_context(|| format!("failed to deserialize {} as JSON", value.display()))?;
+                .with_context(|| format!("failed to parse {}", value.display()))?;
             request = request.body(body_value);
         }
 
@@ -11498,7 +11496,7 @@ impl<T: CliConfig> Cli<T> {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
             let body_value = serde_json::from_str::<types::DiskPath>(&body_txt)
-                .with_context(|| format!("failed to deserialize {} as JSON", value.display()))?;
+                .with_context(|| format!("failed to parse {}", value.display()))?;
             request = request.body(body_value);
         }
 
@@ -11542,7 +11540,7 @@ impl<T: CliConfig> Cli<T> {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
             let body_value = serde_json::from_str::<types::InstanceMigrate>(&body_txt)
-                .with_context(|| format!("failed to deserialize {} as JSON", value.display()))?;
+                .with_context(|| format!("failed to parse {}", value.display()))?;
             request = request.body(body_value);
         }
 
@@ -11788,7 +11786,7 @@ impl<T: CliConfig> Cli<T> {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
             let body_value = serde_json::from_str::<types::OrganizationCreate>(&body_txt)
-                .with_context(|| format!("failed to deserialize {} as JSON", value.display()))?;
+                .with_context(|| format!("failed to parse {}", value.display()))?;
             request = request.body(body_value);
         }
 
@@ -11852,7 +11850,7 @@ impl<T: CliConfig> Cli<T> {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
             let body_value = serde_json::from_str::<types::OrganizationUpdate>(&body_txt)
-                .with_context(|| format!("failed to deserialize {} as JSON", value.display()))?;
+                .with_context(|| format!("failed to parse {}", value.display()))?;
             request = request.body(body_value);
         }
 
@@ -11932,7 +11930,7 @@ impl<T: CliConfig> Cli<T> {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
             let body_value = serde_json::from_str::<types::OrganizationRolePolicy>(&body_txt)
-                .with_context(|| format!("failed to deserialize {} as JSON", value.display()))?;
+                .with_context(|| format!("failed to parse {}", value.display()))?;
             request = request.body(body_value);
         }
 
@@ -12014,7 +12012,7 @@ impl<T: CliConfig> Cli<T> {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
             let body_value = serde_json::from_str::<types::ProjectCreate>(&body_txt)
-                .with_context(|| format!("failed to deserialize {} as JSON", value.display()))?;
+                .with_context(|| format!("failed to parse {}", value.display()))?;
             request = request.body(body_value);
         }
 
@@ -12085,7 +12083,7 @@ impl<T: CliConfig> Cli<T> {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
             let body_value = serde_json::from_str::<types::ProjectUpdate>(&body_txt)
-                .with_context(|| format!("failed to deserialize {} as JSON", value.display()))?;
+                .with_context(|| format!("failed to parse {}", value.display()))?;
             request = request.body(body_value);
         }
 
@@ -12177,7 +12175,7 @@ impl<T: CliConfig> Cli<T> {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
             let body_value = serde_json::from_str::<types::ProjectRolePolicy>(&body_txt)
-                .with_context(|| format!("failed to deserialize {} as JSON", value.display()))?;
+                .with_context(|| format!("failed to parse {}", value.display()))?;
             request = request.body(body_value);
         }
 
@@ -12335,7 +12333,7 @@ impl<T: CliConfig> Cli<T> {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
             let body_value = serde_json::from_str::<types::SystemUpdateStart>(&body_txt)
-                .with_context(|| format!("failed to deserialize {} as JSON", value.display()))?;
+                .with_context(|| format!("failed to parse {}", value.display()))?;
             request = request.body(body_value);
         }
 

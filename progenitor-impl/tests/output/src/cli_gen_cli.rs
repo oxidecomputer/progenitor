@@ -60,7 +60,7 @@ impl<T: CliConfig> Cli<T> {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
             let body_value = serde_json::from_str::<types::UnoBody>(&body_txt)
-                .with_context(|| format!("failed to deserialize {} as JSON", value.display()))?;
+                .with_context(|| format!("failed to parse {}", value.display()))?;
             request = request.body(body_value);
         }
 
