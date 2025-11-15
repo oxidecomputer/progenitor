@@ -106,7 +106,7 @@ mod token_utils;
 ///   the constraints of type compatibility).
 ///
 /// - `patch`: optional map from type to an object with the optional members
-///   `rename` and `derives`. This may be used to renamed generated types or
+///   `rename` and `derives`. This may be used to rename generated types or
 ///   to apply additional (non-default) derive macros to them.
 ///
 /// - `replace`: optional map from definition name to a replacement type. This
