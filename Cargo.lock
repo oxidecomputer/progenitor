@@ -418,9 +418,9 @@ dependencies = [
 
 [[package]]
 name = "dropshot"
-version = "0.16.4"
+version = "0.16.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7cd9bdeafc752f117ed20e659b9763695ae5900adf3a32e93f9f6f4052fd5d66"
+checksum = "3ee062e12b3b08e748f90e92efe0b93d53a28403bd900fd9e69e6be66bbddc4f"
 dependencies = [
  "async-stream",
  "async-trait",
@@ -468,9 +468,9 @@ dependencies = [
 
 [[package]]
 name = "dropshot_endpoint"
-version = "0.16.4"
+version = "0.16.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "89d09440e73a9dcf8a0f7fbd6ab889a7751d59f0fe76e5082a0a6d5623ec6da3"
+checksum = "0430a45e1a3cc8aaf1396c2ca2a4c1215ab253cbcda7ca7ed7beb107e0591bd1"
 dependencies = [
  "heck",
  "proc-macro2",
@@ -964,9 +964,9 @@ dependencies = [
 
 [[package]]
 name = "hyper-util"
-version = "0.1.17"
+version = "0.1.18"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3c6995591a8f1380fcb4ba966a252a4b29188d51d2b89e3a252f5305be65aea8"
+checksum = "52e9a2a24dc5c6821e71a7030e1e14b7b632acac55c40e9d2e082c621261bb56"
 dependencies = [
  "base64",
  "bytes",
