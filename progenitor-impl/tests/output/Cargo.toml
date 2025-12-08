@@ -11,7 +11,7 @@ base64 = "0.21"
 chrono = { version = "0.4", features = ["serde"] }
 clap = { version = "4", features = ["string"] }
 futures = "0.3"
-httpmock = "0.7"
+httpmock = "0.8"
 progenitor-client = { path = "../../../progenitor-client" }
 rand = { version = "0.8", features = ["serde1"] }
 regex = "1.10"

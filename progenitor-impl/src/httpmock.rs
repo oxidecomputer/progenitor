@@ -208,7 +208,7 @@ impl Generator {
                                     value.to_string(),
                                 ))
                             } else {
-                                Self(self.0.matches(|req| {
+                                Self(self.0.is_true(|req| {
                                     req.query_params
                                         .as_ref()
                                         .and_then(|qs| {
@@ -229,7 +229,7 @@ impl Generator {
                                     value.to_string()
                                 ))
                             } else {
-                                Self(self.0.matches(|req| {
+                                Self(self.0.is_true(|req| {
                                     req.headers
                                         .as_ref()
                                         .and_then(|hs| {
