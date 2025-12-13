@@ -58,7 +58,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct EnrolBody {
         pub host: ::std::string::String,
         pub key: ::std::string::String,
@@ -98,7 +100,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct GlobalJobsResult {
         pub summary: ::std::vec::Vec<ReportSummary>,
     }
@@ -142,7 +146,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct OutputRecord {
         pub msg: ::std::string::String,
         pub stream: ::std::string::String,
@@ -184,7 +190,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct PingResult {
         pub host: ::std::string::String,
         pub ok: bool,
@@ -236,11 +244,13 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct ReportFinishBody {
-        pub duration_millis: i32,
+        pub duration_millis: usize,
         pub end_time: ::chrono::DateTime<::chrono::offset::Utc>,
-        pub exit_status: i32,
+        pub exit_status: usize,
         pub id: ReportId,
     }
 
@@ -293,7 +303,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct ReportId {
         pub host: ::std::string::String,
         pub job: ::std::string::String,
@@ -337,7 +349,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct ReportOutputBody {
         pub id: ReportId,
         pub record: OutputRecord,
@@ -374,7 +388,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct ReportResult {
         pub existed_already: bool,
     }
@@ -419,7 +435,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct ReportStartBody {
         pub id: ReportId,
         pub script: ::std::string::String,
@@ -480,13 +498,15 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct ReportSummary {
-        pub age_seconds: i32,
-        pub duration_seconds: i32,
+        pub age_seconds: usize,
+        pub duration_seconds: usize,
         pub host: ::std::string::String,
         pub job: ::std::string::String,
-        pub status: i32,
+        pub status: usize,
         pub when: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
@@ -746,12 +766,12 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct ReportFinishBody {
-            duration_millis: ::std::result::Result<i32, ::std::string::String>,
+            duration_millis: ::std::result::Result<usize, ::std::string::String>,
             end_time: ::std::result::Result<
                 ::chrono::DateTime<::chrono::offset::Utc>,
                 ::std::string::String,
             >,
-            exit_status: ::std::result::Result<i32, ::std::string::String>,
+            exit_status: ::std::result::Result<usize, ::std::string::String>,
             id: ::std::result::Result<super::ReportId, ::std::string::String>,
         }
 
@@ -769,7 +789,7 @@ pub mod types {
         impl ReportFinishBody {
             pub fn duration_millis<T>(mut self, value: T) -> Self
             where
-                T: ::std::convert::TryInto<i32>,
+                T: ::std::convert::TryInto<usize>,
                 T::Error: ::std::fmt::Display,
             {
                 self.duration_millis = value.try_into().map_err(|e| {
@@ -789,7 +809,7 @@ pub mod types {
             }
             pub fn exit_status<T>(mut self, value: T) -> Self
             where
-                T: ::std::convert::TryInto<i32>,
+                T: ::std::convert::TryInto<usize>,
                 T::Error: ::std::fmt::Display,
             {
                 self.exit_status = value
@@ -1120,11 +1140,11 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct ReportSummary {
-            age_seconds: ::std::result::Result<i32, ::std::string::String>,
-            duration_seconds: ::std::result::Result<i32, ::std::string::String>,
+            age_seconds: ::std::result::Result<usize, ::std::string::String>,
+            duration_seconds: ::std::result::Result<usize, ::std::string::String>,
             host: ::std::result::Result<::std::string::String, ::std::string::String>,
             job: ::std::result::Result<::std::string::String, ::std::string::String>,
-            status: ::std::result::Result<i32, ::std::string::String>,
+            status: ::std::result::Result<usize, ::std::string::String>,
             when: ::std::result::Result<
                 ::chrono::DateTime<::chrono::offset::Utc>,
                 ::std::string::String,
@@ -1147,7 +1167,7 @@ pub mod types {
         impl ReportSummary {
             pub fn age_seconds<T>(mut self, value: T) -> Self
             where
-                T: ::std::convert::TryInto<i32>,
+                T: ::std::convert::TryInto<usize>,
                 T::Error: ::std::fmt::Display,
             {
                 self.age_seconds = value
@@ -1157,7 +1177,7 @@ pub mod types {
             }
             pub fn duration_seconds<T>(mut self, value: T) -> Self
             where
-                T: ::std::convert::TryInto<i32>,
+                T: ::std::convert::TryInto<usize>,
                 T::Error: ::std::fmt::Display,
             {
                 self.duration_seconds = value.try_into().map_err(|e| {
@@ -1190,7 +1210,7 @@ pub mod types {
             }
             pub fn status<T>(mut self, value: T) -> Self
             where
-                T: ::std::convert::TryInto<i32>,
+                T: ::std::convert::TryInto<usize>,
                 T::Error: ::std::fmt::Display,
             {
                 self.status = value

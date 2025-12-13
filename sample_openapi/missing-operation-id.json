@@ -1,0 +1,31 @@
+{
+	"openapi": "3.0.0",
+	"info": {
+		"description": "Minimal API for testing missing operation id strategies",
+		"title": "Missing operation ids test",
+		"version": "v1"
+	},
+	"paths": {
+		"/": {
+			"get": {
+				"description": "Ping",
+				"responses": {
+					"200": {
+						"description": "Pong",
+						"type": "string"
+					}
+				}
+			},
+			"post": {
+				"description": "Ping",
+				"operationId": "do_ping",
+				"responses": {
+					"200": {
+						"description": "Pong",
+						"type": "string"
+					}
+				}
+			}
+		}
+	}
+}

@@ -55,7 +55,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     #[serde(untagged)]
     pub enum GetThingOrThingsId {
         String(::std::string::String),
@@ -100,6 +102,7 @@ pub mod types {
         Ord,
         PartialEq,
         PartialOrd,
+        schemars :: JsonSchema,
     )]
     pub enum HeaderArgAcceptLanguage {
         #[serde(rename = "de")]
@@ -218,7 +221,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct ObjWithOptionArray {
         #[serde(rename = "stranger-things")]
         pub stranger_things: ::std::vec::Vec<::std::option::Option<Task>>,
@@ -274,7 +279,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct Task {
         pub id: ::std::string::String,
         pub name: ::std::string::String,
@@ -328,7 +335,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct TaskEvent {
         pub payload: ::std::string::String,
         pub seq: u32,
@@ -376,7 +385,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct TaskOutput {
         pub id: ::std::string::String,
         pub path: ::std::string::String,
@@ -427,7 +438,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct TaskSubmit {
         pub default: bool,
         pub name: ::std::string::String,
@@ -466,7 +479,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct TaskSubmitResult {
         pub id: ::std::string::String,
     }
@@ -501,7 +516,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct UploadedChunk {
         pub id: ::std::string::String,
     }
@@ -536,7 +553,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct UserCreate {
         pub name: ::std::string::String,
     }
@@ -579,7 +598,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct UserCreateResult {
         pub id: ::std::string::String,
         pub name: ::std::string::String,
@@ -620,7 +641,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct WhoamiResult {
         pub id: ::std::string::String,
         pub name: ::std::string::String,
@@ -678,7 +701,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct Worker {
         pub deleted: bool,
         pub id: ::std::string::String,
@@ -732,7 +757,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct WorkerAddOutput {
         pub chunks: ::std::vec::Vec<::std::string::String>,
         pub path: ::std::string::String,
@@ -778,7 +805,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct WorkerAppendTask {
         pub payload: ::std::string::String,
         pub stream: ::std::string::String,
@@ -819,7 +848,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct WorkerBootstrap {
         pub bootstrap: ::std::string::String,
         pub token: ::std::string::String,
@@ -855,7 +886,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct WorkerBootstrapResult {
         pub id: ::std::string::String,
     }
@@ -890,7 +923,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct WorkerCompleteTask {
         pub failed: bool,
     }
@@ -928,7 +963,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct WorkerPingResult {
         pub poweroff: bool,
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -976,7 +1013,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct WorkerPingTask {
         pub id: ::std::string::String,
         pub output_rules: ::std::vec::Vec<::std::string::String>,
@@ -1021,7 +1060,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct WorkerTask {
         pub id: ::std::string::String,
         pub name: ::std::string::String,
@@ -1061,7 +1102,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(
+        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+    )]
     pub struct WorkersResult {
         pub workers: ::std::vec::Vec<Worker>,
     }
