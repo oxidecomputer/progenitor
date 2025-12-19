@@ -516,7 +516,7 @@ impl Generator {
                 status_code: OperationResponseStatus::Code(101),
                 typ: OperationResponseKind::Upgrade,
                 description: None,
-            })
+            });
         }
 
         let dropshot_paginated = self.dropshot_pagination_data(operation, &params, &responses);

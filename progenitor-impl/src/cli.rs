@@ -428,7 +428,7 @@ impl Generator {
                 }
             };
 
-            args.add_arg(arg_name, CliArg { parser, consumer })
+            args.add_arg(arg_name, CliArg { parser, consumer });
         }
 
         let maybe_body_type_id = method
@@ -452,14 +452,14 @@ impl Generator {
             match details {
                 typify::TypeDetails::Struct(struct_info) => {
                     for prop_info in struct_info.properties_info() {
-                        self.cli_method_body_arg(&mut args, prop_info)
+                        self.cli_method_body_arg(&mut args, prop_info);
                     }
                 }
 
                 _ => {
                     // If the body is not a struct, we don't know what's
                     // required or how to generate it
-                    args.body_required()
+                    args.body_required();
                 }
             }
         }
@@ -595,9 +595,9 @@ impl Generator {
                     })
                 }
             };
-            args.add_arg(prop_name, CliArg { parser, consumer })
+            args.add_arg(prop_name, CliArg { parser, consumer });
         } else if required {
-            args.body_required()
+            args.body_required();
         }
 
         // Cases
