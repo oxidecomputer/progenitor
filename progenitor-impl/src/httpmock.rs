@@ -345,7 +345,8 @@ impl Generator {
                             },
                         )
                     }
-                    crate::method::OperationResponseKind::None | crate::method::OperationResponseKind::Upgrade => Default::default(),
+                    crate::method::OperationResponseKind::None
+                    | crate::method::OperationResponseKind::Upgrade => Default::default(),
                     crate::method::OperationResponseKind::Raw => (
                         quote! {
                             value: ::serde_json::Value,

@@ -1003,10 +1003,10 @@ impl Generator {
                     if response.status_code == OperationResponseStatus::Default {
                         return quote! {}; // catch-all handled below
                     }
-                        todo!(
-                            "non-default error response handling for \
+                    todo!(
+                        "non-default error response handling for \
                                 upgrade requests is not yet implemented"
-                        );
+                    );
                 }
             };
 
