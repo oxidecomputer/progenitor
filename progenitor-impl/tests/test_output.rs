@@ -17,12 +17,11 @@ where
     P: AsRef<Path> + std::clone::Clone + std::fmt::Debug,
 {
     let mut f = File::open(p.clone()).unwrap();
-    match serde_json::from_reader(f) {
-        Ok(json_value) => json_value,
-        _ => {
-            f = File::open(p).unwrap();
-            serde_yaml::from_reader(f).unwrap()
-        }
+    if let Ok(json_value) = serde_json::from_reader(f) {
+        json_value
+    } else {
+        f = File::open(p).unwrap();
+        serde_yaml::from_reader(f).unwrap()
     }
 }
 
@@ -38,7 +37,7 @@ fn reformat_code(content: TokenStream) -> String {
         wrap_comments: Some(true),
         ..Default::default()
     };
-    space_out_items(rustfmt_wrapper::rustfmt_config(rustfmt_config, content).unwrap()).unwrap()
+    space_out_items(&rustfmt_wrapper::rustfmt_config(rustfmt_config, content).unwrap()).unwrap()
 }
 
 #[track_caller]
@@ -116,7 +115,7 @@ fn verify_apis(openapi_file: &str) {
     )
     .unwrap();
 
-    let output = progenitor_impl::space_out_items(output).unwrap();
+    let output = progenitor_impl::space_out_items(&output).unwrap();
     expectorate::assert_contents(
         format!("tests/output/src/{openapi_stem}_httpmock.rs"),
         &output,

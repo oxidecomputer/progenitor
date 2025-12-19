@@ -258,7 +258,7 @@ mod tests {
             ),
         ];
 
-        for (path, expect_string, want) in trials.iter() {
+        for (path, expect_string, want) in &trials {
             match parse(path) {
                 Ok(t) => {
                     assert_eq!(&t, want);
@@ -280,7 +280,7 @@ mod tests {
             ),
         ];
 
-        for (path, want) in trials.iter() {
+        for (path, want) in &trials {
             match parse(path) {
                 Ok(t) => assert_eq!(&t.names(), want),
                 Err(e) => panic!("path {path} {e}"),

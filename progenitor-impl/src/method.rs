@@ -601,7 +601,7 @@ impl Generator {
             success: success_type,
             error: error_type,
             body,
-        } = self.method_sig_body(method, quote! { Self }, quote! { self }, has_inner)?;
+        } = self.method_sig_body(method, &quote! { Self }, quote! { self }, has_inner)?;
 
         let method_impl = quote! {
             #[doc = #doc_comment]
@@ -758,7 +758,7 @@ impl Generator {
     fn method_sig_body(
         &self,
         method: &OperationMethod,
-        client_type: TokenStream,
+        client_type: &TokenStream,
         client_value: TokenStream,
         has_inner: bool,
     ) -> Result<MethodSigBody> {
@@ -1042,9 +1042,10 @@ impl Generator {
             }
         };
 
-        let inner = match has_inner {
-            true => quote! { &#client_value.inner, },
-            false => quote! {},
+        let inner = if has_inner {
+            quote! { &#client_value.inner, }
+        } else {
+            quote! {}
         };
         let pre_hook = self.settings.pre_hook.as_ref().map(|hook| {
             quote! {
@@ -1273,9 +1274,9 @@ impl Generator {
         };
 
         let typ = self.type_space.get_type(success_response).ok()?;
-        let details = match typ.details() {
-            typify::TypeDetails::Struct(details) => details,
-            _ => return None,
+
+        let typify::TypeDetails::Struct(details) = typ.details() else {
+            return None;
         };
 
         let properties = details.properties().collect::<BTreeMap<_, _>>();
@@ -1645,7 +1646,7 @@ impl Generator {
             body,
         } = self.method_sig_body(
             method,
-            quote! { super::Client },
+            &quote! { super::Client },
             quote! { #client_ident },
             has_inner,
         )?;
@@ -1878,8 +1879,7 @@ impl Generator {
             .params
             .iter()
             .map(|param| format!("\n    .{}({})", param.name, param.name))
-            .collect::<Vec<_>>()
-            .join("");
+            .collect::<String>();
 
         let eg = format!(
             "\
@@ -1933,7 +1933,7 @@ impl Generator {
         let mut base = Vec::new();
         let mut ext = BTreeMap::new();
 
-        methods.iter().for_each(|method| {
+        for method in methods {
             let BuilderImpl { doc, sig, body } = self.builder_helper(method);
 
             if method.tags.is_empty() {
@@ -1961,7 +1961,7 @@ impl Generator {
                         .push((trait_sig.clone(), impl_body.clone()));
                 });
             }
-        });
+        }
 
         let base_impl = (!base.is_empty()).then(|| {
             quote! {

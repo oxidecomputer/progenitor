@@ -607,6 +607,7 @@ impl Generator {
     }
 }
 
+#[derive(Clone, Copy)]
 enum Volitionality {
     Optional,
     Required,

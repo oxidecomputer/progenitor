@@ -594,7 +594,7 @@ impl Convert<schemars::schema::Schema> for openapiv3::Schema {
                             (None, _) => None,
                         };
                     }
-                };
+                }
 
                 // If we have exactly one type, and it's null, and we have
                 // subschemas that means that we must have had a bunch of

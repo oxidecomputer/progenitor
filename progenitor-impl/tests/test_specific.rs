@@ -24,7 +24,7 @@ fn generate_formatted(generator: &mut Generator, spec: &OpenAPI) -> String {
         wrap_comments: Some(true),
         ..Default::default()
     };
-    space_out_items(rustfmt_wrapper::rustfmt_config(rustfmt_config, content).unwrap()).unwrap()
+    space_out_items(&rustfmt_wrapper::rustfmt_config(rustfmt_config, content).unwrap()).unwrap()
 }
 
 #[allow(dead_code)]
