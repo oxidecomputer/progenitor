@@ -35,7 +35,7 @@ impl PathTemplate {
                     "{}",
                     rename
                         .get(&n)
-                        .expect(&format!("missing path name mapping {}", n)),
+                        .unwrap_or_else(|| panic!("missing path name mapping {n}")),
                 );
                 Some(quote! {
                     encode_path(&#param.to_string())
@@ -158,18 +158,21 @@ pub fn parse(t: &str) -> Result<PathTemplate> {
     Ok(PathTemplate { components })
 }
 
-impl ToString for PathTemplate {
-    fn to_string(&self) -> std::string::String {
-        self.components
-            .iter()
-            .map(|component| match component {
-                Component::Constant(s) => s.clone(),
-                Component::Parameter(s) => format!("{{{}}}", s),
-            })
-            .fold(String::new(), |a, b| a + &b)
+impl std::fmt::Display for PathTemplate {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        for component in &self.components {
+            match component {
+                // Write the string slice directly to the formatter
+                Component::Constant(s) => f.write_str(s)?,
+
+                // Use write! macro to handle formatting (escaping braces)
+                // Note: {{ outputs a literal '{' and }} outputs a literal '}'
+                Component::Parameter(s) => write!(f, "{{{}}}", s)?,
+            }
+        }
+        Ok(())
     }
 }
-
 #[cfg(test)]
 mod tests {
     use std::collections::HashMap;
@@ -178,7 +181,7 @@ mod tests {
 
     #[test]
     fn basic() {
-        let trials = vec![
+        let trials = [
             (
                 "/info",
                 "/info",
@@ -271,7 +274,7 @@ mod tests {
 
     #[test]
     fn names() {
-        let trials = vec![
+        let trials = [
             ("/info", vec![]),
             ("/measure/{number}", vec!["number".to_string()]),
             (
