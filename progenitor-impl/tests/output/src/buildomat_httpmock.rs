@@ -4,6 +4,17 @@ pub mod operations {
     #![doc = r" its inner type with a call to `into_inner()`. This can"]
     #![doc = r" be used to explicitly deviate from permitted values."]
     use crate::buildomat_builder::*;
+    fn apply_query_param_pairs(
+        mut when: ::httpmock::When,
+        pairs: &[(String, String)],
+    ) -> ::httpmock::When {
+        for (key, value) in pairs {
+            when = when.query_param(key, value);
+        }
+
+        when
+    }
+
     pub struct ControlHoldWhen(::httpmock::When);
     impl ControlHoldWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
@@ -208,7 +219,9 @@ pub mod operations {
             T: Into<Option<u32>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("minseq", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("minseq", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("minseq"))
             }
@@ -756,7 +769,9 @@ pub mod operations {
             T: Into<Option<&'a types::GetThingOrThingsId>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("id", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("id", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("id"))
             }

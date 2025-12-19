@@ -4,6 +4,17 @@ pub mod operations {
     #![doc = r" its inner type with a call to `into_inner()`. This can"]
     #![doc = r" be used to explicitly deviate from permitted values."]
     use crate::cli_gen_builder::*;
+    fn apply_query_param_pairs(
+        mut when: ::httpmock::When,
+        pairs: &[(String, String)],
+    ) -> ::httpmock::When {
+        for (key, value) in pairs {
+            when = when.query_param(key, value);
+        }
+
+        when
+    }
+
     pub struct UnoWhen(::httpmock::When);
     impl UnoWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
@@ -19,7 +30,9 @@ pub mod operations {
         }
 
         pub fn gateway(self, value: &str) -> Self {
-            Self(self.0.query_param("gateway", value.to_string()))
+            let expected_pairs = ::progenitor_client::query_param_pairs("gateway", &value)
+                .expect("failed to serialize query param");
+            Self(apply_query_param_pairs(self.0, &expected_pairs))
         }
 
         pub fn body(self, value: &types::UnoBody) -> Self {
