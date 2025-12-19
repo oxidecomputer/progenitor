@@ -29,6 +29,7 @@ dropshot = { workspace = true }
 expectorate = { workspace = true }
 futures = { workspace = true }
 http = { workspace = true }
+httpmock = { workspace = true }
 hyper = { workspace = true }
 progenitor-client = { workspace = true }
 reqwest = { workspace = true }

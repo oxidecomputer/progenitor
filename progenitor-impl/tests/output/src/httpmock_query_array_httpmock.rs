@@ -3,7 +3,7 @@ pub mod operations {
     #![doc = r" wrappers for each operation. Each can be converted to"]
     #![doc = r" its inner type with a call to `into_inner()`. This can"]
     #![doc = r" be used to explicitly deviate from permitted values."]
-    use crate::cli_gen_builder::*;
+    use crate::httpmock_query_array_builder::*;
     fn apply_query_param_pairs(
         mut when: ::httpmock::When,
         pairs: &[(String, String)],
@@ -15,13 +15,13 @@ pub mod operations {
         when
     }
 
-    pub struct UnoWhen(::httpmock::When);
-    impl UnoWhen {
+    pub struct ListWidgetsWhen(::httpmock::When);
+    impl ListWidgetsWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
                     .method(::httpmock::Method::GET)
-                    .path_matches(regex::Regex::new("^/uno$").unwrap()),
+                    .path_matches(regex::Regex::new("^/widgets$").unwrap()),
             )
         }
 
@@ -29,19 +29,15 @@ pub mod operations {
             self.0
         }
 
-        pub fn gateway(self, value: &str) -> Self {
-            let expected_pairs = ::progenitor_client::query_param_pairs("gateway", &value)
+        pub fn tags(self, value: &::std::vec::Vec<::std::string::String>) -> Self {
+            let expected_pairs = ::progenitor_client::query_param_pairs("tags", &value)
                 .expect("failed to serialize query param");
             Self(apply_query_param_pairs(self.0, &expected_pairs))
         }
-
-        pub fn body(self, value: &types::UnoBody) -> Self {
-            Self(self.0.json_body_obj(value))
-        }
     }
 
-    pub struct UnoThen(::httpmock::Then);
-    impl UnoThen {
+    pub struct ListWidgetsThen(::httpmock::Then);
+    impl ListWidgetsThen {
         pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
@@ -50,14 +46,8 @@ pub mod operations {
             self.0
         }
 
-        pub fn success(self, status: u16, value: ::serde_json::Value) -> Self {
-            assert_eq!(status / 100u16, 2u16);
-            Self(
-                self.0
-                    .status(status)
-                    .header("content-type", "application/json")
-                    .json_body(value),
-            )
+        pub fn no_content(self) -> Self {
+            Self(self.0.status(204u16))
         }
     }
 }
@@ -66,20 +56,20 @@ pub mod operations {
 #[doc = r" adds a method for each operation. These are the equivalent of"]
 #[doc = r" type-checked [`mock()`](::httpmock::MockServer::mock) calls."]
 pub trait MockServerExt {
-    fn uno<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
+    fn list_widgets<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::UnoWhen, operations::UnoThen);
+        F: FnOnce(operations::ListWidgetsWhen, operations::ListWidgetsThen);
 }
 
 impl MockServerExt for ::httpmock::MockServer {
-    fn uno<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
+    fn list_widgets<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::UnoWhen, operations::UnoThen),
+        F: FnOnce(operations::ListWidgetsWhen, operations::ListWidgetsThen),
     {
         self.mock(|when, then| {
             config_fn(
-                operations::UnoWhen::new(when),
-                operations::UnoThen::new(then),
+                operations::ListWidgetsWhen::new(when),
+                operations::ListWidgetsThen::new(then),
             )
         })
     }
