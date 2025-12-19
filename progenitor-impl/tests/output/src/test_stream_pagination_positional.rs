@@ -69,8 +69,8 @@ pub mod types {
         pub request_id: ::std::string::String,
     }
 
-    impl ::std::convert::From<&Error> for Error {
-        fn from(value: &Error) -> Self {
+    impl ::std::convert::From<&Self> for Error {
+        fn from(value: &Self) -> Self {
             value.clone()
         }
     }
@@ -117,8 +117,8 @@ pub mod types {
         pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl ::std::convert::From<&Uint32ResultsPage> for Uint32ResultsPage {
-        fn from(value: &Uint32ResultsPage) -> Self {
+    impl ::std::convert::From<&Self> for Uint32ResultsPage {
+        fn from(value: &Self) -> Self {
             value.clone()
         }
     }

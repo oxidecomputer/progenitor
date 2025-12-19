@@ -74,7 +74,7 @@ impl Generator {
         let crate_path = syn::TypePath {
             qself: None,
             path: syn::parse_str(crate_path)
-                .unwrap_or_else(|_| panic!("{} is not a valid identifier", crate_path)),
+                .unwrap_or_else(|_| panic!("{crate_path} is not a valid identifier")),
         };
 
         let code = quote! {

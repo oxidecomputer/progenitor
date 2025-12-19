@@ -53,7 +53,7 @@ fn verify_apis(openapi_file: &str) {
     let mut generator = Generator::default();
     let output = generate_formatted(&mut generator, &spec);
     expectorate::assert_contents(
-        format!("tests/output/src/{}_positional.rs", openapi_stem),
+        format!("tests/output/src/{openapi_stem}_positional.rs"),
         &output,
     );
 
@@ -76,7 +76,7 @@ fn verify_apis(openapi_file: &str) {
     );
     let output = generate_formatted(&mut generator, &spec);
     expectorate::assert_contents(
-        format!("tests/output/src/{}_builder.rs", openapi_stem),
+        format!("tests/output/src/{openapi_stem}_builder.rs"),
         &output,
     );
 
@@ -89,7 +89,7 @@ fn verify_apis(openapi_file: &str) {
     );
     let output = generate_formatted(&mut generator, &spec);
     expectorate::assert_contents(
-        format!("tests/output/src/{}_builder_tagged.rs", openapi_stem),
+        format!("tests/output/src/{openapi_stem}_builder_tagged.rs"),
         &output,
     );
 
@@ -99,7 +99,7 @@ fn verify_apis(openapi_file: &str) {
         .unwrap();
     let output = reformat_code(tokens);
 
-    expectorate::assert_contents(format!("tests/output/src/{}_cli.rs", openapi_stem), &output);
+    expectorate::assert_contents(format!("tests/output/src/{openapi_stem}_cli.rs"), &output);
 
     // httpmock generation.
     let code = generator
@@ -118,7 +118,7 @@ fn verify_apis(openapi_file: &str) {
 
     let output = progenitor_impl::space_out_items(output).unwrap();
     expectorate::assert_contents(
-        format!("tests/output/src/{}_httpmock.rs", openapi_stem),
+        format!("tests/output/src/{openapi_stem}_httpmock.rs"),
         &output,
     );
 }
@@ -176,7 +176,7 @@ fn test_nexus_with_different_timeout() {
     let mut generator = Generator::new(GenerationSettings::default().with_timeout(75));
     let output = generate_formatted(&mut generator, &spec);
     expectorate::assert_contents(
-        format!("tests/output/src/{}_with_timeout.rs", openapi_stem),
+        format!("tests/output/src/{openapi_stem}_with_timeout.rs"),
         &output,
     );
 }

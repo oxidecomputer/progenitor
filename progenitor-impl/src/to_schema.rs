@@ -50,10 +50,10 @@ where
 impl Convert<schemars::schema::Schema> for openapiv3::ReferenceOr<openapiv3::Schema> {
     fn convert(&self) -> schemars::schema::Schema {
         match self {
-            openapiv3::ReferenceOr::Reference { reference } => {
+            Self::Reference { reference } => {
                 schemars::schema::SchemaObject::new_ref(reference.clone()).into()
             }
-            openapiv3::ReferenceOr::Item(schema) => schema.convert(),
+            Self::Item(schema) => schema.convert(),
         }
     }
 }
@@ -627,9 +627,9 @@ where
 {
     fn convert(&self) -> Option<String> {
         match self {
-            openapiv3::VariantOrUnknownOrEmpty::Item(i) => Some(i.convert()),
-            openapiv3::VariantOrUnknownOrEmpty::Unknown(s) => Some(s.clone()),
-            openapiv3::VariantOrUnknownOrEmpty::Empty => None,
+            Self::Item(i) => Some(i.convert()),
+            Self::Unknown(s) => Some(s.clone()),
+            Self::Empty => None,
         }
     }
 }
@@ -637,11 +637,11 @@ where
 impl Convert<String> for openapiv3::StringFormat {
     fn convert(&self) -> String {
         match self {
-            openapiv3::StringFormat::Date => "date",
-            openapiv3::StringFormat::DateTime => "date-time",
-            openapiv3::StringFormat::Password => "password",
-            openapiv3::StringFormat::Byte => "byte",
-            openapiv3::StringFormat::Binary => "binary",
+            Self::Date => "date",
+            Self::DateTime => "date-time",
+            Self::Password => "password",
+            Self::Byte => "byte",
+            Self::Binary => "binary",
         }
         .to_string()
     }
@@ -650,8 +650,8 @@ impl Convert<String> for openapiv3::StringFormat {
 impl Convert<String> for openapiv3::NumberFormat {
     fn convert(&self) -> String {
         match self {
-            openapiv3::NumberFormat::Float => "float",
-            openapiv3::NumberFormat::Double => "double",
+            Self::Float => "float",
+            Self::Double => "double",
         }
         .to_string()
     }
@@ -660,8 +660,8 @@ impl Convert<String> for openapiv3::NumberFormat {
 impl Convert<String> for openapiv3::IntegerFormat {
     fn convert(&self) -> String {
         match self {
-            openapiv3::IntegerFormat::Int32 => "int32",
-            openapiv3::IntegerFormat::Int64 => "int64",
+            Self::Int32 => "int32",
+            Self::Int64 => "int64",
         }
         .to_string()
     }
@@ -750,8 +750,8 @@ impl Convert<Option<u32>> for Option<usize> {
     }
 }
 
-impl Convert<Option<f64>> for Option<f64> {
-    fn convert(&self) -> Option<f64> {
+impl Convert<Self> for Option<f64> {
+    fn convert(&self) -> Self {
         *self
     }
 }
@@ -791,8 +791,8 @@ where
 impl Convert<schemars::schema::Schema> for openapiv3::AdditionalProperties {
     fn convert(&self) -> schemars::schema::Schema {
         match self {
-            openapiv3::AdditionalProperties::Any(b) => schemars::schema::Schema::Bool(*b),
-            openapiv3::AdditionalProperties::Schema(schema) => schema.convert(),
+            Self::Any(b) => schemars::schema::Schema::Bool(*b),
+            Self::Schema(schema) => schema.convert(),
         }
     }
 }

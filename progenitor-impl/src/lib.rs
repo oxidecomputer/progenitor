@@ -673,8 +673,7 @@ fn validate_openapi_spec_version(spec_version: &str) -> Result<()> {
         Ok(())
     } else {
         Err(Error::UnexpectedFormat(format!(
-            "invalid version: {}",
-            spec_version
+            "invalid version: {spec_version}"
         )))
     }
 }
@@ -696,8 +695,7 @@ pub fn validate_openapi(spec: &OpenAPI) -> Result<()> {
                     if let Some(oid) = o.operation_id.as_ref() {
                         if !opids.insert(oid.to_string()) {
                             return Err(Error::UnexpectedFormat(format!(
-                                "duplicate operation ID: {}",
-                                oid,
+                                "duplicate operation ID: {oid}",
                             )));
                         }
                     } else {

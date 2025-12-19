@@ -69,8 +69,8 @@ pub mod types {
         pub request_id: ::std::string::String,
     }
 
-    impl ::std::convert::From<&Error> for Error {
-        fn from(value: &Error) -> Self {
+    impl ::std::convert::From<&Self> for Error {
+        fn from(value: &Self) -> Self {
             value.clone()
         }
     }
@@ -123,8 +123,8 @@ pub mod types {
         pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl ::std::convert::From<&Uint32ResultsPage> for Uint32ResultsPage {
-        fn from(value: &Uint32ResultsPage) -> Self {
+    impl ::std::convert::From<&Self> for Uint32ResultsPage {
+        fn from(value: &Self) -> Self {
             value.clone()
         }
     }
@@ -165,7 +165,7 @@ pub mod types {
             {
                 self.error_code = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for error_code: {}", e));
+                    .map_err(|e| format!("error converting supplied value for error_code: {e}"));
                 self
             }
             pub fn message<T>(mut self, value: T) -> Self
@@ -175,7 +175,7 @@ pub mod types {
             {
                 self.message = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for message: {}", e));
+                    .map_err(|e| format!("error converting supplied value for message: {e}"));
                 self
             }
             pub fn request_id<T>(mut self, value: T) -> Self
@@ -185,7 +185,7 @@ pub mod types {
             {
                 self.request_id = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for request_id: {}", e));
+                    .map_err(|e| format!("error converting supplied value for request_id: {e}"));
                 self
             }
         }
@@ -239,7 +239,7 @@ pub mod types {
             {
                 self.items = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for items: {}", e));
+                    .map_err(|e| format!("error converting supplied value for items: {e}"));
                 self
             }
             pub fn next_page<T>(mut self, value: T) -> Self
@@ -249,7 +249,7 @@ pub mod types {
             {
                 self.next_page = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for next_page: {}", e));
+                    .map_err(|e| format!("error converting supplied value for next_page: {e}"));
                 self
             }
         }

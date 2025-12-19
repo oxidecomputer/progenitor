@@ -65,8 +65,8 @@ enum InterfaceArg {
 impl From<InterfaceArg> for InterfaceStyle {
     fn from(arg: InterfaceArg) -> Self {
         match arg {
-            InterfaceArg::Positional => InterfaceStyle::Positional,
-            InterfaceArg::Builder => InterfaceStyle::Builder,
+            InterfaceArg::Positional => Self::Positional,
+            InterfaceArg::Builder => Self::Builder,
         }
     }
 }
@@ -80,8 +80,8 @@ enum TagArg {
 impl From<TagArg> for TagStyle {
     fn from(arg: TagArg) -> Self {
         match arg {
-            TagArg::Merged => TagStyle::Merged,
-            TagArg::Separate => TagStyle::Separate,
+            TagArg::Merged => Self::Merged,
+            TagArg::Separate => Self::Separate,
         }
     }
 }
@@ -131,7 +131,7 @@ fn main() -> Result<()> {
             println!("-----------------------------------------------------");
             for (idx, type_entry) in type_space.iter_types().enumerate() {
                 let n = type_entry.describe();
-                println!("{:>4}  {}", idx, n);
+                println!("{idx:>4}  {n}");
             }
             println!("-----------------------------------------------------");
             println!();
@@ -156,7 +156,7 @@ fn main() -> Result<()> {
                 name, version, &args.license_name,
             );
             if let Some(registry_name) = args.registry_name {
-                tomlout.extend(format!("publish = [\"{}\"]\n", registry_name).chars());
+                tomlout.extend(format!("publish = [\"{registry_name}\"]\n").chars());
             }
             tomlout.extend(
                 format!(
@@ -178,7 +178,7 @@ fn main() -> Result<()> {
 
             // Create the Rust source file containing the generated client:
             let lib_code = if args.include_client {
-                format!("mod progenitor_client;\n\n{}", api_code)
+                format!("mod progenitor_client;\n\n{api_code}")
             } else {
                 api_code.to_string()
             };
@@ -198,7 +198,7 @@ fn main() -> Result<()> {
         }
 
         Err(e) => {
-            println!("gen fail: {:?}", e);
+            println!("gen fail: {e:?}");
             bail!("generation experienced errors");
         }
     }
@@ -265,7 +265,7 @@ pub fn dependencies(builder: Generator, include_client: bool) -> Vec<String> {
             } else {
                 "*"
             };
-        let client_version_dep = format!("progenitor-client = \"{}\"", crate_version);
+        let client_version_dep = format!("progenitor-client = \"{crate_version}\"");
         deps.push(client_version_dep);
     }
 
