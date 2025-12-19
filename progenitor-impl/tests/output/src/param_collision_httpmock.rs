@@ -4,6 +4,17 @@ pub mod operations {
     #![doc = r" its inner type with a call to `into_inner()`. This can"]
     #![doc = r" be used to explicitly deviate from permitted values."]
     use crate::param_collision_builder::*;
+    fn apply_query_param_pairs(
+        mut when: ::httpmock::When,
+        pairs: &[(String, String)],
+    ) -> ::httpmock::When {
+        for (key, value) in pairs {
+            when = when.query_param(key, value);
+        }
+
+        when
+    }
+
     pub struct KeyGetWhen(::httpmock::When);
     impl KeyGetWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
@@ -24,23 +35,33 @@ pub mod operations {
         }
 
         pub fn client(self, value: bool) -> Self {
-            Self(self.0.query_param("client", value.to_string()))
+            let expected_pairs = ::progenitor_client::query_param_pairs("client", &value)
+                .expect("failed to serialize query param");
+            Self(apply_query_param_pairs(self.0, &expected_pairs))
         }
 
         pub fn request(self, value: bool) -> Self {
-            Self(self.0.query_param("request", value.to_string()))
+            let expected_pairs = ::progenitor_client::query_param_pairs("request", &value)
+                .expect("failed to serialize query param");
+            Self(apply_query_param_pairs(self.0, &expected_pairs))
         }
 
         pub fn response(self, value: bool) -> Self {
-            Self(self.0.query_param("response", value.to_string()))
+            let expected_pairs = ::progenitor_client::query_param_pairs("response", &value)
+                .expect("failed to serialize query param");
+            Self(apply_query_param_pairs(self.0, &expected_pairs))
         }
 
         pub fn result(self, value: bool) -> Self {
-            Self(self.0.query_param("result", value.to_string()))
+            let expected_pairs = ::progenitor_client::query_param_pairs("result", &value)
+                .expect("failed to serialize query param");
+            Self(apply_query_param_pairs(self.0, &expected_pairs))
         }
 
         pub fn url(self, value: bool) -> Self {
-            Self(self.0.query_param("url", value.to_string()))
+            let expected_pairs = ::progenitor_client::query_param_pairs("url", &value)
+                .expect("failed to serialize query param");
+            Self(apply_query_param_pairs(self.0, &expected_pairs))
         }
     }
 

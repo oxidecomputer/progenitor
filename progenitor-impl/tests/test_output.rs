@@ -164,6 +164,11 @@ fn test_cli_gen() {
 }
 
 #[test]
+fn test_httpmock_query_array() {
+    verify_apis("httpmock-query-array.yaml");
+}
+
+#[test]
 fn test_nexus_with_different_timeout() {
     const OPENAPI_FILE: &'static str = "nexus.json";
 
