@@ -213,120 +213,114 @@ impl Generator {
         let (_, error_kind) =
             self.extract_responses(method, OperationResponseStatus::is_error_or_default);
 
-        let execute_and_output = match method.dropshot_paginated {
-            // Normal, one-shot API calls.
-            None => {
-                let success_output = match success_kind {
-                    crate::method::OperationResponseKind::Type(_) => {
-                        quote! {
-                            {
-                                self.config.success_item(&r);
-                                Ok(())
-                            }
+        let execute_and_output = if method.dropshot_paginated.is_some() {
+            let success_type = match success_kind {
+                crate::method::OperationResponseKind::Type(type_id) => {
+                    self.type_space.get_type(&type_id).unwrap().ident()
+                }
+                crate::method::OperationResponseKind::None => quote! { () },
+                crate::method::OperationResponseKind::Raw => todo!(),
+                crate::method::OperationResponseKind::Upgrade => todo!(),
+            };
+            let error_output = match error_kind {
+                crate::method::OperationResponseKind::Type(_)
+                | crate::method::OperationResponseKind::None => {
+                    quote! {
+                        {
+                            self.config.list_end_error(&r);
+                            return Err(anyhow::Error::new(r))
                         }
                     }
-                    crate::method::OperationResponseKind::None => {
-                        quote! {
-                            {
-                                self.config.success_no_item(&r);
-                                Ok(())
-                            }
+                }
+                crate::method::OperationResponseKind::Raw
+                | crate::method::OperationResponseKind::Upgrade => {
+                    quote! {
+                        {
+                            todo!()
                         }
                     }
-                    crate::method::OperationResponseKind::Raw
-                    | crate::method::OperationResponseKind::Upgrade => {
-                        quote! {
-                            {
-                                todo!()
-                            }
-                        }
-                    }
-                };
+                }
+            };
+            quote! {
+                self.config.list_start::<#success_type>();
 
-                let error_output = match error_kind {
-                    crate::method::OperationResponseKind::Type(_)
-                    | crate::method::OperationResponseKind::None => {
-                        quote! {
-                            {
-                                self.config.error(&r);
-                                Err(anyhow::Error::new(r))
-                            }
-                        }
-                    }
-                    crate::method::OperationResponseKind::Raw
-                    | crate::method::OperationResponseKind::Upgrade => {
-                        quote! {
-                            {
-                                todo!()
-                            }
-                        }
-                    }
-                };
+                // We're using "limit" as both the maximum page size and
+                // as the full limit. It's not ideal in that we could
+                // reduce the limit with each iteration and we might get a
+                // bunch of results we don't display... but it's fine.
+                let mut stream = futures::StreamExt::take(
+                    request.stream(),
+                    matches
+                        .get_one::<std::num::NonZeroU32>("limit")
+                        .map_or(usize::MAX, |x| x.get() as usize));
 
-                quote! {
-                    let result = request.send().await;
-
-                    match result {
-                        Ok(r) => #success_output
+                loop {
+                    match futures::TryStreamExt::try_next(&mut stream).await {
                         Err(r) => #error_output
+                        Ok(None) => {
+                            self.config.list_end_success::<#success_type>();
+                            return Ok(());
+                        }
+                        Ok(Some(value)) => {
+                            self.config.list_item(&value);
+                        }
                     }
                 }
             }
-
-            // Paginated APIs for which we iterate over each item.
-            Some(_) => {
-                let success_type = match success_kind {
-                    crate::method::OperationResponseKind::Type(type_id) => {
-                        self.type_space.get_type(&type_id).unwrap().ident()
-                    }
-                    crate::method::OperationResponseKind::None => quote! { () },
-                    crate::method::OperationResponseKind::Raw => todo!(),
-                    crate::method::OperationResponseKind::Upgrade => todo!(),
-                };
-                let error_output = match error_kind {
-                    crate::method::OperationResponseKind::Type(_)
-                    | crate::method::OperationResponseKind::None => {
-                        quote! {
-                            {
-                                self.config.list_end_error(&r);
-                                return Err(anyhow::Error::new(r))
-                            }
+        } else {
+            let success_output = match success_kind {
+                crate::method::OperationResponseKind::Type(_) => {
+                    quote! {
+                        {
+                            self.config.success_item(&r);
+                            Ok(())
                         }
                     }
-                    crate::method::OperationResponseKind::Raw
-                    | crate::method::OperationResponseKind::Upgrade => {
-                        quote! {
-                            {
-                                todo!()
-                            }
+                }
+                crate::method::OperationResponseKind::None => {
+                    quote! {
+                        {
+                            self.config.success_no_item(&r);
+                            Ok(())
                         }
                     }
-                };
-                quote! {
-                    self.config.list_start::<#success_type>();
-
-                    // We're using "limit" as both the maximum page size and
-                    // as the full limit. It's not ideal in that we could
-                    // reduce the limit with each iteration and we might get a
-                    // bunch of results we don't display... but it's fine.
-                    let mut stream = futures::StreamExt::take(
-                        request.stream(),
-                        matches
-                            .get_one::<std::num::NonZeroU32>("limit")
-                            .map_or(usize::MAX, |x| x.get() as usize));
-
-                    loop {
-                        match futures::TryStreamExt::try_next(&mut stream).await {
-                            Err(r) => #error_output
-                            Ok(None) => {
-                                self.config.list_end_success::<#success_type>();
-                                return Ok(());
-                            }
-                            Ok(Some(value)) => {
-                                self.config.list_item(&value);
-                            }
+                }
+                crate::method::OperationResponseKind::Raw
+                | crate::method::OperationResponseKind::Upgrade => {
+                    quote! {
+                        {
+                            todo!()
                         }
                     }
+                }
+            };
+
+            let error_output = match error_kind {
+                crate::method::OperationResponseKind::Type(_)
+                | crate::method::OperationResponseKind::None => {
+                    quote! {
+                        {
+                            self.config.error(&r);
+                            Err(anyhow::Error::new(r))
+                        }
+                    }
+                }
+                crate::method::OperationResponseKind::Raw
+                | crate::method::OperationResponseKind::Upgrade => {
+                    quote! {
+                        {
+                            todo!()
+                        }
+                    }
+                }
+            };
+
+            quote! {
+                let result = request.send().await;
+
+                match result {
+                    Ok(r) => #success_output
+                    Err(r) => #error_output
                 }
             }
         };
@@ -380,8 +374,7 @@ impl Generator {
                 OperationParameterKind::Body(_) => continue,
 
                 OperationParameterKind::Path => true,
-                OperationParameterKind::Query(required) => *required,
-                OperationParameterKind::Header(required) => *required,
+                OperationParameterKind::Query(required) | OperationParameterKind::Header(required) => *required,
             };
 
             // For paginated endpoints, we don't generate 'page_token' args.

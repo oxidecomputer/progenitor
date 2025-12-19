@@ -345,7 +345,7 @@ impl Generator {
                             },
                         )
                     }
-                    crate::method::OperationResponseKind::None => Default::default(),
+                    crate::method::OperationResponseKind::None | crate::method::OperationResponseKind::Upgrade => Default::default(),
                     crate::method::OperationResponseKind::Raw => (
                         quote! {
                             value: ::serde_json::Value,
@@ -355,7 +355,6 @@ impl Generator {
                             .json_body(value)
                         },
                     ),
-                    crate::method::OperationResponseKind::Upgrade => Default::default(),
                 };
 
                 match status_code {

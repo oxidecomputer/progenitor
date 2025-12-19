@@ -121,8 +121,7 @@ impl OperationParameterKind {
     fn is_required(&self) -> bool {
         match self {
             Self::Path => true,
-            Self::Query(required) => *required,
-            Self::Header(required) => *required,
+            Self::Query(required) | Self::Header(required) => *required,
             // TODO may be optional
             Self::Body(_) => true,
         }
@@ -220,7 +219,7 @@ impl OperationResponseStatus {
     pub fn is_success_or_default(&self) -> bool {
         matches!(
             self,
-            Self::Default | Self::Code(101) | Self::Code(200..=299) | Self::Range(2)
+            Self::Default | Self::Code(101 | 200..=299) | Self::Range(2)
         )
     }
 
@@ -1003,12 +1002,11 @@ impl Generator {
                 OperationResponseKind::Upgrade => {
                     if response.status_code == OperationResponseStatus::Default {
                         return quote! {}; // catch-all handled below
-                    } else {
+                    }
                         todo!(
                             "non-default error response handling for \
                                 upgrade requests is not yet implemented"
                         );
-                    }
                 }
             };
 
@@ -1226,8 +1224,7 @@ impl Generator {
             .filter(|param| {
                 matches!(
                     (param.api_name.as_str(), &param.kind),
-                    ("page_token", OperationParameterKind::Query(false))
-                        | ("limit", OperationParameterKind::Query(false))
+                    ("page_token" | "limit", OperationParameterKind::Query(false))
                 )
             })
             .count()

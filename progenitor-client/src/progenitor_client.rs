@@ -21,7 +21,7 @@ type InnerByteStream = std::pin::Pin<Box<dyn Stream<Item = reqwest::Result<Bytes
 pub struct ByteStream(InnerByteStream);
 
 impl ByteStream {
-    /// Creates a new ByteStream
+    /// Creates a new [`ByteStream`]
     ///
     /// Useful for generating test fixtures.
     pub fn new(inner: InnerByteStream) -> Self {

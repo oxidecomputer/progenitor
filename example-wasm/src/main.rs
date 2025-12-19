@@ -8,8 +8,8 @@ fn main() {
     let _ = client.enrol(
         "auth-token",
         &types::EnrolBody {
-            host: "".to_string(),
-            key: "".to_string(),
+            host: String::new(),
+            key: String::new(),
         },
     );
 }
