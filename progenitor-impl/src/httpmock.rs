@@ -87,6 +87,16 @@ impl Generator {
 
                 use #crate_path::*;
 
+                fn apply_query_param_pairs(
+                    mut when: ::httpmock::When,
+                    pairs: &[(String, String)],
+                ) -> ::httpmock::When {
+                    for (key, value) in pairs {
+                        when = when.query_param(key, value);
+                    }
+                    when
+                }
+
                 #(
                     pub struct #when(::httpmock::When);
                     #when_impl
@@ -189,7 +199,12 @@ impl Generator {
                     OperationParameterKind::Query(true) => (
                         true,
                         quote! {
-                            Self(self.0.query_param(#api_name, value.to_string()))
+                            let expected_pairs = ::progenitor_client::query_param_pairs(
+                                #api_name,
+                                &value,
+                            )
+                            .expect("failed to serialize query param");
+                            Self(apply_query_param_pairs(self.0, &expected_pairs))
                         },
                     ),
                     OperationParameterKind::Header(true) => (
@@ -203,10 +218,12 @@ impl Generator {
                         false,
                         quote! {
                             if let Some(value) = value.into() {
-                                Self(self.0.query_param(
+                                let expected_pairs = ::progenitor_client::query_param_pairs(
                                     #api_name,
-                                    value.to_string(),
-                                ))
+                                    &value,
+                                )
+                                .expect("failed to serialize query param");
+                                Self(apply_query_param_pairs(self.0, &expected_pairs))
                             } else {
                                 Self(self.0.query_param_missing(#api_name))
                             }
