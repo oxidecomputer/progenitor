@@ -92,7 +92,7 @@ fn reformat_code(input: String) -> String {
         wrap_comments: Some(true),
         ..Default::default()
     };
-    space_out_items(rustfmt_wrapper::rustfmt_config(config, input).unwrap()).unwrap()
+    space_out_items(&rustfmt_wrapper::rustfmt_config(config, input).unwrap()).unwrap()
 }
 
 fn save<P>(p: P, data: &str) -> Result<()>
