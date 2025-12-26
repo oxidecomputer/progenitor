@@ -208,15 +208,7 @@ impl Generator {
                                     value.to_string(),
                                 ))
                             } else {
-                                Self(self.0.matches(|req| {
-                                    req.query_params
-                                        .as_ref()
-                                        .and_then(|qs| {
-                                            qs.iter().find(
-                                                |(key, _)| key == #api_name)
-                                        })
-                                        .is_none()
-                                }))
+                                Self(self.0.query_param_missing(#api_name))
                             }
                         },
                     ),
@@ -229,16 +221,7 @@ impl Generator {
                                     value.to_string()
                                 ))
                             } else {
-                                Self(self.0.matches(|req| {
-                                    req.headers
-                                        .as_ref()
-                                        .and_then(|hs| {
-                                            hs.iter().find(
-                                                |(key, _)| key == #api_name
-                                            )
-                                        })
-                                        .is_none()
-                                }))
+                                Self(self.0.header_missing(#api_name))
                             }
                         },
                     ),
@@ -247,7 +230,6 @@ impl Generator {
                             true,
                             quote! {
                                 Self(self.0.json_body_obj(value))
-
                             },
                         ),
                         OperationParameterType::RawBody => match body_content_type {
