@@ -1,11 +1,8 @@
 // Copyright 2025 Oxide Computer Company
 
-use assert_cmd::Command;
-
 #[test]
 fn test_help() {
-    Command::cargo_bin("cargo-progenitor")
-        .unwrap()
+    assert_cmd::cargo::cargo_bin_cmd!()
         .arg("progenitor")
         .arg("--help")
         .assert()

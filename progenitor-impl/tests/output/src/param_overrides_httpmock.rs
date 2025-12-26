@@ -25,12 +25,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("key", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "key"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("key"))
             }
         }
 
@@ -41,12 +36,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("uniqueKey", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "uniqueKey"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("uniqueKey"))
             }
         }
     }

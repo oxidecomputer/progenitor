@@ -210,12 +210,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("minseq", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "minseq"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("minseq"))
             }
         }
     }
@@ -763,12 +758,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("id", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "id"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("id"))
             }
         }
     }
@@ -814,12 +804,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.header("accept-language", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.headers
-                        .as_ref()
-                        .and_then(|hs| hs.iter().find(|(key, _)| key == "accept-language"))
-                        .is_none()
-                }))
+                Self(self.0.header_missing("accept-language"))
             }
         }
     }
