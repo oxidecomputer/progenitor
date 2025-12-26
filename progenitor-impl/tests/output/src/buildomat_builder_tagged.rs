@@ -4066,7 +4066,7 @@ pub mod builder {
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client: client,
-                accept_language: Ok(None),
+                accept_language: Ok(Some(::std::default::Default::default())),
             }
         }
 
