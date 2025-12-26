@@ -17,17 +17,16 @@ where
     P: AsRef<Path> + std::clone::Clone + std::fmt::Debug,
 {
     let mut f = File::open(p.clone()).unwrap();
-    match serde_json::from_reader(f) {
-        Ok(json_value) => json_value,
-        _ => {
-            f = File::open(p).unwrap();
-            serde_yaml::from_reader(f).unwrap()
-        }
+    if let Ok(json_value) = serde_json::from_reader(f) {
+        json_value
+    } else {
+        f = File::open(p).unwrap();
+        serde_yaml::from_reader(f).unwrap()
     }
 }
 
 fn generate_formatted(generator: &mut Generator, spec: &OpenAPI) -> String {
-    let content = generator.generate_tokens(&spec).unwrap();
+    let content = generator.generate_tokens(spec).unwrap();
     reformat_code(content)
 }
 
@@ -38,7 +37,7 @@ fn reformat_code(content: TokenStream) -> String {
         wrap_comments: Some(true),
         ..Default::default()
     };
-    space_out_items(rustfmt_wrapper::rustfmt_config(rustfmt_config, content).unwrap()).unwrap()
+    space_out_items(&rustfmt_wrapper::rustfmt_config(rustfmt_config, content).unwrap()).unwrap()
 }
 
 #[track_caller]
@@ -53,7 +52,7 @@ fn verify_apis(openapi_file: &str) {
     let mut generator = Generator::default();
     let output = generate_formatted(&mut generator, &spec);
     expectorate::assert_contents(
-        format!("tests/output/src/{}_positional.rs", openapi_stem),
+        format!("tests/output/src/{openapi_stem}_positional.rs"),
         &output,
     );
 
@@ -76,7 +75,7 @@ fn verify_apis(openapi_file: &str) {
     );
     let output = generate_formatted(&mut generator, &spec);
     expectorate::assert_contents(
-        format!("tests/output/src/{}_builder.rs", openapi_stem),
+        format!("tests/output/src/{openapi_stem}_builder.rs"),
         &output,
     );
 
@@ -89,7 +88,7 @@ fn verify_apis(openapi_file: &str) {
     );
     let output = generate_formatted(&mut generator, &spec);
     expectorate::assert_contents(
-        format!("tests/output/src/{}_builder_tagged.rs", openapi_stem),
+        format!("tests/output/src/{openapi_stem}_builder_tagged.rs"),
         &output,
     );
 
@@ -99,7 +98,7 @@ fn verify_apis(openapi_file: &str) {
         .unwrap();
     let output = reformat_code(tokens);
 
-    expectorate::assert_contents(format!("tests/output/src/{}_cli.rs", openapi_stem), &output);
+    expectorate::assert_contents(format!("tests/output/src/{openapi_stem}_cli.rs"), &output);
 
     // httpmock generation.
     let code = generator
@@ -116,9 +115,9 @@ fn verify_apis(openapi_file: &str) {
     )
     .unwrap();
 
-    let output = progenitor_impl::space_out_items(output).unwrap();
+    let output = progenitor_impl::space_out_items(&output).unwrap();
     expectorate::assert_contents(
-        format!("tests/output/src/{}_httpmock.rs", openapi_stem),
+        format!("tests/output/src/{openapi_stem}_httpmock.rs"),
         &output,
     );
 }
@@ -165,7 +164,7 @@ fn test_cli_gen() {
 
 #[test]
 fn test_nexus_with_different_timeout() {
-    const OPENAPI_FILE: &'static str = "nexus.json";
+    const OPENAPI_FILE: &str = "nexus.json";
 
     let mut in_path = PathBuf::from("../sample_openapi");
     in_path.push(OPENAPI_FILE);
@@ -176,7 +175,7 @@ fn test_nexus_with_different_timeout() {
     let mut generator = Generator::new(GenerationSettings::default().with_timeout(75));
     let output = generate_formatted(&mut generator, &spec);
     expectorate::assert_contents(
-        format!("tests/output/src/{}_with_timeout.rs", openapi_stem),
+        format!("tests/output/src/{openapi_stem}_with_timeout.rs"),
         &output,
     );
 }

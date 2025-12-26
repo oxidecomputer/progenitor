@@ -21,7 +21,7 @@ type InnerByteStream = std::pin::Pin<Box<dyn Stream<Item = reqwest::Result<Bytes
 pub struct ByteStream(InnerByteStream);
 
 impl ByteStream {
-    /// Creates a new ByteStream
+    /// Creates a new [`ByteStream`]
     ///
     /// Useful for generating test fixtures.
     pub fn new(inner: InnerByteStream) -> Self {
@@ -355,14 +355,14 @@ impl<E> Error<E> {
     /// Returns the status code, if the error was generated from a response.
     pub fn status(&self) -> Option<reqwest::StatusCode> {
         match self {
-            Error::InvalidRequest(_) => None,
-            Error::Custom(_) => None,
-            Error::CommunicationError(e) => e.status(),
-            Error::ErrorResponse(rv) => Some(rv.status()),
-            Error::InvalidUpgrade(e) => e.status(),
-            Error::ResponseBodyError(e) => e.status(),
-            Error::InvalidResponsePayload(_, _) => None,
-            Error::UnexpectedResponse(r) => Some(r.status()),
+            Self::InvalidRequest(_) => None,
+            Self::Custom(_) => None,
+            Self::CommunicationError(e) => e.status(),
+            Self::ErrorResponse(rv) => Some(rv.status()),
+            Self::InvalidUpgrade(e) => e.status(),
+            Self::ResponseBodyError(e) => e.status(),
+            Self::InvalidResponsePayload(_, _) => None,
+            Self::UnexpectedResponse(r) => Some(r.status()),
         }
     }
 
@@ -372,10 +372,10 @@ impl<E> Error<E> {
     /// various error response bodies.
     pub fn into_untyped(self) -> Error {
         match self {
-            Error::InvalidRequest(s) => Error::InvalidRequest(s),
-            Error::Custom(s) => Error::Custom(s),
-            Error::CommunicationError(e) => Error::CommunicationError(e),
-            Error::ErrorResponse(ResponseValue {
+            Self::InvalidRequest(s) => Error::InvalidRequest(s),
+            Self::Custom(s) => Error::Custom(s),
+            Self::CommunicationError(e) => Error::CommunicationError(e),
+            Self::ErrorResponse(ResponseValue {
                 inner: _,
                 status,
                 headers,
@@ -384,10 +384,10 @@ impl<E> Error<E> {
                 status,
                 headers,
             }),
-            Error::InvalidUpgrade(e) => Error::InvalidUpgrade(e),
-            Error::ResponseBodyError(e) => Error::ResponseBodyError(e),
-            Error::InvalidResponsePayload(b, e) => Error::InvalidResponsePayload(b, e),
-            Error::UnexpectedResponse(r) => Error::UnexpectedResponse(r),
+            Self::InvalidUpgrade(e) => Error::InvalidUpgrade(e),
+            Self::ResponseBodyError(e) => Error::ResponseBodyError(e),
+            Self::InvalidResponsePayload(b, e) => Error::InvalidResponsePayload(b, e),
+            Self::UnexpectedResponse(r) => Error::UnexpectedResponse(r),
         }
     }
 }
@@ -416,30 +416,30 @@ where
 {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            Error::InvalidRequest(s) => {
-                write!(f, "Invalid Request: {}", s)?;
+            Self::InvalidRequest(s) => {
+                write!(f, "Invalid Request: {s}")?;
             }
-            Error::CommunicationError(e) => {
-                write!(f, "Communication Error: {}", e)?;
+            Self::CommunicationError(e) => {
+                write!(f, "Communication Error: {e}")?;
             }
-            Error::ErrorResponse(rve) => {
+            Self::ErrorResponse(rve) => {
                 write!(f, "Error Response: ")?;
                 rve.fmt_info(f)?;
             }
-            Error::InvalidUpgrade(e) => {
-                write!(f, "Invalid Response Upgrade: {}", e)?;
+            Self::InvalidUpgrade(e) => {
+                write!(f, "Invalid Response Upgrade: {e}")?;
             }
-            Error::ResponseBodyError(e) => {
-                write!(f, "Invalid Response Body Bytes: {}", e)?;
+            Self::ResponseBodyError(e) => {
+                write!(f, "Invalid Response Body Bytes: {e}")?;
             }
-            Error::InvalidResponsePayload(b, e) => {
-                write!(f, "Invalid Response Payload ({:?}): {}", b, e)?;
+            Self::InvalidResponsePayload(b, e) => {
+                write!(f, "Invalid Response Payload ({b:?}): {e}")?;
             }
-            Error::UnexpectedResponse(r) => {
-                write!(f, "Unexpected Response: {:?}", r)?;
+            Self::UnexpectedResponse(r) => {
+                write!(f, "Unexpected Response: {r:?}")?;
             }
-            Error::Custom(s) => {
-                write!(f, "Error: {}", s)?;
+            Self::Custom(s) => {
+                write!(f, "Error: {s}")?;
             }
         }
 
@@ -497,10 +497,10 @@ where
 {
     fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
         match self {
-            Error::CommunicationError(e) => Some(e),
-            Error::InvalidUpgrade(e) => Some(e),
-            Error::ResponseBodyError(e) => Some(e),
-            Error::InvalidResponsePayload(_b, e) => Some(e),
+            Self::CommunicationError(e) => Some(e),
+            Self::InvalidUpgrade(e) => Some(e),
+            Self::ResponseBodyError(e) => Some(e),
+            Self::InvalidResponsePayload(_b, e) => Some(e),
             _ => None,
         }
     }

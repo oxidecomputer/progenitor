@@ -85,33 +85,23 @@ struct CrateSpec {
 }
 
 /// Style of generated client.
-#[derive(Clone, Deserialize, PartialEq, Eq)]
+#[derive(Clone, Deserialize, PartialEq, Eq, Default)]
 pub enum InterfaceStyle {
     /// Use positional style.
+    #[default]
     Positional,
     /// Use builder style.
     Builder,
 }
 
-impl Default for InterfaceStyle {
-    fn default() -> Self {
-        Self::Positional
-    }
-}
-
 /// Style for using the OpenAPI tags when generating names in the client.
-#[derive(Clone, Deserialize)]
+#[derive(Clone, Deserialize, Default)]
 pub enum TagStyle {
     /// Merge tags to create names in the generated client.
+    #[default]
     Merged,
     /// Use each tag name to create separate names in the generated client.
     Separate,
-}
-
-impl Default for TagStyle {
-    fn default() -> Self {
-        Self::Merged
-    }
 }
 
 impl GenerationSettings {
@@ -296,13 +286,13 @@ impl Generator {
             .replace
             .iter()
             .for_each(|(type_name, (replace_name, impls))| {
-                type_settings.with_replacement(type_name, replace_name, impls.iter().cloned());
+                type_settings.with_replacement(type_name, replace_name, impls.iter().copied());
             });
         settings
             .convert
             .iter()
             .for_each(|(schema, type_name, impls)| {
-                type_settings.with_conversion(schema.clone(), type_name, impls.iter().cloned());
+                type_settings.with_conversion(schema.clone(), type_name, impls.iter().copied());
             });
 
         // Set the map type if specified.
@@ -667,13 +657,13 @@ impl Generator {
 }
 
 /// Add newlines after end-braces at <= two levels of indentation.
-pub fn space_out_items(content: String) -> Result<String> {
+pub fn space_out_items(content: &str) -> Result<String> {
     Ok(if cfg!(not(windows)) {
-        let regex = regex::Regex::new(r#"(\n\s*})(\n\s{0,8}[^} ])"#).unwrap();
-        regex.replace_all(&content, "$1\n$2").to_string()
+        let regex = regex::Regex::new(r"(\n\s*})(\n\s{0,8}[^} ])").unwrap();
+        regex.replace_all(content, "$1\n$2").to_string()
     } else {
-        let regex = regex::Regex::new(r#"(\n\s*})(\r\n\s{0,8}[^} ])"#).unwrap();
-        regex.replace_all(&content, "$1\r\n$2").to_string()
+        let regex = regex::Regex::new(r"(\n\s*})(\r\n\s{0,8}[^} ])").unwrap();
+        regex.replace_all(content, "$1\r\n$2").to_string()
     })
 }
 
@@ -683,8 +673,7 @@ fn validate_openapi_spec_version(spec_version: &str) -> Result<()> {
         Ok(())
     } else {
         Err(Error::UnexpectedFormat(format!(
-            "invalid version: {}",
-            spec_version
+            "invalid version: {spec_version}"
         )))
     }
 }
@@ -704,10 +693,9 @@ pub fn validate_openapi(spec: &OpenAPI) -> Result<()> {
                 // operation ID is only used once in the document.
                 item.iter().try_for_each(|(_, o)| {
                     if let Some(oid) = o.operation_id.as_ref() {
-                        if !opids.insert(oid.to_string()) {
+                        if !opids.insert(oid.clone()) {
                             return Err(Error::UnexpectedFormat(format!(
-                                "duplicate operation ID: {}",
-                                oid,
+                                "duplicate operation ID: {oid}",
                             )));
                         }
                     } else {

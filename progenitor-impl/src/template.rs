@@ -35,7 +35,7 @@ impl PathTemplate {
                     "{}",
                     rename
                         .get(&n)
-                        .expect(&format!("missing path name mapping {}", n)),
+                        .unwrap_or_else(|| panic!("missing path name mapping {n}")),
                 );
                 Some(quote! {
                     encode_path(&#param.to_string())
@@ -69,7 +69,7 @@ impl PathTemplate {
                 Component::Parameter(_) => "[^/]*".to_string(),
             })
             .collect::<String>();
-        format!("^{}$", inner)
+        format!("^{inner}$")
     }
 
     pub fn as_wildcard_param(&self, param: &str) -> String {
@@ -82,7 +82,7 @@ impl PathTemplate {
                 Component::Parameter(_) => ".*".to_string(),
             })
             .collect::<String>();
-        format!("^{}$", inner)
+        format!("^{inner}$")
     }
 }
 
@@ -133,10 +133,7 @@ pub fn parse(t: &str) -> Result<PathTemplate> {
             State::Parameter => {
                 if c == '}' {
                     if a.contains('/') || a.contains('{') {
-                        return Err(Error::InvalidPath(format!(
-                            "invalid parameter name {:?}",
-                            a,
-                        )));
+                        return Err(Error::InvalidPath(format!("invalid parameter name {a:?}",)));
                     }
                     components.push(Component::Parameter(a));
                     a = String::new();
@@ -158,18 +155,21 @@ pub fn parse(t: &str) -> Result<PathTemplate> {
     Ok(PathTemplate { components })
 }
 
-impl ToString for PathTemplate {
-    fn to_string(&self) -> std::string::String {
-        self.components
-            .iter()
-            .map(|component| match component {
-                Component::Constant(s) => s.clone(),
-                Component::Parameter(s) => format!("{{{}}}", s),
-            })
-            .fold(String::new(), |a, b| a + &b)
+impl std::fmt::Display for PathTemplate {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        for component in &self.components {
+            match component {
+                // Write the string slice directly to the formatter
+                Component::Constant(s) => f.write_str(s)?,
+
+                // Use write! macro to handle formatting (escaping braces)
+                // Note: {{ outputs a literal '{' and }} outputs a literal '}'
+                Component::Parameter(s) => write!(f, "{{{s}}}")?,
+            }
+        }
+        Ok(())
     }
 }
-
 #[cfg(test)]
 mod tests {
     use std::collections::HashMap;
@@ -178,7 +178,7 @@ mod tests {
 
     #[test]
     fn basic() {
-        let trials = vec![
+        let trials = [
             (
                 "/info",
                 "/info",
@@ -258,20 +258,20 @@ mod tests {
             ),
         ];
 
-        for (path, expect_string, want) in trials.iter() {
+        for (path, expect_string, want) in &trials {
             match parse(path) {
                 Ok(t) => {
                     assert_eq!(&t, want);
                     assert_eq!(t.to_string().as_str(), *expect_string);
                 }
-                Err(e) => panic!("path {} {}", path, e),
+                Err(e) => panic!("path {path} {e}"),
             }
         }
     }
 
     #[test]
     fn names() {
-        let trials = vec![
+        let trials = [
             ("/info", vec![]),
             ("/measure/{number}", vec!["number".to_string()]),
             (
@@ -280,10 +280,10 @@ mod tests {
             ),
         ];
 
-        for (path, want) in trials.iter() {
+        for (path, want) in &trials {
             match parse(path) {
                 Ok(t) => assert_eq!(&t.names(), want),
-                Err(e) => panic!("path {} {}", path, e),
+                Err(e) => panic!("path {path} {e}"),
             }
         }
     }

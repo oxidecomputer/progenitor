@@ -56,21 +56,21 @@ impl std::str::FromStr for HttpMethod {
             "head" => Ok(Self::Head),
             "patch" => Ok(Self::Patch),
             "trace" => Ok(Self::Trace),
-            _ => Err(Error::InternalError(format!("bad method: {}", s))),
+            _ => Err(Error::InternalError(format!("bad method: {s}"))),
         }
     }
 }
 impl HttpMethod {
     fn as_str(&self) -> &'static str {
         match self {
-            HttpMethod::Get => "get",
-            HttpMethod::Put => "put",
-            HttpMethod::Post => "post",
-            HttpMethod::Delete => "delete",
-            HttpMethod::Options => "options",
-            HttpMethod::Head => "head",
-            HttpMethod::Patch => "patch",
-            HttpMethod::Trace => "trace",
+            Self::Get => "get",
+            Self::Put => "put",
+            Self::Post => "post",
+            Self::Delete => "delete",
+            Self::Options => "options",
+            Self::Head => "head",
+            Self::Patch => "patch",
+            Self::Trace => "trace",
         }
     }
 }
@@ -120,11 +120,10 @@ pub enum OperationParameterKind {
 impl OperationParameterKind {
     fn is_required(&self) -> bool {
         match self {
-            OperationParameterKind::Path => true,
-            OperationParameterKind::Query(required) => *required,
-            OperationParameterKind::Header(required) => *required,
+            Self::Path => true,
+            Self::Query(required) | Self::Header(required) => *required,
             // TODO may be optional
-            OperationParameterKind::Body(_) => true,
+            Self::Body(_) => true,
         }
     }
     fn is_optional(&self) -> bool {
@@ -151,8 +150,7 @@ impl FromStr for BodyContentType {
             "application/x-www-form-urlencoded" => Ok(Self::FormUrlencoded),
             "text/plain" | "text/x-markdown" => Ok(Self::Text(String::from(&s[..offset]))),
             _ => Err(Error::UnexpectedFormat(format!(
-                "unexpected content type: {}",
-                s
+                "unexpected content type: {s}"
             ))),
         }
     }
@@ -206,39 +204,34 @@ pub(crate) enum OperationResponseStatus {
 impl OperationResponseStatus {
     fn to_value(&self) -> u16 {
         match self {
-            OperationResponseStatus::Code(code) => {
+            Self::Code(code) => {
                 assert!(*code < 1000);
                 *code
             }
-            OperationResponseStatus::Range(range) => {
+            Self::Range(range) => {
                 assert!(*range < 10);
                 *range * 100
             }
-            OperationResponseStatus::Default => 1000,
+            Self::Default => 1000,
         }
     }
 
     pub fn is_success_or_default(&self) -> bool {
         matches!(
             self,
-            OperationResponseStatus::Default
-                | OperationResponseStatus::Code(101)
-                | OperationResponseStatus::Code(200..=299)
-                | OperationResponseStatus::Range(2)
+            Self::Default | Self::Code(101 | 200..=299) | Self::Range(2)
         )
     }
 
     pub fn is_error_or_default(&self) -> bool {
         matches!(
             self,
-            OperationResponseStatus::Default
-                | OperationResponseStatus::Code(400..=599)
-                | OperationResponseStatus::Range(4..=5)
+            Self::Default | Self::Code(400..=599) | Self::Range(4..=5)
         )
     }
 
     pub fn is_default(&self) -> bool {
-        matches!(self, OperationResponseStatus::Default)
+        matches!(self, Self::Default)
     }
 }
 
@@ -265,17 +258,17 @@ pub(crate) enum OperationResponseKind {
 impl OperationResponseKind {
     pub fn into_tokens(self, type_space: &TypeSpace) -> TokenStream {
         match self {
-            OperationResponseKind::Type(ref type_id) => {
+            Self::Type(ref type_id) => {
                 let type_name = type_space.get_type(type_id).unwrap().ident();
                 quote! { #type_name }
             }
-            OperationResponseKind::None => {
+            Self::None => {
                 quote! { () }
             }
-            OperationResponseKind::Raw => {
+            Self::Raw => {
                 quote! { ByteStream }
             }
-            OperationResponseKind::Upgrade => {
+            Self::Upgrade => {
                 quote! { reqwest::Upgraded }
             }
         }
@@ -392,13 +385,13 @@ impl Generator {
                         })
                     }
                     openapiv3::Parameter::Path { style, .. } => Err(Error::UnexpectedFormat(
-                        format!("unsupported style of path parameter {:#?}", style,),
+                        format!("unsupported style of path parameter {style:#?}",),
                     )),
                     openapiv3::Parameter::Query { style, .. } => Err(Error::UnexpectedFormat(
-                        format!("unsupported style of query parameter {:#?}", style,),
+                        format!("unsupported style of query parameter {style:#?}",),
                     )),
                     cookie @ openapiv3::Parameter::Cookie { .. } => Err(Error::UnexpectedFormat(
-                        format!("cookie parameters are not supported {:#?}", cookie,),
+                        format!("cookie parameters are not supported {cookie:#?}",),
                     )),
                 }
             })
@@ -522,15 +515,14 @@ impl Generator {
                 status_code: OperationResponseStatus::Code(101),
                 typ: OperationResponseKind::Upgrade,
                 description: None,
-            })
+            });
         }
 
         let dropshot_paginated = self.dropshot_pagination_data(operation, &params, &responses);
 
         if dropshot_websocket && dropshot_paginated.is_some() {
             return Err(Error::InvalidExtension(format!(
-                "conflicting extensions in {:?}",
-                operation_id
+                "conflicting extensions in {operation_id:?}"
             )));
         }
 
@@ -609,7 +601,7 @@ impl Generator {
             success: success_type,
             error: error_type,
             body,
-        } = self.method_sig_body(method, quote! { Self }, quote! { self }, has_inner)?;
+        } = self.method_sig_body(method, &quote! { Self }, quote! { self }, has_inner)?;
 
         let method_impl = quote! {
             #[doc = #doc_comment]
@@ -766,7 +758,7 @@ impl Generator {
     fn method_sig_body(
         &self,
         method: &OperationMethod,
-        client_type: TokenStream,
+        client_type: &TokenStream,
         client_value: TokenStream,
         has_inner: bool,
     ) -> Result<MethodSigBody> {
@@ -1010,12 +1002,11 @@ impl Generator {
                 OperationResponseKind::Upgrade => {
                     if response.status_code == OperationResponseStatus::Default {
                         return quote! {}; // catch-all handled below
-                    } else {
-                        todo!(
-                            "non-default error response handling for \
-                                upgrade requests is not yet implemented"
-                        );
                     }
+                    todo!(
+                        "non-default error response handling for \
+                                upgrade requests is not yet implemented"
+                    );
                 }
             };
 
@@ -1051,9 +1042,10 @@ impl Generator {
             }
         };
 
-        let inner = match has_inner {
-            true => quote! { &#client_value.inner, },
-            false => quote! {},
+        let inner = if has_inner {
+            quote! { &#client_value.inner, }
+        } else {
+            quote! {}
         };
         let pre_hook = self.settings.pre_hook.as_ref().map(|hook| {
             quote! {
@@ -1233,8 +1225,7 @@ impl Generator {
             .filter(|param| {
                 matches!(
                     (param.api_name.as_str(), &param.kind),
-                    ("page_token", OperationParameterKind::Query(false))
-                        | ("limit", OperationParameterKind::Query(false))
+                    ("page_token" | "limit", OperationParameterKind::Query(false))
                 )
             })
             .count()
@@ -1283,9 +1274,9 @@ impl Generator {
         };
 
         let typ = self.type_space.get_type(success_response).ok()?;
-        let details = match typ.details() {
-            typify::TypeDetails::Struct(details) => details,
-            _ => return None,
+
+        let typify::TypeDetails::Struct(details) = typ.details() else {
+            return None;
         };
 
         let properties = details.properties().collect::<BTreeMap<_, _>>();
@@ -1655,7 +1646,7 @@ impl Generator {
             body,
         } = self.method_sig_body(
             method,
-            quote! { super::Client },
+            &quote! { super::Client },
             quote! { #client_ident },
             has_inner,
         )?;
@@ -1663,7 +1654,7 @@ impl Generator {
         let send_doc = format!(
             "Sends a `{}` request to `{}`",
             method.method.as_str().to_ascii_uppercase(),
-            method.path.to_string(),
+            method.path,
         );
         let send_impl = quote! {
             #[doc = #send_doc]
@@ -1724,7 +1715,7 @@ impl Generator {
             let stream_doc = format!(
                 "Streams `{}` requests to `{}`",
                 method.method.as_str().to_ascii_uppercase(),
-                method.path.to_string(),
+                method.path,
             );
 
             quote! {
@@ -1813,7 +1804,7 @@ impl Generator {
         let struct_doc = match (tag_style, method.tags.len(), method.tags.first()) {
             (TagStyle::Merged, _, _) | (TagStyle::Separate, 0, _) => {
                 let ty = format!("Client::{}", method.operation_id);
-                format!("Builder for [`{}`]\n\n[`{}`]: super::{}", ty, ty, ty,)
+                format!("Builder for [`{ty}`]\n\n[`{ty}`]: super::{ty}",)
             }
             (TagStyle::Separate, 1, Some(tag)) => {
                 let ty = format!(
@@ -1821,7 +1812,7 @@ impl Generator {
                     sanitize(tag, Case::Pascal),
                     method.operation_id
                 );
-                format!("Builder for [`{}`]\n\n[`{}`]: super::{}", ty, ty, ty,)
+                format!("Builder for [`{ty}`]\n\n[`{ty}`]: super::{ty}",)
             }
             (TagStyle::Separate, _, _) => {
                 format!(
@@ -1848,7 +1839,7 @@ impl Generator {
                                 sanitize(tag, Case::Pascal),
                                 method.operation_id,
                             );
-                            format!("[`{}`]: super::{}", ty, ty)
+                            format!("[`{ty}`]: super::{ty}")
                         })
                         .collect::<Vec<_>>()
                         .join("\n"),
@@ -1888,8 +1879,7 @@ impl Generator {
             .params
             .iter()
             .map(|param| format!("\n    .{}({})", param.name, param.name))
-            .collect::<Vec<_>>()
-            .join("");
+            .collect::<String>();
 
         let eg = format!(
             "\
@@ -1943,7 +1933,7 @@ impl Generator {
         let mut base = Vec::new();
         let mut ext = BTreeMap::new();
 
-        methods.iter().for_each(|method| {
+        for method in methods {
             let BuilderImpl { doc, sig, body } = self.builder_helper(method);
 
             if method.tags.is_empty() {
@@ -1971,7 +1961,7 @@ impl Generator {
                         .push((trait_sig.clone(), impl_body.clone()));
                 });
             }
-        });
+        }
 
         let base_impl = (!base.is_empty()).then(|| {
             quote! {
@@ -2091,8 +2081,7 @@ impl Generator {
                             )),
                     } if enumeration.is_empty() => Ok(()),
                     _ => Err(Error::UnexpectedFormat(format!(
-                        "invalid schema for application/octet-stream: {:?}",
-                        schema
+                        "invalid schema for application/octet-stream: {schema:?}"
                     ))),
                 }?;
                 OperationParameterType::RawBody
@@ -2125,8 +2114,7 @@ impl Generator {
                             )),
                     } if enumeration.is_empty() => Ok(()),
                     _ => Err(Error::UnexpectedFormat(format!(
-                        "invalid schema for {}: {:?}",
-                        content_type, schema
+                        "invalid schema for {content_type}: {schema:?}"
                     ))),
                 }?;
                 OperationParameterType::RawBody
@@ -2174,7 +2162,7 @@ fn make_doc_comment(method: &OperationMethod) -> String {
     buf.push_str(&format!(
         "Sends a `{}` request to `{}`\n\n",
         method.method.as_str().to_ascii_uppercase(),
-        method.path.to_string(),
+        method.path,
     ));
 
     if method
@@ -2213,7 +2201,7 @@ fn make_stream_doc_comment(method: &OperationMethod) -> String {
     buf.push_str(&format!(
         "Sends repeated `{}` requests to `{}` until there are no more results.\n\n",
         method.method.as_str().to_ascii_uppercase(),
-        method.path.to_string(),
+        method.path,
     ));
 
     if method
@@ -2260,11 +2248,11 @@ fn sort_params(raw_params: &mut [OperationParameter], names: &[String]) {
                     let a_index = names
                         .iter()
                         .position(|x| x == a_name)
-                        .unwrap_or_else(|| panic!("{} missing from path", a_name));
+                        .unwrap_or_else(|| panic!("{a_name} missing from path"));
                     let b_index = names
                         .iter()
                         .position(|x| x == b_name)
-                        .unwrap_or_else(|| panic!("{} missing from path", b_name));
+                        .unwrap_or_else(|| panic!("{b_name} missing from path"));
                     a_index.cmp(&b_index)
                 }
                 (OperationParameterKind::Path, OperationParameterKind::Query(_)) => Ordering::Less,
@@ -2318,7 +2306,7 @@ impl ParameterDataExt for openapiv3::ParameterData {
         match &self.format {
             openapiv3::ParameterSchemaOrContent::Schema(s) => Ok(s),
             openapiv3::ParameterSchemaOrContent::Content(c) => Err(Error::UnexpectedFormat(
-                format!("unexpected content {:#?}", c),
+                format!("unexpected content {c:#?}"),
             )),
         }
     }

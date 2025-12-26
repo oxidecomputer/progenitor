@@ -268,7 +268,7 @@ fn is_crate(s: &str) -> bool {
 fn open_file(path: PathBuf, span: proc_macro2::Span) -> Result<File, syn::Error> {
     File::open(path.clone()).map_err(|e| {
         let path_str = path.to_string_lossy();
-        syn::Error::new(span, format!("couldn't read file {}: {}", path_str, e))
+        syn::Error::new(span, format!("couldn't read file {path_str}: {e}"))
     })
 }
 
@@ -353,7 +353,7 @@ fn do_generate_api(item: TokenStream) -> Result<TokenStream, syn::Error> {
         _ => {
             f = open_file(path.clone(), spec.span())?;
             serde_yaml::from_reader(f).map_err(|e| {
-                syn::Error::new(spec.span(), format!("failed to parse {}: {}", path_str, e))
+                syn::Error::new(spec.span(), format!("failed to parse {path_str}: {e}"))
             })?
         }
     };
