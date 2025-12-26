@@ -829,7 +829,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
@@ -845,7 +845,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
@@ -861,7 +861,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("sort_by", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "sort_by"))
@@ -1249,7 +1249,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
@@ -1265,7 +1265,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
@@ -1281,7 +1281,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("sort_by", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "sort_by"))
@@ -1722,7 +1722,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
@@ -1738,7 +1738,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
@@ -1754,7 +1754,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("sort_by", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "sort_by"))
@@ -2124,7 +2124,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
@@ -2140,7 +2140,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
@@ -2156,7 +2156,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("sort_by", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "sort_by"))
@@ -2496,7 +2496,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("end_time", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "end_time"))
@@ -2512,7 +2512,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
@@ -2528,7 +2528,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
@@ -2544,7 +2544,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("start_time", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "start_time"))
@@ -2631,7 +2631,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
@@ -2647,7 +2647,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
@@ -2663,7 +2663,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("sort_by", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "sort_by"))
@@ -2980,7 +2980,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
@@ -2996,7 +2996,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
@@ -3012,7 +3012,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("sort_by", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "sort_by"))
@@ -3343,7 +3343,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
@@ -3359,7 +3359,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
@@ -3375,7 +3375,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("sort_by", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "sort_by"))
@@ -3828,7 +3828,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
@@ -3844,7 +3844,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
@@ -3860,7 +3860,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("sort_by", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "sort_by"))
@@ -4419,7 +4419,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("from_start", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "from_start"))
@@ -4435,7 +4435,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("max_bytes", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "max_bytes"))
@@ -4451,7 +4451,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("most_recent", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "most_recent"))
@@ -4917,7 +4917,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
@@ -4933,7 +4933,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
@@ -4949,7 +4949,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("sort_by", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "sort_by"))
@@ -5266,7 +5266,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
@@ -5282,7 +5282,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
@@ -5298,7 +5298,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("sort_by", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "sort_by"))
@@ -5885,7 +5885,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
@@ -5901,7 +5901,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
@@ -5917,7 +5917,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("sort_by", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "sort_by"))
@@ -6395,7 +6395,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
@@ -6411,7 +6411,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
@@ -6427,7 +6427,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("sort_by", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "sort_by"))
@@ -6935,7 +6935,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
@@ -6951,7 +6951,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
@@ -6967,7 +6967,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("sort_by", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "sort_by"))
@@ -7446,7 +7446,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
@@ -7462,7 +7462,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
@@ -7478,7 +7478,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("sort_by", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "sort_by"))
@@ -7663,7 +7663,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
@@ -7679,7 +7679,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
@@ -7865,7 +7865,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
@@ -7881,7 +7881,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
@@ -7897,7 +7897,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("sort_by", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "sort_by"))
@@ -7968,7 +7968,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
@@ -7984,7 +7984,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
@@ -8000,7 +8000,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("sort_by", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "sort_by"))
@@ -8430,7 +8430,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
@@ -8446,7 +8446,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
@@ -8462,7 +8462,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("sort_by", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "sort_by"))
@@ -8709,7 +8709,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
@@ -8725,7 +8725,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
@@ -8741,7 +8741,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("sort_by", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "sort_by"))
@@ -8812,7 +8812,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
@@ -8828,7 +8828,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
@@ -8844,7 +8844,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("sort_by", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "sort_by"))
@@ -8976,7 +8976,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
@@ -8992,7 +8992,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
@@ -9008,7 +9008,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("sort_by", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "sort_by"))
@@ -9149,7 +9149,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
@@ -9165,7 +9165,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
@@ -9181,7 +9181,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("sort_by", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "sort_by"))
@@ -9252,7 +9252,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
@@ -9268,7 +9268,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
@@ -9284,7 +9284,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("sort_by", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "sort_by"))
@@ -9529,7 +9529,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
@@ -9545,7 +9545,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
@@ -9561,7 +9561,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("sort_by", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "sort_by"))
@@ -9879,7 +9879,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
@@ -9895,7 +9895,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
@@ -10152,7 +10152,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
@@ -10168,7 +10168,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
@@ -10356,7 +10356,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("end_time", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "end_time"))
@@ -10376,7 +10376,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
@@ -10392,7 +10392,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
@@ -10408,7 +10408,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("start_time", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "start_time"))
@@ -10593,7 +10593,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
@@ -10609,7 +10609,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
@@ -10625,7 +10625,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("sort_by", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "sort_by"))
@@ -10756,7 +10756,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
@@ -10772,7 +10772,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
@@ -10788,7 +10788,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("sort_by", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "sort_by"))
@@ -11040,7 +11040,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
@@ -11056,7 +11056,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
@@ -11072,7 +11072,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("sort_by", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "sort_by"))
@@ -11622,7 +11622,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
@@ -11638,7 +11638,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
@@ -11654,7 +11654,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("sort_by", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "sort_by"))
@@ -11798,7 +11798,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
@@ -11814,7 +11814,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
@@ -11830,7 +11830,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("sort_by", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "sort_by"))
@@ -11961,7 +11961,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
@@ -11977,7 +11977,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
@@ -12048,7 +12048,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
@@ -12064,7 +12064,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
@@ -12080,7 +12080,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("sort_by", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "sort_by"))
@@ -12151,7 +12151,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
@@ -12167,7 +12167,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("organization", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "organization"))
@@ -12183,7 +12183,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
@@ -12199,7 +12199,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("project", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "project"))
@@ -12215,7 +12215,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("sort_by", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "sort_by"))
@@ -12286,7 +12286,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("organization", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "organization"))
@@ -12370,7 +12370,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("organization", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "organization"))
@@ -12386,7 +12386,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("project", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "project"))
@@ -12462,7 +12462,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("organization", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "organization"))
@@ -12478,7 +12478,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("project", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "project"))
@@ -12544,7 +12544,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
@@ -12560,7 +12560,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("organization", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "organization"))
@@ -12576,7 +12576,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
@@ -12592,7 +12592,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("project", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "project"))
@@ -12608,7 +12608,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("sort_by", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "sort_by"))
@@ -12679,7 +12679,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("organization", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "organization"))
@@ -12763,7 +12763,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("organization", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "organization"))
@@ -12779,7 +12779,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("project", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "project"))
@@ -12855,7 +12855,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("organization", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "organization"))
@@ -12871,7 +12871,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("project", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "project"))
@@ -12943,7 +12943,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
@@ -12959,7 +12959,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("organization", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "organization"))
@@ -12975,7 +12975,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
@@ -12991,7 +12991,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("project", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "project"))
@@ -13007,7 +13007,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("sort_by", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "sort_by"))
@@ -13087,7 +13087,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("organization", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "organization"))
@@ -13103,7 +13103,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("project", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "project"))
@@ -13187,7 +13187,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("organization", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "organization"))
@@ -13203,7 +13203,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("project", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "project"))
@@ -13284,7 +13284,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("organization", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "organization"))
@@ -13300,7 +13300,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("project", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "project"))
@@ -13381,7 +13381,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("organization", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "organization"))
@@ -13397,7 +13397,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("project", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "project"))
@@ -13477,7 +13477,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("from_start", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "from_start"))
@@ -13493,7 +13493,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("max_bytes", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "max_bytes"))
@@ -13509,7 +13509,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("most_recent", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "most_recent"))
@@ -13525,7 +13525,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("organization", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "organization"))
@@ -13541,7 +13541,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("project", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "project"))
@@ -13619,7 +13619,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("organization", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "organization"))
@@ -13635,7 +13635,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("project", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "project"))
@@ -13691,7 +13691,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("organization", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "organization"))
@@ -13707,7 +13707,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("project", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "project"))
@@ -13784,7 +13784,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("organization", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "organization"))
@@ -13800,7 +13800,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("project", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "project"))
@@ -13871,7 +13871,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
@@ -13887,7 +13887,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
@@ -13903,7 +13903,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("sort_by", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "sort_by"))
@@ -14343,7 +14343,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
@@ -14359,7 +14359,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("organization", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "organization"))
@@ -14375,7 +14375,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
@@ -14391,7 +14391,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("sort_by", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "sort_by"))
@@ -14530,7 +14530,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("organization", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "organization"))
@@ -14606,7 +14606,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("organization", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "organization"))
@@ -14686,7 +14686,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("organization", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "organization"))
@@ -14758,7 +14758,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("organization", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "organization"))
@@ -14835,7 +14835,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("organization", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "organization"))
@@ -14910,7 +14910,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
@@ -14926,7 +14926,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
@@ -14942,7 +14942,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("sort_by", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "sort_by"))
@@ -15013,7 +15013,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
@@ -15029,7 +15029,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
@@ -15045,7 +15045,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("sort_by", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "sort_by"))
@@ -15339,7 +15339,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
@@ -15355,7 +15355,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
@@ -15371,7 +15371,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("sort_by", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
+                Self(self.0.is_true(|req| {
                     req.query_params
                         .as_ref()
                         .and_then(|qs| qs.iter().find(|(key, _)| key == "sort_by"))
