@@ -117,7 +117,7 @@ impl Convert<schemars::schema::Schema> for openapiv3::Schema {
             examples: example.into_iter().collect::<Vec<_>>(),
         };
 
-        let metadata = Some(Box::new(metadata)).reduce();
+        let metadata = Some(Box::new(metadata)).simplify_default();
         let extensions = extensions.into_iter().collect();
 
         match &self.schema_kind {
@@ -137,7 +137,7 @@ impl Convert<schemars::schema::Schema> for openapiv3::Schema {
                     min_length: min_length.convert(),
                     pattern: pattern.clone(),
                 }))
-                .reduce(),
+                .simplify_default(),
                 extensions,
                 ..Default::default()
             },
@@ -170,7 +170,7 @@ impl Convert<schemars::schema::Schema> for openapiv3::Schema {
                         minimum,
                         exclusive_minimum,
                     }))
-                    .reduce(),
+                    .simplify_default(),
                     extensions,
                     ..Default::default()
                 }
@@ -207,7 +207,7 @@ impl Convert<schemars::schema::Schema> for openapiv3::Schema {
                         minimum,
                         exclusive_minimum,
                     }))
-                    .reduce(),
+                    .simplify_default(),
                     extensions,
                     ..Default::default()
                 }
@@ -231,7 +231,7 @@ impl Convert<schemars::schema::Schema> for openapiv3::Schema {
                     additional_properties: additional_properties.convert(),
                     property_names: None,
                 }))
-                .reduce(),
+                .simplify_default(),
                 extensions,
                 ..Default::default()
             },
@@ -254,7 +254,7 @@ impl Convert<schemars::schema::Schema> for openapiv3::Schema {
                     unique_items: if *unique_items { Some(true) } else { None },
                     contains: None,
                 }))
-                .reduce(),
+                .simplify_default(),
                 extensions,
                 ..Default::default()
             },
@@ -797,16 +797,16 @@ impl Convert<schemars::schema::Schema> for openapiv3::AdditionalProperties {
     }
 }
 
-trait OptionReduce {
-    fn reduce(self) -> Self;
+trait OptionSimplifyDefault {
+    fn simplify_default(self) -> Self;
 }
 
 // If an Option is `Some` of it's default value, we can simplify that to `None`
-impl<T> OptionReduce for Option<T>
+impl<T> OptionSimplifyDefault for Option<T>
 where
     T: Default + PartialEq + std::fmt::Debug,
 {
-    fn reduce(self) -> Self {
+    fn simplify_default(self) -> Self {
         match &self {
             Some(s) if s != &T::default() => self,
             _ => None,
