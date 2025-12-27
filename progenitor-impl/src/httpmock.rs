@@ -87,6 +87,7 @@ impl Generator {
 
                 use #crate_path::*;
 
+                /// Apply decoded query parameter pairs to the matcher.
                 fn apply_query_param_pairs(
                     mut when: ::httpmock::When,
                     pairs: &[(String, String)],
