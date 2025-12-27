@@ -36,14 +36,7 @@ jobs:
         os: [ ubuntu-latest, windows-latest, macos-latest ]
     steps:
     - uses: actions/checkout@v4
-    - name: Install nightly rustfmt
-      uses: dtolnay/rust-toolchain@nightly
-      with:
-        components: rustfmt
-    - name: Install stable
-      uses: dtolnay/rust-toolchain@stable
-      with:
-        components: rustfmt
+    - uses: dtolnay/rust-toolchain@stable
     - name: Build
       run: cargo build --locked --tests --verbose
     - name: Run tests
