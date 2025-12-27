@@ -4,6 +4,7 @@ pub mod operations {
     #![doc = r" its inner type with a call to `into_inner()`. This can"]
     #![doc = r" be used to explicitly deviate from permitted values."]
     use crate::nexus_builder::*;
+    /// Apply decoded query parameter pairs to the matcher.
     fn apply_query_param_pairs(
         mut when: ::httpmock::When,
         pairs: &[(String, String)],
