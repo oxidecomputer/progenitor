@@ -555,6 +555,9 @@ impl Generator {
     ) -> Result<TokenStream> {
         let operation_id = format_ident!("{}", method.operation_id);
 
+        let mut needs_lifetime = false;
+        let mut needs_body = false;
+
         // Render each parameter as it will appear in the method signature.
         let params = method
             .params
@@ -562,12 +565,15 @@ impl Generator {
             .map(|param| {
                 let name = format_ident!("{}", param.name);
                 let typ = match (&param.typ, param.kind.is_optional()) {
-                    (OperationParameterType::Type(type_id), false) => self
-                        .type_space
-                        .get_type(type_id)
-                        .unwrap()
-                        .parameter_ident_with_lifetime("a"),
+                    (OperationParameterType::Type(type_id), false) => {
+                        needs_lifetime = true;
+                        self.type_space
+                            .get_type(type_id)
+                            .unwrap()
+                            .parameter_ident_with_lifetime("a")
+                    }
                     (OperationParameterType::Type(type_id), true) => {
+                        needs_lifetime = true;
                         let t = self
                             .type_space
                             .get_type(type_id)
@@ -577,6 +583,7 @@ impl Generator {
                     }
                     (OperationParameterType::RawBody, false) => match &param.kind {
                         OperationParameterKind::Body(BodyContentType::OctetStream) => {
+                            needs_body = true;
                             quote! { B }
                         }
                         OperationParameterKind::Body(BodyContentType::Text(_)) => {
@@ -592,16 +599,17 @@ impl Generator {
             })
             .collect::<Vec<_>>();
 
-        let raw_body_param = method.params.iter().any(|param| {
-            param.typ == OperationParameterType::RawBody
-                && param.kind == OperationParameterKind::Body(BodyContentType::OctetStream)
+        let bounds = [
+            needs_lifetime.then(|| quote! { 'a }),
+            needs_body.then(|| quote! { B: Into<reqwest::Body> }),
+        ]
+        .into_iter()
+        .flatten()
+        .collect::<Vec<_>>();
+        let bounds = (!bounds.is_empty()).then(|| {
+            quote! { < #(#bounds),* > }
         });
-
-        let bounds = if raw_body_param {
-            quote! { <'a, B: Into<reqwest::Body> > }
-        } else {
-            quote! { <'a> }
-        };
+        let self_bounds = needs_lifetime.then(|| quote! { 'a });
 
         let doc_comment = make_doc_comment(method);
 
@@ -614,7 +622,7 @@ impl Generator {
         let method_impl = quote! {
             #[doc = #doc_comment]
             pub async fn #operation_id #bounds (
-                &'a self,
+                & #self_bounds self,
                 #(#params),*
             ) -> Result<
                 ResponseValue<#success_type>,
@@ -690,7 +698,7 @@ impl Generator {
             quote! {
                 #[doc = #doc_comment]
                 pub fn #stream_id #bounds (
-                    &'a self,
+                    & #self_bounds self,
                     #(#stream_params),*
                 ) -> impl futures::Stream<Item = Result<
                     #item_type,
