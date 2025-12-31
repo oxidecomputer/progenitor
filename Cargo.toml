@@ -3,12 +3,15 @@ members = [
 	"cargo-progenitor",
 	"example-build",
 	"example-macro",
-	"example-wasm",
 	"progenitor",
 	"progenitor-client",
 	"progenitor-impl",
 	"progenitor-macro",
 ]
+
+# example-wasm is excluded from workspace because it uses gloo-client feature
+# which conflicts with other members using reqwest-client
+exclude = ["example-wasm"]
 
 resolver = "2"
 

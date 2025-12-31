@@ -1,4 +1,4 @@
-// Copyright 2022 Oxide Computer Company
+// Copyright 2025 Oxide Computer Company
 
 use std::{
     env,
@@ -9,9 +9,13 @@ use std::{
 fn main() {
     let src = "../sample_openapi/keeper.json";
     println!("cargo:rerun-if-changed={}", src);
+
     let file = File::open(src).unwrap();
     let spec = serde_json::from_reader(file).unwrap();
-    let mut generator = progenitor::Generator::default();
+    let mut generator = progenitor::Generator::new(
+        progenitor::GenerationSettings::default()
+            .with_backend(progenitor::HttpBackend::Gloo),
+    );
 
     let tokens = generator.generate_tokens(&spec).unwrap();
     let ast = syn::parse2(tokens).unwrap();
