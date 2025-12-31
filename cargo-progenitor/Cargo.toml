@@ -13,7 +13,7 @@ default-run = "cargo-progenitor"
 
 [dependencies]
 progenitor = { workspace = true, default-features = false }
-progenitor-client = { workspace = true }
+progenitor-client = { workspace = true, features = ["reqwest-client"] }
 progenitor-impl = { workspace = true }
 
 anyhow = { workspace = true }
