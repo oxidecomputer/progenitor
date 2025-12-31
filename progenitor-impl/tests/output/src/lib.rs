@@ -1,34 +1,71 @@
-pub mod buildomat_builder;
-pub mod buildomat_builder_tagged;
-pub mod buildomat_cli;
-//pub mod buildomat_httpmock;
-pub mod buildomat_positional;
-pub mod keeper_builder;
-pub mod keeper_builder_tagged;
-pub mod keeper_cli;
-pub mod keeper_httpmock;
-pub mod keeper_positional;
-pub mod nexus_builder;
-pub mod nexus_builder_tagged;
-pub mod nexus_cli;
-pub mod nexus_httpmock;
-pub mod nexus_positional;
-pub mod param_collision_builder;
-pub mod param_collision_builder_tagged;
-pub mod param_collision_cli;
-pub mod param_collision_httpmock;
-pub mod param_collision_positional;
-pub mod param_overrides_builder;
-pub mod param_overrides_builder_tagged;
-pub mod param_overrides_cli;
-pub mod param_overrides_httpmock;
-pub mod param_overrides_positional;
-pub mod propolis_server_builder;
-pub mod propolis_server_builder_tagged;
-pub mod propolis_server_cli;
-//pub mod propolis_server_httpmock;
-pub mod propolis_server_positional;
-pub mod test_default_params_builder;
-pub mod test_default_params_positional;
-pub mod test_freeform_response;
-pub mod test_renamed_parameters;
+#[cfg(not(target_arch = "wasm32"))]
+#[path = "reqwest_backend"]
+mod backend {
+    pub mod buildomat_builder;
+    pub mod buildomat_builder_tagged;
+    pub mod buildomat_cli;
+    pub mod buildomat_httpmock;
+    pub mod buildomat_positional;
+    pub mod cli_gen_builder;
+    pub mod cli_gen_builder_tagged;
+    pub mod cli_gen_cli;
+    pub mod cli_gen_httpmock;
+    pub mod cli_gen_positional;
+    pub mod keeper_builder;
+    pub mod keeper_builder_tagged;
+    pub mod keeper_cli;
+    pub mod keeper_httpmock;
+    pub mod keeper_positional;
+    pub mod nexus_builder;
+    pub mod nexus_builder_tagged;
+    pub mod nexus_cli;
+    pub mod nexus_httpmock;
+    pub mod nexus_positional;
+    pub mod param_collision_builder;
+    pub mod param_collision_builder_tagged;
+    pub mod param_collision_cli;
+    pub mod param_collision_httpmock;
+    pub mod param_collision_positional;
+    pub mod param_overrides_builder;
+    pub mod param_overrides_builder_tagged;
+    pub mod param_overrides_cli;
+    pub mod param_overrides_httpmock;
+    pub mod param_overrides_positional;
+    pub mod propolis_server_builder;
+    pub mod propolis_server_builder_tagged;
+    pub mod propolis_server_cli;
+    pub mod propolis_server_httpmock;
+    pub mod propolis_server_positional;
+    pub mod test_default_params_builder;
+    pub mod test_default_params_positional;
+    pub mod test_freeform_response;
+    pub mod test_renamed_parameters;
+}
+
+#[cfg(target_arch = "wasm32")]
+#[path = "gloo_backend"]
+mod backend {
+    pub mod buildomat_builder;
+    pub mod buildomat_builder_tagged;
+    pub mod buildomat_positional;
+    pub mod cli_gen_builder;
+    pub mod cli_gen_builder_tagged;
+    pub mod cli_gen_positional;
+    pub mod keeper_builder;
+    pub mod keeper_builder_tagged;
+    pub mod keeper_positional;
+    pub mod nexus_builder;
+    pub mod nexus_builder_tagged;
+    pub mod nexus_positional;
+    pub mod param_collision_builder;
+    pub mod param_collision_builder_tagged;
+    pub mod param_collision_positional;
+    pub mod param_overrides_builder;
+    pub mod param_overrides_builder_tagged;
+    pub mod param_overrides_positional;
+    pub mod propolis_server_builder;
+    pub mod propolis_server_builder_tagged;
+    pub mod propolis_server_positional;
+}
+
+pub use backend::*;

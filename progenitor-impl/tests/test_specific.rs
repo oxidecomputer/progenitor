@@ -1,4 +1,4 @@
-// Copyright 2024 Oxide Computer Company
+// Copyright 2025 Oxide Computer Company
 
 use dropshot::{
     endpoint, ApiDescription, Body, ConfigDropshot, ConfigLogging, ConfigLoggingLevel,
@@ -81,7 +81,7 @@ fn test_renamed_parameters() {
     let mut generator = Generator::default();
     let output = generate_formatted(&mut generator, &spec);
     expectorate::assert_contents(
-        format!("tests/output/src/{}.rs", "test_renamed_parameters"),
+        format!("tests/output/src/reqwest_backend/{}.rs", "test_renamed_parameters"),
         &output,
     )
 }
@@ -112,7 +112,7 @@ fn test_freeform_response() {
     let mut generator = Generator::default();
     let output = generate_formatted(&mut generator, &spec);
     expectorate::assert_contents(
-        format!("tests/output/src/{}.rs", "test_freeform_response"),
+        format!("tests/output/src/reqwest_backend/{}.rs", "test_freeform_response"),
         &output,
     )
 }
@@ -166,7 +166,7 @@ fn test_default_params() {
     let mut generator = Generator::default();
     let output = generate_formatted(&mut generator, &spec);
     expectorate::assert_contents(
-        format!("tests/output/src/{}.rs", "test_default_params_positional"),
+        format!("tests/output/src/reqwest_backend/{}.rs", "test_default_params_positional"),
         &output,
     );
 
@@ -174,7 +174,7 @@ fn test_default_params() {
         Generator::new(GenerationSettings::default().with_interface(InterfaceStyle::Builder));
     let output = generate_formatted(&mut generator, &spec);
     expectorate::assert_contents(
-        format!("tests/output/src/{}.rs", "test_default_params_builder"),
+        format!("tests/output/src/reqwest_backend/{}.rs", "test_default_params_builder"),
         &output,
     );
 }
@@ -237,13 +237,13 @@ async fn test_stream_pagination() {
         Generator::new(GenerationSettings::new().with_interface(InterfaceStyle::Positional));
     let output = generate_formatted(&mut generator, &spec);
     expectorate::assert_contents(
-        format!("tests/output/src/{TEST_NAME}_positional.rs"),
+        format!("tests/output/src/reqwest_backend/{TEST_NAME}_positional.rs"),
         &output,
     );
     let mut generator =
         Generator::new(GenerationSettings::new().with_interface(InterfaceStyle::Builder));
     let output = generate_formatted(&mut generator, &spec);
-    expectorate::assert_contents(format!("tests/output/src/{TEST_NAME}_builder.rs"), &output);
+    expectorate::assert_contents(format!("tests/output/src/reqwest_backend/{TEST_NAME}_builder.rs"), &output);
 
     // Run the Dropshot server.
     let config_dropshot = ConfigDropshot {
@@ -278,7 +278,7 @@ async fn test_stream_pagination() {
         // `EXPECTORATE=overwrite`, because the above check will overwrite the
         // file on disk, but then the test proceeds and gets to this point,
         // where it uses what was on disk _before_ expectorate overwrote it.
-        include!("output/src/test_stream_pagination_positional.rs");
+        include!("output/src/reqwest_backend/test_stream_pagination_positional.rs");
     }
 
     let client = gen_client_positional::Client::new(&server_addr);
@@ -323,7 +323,7 @@ async fn test_stream_pagination() {
         // `EXPECTORATE=overwrite`, because the above check will overwrite the
         // file on disk, but then the test proceeds and gets to this point,
         // where it uses what was on disk _before_ expectorate overwrote it.
-        include!("output/src/test_stream_pagination_builder.rs");
+        include!("output/src/reqwest_backend/test_stream_pagination_builder.rs");
     }
 
     let client = gen_client_builder::Client::new(&server_addr);

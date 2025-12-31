@@ -53,7 +53,16 @@ fn verify_apis(openapi_file: &str) {
     let mut generator = Generator::default();
     let output = generate_formatted(&mut generator, &spec);
     expectorate::assert_contents(
-        format!("tests/output/src/{}_positional.rs", openapi_stem),
+        format!("tests/output/src/reqwest_backend/{}_positional.rs", openapi_stem),
+        &output,
+    );
+
+    let mut generator = Generator::new(
+        GenerationSettings::default().with_backend(progenitor_impl::HttpBackend::Gloo),
+    );
+    let output = generate_formatted(&mut generator, &spec);
+    expectorate::assert_contents(
+        format!("tests/output/src/gloo_backend/{}_positional.rs", openapi_stem),
         &output,
     );
 
@@ -76,7 +85,30 @@ fn verify_apis(openapi_file: &str) {
     );
     let output = generate_formatted(&mut generator, &spec);
     expectorate::assert_contents(
-        format!("tests/output/src/{}_builder.rs", openapi_stem),
+        format!("tests/output/src/reqwest_backend/{}_builder.rs", openapi_stem),
+        &output,
+    );
+
+    let mut generator = Generator::new(
+        GenerationSettings::default()
+            .with_backend(progenitor_impl::HttpBackend::Gloo)
+            .with_interface(InterfaceStyle::Builder)
+            .with_tag(TagStyle::Merged)
+            .with_derive("schemars::JsonSchema")
+            .with_patch("Name", TypePatch::default().with_derive("Hash"))
+            .with_conversion(
+                schemars::schema::SchemaObject {
+                    instance_type: Some(schemars::schema::InstanceType::Integer.into()),
+                    format: Some("int32".to_string()),
+                    ..Default::default()
+                },
+                "usize",
+                [TypeImpl::Display].into_iter(),
+            ),
+    );
+    let output = generate_formatted(&mut generator, &spec);
+    expectorate::assert_contents(
+        format!("tests/output/src/gloo_backend/{}_builder.rs", openapi_stem),
         &output,
     );
 
@@ -89,7 +121,20 @@ fn verify_apis(openapi_file: &str) {
     );
     let output = generate_formatted(&mut generator, &spec);
     expectorate::assert_contents(
-        format!("tests/output/src/{}_builder_tagged.rs", openapi_stem),
+        format!("tests/output/src/reqwest_backend/{}_builder_tagged.rs", openapi_stem),
+        &output,
+    );
+
+    let mut generator = Generator::new(
+        GenerationSettings::default()
+            .with_backend(progenitor_impl::HttpBackend::Gloo)
+            .with_interface(InterfaceStyle::Builder)
+            .with_cli_bounds("std::clone::Clone")
+            .with_tag(TagStyle::Separate),
+    );
+    let output = generate_formatted(&mut generator, &spec);
+    expectorate::assert_contents(
+        format!("tests/output/src/gloo_backend/{}_builder_tagged.rs", openapi_stem),
         &output,
     );
 
@@ -99,7 +144,7 @@ fn verify_apis(openapi_file: &str) {
         .unwrap();
     let output = reformat_code(tokens);
 
-    expectorate::assert_contents(format!("tests/output/src/{}_cli.rs", openapi_stem), &output);
+    expectorate::assert_contents(format!("tests/output/src/reqwest_backend/{}_cli.rs", openapi_stem), &output);
 
     // httpmock generation.
     let code = generator
@@ -118,7 +163,7 @@ fn verify_apis(openapi_file: &str) {
 
     let output = progenitor_impl::space_out_items(output).unwrap();
     expectorate::assert_contents(
-        format!("tests/output/src/{}_httpmock.rs", openapi_stem),
+        format!("tests/output/src/reqwest_backend/{}_httpmock.rs", openapi_stem),
         &output,
     );
 }

@@ -9,18 +9,32 @@ edition = "2021"
 anyhow = "1.0"
 base64 = "0.21"
 chrono = { version = "0.4", features = ["serde"] }
-clap = { version = "4", features = ["string"] }
 futures = "0.3"
-httpmock = "0.7"
-progenitor-client = { path = "../../../progenitor-client" }
 rand = { version = "0.8", features = ["serde1"] }
 regex = "1.10"
 regress = "0.7"
-reqwest = "0.12"
 schemars = { version = "0.8", features = ["chrono", "uuid1"] }
 serde = { features = ["derive"], version = "1" }
 serde_json = "1"
+serde_urlencoded = "0.7"
 uuid = { features = ["serde", "v4"], version = "1" }
+
+[target.'cfg(not(target_arch = "wasm32"))'.dependencies]
+progenitor-client = { path = "../../../progenitor-client", features = ["reqwest-client"] }
+clap = { version = "4", features = ["string"] }
+httpmock = "0.7"
+reqwest = "0.12"
+
+# rand/uuid transitively depend on getrandom, which requires the "js" feature
+# to work on wasm32-unknown-unknown targets
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+progenitor-client = { path = "../../../progenitor-client", features = ["gloo-client"] }
+getrandom = { version = "0.2", features = ["js"] }
+uuid = { version = "1", features = ["serde", "v4", "js"] }
+gloo-net = "0.6"
+js-sys = "0.3"
+wasm-bindgen = "0.2"
+web-sys = { version = "0.3", features = ["WebSocket"] }
 
 [lints.rust]
 unused_imports = "allow"
