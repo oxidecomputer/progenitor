@@ -5,10 +5,17 @@ edition = "2021"
 
 [dependencies]
 chrono = { version = "0.4", features = ["serde"] }
-progenitor-client = { path = "../progenitor-client" }
-reqwest = { version = "0.12.26", features = ["json", "stream"] }
+progenitor-client = { path = "../progenitor-client", features = ["gloo-client"] }
+gloo-net = "0.6"
+js-sys = "0.3"
+wasm-bindgen = "0.2"
+wasm-streams = "0.4"
+web-sys = { version = "0.3", features = ["WebSocket"] }
 base64 = "0.22"
+futures-core = "0.3"
+getrandom = { version = "0.2", features = ["js"] }
 serde = { version = "1.0", features = ["derive"] }
+serde_urlencoded = "0.7"
 uuid = { version = "1.19", features = ["serde", "v4", "js"] }
 
 [dev-dependencies]
@@ -16,6 +23,6 @@ wasm-bindgen-test = "0.3.50"
 
 [build-dependencies]
 prettyplease = "0.2.37"
-progenitor = { path = "../progenitor" }
+progenitor = { path = "../progenitor", default-features = false }
 serde_json = "1.0"
 syn = "2.0"

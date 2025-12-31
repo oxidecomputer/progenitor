@@ -60,6 +60,7 @@ pub struct Generator {
 pub struct GenerationSettings {
     interface: InterfaceStyle,
     tag: TagStyle,
+    backend: HttpBackend,
     inner_type: Option<TokenStream>,
     pre_hook: Option<TokenStream>,
     pre_hook_async: Option<TokenStream>,
@@ -99,6 +100,21 @@ impl Default for InterfaceStyle {
     }
 }
 
+/// HTTP backend for generated client.
+#[derive(Clone, Deserialize, PartialEq, Eq, Debug)]
+pub enum HttpBackend {
+    /// Use reqwest as the HTTP backend.
+    Reqwest,
+    /// Use gloo-net as the HTTP backend.
+    Gloo,
+}
+
+impl Default for HttpBackend {
+    fn default() -> Self {
+        Self::Reqwest
+    }
+}
+
 /// Style for using the OpenAPI tags when generating names in the client.
 #[derive(Clone, Deserialize)]
 pub enum TagStyle {
@@ -129,6 +145,12 @@ impl GenerationSettings {
     /// Set the [TagStyle].
     pub fn with_tag(&mut self, tag: TagStyle) -> &mut Self {
         self.tag = tag;
+        self
+    }
+
+    /// Set the [HttpBackend].
+    pub fn with_backend(&mut self, backend: HttpBackend) -> &mut Self {
+        self.backend = backend;
         self
     }
 
@@ -415,6 +437,82 @@ impl Generator {
 
         let version_str = &spec.info.version;
 
+        let (client_field, client_impl, client_info_client_method) = match self.settings.backend {
+            HttpBackend::Reqwest => {
+                let field = quote! {
+                    pub(crate) client: reqwest::Client,
+                };
+                let impl_block = quote! {
+                    /// Create a new client.
+                    ///
+                    /// `baseurl` is the base URL provided to the internal
+                    /// `reqwest::Client`, and should include a scheme and hostname,
+                    /// as well as port and a path stem if applicable.
+                    pub fn new(
+                        baseurl: &str,
+                        #inner_parameter
+                    ) -> Self {
+                        #[cfg(not(target_arch = "wasm32"))]
+                        let client = {
+                            let dur = ::std::time::Duration::from_secs(#client_timeout);
+
+                            reqwest::ClientBuilder::new()
+                                .connect_timeout(dur)
+                                .timeout(dur)
+                        };
+
+                        #[cfg(target_arch = "wasm32")]
+                        let client = reqwest::ClientBuilder::new();
+
+                        Self::new_with_client(baseurl, client.build().unwrap(), #inner_value)
+                    }
+
+                    /// Construct a new client with an existing `reqwest::Client`,
+                    /// allowing more control over its configuration.
+                    ///
+                    /// `baseurl` is the base URL provided to the internal
+                    /// `reqwest::Client`, and should include a scheme and hostname,
+                    /// as well as port and a path stem if applicable.
+                    pub fn new_with_client(
+                        baseurl: &str,
+                        client: reqwest::Client,
+                        #inner_parameter
+                    ) -> Self {
+                        Self {
+                            baseurl: baseurl.to_string(),
+                            client,
+                            #inner_value
+                        }
+                    }
+                };
+                let client_method = quote! {
+                    fn client(&self) -> &reqwest::Client {
+                        &self.client
+                    }
+                };
+                (field, impl_block, client_method)
+            }
+            HttpBackend::Gloo => {
+                let field = quote! {};
+                let impl_block = quote! {
+                    /// Create a new client.
+                    ///
+                    /// `baseurl` is the base URL to which requests are made.
+                    pub fn new(
+                        baseurl: &str,
+                        #inner_parameter
+                    ) -> Self {
+                        Self {
+                            baseurl: baseurl.to_string(),
+                            #inner_value
+                        }
+                    }
+                };
+                let client_method = quote! {};
+                (field, impl_block, client_method)
+            }
+        };
+
         // The allow(unused_imports) on the `pub use` is necessary with Rust
         // 1.76+, in case the generated file is not at the top level of the
         // crate.
@@ -446,52 +544,12 @@ impl Generator {
             #[doc = #client_docstring]
             pub struct Client {
                 pub(crate) baseurl: String,
-                pub(crate) client: reqwest::Client,
+                #client_field
                 #inner_property
             }
 
             impl Client {
-                /// Create a new client.
-                ///
-                /// `baseurl` is the base URL provided to the internal
-                /// `reqwest::Client`, and should include a scheme and hostname,
-                /// as well as port and a path stem if applicable.
-                pub fn new(
-                    baseurl: &str,
-                    #inner_parameter
-                ) -> Self {
-                    #[cfg(not(target_arch = "wasm32"))]
-                    let client = {
-                        let dur = ::std::time::Duration::from_secs(#client_timeout);
-
-                        reqwest::ClientBuilder::new()
-                            .connect_timeout(dur)
-                            .timeout(dur)
-                    };
-
-                    #[cfg(target_arch = "wasm32")]
-                    let client = reqwest::ClientBuilder::new();
-
-                    Self::new_with_client(baseurl, client.build().unwrap(), #inner_value)
-                }
-
-                /// Construct a new client with an existing `reqwest::Client`,
-                /// allowing more control over its configuration.
-                ///
-                /// `baseurl` is the base URL provided to the internal
-                /// `reqwest::Client`, and should include a scheme and hostname,
-                /// as well as port and a path stem if applicable.
-                pub fn new_with_client(
-                    baseurl: &str,
-                    client: reqwest::Client,
-                    #inner_parameter
-                ) -> Self {
-                    Self {
-                        baseurl: baseurl.to_string(),
-                        client,
-                        #inner_value
-                    }
-                }
+                #client_impl
             }
 
             impl ClientInfo<#inner_type> for Client {
@@ -503,9 +561,7 @@ impl Generator {
                     self.baseurl.as_str()
                 }
 
-                fn client(&self) -> &reqwest::Client {
-                    &self.client
-                }
+                #client_info_client_method
 
                 fn inner(&self) -> &#inner_type {
                     #inner_fn_value

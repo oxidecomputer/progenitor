@@ -14,7 +14,7 @@ use typify::{TypeId, TypeSpace};
 use crate::{
     template::PathTemplate,
     util::{items, parameter_map, sanitize, unique_ident_from, Case},
-    Error, Generator, Result, TagStyle,
+    Error, Generator, HttpBackend, Result, TagStyle,
 };
 use crate::{to_schema::ToSchema, util::ReferenceOrExt};
 
@@ -263,7 +263,7 @@ pub(crate) enum OperationResponseKind {
 }
 
 impl OperationResponseKind {
-    pub fn into_tokens(self, type_space: &TypeSpace) -> TokenStream {
+    pub fn into_tokens(self, type_space: &TypeSpace, backend: &crate::HttpBackend) -> TokenStream {
         match self {
             OperationResponseKind::Type(ref type_id) => {
                 let type_name = type_space.get_type(type_id).unwrap().ident();
@@ -276,7 +276,10 @@ impl OperationResponseKind {
                 quote! { ByteStream }
             }
             OperationResponseKind::Upgrade => {
-                quote! { reqwest::Upgraded }
+                match backend {
+                    crate::HttpBackend::Reqwest => quote! { reqwest::Upgraded },
+                    crate::HttpBackend::Gloo => quote! { web_sys::WebSocket },
+                }
             }
         }
     }
@@ -598,7 +601,10 @@ impl Generator {
         });
 
         let bounds = if raw_body_param {
-            quote! { <'a, B: Into<reqwest::Body> > }
+            match self.settings.backend {
+                HttpBackend::Reqwest => quote! { <'a, B: Into<reqwest::Body> > },
+                HttpBackend::Gloo => quote! { <'a, B: Into<::wasm_bindgen::JsValue> > },
+            }
         } else {
             quote! { <'a> }
         };
@@ -622,6 +628,12 @@ impl Generator {
             > {
                 #body
             }
+        };
+
+        // For WASM, use .boxed_local() instead of .boxed() since Send is not available
+        let boxed_method = match self.settings.backend {
+            HttpBackend::Reqwest => quote! { .boxed() },
+            HttpBackend::Gloo => quote! { .boxed_local() },
         };
 
         let stream_impl = method.dropshot_paginated.as_ref().map(|page_data| {
@@ -747,7 +759,7 @@ impl Generator {
                             first.chain(rest)
                         })
                         .try_flatten_stream()
-                        .boxed()
+                        #boxed_method
                 }
             }
         });
@@ -790,9 +802,26 @@ impl Generator {
                 OperationParameterKind::Query(_) => {
                     let qn = &param.api_name;
                     let qn_ident = format_ident!("{}", &param.name);
-                    Some(quote! {
-                        &progenitor_client::QueryParam::new(#qn, &#qn_ident)
-                    })
+
+                    match self.settings.backend {
+                        HttpBackend::Reqwest => {
+                            Some(quote! {
+                                &progenitor_client::QueryParam::new(#qn, &#qn_ident)
+                            })
+                        }
+                        HttpBackend::Gloo => {
+                            // Serialize to URL-encoded format and parse into (key, value) pairs
+                            Some(quote! {
+                                ::serde_urlencoded::to_string([(#qn, &#qn_ident)])
+                                    .map_err(|e| Error::InvalidRequest(e.to_string()))?
+                                    .split('&')
+                                    .filter_map(|pair| {
+                                        let mut parts = pair.splitn(2, '=');
+                                        Some((parts.next()?, parts.next().unwrap_or("")))
+                                    })
+                            })
+                        }
+                    }
                 }
                 _ => None,
             })
@@ -828,22 +857,34 @@ impl Generator {
             })
             .collect::<Vec<_>>();
 
-        let headers_size = headers.len() + 1;
-        let headers_build = quote! {
-            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(#headers_size);
-            header_map.append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(#client_type::api_version()),
-            );
+        let (headers_build, headers_use) = match self.settings.backend {
+            HttpBackend::Reqwest => {
+                let headers_size = headers.len() + 1;
+                let build = quote! {
+                    let mut header_map = ::reqwest::header::HeaderMap::with_capacity(#headers_size);
+                    header_map.append(
+                        ::reqwest::header::HeaderName::from_static("api-version"),
+                        ::reqwest::header::HeaderValue::from_static(#client_type::api_version()),
+                    );
 
-            #(#headers)*
+                    #(#headers)*
+                };
+                let use_stmt = quote! {
+                    .headers(header_map)
+                };
+                (build, use_stmt)
+            }
+            HttpBackend::Gloo => {
+                // All headers are set directly on the request builder.
+                let build = quote! {};
+                let use_stmt = quote! {
+                    .header("api-version", #client_type::api_version())
+                };
+                (build, use_stmt)
+            }
         };
 
-        let headers_use = quote! {
-            .headers(header_map)
-        };
-
-        let websock_hdrs = if method.dropshot_websocket {
+        let websock_hdrs = if method.dropshot_websocket && matches!(self.settings.backend, HttpBackend::Reqwest) {
             quote! {
                 .header(::reqwest::header::CONNECTION, "Upgrade")
                 .header(::reqwest::header::UPGRADE, "websocket")
@@ -882,42 +923,64 @@ impl Generator {
                 (
                     OperationParameterKind::Body(BodyContentType::OctetStream),
                     OperationParameterType::RawBody,
-                ) => Some(quote! {
-                    // Set the content type (this is handled by helper
-                    // functions for other MIME types).
-                    .header(
-                        ::reqwest::header::CONTENT_TYPE,
-                        ::reqwest::header::HeaderValue::from_static("application/octet-stream"),
-                    )
-                    .body(body)
-                }),
+                ) => match self.settings.backend {
+                    HttpBackend::Reqwest => Some(quote! {
+                        .header(
+                            ::reqwest::header::CONTENT_TYPE,
+                            ::reqwest::header::HeaderValue::from_static("application/octet-stream"),
+                        )
+                        .body(body)
+                    }),
+                    HttpBackend::Gloo => Some(quote! {
+                        .header("content-type", "application/octet-stream")
+                        .body(body)?
+                    }),
+                },
                 (
                     OperationParameterKind::Body(BodyContentType::Text(mime_type)),
                     OperationParameterType::RawBody,
-                ) => Some(quote! {
-                    // Set the content type (this is handled by helper
-                    // functions for other MIME types).
-                    .header(
-                        ::reqwest::header::CONTENT_TYPE,
-                        ::reqwest::header::HeaderValue::from_static(#mime_type),
-                    )
-                    .body(body)
-                }),
+                ) => match self.settings.backend {
+                    HttpBackend::Reqwest => Some(quote! {
+                        .header(
+                            ::reqwest::header::CONTENT_TYPE,
+                            ::reqwest::header::HeaderValue::from_static(#mime_type),
+                        )
+                        .body(body)
+                    }),
+                    HttpBackend::Gloo => Some(quote! {
+                        .header("content-type", #mime_type)
+                        .body(body)?
+                    }),
+                },
                 (
                     OperationParameterKind::Body(BodyContentType::Json),
                     OperationParameterType::Type(_),
-                ) => Some(quote! {
-                    // Serialization errors are deferred.
-                    .json(&body)
-                }),
+                ) => match self.settings.backend {
+                    HttpBackend::Reqwest => Some(quote! {
+                        .json(&body)
+                    }),
+                    HttpBackend::Gloo => Some(quote! {
+                        .json(&body)?
+                    }),
+                },
                 (
                     OperationParameterKind::Body(BodyContentType::FormUrlencoded),
                     OperationParameterType::Type(_),
-                ) => Some(quote! {
-                    // This uses progenitor_client::RequestBuilderExt which
-                    // returns an error in the case of a serialization failure.
-                    .form_urlencoded(&body)?
-                }),
+                ) => match self.settings.backend {
+                    HttpBackend::Reqwest => Some(quote! {
+                        // This uses progenitor_client::RequestBuilderExt which
+                        // returns an error in the case of a serialization failure.
+                        .form_urlencoded(&body)?
+                    }),
+                    HttpBackend::Gloo => {
+                        // For gloo-net, form-urlencoded must be handled during request construction
+                        Some(quote! {
+                            .header("content-type", "application/x-www-form-urlencoded")
+                            .body(::serde_urlencoded::to_string(&body)
+                                .map_err(|e| Error::InvalidRequest(e.to_string()))?)?
+                        })
+                    }
+                },
                 (OperationParameterKind::Body(_), _) => {
                     unreachable!("invalid body kind/type combination")
                 }
@@ -926,6 +989,14 @@ impl Generator {
         });
         // ... and there can be at most one body.
         assert!(body_func.clone().count() <= 1);
+
+        // .json() and .body() return Request, only call .build() without body
+        let has_body = body_func.clone().count() > 0;
+        let gloo_build_call = if has_body {
+            quote! {}
+        } else {
+            quote! { .build()? }
+        };
 
         let (success_response_items, response_type) =
             self.extract_responses(method, OperationResponseStatus::is_success_or_default);
@@ -1028,13 +1099,18 @@ impl Generator {
                 | (OperationResponseKind::None, OperationResponseKind::Type(_))
         )
         .then(|| {
-            quote! {
+            match self.settings.backend {
+                HttpBackend::Reqwest => quote! {
                     .header(
                         ::reqwest::header::ACCEPT,
                         ::reqwest::header::HeaderValue::from_static(
                             "application/json",
                         ),
                     )
+                },
+                HttpBackend::Gloo => quote! {
+                    .header("accept", "application/json")
+                },
             }
         });
 
@@ -1085,44 +1161,97 @@ impl Generator {
         let operation_id = &method.operation_id;
         let method_func = format_ident!("{}", method.method.as_str());
 
-        let body_impl = quote! {
-            #url_path
+        let request_build = match self.settings.backend {
+            HttpBackend::Reqwest => quote! {
+                #[allow(unused_mut)]
+                let mut #request_ident = #client_value.client
+                    . #method_func (#url_ident)
+                    #accept_header
+                    #(#body_func)*
+                    #( .query(#query_params) )*
+                    #headers_use
+                    #websock_hdrs
+                    .build()?;
 
-            #headers_build
+                let info = OperationInfo {
+                    operation_id: #operation_id,
+                };
 
-            #[allow(unused_mut)]
-            let mut #request_ident = #client_value.client
-                . #method_func (#url_ident)
-                #accept_header
-                #(#body_func)*
-                #( .query(#query_params) )*
-                #headers_use
-                #websock_hdrs
-                .build()?;
+                #pre_hook
+                #pre_hook_async
+                #client_value
+                    .pre(&mut #request_ident, &info)
+                    .await?;
 
-            let info = OperationInfo {
-                operation_id: #operation_id,
-            };
+                let #result_ident = #client_value
+                    .exec(#request_ident, &info)
+                    .await;
+            },
+            HttpBackend::Gloo => {
+                // WebSocket handling is done in body_impl
+                quote! {
+                    let #request_ident = ::gloo_net::http::Request::#method_func(&#url_ident)
+                        #accept_header
+                        #( .query(#query_params) )*
+                        #headers_use
+                        #(#body_func)*
+                        #gloo_build_call;
 
-            #pre_hook
-            #pre_hook_async
-            #client_value
-                .pre(&mut #request_ident, &info)
-                .await?;
+                    let info = OperationInfo {
+                        operation_id: #operation_id,
+                    };
 
-            let #result_ident = #client_value
-                .exec(#request_ident, &info)
-                .await;
+                    // pre-hook with &mut request not supported for gloo-net
+                    // since Request is immutable
+                    #pre_hook
+                    #pre_hook_async
 
-            #client_value
-                .post(&#result_ident, &info)
-                .await?;
-            #post_hook_async
-            #post_hook
+                    let #result_ident = #client_value
+                        .exec(#request_ident, &info)
+                        .await;
+                }
+            },
+        };
 
-            let #response_ident = #result_ident?;
+        // Status code extraction
+        let status_conversion = match self.settings.backend {
+            HttpBackend::Reqwest => quote! { .as_u16() },
+            HttpBackend::Gloo => quote! {}, // gloo-net already returns u16
+        };
 
-            match #response_ident.status().as_u16() {
+        let body_impl = if method.dropshot_websocket && matches!(self.settings.backend, HttpBackend::Gloo) {
+            // Create WebSocket directly
+            quote! {
+                #url_path
+
+                // Convert HTTP(S) URL to WS(S) URL
+                let ws_url = #url_ident
+                    .replace("https://", "wss://")
+                    .replace("http://", "ws://");
+
+                // Create WebSocket connection
+                let ws = ::web_sys::WebSocket::new(&ws_url)
+                    .map_err(|e| Error::Custom(format!("Failed to create WebSocket: {:?}", e)))?;
+
+                ResponseValue::websocket(ws)
+            }
+        } else {
+            quote! {
+                #url_path
+
+                #headers_build
+
+                #request_build
+
+                #client_value
+                    .post(&#result_ident, &info)
+                    .await?;
+                #post_hook_async
+                #post_hook
+
+                let #response_ident = #result_ident?;
+
+                match #response_ident.status()#status_conversion {
                 // These will be of the form...
                 // 201 => ResponseValue::from_response(response).await,
                 // 200..299 => ResponseValue::empty(response),
@@ -1150,17 +1279,18 @@ impl Generator {
                 // }
                 #(#error_response_matches)*
 
-                // The default response is either an Error with a known
-                // type if the operation defines a default (as above) or
-                // an Error::UnexpectedResponse...
-                // _ => Err(Error::UnexpectedResponse(response)),
-                #default_response
+                    // The default response is either an Error with a known
+                    // type if the operation defines a default (as above) or
+                    // an Error::UnexpectedResponse...
+                    // _ => Err(Error::UnexpectedResponse(response)),
+                    #default_response
+                }
             }
         };
 
         Ok(MethodSigBody {
-            success: response_type.into_tokens(&self.type_space),
-            error: error_type.into_tokens(&self.type_space),
+            success: response_type.into_tokens(&self.type_space, &self.settings.backend),
+            error: error_type.into_tokens(&self.type_space, &self.settings.backend),
             body: body_impl,
         })
     }
@@ -1456,7 +1586,10 @@ impl Generator {
 
                 OperationParameterType::RawBody => {
                     cloneable = false;
-                    Ok(quote! { Result<reqwest::Body, String> })
+                    match self.settings.backend {
+                        HttpBackend::Reqwest => Ok(quote! { Result<reqwest::Body, String> }),
+                        HttpBackend::Gloo => Ok(quote! { Result<::wasm_bindgen::JsValue, String> }),
+                    }
                 }
             })
             .collect::<Result<Vec<_>>>()?;
@@ -1614,18 +1747,36 @@ impl Generator {
 
                     OperationParameterType::RawBody => match param.kind {
                         OperationParameterKind::Body(BodyContentType::OctetStream) => {
-                            let err_msg =
-                                format!("conversion to `reqwest::Body` for {} failed", param.name,);
+                            match self.settings.backend {
+                                HttpBackend::Reqwest => {
+                                    let err_msg =
+                                        format!("conversion to `reqwest::Body` for {} failed", param.name,);
 
-                            Ok(quote! {
-                                pub fn #param_name<B>(mut self, value: B) -> Self
-                                    where B: std::convert::TryInto<reqwest::Body>
-                                {
-                                    self.#param_name = value.try_into()
-                                        .map_err(|_| #err_msg.to_string());
-                                    self
+                                    Ok(quote! {
+                                        pub fn #param_name<B>(mut self, value: B) -> Self
+                                            where B: std::convert::TryInto<reqwest::Body>
+                                        {
+                                            self.#param_name = value.try_into()
+                                                .map_err(|_| #err_msg.to_string());
+                                            self
+                                        }
+                                    })
                                 }
-                            })
+                                HttpBackend::Gloo => {
+                                    let err_msg =
+                                        format!("conversion to `wasm_bindgen::JsValue` for {} failed", param.name,);
+
+                                    Ok(quote! {
+                                        pub fn #param_name<B>(mut self, value: B) -> Self
+                                            where B: std::convert::TryInto<::wasm_bindgen::JsValue>
+                                        {
+                                            self.#param_name = value.try_into()
+                                                .map_err(|_| #err_msg.to_string());
+                                            self
+                                        }
+                                    })
+                                }
+                            }
                         }
                         OperationParameterKind::Body(BodyContentType::Text(_)) => {
                             let err_msg =
@@ -1693,6 +1844,12 @@ impl Generator {
                 // Do the work.
                 #body
             }
+        };
+
+        // For WASM, use .boxed_local() instead of .boxed() since Send is not available
+        let boxed_method = match self.settings.backend {
+            HttpBackend::Reqwest => quote! { .boxed() },
+            HttpBackend::Gloo => quote! { .boxed_local() },
         };
 
         let stream_impl = method.dropshot_paginated.as_ref().map(|page_data| {
@@ -1791,7 +1948,7 @@ impl Generator {
                             first.chain(rest)
                         })
                         .try_flatten_stream()
-                        .boxed()
+                        #boxed_method
                 }
             }
         });

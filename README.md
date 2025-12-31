@@ -18,6 +18,20 @@ Progenitor may fail for some OpenAPI documents. If you encounter a problem, you
 can help the project by filing an issue that includes the OpenAPI document that
 produced the problem.
 
+## HTTP Backend
+
+Progenitor supports two HTTP backends:
+
+- `reqwest-client`: Uses [reqwest](https://crates.io/crates/reqwest) for HTTP operations. Works on native targets and WASM. Best for server-side applications and native CLI tools.
+
+- `gloo-client`: Uses [gloo-net](https://crates.io/crates/gloo-net) for HTTP operations. Designed specifically for WASM/browser environments. Produces smaller bundles than reqwest and leverages the browser's native Fetch API.
+
+Differences of `gloo-net` compared to `reqwest`:
+
+- Only works on browser targets (`wasm32-unknown-unknown`)
+- WebSocket uses `web_sys::WebSocket` directly instead of HTTP protocol upgrade
+- Connection pooling, timeouts, and TLS are handled by the browser and not configurable in code
+
 ## Using Progenitor
 
 There are three different ways of using the `progenitor` crate. The one you
@@ -38,11 +52,12 @@ You'll need to add the following to `Cargo.toml`:
 
 ```toml
 [dependencies]
-futures = "0.3"
 progenitor = { git = "https://github.com/oxidecomputer/progenitor" }
-reqwest = { version = "0.12", features = ["json", "stream"] }
+progenitor-client = { git = "https://github.com/oxidecomputer/progenitor", features = ["reqwest-client"] }
 serde = { version = "1.0", features = ["derive"] }
 ```
+
+For the gloo backend (WASM/browser), use `features = ["gloo-client"]` instead:
 
 In addition, if the OpenAPI document contains string types with the `format`
 field set to `date` or `date-time`, include
@@ -131,20 +146,19 @@ You'll need to add the following to `Cargo.toml`:
 
 ```toml
 [dependencies]
-futures = "0.3"
-progenitor-client = { git = "https://github.com/oxidecomputer/progenitor" }
-reqwest = { version = "0.12", features = ["json", "stream"] }
+progenitor-client = { git = "https://github.com/oxidecomputer/progenitor", features = ["reqwest-client"] }
 serde = { version = "1.0", features = ["derive"] }
-serde_json = "1.0"
 
 [build-dependencies]
 prettyplease = "0.2.22"
-progenitor = { git = "https://github.com/oxidecomputer/progenitor" }
+progenitor = { git = "https://github.com/oxidecomputer/progenitor", default-features = false }
 serde_json = "1.0"
 syn = "2.0"
 ```
 
-(`chrono`, `uuid`, `base64`, and `rand` as above)
+For the gloo backend, use `features = ["gloo-client"]` in the progenitor-client dependency.
+
+(`chrono`, `uuid`, `base64`, and `rand` as above depending on your OpenAPI spec)
 
 Note that `progenitor` is used by `build.rs`, but the generated code required
 `progenitor-client`.
@@ -157,7 +171,7 @@ however, the most manual way to use Progenitor.
 
 Usage:
 
-```
+```bash
 cargo progenitor
 
 Options:
@@ -169,13 +183,14 @@ Options:
 
 For example:
 
-```
+```bash
 cargo install cargo-progenitor
 cargo progenitor -i sample_openapi/keeper.json -o keeper -n keeper -v 0.1.0
 ```
 
 ... or within the repo:
-```
+
+```bash
 cargo run --bin cargo-progenitor -- progenitor -i sample_openapi/keeper.json -o keeper -n keeper -v 0.1.0
 ```
 

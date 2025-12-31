@@ -6,14 +6,39 @@ license = "MPL-2.0"
 repository = "https://github.com/oxidecomputer/progenitor.git"
 description = "An OpenAPI client generator - client support"
 
+[features]
+reqwest-client = ["dep:reqwest", "dep:bytes"]
+gloo-client = ["dep:gloo-net", "dep:wasm-bindgen", "dep:web-sys", "dep:js-sys", "dep:wasm-streams"]
+
 [dependencies]
-bytes = { workspace = true }
-futures-core = { workspace = true }
 percent-encoding = { workspace = true }
-reqwest = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }
 serde_urlencoded = { workspace = true }
+futures-core = { workspace = true }
+
+# reqwest backend
+bytes = { workspace = true, optional = true }
+reqwest = { workspace = true, optional = true }
+
+# gloo-net backend
+gloo-net = { version = "0.6", optional = true }
+js-sys = { version = "0.3", optional = true }
+wasm-bindgen = { version = "0.2", optional = true }
+wasm-streams = { version = "0.4", optional = true }
+web-sys = { version = "0.3", optional = true, features = [
+    "Blob",
+    "File",
+    "FormData",
+    "Headers",
+    "ReadableStream",
+    "Request",
+    "RequestCredentials",
+    "RequestInit",
+    "RequestMode",
+    "Response",
+    "WebSocket",
+] }
 
 [dev-dependencies]
 url = { workspace = true }

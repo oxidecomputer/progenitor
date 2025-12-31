@@ -7,10 +7,10 @@ different ways (see ["Using Progenitor"](../README.md#using_progenitor)).
 
 - For macro consumers, it comes from the `progenitor` dependency.
 
-- For builder consumers, it must be specified under `[dependencies]` (while `progenitor` is under `[build-dependencies]`).
+- For builder consumers, it must be specified under `[dependencies]` with either the `reqwest-client` or `gloo-client` feature (while `progenitor` is under `[build-dependencies]`).
 
 - For statically generated consumers, the code is emitted into
-  `src/progenitor_client.rs`.
+  `src/progenitor_client.rs` when using `--include-client` (reqwest backend only).
 
 The two types that `progenitor-client` exports are `Error<E>` and
 `ResponseValue<T>`. A typical generated method will use these types in its
@@ -45,8 +45,8 @@ These are the relevant implementations for `ResponseValue<T>`:
 pub struct ResponseValue<T> { .. }
 
 impl<T> ResponseValue<T> {
-    pub fn status(&self) -> &reqwest::StatusCode { .. }
-    pub fn headers(&self) -> &reqwest::header::HeaderMap { .. }
+    pub fn status(&self) -> u16 { .. }
+    pub fn headers(&self) -> &HeadersWrapper { .. }
     pub fn into_inner(self) -> T { .. }
 }
 impl<T> std::ops::Deref for ResponseValue<T> {
@@ -57,6 +57,8 @@ impl<T> std::ops::DerefMut for ResponseValue<T> { .. }
 
 impl<T: std::fmt::Debug> std::fmt::Debug for ResponseValue<T> { .. }
 ```
+
+Note: The exact types for `headers()` differ by backend (`reqwest::header::HeaderMap` for reqwest, `HeadersWrapper` for gloo).
 
 It can be used as the type `T` in most instances and extracted as a `T` using
 `into_inner()`.
@@ -86,7 +88,9 @@ There are seven sub-categories of error covered by the error type variants:
 
 - A custom error, particular to the generated client
 
-These errors are covered by the variants of the `Error<E>` type:
+These errors are covered by the variants of the `Error<E>` type. The exact variant types differ by backend:
+
+**`reqwest` backend:**
 
 ```rust
 pub enum Error<E = ()> {
@@ -97,6 +101,20 @@ pub enum Error<E = ()> {
     ResponseBodyError(reqwest::Error),
     InvalidResponsePayload(bytes::Bytes, reqwest::Error),
     UnexpectedResponse(reqwest::Response),
+    Custom(String),
+}
+```
+
+**`gloo-net` backend:**
+
+```rust
+pub enum Error<E = ()> {
+    InvalidRequest(String),
+    CommunicationError(String),
+    ErrorResponse(ResponseValue<E>),
+    ResponseBodyError(String),
+    InvalidResponsePayload(String, serde_json::Error),
+    UnexpectedResponse(gloo_net::http::Response),
     Custom(String),
 }
 ```

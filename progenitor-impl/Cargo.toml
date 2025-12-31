@@ -29,7 +29,7 @@ expectorate = { workspace = true }
 futures = { workspace = true }
 http = { workspace = true }
 hyper = { workspace = true }
-progenitor-client = { workspace = true }
+progenitor-client = { workspace = true, features = ["reqwest-client"] }
 reqwest = { workspace = true }
 rustfmt-wrapper = { workspace = true }
 semver = { workspace = true }

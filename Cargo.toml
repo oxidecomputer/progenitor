@@ -3,12 +3,15 @@ members = [
 	"cargo-progenitor",
 	"example-build",
 	"example-macro",
-	"example-wasm",
 	"progenitor",
 	"progenitor-client",
 	"progenitor-impl",
 	"progenitor-macro",
 ]
+
+# example-wasm is excluded from workspace because it uses gloo-client feature
+# which conflicts with other members using reqwest-client
+exclude = ["example-wasm"]
 
 resolver = "2"
 
@@ -57,7 +60,7 @@ typify = { version = "0.5.0" }
 # typify = { git = "https://github.com/oxidecomputer/typify" }
 url = "2.5.7"
 unicode-ident = "1.0.22"
-uuid = { version = "1.19.0", features = ["serde", "v4"] }
+uuid = { version = "1.19.0", features = ["serde", "v4", "js"] }
 
 #[patch."https://github.com/oxidecomputer/typify"]
 #typify = { path = "../typify/typify" }
