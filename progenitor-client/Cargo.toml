@@ -16,5 +16,6 @@ serde_json = { workspace = true }
 serde_urlencoded = { workspace = true }
 
 [dev-dependencies]
+assert_matches = { workspace = true }
 url = { workspace = true }
 uuid = { workspace = true }
