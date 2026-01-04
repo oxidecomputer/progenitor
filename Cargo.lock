@@ -1239,9 +1239,9 @@ dependencies = [
 
 [[package]]
 name = "log"
-version = "0.4.28"
+version = "0.4.29"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "34080505efa8e45a4b816c349525ebe327ceaa8559756f0356cba97ef3bf7432"
+checksum = "5e5032e24019045c762d3c0f28f5b6b8bbf38563a65908389bf7978758920897"
 
 [[package]]
 name = "match_cfg"
@@ -2677,8 +2677,7 @@ checksum = "562d481066bde0658276a35467c4af00bdc6ee726305698a55b86e61d7ad82bb"
 [[package]]
 name = "typify"
 version = "0.5.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e6d5bcc6f62eb1fa8aa4098f39b29f93dcb914e17158b76c50360911257aa629"
+source = "git+https://github.com/danieleades/typify?branch=refactor#75bb6c338d1a4fd531c388bfbeb755894b5b1c76"
 dependencies = [
  "typify-impl",
  "typify-macro",
@@ -2687,8 +2686,7 @@ dependencies = [
 [[package]]
 name = "typify-impl"
 version = "0.5.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a1eb359f7ffa4f9ebe947fa11a1b2da054564502968db5f317b7e37693cb2240"
+source = "git+https://github.com/danieleades/typify?branch=refactor#75bb6c338d1a4fd531c388bfbeb755894b5b1c76"
 dependencies = [
  "heck",
  "log",
@@ -2707,8 +2705,7 @@ dependencies = [
 [[package]]
 name = "typify-macro"
 version = "0.5.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "911c32f3c8514b048c1b228361bebb5e6d73aeec01696e8cc0e82e2ffef8ab7a"
+source = "git+https://github.com/danieleades/typify?branch=refactor#75bb6c338d1a4fd531c388bfbeb755894b5b1c76"
 dependencies = [
  "proc-macro2",
  "quote",

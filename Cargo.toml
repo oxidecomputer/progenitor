@@ -62,7 +62,7 @@ uuid = { version = "1.19.0", features = ["serde", "v4"] }
 #[patch."https://github.com/oxidecomputer/typify"]
 #typify = { path = "../typify/typify" }
 
-#[patch.crates-io]
+[patch.crates-io]
 #serde_tokenstream = { path = "../serde_tokenstream" }
-#typify = { path = "../typify/typify" }
+typify = { git = "https://github.com/danieleades/typify", branch = "refactor" }
 #rustfmt-wrapper = { path = "../rustfmt-wrapper" }

@@ -81,12 +81,6 @@ pub mod types {
         pub yes: bool,
     }
 
-    impl ::std::convert::From<&BodyWithDefaults> for BodyWithDefaults {
-        fn from(value: &BodyWithDefaults) -> Self {
-            value.clone()
-        }
-    }
-
     /// Generation of default values for serde.
     pub mod defaults {
         pub(super) fn default_u64<T, const V: u64>() -> T

@@ -62,12 +62,6 @@ pub mod types {
         pub required: ::serde_json::Value,
     }
 
-    impl ::std::convert::From<&UnoBody> for UnoBody {
-        fn from(value: &UnoBody) -> Self {
-            value.clone()
-        }
-    }
-
     impl UnoBody {
         pub fn builder() -> builder::UnoBody {
             Default::default()
@@ -102,7 +96,7 @@ pub mod types {
             {
                 self.gateway = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for gateway: {}", e));
+                    .map_err(|e| format!("error converting supplied value for gateway: {e}"));
                 self
             }
             pub fn required<T>(mut self, value: T) -> Self
@@ -112,7 +106,7 @@ pub mod types {
             {
                 self.required = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for required: {}", e));
+                    .map_err(|e| format!("error converting supplied value for required: {e}"));
                 self
             }
         }
