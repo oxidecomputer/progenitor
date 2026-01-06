@@ -169,6 +169,12 @@ fn test_httpmock_query_array() {
     verify_apis("httpmock-query-array.yaml");
 }
 
+/// Exercises httpmock output for string body parameters.
+#[test]
+fn test_httpmock_string_body() {
+    verify_apis("httpmock-string-body.yaml");
+}
+
 #[test]
 fn test_nexus_with_different_timeout() {
     const OPENAPI_FILE: &'static str = "nexus.json";

@@ -244,21 +244,12 @@ impl Generator {
                         },
                     ),
                     OperationParameterKind::Body(body_content_type) => match typ {
-                        OperationParameterType::Type(type_id) => {
-                            let ty = self.type_space.get_type(type_id).unwrap();
-                            let is_string =
-                                matches!(ty.details(), typify::TypeDetails::String);
-                            // String types need `to_owned()` because `str` doesn't
-                            // implement Deserialize and is unsized
-                            let value_expr =
-                                if is_string { quote! { &value.to_owned() } } else { quote! { value } };
-                            (
-                                true,
-                                quote! {
-                                    Self(self.0.json_body_obj(#value_expr))
-                                },
-                            )
-                        }
+                        OperationParameterType::Type(_) => (
+                            true,
+                            quote! {
+                                Self(self.0.json_body_obj(value))
+                            },
+                        ),
                         OperationParameterType::RawBody => match body_content_type {
                             BodyContentType::OctetStream => (
                                 true,
@@ -344,18 +335,13 @@ impl Generator {
                     crate::method::OperationResponseKind::Type(arg_type_id) => {
                         let arg_type = self.type_space.get_type(arg_type_id).unwrap();
                         let arg_type_ident = arg_type.parameter_ident();
-                        let is_string =
-                            matches!(arg_type.details(), typify::TypeDetails::String);
-                        // String types need `to_owned()` because `str` is unsized
-                        let value_expr =
-                            if is_string { quote! { &value.to_owned() } } else { quote! { value } };
                         (
                             quote! {
                                 value: #arg_type_ident,
                             },
                             quote! {
                                 .header("content-type", "application/json")
-                                .json_body_obj(#value_expr)
+                                .json_body_obj(value)
                             },
                         )
                     }
