@@ -1,0 +1,26 @@
+openapi: 3.0.0
+info:
+  title: httpmock-string-body
+  version: "0.0.0"
+paths:
+  /message:
+    post:
+      operationId: sendMessage
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: string
+      responses:
+        "204":
+          description: no-content
+    get:
+      operationId: getMessage
+      responses:
+        "200":
+          description: success
+          content:
+            application/json:
+              schema:
+                type: string
