@@ -232,7 +232,7 @@ static DEPENDENCIES: Dependencies = Dependencies {
     percent_encoding: "2.3",
     rand: "0.8",
     regress: "0.10",
-    reqwest: "0.12",
+    reqwest: "0.13",
     serde: "1.0",
     serde_json: "1.0",
     serde_urlencoded: "0.7",
@@ -243,7 +243,7 @@ pub fn dependencies(builder: Generator, include_client: bool) -> Vec<String> {
     let mut deps = vec![
         format!("bytes = \"{}\"", DEPENDENCIES.bytes),
         format!("futures-core = \"{}\"", DEPENDENCIES.futures),
-        format!("reqwest = {{ version = \"{}\", default-features=false, features = [\"json\", \"stream\"] }}", DEPENDENCIES.reqwest),
+        format!("reqwest = {{ version = \"{}\", default-features=false, features = [\"json\", \"query\", \"stream\"] }}", DEPENDENCIES.reqwest),
         format!("serde = {{ version = \"{}\", features = [\"derive\"] }}", DEPENDENCIES.serde),
         format!("serde_urlencoded = \"{}\"", DEPENDENCIES.serde_urlencoded),
     ];

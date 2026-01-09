@@ -40,7 +40,7 @@ You'll need to add the following to `Cargo.toml`:
 [dependencies]
 futures = "0.3"
 progenitor = { git = "https://github.com/oxidecomputer/progenitor" }
-reqwest = { version = "0.12", features = ["json", "stream"] }
+reqwest = { version = "0.13", features = ["json", "query", "stream"] }
 serde = { version = "1.0", features = ["derive"] }
 ```
 
@@ -133,7 +133,7 @@ You'll need to add the following to `Cargo.toml`:
 [dependencies]
 futures = "0.3"
 progenitor-client = { git = "https://github.com/oxidecomputer/progenitor" }
-reqwest = { version = "0.12", features = ["json", "stream"] }
+reqwest = { version = "0.13", features = ["json", "query", "stream"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 
@@ -200,7 +200,7 @@ bytes = "1.9"
 chrono = { version = "0.4", default-features=false, features = ["serde"] }
 futures-core = "0.3"
 progenitor-client = "0.9.1"
-reqwest = { version = "0.12", default-features=false, features = ["json", "stream"] }
+reqwest = { version = "0.13", default-features=false, features = ["json", "query", "stream"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_urlencoded = "0.7"
 ```
@@ -213,7 +213,7 @@ bytes = "1.9"
 chrono = { version = "0.4", default-features=false, features = ["serde"] }
 futures-core = "0.3"
 percent-encoding = "2.3"
-reqwest = { version = "0.12", default-features=false, features = ["json", "stream"] }
+reqwest = { version = "0.13", default-features=false, features = ["json", "query", "stream"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 serde_urlencoded = "0.7"
