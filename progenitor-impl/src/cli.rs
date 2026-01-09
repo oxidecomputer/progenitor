@@ -390,7 +390,7 @@ impl Generator {
             }
 
             let first_page_required = first_page_required_set
-                .map_or(false, |required| required.contains(&param.api_name));
+                .is_some_and(|required| required.contains(&param.api_name));
 
             let volitionality = if innately_required || first_page_required {
                 Volitionality::Required
@@ -441,7 +441,8 @@ impl Generator {
                 // are currently...
                 OperationParameterType::RawBody => None,
 
-                OperationParameterType::Type(body_type_id) => Some(body_type_id),
+                OperationParameterType::Type(body_type_id)
+                | OperationParameterType::MultipartRelated(body_type_id) => Some(body_type_id),
             });
 
         if let Some(body_type_id) = maybe_body_type_id {
