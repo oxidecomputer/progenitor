@@ -8,7 +8,7 @@ use std::ops::{Deref, DerefMut};
 
 use bytes::Bytes;
 use futures_core::Stream;
-use reqwest::RequestBuilder;
+use reqwest::{multipart::Part, RequestBuilder};
 use serde::{de::DeserializeOwned, ser::SerializeStruct, Serialize};
 
 #[cfg(not(target_arch = "wasm32"))]
@@ -16,6 +16,404 @@ type InnerByteStream = std::pin::Pin<Box<dyn Stream<Item = reqwest::Result<Bytes
 
 #[cfg(target_arch = "wasm32")]
 type InnerByteStream = std::pin::Pin<Box<dyn Stream<Item = reqwest::Result<Bytes>>>>;
+
+/// A validated filename for form part uploads.
+///
+/// Filenames are validated to not contain path separators or null bytes,
+/// preventing path traversal attacks.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct Filename(String);
+
+impl Filename {
+    /// Create a new filename, validating that it doesn't contain path separators.
+    ///
+    /// # Errors
+    /// Returns an error if the filename contains `/`, `\`, or null bytes.
+    pub fn new(name: impl Into<String>) -> Result<Self, FilenameError> {
+        let name = name.into();
+        if name.contains('/') || name.contains('\\') || name.contains('\0') {
+            Err(FilenameError::InvalidCharacter)
+        } else if name.is_empty() {
+            Err(FilenameError::Empty)
+        } else {
+            Ok(Self(name))
+        }
+    }
+
+    /// Create a filename without validation.
+    ///
+    /// # Safety
+    /// The caller must ensure the filename doesn't contain path separators.
+    /// This is useful when the filename comes from a trusted source.
+    pub fn new_unchecked(name: impl Into<String>) -> Self {
+        Self(name.into())
+    }
+
+    /// Get the filename as a string slice.
+    pub fn as_str(&self) -> &str {
+        &self.0
+    }
+
+    /// Consume the Filename and return the inner String.
+    pub fn into_string(self) -> String {
+        self.0
+    }
+}
+
+impl AsRef<str> for Filename {
+    fn as_ref(&self) -> &str {
+        &self.0
+    }
+}
+
+impl std::fmt::Display for Filename {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.0)
+    }
+}
+
+/// Error type for invalid filenames.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum FilenameError {
+    /// Filename contains path separators (`/`, `\`) or null bytes.
+    InvalidCharacter,
+    /// Filename is empty.
+    Empty,
+}
+
+impl std::fmt::Display for FilenameError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            FilenameError::InvalidCharacter => {
+                write!(f, "filename contains invalid characters (/, \\, or null)")
+            }
+            FilenameError::Empty => write!(f, "filename cannot be empty"),
+        }
+    }
+}
+
+impl std::error::Error for FilenameError {}
+
+/// A validated MIME content-type for form parts.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct ContentType(String);
+
+impl ContentType {
+    /// Create a new content-type, validating the format.
+    ///
+    /// # Errors
+    /// Returns an error if the content-type doesn't follow `type/subtype` format.
+    pub fn new(content_type: impl Into<String>) -> Result<Self, ContentTypeError> {
+        let content_type = content_type.into();
+        let Some((type_part, rest)) = content_type.split_once('/') else {
+            return Err(ContentTypeError::InvalidFormat);
+        };
+        let subtype_part = rest.split_once(';').map_or(rest, |(s, _)| s);
+        if type_part.trim().is_empty()
+            || subtype_part.trim().is_empty()
+            || subtype_part.contains('/')
+        {
+            return Err(ContentTypeError::InvalidFormat);
+        }
+        Ok(Self(content_type))
+    }
+
+    /// Create a content-type without validation.
+    ///
+    /// # Safety
+    /// The caller must ensure the content-type is in valid `type/subtype` format.
+    pub fn new_unchecked(content_type: impl Into<String>) -> Self {
+        Self(content_type.into())
+    }
+
+    /// Get the content-type as a string slice.
+    pub fn as_str(&self) -> &str {
+        &self.0
+    }
+
+    /// Consume the ContentType and return the inner String.
+    pub fn into_string(self) -> String {
+        self.0
+    }
+
+    /// Create `application/json` content type.
+    pub fn json() -> Self {
+        Self("application/json".to_string())
+    }
+
+    /// Create `application/octet-stream` content type.
+    pub fn octet_stream() -> Self {
+        Self("application/octet-stream".to_string())
+    }
+
+    /// Create an `application/{subtype}` content type.
+    pub fn application(subtype: &str) -> Self {
+        Self(format!("application/{}", subtype))
+    }
+
+    /// Create an `image/{subtype}` content type.
+    pub fn image(subtype: &str) -> Self {
+        Self(format!("image/{}", subtype))
+    }
+}
+
+impl AsRef<str> for ContentType {
+    fn as_ref(&self) -> &str {
+        &self.0
+    }
+}
+
+impl std::fmt::Display for ContentType {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.0)
+    }
+}
+
+/// Error type for invalid content-types.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum ContentTypeError {
+    /// Content-type doesn't follow the `type/subtype` format.
+    InvalidFormat,
+}
+
+impl std::fmt::Display for ContentTypeError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "content-type must be in 'type/subtype' format")
+    }
+}
+
+impl std::error::Error for ContentTypeError {}
+
+/// Binary form part data with optional filename and content-type.
+#[derive(Debug, Clone)]
+pub struct BinaryFormPart {
+    /// The binary data
+    pub data: Bytes,
+    /// Optional filename for the part
+    pub filename: Option<Filename>,
+    /// Optional content-type override
+    pub content_type: Option<ContentType>,
+}
+
+impl BinaryFormPart {
+    /// Create a new binary form part from bytes.
+    pub fn new(data: impl Into<Bytes>) -> Self {
+        Self {
+            data: data.into(),
+            filename: None,
+            content_type: None,
+        }
+    }
+
+    /// Create a binary form part with a filename.
+    pub fn with_filename(data: impl Into<Bytes>, filename: Filename) -> Self {
+        Self {
+            data: data.into(),
+            filename: Some(filename),
+            content_type: None,
+        }
+    }
+
+    /// Create a binary form part with filename and content-type.
+    pub fn with_metadata(
+        data: impl Into<Bytes>,
+        filename: Option<Filename>,
+        content_type: Option<ContentType>,
+    ) -> Self {
+        Self {
+            data: data.into(),
+            filename,
+            content_type,
+        }
+    }
+
+    /// Create a builder for a binary form part.
+    pub fn builder(data: impl Into<Bytes>) -> BinaryFormPartBuilder {
+        BinaryFormPartBuilder {
+            data: data.into(),
+            filename: None,
+            content_type: None,
+        }
+    }
+}
+
+impl From<BinaryFormPart> for FormPart {
+    fn from(part: BinaryFormPart) -> Self {
+        FormPart::Binary(part)
+    }
+}
+
+/// Text form part data with optional content-type.
+#[derive(Debug, Clone)]
+pub struct TextFormPart {
+    /// The text value
+    pub value: String,
+    /// Optional content-type override
+    pub content_type: Option<ContentType>,
+}
+
+impl TextFormPart {
+    /// Create a new text form part.
+    pub fn new(value: impl Into<String>) -> Self {
+        Self {
+            value: value.into(),
+            content_type: None,
+        }
+    }
+
+    /// Create a text form part with a specific content-type.
+    pub fn with_content_type(value: impl Into<String>, content_type: ContentType) -> Self {
+        Self {
+            value: value.into(),
+            content_type: Some(content_type),
+        }
+    }
+
+    /// Create a JSON text form part.
+    pub fn json<T: serde::Serialize>(value: &T) -> Result<Self, serde_json::Error> {
+        Ok(Self {
+            value: serde_json::to_string(value)?,
+            content_type: Some(ContentType::json()),
+        })
+    }
+
+    /// Create a builder for a text form part.
+    pub fn builder(value: impl Into<String>) -> TextFormPartBuilder {
+        TextFormPartBuilder {
+            value: value.into(),
+            content_type: None,
+        }
+    }
+}
+
+impl From<TextFormPart> for FormPart {
+    fn from(part: TextFormPart) -> Self {
+        FormPart::Text(part)
+    }
+}
+
+/// A part of a multipart form, either binary data or text.
+#[derive(Debug, Clone)]
+pub enum FormPart {
+    /// Binary data (e.g., file contents) with optional filename and content-type
+    Binary(BinaryFormPart),
+    /// Text data (will be sent as a text field) with optional content-type
+    Text(TextFormPart),
+}
+
+impl FormPart {
+    /// Create a binary form part from bytes
+    pub fn binary(data: impl Into<Bytes>) -> Self {
+        Self::Binary(BinaryFormPart::new(data))
+    }
+
+    /// Create a binary form part with a filename
+    pub fn binary_with_filename(data: impl Into<Bytes>, filename: Filename) -> Self {
+        Self::Binary(BinaryFormPart::with_filename(data, filename))
+    }
+
+    /// Create a binary form part with filename and content-type
+    pub fn binary_with_metadata(
+        data: impl Into<Bytes>,
+        filename: Option<Filename>,
+        content_type: Option<ContentType>,
+    ) -> Self {
+        Self::Binary(BinaryFormPart::with_metadata(data, filename, content_type))
+    }
+
+    /// Create a text form part from a string
+    pub fn text(data: impl Into<String>) -> Self {
+        Self::Text(TextFormPart::new(data))
+    }
+
+    /// Create a text form part with a specific content-type
+    pub fn text_with_content_type(data: impl Into<String>, content_type: ContentType) -> Self {
+        Self::Text(TextFormPart::with_content_type(data, content_type))
+    }
+
+    /// Create a JSON text form part
+    pub fn json<T: serde::Serialize>(value: &T) -> Result<Self, serde_json::Error> {
+        Ok(Self::Text(TextFormPart::json(value)?))
+    }
+
+    /// Create a builder for a binary form part
+    pub fn binary_builder(data: impl Into<Bytes>) -> BinaryFormPartBuilder {
+        BinaryFormPart::builder(data)
+    }
+
+    /// Create a builder for a text form part
+    pub fn text_builder(value: impl Into<String>) -> TextFormPartBuilder {
+        TextFormPart::builder(value)
+    }
+}
+
+/// Builder for binary form parts.
+///
+/// Created via [`FormPart::binary_builder`] or [`BinaryFormPart::builder`].
+#[derive(Debug, Clone)]
+pub struct BinaryFormPartBuilder {
+    data: Bytes,
+    filename: Option<Filename>,
+    content_type: Option<ContentType>,
+}
+
+impl BinaryFormPartBuilder {
+    /// Set the filename for this part.
+    pub fn filename(mut self, filename: Filename) -> Self {
+        self.filename = Some(filename);
+        self
+    }
+
+    /// Set the content-type for this part.
+    pub fn content_type(mut self, content_type: ContentType) -> Self {
+        self.content_type = Some(content_type);
+        self
+    }
+
+    /// Build the BinaryFormPart.
+    pub fn build(self) -> BinaryFormPart {
+        BinaryFormPart {
+            data: self.data,
+            filename: self.filename,
+            content_type: self.content_type,
+        }
+    }
+
+    /// Build directly into a FormPart.
+    pub fn into_form_part(self) -> FormPart {
+        FormPart::Binary(self.build())
+    }
+}
+
+/// Builder for text form parts.
+///
+/// Created via [`FormPart::text_builder`] or [`TextFormPart::builder`].
+#[derive(Debug, Clone)]
+pub struct TextFormPartBuilder {
+    value: String,
+    content_type: Option<ContentType>,
+}
+
+impl TextFormPartBuilder {
+    /// Set the content-type for this part.
+    pub fn content_type(mut self, content_type: ContentType) -> Self {
+        self.content_type = Some(content_type);
+        self
+    }
+
+    /// Build the TextFormPart.
+    pub fn build(self) -> TextFormPart {
+        TextFormPart {
+            value: self.value,
+            content_type: self.content_type,
+        }
+    }
+
+    /// Build directly into a FormPart.
+    pub fn into_form_part(self) -> FormPart {
+        FormPart::Text(self.build())
+    }
+}
 
 /// Untyped byte stream used for both success and error responses.
 pub struct ByteStream(InnerByteStream);
@@ -527,8 +925,21 @@ pub fn encode_path(pc: &str) -> String {
 }
 
 #[doc(hidden)]
-pub trait RequestBuilderExt<E> {
+pub trait RequestBuilderExt<E>
+where
+    Self: Sized,
+{
     fn form_urlencoded<T: Serialize + ?Sized>(self, body: &T) -> Result<RequestBuilder, Error<E>>;
+
+    fn form_from_raw<S: AsRef<str>, T: AsRef<[u8]>, I: Sized + IntoIterator<Item = (S, T)>>(
+        self,
+        iter: I,
+    ) -> Result<Self, Error<E>>;
+
+    fn form_from_parts<S: AsRef<str>, I: Sized + IntoIterator<Item = (S, FormPart)>>(
+        self,
+        iter: I,
+    ) -> Result<Self, Error<E>>;
 }
 
 impl<E> RequestBuilderExt<E> for RequestBuilder {
@@ -542,6 +953,70 @@ impl<E> RequestBuilderExt<E> for RequestBuilder {
                 serde_urlencoded::to_string(body)
                     .map_err(|_| Error::InvalidRequest("failed to serialize body".to_string()))?,
             ))
+    }
+
+    fn form_from_raw<S: AsRef<str>, T: AsRef<[u8]>, I: Sized + IntoIterator<Item = (S, T)>>(
+        self,
+        iter: I,
+    ) -> Result<Self, Error<E>> {
+        use reqwest::multipart::Form;
+
+        let mut form = Form::new();
+        for (name, value) in iter {
+            form = form.part(
+                name.as_ref().to_owned(),
+                Part::stream(Vec::from(value.as_ref())),
+            );
+        }
+        // Note: reqwest's .multipart() automatically sets the Content-Type header
+        // with the correct boundary, so we don't set it manually here.
+        Ok(self.multipart(form))
+    }
+
+    fn form_from_parts<S: AsRef<str>, I: Sized + IntoIterator<Item = (S, FormPart)>>(
+        self,
+        iter: I,
+    ) -> Result<Self, Error<E>> {
+        use reqwest::multipart::Form;
+
+        let mut form = Form::new();
+        for (name, part) in iter {
+            let name = name.as_ref().to_owned();
+            form = match part {
+                FormPart::Binary(BinaryFormPart {
+                    data,
+                    filename,
+                    content_type,
+                }) => {
+                    let mut p = Part::stream(data.to_vec());
+                    if let Some(fname) = filename {
+                        p = p.file_name(fname.into_string());
+                    }
+                    if let Some(ct) = content_type {
+                        p = p.mime_str(ct.as_str()).map_err(|e| {
+                            Error::InvalidRequest(format!("invalid content-type: {}", e))
+                        })?;
+                    }
+                    form.part(name, p)
+                }
+                FormPart::Text(TextFormPart {
+                    value,
+                    content_type,
+                }) => {
+                    if let Some(ct) = content_type {
+                        let p = Part::text(value).mime_str(ct.as_str()).map_err(|e| {
+                            Error::InvalidRequest(format!("invalid content-type: {}", e))
+                        })?;
+                        form.part(name, p)
+                    } else {
+                        form.text(name, value)
+                    }
+                }
+            };
+        }
+        // Note: reqwest's .multipart() automatically sets the Content-Type header
+        // with the correct boundary, so we don't set it manually here.
+        Ok(self.multipart(form))
     }
 }
 

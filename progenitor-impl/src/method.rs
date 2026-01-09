@@ -6,6 +6,8 @@ use std::{
     str::FromStr,
 };
 
+use indexmap::IndexMap;
+
 use openapiv3::{Components, Parameter, ReferenceOr, Response, StatusCode};
 use proc_macro2::TokenStream;
 use quote::{format_ident, quote, ToTokens};
@@ -102,9 +104,10 @@ pub struct OperationParameter {
     pub kind: OperationParameterKind,
 }
 
-#[derive(Eq, PartialEq)]
+#[derive(Debug, Eq, PartialEq)]
 pub enum OperationParameterType {
     Type(TypeId),
+    Form(TypeId),
     RawBody,
 }
 
@@ -137,6 +140,7 @@ pub enum BodyContentType {
     OctetStream,
     Json,
     FormUrlencoded,
+    FormData,
     Text(String),
 }
 
@@ -149,6 +153,7 @@ impl FromStr for BodyContentType {
             "application/octet-stream" => Ok(Self::OctetStream),
             "application/json" => Ok(Self::Json),
             "application/x-www-form-urlencoded" => Ok(Self::FormUrlencoded),
+            "form-data" | "multipart/form-data" => Ok(Self::FormData),
             "text/plain" | "text/x-markdown" => Ok(Self::Text(String::from(&s[..offset]))),
             _ => Err(Error::UnexpectedFormat(format!(
                 "unexpected content type: {}",
@@ -164,6 +169,7 @@ impl std::fmt::Display for BodyContentType {
             Self::OctetStream => "application/octet-stream",
             Self::Json => "application/json",
             Self::FormUrlencoded => "application/x-www-form-urlencoded",
+            Self::FormData => "multipart/form-data",
             Self::Text(typ) => typ,
         })
     }
@@ -562,12 +568,20 @@ impl Generator {
             .map(|param| {
                 let name = format_ident!("{}", param.name);
                 let typ = match (&param.typ, param.kind.is_optional()) {
-                    (OperationParameterType::Type(type_id), false) => self
+                    (
+                        OperationParameterType::Type(type_id)
+                        | OperationParameterType::Form(type_id),
+                        false,
+                    ) => self
                         .type_space
                         .get_type(type_id)
                         .unwrap()
                         .parameter_ident_with_lifetime("a"),
-                    (OperationParameterType::Type(type_id), true) => {
+                    (
+                        OperationParameterType::Type(type_id)
+                        | OperationParameterType::Form(type_id),
+                        true,
+                    ) => {
                         let t = self
                             .type_space
                             .get_type(type_id)
@@ -918,6 +932,16 @@ impl Generator {
                     // returns an error in the case of a serialization failure.
                     .form_urlencoded(&body)?
                 }),
+                (
+                    OperationParameterKind::Body(BodyContentType::FormData),
+                    OperationParameterType::Form(_),
+                ) => {
+                    Some(quote! {
+                        // This uses `progenitor_client::RequestBuilderExt` which
+                        // builds a multipart form from the form parts
+                        .form_from_parts(body.as_form())?
+                    })
+                }
                 (OperationParameterKind::Body(_), _) => {
                     unreachable!("invalid body kind/type combination")
                 }
@@ -1436,7 +1460,7 @@ impl Generator {
             .params
             .iter()
             .map(|param| match &param.typ {
-                OperationParameterType::Type(type_id) => {
+                OperationParameterType::Type(type_id) | OperationParameterType::Form(type_id) => {
                     let ty = self.type_space.get_type(type_id)?;
 
                     // For body parameters only, if there's a builder we'll
@@ -1469,7 +1493,7 @@ impl Generator {
             .params
             .iter()
             .map(|param| match &param.typ {
-                OperationParameterType::Type(type_id) => {
+                OperationParameterType::Type(type_id) | OperationParameterType::Form(type_id) => {
                     let ty = self.type_space.get_type(type_id)?;
 
                     // Fill in the appropriate initial value for the
@@ -1499,7 +1523,7 @@ impl Generator {
             .params
             .iter()
             .map(|param| match &param.typ {
-                OperationParameterType::Type(type_id) => {
+                OperationParameterType::Type(type_id) | OperationParameterType::Form(type_id) => {
                     let ty = self.type_space.get_type(type_id)?;
                     if ty.builder().is_some() {
                         let type_name = ty.ident();
@@ -1523,7 +1547,8 @@ impl Generator {
             .map(|param| {
                 let param_name = format_ident!("{}", param.name);
                 match &param.typ {
-                    OperationParameterType::Type(type_id) => {
+                    OperationParameterType::Type(type_id)
+                    | OperationParameterType::Form(type_id) => {
                         let ty = self.type_space.get_type(type_id)?;
                         match (ty.builder(), param.kind.is_optional()) {
                             // TODO right now optional body parameters are not
@@ -2130,6 +2155,95 @@ impl Generator {
                     ))),
                 }?;
                 OperationParameterType::RawBody
+            }
+            BodyContentType::FormData => {
+                // For multipart/form-data, we accept an object schema with various property types:
+                // - type: string, format: binary -> Binary file data (bytes::Bytes)
+                // - type: string -> Text field
+                // - type: integer/number/boolean -> Text field (serialized)
+                // - type: object -> JSON-serialized text field
+                // - type: array -> JSON-serialized text field
+                //
+                // We track field metadata to generate appropriate as_form() implementations.
+                // The encoding object can override content-types for individual fields.
+
+                let field_info = match schema.item(components)? {
+                    openapiv3::Schema {
+                        schema_kind:
+                            openapiv3::SchemaKind::Type(openapiv3::Type::Object(
+                                openapiv3::ObjectType { properties, .. },
+                            )),
+                        ..
+                    } => {
+                        let mut fields = IndexMap::new();
+                        for (name, property) in properties {
+                            let (is_binary, needs_json) = match property {
+                                ReferenceOr::Item(prop) => {
+                                    let is_binary = matches!(
+                                        &prop.schema_kind,
+                                        openapiv3::SchemaKind::Type(openapiv3::Type::String(
+                                            openapiv3::StringType {
+                                                format: openapiv3::VariantOrUnknownOrEmpty::Item(
+                                                    openapiv3::StringFormat::Binary,
+                                                ),
+                                                ..
+                                            },
+                                        ))
+                                    );
+                                    let needs_json = matches!(
+                                        &prop.schema_kind,
+                                        openapiv3::SchemaKind::Type(openapiv3::Type::Array(_))
+                                            | openapiv3::SchemaKind::Type(openapiv3::Type::Object(
+                                                _
+                                            ))
+                                    );
+                                    (is_binary, needs_json)
+                                }
+                                ReferenceOr::Reference { .. } => {
+                                    // References are assumed to be complex types requiring JSON
+                                    (false, true)
+                                }
+                            };
+
+                            // Check for encoding overrides (content-type per field)
+                            let content_type = media_type
+                                .encoding
+                                .get(name)
+                                .and_then(|enc| enc.content_type.clone());
+
+                            // Use the Rust-ized (snake_case) name as the key since
+                            // typify's properties() returns Rust names, but store the
+                            // original API name for use in the form field name.
+                            let rust_name = sanitize(name, Case::Snake);
+                            fields.insert(
+                                rust_name,
+                                crate::FormFieldMeta {
+                                    api_name: name.clone(),
+                                    is_binary,
+                                    needs_json,
+                                    content_type,
+                                },
+                            );
+                        }
+                        crate::FormFieldsInfo { fields }
+                    }
+                    _ => {
+                        return Err(Error::UnexpectedFormat(format!(
+                            "multipart/form-data requires an object schema, got: {:?}",
+                            schema
+                        )));
+                    }
+                };
+
+                let form_name = sanitize(
+                    &format!("{}-form", operation.operation_id.as_ref().unwrap(),),
+                    Case::Pascal,
+                );
+                let type_id = self
+                    .type_space
+                    .add_type_with_name(&schema.to_schema(), Some(form_name))?;
+                self.forms.insert(type_id.clone(), field_info);
+                OperationParameterType::Form(type_id)
             }
             BodyContentType::Json | BodyContentType::FormUrlencoded => {
                 // TODO it would be legal to have the encoding field set for

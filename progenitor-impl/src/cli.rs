@@ -441,7 +441,8 @@ impl Generator {
                 // are currently...
                 OperationParameterType::RawBody => None,
 
-                OperationParameterType::Type(body_type_id) => Some(body_type_id),
+                OperationParameterType::Type(body_type_id)
+                | OperationParameterType::Form(body_type_id) => Some(body_type_id),
             });
 
         if let Some(body_type_id) = maybe_body_type_id {

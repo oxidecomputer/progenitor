@@ -219,3 +219,369 @@ fn test_query_option() {
     let result = encode_query_param("paramName", &value).unwrap();
     assert_eq!(result, "paramName=42");
 }
+
+mod form_part_tests {
+    use assert_matches::assert_matches;
+    use bytes::Bytes;
+    use progenitor_client::{BinaryFormPart, ContentType, Filename, FormPart, TextFormPart};
+    use serde::Serialize;
+
+    #[test]
+    fn test_form_part_binary() {
+        let data = vec![1u8, 2, 3, 4];
+        let part = FormPart::binary(data.clone());
+
+        assert_matches!(part, FormPart::Binary(BinaryFormPart { data: d, filename: None, content_type: None }) => {
+            assert_eq!(d.as_ref(), &data[..]);
+        });
+    }
+
+    #[test]
+    fn test_form_part_binary_from_bytes() {
+        let data = Bytes::from_static(b"hello world");
+        let part = FormPart::binary(data.clone());
+
+        assert_matches!(part, FormPart::Binary(BinaryFormPart { data: d, .. }) => {
+            assert_eq!(d, data);
+        });
+    }
+
+    #[test]
+    fn test_form_part_binary_with_filename() {
+        let part =
+            FormPart::binary_with_filename(vec![1u8, 2, 3], Filename::new("test.bin").unwrap());
+
+        assert_matches!(part, FormPart::Binary(BinaryFormPart { filename: Some(f), content_type: None, .. }) => {
+            assert_eq!(f.as_str(), "test.bin");
+        });
+    }
+
+    #[test]
+    fn test_form_part_binary_with_metadata() {
+        let part = FormPart::binary_with_metadata(
+            vec![1u8, 2, 3],
+            Some(Filename::new("document.pdf").unwrap()),
+            Some(ContentType::application("pdf")),
+        );
+
+        assert_matches!(part, FormPart::Binary(BinaryFormPart { filename: Some(f), content_type: Some(ct), .. }) => {
+            assert_eq!(f.as_str(), "document.pdf");
+            assert_eq!(ct.as_str(), "application/pdf");
+        });
+    }
+
+    #[test]
+    fn test_form_part_binary_with_metadata_none() {
+        let part = FormPart::binary_with_metadata(vec![1u8, 2, 3], None, None);
+        assert_matches!(
+            part,
+            FormPart::Binary(BinaryFormPart {
+                filename: None,
+                content_type: None,
+                ..
+            })
+        );
+    }
+
+    #[test]
+    fn test_form_part_text() {
+        let part = FormPart::text("hello world");
+
+        assert_matches!(part, FormPart::Text(TextFormPart { value, content_type: None }) => {
+            assert_eq!(value, "hello world");
+        });
+    }
+
+    #[test]
+    fn test_form_part_text_from_string() {
+        let part = FormPart::text(String::from("hello world"));
+
+        assert_matches!(part, FormPart::Text(TextFormPart { value, .. }) => {
+            assert_eq!(value, "hello world");
+        });
+    }
+
+    #[test]
+    fn test_form_part_text_with_content_type() {
+        let part = FormPart::text_with_content_type("{\"key\": \"value\"}", ContentType::json());
+
+        assert_matches!(part, FormPart::Text(TextFormPart { value, content_type: Some(ct) }) => {
+            assert_eq!(value, "{\"key\": \"value\"}");
+            assert_eq!(ct.as_str(), "application/json");
+        });
+    }
+
+    #[test]
+    fn test_form_part_json() {
+        #[derive(Serialize)]
+        struct TestData {
+            name: String,
+            count: i32,
+        }
+
+        let data = TestData {
+            name: "test".to_string(),
+            count: 42,
+        };
+        let part = FormPart::json(&data).unwrap();
+
+        assert_matches!(part, FormPart::Text(TextFormPart { value, content_type: Some(ct) }) => {
+            assert_eq!(value, r#"{"name":"test","count":42}"#);
+            assert_eq!(ct.as_str(), "application/json");
+        });
+    }
+
+    #[test]
+    fn test_form_part_json_array() {
+        let part = FormPart::json(&vec![1, 2, 3, 4, 5]).unwrap();
+
+        assert_matches!(part, FormPart::Text(TextFormPart { value, content_type: Some(ct) }) => {
+            assert_eq!(value, "[1,2,3,4,5]");
+            assert_eq!(ct.as_str(), "application/json");
+        });
+    }
+
+    #[test]
+    fn test_form_part_json_nested() {
+        #[derive(Serialize)]
+        struct Inner {
+            value: String,
+        }
+
+        #[derive(Serialize)]
+        struct Outer {
+            inner: Inner,
+            tags: Vec<String>,
+        }
+
+        let data = Outer {
+            inner: Inner {
+                value: "nested".to_string(),
+            },
+            tags: vec!["a".to_string(), "b".to_string()],
+        };
+        let part = FormPart::json(&data).unwrap();
+
+        assert_matches!(part, FormPart::Text(TextFormPart { value, .. }) => {
+            assert!(value.contains("\"inner\""));
+            assert!(value.contains("\"nested\""));
+            assert!(value.contains("\"tags\""));
+        });
+    }
+
+    #[test]
+    fn test_form_part_clone() {
+        let part1 =
+            FormPart::binary_with_filename(vec![1, 2, 3], Filename::new("test.bin").unwrap());
+        let part2 = part1.clone();
+
+        assert_matches!(
+            (part1, part2),
+            (FormPart::Binary(BinaryFormPart { data: d1, filename: f1, .. }), FormPart::Binary(BinaryFormPart { data: d2, filename: f2, .. })) => {
+                assert_eq!(d1, d2);
+                assert_eq!(f1, f2);
+            }
+        );
+    }
+
+    #[test]
+    fn test_form_part_debug() {
+        let part = FormPart::text("test");
+        let debug_str = format!("{:?}", part);
+        assert!(debug_str.contains("Text"));
+        assert!(debug_str.contains("test"));
+    }
+
+    // Tests for the new type-safe newtypes
+    #[test]
+    fn test_filename_validation() {
+        // Valid filenames
+        assert!(Filename::new("test.bin").is_ok());
+        assert!(Filename::new("my-file_123.txt").is_ok());
+        assert!(Filename::new("file with spaces.pdf").is_ok());
+
+        // Invalid filenames (path separators)
+        assert!(Filename::new("path/to/file.txt").is_err());
+        assert!(Filename::new("path\\to\\file.txt").is_err());
+        assert!(Filename::new("file\0name.txt").is_err());
+        assert!(Filename::new("").is_err());
+    }
+
+    #[test]
+    fn test_filename_unchecked() {
+        // new_unchecked bypasses validation (useful for trusted sources)
+        let f = Filename::new_unchecked("any/path/works");
+        assert_eq!(f.as_str(), "any/path/works");
+    }
+
+    #[test]
+    fn test_content_type_json() {
+        assert_eq!(ContentType::json().as_str(), "application/json");
+    }
+
+    #[test]
+    fn test_content_type_new_unchecked() {
+        assert_eq!(
+            ContentType::new_unchecked("text/html").as_str(),
+            "text/html"
+        );
+    }
+
+    #[test]
+    fn test_content_type_application() {
+        assert_eq!(ContentType::application("pdf").as_str(), "application/pdf");
+        assert_eq!(
+            ContentType::application("xml").as_str(),
+            "application/xml"
+        );
+    }
+
+    #[test]
+    fn test_content_type_image() {
+        assert_eq!(ContentType::image("png").as_str(), "image/png");
+        assert_eq!(ContentType::image("jpeg").as_str(), "image/jpeg");
+    }
+
+    #[test]
+    fn test_content_type_octet_stream() {
+        assert_eq!(
+            ContentType::octet_stream().as_str(),
+            "application/octet-stream"
+        );
+    }
+
+    #[test]
+    fn test_filename_display() {
+        let f = Filename::new("test.bin").unwrap();
+        assert_eq!(format!("{}", f), "test.bin");
+    }
+
+    #[test]
+    fn test_content_type_display() {
+        let ct = ContentType::json();
+        assert_eq!(format!("{}", ct), "application/json");
+    }
+
+    #[test]
+    fn test_filename_as_ref() {
+        let f = Filename::new("test.bin").unwrap();
+        let s: &str = f.as_ref();
+        assert_eq!(s, "test.bin");
+    }
+
+    #[test]
+    fn test_content_type_as_ref() {
+        let ct = ContentType::json();
+        let s: &str = ct.as_ref();
+        assert_eq!(s, "application/json");
+    }
+
+    // Builder pattern tests
+    #[test]
+    fn test_binary_builder_minimal() {
+        let part = FormPart::binary_builder(vec![1u8, 2, 3]).build();
+        assert_matches!(
+            part,
+            BinaryFormPart {
+                filename: None,
+                content_type: None,
+                ..
+            }
+        );
+    }
+
+    #[test]
+    fn test_binary_builder_with_filename() {
+        let part = FormPart::binary_builder(vec![1u8, 2, 3])
+            .filename(Filename::new("test.bin").unwrap())
+            .build();
+
+        assert_matches!(part, BinaryFormPart { filename: Some(f), content_type: None, .. } => {
+            assert_eq!(f.as_str(), "test.bin");
+        });
+    }
+
+    #[test]
+    fn test_binary_builder_with_content_type() {
+        let part = FormPart::binary_builder(vec![1u8, 2, 3])
+            .content_type(ContentType::image("png"))
+            .build();
+
+        assert_matches!(part, BinaryFormPart { filename: None, content_type: Some(ct), .. } => {
+            assert_eq!(ct.as_str(), "image/png");
+        });
+    }
+
+    #[test]
+    fn test_binary_builder_full() {
+        let part = FormPart::binary_builder(vec![1u8, 2, 3])
+            .filename(Filename::new("document.pdf").unwrap())
+            .content_type(ContentType::application("pdf"))
+            .build();
+
+        assert_matches!(part, BinaryFormPart { data, filename: Some(f), content_type: Some(ct) } => {
+            assert_eq!(data.as_ref(), &[1u8, 2, 3]);
+            assert_eq!(f.as_str(), "document.pdf");
+            assert_eq!(ct.as_str(), "application/pdf");
+        });
+    }
+
+    #[test]
+    fn test_text_builder_minimal() {
+        let part = FormPart::text_builder("hello").build();
+
+        assert_matches!(part, TextFormPart { value, content_type: None } => {
+            assert_eq!(value, "hello");
+        });
+    }
+
+    #[test]
+    fn test_text_builder_with_content_type() {
+        let part = FormPart::text_builder("{}")
+            .content_type(ContentType::json())
+            .build();
+
+        assert_matches!(part, TextFormPart { value, content_type: Some(ct) } => {
+            assert_eq!(value, "{}");
+            assert_eq!(ct.as_str(), "application/json");
+        });
+    }
+
+    #[test]
+    fn test_builder_into_form_part() {
+        // Test that builders can be converted directly to FormPart
+        let part: FormPart = FormPart::binary_builder(vec![1u8, 2, 3])
+            .filename(Filename::new("test.bin").unwrap())
+            .into_form_part();
+        assert_matches!(
+            part,
+            FormPart::Binary(BinaryFormPart {
+                filename: Some(_),
+                ..
+            })
+        );
+
+        let part: FormPart = FormPart::text_builder("hello")
+            .content_type(ContentType::json())
+            .into_form_part();
+        assert_matches!(
+            part,
+            FormPart::Text(TextFormPart {
+                content_type: Some(_),
+                ..
+            })
+        );
+    }
+
+    #[test]
+    fn test_inner_types_into_form_part() {
+        // Test that BinaryFormPart and TextFormPart can be converted to FormPart via From
+        let binary = BinaryFormPart::new(vec![1u8, 2, 3]);
+        let part: FormPart = binary.into();
+        assert_matches!(part, FormPart::Binary(_));
+
+        let text = TextFormPart::new("hello");
+        let part: FormPart = text.into();
+        assert_matches!(part, FormPart::Text(_));
+    }
+}

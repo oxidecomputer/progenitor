@@ -6,12 +6,13 @@
 
 use std::collections::{BTreeMap, HashMap, HashSet};
 
+use indexmap::IndexMap;
 use openapiv3::OpenAPI;
 use proc_macro2::TokenStream;
 use quote::quote;
 use serde::Deserialize;
 use thiserror::Error;
-use typify::{TypeSpace, TypeSpaceSettings};
+use typify::{TypeDetails, TypeId, TypeSpace, TypeSpaceSettings};
 
 use crate::to_schema::ToSchema;
 
@@ -50,9 +51,31 @@ pub type Result<T> = std::result::Result<T, Error>;
 /// OpenAPI generator.
 pub struct Generator {
     type_space: TypeSpace,
+    /// Maps form type IDs to their field metadata (field name -> is_binary)
+    forms: IndexMap<TypeId, FormFieldsInfo>,
     settings: GenerationSettings,
     uses_futures: bool,
     uses_websockets: bool,
+}
+
+/// Information about form fields for multipart/form-data generation
+#[derive(Debug, Clone, Default)]
+pub(crate) struct FormFieldsInfo {
+    /// Maps field names to their metadata
+    pub fields: IndexMap<String, FormFieldMeta>,
+}
+
+/// Metadata about a single form field
+#[derive(Debug, Clone, Default)]
+pub(crate) struct FormFieldMeta {
+    /// The original API name for the field (used in form field name)
+    pub api_name: String,
+    /// Whether the field is binary (format: binary)
+    pub is_binary: bool,
+    /// Whether the field is a complex type (array or object) requiring JSON serialization
+    pub needs_json: bool,
+    /// Content-type override from the encoding object
+    pub content_type: Option<String>,
 }
 
 /// Settings for [Generator].
@@ -261,6 +284,7 @@ impl Default for Generator {
     fn default() -> Self {
         Self {
             type_space: TypeSpace::new(TypeSpaceSettings::default().with_type_mod("types")),
+            forms: Default::default(),
             settings: Default::default(),
             uses_futures: Default::default(),
             uses_websockets: Default::default(),
@@ -312,6 +336,7 @@ impl Generator {
 
         Self {
             type_space: TypeSpace::new(&type_settings),
+            forms: Default::default(),
             settings: settings.clone(),
             uses_futures: false,
             uses_websockets: false,
@@ -373,6 +398,90 @@ impl Generator {
         }?;
 
         let types = self.type_space.to_stream();
+
+        // Generate as_form() implementations for form data types.
+        // Each form type gets a method that returns an iterator of (name, FormPart) pairs.
+        let extra_impl = TokenStream::from_iter(self.forms.iter().map(|(type_id, field_info)| {
+            let typ = self.get_type_space().get_type(type_id).unwrap();
+            let td = typ.details();
+            let TypeDetails::Struct(tstru) = td else {
+                unreachable!()
+            };
+
+            // Generate field accessors that convert each field to the appropriate FormPart
+            let field_conversions = tstru.properties().filter_map(|(prop_name, _prop_id)| {
+                let meta = field_info.fields.get(prop_name)?;
+                let ident = quote::format_ident!("{}", prop_name);
+                // Use the original API name for the form field name
+                let api_name = &meta.api_name;
+                let content_type = meta
+                    .content_type
+                    .as_ref()
+                    .map(|ct| {
+                        quote! { Some(progenitor_client::ContentType::new_unchecked(#ct)) }
+                    })
+                    .unwrap_or_else(|| quote! { None });
+
+                if meta.is_binary {
+                    // Binary fields: Option<bytes::Bytes> -> FormPart::Binary
+                    // Use .into() to support custom binary types via with_conversion
+                    Some(quote! {
+                        if let Some(ref val) = self.#ident {
+                            parts.push((#api_name, progenitor_client::FormPart::Binary(
+                                progenitor_client::BinaryFormPart {
+                                    data: val.clone().into(),
+                                    filename: None,
+                                    content_type: #content_type,
+                                }
+                            )));
+                        }
+                    })
+                } else if meta.needs_json {
+                    // Complex types (array/object): JSON serialize
+                    let json_content_type = if meta.content_type.is_some() {
+                        content_type.clone()
+                    } else {
+                        quote! { Some(progenitor_client::ContentType::json()) }
+                    };
+                    Some(quote! {
+                        if let Some(ref val) = self.#ident {
+                            parts.push((#api_name, progenitor_client::FormPart::Text(
+                                progenitor_client::TextFormPart {
+                                    value: serde_json::to_string(val).unwrap_or_default(),
+                                    content_type: #json_content_type,
+                                }
+                            )));
+                        }
+                    })
+                } else {
+                    // Simple text fields: serialize to string
+                    Some(quote! {
+                        if let Some(ref val) = self.#ident {
+                            parts.push((#api_name, progenitor_client::FormPart::Text(
+                                progenitor_client::TextFormPart {
+                                    value: val.to_string(),
+                                    content_type: #content_type,
+                                }
+                            )));
+                        }
+                    })
+                }
+            });
+
+            let form_name = quote::format_ident!("{}", typ.name());
+
+            quote! {
+                impl #form_name {
+                    /// Convert this form into an iterator of (field_name, field_value) pairs
+                    /// suitable for multipart/form-data encoding.
+                    pub fn as_form(&self) -> Vec<(&'static str, progenitor_client::FormPart)> {
+                        let mut parts = Vec::new();
+                        #(#field_conversions)*
+                        parts
+                    }
+                }
+            }
+        }));
 
         let (inner_type, inner_fn_value) = match self.settings.inner_type.as_ref() {
             Some(inner_type) => (inner_type.clone(), quote! { &self.inner }),
@@ -440,6 +549,8 @@ impl Generator {
             #[allow(clippy::all)]
             pub mod types {
                 #types
+
+                #extra_impl
             }
 
             #[derive(Clone, Debug)]
