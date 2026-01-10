@@ -7,7 +7,7 @@ edition = "2021"
 [dependencies]
 chrono = { version = "0.4", features = ["serde"] }
 progenitor = { path = "../progenitor" }
-reqwest = { version = "0.12.28", features = ["json", "stream"] }
+reqwest = { version = "0.13.1", features = ["json", "query", "stream"] }
 schemars = { version = "0.8.22", features = ["uuid1"] }
 serde = { version = "1.0", features = ["derive"] }
 uuid = { version = "1.19", features = ["serde", "v4"] }
