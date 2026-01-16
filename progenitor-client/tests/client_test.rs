@@ -430,10 +430,7 @@ mod form_part_tests {
     #[test]
     fn test_content_type_application() {
         assert_eq!(ContentType::application("pdf").as_str(), "application/pdf");
-        assert_eq!(
-            ContentType::application("xml").as_str(),
-            "application/xml"
-        );
+        assert_eq!(ContentType::application("xml").as_str(), "application/xml");
     }
 
     #[test]
