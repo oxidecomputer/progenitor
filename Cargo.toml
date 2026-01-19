@@ -22,7 +22,7 @@ anyhow = "1.0.100"
 assert_cmd = "2.1.1"
 base64 = "0.22.1"
 bytes = "1.11.0"
-chrono = { version = "0.4.42", default-features = false, features = ["serde"] }
+chrono = { version = "0.4.43", default-features = false, features = ["serde"] }
 clap = { version = "4.5.54" }
 clap-cargo = "0.18.3"
 dropshot = { version = "0.16.6", default-features = false }
