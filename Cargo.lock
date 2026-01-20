@@ -631,7 +631,7 @@ dependencies = [
  "progenitor",
  "progenitor-client",
  "rand",
- "reqwest",
+ "reqwest 0.13.1",
  "serde",
  "serde_json",
  "syn",
@@ -644,7 +644,7 @@ version = "0.0.1"
 dependencies = [
  "chrono",
  "progenitor",
- "reqwest",
+ "reqwest 0.13.1",
  "schemars",
  "serde",
  "uuid",
@@ -659,7 +659,7 @@ dependencies = [
  "prettyplease",
  "progenitor",
  "progenitor-client",
- "reqwest",
+ "reqwest 0.13.1",
  "serde",
  "serde_json",
  "syn",
@@ -1603,7 +1603,7 @@ dependencies = [
  "progenitor-macro",
  "rand",
  "regress",
- "reqwest",
+ "reqwest 0.12.28",
  "schemars",
  "serde",
  "serde_json",
@@ -1618,7 +1618,8 @@ dependencies = [
  "bytes",
  "futures-core",
  "percent-encoding",
- "reqwest",
+ "reqwest 0.12.28",
+ "schemars",
  "serde",
  "serde_json",
  "serde_urlencoded",
@@ -1642,7 +1643,7 @@ dependencies = [
  "progenitor-client",
  "quote",
  "regex",
- "reqwest",
+ "reqwest 0.12.28",
  "rustfmt-wrapper",
  "schemars",
  "semver",
@@ -1818,6 +1819,41 @@ checksum = "2057b2325e68a893284d1538021ab90279adac1139957ca2a74426c6f118fb48"
 dependencies = [
  "hashbrown",
  "memchr",
+]
+
+[[package]]
+name = "reqwest"
+version = "0.12.28"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "eddd3ca559203180a307f12d114c268abf583f59b03cb906fd0b3ff8646c1147"
+dependencies = [
+ "base64",
+ "bytes",
+ "futures-core",
+ "futures-util",
+ "http",
+ "http-body",
+ "http-body-util",
+ "hyper",
+ "hyper-util",
+ "js-sys",
+ "log",
+ "percent-encoding",
+ "pin-project-lite",
+ "serde",
+ "serde_json",
+ "serde_urlencoded",
+ "sync_wrapper",
+ "tokio",
+ "tokio-util",
+ "tower",
+ "tower-http",
+ "tower-service",
+ "url",
+ "wasm-bindgen",
+ "wasm-bindgen-futures",
+ "wasm-streams",
+ "web-sys",
 ]
 
 [[package]]

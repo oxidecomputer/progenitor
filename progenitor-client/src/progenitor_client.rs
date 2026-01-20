@@ -11,6 +11,9 @@ use futures_core::Stream;
 use reqwest::RequestBuilder;
 use serde::{de::DeserializeOwned, ser::SerializeStruct, Serialize};
 
+#[cfg(feature = "cli")]
+use schemars::schema::{InstanceType, RootSchema, Schema, SchemaObject, SingleOrVec};
+
 #[cfg(not(target_arch = "wasm32"))]
 type InnerByteStream = std::pin::Pin<Box<dyn Stream<Item = reqwest::Result<Bytes>> + Send + Sync>>;
 
@@ -761,5 +764,162 @@ where
 
     fn end(self) -> Result<Self::Ok, Self::Error> {
         self.inner.end()
+    }
+}
+
+/// Count the number of fields in a schema (for picking the "fullest" variant)
+#[cfg(feature = "cli")]
+fn count_schema_fields(schema: &Schema) -> usize {
+    match schema {
+        Schema::Bool(_) => 0,
+        Schema::Object(obj) => {
+            if let Some(object) = &obj.object {
+                object.properties.len()
+            } else {
+                0
+            }
+        }
+    }
+}
+
+/// Generate a JSON template from a schemars schema.
+///
+/// This function creates a JSON value that represents a valid instance of the
+/// schema, using example values for primitive types and recursively building
+/// objects and arrays.
+///
+/// When `full_mode` is true, generates templates with all optional fields and
+/// picks the fullest variant from union types. When false (minimal mode), only
+/// includes required fields and picks the simplest variant.
+#[cfg(feature = "cli")]
+pub fn generate_body_template(root_schema: &RootSchema, full_mode: bool) -> serde_json::Value {
+    generate_from_schema(&Schema::Object(root_schema.schema.clone()), root_schema, full_mode)
+}
+
+#[cfg(feature = "cli")]
+fn generate_from_schema(schema: &Schema, root: &RootSchema, full_mode: bool) -> serde_json::Value {
+    match schema {
+        Schema::Bool(true) => serde_json::Value::Null,
+        Schema::Bool(false) => serde_json::Value::Null,
+        Schema::Object(obj) => generate_from_schema_object(obj, root, full_mode),
+    }
+}
+
+#[cfg(feature = "cli")]
+fn generate_from_schema_object(schema: &SchemaObject, root: &RootSchema, full_mode: bool) -> serde_json::Value {
+    // Handle references to other schemas
+    if let Some(reference) = &schema.reference {
+        // Extract the definition name from the reference (e.g., "#/definitions/Foo" -> "Foo")
+        if let Some(def_name) = reference.strip_prefix("#/definitions/") {
+            if let Some(def_schema) = root.definitions.get(def_name) {
+                return generate_from_schema(def_schema, root, full_mode);
+            }
+        }
+        // If we can't resolve the reference, return null
+        return serde_json::Value::Null;
+    }
+
+    // Handle anyOf - use the first non-null option
+    if let Some(any_of) = &schema.subschemas {
+        if let Some(any_of_schemas) = &any_of.any_of {
+            for sub_schema in any_of_schemas {
+                let value = generate_from_schema(sub_schema, root, full_mode);
+                // Skip null values and use the first non-null option
+                if !value.is_null() {
+                    return value;
+                }
+            }
+        }
+        // Handle oneOf - in full mode use the variant with most fields, in minimal mode use the first
+        if let Some(one_of_schemas) = &any_of.one_of {
+            let best_schema = if full_mode {
+                one_of_schemas.iter()
+                    .max_by_key(|schema| count_schema_fields(schema))
+                    .or_else(|| one_of_schemas.first())
+            } else {
+                one_of_schemas.first()
+            };
+
+            if let Some(schema) = best_schema {
+                return generate_from_schema(schema, root, full_mode);
+            }
+        }
+        // Handle allOf - merge all schemas (simplified: just use the first)
+        if let Some(all_of_schemas) = &any_of.all_of {
+            if let Some(first_schema) = all_of_schemas.first() {
+                return generate_from_schema(first_schema, root, full_mode);
+            }
+        }
+    }
+
+    // Check for enum values
+    if let Some(enum_values) = &schema.enum_values {
+        if let Some(first_value) = enum_values.first() {
+            return first_value.clone();
+        }
+    }
+
+    // Handle instance types
+    if let Some(instance_type) = &schema.instance_type {
+        match instance_type {
+            SingleOrVec::Single(t) => match **t {
+                InstanceType::Null => serde_json::Value::Null,
+                InstanceType::Boolean => serde_json::Value::Bool(false),
+                InstanceType::Number => serde_json::Value::Number(serde_json::Number::from(0)),
+                InstanceType::Integer => serde_json::Value::Number(serde_json::Number::from(0)),
+                InstanceType::String => serde_json::Value::String(String::new()),
+                InstanceType::Array => {
+                    // Generate an empty array or array with one example item
+                    if let Some(items) = &schema.array {
+                        if let Some(items_schema) = &items.items {
+                            match items_schema {
+                                SingleOrVec::Single(item_schema) => {
+                                    let item = generate_from_schema(item_schema, root, full_mode);
+                                    serde_json::Value::Array(vec![item])
+                                }
+                                SingleOrVec::Vec(item_schemas) => {
+                                    let items: Vec<_> = item_schemas
+                                        .iter()
+                                        .map(|s| generate_from_schema(s, root, full_mode))
+                                        .collect();
+                                    serde_json::Value::Array(items)
+                                }
+                            }
+                        } else {
+                            serde_json::Value::Array(vec![])
+                        }
+                    } else {
+                        serde_json::Value::Array(vec![])
+                    }
+                }
+                InstanceType::Object => {
+                    let mut map = serde_json::Map::new();
+
+                    if let Some(object) = &schema.object {
+                        // In full mode, add all properties. In minimal mode, only add required properties.
+                        for (prop_name, prop_schema) in &object.properties {
+                            let is_required = object.required.contains(prop_name);
+
+                            // Skip optional fields in minimal mode
+                            if !full_mode && !is_required {
+                                continue;
+                            }
+
+                            let value = generate_from_schema(prop_schema, root, full_mode);
+                            map.insert(prop_name.clone(), value);
+                        }
+                    }
+
+                    serde_json::Value::Object(map)
+                }
+            },
+            SingleOrVec::Vec(_) => {
+                // If multiple types, default to null
+                serde_json::Value::Null
+            }
+        }
+    } else {
+        // No type specified, default to null
+        serde_json::Value::Null
     }
 }
