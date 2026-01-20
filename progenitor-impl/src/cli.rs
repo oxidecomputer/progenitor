@@ -483,6 +483,11 @@ impl Generator {
         })
         .map(|required| {
             let help = "Path to a file that contains the full json body.";
+            let required_clause = if required {
+                quote! { .required_unless_present_any(["json-body-template", "json-body-schema"]) }
+            } else {
+                quote! {}
+            };
 
             quote! {
                 .arg(
@@ -491,7 +496,7 @@ impl Generator {
                         .value_name("JSON-FILE")
                         // Required if we can't turn the body into individual
                         // parameters.
-                        .required(#required)
+                        #required_clause
                         .value_parser(::clap::value_parser!(std::path::PathBuf))
                         .help(#help)
                 )
@@ -499,7 +504,16 @@ impl Generator {
                     ::clap::Arg::new("json-body-template")
                         .long("json-body-template")
                         .action(::clap::ArgAction::SetTrue)
-                        .help("XXX")
+                        .conflicts_with("json-body")
+                        .conflicts_with("json-body-schema")
+                        .help("Output a JSON template with required fields and exit")
+                )
+                .arg(
+                    ::clap::Arg::new("json-body-schema")
+                        .long("json-body-schema")
+                        .action(::clap::ArgAction::SetTrue)
+                        .conflicts_with("json-body")
+                        .help("Output a grammar reference for the request body and exit")
                 )
             }
         });
@@ -517,6 +531,20 @@ impl Generator {
             let body_type = self.type_space.get_type(body_type_id).unwrap();
             let body_type_ident = body_type.ident();
             quote! {
+                // Handle --json-body-template / --json-body-schema
+                if matches.get_flag("json-body-template") {
+                    let schema = schemars::schema_for!(#body_type_ident);
+                    let template = progenitor_client::generate_body_template(&schema);
+                    println!("{}", serde_json::to_string_pretty(&template).unwrap());
+                    return Ok(());
+                }
+                if matches.get_flag("json-body-schema") {
+                    let schema = schemars::schema_for!(#body_type_ident);
+                    print!("{}", progenitor_client::render_body_schema(&schema));
+                    return Ok(());
+                }
+
+                // Handle --json-body
                 if let Some(value) =
                     matches.get_one::<std::path::PathBuf>("json-body")
                 {
@@ -685,9 +713,11 @@ fn clap_arg(
 
     let required = match volitionality {
         Volitionality::Optional => quote! { .required(false) },
-        Volitionality::Required => quote! { .required(true) },
+        Volitionality::Required => {
+            quote! { .required_unless_present_any(["json-body-template", "json-body-schema"]) }
+        }
         Volitionality::RequiredIfNoBody => {
-            quote! { .required_unless_present("json-body") }
+            quote! { .required_unless_present_any(["json-body", "json-body-template", "json-body-schema"]) }
         }
     };
 

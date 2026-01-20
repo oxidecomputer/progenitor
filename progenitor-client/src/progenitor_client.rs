@@ -11,6 +11,9 @@ use futures_core::Stream;
 use reqwest::RequestBuilder;
 use serde::{Serialize, de::DeserializeOwned, ser::SerializeStruct};
 
+#[cfg(feature = "cli")]
+use schemars::schema::{InstanceType, RootSchema, Schema, SchemaObject, SingleOrVec};
+
 #[cfg(not(target_arch = "wasm32"))]
 type InnerByteStream = std::pin::Pin<Box<dyn Stream<Item = reqwest::Result<Bytes>> + Send + Sync>>;
 
@@ -806,4 +809,906 @@ where
     fn end(self) -> Result<Self::Ok, Self::Error> {
         self.inner.end()
     }
+}
+
+/// Generate a fill-in JSON template for a request body from its schema.
+///
+/// The template includes only required fields with placeholder values
+/// (empty strings, zero numbers, first enum value, etc.) and picks the
+/// first variant for any `oneOf`. It is intended as a starting point for
+/// `--json-body` submission, not as a reference.
+#[cfg(feature = "cli")]
+pub fn generate_body_template(root_schema: &RootSchema) -> serde_json::Value {
+    generate_from_schema(&Schema::Object(root_schema.schema.clone()), root_schema)
+}
+
+#[cfg(feature = "cli")]
+fn generate_from_schema(schema: &Schema, root: &RootSchema) -> serde_json::Value {
+    match schema {
+        Schema::Bool(_) => serde_json::Value::Null,
+        Schema::Object(obj) => generate_from_schema_object(obj, root),
+    }
+}
+
+#[cfg(feature = "cli")]
+fn generate_from_schema_object(schema: &SchemaObject, root: &RootSchema) -> serde_json::Value {
+    if let Some(reference) = &schema.reference {
+        if let Some(def_name) = reference.strip_prefix("#/definitions/") {
+            if let Some(def_schema) = root.definitions.get(def_name) {
+                return generate_from_schema(def_schema, root);
+            }
+        }
+        return serde_json::Value::Null;
+    }
+
+    if let Some(sub) = &schema.subschemas {
+        if let Some(any_of) = &sub.any_of {
+            for sub_schema in any_of {
+                let value = generate_from_schema(sub_schema, root);
+                if !value.is_null() {
+                    return value;
+                }
+            }
+        }
+        if let Some(one_of) = &sub.one_of {
+            if let Some(first) = one_of.first() {
+                return generate_from_schema(first, root);
+            }
+        }
+        if let Some(all_of) = &sub.all_of {
+            if let Some(first) = all_of.first() {
+                return generate_from_schema(first, root);
+            }
+        }
+    }
+
+    if let Some(enum_values) = &schema.enum_values {
+        if let Some(first) = enum_values.first() {
+            return first.clone();
+        }
+    }
+
+    let Some(instance_type) = &schema.instance_type else {
+        return serde_json::Value::Null;
+    };
+
+    match instance_type {
+        SingleOrVec::Single(t) => match **t {
+            InstanceType::Null => serde_json::Value::Null,
+            InstanceType::Boolean => serde_json::Value::Bool(false),
+            InstanceType::Number | InstanceType::Integer => {
+                serde_json::Value::Number(serde_json::Number::from(0))
+            }
+            InstanceType::String => serde_json::Value::String(String::new()),
+            InstanceType::Array => match &schema.array {
+                Some(items) => match &items.items {
+                    Some(SingleOrVec::Single(item_schema)) => {
+                        serde_json::Value::Array(vec![generate_from_schema(item_schema, root)])
+                    }
+                    Some(SingleOrVec::Vec(item_schemas)) => serde_json::Value::Array(
+                        item_schemas.iter().map(|s| generate_from_schema(s, root)).collect(),
+                    ),
+                    None => serde_json::Value::Array(vec![]),
+                },
+                None => serde_json::Value::Array(vec![]),
+            },
+            InstanceType::Object => {
+                let mut map = serde_json::Map::new();
+                if let Some(object) = &schema.object {
+                    for (prop_name, prop_schema) in &object.properties {
+                        if !object.required.contains(prop_name) {
+                            continue;
+                        }
+                        map.insert(prop_name.clone(), generate_from_schema(prop_schema, root));
+                    }
+                }
+                serde_json::Value::Object(map)
+            }
+        },
+        SingleOrVec::Vec(_) => serde_json::Value::Null,
+    }
+}
+
+// ----------------------------------------------------------------------------
+// Body schema renderer (Oracle-style grammar reference).
+// ----------------------------------------------------------------------------
+
+/// Render a request body schema as a structured grammar reference.
+///
+/// Output style is modeled after Oracle's SQL reference docs: a top-level
+/// production for the request body, with each `$ref`'d type emitted as a
+/// separate named production below. Required fields appear bare; optional
+/// fields are wrapped in `[brackets]`. `oneOf` variants are joined with `|`.
+///
+/// Each production header carries metadata: `(root)` or `(used by: ...)` to
+/// orient the reader, plus `(tagged on \`field\`)` for discriminated unions.
+///
+/// ANSI color is applied when stdout is a terminal and `NO_COLOR` is unset.
+#[cfg(feature = "cli")]
+pub fn render_body_schema(root_schema: &RootSchema) -> String {
+    use std::collections::BTreeSet;
+
+    let colorize = should_colorize();
+    let style = Style::new(colorize);
+
+    let top_name = root_schema
+        .schema
+        .metadata
+        .as_ref()
+        .and_then(|m| m.title.clone())
+        .map(|t| snake_case(&t))
+        .unwrap_or_else(|| "request".to_string());
+
+    let usage_map = build_usage_map(root_schema, &top_name);
+
+    let mut referenced: BTreeSet<String> = BTreeSet::new();
+    let mut out = String::new();
+
+    out.push_str(&render_production(
+        &top_name,
+        &Schema::Object(root_schema.schema.clone()),
+        true,
+        &usage_map,
+        &root_schema.definitions,
+        &mut referenced,
+        &style,
+    ));
+
+    let mut emitted: BTreeSet<String> = BTreeSet::new();
+    while let Some(name) = referenced.iter().find(|n| !emitted.contains(*n)).cloned() {
+        emitted.insert(name.clone());
+        if let Some(def) = root_schema.definitions.get(&name) {
+            out.push('\n');
+            out.push_str(&render_production(
+                &name,
+                def,
+                false,
+                &usage_map,
+                &root_schema.definitions,
+                &mut referenced,
+                &style,
+            ));
+        }
+    }
+
+    out
+}
+
+#[cfg(feature = "cli")]
+fn render_production(
+    name: &str,
+    schema: &Schema,
+    is_root: bool,
+    usage_map: &std::collections::BTreeMap<String, std::collections::BTreeSet<String>>,
+    defs: &std::collections::BTreeMap<String, Schema>,
+    refs: &mut std::collections::BTreeSet<String>,
+    style: &Style,
+) -> String {
+    // Effective schema (unwrap single-allOf metadata wrappers).
+    let effective: &SchemaObject = match schema {
+        Schema::Object(o) => {
+            if let Some(sub) = &o.subschemas {
+                if let Some(all) = &sub.all_of {
+                    if all.len() == 1 {
+                        if let Schema::Object(inner) = &all[0] {
+                            // We need a stable reference; fall back to outer if not Object.
+                            inner
+                        } else {
+                            o
+                        }
+                    } else {
+                        o
+                    }
+                } else {
+                    o
+                }
+            } else {
+                o
+            }
+        }
+        _ => {
+            // Non-object production (rare): emit on header line as before.
+            return format!(
+                "{} {} {}\n",
+                style.bold(name),
+                style.dim("::="),
+                render_schema(schema, defs, refs, 0, style),
+            );
+        }
+    };
+
+    let oneof_variants: Option<Vec<&Schema>> = effective
+        .subschemas
+        .as_ref()
+        .and_then(|s| s.one_of.as_ref().or(s.any_of.as_ref()))
+        .map(|v| v.iter().filter(|s| !is_null_schema(s)).collect());
+
+    // Header annotations.
+    let mut annotations: Vec<String> = Vec::new();
+    if is_root {
+        annotations.push(style.dim("(root)"));
+    } else if let Some(users) = usage_map.get(name) {
+        let users_vec: Vec<&String> = users.iter().filter(|u| u.as_str() != name).collect();
+        if !users_vec.is_empty() {
+            let take = 3;
+            let mut text = String::from("(used by: ");
+            text.push_str(
+                &users_vec
+                    .iter()
+                    .take(take)
+                    .map(|s| s.as_str())
+                    .collect::<Vec<_>>()
+                    .join(", "),
+            );
+            if users_vec.len() > take {
+                text.push_str(&format!(", +{} more", users_vec.len() - take));
+            }
+            text.push(')');
+            annotations.push(style.dim(&text));
+        }
+    }
+
+    let tag = oneof_variants.as_ref().and_then(|v| detect_tag(v));
+    if let Some(t) = &tag {
+        annotations.push(style.dim(&format!("(tagged on `{}`)", t)));
+    }
+
+    let mut header = format!("{} {}", style.bold(name), style.dim("::="));
+    if !annotations.is_empty() {
+        header.push_str("  ");
+        header.push_str(&annotations.join("  "));
+    }
+
+    // Body.
+    let body = match &oneof_variants {
+        Some(variants) if variants.len() > 1 => {
+            render_variants_production(variants, tag.as_deref(), defs, refs, style)
+        }
+        Some(variants) if variants.len() == 1 => render_schema(variants[0], defs, refs, 0, style),
+        _ => render_schema(schema, defs, refs, 0, style),
+    };
+
+    format!("{}\n{}\n", header, body)
+}
+
+#[cfg(feature = "cli")]
+fn render_variants_production(
+    variants: &[&Schema],
+    tag: Option<&str>,
+    defs: &std::collections::BTreeMap<String, Schema>,
+    refs: &mut std::collections::BTreeSet<String>,
+    style: &Style,
+) -> String {
+    // Try inline rendering first. If all variants fit, emit each on its own
+    // line with the BNF-style `|` separator (first variant indented; rest at
+    // column 0 with leading `| `).
+    let inline_budget = 76;
+    let inline_attempts: Vec<Option<String>> = variants
+        .iter()
+        .map(|v| render_variant_inline(v, tag, defs, refs, style, inline_budget))
+        .collect();
+
+    let all_inline = inline_attempts.iter().all(|o| o.is_some());
+    if all_inline {
+        let rendered: Vec<String> = inline_attempts.into_iter().flatten().collect();
+        let any_object = rendered.iter().any(|r| r.contains('{'));
+        let single_line = rendered.join(&format!(" {} ", style.bold_yellow("|")));
+        // Collapse purely-scalar unions to one line (e.g., `Uuid | String`).
+        // Keep object unions in BNF style so each alternative reads as its own row.
+        if !any_object && plain_len(&single_line) <= 80 {
+            return single_line;
+        }
+        let mut out = String::new();
+        for (i, v) in rendered.iter().enumerate() {
+            if i == 0 {
+                out.push_str("  ");
+            } else {
+                out.push('\n');
+                out.push_str(&style.bold_yellow("|"));
+                out.push(' ');
+            }
+            out.push_str(v);
+        }
+        return out;
+    }
+
+    // Block style fallback (each variant as a full object).
+    let priority = tag.map(|t| vec![t.to_string()]).unwrap_or_default();
+    let rendered: Vec<String> = variants
+        .iter()
+        .map(|v| render_schema_with_priority(v, &priority, defs, refs, 0, style))
+        .collect();
+    let sep = format!("\n{} ", style.bold_yellow("|"));
+    rendered.join(&sep)
+}
+
+#[cfg(feature = "cli")]
+fn render_variant_inline(
+    schema: &Schema,
+    tag: Option<&str>,
+    defs: &std::collections::BTreeMap<String, Schema>,
+    refs: &mut std::collections::BTreeSet<String>,
+    style: &Style,
+    budget: usize,
+) -> Option<String> {
+    // Object variants get tag-first ordering and inline key/value rendering.
+    if let Schema::Object(o) = schema {
+        if let Some(ov) = &o.object {
+            let priority: Vec<String> = tag.map(|t| vec![t.to_string()]).unwrap_or_default();
+            let ordered = order_properties(ov, &priority);
+            let mut parts: Vec<String> = Vec::new();
+            for (k, v, is_required) in ordered {
+                let key_plain = if is_required {
+                    format!("{}:", k)
+                } else {
+                    format!("[{}]:", k)
+                };
+                let key_styled = if is_required {
+                    key_plain.clone()
+                } else {
+                    style.dim(&key_plain)
+                };
+                let rendered = render_schema(v, defs, refs, 0, style);
+                let default_suffix = match v {
+                    Schema::Object(o) => default_annotation(o)
+                        .map(|d| style.dim(&format!(" (default: {})", d)))
+                        .unwrap_or_default(),
+                    _ => String::new(),
+                };
+                parts.push(format!("{} {}{}", key_styled, rendered, default_suffix));
+            }
+            let inline = if parts.is_empty() {
+                "{}".to_string()
+            } else {
+                format!("{{ {} }}", parts.join(", "))
+            };
+            if plain_len(&inline) <= budget && !inline.contains('\n') {
+                return Some(inline);
+            }
+            return None;
+        }
+    }
+
+    // Scalar / non-object variants: render normally and check the budget.
+    let rendered = render_schema(schema, defs, refs, 0, style);
+    if plain_len(&rendered) <= budget && !rendered.contains('\n') {
+        Some(rendered)
+    } else {
+        None
+    }
+}
+
+#[cfg(feature = "cli")]
+fn render_schema_with_priority(
+    schema: &Schema,
+    priority: &[String],
+    defs: &std::collections::BTreeMap<String, Schema>,
+    refs: &mut std::collections::BTreeSet<String>,
+    depth: usize,
+    style: &Style,
+) -> String {
+    if priority.is_empty() {
+        return render_schema(schema, defs, refs, depth, style);
+    }
+    match schema {
+        Schema::Object(o) => render_object_with_priority(o, priority, defs, refs, depth, style),
+        _ => render_schema(schema, defs, refs, depth, style),
+    }
+}
+
+#[cfg(feature = "cli")]
+fn order_properties<'a>(
+    ov: &'a schemars::schema::ObjectValidation,
+    priority: &[String],
+) -> Vec<(&'a String, &'a Schema, bool)> {
+    let mut out: Vec<(&String, &Schema, bool)> = Vec::new();
+    let is_required = |k: &String| ov.required.contains(k);
+
+    // Priority fields first, in order.
+    for p in priority {
+        if let Some((k, v)) = ov.properties.iter().find(|(k, _)| *k == p) {
+            out.push((k, v, is_required(k)));
+        }
+    }
+    let used: std::collections::BTreeSet<&String> = out.iter().map(|t| t.0).collect();
+
+    // Then required (alphabetical via BTreeMap iteration).
+    for (k, v) in &ov.properties {
+        if used.contains(k) {
+            continue;
+        }
+        if is_required(k) {
+            out.push((k, v, true));
+        }
+    }
+    // Then optional.
+    for (k, v) in &ov.properties {
+        if used.contains(k) {
+            continue;
+        }
+        if !is_required(k) {
+            out.push((k, v, false));
+        }
+    }
+    out
+}
+
+#[cfg(feature = "cli")]
+fn render_object_with_priority(
+    o: &SchemaObject,
+    priority: &[String],
+    defs: &std::collections::BTreeMap<String, Schema>,
+    refs: &mut std::collections::BTreeSet<String>,
+    depth: usize,
+    style: &Style,
+) -> String {
+    let ov = match &o.object {
+        Some(ov) => ov,
+        None => return "{}".to_string(),
+    };
+    if ov.properties.is_empty() {
+        return "{}".to_string();
+    }
+
+    let indent_outer = "  ".repeat(depth);
+    let indent_inner = "  ".repeat(depth + 1);
+
+    let key_width = ov
+        .properties
+        .keys()
+        .map(|k| {
+            if ov.required.contains(k) {
+                k.len()
+            } else {
+                k.len() + 2
+            }
+        })
+        .max()
+        .unwrap_or(0);
+
+    let ordered = order_properties(ov, priority);
+    let mut lines = Vec::new();
+    for (k, v, is_required) in ordered {
+        let default = match v {
+            Schema::Object(o) => default_annotation(o),
+            _ => None,
+        };
+        let rendered = render_schema(v, defs, refs, depth + 1, style);
+        let key_plain = if is_required {
+            format!("{}:", k)
+        } else {
+            format!("[{}]:", k)
+        };
+        let key_styled = if is_required {
+            key_plain.clone()
+        } else {
+            style.dim(&key_plain)
+        };
+        let pad = " ".repeat((key_width + 1).saturating_sub(key_plain.len()));
+        let suffix = default
+            .map(|d| style.dim(&format!("   (default: {})", d)))
+            .unwrap_or_default();
+        lines.push(format!(
+            "{}{}{}  {}{}",
+            indent_inner, key_styled, pad, rendered, suffix
+        ));
+    }
+
+    format!("{{\n{}\n{}}}", lines.join("\n"), indent_outer)
+}
+
+#[cfg(feature = "cli")]
+fn build_usage_map(
+    root: &RootSchema,
+    top_name: &str,
+) -> std::collections::BTreeMap<String, std::collections::BTreeSet<String>> {
+    let mut map: std::collections::BTreeMap<String, std::collections::BTreeSet<String>> =
+        std::collections::BTreeMap::new();
+    walk_for_refs(&Schema::Object(root.schema.clone()), top_name, &mut map);
+    for (def_name, def_schema) in &root.definitions {
+        walk_for_refs(def_schema, def_name, &mut map);
+    }
+    map
+}
+
+#[cfg(feature = "cli")]
+fn walk_for_refs(
+    schema: &Schema,
+    parent: &str,
+    map: &mut std::collections::BTreeMap<String, std::collections::BTreeSet<String>>,
+) {
+    let Schema::Object(o) = schema else { return };
+    if let Some(r) = &o.reference {
+        let name = ref_name(r);
+        map.entry(name).or_default().insert(parent.to_string());
+        return;
+    }
+    if let Some(sub) = &o.subschemas {
+        for list in [&sub.one_of, &sub.any_of, &sub.all_of] {
+            if let Some(items) = list {
+                for s in items {
+                    walk_for_refs(s, parent, map);
+                }
+            }
+        }
+    }
+    if let Some(ov) = &o.object {
+        for v in ov.properties.values() {
+            walk_for_refs(v, parent, map);
+        }
+    }
+    if let Some(av) = &o.array {
+        match &av.items {
+            Some(SingleOrVec::Single(s)) => walk_for_refs(s, parent, map),
+            Some(SingleOrVec::Vec(v)) => {
+                for s in v {
+                    walk_for_refs(s, parent, map);
+                }
+            }
+            None => {}
+        }
+    }
+}
+
+#[cfg(feature = "cli")]
+fn detect_tag(variants: &[&Schema]) -> Option<String> {
+    // For each variant, collect fields that are single-value string enums.
+    // The tag is a field present (with that shape) in every variant.
+    let candidate_sets: Vec<std::collections::BTreeSet<String>> = variants
+        .iter()
+        .map(|v| {
+            let Schema::Object(o) = v else {
+                return std::collections::BTreeSet::new();
+            };
+            let Some(ov) = &o.object else {
+                return std::collections::BTreeSet::new();
+            };
+            ov.properties
+                .iter()
+                .filter_map(|(name, schema)| {
+                    let Schema::Object(s) = schema else { return None };
+                    let values = s.enum_values.as_ref()?;
+                    if values.len() == 1 && values[0].is_string() {
+                        Some(name.clone())
+                    } else {
+                        None
+                    }
+                })
+                .collect()
+        })
+        .collect();
+
+    if candidate_sets.is_empty() || candidate_sets.iter().any(|s| s.is_empty()) {
+        return None;
+    }
+
+    let mut intersection = candidate_sets[0].clone();
+    for s in &candidate_sets[1..] {
+        intersection = intersection.intersection(s).cloned().collect();
+    }
+
+    if intersection.len() == 1 {
+        intersection.into_iter().next()
+    } else {
+        None
+    }
+}
+
+#[cfg(feature = "cli")]
+fn should_colorize() -> bool {
+    use std::io::IsTerminal as _;
+    if std::env::var_os("NO_COLOR").is_some() {
+        return false;
+    }
+    if std::env::var_os("CLICOLOR_FORCE").is_some() {
+        return true;
+    }
+    std::io::stdout().is_terminal()
+}
+
+#[cfg(feature = "cli")]
+struct Style {
+    enabled: bool,
+}
+
+#[cfg(feature = "cli")]
+impl Style {
+    fn new(enabled: bool) -> Self {
+        Self { enabled }
+    }
+    fn wrap(&self, code: &str, s: &str) -> String {
+        if self.enabled {
+            format!("\x1b[{}m{}\x1b[0m", code, s)
+        } else {
+            s.to_string()
+        }
+    }
+    fn dim(&self, s: &str) -> String {
+        self.wrap("2", s)
+    }
+    fn bold(&self, s: &str) -> String {
+        self.wrap("1", s)
+    }
+    fn cyan(&self, s: &str) -> String {
+        self.wrap("36", s)
+    }
+    fn green(&self, s: &str) -> String {
+        self.wrap("32", s)
+    }
+    fn bold_yellow(&self, s: &str) -> String {
+        self.wrap("1;33", s)
+    }
+}
+
+#[cfg(feature = "cli")]
+fn render_schema(
+    s: &Schema,
+    defs: &std::collections::BTreeMap<String, Schema>,
+    refs: &mut std::collections::BTreeSet<String>,
+    depth: usize,
+    style: &Style,
+) -> String {
+    match s {
+        Schema::Bool(true) => "any".to_string(),
+        Schema::Bool(false) => "never".to_string(),
+        Schema::Object(o) => render_schema_object(o, defs, refs, depth, style),
+    }
+}
+
+#[cfg(feature = "cli")]
+fn render_schema_object(
+    o: &SchemaObject,
+    defs: &std::collections::BTreeMap<String, Schema>,
+    refs: &mut std::collections::BTreeSet<String>,
+    depth: usize,
+    style: &Style,
+) -> String {
+    if let Some(r) = &o.reference {
+        let name = ref_name(r);
+        refs.insert(name.clone());
+        return style.cyan(&format!("<{}>", name));
+    }
+
+    // allOf wrapping a single ref is just a description carrier; unwrap.
+    if let Some(sub) = &o.subschemas {
+        if let Some(all) = &sub.all_of {
+            if all.len() == 1 {
+                return render_schema(&all[0], defs, refs, depth, style);
+            }
+        }
+    }
+
+    // oneOf / anyOf: drop null alternatives (optionality is shown by brackets).
+    if let Some(sub) = &o.subschemas {
+        if let Some(variants) = sub.one_of.as_ref().or(sub.any_of.as_ref()) {
+            let non_null: Vec<&Schema> = variants.iter().filter(|v| !is_null_schema(v)).collect();
+            if non_null.len() == 1 {
+                return render_schema(non_null[0], defs, refs, depth, style);
+            }
+            let rendered: Vec<String> = non_null
+                .iter()
+                .map(|v| render_schema(v, defs, refs, depth, style))
+                .collect();
+            return join_variants(&rendered, depth, style);
+        }
+    }
+
+    if let Some(values) = &o.enum_values {
+        if !values.is_empty() {
+            let rendered: Vec<String> = values
+                .iter()
+                .map(|v| match v {
+                    serde_json::Value::String(s) => style.green(&format!("\"{}\"", s)),
+                    other => other.to_string(),
+                })
+                .collect();
+            let sep = format!(" {} ", style.bold_yellow("|"));
+            return rendered.join(&sep);
+        }
+    }
+
+    match instance_type(&o.instance_type) {
+        Some(InstanceType::String) => render_string(o),
+        Some(InstanceType::Integer) => render_integer(o),
+        Some(InstanceType::Number) => "Number".to_string(),
+        Some(InstanceType::Boolean) => "bool".to_string(),
+        Some(InstanceType::Null) => "null".to_string(),
+        Some(InstanceType::Array) => render_array(o, defs, refs, depth, style),
+        Some(InstanceType::Object) | None => render_object(o, defs, refs, depth, style),
+    }
+}
+
+#[cfg(feature = "cli")]
+fn is_null_schema(s: &Schema) -> bool {
+    match s {
+        Schema::Object(o) => matches!(instance_type(&o.instance_type), Some(InstanceType::Null)),
+        _ => false,
+    }
+}
+
+#[cfg(feature = "cli")]
+fn render_string(o: &SchemaObject) -> String {
+    match o.format.as_deref() {
+        Some("uuid") => "Uuid".to_string(),
+        Some("date-time") => "DateTime".to_string(),
+        Some("ip") => "IpAddr".to_string(),
+        Some("ipv4") => "Ipv4Addr".to_string(),
+        Some("ipv6") => "Ipv6Addr".to_string(),
+        Some("byte") => "Base64".to_string(),
+        Some(other) => format!("String ({})", other),
+        None => "String".to_string(),
+    }
+}
+
+#[cfg(feature = "cli")]
+fn render_integer(o: &SchemaObject) -> String {
+    o.format.clone().unwrap_or_else(|| "Integer".to_string())
+}
+
+#[cfg(feature = "cli")]
+fn render_array(
+    o: &SchemaObject,
+    defs: &std::collections::BTreeMap<String, Schema>,
+    refs: &mut std::collections::BTreeSet<String>,
+    depth: usize,
+    style: &Style,
+) -> String {
+    let item = match &o.array {
+        Some(av) => match &av.items {
+            Some(SingleOrVec::Single(s)) => render_schema(s, defs, refs, depth, style),
+            Some(SingleOrVec::Vec(v)) if !v.is_empty() => {
+                render_schema(&v[0], defs, refs, depth, style)
+            }
+            _ => "any".to_string(),
+        },
+        None => "any".to_string(),
+    };
+    format!("[{}, ...]", item)
+}
+
+#[cfg(feature = "cli")]
+fn render_object(
+    o: &SchemaObject,
+    defs: &std::collections::BTreeMap<String, Schema>,
+    refs: &mut std::collections::BTreeSet<String>,
+    depth: usize,
+    style: &Style,
+) -> String {
+    let ov = match &o.object {
+        Some(ov) => ov,
+        None => return "{}".to_string(),
+    };
+
+    if ov.properties.is_empty() {
+        return "{}".to_string();
+    }
+
+    let indent_outer = "  ".repeat(depth);
+    let indent_inner = "  ".repeat(depth + 1);
+
+    let mut required: Vec<(&String, &Schema)> = Vec::new();
+    let mut optional: Vec<(&String, &Schema)> = Vec::new();
+    for (k, v) in &ov.properties {
+        if ov.required.contains(k) {
+            required.push((k, v));
+        } else {
+            optional.push((k, v));
+        }
+    }
+
+    // Align all colons. Optional keys are 2 chars wider for the brackets.
+    let key_width = ov
+        .properties
+        .keys()
+        .map(|k| {
+            if ov.required.contains(k) {
+                k.len()
+            } else {
+                k.len() + 2
+            }
+        })
+        .max()
+        .unwrap_or(0);
+
+    let mut lines = Vec::new();
+    for (k, v) in required.iter().chain(optional.iter()) {
+        let is_required = ov.required.contains(*k);
+        let default = match v {
+            Schema::Object(o) => default_annotation(o),
+            _ => None,
+        };
+        let rendered = render_schema(v, defs, refs, depth + 1, style);
+        let key_plain = if is_required {
+            format!("{}:", k)
+        } else {
+            format!("[{}]:", k)
+        };
+        let key_styled = if is_required {
+            key_plain.clone()
+        } else {
+            style.dim(&key_plain)
+        };
+        let pad = " ".repeat((key_width + 1).saturating_sub(key_plain.len()));
+        let suffix = default
+            .map(|d| style.dim(&format!("   (default: {})", d)))
+            .unwrap_or_default();
+        lines.push(format!(
+            "{}{}{}  {}{}",
+            indent_inner, key_styled, pad, rendered, suffix
+        ));
+    }
+
+    format!("{{\n{}\n{}}}", lines.join("\n"), indent_outer)
+}
+
+#[cfg(feature = "cli")]
+fn join_variants(variants: &[String], depth: usize, style: &Style) -> String {
+    let sep_inline = format!(" {} ", style.bold_yellow("|"));
+    let inline = variants.join(&sep_inline);
+    let budget = 80usize.saturating_sub(2 * depth);
+    if !inline.contains('\n') && plain_len(&inline) <= budget {
+        return inline;
+    }
+    let indent = "  ".repeat(depth);
+    let sep = format!("\n{}{} ", indent, style.bold_yellow("|"));
+    let mut out = String::new();
+    out.push_str(&variants[0]);
+    for v in &variants[1..] {
+        out.push_str(&sep);
+        out.push_str(v);
+    }
+    out
+}
+
+#[cfg(feature = "cli")]
+fn plain_len(s: &str) -> usize {
+    let mut len = 0;
+    let mut in_esc = false;
+    for c in s.chars() {
+        if in_esc {
+            if c.is_ascii_alphabetic() {
+                in_esc = false;
+            }
+        } else if c == '\x1b' {
+            in_esc = true;
+        } else {
+            len += 1;
+        }
+    }
+    len
+}
+
+#[cfg(feature = "cli")]
+fn default_annotation(o: &SchemaObject) -> Option<String> {
+    let d = o.metadata.as_ref()?.default.as_ref()?;
+    Some(match d {
+        serde_json::Value::String(s) => format!("\"{}\"", s),
+        other => other.to_string(),
+    })
+}
+
+#[cfg(feature = "cli")]
+fn instance_type(t: &Option<SingleOrVec<InstanceType>>) -> Option<InstanceType> {
+    match t {
+        Some(SingleOrVec::Single(t)) => Some(**t),
+        Some(SingleOrVec::Vec(v)) => v.iter().find(|t| !matches!(t, InstanceType::Null)).copied(),
+        None => None,
+    }
+}
+
+#[cfg(feature = "cli")]
+fn ref_name(r: &str) -> String {
+    r.rsplit('/').next().unwrap_or(r).to_string()
+}
+
+#[cfg(feature = "cli")]
+fn snake_case(s: &str) -> String {
+    let mut out = String::new();
+    for (i, c) in s.chars().enumerate() {
+        if c.is_uppercase() && i > 0 {
+            out.push('_');
+        }
+        out.push(c.to_ascii_lowercase());
+    }
+    out
 }

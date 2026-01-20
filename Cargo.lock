@@ -1784,6 +1784,7 @@ dependencies = [
  "futures-core",
  "percent-encoding",
  "reqwest",
+ "schemars",
  "serde",
  "serde_json",
  "serde_urlencoded",
