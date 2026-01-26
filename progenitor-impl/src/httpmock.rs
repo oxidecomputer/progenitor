@@ -154,6 +154,7 @@ impl Generator {
                  kind,
                  api_name,
                  description: _,
+                 ..
              }| {
                 let arg_type_name = match typ {
                     OperationParameterType::Type(arg_type_id) => self
@@ -161,8 +162,14 @@ impl Generator {
                         .get_type(arg_type_id)
                         .unwrap()
                         .parameter_ident(),
+                    OperationParameterType::MultipartRelated(arg_type_id) => self
+                        .type_space
+                        .get_type(arg_type_id)
+                        .unwrap()
+                        .parameter_ident(),
                     OperationParameterType::RawBody => match kind {
-                        OperationParameterKind::Body(BodyContentType::OctetStream) => quote! {
+                        OperationParameterKind::Body(BodyContentType::OctetStream)
+                        | OperationParameterKind::Body(BodyContentType::MultipartRelated) => quote! {
                             ::serde_json::Value
                         },
                         OperationParameterKind::Body(BodyContentType::Text(_)) => quote! {
@@ -232,8 +239,14 @@ impl Generator {
                                 Self(self.0.json_body_obj(value))
                             },
                         ),
+                        OperationParameterType::MultipartRelated(_) => (
+                            true,
+                            quote! {
+                                Self(self.0.json_body_obj(value))
+                            },
+                        ),
                         OperationParameterType::RawBody => match body_content_type {
-                            BodyContentType::OctetStream => (
+                            BodyContentType::OctetStream | BodyContentType::MultipartRelated => (
                                 true,
                                 quote! {
                                     Self(self.0.json_body(value))
