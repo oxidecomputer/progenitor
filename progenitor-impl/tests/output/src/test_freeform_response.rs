@@ -100,9 +100,7 @@ impl ClientHooks<()> for &Client {}
 #[allow(clippy::all)]
 impl Client {
     ///Sends a `GET` request to `/`
-    pub async fn freeform_response<'a>(
-        &'a self,
-    ) -> Result<ResponseValue<ByteStream>, Error<ByteStream>> {
+    pub async fn freeform_response(&self) -> Result<ResponseValue<ByteStream>, Error<ByteStream>> {
         let url = format!("{}/", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
