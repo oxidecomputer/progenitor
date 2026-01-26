@@ -78,7 +78,8 @@ impl HttpMethod {
 struct MethodSigBody {
     success: TokenStream,
     error: TokenStream,
-    body: TokenStream,
+    build: TokenStream,
+    send: TokenStream,
 }
 
 struct BuilderImpl {
@@ -608,7 +609,8 @@ impl Generator {
         let MethodSigBody {
             success: success_type,
             error: error_type,
-            body,
+            build,
+            send,
         } = self.method_sig_body(method, quote! { Self }, quote! { self }, has_inner)?;
 
         let method_impl = quote! {
@@ -620,7 +622,11 @@ impl Generator {
                 ResponseValue<#success_type>,
                 Error<#error_type>,
             > {
-                #body
+                #[allow(unused_mut)]
+                let mut request = {
+                    #build
+                }.build()?;
+                #send
             }
         };
 
@@ -778,7 +784,6 @@ impl Generator {
 
         // Generate a unique Ident for internal variables
         let url_ident = unique_ident_from("url", &param_names);
-        let request_ident = unique_ident_from("request", &param_names);
         let response_ident = unique_ident_from("response", &param_names);
         let result_ident = unique_ident_from("result", &param_names);
 
@@ -1057,12 +1062,12 @@ impl Generator {
         };
         let pre_hook = self.settings.pre_hook.as_ref().map(|hook| {
             quote! {
-                (#hook)(#inner &#request_ident);
+                (#hook)(#inner &request);
             }
         });
         let pre_hook_async = self.settings.pre_hook_async.as_ref().map(|hook| {
             quote! {
-                match (#hook)(#inner &mut #request_ident).await {
+                match (#hook)(#inner &mut request).await {
                     Ok(_) => (),
                     Err(e) => return Err(Error::Custom(e.to_string())),
                 }
@@ -1085,21 +1090,22 @@ impl Generator {
         let operation_id = &method.operation_id;
         let method_func = format_ident!("{}", method.method.as_str());
 
-        let body_impl = quote! {
+        let build_impl = quote! {
             #url_path
 
             #headers_build
 
-            #[allow(unused_mut)]
-            let mut #request_ident = #client_value.client
+            #client_value.client
                 . #method_func (#url_ident)
                 #accept_header
                 #(#body_func)*
                 #( .query(#query_params) )*
                 #headers_use
                 #websock_hdrs
-                .build()?;
+        };
 
+        // Assumes `request: reqwest::Request`
+        let send_impl = quote! {
             let info = OperationInfo {
                 operation_id: #operation_id,
             };
@@ -1107,11 +1113,11 @@ impl Generator {
             #pre_hook
             #pre_hook_async
             #client_value
-                .pre(&mut #request_ident, &info)
+                .pre(&mut request, &info)
                 .await?;
 
             let #result_ident = #client_value
-                .exec(#request_ident, &info)
+                .exec(request, &info)
                 .await;
 
             #client_value
@@ -1161,7 +1167,8 @@ impl Generator {
         Ok(MethodSigBody {
             success: response_type.into_tokens(&self.type_space),
             error: error_type.into_tokens(&self.type_space),
-            body: body_impl,
+            build: build_impl,
+            send: send_impl,
         })
     }
 
@@ -1353,14 +1360,14 @@ impl Generator {
     /// also has a corresponding method:
     /// ```ignore
     /// impl<'a> OperationId<'a> {
-    ///     pub fn param_1<V>(self, value: V)
+    ///     pub fn param_1<V>(self, value: V) -> Self
     ///         where V: std::convert::TryInto<SomeType>
     ///     {
     ///         self.param_1 = value.try_into()
     ///             .map_err(|_| #err_msg.to_string());
     ///         self
     ///     }
-    ///     pub fn param_2<V>(self, value: V)
+    ///     pub fn param_2<V>(self, value: V) -> Self
     ///         where V: std::convert::TryInto<SomeType>
     ///     {
     ///         self.param_2 = value.try_into()
@@ -1416,7 +1423,7 @@ impl Generator {
         method: &OperationMethod,
         tag_style: TagStyle,
         has_inner: bool,
-    ) -> Result<TokenStream> {
+    ) -> Result<(TokenStream, TokenStream)> {
         let struct_name = sanitize(&method.operation_id, Case::Pascal);
         let struct_ident = format_ident!("{}", struct_name);
 
@@ -1652,11 +1659,12 @@ impl Generator {
         let MethodSigBody {
             success,
             error,
-            body,
+            build,
+            send,
         } = self.method_sig_body(
             method,
             quote! { super::Client },
-            quote! { #client_ident },
+            quote! { client },
             has_inner,
         )?;
 
@@ -1671,6 +1679,14 @@ impl Generator {
                 ResponseValue<#success>,
                 Error<#error>,
             > {
+                self.build()?.send().await
+            }
+        };
+
+        let build_impl = quote! {
+            pub fn build(self)
+                -> Result<built::#struct_ident<'a>, Error<#error>>
+            {
                 // Destructure the builder for convenience.
                 let Self {
                     #client_ident,
@@ -1690,8 +1706,11 @@ impl Generator {
                         .map_err(Error::InvalidRequest)?;
                 )*
 
-                // Do the work.
-                #body
+                let request = {#build};
+                Ok(built::#struct_ident {
+                    client: #client_ident,
+                    request,
+                })
             }
         };
 
@@ -1856,7 +1875,7 @@ impl Generator {
             }
         };
 
-        Ok(quote! {
+        let builder = quote! {
             #[doc = #struct_doc]
             #derive
             pub struct #struct_ident<'a> {
@@ -1874,9 +1893,46 @@ impl Generator {
 
                 #( #param_impls )*
                 #send_impl
+                #build_impl
                 #stream_impl
             }
-        })
+        };
+
+        let built = quote! {
+            pub struct #struct_ident<'a> {
+                pub (crate) client: &'a super::super::Client,
+                pub (crate) request: reqwest::RequestBuilder,
+            }
+
+            impl<'a> #struct_ident<'a> {
+                pub async fn send(self) -> Result<
+                    ResponseValue<#success>,
+                    Error<#error>,
+                > {
+                    let Self {
+                        client,
+                        request
+                    } = self;
+
+                    #[allow(unused_mut)]
+                    let mut request = request.build()?;
+
+                    #send
+                }
+
+                pub fn map_request<F>(self, f: F) -> Self
+                    where F: Fn(reqwest::RequestBuilder)
+                        -> reqwest::RequestBuilder
+                {
+                    Self {
+                        client: self.client,
+                        request: f(self.request)
+                    }
+                }
+            }
+        };
+
+        Ok((builder, built))
     }
 
     fn builder_helper(&self, method: &OperationMethod) -> BuilderImpl {
