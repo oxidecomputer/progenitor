@@ -25,7 +25,7 @@ bytes = "1.11.0"
 chrono = { version = "0.4.43", default-features = false, features = ["serde"] }
 clap = { version = "4.5.56" }
 clap-cargo = "0.18.3"
-dropshot = { version = "0.16.6", default-features = false }
+dropshot = { version = "0.16.7", default-features = false }
 env_logger = "0.11.8"
 expectorate = { version = "1.2.0", features = ["predicates"] }
 futures = "0.3.31"
