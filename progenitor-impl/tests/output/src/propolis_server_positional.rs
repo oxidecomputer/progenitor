@@ -127,12 +127,6 @@ pub mod types {
         pub target: ::std::vec::Vec<::std::string::String>,
     }
 
-    impl ::std::convert::From<&CrucibleOpts> for CrucibleOpts {
-        fn from(value: &CrucibleOpts) -> Self {
-            value.clone()
-        }
-    }
-
     ///`DiskAttachment`
     ///
     /// <details><summary>JSON schema</summary>
@@ -167,12 +161,6 @@ pub mod types {
         pub disk_id: ::uuid::Uuid,
         pub generation_id: u64,
         pub state: DiskAttachmentState,
-    }
-
-    impl ::std::convert::From<&DiskAttachment> for DiskAttachment {
-        fn from(value: &DiskAttachment) -> Self {
-            value.clone()
-        }
     }
 
     ///`DiskAttachmentState`
@@ -213,12 +201,6 @@ pub mod types {
         Destroyed,
         Faulted,
         Attached(::uuid::Uuid),
-    }
-
-    impl ::std::convert::From<&Self> for DiskAttachmentState {
-        fn from(value: &DiskAttachmentState) -> Self {
-            value.clone()
-        }
     }
 
     impl ::std::convert::From<::uuid::Uuid> for DiskAttachmentState {
@@ -277,12 +259,6 @@ pub mod types {
         pub volume_construction_request: VolumeConstructionRequest,
     }
 
-    impl ::std::convert::From<&DiskRequest> for DiskRequest {
-        fn from(value: &DiskRequest) -> Self {
-            value.clone()
-        }
-    }
-
     ///Error information from a response.
     ///
     /// <details><summary>JSON schema</summary>
@@ -315,12 +291,6 @@ pub mod types {
         pub error_code: ::std::option::Option<::std::string::String>,
         pub message: ::std::string::String,
         pub request_id: ::std::string::String,
-    }
-
-    impl ::std::convert::From<&Error> for Error {
-        fn from(value: &Error) -> Self {
-            value.clone()
-        }
     }
 
     ///`Instance`
@@ -365,12 +335,6 @@ pub mod types {
         pub nics: ::std::vec::Vec<NetworkInterface>,
         pub properties: InstanceProperties,
         pub state: InstanceState,
-    }
-
-    impl ::std::convert::From<&Instance> for Instance {
-        fn from(value: &Instance) -> Self {
-            value.clone()
-        }
     }
 
     ///`InstanceEnsureRequest`
@@ -439,12 +403,6 @@ pub mod types {
         pub properties: InstanceProperties,
     }
 
-    impl ::std::convert::From<&InstanceEnsureRequest> for InstanceEnsureRequest {
-        fn from(value: &InstanceEnsureRequest) -> Self {
-            value.clone()
-        }
-    }
-
     ///`InstanceEnsureResponse`
     ///
     /// <details><summary>JSON schema</summary>
@@ -478,12 +436,6 @@ pub mod types {
         pub migrate: ::std::option::Option<InstanceMigrateInitiateResponse>,
     }
 
-    impl ::std::convert::From<&InstanceEnsureResponse> for InstanceEnsureResponse {
-        fn from(value: &InstanceEnsureResponse) -> Self {
-            value.clone()
-        }
-    }
-
     impl ::std::default::Default for InstanceEnsureResponse {
         fn default() -> Self {
             Self {
@@ -513,12 +465,6 @@ pub mod types {
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct InstanceGetResponse {
         pub instance: Instance,
-    }
-
-    impl ::std::convert::From<&InstanceGetResponse> for InstanceGetResponse {
-        fn from(value: &InstanceGetResponse) -> Self {
-            value.clone()
-        }
     }
 
     ///`InstanceMigrateInitiateRequest`
@@ -556,12 +502,6 @@ pub mod types {
         pub src_uuid: ::uuid::Uuid,
     }
 
-    impl ::std::convert::From<&InstanceMigrateInitiateRequest> for InstanceMigrateInitiateRequest {
-        fn from(value: &InstanceMigrateInitiateRequest) -> Self {
-            value.clone()
-        }
-    }
-
     ///`InstanceMigrateInitiateResponse`
     ///
     /// <details><summary>JSON schema</summary>
@@ -584,12 +524,6 @@ pub mod types {
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct InstanceMigrateInitiateResponse {
         pub migration_id: ::uuid::Uuid,
-    }
-
-    impl ::std::convert::From<&InstanceMigrateInitiateResponse> for InstanceMigrateInitiateResponse {
-        fn from(value: &InstanceMigrateInitiateResponse) -> Self {
-            value.clone()
-        }
     }
 
     ///`InstanceMigrateStatusRequest`
@@ -616,12 +550,6 @@ pub mod types {
         pub migration_id: ::uuid::Uuid,
     }
 
-    impl ::std::convert::From<&InstanceMigrateStatusRequest> for InstanceMigrateStatusRequest {
-        fn from(value: &InstanceMigrateStatusRequest) -> Self {
-            value.clone()
-        }
-    }
-
     ///`InstanceMigrateStatusResponse`
     ///
     /// <details><summary>JSON schema</summary>
@@ -643,12 +571,6 @@ pub mod types {
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct InstanceMigrateStatusResponse {
         pub state: MigrationState,
-    }
-
-    impl ::std::convert::From<&InstanceMigrateStatusResponse> for InstanceMigrateStatusResponse {
-        fn from(value: &InstanceMigrateStatusResponse) -> Self {
-            value.clone()
-        }
     }
 
     ///`InstanceProperties`
@@ -726,12 +648,6 @@ pub mod types {
         pub vcpus: u8,
     }
 
-    impl ::std::convert::From<&InstanceProperties> for InstanceProperties {
-        fn from(value: &InstanceProperties) -> Self {
-            value.clone()
-        }
-    }
-
     ///Current state of an Instance.
     ///
     /// <details><summary>JSON schema</summary>
@@ -778,12 +694,6 @@ pub mod types {
         Repairing,
         Failed,
         Destroyed,
-    }
-
-    impl ::std::convert::From<&Self> for InstanceState {
-        fn from(value: &InstanceState) -> Self {
-            value.clone()
-        }
     }
 
     impl ::std::fmt::Display for InstanceState {
@@ -872,12 +782,6 @@ pub mod types {
         pub gen: u64,
     }
 
-    impl ::std::convert::From<&InstanceStateMonitorRequest> for InstanceStateMonitorRequest {
-        fn from(value: &InstanceStateMonitorRequest) -> Self {
-            value.clone()
-        }
-    }
-
     ///`InstanceStateMonitorResponse`
     ///
     /// <details><summary>JSON schema</summary>
@@ -906,12 +810,6 @@ pub mod types {
     pub struct InstanceStateMonitorResponse {
         pub gen: u64,
         pub state: InstanceState,
-    }
-
-    impl ::std::convert::From<&InstanceStateMonitorResponse> for InstanceStateMonitorResponse {
-        fn from(value: &InstanceStateMonitorResponse) -> Self {
-            value.clone()
-        }
     }
 
     ///`InstanceStateRequested`
@@ -947,12 +845,6 @@ pub mod types {
         Stop,
         Reboot,
         MigrateStart,
-    }
-
-    impl ::std::convert::From<&Self> for InstanceStateRequested {
-        fn from(value: &InstanceStateRequested) -> Self {
-            value.clone()
-        }
     }
 
     impl ::std::fmt::Display for InstanceStateRequested {
@@ -1051,12 +943,6 @@ pub mod types {
         Error,
     }
 
-    impl ::std::convert::From<&Self> for MigrationState {
-        fn from(value: &MigrationState) -> Self {
-            value.clone()
-        }
-    }
-
     impl ::std::fmt::Display for MigrationState {
         fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
@@ -1146,12 +1032,6 @@ pub mod types {
         pub name: ::std::string::String,
     }
 
-    impl ::std::convert::From<&NetworkInterface> for NetworkInterface {
-        fn from(value: &NetworkInterface) -> Self {
-            value.clone()
-        }
-    }
-
     ///`NetworkInterfaceAttachmentState`
     ///
     /// <details><summary>JSON schema</summary>
@@ -1189,12 +1069,6 @@ pub mod types {
         Attached(Slot),
     }
 
-    impl ::std::convert::From<&Self> for NetworkInterfaceAttachmentState {
-        fn from(value: &NetworkInterfaceAttachmentState) -> Self {
-            value.clone()
-        }
-    }
-
     impl ::std::convert::From<Slot> for NetworkInterfaceAttachmentState {
         fn from(value: Slot) -> Self {
             Self::Attached(value)
@@ -1229,12 +1103,6 @@ pub mod types {
         pub slot: Slot,
     }
 
-    impl ::std::convert::From<&NetworkInterfaceRequest> for NetworkInterfaceRequest {
-        fn from(value: &NetworkInterfaceRequest) -> Self {
-            value.clone()
-        }
-    }
-
     ///A stable index which is translated by Propolis into a PCI BDF, visible
     /// to the guest.
     ///
@@ -1266,12 +1134,6 @@ pub mod types {
         }
     }
 
-    impl ::std::convert::From<&Slot> for Slot {
-        fn from(value: &Slot) -> Self {
-            value.clone()
-        }
-    }
-
     impl ::std::convert::From<u8> for Slot {
         fn from(value: u8) -> Self {
             Self(value)
@@ -1288,13 +1150,6 @@ pub mod types {
     impl ::std::convert::TryFrom<&str> for Slot {
         type Error = <u8 as ::std::str::FromStr>::Err;
         fn try_from(value: &str) -> ::std::result::Result<Self, Self::Error> {
-            value.parse()
-        }
-    }
-
-    impl ::std::convert::TryFrom<&String> for Slot {
-        type Error = <u8 as ::std::str::FromStr>::Err;
-        fn try_from(value: &String) -> ::std::result::Result<Self, Self::Error> {
             value.parse()
         }
     }
@@ -1487,12 +1342,6 @@ pub mod types {
             id: ::uuid::Uuid,
             path: ::std::string::String,
         },
-    }
-
-    impl ::std::convert::From<&Self> for VolumeConstructionRequest {
-        fn from(value: &VolumeConstructionRequest) -> Self {
-            value.clone()
-        }
     }
 }
 
