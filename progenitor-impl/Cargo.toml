@@ -1,6 +1,6 @@
 [package]
 name = "progenitor-impl"
-version = "0.11.2"
+version = "0.12.0"
 edition = "2021"
 license = "MPL-2.0"
 description = "An OpenAPI client generator - core implementation"
