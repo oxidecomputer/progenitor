@@ -52,14 +52,12 @@ serde_yaml = "0.9"
 syn = { version = "2.0.114", features = ["parsing"] }
 thiserror = "2.0.18"
 tokio = { version = "1.49.0", features = ["rt", "net"] }
-# change when publishing
-typify = { version = "0.5.0" }
-# typify = { git = "https://github.com/oxidecomputer/typify" }
+typify = { version = "0.6.0" }
 url = "2.5.8"
 unicode-ident = "1.0.22"
 uuid = { version = "1.20.0", features = ["serde", "v4"] }
 
-#[patch."https://github.com/oxidecomputer/typify"]
+#[patch.crates-io]
 #typify = { path = "../typify/typify" }
 
 #[patch.crates-io]

@@ -71,12 +71,6 @@ pub mod types {
         pub serial: ::std::string::String,
     }
 
-    impl ::std::convert::From<&Baseboard> for Baseboard {
-        fn from(value: &Baseboard) -> Self {
-            value.clone()
-        }
-    }
-
     ///A type storing a range over `T`.
     ///
     ///This type supports ranges similar to the `RangeTo`, `Range` and
@@ -177,12 +171,6 @@ pub mod types {
         ///A range bounded inclusively below and unbounded above, `start..`.
         #[serde(rename = "range_from")]
         RangeFrom { start: f64 },
-    }
-
-    impl ::std::convert::From<&Self> for BinRangedouble {
-        fn from(value: &BinRangedouble) -> Self {
-            value.clone()
-        }
     }
 
     ///A type storing a range over `T`.
@@ -287,12 +275,6 @@ pub mod types {
         RangeFrom { start: i64 },
     }
 
-    impl ::std::convert::From<&Self> for BinRangeint64 {
-        fn from(value: &BinRangeint64) -> Self {
-            value.clone()
-        }
-    }
-
     ///Type storing bin edges and a count of samples within it.
     ///
     /// <details><summary>JSON schema</summary>
@@ -331,12 +313,6 @@ pub mod types {
         pub count: u64,
         ///The range of the support covered by this bin.
         pub range: BinRangedouble,
-    }
-
-    impl ::std::convert::From<&Bindouble> for Bindouble {
-        fn from(value: &Bindouble) -> Self {
-            value.clone()
-        }
     }
 
     ///Type storing bin edges and a count of samples within it.
@@ -379,12 +355,6 @@ pub mod types {
         pub range: BinRangeint64,
     }
 
-    impl ::std::convert::From<&Binint64> for Binint64 {
-        fn from(value: &Binint64) -> Self {
-            value.clone()
-        }
-    }
-
     ///`BlockSize`
     ///
     /// <details><summary>JSON schema</summary>
@@ -414,12 +384,6 @@ pub mod types {
     impl ::std::convert::From<BlockSize> for i64 {
         fn from(value: BlockSize) -> Self {
             value.0
-        }
-    }
-
-    impl ::std::convert::From<&BlockSize> for BlockSize {
-        fn from(value: &BlockSize) -> Self {
-            value.clone()
         }
     }
 
@@ -485,12 +449,6 @@ pub mod types {
         }
     }
 
-    impl ::std::convert::From<&ByteCount> for ByteCount {
-        fn from(value: &ByteCount) -> Self {
-            value.clone()
-        }
-    }
-
     impl ::std::convert::From<u64> for ByteCount {
         fn from(value: u64) -> Self {
             Self(value)
@@ -507,13 +465,6 @@ pub mod types {
     impl ::std::convert::TryFrom<&str> for ByteCount {
         type Error = <u64 as ::std::str::FromStr>::Err;
         fn try_from(value: &str) -> ::std::result::Result<Self, Self::Error> {
-            value.parse()
-        }
-    }
-
-    impl ::std::convert::TryFrom<&String> for ByteCount {
-        type Error = <u64 as ::std::str::FromStr>::Err;
-        fn try_from(value: &String) -> ::std::result::Result<Self, Self::Error> {
             value.parse()
         }
     }
@@ -599,12 +550,6 @@ pub mod types {
         pub time_modified: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
-    impl ::std::convert::From<&Certificate> for Certificate {
-        fn from(value: &Certificate) -> Self {
-            value.clone()
-        }
-    }
-
     ///Create-time parameters for a
     /// [`Certificate`](crate::external_api::views::Certificate)
     ///
@@ -671,12 +616,6 @@ pub mod types {
         pub service: ServiceUsingCertificate,
     }
 
-    impl ::std::convert::From<&CertificateCreate> for CertificateCreate {
-        fn from(value: &CertificateCreate) -> Self {
-            value.clone()
-        }
-    }
-
     ///A single page of results
     ///
     /// <details><summary>JSON schema</summary>
@@ -715,12 +654,6 @@ pub mod types {
         ///token used to fetch the next page of results (if any)
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         pub next_page: ::std::option::Option<::std::string::String>,
-    }
-
-    impl ::std::convert::From<&CertificateResultsPage> for CertificateResultsPage {
-        fn from(value: &CertificateResultsPage) -> Self {
-            value.clone()
-        }
     }
 
     ///Identity-related metadata that's included in "asset" public API objects
@@ -779,12 +712,6 @@ pub mod types {
         pub version: SemverVersion,
     }
 
-    impl ::std::convert::From<&ComponentUpdate> for ComponentUpdate {
-        fn from(value: &ComponentUpdate) -> Self {
-            value.clone()
-        }
-    }
-
     ///A single page of results
     ///
     /// <details><summary>JSON schema</summary>
@@ -825,12 +752,6 @@ pub mod types {
         pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl ::std::convert::From<&ComponentUpdateResultsPage> for ComponentUpdateResultsPage {
-        fn from(value: &ComponentUpdateResultsPage) -> Self {
-            value.clone()
-        }
-    }
-
     ///A cumulative or counter data type.
     ///
     /// <details><summary>JSON schema</summary>
@@ -862,12 +783,6 @@ pub mod types {
         pub value: f64,
     }
 
-    impl ::std::convert::From<&Cumulativedouble> for Cumulativedouble {
-        fn from(value: &Cumulativedouble) -> Self {
-            value.clone()
-        }
-    }
-
     ///A cumulative or counter data type.
     ///
     /// <details><summary>JSON schema</summary>
@@ -897,12 +812,6 @@ pub mod types {
     pub struct Cumulativeint64 {
         pub start_time: ::chrono::DateTime<::chrono::offset::Utc>,
         pub value: i64,
-    }
-
-    impl ::std::convert::From<&Cumulativeint64> for Cumulativeint64 {
-        fn from(value: &Cumulativeint64) -> Self {
-            value.clone()
-        }
     }
 
     ///A `Datum` is a single sampled data point from a metric.
@@ -1110,12 +1019,6 @@ pub mod types {
         HistogramF64(Histogramdouble),
     }
 
-    impl ::std::convert::From<&Self> for Datum {
-        fn from(value: &Datum) -> Self {
-            value.clone()
-        }
-    }
-
     impl ::std::convert::From<bool> for Datum {
         fn from(value: bool) -> Self {
             Self::Bool(value)
@@ -1219,12 +1122,6 @@ pub mod types {
         HistogramF64,
     }
 
-    impl ::std::convert::From<&Self> for DatumType {
-        fn from(value: &DatumType) -> Self {
-            value.clone()
-        }
-    }
-
     impl ::std::fmt::Display for DatumType {
         fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
@@ -1318,12 +1215,6 @@ pub mod types {
         pub public_cert: ::std::string::String,
     }
 
-    impl ::std::convert::From<&DerEncodedKeyPair> for DerEncodedKeyPair {
-        fn from(value: &DerEncodedKeyPair) -> Self {
-            value.clone()
-        }
-    }
-
     ///`DeviceAccessTokenRequest`
     ///
     /// <details><summary>JSON schema</summary>
@@ -1358,12 +1249,6 @@ pub mod types {
         pub grant_type: ::std::string::String,
     }
 
-    impl ::std::convert::From<&DeviceAccessTokenRequest> for DeviceAccessTokenRequest {
-        fn from(value: &DeviceAccessTokenRequest) -> Self {
-            value.clone()
-        }
-    }
-
     ///`DeviceAuthRequest`
     ///
     /// <details><summary>JSON schema</summary>
@@ -1388,12 +1273,6 @@ pub mod types {
         pub client_id: ::uuid::Uuid,
     }
 
-    impl ::std::convert::From<&DeviceAuthRequest> for DeviceAuthRequest {
-        fn from(value: &DeviceAuthRequest) -> Self {
-            value.clone()
-        }
-    }
-
     ///`DeviceAuthVerify`
     ///
     /// <details><summary>JSON schema</summary>
@@ -1415,12 +1294,6 @@ pub mod types {
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct DeviceAuthVerify {
         pub user_code: ::std::string::String,
-    }
-
-    impl ::std::convert::From<&DeviceAuthVerify> for DeviceAuthVerify {
-        fn from(value: &DeviceAuthVerify) -> Self {
-            value.clone()
-        }
     }
 
     ///`Digest`
@@ -1457,12 +1330,6 @@ pub mod types {
     pub enum Digest {
         #[serde(rename = "sha256")]
         Sha256(::std::string::String),
-    }
-
-    impl ::std::convert::From<&Self> for Digest {
-        fn from(value: &Digest) -> Self {
-            value.clone()
-        }
     }
 
     ///Client view of a [`Disk`]
@@ -1572,12 +1439,6 @@ pub mod types {
         pub time_modified: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
-    impl ::std::convert::From<&Disk> for Disk {
-        fn from(value: &Disk) -> Self {
-            value.clone()
-        }
-    }
-
     ///Create-time parameters for a
     /// [`Disk`](omicron_common::api::external::Disk)
     ///
@@ -1631,12 +1492,6 @@ pub mod types {
         pub size: ByteCount,
     }
 
-    impl ::std::convert::From<&DiskCreate> for DiskCreate {
-        fn from(value: &DiskCreate) -> Self {
-            value.clone()
-        }
-    }
-
     ///TODO-v1: Delete this Parameters for the
     /// [`Disk`](omicron_common::api::external::Disk) to be attached or detached
     /// to an instance
@@ -1663,12 +1518,6 @@ pub mod types {
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct DiskIdentifier {
         pub name: Name,
-    }
-
-    impl ::std::convert::From<&DiskIdentifier> for DiskIdentifier {
-        fn from(value: &DiskIdentifier) -> Self {
-            value.clone()
-        }
     }
 
     ///`DiskMetricName`
@@ -1714,12 +1563,6 @@ pub mod types {
         Write,
         #[serde(rename = "write_bytes")]
         WriteBytes,
-    }
-
-    impl ::std::convert::From<&Self> for DiskMetricName {
-        fn from(value: &DiskMetricName) -> Self {
-            value.clone()
-        }
     }
 
     impl ::std::fmt::Display for DiskMetricName {
@@ -1798,12 +1641,6 @@ pub mod types {
         pub disk: NameOrId,
     }
 
-    impl ::std::convert::From<&DiskPath> for DiskPath {
-        fn from(value: &DiskPath) -> Self {
-            value.clone()
-        }
-    }
-
     ///A single page of results
     ///
     /// <details><summary>JSON schema</summary>
@@ -1842,12 +1679,6 @@ pub mod types {
         ///token used to fetch the next page of results (if any)
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         pub next_page: ::std::option::Option<::std::string::String>,
-    }
-
-    impl ::std::convert::From<&DiskResultsPage> for DiskResultsPage {
-        fn from(value: &DiskResultsPage) -> Self {
-            value.clone()
-        }
     }
 
     ///Different sources for a disk
@@ -1966,12 +1797,6 @@ pub mod types {
         ///Create a disk from a global image
         #[serde(rename = "global_image")]
         GlobalImage { image_id: ::uuid::Uuid },
-    }
-
-    impl ::std::convert::From<&Self> for DiskSource {
-        fn from(value: &DiskSource) -> Self {
-            value.clone()
-        }
     }
 
     ///State of a Disk (primarily: attached or not)
@@ -2128,12 +1953,6 @@ pub mod types {
         Faulted,
     }
 
-    impl ::std::convert::From<&Self> for DiskState {
-        fn from(value: &DiskState) -> Self {
-            value.clone()
-        }
-    }
-
     ///OS image distribution
     ///
     /// <details><summary>JSON schema</summary>
@@ -2173,12 +1992,6 @@ pub mod types {
         pub version: ::std::string::String,
     }
 
-    impl ::std::convert::From<&Distribution> for Distribution {
-        fn from(value: &Distribution) -> Self {
-            value.clone()
-        }
-    }
-
     ///Error information from a response.
     ///
     /// <details><summary>JSON schema</summary>
@@ -2213,12 +2026,6 @@ pub mod types {
         pub request_id: ::std::string::String,
     }
 
-    impl ::std::convert::From<&Error> for Error {
-        fn from(value: &Error) -> Self {
-            value.clone()
-        }
-    }
-
     ///`ExternalIp`
     ///
     /// <details><summary>JSON schema</summary>
@@ -2246,12 +2053,6 @@ pub mod types {
     pub struct ExternalIp {
         pub ip: ::std::net::IpAddr,
         pub kind: IpKind,
-    }
-
-    impl ::std::convert::From<&ExternalIp> for ExternalIp {
-        fn from(value: &ExternalIp) -> Self {
-            value.clone()
-        }
     }
 
     ///Parameters for creating an external IP address for instances.
@@ -2311,12 +2112,6 @@ pub mod types {
         },
     }
 
-    impl ::std::convert::From<&Self> for ExternalIpCreate {
-        fn from(value: &ExternalIpCreate) -> Self {
-            value.clone()
-        }
-    }
-
     ///A single page of results
     ///
     /// <details><summary>JSON schema</summary>
@@ -2357,12 +2152,6 @@ pub mod types {
         pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl ::std::convert::From<&ExternalIpResultsPage> for ExternalIpResultsPage {
-        fn from(value: &ExternalIpResultsPage) -> Self {
-            value.clone()
-        }
-    }
-
     ///The name and type information for a field of a timeseries schema.
     ///
     /// <details><summary>JSON schema</summary>
@@ -2398,12 +2187,6 @@ pub mod types {
         pub ty: FieldType,
     }
 
-    impl ::std::convert::From<&FieldSchema> for FieldSchema {
-        fn from(value: &FieldSchema) -> Self {
-            value.clone()
-        }
-    }
-
     ///The source from which a field is derived, the target or metric.
     ///
     /// <details><summary>JSON schema</summary>
@@ -2437,12 +2220,6 @@ pub mod types {
         Target,
         #[serde(rename = "metric")]
         Metric,
-    }
-
-    impl ::std::convert::From<&Self> for FieldSource {
-        fn from(value: &FieldSource) -> Self {
-            value.clone()
-        }
     }
 
     impl ::std::fmt::Display for FieldSource {
@@ -2534,12 +2311,6 @@ pub mod types {
         Bool,
     }
 
-    impl ::std::convert::From<&Self> for FieldType {
-        fn from(value: &FieldType) -> Self {
-            value.clone()
-        }
-    }
-
     impl ::std::fmt::Display for FieldType {
         fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
@@ -2627,12 +2398,6 @@ pub mod types {
         Viewer,
     }
 
-    impl ::std::convert::From<&Self> for FleetRole {
-        fn from(value: &FleetRole) -> Self {
-            value.clone()
-        }
-    }
-
     impl ::std::fmt::Display for FleetRole {
         fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
@@ -2717,12 +2482,6 @@ pub mod types {
         pub role_assignments: ::std::vec::Vec<FleetRoleRoleAssignment>,
     }
 
-    impl ::std::convert::From<&FleetRolePolicy> for FleetRolePolicy {
-        fn from(value: &FleetRolePolicy) -> Self {
-            value.clone()
-        }
-    }
-
     ///Describes the assignment of a particular role on a particular resource
     /// to a particular identity (user, group, etc.)
     ///
@@ -2765,12 +2524,6 @@ pub mod types {
         pub identity_id: ::uuid::Uuid,
         pub identity_type: IdentityType,
         pub role_name: FleetRole,
-    }
-
-    impl ::std::convert::From<&FleetRoleRoleAssignment> for FleetRoleRoleAssignment {
-        fn from(value: &FleetRoleRoleAssignment) -> Self {
-            value.clone()
-        }
     }
 
     ///Client view of global Images
@@ -2900,12 +2653,6 @@ pub mod types {
         pub version: ::std::string::String,
     }
 
-    impl ::std::convert::From<&GlobalImage> for GlobalImage {
-        fn from(value: &GlobalImage) -> Self {
-            value.clone()
-        }
-    }
-
     ///Create-time parameters for an
     /// [`GlobalImage`](crate::external_api::views::GlobalImage)
     ///
@@ -2970,12 +2717,6 @@ pub mod types {
         pub source: ImageSource,
     }
 
-    impl ::std::convert::From<&GlobalImageCreate> for GlobalImageCreate {
-        fn from(value: &GlobalImageCreate) -> Self {
-            value.clone()
-        }
-    }
-
     ///A single page of results
     ///
     /// <details><summary>JSON schema</summary>
@@ -3014,12 +2755,6 @@ pub mod types {
         ///token used to fetch the next page of results (if any)
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         pub next_page: ::std::option::Option<::std::string::String>,
-    }
-
-    impl ::std::convert::From<&GlobalImageResultsPage> for GlobalImageResultsPage {
-        fn from(value: &GlobalImageResultsPage) -> Self {
-            value.clone()
-        }
     }
 
     ///Client view of a [`Group`]
@@ -3062,12 +2797,6 @@ pub mod types {
         pub silo_id: ::uuid::Uuid,
     }
 
-    impl ::std::convert::From<&Group> for Group {
-        fn from(value: &Group) -> Self {
-            value.clone()
-        }
-    }
-
     ///A single page of results
     ///
     /// <details><summary>JSON schema</summary>
@@ -3106,12 +2835,6 @@ pub mod types {
         ///token used to fetch the next page of results (if any)
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         pub next_page: ::std::option::Option<::std::string::String>,
-    }
-
-    impl ::std::convert::From<&GroupResultsPage> for GroupResultsPage {
-        fn from(value: &GroupResultsPage) -> Self {
-            value.clone()
-        }
     }
 
     ///A simple type for managing a histogram metric.
@@ -3226,12 +2949,6 @@ pub mod types {
         pub start_time: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
-    impl ::std::convert::From<&Histogramdouble> for Histogramdouble {
-        fn from(value: &Histogramdouble) -> Self {
-            value.clone()
-        }
-    }
-
     ///A simple type for managing a histogram metric.
     ///
     ///A histogram maintains the count of any number of samples, over a set of
@@ -3344,12 +3061,6 @@ pub mod types {
         pub start_time: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
-    impl ::std::convert::From<&Histogramint64> for Histogramint64 {
-        fn from(value: &Histogramint64) -> Self {
-            value.clone()
-        }
-    }
-
     ///Supported set of sort modes for scanning by id only.
     ///
     ///Currently, we only support scanning in ascending order.
@@ -3388,12 +3099,6 @@ pub mod types {
         ///sort in increasing order of "id"
         #[serde(rename = "id_ascending")]
         IdAscending,
-    }
-
-    impl ::std::convert::From<&Self> for IdSortMode {
-        fn from(value: &IdSortMode) -> Self {
-            value.clone()
-        }
     }
 
     impl ::std::fmt::Display for IdSortMode {
@@ -3513,12 +3218,6 @@ pub mod types {
         pub time_modified: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
-    impl ::std::convert::From<&IdentityProvider> for IdentityProvider {
-        fn from(value: &IdentityProvider) -> Self {
-            value.clone()
-        }
-    }
-
     ///A single page of results
     ///
     /// <details><summary>JSON schema</summary>
@@ -3559,12 +3258,6 @@ pub mod types {
         pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl ::std::convert::From<&IdentityProviderResultsPage> for IdentityProviderResultsPage {
-        fn from(value: &IdentityProviderResultsPage) -> Self {
-            value.clone()
-        }
-    }
-
     ///`IdentityProviderType`
     ///
     /// <details><summary>JSON schema</summary>
@@ -3599,12 +3292,6 @@ pub mod types {
         ///SAML identity provider
         #[serde(rename = "saml")]
         Saml,
-    }
-
-    impl ::std::convert::From<&Self> for IdentityProviderType {
-        fn from(value: &IdentityProviderType) -> Self {
-            value.clone()
-        }
     }
 
     impl ::std::fmt::Display for IdentityProviderType {
@@ -3682,12 +3369,6 @@ pub mod types {
         SiloUser,
         #[serde(rename = "silo_group")]
         SiloGroup,
-    }
-
-    impl ::std::convert::From<&Self> for IdentityType {
-        fn from(value: &IdentityType) -> Self {
-            value.clone()
-        }
     }
 
     impl ::std::fmt::Display for IdentityType {
@@ -3789,12 +3470,6 @@ pub mod types {
         Url { url: ::std::string::String },
         #[serde(rename = "base64_encoded_xml")]
         Base64EncodedXml { data: ::std::string::String },
-    }
-
-    impl ::std::convert::From<&Self> for IdpMetadataSource {
-        fn from(value: &IdpMetadataSource) -> Self {
-            value.clone()
-        }
     }
 
     ///Client view of project Images
@@ -3928,12 +3603,6 @@ pub mod types {
         pub version: ::std::option::Option<::std::string::String>,
     }
 
-    impl ::std::convert::From<&Image> for Image {
-        fn from(value: &Image) -> Self {
-            value.clone()
-        }
-    }
-
     ///Create-time parameters for an
     /// [`Image`](crate::external_api::views::Image)
     ///
@@ -3987,12 +3656,6 @@ pub mod types {
         pub source: ImageSource,
     }
 
-    impl ::std::convert::From<&ImageCreate> for ImageCreate {
-        fn from(value: &ImageCreate) -> Self {
-            value.clone()
-        }
-    }
-
     ///A single page of results
     ///
     /// <details><summary>JSON schema</summary>
@@ -4031,12 +3694,6 @@ pub mod types {
         ///token used to fetch the next page of results (if any)
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         pub next_page: ::std::option::Option<::std::string::String>,
-    }
-
-    impl ::std::convert::From<&ImageResultsPage> for ImageResultsPage {
-        fn from(value: &ImageResultsPage) -> Self {
-            value.clone()
-        }
     }
 
     ///The source of the underlying image.
@@ -4113,12 +3770,6 @@ pub mod types {
         Snapshot { id: ::uuid::Uuid },
         #[serde(rename = "you_can_boot_anything_as_long_as_its_alpine")]
         YouCanBootAnythingAsLongAsItsAlpine,
-    }
-
-    impl ::std::convert::From<&Self> for ImageSource {
-        fn from(value: &ImageSource) -> Self {
-            value.clone()
-        }
     }
 
     ///Client view of an [`Instance`]
@@ -4232,12 +3883,6 @@ pub mod types {
         pub time_run_state_updated: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
-    impl ::std::convert::From<&Instance> for Instance {
-        fn from(value: &Instance) -> Self {
-            value.clone()
-        }
-    }
-
     ///The number of CPUs in an Instance
     ///
     /// <details><summary>JSON schema</summary>
@@ -4267,12 +3912,6 @@ pub mod types {
         }
     }
 
-    impl ::std::convert::From<&InstanceCpuCount> for InstanceCpuCount {
-        fn from(value: &InstanceCpuCount) -> Self {
-            value.clone()
-        }
-    }
-
     impl ::std::convert::From<u16> for InstanceCpuCount {
         fn from(value: u16) -> Self {
             Self(value)
@@ -4289,13 +3928,6 @@ pub mod types {
     impl ::std::convert::TryFrom<&str> for InstanceCpuCount {
         type Error = <u16 as ::std::str::FromStr>::Err;
         fn try_from(value: &str) -> ::std::result::Result<Self, Self::Error> {
-            value.parse()
-        }
-    }
-
-    impl ::std::convert::TryFrom<&String> for InstanceCpuCount {
-        type Error = <u16 as ::std::str::FromStr>::Err;
-        fn try_from(value: &String) -> ::std::result::Result<Self, Self::Error> {
             value.parse()
         }
     }
@@ -4430,12 +4062,6 @@ pub mod types {
         pub user_data: ::std::string::String,
     }
 
-    impl ::std::convert::From<&InstanceCreate> for InstanceCreate {
-        fn from(value: &InstanceCreate) -> Self {
-            value.clone()
-        }
-    }
-
     ///Describe the instance's disks at creation time
     ///
     /// <details><summary>JSON schema</summary>
@@ -4534,12 +4160,6 @@ pub mod types {
         },
     }
 
-    impl ::std::convert::From<&Self> for InstanceDiskAttachment {
-        fn from(value: &InstanceDiskAttachment) -> Self {
-            value.clone()
-        }
-    }
-
     ///Migration parameters for an
     /// [`Instance`](omicron_common::api::external::Instance)
     ///
@@ -4565,12 +4185,6 @@ pub mod types {
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct InstanceMigrate {
         pub dst_sled_id: ::uuid::Uuid,
-    }
-
-    impl ::std::convert::From<&InstanceMigrate> for InstanceMigrate {
-        fn from(value: &InstanceMigrate) -> Self {
-            value.clone()
-        }
     }
 
     ///Describes an attachment of a `NetworkInterface` to an `Instance`, at the
@@ -4660,12 +4274,6 @@ pub mod types {
         None,
     }
 
-    impl ::std::convert::From<&Self> for InstanceNetworkInterfaceAttachment {
-        fn from(value: &InstanceNetworkInterfaceAttachment) -> Self {
-            value.clone()
-        }
-    }
-
     impl ::std::convert::From<::std::vec::Vec<NetworkInterfaceCreate>>
         for InstanceNetworkInterfaceAttachment
     {
@@ -4714,12 +4322,6 @@ pub mod types {
         pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl ::std::convert::From<&InstanceResultsPage> for InstanceResultsPage {
-        fn from(value: &InstanceResultsPage) -> Self {
-            value.clone()
-        }
-    }
-
     ///Contents of an Instance's serial console buffer.
     ///
     /// <details><summary>JSON schema</summary>
@@ -4765,12 +4367,6 @@ pub mod types {
         ///The absolute offset since boot (suitable for use as `byte_offset` in
         /// a subsequent request) of the last byte returned in `data`.
         pub last_byte_offset: u64,
-    }
-
-    impl ::std::convert::From<&InstanceSerialConsoleData> for InstanceSerialConsoleData {
-        fn from(value: &InstanceSerialConsoleData) -> Self {
-            value.clone()
-        }
     }
 
     ///Running state of an Instance (primarily: booted or stopped)
@@ -4914,12 +4510,6 @@ pub mod types {
         Destroyed,
     }
 
-    impl ::std::convert::From<&Self> for InstanceState {
-        fn from(value: &InstanceState) -> Self {
-            value.clone()
-        }
-    }
-
     impl ::std::fmt::Display for InstanceState {
         fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
@@ -5015,12 +4605,6 @@ pub mod types {
         Floating,
     }
 
-    impl ::std::convert::From<&Self> for IpKind {
-        fn from(value: &IpKind) -> Self {
-            value.clone()
-        }
-    }
-
     impl ::std::fmt::Display for IpKind {
         fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
@@ -5098,12 +4682,6 @@ pub mod types {
     pub enum IpNet {
         V4(Ipv4Net),
         V6(Ipv6Net),
-    }
-
-    impl ::std::convert::From<&Self> for IpNet {
-        fn from(value: &IpNet) -> Self {
-            value.clone()
-        }
     }
 
     impl ::std::str::FromStr for IpNet {
@@ -5230,12 +4808,6 @@ pub mod types {
         pub time_modified: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
-    impl ::std::convert::From<&IpPool> for IpPool {
-        fn from(value: &IpPool) -> Self {
-            value.clone()
-        }
-    }
-
     ///Create-time parameters for an IP Pool.
     ///
     ///See [`IpPool`](crate::external_api::views::IpPool)
@@ -5266,12 +4838,6 @@ pub mod types {
     pub struct IpPoolCreate {
         pub description: ::std::string::String,
         pub name: Name,
-    }
-
-    impl ::std::convert::From<&IpPoolCreate> for IpPoolCreate {
-        fn from(value: &IpPoolCreate) -> Self {
-            value.clone()
-        }
     }
 
     ///`IpPoolRange`
@@ -5307,12 +4873,6 @@ pub mod types {
         pub id: ::uuid::Uuid,
         pub range: IpRange,
         pub time_created: ::chrono::DateTime<::chrono::offset::Utc>,
-    }
-
-    impl ::std::convert::From<&IpPoolRange> for IpPoolRange {
-        fn from(value: &IpPoolRange) -> Self {
-            value.clone()
-        }
     }
 
     ///A single page of results
@@ -5355,12 +4915,6 @@ pub mod types {
         pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl ::std::convert::From<&IpPoolRangeResultsPage> for IpPoolRangeResultsPage {
-        fn from(value: &IpPoolRangeResultsPage) -> Self {
-            value.clone()
-        }
-    }
-
     ///A single page of results
     ///
     /// <details><summary>JSON schema</summary>
@@ -5399,12 +4953,6 @@ pub mod types {
         ///token used to fetch the next page of results (if any)
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         pub next_page: ::std::option::Option<::std::string::String>,
-    }
-
-    impl ::std::convert::From<&IpPoolResultsPage> for IpPoolResultsPage {
-        fn from(value: &IpPoolResultsPage) -> Self {
-            value.clone()
-        }
     }
 
     ///Parameters for updating an IP Pool
@@ -5448,12 +4996,6 @@ pub mod types {
         pub name: ::std::option::Option<Name>,
     }
 
-    impl ::std::convert::From<&IpPoolUpdate> for IpPoolUpdate {
-        fn from(value: &IpPoolUpdate) -> Self {
-            value.clone()
-        }
-    }
-
     impl ::std::default::Default for IpPoolUpdate {
         fn default() -> Self {
             Self {
@@ -5495,12 +5037,6 @@ pub mod types {
     pub enum IpRange {
         V4(Ipv4Range),
         V6(Ipv6Range),
-    }
-
-    impl ::std::convert::From<&Self> for IpRange {
-        fn from(value: &IpRange) -> Self {
-            value.clone()
-        }
     }
 
     impl ::std::convert::From<Ipv4Range> for IpRange {
@@ -5547,12 +5083,6 @@ pub mod types {
     impl ::std::convert::From<Ipv4Net> for ::std::string::String {
         fn from(value: Ipv4Net) -> Self {
             value.0
-        }
-    }
-
-    impl ::std::convert::From<&Ipv4Net> for Ipv4Net {
-        fn from(value: &Ipv4Net) -> Self {
-            value.clone()
         }
     }
 
@@ -5652,12 +5182,6 @@ pub mod types {
         pub last: ::std::net::Ipv4Addr,
     }
 
-    impl ::std::convert::From<&Ipv4Range> for Ipv4Range {
-        fn from(value: &Ipv4Range) -> Self {
-            value.clone()
-        }
-    }
-
     ///An IPv6 subnet, including prefix and subnet mask
     ///
     /// <details><summary>JSON schema</summary>
@@ -5689,12 +5213,6 @@ pub mod types {
     impl ::std::convert::From<Ipv6Net> for ::std::string::String {
         fn from(value: Ipv6Net) -> Self {
             value.0
-        }
-    }
-
-    impl ::std::convert::From<&Ipv6Net> for Ipv6Net {
-        fn from(value: &Ipv6Net) -> Self {
-            value.clone()
         }
     }
 
@@ -5793,12 +5311,6 @@ pub mod types {
         pub last: ::std::net::Ipv6Addr,
     }
 
-    impl ::std::convert::From<&Ipv6Range> for Ipv6Range {
-        fn from(value: &Ipv6Range) -> Self {
-            value.clone()
-        }
-    }
-
     ///An inclusive-inclusive range of IP ports. The second port may be omitted
     /// to represent a single port
     ///
@@ -5832,12 +5344,6 @@ pub mod types {
     impl ::std::convert::From<L4PortRange> for ::std::string::String {
         fn from(value: L4PortRange) -> Self {
             value.0
-        }
-    }
-
-    impl ::std::convert::From<&L4PortRange> for L4PortRange {
-        fn from(value: &L4PortRange) -> Self {
-            value.clone()
         }
     }
 
@@ -5933,12 +5439,6 @@ pub mod types {
         }
     }
 
-    impl ::std::convert::From<&MacAddr> for MacAddr {
-        fn from(value: &MacAddr) -> Self {
-            value.clone()
-        }
-    }
-
     impl ::std::str::FromStr for MacAddr {
         type Err = self::error::ConversionError;
         fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
@@ -6030,12 +5530,6 @@ pub mod types {
         pub timestamp: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
-    impl ::std::convert::From<&Measurement> for Measurement {
-        fn from(value: &Measurement) -> Self {
-            value.clone()
-        }
-    }
-
     ///A single page of results
     ///
     /// <details><summary>JSON schema</summary>
@@ -6076,12 +5570,6 @@ pub mod types {
         pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl ::std::convert::From<&MeasurementResultsPage> for MeasurementResultsPage {
-        fn from(value: &MeasurementResultsPage) -> Self {
-            value.clone()
-        }
-    }
-
     ///Names must begin with a lower case ASCII letter, be composed exclusively
     /// of lowercase ASCII, uppercase ASCII, numbers, and '-', and may not end
     /// with a '-'. Names cannot be a UUID though they may contain a UUID.
@@ -6116,12 +5604,6 @@ pub mod types {
     impl ::std::convert::From<Name> for ::std::string::String {
         fn from(value: Name) -> Self {
             value.0
-        }
-    }
-
-    impl ::std::convert::From<&Name> for Name {
-        fn from(value: &Name) -> Self {
-            value.clone()
         }
     }
 
@@ -6214,12 +5696,6 @@ pub mod types {
     pub enum NameOrId {
         Id(::uuid::Uuid),
         Name(Name),
-    }
-
-    impl ::std::convert::From<&Self> for NameOrId {
-        fn from(value: &NameOrId) -> Self {
-            value.clone()
-        }
     }
 
     impl ::std::str::FromStr for NameOrId {
@@ -6339,12 +5815,6 @@ pub mod types {
         IdAscending,
     }
 
-    impl ::std::convert::From<&Self> for NameOrIdSortMode {
-        fn from(value: &NameOrIdSortMode) -> Self {
-            value.clone()
-        }
-    }
-
     impl ::std::fmt::Display for NameOrIdSortMode {
         fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
@@ -6430,12 +5900,6 @@ pub mod types {
         ///sort in increasing order of "name"
         #[serde(rename = "name_ascending")]
         NameAscending,
-    }
-
-    impl ::std::convert::From<&Self> for NameSortMode {
-        fn from(value: &NameSortMode) -> Self {
-            value.clone()
-        }
     }
 
     impl ::std::fmt::Display for NameSortMode {
@@ -6597,12 +6061,6 @@ pub mod types {
         pub vpc_id: ::uuid::Uuid,
     }
 
-    impl ::std::convert::From<&NetworkInterface> for NetworkInterface {
-        fn from(value: &NetworkInterface) -> Self {
-            value.clone()
-        }
-    }
-
     ///Create-time parameters for a
     /// [`NetworkInterface`](omicron_common::api::external::NetworkInterface)
     ///
@@ -6668,12 +6126,6 @@ pub mod types {
         pub vpc_name: Name,
     }
 
-    impl ::std::convert::From<&NetworkInterfaceCreate> for NetworkInterfaceCreate {
-        fn from(value: &NetworkInterfaceCreate) -> Self {
-            value.clone()
-        }
-    }
-
     ///A single page of results
     ///
     /// <details><summary>JSON schema</summary>
@@ -6712,12 +6164,6 @@ pub mod types {
         ///token used to fetch the next page of results (if any)
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         pub next_page: ::std::option::Option<::std::string::String>,
-    }
-
-    impl ::std::convert::From<&NetworkInterfaceResultsPage> for NetworkInterfaceResultsPage {
-        fn from(value: &NetworkInterfaceResultsPage) -> Self {
-            value.clone()
-        }
     }
 
     ///Parameters for updating a
@@ -6793,12 +6239,6 @@ pub mod types {
         pub primary: bool,
     }
 
-    impl ::std::convert::From<&NetworkInterfaceUpdate> for NetworkInterfaceUpdate {
-        fn from(value: &NetworkInterfaceUpdate) -> Self {
-            value.clone()
-        }
-    }
-
     impl ::std::default::Default for NetworkInterfaceUpdate {
         fn default() -> Self {
             Self {
@@ -6851,12 +6291,6 @@ pub mod types {
     impl ::std::convert::From<NodeName> for ::std::string::String {
         fn from(value: NodeName) -> Self {
             value.0
-        }
-    }
-
-    impl ::std::convert::From<&NodeName> for NodeName {
-        fn from(value: &NodeName) -> Self {
-            value.clone()
         }
     }
 
@@ -6942,12 +6376,6 @@ pub mod types {
         pub time_modified: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
-    impl ::std::convert::From<&Organization> for Organization {
-        fn from(value: &Organization) -> Self {
-            value.clone()
-        }
-    }
-
     ///Create-time parameters for an
     /// [`Organization`](crate::external_api::views::Organization)
     ///
@@ -6977,12 +6405,6 @@ pub mod types {
     pub struct OrganizationCreate {
         pub description: ::std::string::String,
         pub name: Name,
-    }
-
-    impl ::std::convert::From<&OrganizationCreate> for OrganizationCreate {
-        fn from(value: &OrganizationCreate) -> Self {
-            value.clone()
-        }
     }
 
     ///A single page of results
@@ -7025,12 +6447,6 @@ pub mod types {
         pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl ::std::convert::From<&OrganizationResultsPage> for OrganizationResultsPage {
-        fn from(value: &OrganizationResultsPage) -> Self {
-            value.clone()
-        }
-    }
-
     ///`OrganizationRole`
     ///
     /// <details><summary>JSON schema</summary>
@@ -7065,12 +6481,6 @@ pub mod types {
         Collaborator,
         #[serde(rename = "viewer")]
         Viewer,
-    }
-
-    impl ::std::convert::From<&Self> for OrganizationRole {
-        fn from(value: &OrganizationRole) -> Self {
-            value.clone()
-        }
     }
 
     impl ::std::fmt::Display for OrganizationRole {
@@ -7157,12 +6567,6 @@ pub mod types {
         pub role_assignments: ::std::vec::Vec<OrganizationRoleRoleAssignment>,
     }
 
-    impl ::std::convert::From<&OrganizationRolePolicy> for OrganizationRolePolicy {
-        fn from(value: &OrganizationRolePolicy) -> Self {
-            value.clone()
-        }
-    }
-
     ///Describes the assignment of a particular role on a particular resource
     /// to a particular identity (user, group, etc.)
     ///
@@ -7205,12 +6609,6 @@ pub mod types {
         pub identity_id: ::uuid::Uuid,
         pub identity_type: IdentityType,
         pub role_name: OrganizationRole,
-    }
-
-    impl ::std::convert::From<&OrganizationRoleRoleAssignment> for OrganizationRoleRoleAssignment {
-        fn from(value: &OrganizationRoleRoleAssignment) -> Self {
-            value.clone()
-        }
     }
 
     ///Updateable properties of an
@@ -7256,12 +6654,6 @@ pub mod types {
         pub name: ::std::option::Option<Name>,
     }
 
-    impl ::std::convert::From<&OrganizationUpdate> for OrganizationUpdate {
-        fn from(value: &OrganizationUpdate) -> Self {
-            value.clone()
-        }
-    }
-
     impl ::std::default::Default for OrganizationUpdate {
         fn default() -> Self {
             Self {
@@ -7297,12 +6689,6 @@ pub mod types {
     impl ::std::convert::From<Password> for ::std::string::String {
         fn from(value: Password) -> Self {
             value.0
-        }
-    }
-
-    impl ::std::convert::From<&Password> for Password {
-        fn from(value: &Password) -> Self {
-            value.clone()
         }
     }
 
@@ -7429,12 +6815,6 @@ pub mod types {
         pub vendor: ::std::string::String,
     }
 
-    impl ::std::convert::From<&PhysicalDisk> for PhysicalDisk {
-        fn from(value: &PhysicalDisk) -> Self {
-            value.clone()
-        }
-    }
-
     ///A single page of results
     ///
     /// <details><summary>JSON schema</summary>
@@ -7475,12 +6855,6 @@ pub mod types {
         pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl ::std::convert::From<&PhysicalDiskResultsPage> for PhysicalDiskResultsPage {
-        fn from(value: &PhysicalDiskResultsPage) -> Self {
-            value.clone()
-        }
-    }
-
     ///`PhysicalDiskType`
     ///
     /// <details><summary>JSON schema</summary>
@@ -7512,12 +6886,6 @@ pub mod types {
         Internal,
         #[serde(rename = "external")]
         External,
-    }
-
-    impl ::std::convert::From<&Self> for PhysicalDiskType {
-        fn from(value: &PhysicalDiskType) -> Self {
-            value.clone()
-        }
     }
 
     impl ::std::fmt::Display for PhysicalDiskType {
@@ -7634,12 +7002,6 @@ pub mod types {
         pub time_modified: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
-    impl ::std::convert::From<&Project> for Project {
-        fn from(value: &Project) -> Self {
-            value.clone()
-        }
-    }
-
     ///Create-time parameters for a
     /// [`Project`](crate::external_api::views::Project)
     ///
@@ -7669,12 +7031,6 @@ pub mod types {
     pub struct ProjectCreate {
         pub description: ::std::string::String,
         pub name: Name,
-    }
-
-    impl ::std::convert::From<&ProjectCreate> for ProjectCreate {
-        fn from(value: &ProjectCreate) -> Self {
-            value.clone()
-        }
     }
 
     ///A single page of results
@@ -7717,12 +7073,6 @@ pub mod types {
         pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl ::std::convert::From<&ProjectResultsPage> for ProjectResultsPage {
-        fn from(value: &ProjectResultsPage) -> Self {
-            value.clone()
-        }
-    }
-
     ///`ProjectRole`
     ///
     /// <details><summary>JSON schema</summary>
@@ -7757,12 +7107,6 @@ pub mod types {
         Collaborator,
         #[serde(rename = "viewer")]
         Viewer,
-    }
-
-    impl ::std::convert::From<&Self> for ProjectRole {
-        fn from(value: &ProjectRole) -> Self {
-            value.clone()
-        }
     }
 
     impl ::std::fmt::Display for ProjectRole {
@@ -7849,12 +7193,6 @@ pub mod types {
         pub role_assignments: ::std::vec::Vec<ProjectRoleRoleAssignment>,
     }
 
-    impl ::std::convert::From<&ProjectRolePolicy> for ProjectRolePolicy {
-        fn from(value: &ProjectRolePolicy) -> Self {
-            value.clone()
-        }
-    }
-
     ///Describes the assignment of a particular role on a particular resource
     /// to a particular identity (user, group, etc.)
     ///
@@ -7899,12 +7237,6 @@ pub mod types {
         pub role_name: ProjectRole,
     }
 
-    impl ::std::convert::From<&ProjectRoleRoleAssignment> for ProjectRoleRoleAssignment {
-        fn from(value: &ProjectRoleRoleAssignment) -> Self {
-            value.clone()
-        }
-    }
-
     ///Updateable properties of a
     /// [`Project`](crate::external_api::views::Project)
     ///
@@ -7946,12 +7278,6 @@ pub mod types {
         pub description: ::std::option::Option<::std::string::String>,
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         pub name: ::std::option::Option<Name>,
-    }
-
-    impl ::std::convert::From<&ProjectUpdate> for ProjectUpdate {
-        fn from(value: &ProjectUpdate) -> Self {
-            value.clone()
-        }
     }
 
     impl ::std::default::Default for ProjectUpdate {
@@ -8007,12 +7333,6 @@ pub mod types {
         pub time_modified: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
-    impl ::std::convert::From<&Rack> for Rack {
-        fn from(value: &Rack) -> Self {
-            value.clone()
-        }
-    }
-
     ///A single page of results
     ///
     /// <details><summary>JSON schema</summary>
@@ -8053,12 +7373,6 @@ pub mod types {
         pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl ::std::convert::From<&RackResultsPage> for RackResultsPage {
-        fn from(value: &RackResultsPage) -> Self {
-            value.clone()
-        }
-    }
-
     ///Client view of a [`Role`]
     ///
     /// <details><summary>JSON schema</summary>
@@ -8086,12 +7400,6 @@ pub mod types {
     pub struct Role {
         pub description: ::std::string::String,
         pub name: RoleName,
-    }
-
-    impl ::std::convert::From<&Role> for Role {
-        fn from(value: &Role) -> Self {
-            value.clone()
-        }
     }
 
     ///Role names consist of two string components separated by dot (".").
@@ -8122,12 +7430,6 @@ pub mod types {
     impl ::std::convert::From<RoleName> for ::std::string::String {
         fn from(value: RoleName) -> Self {
             value.0
-        }
-    }
-
-    impl ::std::convert::From<&RoleName> for RoleName {
-        fn from(value: &RoleName) -> Self {
-            value.clone()
         }
     }
 
@@ -8222,12 +7524,6 @@ pub mod types {
         ///token used to fetch the next page of results (if any)
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         pub next_page: ::std::option::Option<::std::string::String>,
-    }
-
-    impl ::std::convert::From<&RoleResultsPage> for RoleResultsPage {
-        fn from(value: &RoleResultsPage) -> Self {
-            value.clone()
-        }
     }
 
     ///A `RouteDestination` is used to match traffic with a routing rule, on
@@ -8346,12 +7642,6 @@ pub mod types {
         ///Route applies to traffic
         #[serde(rename = "subnet")]
         Subnet(Name),
-    }
-
-    impl ::std::convert::From<&Self> for RouteDestination {
-        fn from(value: &RouteDestination) -> Self {
-            value.clone()
-        }
     }
 
     impl ::std::convert::From<::std::net::IpAddr> for RouteDestination {
@@ -8496,12 +7786,6 @@ pub mod types {
         InternetGateway(Name),
     }
 
-    impl ::std::convert::From<&Self> for RouteTarget {
-        fn from(value: &RouteTarget) -> Self {
-            value.clone()
-        }
-    }
-
     impl ::std::convert::From<::std::net::IpAddr> for RouteTarget {
         fn from(value: ::std::net::IpAddr) -> Self {
             Self::Ip(value)
@@ -8603,12 +7887,6 @@ pub mod types {
         pub vpc_router_id: ::uuid::Uuid,
     }
 
-    impl ::std::convert::From<&RouterRoute> for RouterRoute {
-        fn from(value: &RouterRoute) -> Self {
-            value.clone()
-        }
-    }
-
     ///Create-time parameters for a [`RouterRoute`]
     ///
     /// <details><summary>JSON schema</summary>
@@ -8646,12 +7924,6 @@ pub mod types {
         pub destination: RouteDestination,
         pub name: Name,
         pub target: RouteTarget,
-    }
-
-    impl ::std::convert::From<&RouterRouteCreateParams> for RouterRouteCreateParams {
-        fn from(value: &RouterRouteCreateParams) -> Self {
-            value.clone()
-        }
     }
 
     ///The classification of a [`RouterRoute`] as defined by the system. The
@@ -8737,12 +8009,6 @@ pub mod types {
         ///`Destination: User defined` `Modifiable: true`
         #[serde(rename = "custom")]
         Custom,
-    }
-
-    impl ::std::convert::From<&Self> for RouterRouteKind {
-        fn from(value: &RouterRouteKind) -> Self {
-            value.clone()
-        }
     }
 
     impl ::std::fmt::Display for RouterRouteKind {
@@ -8834,12 +8100,6 @@ pub mod types {
         pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl ::std::convert::From<&RouterRouteResultsPage> for RouterRouteResultsPage {
-        fn from(value: &RouterRouteResultsPage) -> Self {
-            value.clone()
-        }
-    }
-
     ///Updateable properties of a [`RouterRoute`]
     ///
     /// <details><summary>JSON schema</summary>
@@ -8893,12 +8153,6 @@ pub mod types {
         pub target: RouteTarget,
     }
 
-    impl ::std::convert::From<&RouterRouteUpdateParams> for RouterRouteUpdateParams {
-        fn from(value: &RouterRouteUpdateParams) -> Self {
-            value.clone()
-        }
-    }
-
     ///`Saga`
     ///
     /// <details><summary>JSON schema</summary>
@@ -8926,12 +8180,6 @@ pub mod types {
     pub struct Saga {
         pub id: ::uuid::Uuid,
         pub state: SagaState,
-    }
-
-    impl ::std::convert::From<&Saga> for Saga {
-        fn from(value: &Saga) -> Self {
-            value.clone()
-        }
     }
 
     ///`SagaErrorInfo`
@@ -9044,12 +8292,6 @@ pub mod types {
         SubsagaCreateFailed { message: ::std::string::String },
     }
 
-    impl ::std::convert::From<&Self> for SagaErrorInfo {
-        fn from(value: &SagaErrorInfo) -> Self {
-            value.clone()
-        }
-    }
-
     ///A single page of results
     ///
     /// <details><summary>JSON schema</summary>
@@ -9088,12 +8330,6 @@ pub mod types {
         ///token used to fetch the next page of results (if any)
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         pub next_page: ::std::option::Option<::std::string::String>,
-    }
-
-    impl ::std::convert::From<&SagaResultsPage> for SagaResultsPage {
-        fn from(value: &SagaResultsPage) -> Self {
-            value.clone()
-        }
     }
 
     ///`SagaState`
@@ -9169,12 +8405,6 @@ pub mod types {
             error_info: SagaErrorInfo,
             error_node_name: NodeName,
         },
-    }
-
-    impl ::std::convert::From<&Self> for SagaState {
-        fn from(value: &SagaState) -> Self {
-            value.clone()
-        }
     }
 
     ///Identity-related metadata that's included in nearly all public API
@@ -9292,12 +8522,6 @@ pub mod types {
         pub time_modified: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
-    impl ::std::convert::From<&SamlIdentityProvider> for SamlIdentityProvider {
-        fn from(value: &SamlIdentityProvider) -> Self {
-            value.clone()
-        }
-    }
-
     ///Create-time identity-related parameters
     ///
     /// <details><summary>JSON schema</summary>
@@ -9409,12 +8633,6 @@ pub mod types {
         pub technical_contact_email: ::std::string::String,
     }
 
-    impl ::std::convert::From<&SamlIdentityProviderCreate> for SamlIdentityProviderCreate {
-        fn from(value: &SamlIdentityProviderCreate) -> Self {
-            value.clone()
-        }
-    }
-
     ///`SemverVersion`
     ///
     /// <details><summary>JSON schema</summary>
@@ -9439,12 +8657,6 @@ pub mod types {
     impl ::std::convert::From<SemverVersion> for ::std::string::String {
         fn from(value: SemverVersion) -> Self {
             value.0
-        }
-    }
-
-    impl ::std::convert::From<&SemverVersion> for SemverVersion {
-        fn from(value: &SemverVersion) -> Self {
-            value.clone()
         }
     }
 
@@ -9536,12 +8748,6 @@ pub mod types {
         ///This certificate is intended for access to the external API.
         #[serde(rename = "external_api")]
         ExternalApi,
-    }
-
-    impl ::std::convert::From<&Self> for ServiceUsingCertificate {
-        fn from(value: &ServiceUsingCertificate) -> Self {
-            value.clone()
-        }
     }
 
     impl ::std::fmt::Display for ServiceUsingCertificate {
@@ -9669,12 +8875,6 @@ pub mod types {
         pub time_modified: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
-    impl ::std::convert::From<&Silo> for Silo {
-        fn from(value: &Silo) -> Self {
-            value.clone()
-        }
-    }
-
     ///Create-time parameters for a [`Silo`](crate::external_api::views::Silo)
     ///
     /// <details><summary>JSON schema</summary>
@@ -9738,12 +8938,6 @@ pub mod types {
         pub name: Name,
     }
 
-    impl ::std::convert::From<&SiloCreate> for SiloCreate {
-        fn from(value: &SiloCreate) -> Self {
-            value.clone()
-        }
-    }
-
     ///Describes how identities are managed and users are authenticated in this
     /// Silo
     ///
@@ -9800,12 +8994,6 @@ pub mod types {
         /// to an external authentication provider or identity provider.
         #[serde(rename = "local_only")]
         LocalOnly,
-    }
-
-    impl ::std::convert::From<&Self> for SiloIdentityMode {
-        fn from(value: &SiloIdentityMode) -> Self {
-            value.clone()
-        }
     }
 
     impl ::std::fmt::Display for SiloIdentityMode {
@@ -9893,12 +9081,6 @@ pub mod types {
         pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl ::std::convert::From<&SiloResultsPage> for SiloResultsPage {
-        fn from(value: &SiloResultsPage) -> Self {
-            value.clone()
-        }
-    }
-
     ///`SiloRole`
     ///
     /// <details><summary>JSON schema</summary>
@@ -9933,12 +9115,6 @@ pub mod types {
         Collaborator,
         #[serde(rename = "viewer")]
         Viewer,
-    }
-
-    impl ::std::convert::From<&Self> for SiloRole {
-        fn from(value: &SiloRole) -> Self {
-            value.clone()
-        }
     }
 
     impl ::std::fmt::Display for SiloRole {
@@ -10025,12 +9201,6 @@ pub mod types {
         pub role_assignments: ::std::vec::Vec<SiloRoleRoleAssignment>,
     }
 
-    impl ::std::convert::From<&SiloRolePolicy> for SiloRolePolicy {
-        fn from(value: &SiloRolePolicy) -> Self {
-            value.clone()
-        }
-    }
-
     ///Describes the assignment of a particular role on a particular resource
     /// to a particular identity (user, group, etc.)
     ///
@@ -10073,12 +9243,6 @@ pub mod types {
         pub identity_id: ::uuid::Uuid,
         pub identity_type: IdentityType,
         pub role_name: SiloRole,
-    }
-
-    impl ::std::convert::From<&SiloRoleRoleAssignment> for SiloRoleRoleAssignment {
-        fn from(value: &SiloRoleRoleAssignment) -> Self {
-            value.clone()
-        }
     }
 
     ///Client view of a [`Sled`]
@@ -10135,12 +9299,6 @@ pub mod types {
         pub time_modified: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
-    impl ::std::convert::From<&Sled> for Sled {
-        fn from(value: &Sled) -> Self {
-            value.clone()
-        }
-    }
-
     ///A single page of results
     ///
     /// <details><summary>JSON schema</summary>
@@ -10179,12 +9337,6 @@ pub mod types {
         ///token used to fetch the next page of results (if any)
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         pub next_page: ::std::option::Option<::std::string::String>,
-    }
-
-    impl ::std::convert::From<&SledResultsPage> for SledResultsPage {
-        fn from(value: &SledResultsPage) -> Self {
-            value.clone()
-        }
     }
 
     ///Client view of a Snapshot
@@ -10272,12 +9424,6 @@ pub mod types {
         pub time_modified: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
-    impl ::std::convert::From<&Snapshot> for Snapshot {
-        fn from(value: &Snapshot) -> Self {
-            value.clone()
-        }
-    }
-
     ///Create-time parameters for a
     /// [`Snapshot`](crate::external_api::views::Snapshot)
     ///
@@ -10320,12 +9466,6 @@ pub mod types {
         pub name: Name,
     }
 
-    impl ::std::convert::From<&SnapshotCreate> for SnapshotCreate {
-        fn from(value: &SnapshotCreate) -> Self {
-            value.clone()
-        }
-    }
-
     ///A single page of results
     ///
     /// <details><summary>JSON schema</summary>
@@ -10366,12 +9506,6 @@ pub mod types {
         pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl ::std::convert::From<&SnapshotResultsPage> for SnapshotResultsPage {
-        fn from(value: &SnapshotResultsPage) -> Self {
-            value.clone()
-        }
-    }
-
     ///`SnapshotState`
     ///
     /// <details><summary>JSON schema</summary>
@@ -10409,12 +9543,6 @@ pub mod types {
         Faulted,
         #[serde(rename = "destroyed")]
         Destroyed,
-    }
-
-    impl ::std::convert::From<&Self> for SnapshotState {
-        fn from(value: &SnapshotState) -> Self {
-            value.clone()
-        }
     }
 
     impl ::std::fmt::Display for SnapshotState {
@@ -10487,12 +9615,6 @@ pub mod types {
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct SpoofLoginBody {
         pub username: ::std::string::String,
-    }
-
-    impl ::std::convert::From<&SpoofLoginBody> for SpoofLoginBody {
-        fn from(value: &SpoofLoginBody) -> Self {
-            value.clone()
-        }
     }
 
     ///Client view of a [`SshKey`]
@@ -10574,12 +9696,6 @@ pub mod types {
         pub time_modified: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
-    impl ::std::convert::From<&SshKey> for SshKey {
-        fn from(value: &SshKey) -> Self {
-            value.clone()
-        }
-    }
-
     ///Create-time parameters for an
     /// [`SshKey`](crate::external_api::views::SshKey)
     ///
@@ -10617,12 +9733,6 @@ pub mod types {
         pub name: Name,
         ///SSH public key, e.g., `"ssh-ed25519 AAAAC3NzaC..."`
         pub public_key: ::std::string::String,
-    }
-
-    impl ::std::convert::From<&SshKeyCreate> for SshKeyCreate {
-        fn from(value: &SshKeyCreate) -> Self {
-            value.clone()
-        }
     }
 
     ///A single page of results
@@ -10665,12 +9775,6 @@ pub mod types {
         pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl ::std::convert::From<&SshKeyResultsPage> for SshKeyResultsPage {
-        fn from(value: &SshKeyResultsPage) -> Self {
-            value.clone()
-        }
-    }
-
     ///`SystemMetricName`
     ///
     /// <details><summary>JSON schema</summary>
@@ -10705,12 +9809,6 @@ pub mod types {
         CpusProvisioned,
         #[serde(rename = "ram_provisioned")]
         RamProvisioned,
-    }
-
-    impl ::std::convert::From<&Self> for SystemMetricName {
-        fn from(value: &SystemMetricName) -> Self {
-            value.clone()
-        }
     }
 
     impl ::std::fmt::Display for SystemMetricName {
@@ -10811,12 +9909,6 @@ pub mod types {
         pub version: SemverVersion,
     }
 
-    impl ::std::convert::From<&SystemUpdate> for SystemUpdate {
-        fn from(value: &SystemUpdate) -> Self {
-            value.clone()
-        }
-    }
-
     ///A single page of results
     ///
     /// <details><summary>JSON schema</summary>
@@ -10857,12 +9949,6 @@ pub mod types {
         pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl ::std::convert::From<&SystemUpdateResultsPage> for SystemUpdateResultsPage {
-        fn from(value: &SystemUpdateResultsPage) -> Self {
-            value.clone()
-        }
-    }
-
     ///`SystemUpdateStart`
     ///
     /// <details><summary>JSON schema</summary>
@@ -10884,12 +9970,6 @@ pub mod types {
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct SystemUpdateStart {
         pub version: SemverVersion,
-    }
-
-    impl ::std::convert::From<&SystemUpdateStart> for SystemUpdateStart {
-        fn from(value: &SystemUpdateStart) -> Self {
-            value.clone()
-        }
     }
 
     ///`SystemVersion`
@@ -10918,12 +9998,6 @@ pub mod types {
     pub struct SystemVersion {
         pub status: UpdateStatus,
         pub version_range: VersionRange,
-    }
-
-    impl ::std::convert::From<&SystemVersion> for SystemVersion {
-        fn from(value: &SystemVersion) -> Self {
-            value.clone()
-        }
     }
 
     ///Names are constructed by concatenating the target and metric names with
@@ -10957,12 +10031,6 @@ pub mod types {
     impl ::std::convert::From<TimeseriesName> for ::std::string::String {
         fn from(value: TimeseriesName) -> Self {
             value.0
-        }
-    }
-
-    impl ::std::convert::From<&TimeseriesName> for TimeseriesName {
-        fn from(value: &TimeseriesName) -> Self {
-            value.clone()
         }
     }
 
@@ -11072,12 +10140,6 @@ pub mod types {
         pub timeseries_name: TimeseriesName,
     }
 
-    impl ::std::convert::From<&TimeseriesSchema> for TimeseriesSchema {
-        fn from(value: &TimeseriesSchema) -> Self {
-            value.clone()
-        }
-    }
-
     ///A single page of results
     ///
     /// <details><summary>JSON schema</summary>
@@ -11116,12 +10178,6 @@ pub mod types {
         ///token used to fetch the next page of results (if any)
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         pub next_page: ::std::option::Option<::std::string::String>,
-    }
-
-    impl ::std::convert::From<&TimeseriesSchemaResultsPage> for TimeseriesSchemaResultsPage {
-        fn from(value: &TimeseriesSchemaResultsPage) -> Self {
-            value.clone()
-        }
     }
 
     ///Identity-related metadata that's included in "asset" public API objects
@@ -11180,12 +10236,6 @@ pub mod types {
         pub version: SemverVersion,
     }
 
-    impl ::std::convert::From<&UpdateDeployment> for UpdateDeployment {
-        fn from(value: &UpdateDeployment) -> Self {
-            value.clone()
-        }
-    }
-
     ///A single page of results
     ///
     /// <details><summary>JSON schema</summary>
@@ -11224,12 +10274,6 @@ pub mod types {
         ///token used to fetch the next page of results (if any)
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         pub next_page: ::std::option::Option<::std::string::String>,
-    }
-
-    impl ::std::convert::From<&UpdateDeploymentResultsPage> for UpdateDeploymentResultsPage {
-        fn from(value: &UpdateDeploymentResultsPage) -> Self {
-            value.clone()
-        }
     }
 
     ///`UpdateStatus`
@@ -11289,12 +10333,6 @@ pub mod types {
         Updating,
         #[serde(rename = "steady")]
         Steady,
-    }
-
-    impl ::std::convert::From<&Self> for UpdateStatus {
-        fn from(value: &UpdateStatus) -> Self {
-            value.clone()
-        }
     }
 
     impl ::std::fmt::Display for UpdateStatus {
@@ -11413,12 +10451,6 @@ pub mod types {
         pub version: SemverVersion,
     }
 
-    impl ::std::convert::From<&UpdateableComponent> for UpdateableComponent {
-        fn from(value: &UpdateableComponent) -> Self {
-            value.clone()
-        }
-    }
-
     ///A single page of results
     ///
     /// <details><summary>JSON schema</summary>
@@ -11457,12 +10489,6 @@ pub mod types {
         ///token used to fetch the next page of results (if any)
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         pub next_page: ::std::option::Option<::std::string::String>,
-    }
-
-    impl ::std::convert::From<&UpdateableComponentResultsPage> for UpdateableComponentResultsPage {
-        fn from(value: &UpdateableComponentResultsPage) -> Self {
-            value.clone()
-        }
     }
 
     ///`UpdateableComponentType`
@@ -11526,12 +10552,6 @@ pub mod types {
         HeliosHostPhase2,
         #[serde(rename = "host_omicron")]
         HostOmicron,
-    }
-
-    impl ::std::convert::From<&Self> for UpdateableComponentType {
-        fn from(value: &UpdateableComponentType) -> Self {
-            value.clone()
-        }
     }
 
     impl ::std::fmt::Display for UpdateableComponentType {
@@ -11639,12 +10659,6 @@ pub mod types {
         pub silo_id: ::uuid::Uuid,
     }
 
-    impl ::std::convert::From<&User> for User {
-        fn from(value: &User) -> Self {
-            value.clone()
-        }
-    }
-
     ///Client view of a [`UserBuiltin`]
     ///
     /// <details><summary>JSON schema</summary>
@@ -11708,12 +10722,6 @@ pub mod types {
         pub time_modified: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
-    impl ::std::convert::From<&UserBuiltin> for UserBuiltin {
-        fn from(value: &UserBuiltin) -> Self {
-            value.clone()
-        }
-    }
-
     ///A single page of results
     ///
     /// <details><summary>JSON schema</summary>
@@ -11752,12 +10760,6 @@ pub mod types {
         ///token used to fetch the next page of results (if any)
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         pub next_page: ::std::option::Option<::std::string::String>,
-    }
-
-    impl ::std::convert::From<&UserBuiltinResultsPage> for UserBuiltinResultsPage {
-        fn from(value: &UserBuiltinResultsPage) -> Self {
-            value.clone()
-        }
     }
 
     ///Create-time parameters for a [`User`](crate::external_api::views::User)
@@ -11802,12 +10804,6 @@ pub mod types {
         pub password: UserPassword,
     }
 
-    impl ::std::convert::From<&UserCreate> for UserCreate {
-        fn from(value: &UserCreate) -> Self {
-            value.clone()
-        }
-    }
-
     ///Names must begin with a lower case ASCII letter, be composed exclusively
     /// of lowercase ASCII, uppercase ASCII, numbers, and '-', and may not end
     /// with a '-'. Names cannot be a UUID though they may contain a UUID.
@@ -11842,12 +10838,6 @@ pub mod types {
     impl ::std::convert::From<UserId> for ::std::string::String {
         fn from(value: UserId) -> Self {
             value.0
-        }
-    }
-
-    impl ::std::convert::From<&UserId> for UserId {
-        fn from(value: &UserId) -> Self {
-            value.clone()
         }
     }
 
@@ -11964,12 +10954,6 @@ pub mod types {
         InvalidPassword,
     }
 
-    impl ::std::convert::From<&Self> for UserPassword {
-        fn from(value: &UserPassword) -> Self {
-            value.clone()
-        }
-    }
-
     impl ::std::convert::From<Password> for UserPassword {
         fn from(value: Password) -> Self {
             Self::Password(value)
@@ -12016,12 +11000,6 @@ pub mod types {
         pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl ::std::convert::From<&UserResultsPage> for UserResultsPage {
-        fn from(value: &UserResultsPage) -> Self {
-            value.clone()
-        }
-    }
-
     ///Credentials for local user login
     ///
     /// <details><summary>JSON schema</summary>
@@ -12051,12 +11029,6 @@ pub mod types {
         pub username: UserId,
     }
 
-    impl ::std::convert::From<&UsernamePasswordCredentials> for UsernamePasswordCredentials {
-        fn from(value: &UsernamePasswordCredentials) -> Self {
-            value.clone()
-        }
-    }
-
     ///`VersionRange`
     ///
     /// <details><summary>JSON schema</summary>
@@ -12083,12 +11055,6 @@ pub mod types {
     pub struct VersionRange {
         pub high: SemverVersion,
         pub low: SemverVersion,
-    }
-
-    impl ::std::convert::From<&VersionRange> for VersionRange {
-        fn from(value: &VersionRange) -> Self {
-            value.clone()
-        }
     }
 
     ///Client view of a [`Vpc`]
@@ -12194,12 +11160,6 @@ pub mod types {
         pub time_modified: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
-    impl ::std::convert::From<&Vpc> for Vpc {
-        fn from(value: &Vpc) -> Self {
-            value.clone()
-        }
-    }
-
     ///Create-time parameters for a [`Vpc`](crate::external_api::views::Vpc)
     ///
     /// <details><summary>JSON schema</summary>
@@ -12259,12 +11219,6 @@ pub mod types {
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         pub ipv6_prefix: ::std::option::Option<Ipv6Net>,
         pub name: Name,
-    }
-
-    impl ::std::convert::From<&VpcCreate> for VpcCreate {
-        fn from(value: &VpcCreate) -> Self {
-            value.clone()
-        }
     }
 
     ///A single rule in a VPC firewall
@@ -12404,12 +11358,6 @@ pub mod types {
         pub vpc_id: ::uuid::Uuid,
     }
 
-    impl ::std::convert::From<&VpcFirewallRule> for VpcFirewallRule {
-        fn from(value: &VpcFirewallRule) -> Self {
-            value.clone()
-        }
-    }
-
     ///`VpcFirewallRuleAction`
     ///
     /// <details><summary>JSON schema</summary>
@@ -12441,12 +11389,6 @@ pub mod types {
         Allow,
         #[serde(rename = "deny")]
         Deny,
-    }
-
-    impl ::std::convert::From<&Self> for VpcFirewallRuleAction {
-        fn from(value: &VpcFirewallRuleAction) -> Self {
-            value.clone()
-        }
     }
 
     impl ::std::fmt::Display for VpcFirewallRuleAction {
@@ -12525,12 +11467,6 @@ pub mod types {
         Inbound,
         #[serde(rename = "outbound")]
         Outbound,
-    }
-
-    impl ::std::convert::From<&Self> for VpcFirewallRuleDirection {
-        fn from(value: &VpcFirewallRuleDirection) -> Self {
-            value.clone()
-        }
     }
 
     impl ::std::fmt::Display for VpcFirewallRuleDirection {
@@ -12640,12 +11576,6 @@ pub mod types {
         ///If present, the networking protocols this rule applies to.
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         pub protocols: ::std::option::Option<::std::vec::Vec<VpcFirewallRuleProtocol>>,
-    }
-
-    impl ::std::convert::From<&VpcFirewallRuleFilter> for VpcFirewallRuleFilter {
-        fn from(value: &VpcFirewallRuleFilter) -> Self {
-            value.clone()
-        }
     }
 
     impl ::std::default::Default for VpcFirewallRuleFilter {
@@ -12793,12 +11723,6 @@ pub mod types {
         IpNet(IpNet),
     }
 
-    impl ::std::convert::From<&Self> for VpcFirewallRuleHostFilter {
-        fn from(value: &VpcFirewallRuleHostFilter) -> Self {
-            value.clone()
-        }
-    }
-
     impl ::std::convert::From<::std::net::IpAddr> for VpcFirewallRuleHostFilter {
         fn from(value: ::std::net::IpAddr) -> Self {
             Self::Ip(value)
@@ -12847,12 +11771,6 @@ pub mod types {
         Udp,
         #[serde(rename = "ICMP")]
         Icmp,
-    }
-
-    impl ::std::convert::From<&Self> for VpcFirewallRuleProtocol {
-        fn from(value: &VpcFirewallRuleProtocol) -> Self {
-            value.clone()
-        }
     }
 
     impl ::std::fmt::Display for VpcFirewallRuleProtocol {
@@ -12933,12 +11851,6 @@ pub mod types {
         Disabled,
         #[serde(rename = "enabled")]
         Enabled,
-    }
-
-    impl ::std::convert::From<&Self> for VpcFirewallRuleStatus {
-        fn from(value: &VpcFirewallRuleStatus) -> Self {
-            value.clone()
-        }
     }
 
     impl ::std::fmt::Display for VpcFirewallRuleStatus {
@@ -13117,12 +12029,6 @@ pub mod types {
         IpNet(IpNet),
     }
 
-    impl ::std::convert::From<&Self> for VpcFirewallRuleTarget {
-        fn from(value: &VpcFirewallRuleTarget) -> Self {
-            value.clone()
-        }
-    }
-
     impl ::std::convert::From<::std::net::IpAddr> for VpcFirewallRuleTarget {
         fn from(value: ::std::net::IpAddr) -> Self {
             Self::Ip(value)
@@ -13238,12 +12144,6 @@ pub mod types {
         pub targets: ::std::vec::Vec<VpcFirewallRuleTarget>,
     }
 
-    impl ::std::convert::From<&VpcFirewallRuleUpdate> for VpcFirewallRuleUpdate {
-        fn from(value: &VpcFirewallRuleUpdate) -> Self {
-            value.clone()
-        }
-    }
-
     ///Updateable properties of a `Vpc`'s firewall Note that VpcFirewallRules
     /// are implicitly created along with a Vpc, so there is no explicit
     /// creation.
@@ -13275,12 +12175,6 @@ pub mod types {
         pub rules: ::std::vec::Vec<VpcFirewallRuleUpdate>,
     }
 
-    impl ::std::convert::From<&VpcFirewallRuleUpdateParams> for VpcFirewallRuleUpdateParams {
-        fn from(value: &VpcFirewallRuleUpdateParams) -> Self {
-            value.clone()
-        }
-    }
-
     ///Collection of a Vpc's firewall rules
     ///
     /// <details><summary>JSON schema</summary>
@@ -13306,12 +12200,6 @@ pub mod types {
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct VpcFirewallRules {
         pub rules: ::std::vec::Vec<VpcFirewallRule>,
-    }
-
-    impl ::std::convert::From<&VpcFirewallRules> for VpcFirewallRules {
-        fn from(value: &VpcFirewallRules) -> Self {
-            value.clone()
-        }
     }
 
     ///A single page of results
@@ -13352,12 +12240,6 @@ pub mod types {
         ///token used to fetch the next page of results (if any)
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         pub next_page: ::std::option::Option<::std::string::String>,
-    }
-
-    impl ::std::convert::From<&VpcResultsPage> for VpcResultsPage {
-        fn from(value: &VpcResultsPage) -> Self {
-            value.clone()
-        }
     }
 
     ///A VPC router defines a series of rules that indicate where traffic
@@ -13438,12 +12320,6 @@ pub mod types {
         pub vpc_id: ::uuid::Uuid,
     }
 
-    impl ::std::convert::From<&VpcRouter> for VpcRouter {
-        fn from(value: &VpcRouter) -> Self {
-            value.clone()
-        }
-    }
-
     ///Create-time parameters for a
     /// [`VpcRouter`](crate::external_api::views::VpcRouter)
     ///
@@ -13473,12 +12349,6 @@ pub mod types {
     pub struct VpcRouterCreate {
         pub description: ::std::string::String,
         pub name: Name,
-    }
-
-    impl ::std::convert::From<&VpcRouterCreate> for VpcRouterCreate {
-        fn from(value: &VpcRouterCreate) -> Self {
-            value.clone()
-        }
     }
 
     ///`VpcRouterKind`
@@ -13512,12 +12382,6 @@ pub mod types {
         System,
         #[serde(rename = "custom")]
         Custom,
-    }
-
-    impl ::std::convert::From<&Self> for VpcRouterKind {
-        fn from(value: &VpcRouterKind) -> Self {
-            value.clone()
-        }
     }
 
     impl ::std::fmt::Display for VpcRouterKind {
@@ -13605,12 +12469,6 @@ pub mod types {
         pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    impl ::std::convert::From<&VpcRouterResultsPage> for VpcRouterResultsPage {
-        fn from(value: &VpcRouterResultsPage) -> Self {
-            value.clone()
-        }
-    }
-
     ///Updateable properties of a
     /// [`VpcRouter`](crate::external_api::views::VpcRouter)
     ///
@@ -13652,12 +12510,6 @@ pub mod types {
         pub description: ::std::option::Option<::std::string::String>,
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         pub name: ::std::option::Option<Name>,
-    }
-
-    impl ::std::convert::From<&VpcRouterUpdate> for VpcRouterUpdate {
-        fn from(value: &VpcRouterUpdate) -> Self {
-            value.clone()
-        }
     }
 
     impl ::std::default::Default for VpcRouterUpdate {
@@ -13766,12 +12618,6 @@ pub mod types {
         pub vpc_id: ::uuid::Uuid,
     }
 
-    impl ::std::convert::From<&VpcSubnet> for VpcSubnet {
-        fn from(value: &VpcSubnet) -> Self {
-            value.clone()
-        }
-    }
-
     ///Create-time parameters for a
     /// [`VpcSubnet`](crate::external_api::views::VpcSubnet)
     ///
@@ -13846,12 +12692,6 @@ pub mod types {
         pub name: Name,
     }
 
-    impl ::std::convert::From<&VpcSubnetCreate> for VpcSubnetCreate {
-        fn from(value: &VpcSubnetCreate) -> Self {
-            value.clone()
-        }
-    }
-
     ///A single page of results
     ///
     /// <details><summary>JSON schema</summary>
@@ -13890,12 +12730,6 @@ pub mod types {
         ///token used to fetch the next page of results (if any)
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         pub next_page: ::std::option::Option<::std::string::String>,
-    }
-
-    impl ::std::convert::From<&VpcSubnetResultsPage> for VpcSubnetResultsPage {
-        fn from(value: &VpcSubnetResultsPage) -> Self {
-            value.clone()
-        }
     }
 
     ///Updateable properties of a
@@ -13939,12 +12773,6 @@ pub mod types {
         pub description: ::std::option::Option<::std::string::String>,
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         pub name: ::std::option::Option<Name>,
-    }
-
-    impl ::std::convert::From<&VpcSubnetUpdate> for VpcSubnetUpdate {
-        fn from(value: &VpcSubnetUpdate) -> Self {
-            value.clone()
-        }
     }
 
     impl ::std::default::Default for VpcSubnetUpdate {
@@ -14012,12 +12840,6 @@ pub mod types {
         pub dns_name: ::std::option::Option<Name>,
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         pub name: ::std::option::Option<Name>,
-    }
-
-    impl ::std::convert::From<&VpcUpdate> for VpcUpdate {
-        fn from(value: &VpcUpdate) -> Self {
-            value.clone()
-        }
     }
 
     impl ::std::default::Default for VpcUpdate {
