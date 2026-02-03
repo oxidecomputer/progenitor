@@ -15,6 +15,11 @@
 
 https://github.com/oxidecomputer/progenitor/compare/v0.11.2\...HEAD[Full list of commits]
 
+* update typify to 0.6.0 (#1296)
+* update reqwest 0.13 (#1279)
+* update httpmock generation to support 0.8 (#1264)
+* don't panic on json-body failure (#1244)
+
 == 0.11.2 (released 2025-10-09)
 
 https://github.com/oxidecomputer/progenitor/compare/v0.11.1\...v0.11.2[Full list of commits]
