@@ -1,8 +1,9 @@
 [package]
 name = "progenitor-macro"
 version = "0.12.0"
-edition = "2021"
-license = "MPL-2.0"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
 description = "An OpenAPI client generator - macros"
 repository = "https://github.com/oxidecomputer/progenitor.git"
 readme = "../README.md"

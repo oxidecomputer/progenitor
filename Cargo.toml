@@ -9,8 +9,14 @@ members = [
 	"progenitor-impl",
 	"progenitor-macro",
 ]
+resolver = "3"
 
-resolver = "2"
+[workspace.package]
+# TODO: migrate to 2024 edition. We currently have a few schemas that have
+# keywords like `gen` in them. We need to escape those as `r#gen`, etc.
+edition = "2021"
+rust-version = "1.88"
+license = "MPL-2.0"
 
 [workspace.dependencies]
 progenitor = { version = "0.12.0", path = "progenitor", default-features = false }

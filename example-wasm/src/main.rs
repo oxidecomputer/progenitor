@@ -5,11 +5,12 @@ include!(concat!(env!("OUT_DIR"), "/codegen.rs"));
 
 fn main() {
     let client = Client::new("https://foo/bar");
-    let _ = client.enrol(
+    // Explicitly drop the future to avoid clippy's let_underscore_future lint.
+    std::mem::drop(client.enrol(
         "auth-token",
         &types::EnrolBody {
             host: "".to_string(),
             key: "".to_string(),
         },
-    );
+    ));
 }
