@@ -1,7 +1,8 @@
 [package]
 name = "example-wasm"
 version = "0.1.0"
-edition = "2021"
+edition.workspace = true
+rust-version.workspace = true
 
 [dependencies]
 chrono = { version = "0.4", features = ["serde"] }
