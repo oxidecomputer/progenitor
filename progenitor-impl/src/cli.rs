@@ -389,8 +389,8 @@ impl Generator {
                 continue;
             }
 
-            let first_page_required = first_page_required_set
-                .map_or(false, |required| required.contains(&param.api_name));
+            let first_page_required =
+                first_page_required_set.is_some_and(|required| required.contains(&param.api_name));
 
             let volitionality = if innately_required || first_page_required {
                 Volitionality::Required
