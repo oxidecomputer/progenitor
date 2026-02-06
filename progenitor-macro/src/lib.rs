@@ -4,11 +4,7 @@
 
 #![deny(missing_docs)]
 
-use std::{
-    collections::HashMap,
-    fs::File,
-    path::{Path, PathBuf},
-};
+use std::{collections::HashMap, fs::File, path::PathBuf};
 
 use openapiv3::OpenAPI;
 use proc_macro::TokenStream;
@@ -18,11 +14,74 @@ use progenitor_impl::{
 use quote::{quote, ToTokens};
 use schemars::schema::SchemaObject;
 use serde::Deserialize;
-use serde_tokenstream::{OrderedMap, ParseWrapper};
-use syn::LitStr;
+use serde_tokenstream::{OrderedMap, ParseWrapper, TokenStreamWrapper};
+use syn::{spanned::Spanned, LitStr};
 use token_utils::TypeAndImpls;
 
 mod token_utils;
+
+/// Where to resolve the spec path relative to.
+#[derive(Debug, Clone, Copy, Default, Deserialize)]
+enum RelativeTo {
+    /// Resolve relative to CARGO_MANIFEST_DIR (the default).
+    #[default]
+    ManifestDir,
+    /// Resolve relative to OUT_DIR.
+    OutDir,
+}
+
+/// Specification of where to find the OpenAPI document.
+#[derive(Debug)]
+struct SpecSource {
+    /// The path to the spec file.
+    path: LitStr,
+    /// Where to resolve the path relative to.
+    relative_to: RelativeTo,
+}
+
+impl SpecSource {
+    fn from_tokens(tokens: proc_macro2::TokenStream) -> Result<Self, syn::Error> {
+        /// Helper struct for deserializing the struct form of SpecSource.
+        #[derive(Deserialize)]
+        struct SpecSourceStruct {
+            path: ParseWrapper<LitStr>,
+            relative_to: RelativeTo,
+        }
+
+        let mut iter = tokens.clone().into_iter();
+        match iter.next() {
+            Some(proc_macro2::TokenTree::Literal(_)) => {
+                // spec = "path/to/spec.json"
+                let path = syn::parse2::<LitStr>(tokens)?;
+                Ok(SpecSource {
+                    path,
+                    relative_to: RelativeTo::default(),
+                })
+            }
+            Some(proc_macro2::TokenTree::Group(group))
+                if group.delimiter() == proc_macro2::Delimiter::Brace =>
+            {
+                // spec = { path = "...", relative_to = "..." }
+                let helper: SpecSourceStruct = serde_tokenstream::from_tokenstream_spanned(
+                    &group.delim_span(),
+                    &group.stream(),
+                )?;
+                Ok(SpecSource {
+                    path: helper.path.into_inner(),
+                    relative_to: helper.relative_to,
+                })
+            }
+            Some(other) => Err(syn::Error::new(
+                other.span(),
+                "expected a string or { path = \"...\", relative_to = \"...\" }",
+            )),
+            None => Err(syn::Error::new(
+                tokens.span(),
+                "expected a string or { path = \"...\", relative_to = \"...\" }",
+            )),
+        }
+    }
+}
 
 /// Generates a client from the given OpenAPI document
 ///
@@ -35,7 +94,10 @@ mod token_utils;
 /// The more complex form accepts the following key-value pairs in any order:
 /// ```ignore
 /// generate_api!(
+///     // spec can be a simple path string:
 ///     spec = "path/to/spec.json",
+///     // Or a struct with path and relative_to:
+///     // spec = { path = "path/to/spec.json", relative_to = OutDir },
 ///     [ interface = ( Positional | Builder ), ]
 ///     [ tags = ( Merged | Separate ), ]
 ///     [ pre_hook = closure::or::path::to::function, ]
@@ -56,7 +118,13 @@ mod token_utils;
 /// ```
 ///
 /// The `spec` key is required; it is the OpenAPI document (JSON or YAML) from
-/// which the client is derived.
+/// which the client is derived. It can be specified as a simple string path, or
+/// as a struct with `path` and `relative_to` fields. The `relative_to`
+/// field controls where the path is resolved from:
+///
+/// - `ManifestDir`: relative to `CARGO_MANIFEST_DIR`. This is the default when
+///   the spec is provided as a string path.
+/// - `OutDir`: relative to `OUT_DIR` (useful for build script outputs).
 ///
 /// The optional `interface` lets you specify either a `Positional` argument or
 /// `Builder` argument style; `Positional` is the default.
@@ -129,7 +197,7 @@ pub fn generate_api(item: TokenStream) -> TokenStream {
 
 #[derive(Deserialize)]
 struct MacroSettings {
-    spec: ParseWrapper<LitStr>,
+    spec: TokenStreamWrapper,
     #[serde(default)]
     interface: InterfaceStyle,
     #[serde(default)]
@@ -273,8 +341,12 @@ fn open_file(path: PathBuf, span: proc_macro2::Span) -> Result<File, syn::Error>
 }
 
 fn do_generate_api(item: TokenStream) -> Result<TokenStream, syn::Error> {
-    let (spec, settings) = if let Ok(spec) = syn::parse::<LitStr>(item.clone()) {
-        (spec, GenerationSettings::default())
+    let (spec_source, settings) = if let Ok(spec) = syn::parse::<LitStr>(item.clone()) {
+        let spec_source = SpecSource {
+            path: spec,
+            relative_to: RelativeTo::default(),
+        };
+        (spec_source, GenerationSettings::default())
     } else {
         let MacroSettings {
             spec,
@@ -294,6 +366,8 @@ fn do_generate_api(item: TokenStream) -> Result<TokenStream, syn::Error> {
             convert,
             timeout,
         } = serde_tokenstream::from_tokenstream(&item.into())?;
+
+        let spec = SpecSource::from_tokens(spec.into_inner())?;
 
         let mut settings = GenerationSettings::default();
         settings.with_interface(interface);
@@ -336,24 +410,38 @@ fn do_generate_api(item: TokenStream) -> Result<TokenStream, syn::Error> {
         if let Some(timeout) = timeout {
             settings.with_timeout(timeout);
         }
-        (spec.into_inner(), settings)
+        (spec, settings)
     };
 
-    let dir = std::env::var("CARGO_MANIFEST_DIR").map_or_else(
-        |_| std::env::current_dir().unwrap(),
-        |s| Path::new(&s).to_path_buf(),
-    );
+    let spec_path = spec_source.path;
+    let base_dir = match spec_source.relative_to {
+        RelativeTo::ManifestDir => std::env::var("CARGO_MANIFEST_DIR")
+            .map_or_else(|_| std::env::current_dir().unwrap(), PathBuf::from),
+        RelativeTo::OutDir => {
+            let out_dir = std::env::var("OUT_DIR").map_err(|_| {
+                syn::Error::new(
+                    spec_path.span(),
+                    "relative_to = \"out-dir\" requires OUT_DIR to be set \
+                     (are you using this from a build script?)",
+                )
+            })?;
+            PathBuf::from(out_dir)
+        }
+    };
 
-    let path = dir.join(spec.value());
+    let path = base_dir.join(spec_path.value());
     let path_str = path.to_string_lossy();
 
-    let mut f = open_file(path.clone(), spec.span())?;
+    let mut f = open_file(path.clone(), spec_path.span())?;
     let oapi: OpenAPI = match serde_json::from_reader(f) {
         Ok(json_value) => json_value,
         _ => {
-            f = open_file(path.clone(), spec.span())?;
+            f = open_file(path.clone(), spec_path.span())?;
             serde_yaml::from_reader(f).map_err(|e| {
-                syn::Error::new(spec.span(), format!("failed to parse {}: {}", path_str, e))
+                syn::Error::new(
+                    spec_path.span(),
+                    format!("failed to parse {}: {}", path_str, e),
+                )
             })?
         }
     };
@@ -362,8 +450,8 @@ fn do_generate_api(item: TokenStream) -> Result<TokenStream, syn::Error> {
 
     let code = builder.generate_tokens(&oapi).map_err(|e| {
         syn::Error::new(
-            spec.span(),
-            format!("generation error for {}: {}", spec.value(), e),
+            spec_path.span(),
+            format!("generation error for {}: {}", spec_path.value(), e),
         )
     })?;
 
