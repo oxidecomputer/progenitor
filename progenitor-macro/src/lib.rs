@@ -21,10 +21,9 @@ use token_utils::TypeAndImpls;
 mod token_utils;
 
 /// Where to resolve the spec path relative to.
-#[derive(Debug, Clone, Copy, Default, Deserialize)]
+#[derive(Debug, Clone, Copy, Deserialize)]
 enum RelativeTo {
     /// Resolve relative to CARGO_MANIFEST_DIR (the default).
-    #[default]
     ManifestDir,
     /// Resolve relative to OUT_DIR.
     OutDir,
@@ -55,13 +54,13 @@ impl SpecSource {
                 let path = syn::parse2::<LitStr>(tokens)?;
                 Ok(SpecSource {
                     path,
-                    relative_to: RelativeTo::default(),
+                    relative_to: RelativeTo::ManifestDir,
                 })
             }
             Some(proc_macro2::TokenTree::Group(group))
                 if group.delimiter() == proc_macro2::Delimiter::Brace =>
             {
-                // spec = { path = "...", relative_to = "..." }
+                // spec = { path = "...", relative_to = ... }
                 let helper: SpecSourceStruct = serde_tokenstream::from_tokenstream_spanned(
                     &group.delim_span(),
                     &group.stream(),
@@ -73,11 +72,11 @@ impl SpecSource {
             }
             Some(other) => Err(syn::Error::new(
                 other.span(),
-                "expected a string or { path = \"...\", relative_to = \"...\" }",
+                "expected a string or { path = \"...\", relative_to = ... }",
             )),
             None => Err(syn::Error::new(
                 tokens.span(),
-                "expected a string or { path = \"...\", relative_to = \"...\" }",
+                "expected a string or { path = \"...\", relative_to = ... }",
             )),
         }
     }
@@ -344,7 +343,7 @@ fn do_generate_api(item: TokenStream) -> Result<TokenStream, syn::Error> {
     let (spec_source, settings) = if let Ok(spec) = syn::parse::<LitStr>(item.clone()) {
         let spec_source = SpecSource {
             path: spec,
-            relative_to: RelativeTo::default(),
+            relative_to: RelativeTo::ManifestDir,
         };
         (spec_source, GenerationSettings::default())
     } else {
@@ -421,7 +420,7 @@ fn do_generate_api(item: TokenStream) -> Result<TokenStream, syn::Error> {
             let out_dir = std::env::var("OUT_DIR").map_err(|_| {
                 syn::Error::new(
                     spec_path.span(),
-                    "relative_to = \"out-dir\" requires OUT_DIR to be set \
+                    "relative_to = OutDir requires OUT_DIR to be set \
                      (are you using this from a build script?)",
                 )
             })?;
