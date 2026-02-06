@@ -528,6 +528,8 @@ pub fn encode_path(pc: &str) -> String {
 
 #[doc(hidden)]
 pub trait RequestBuilderExt<E> {
+    // The error type is large but it's used in generated output.
+    #[expect(clippy::result_large_err)]
     fn form_urlencoded<T: Serialize + ?Sized>(self, body: &T) -> Result<RequestBuilder, Error<E>>;
 }
 

@@ -14,35 +14,32 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - name: Install nightly rustfmt
-      uses: dtolnay/rust-toolchain@nightly
+    - name: Install stable
+      uses: dtolnay/rust-toolchain@stable
       with:
-        components: rustfmt
-    - name: Report cargo version
-      run: cargo --version
-    - name: Report rustfmt version
-      run: cargo fmt -- --version
-    - name: Report nightly cargo version
-      run: cargo +nightly --version
-    - name: Report nightly rustfmt version
-      run: cargo +nightly fmt -- --version
-    - name: Check style
+        components: rustfmt, clippy
+    - name: Check formatting
       run: cargo fmt -- --check
+    - name: Clippy
+      run: cargo clippy --all-features --all-targets
 
   build-and-test:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [ ubuntu-latest, windows-latest, macos-latest ]
+        # The first version is the MSRV.
+        rust-version: [ "1.85", stable ]
     steps:
     - uses: actions/checkout@v4
     - name: Install nightly rustfmt
       uses: dtolnay/rust-toolchain@nightly
       with:
         components: rustfmt
-    - name: Install stable
-      uses: dtolnay/rust-toolchain@stable
+    - name: Install Rust
+      uses: dtolnay/rust-toolchain@master
       with:
+        toolchain: ${{ matrix.rust-version }}
         components: rustfmt
     - name: Build
       run: cargo build --locked --tests --verbose

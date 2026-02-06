@@ -12,12 +12,12 @@ mod propolis_client {
 use propolis_client::Client;
 
 pub fn _ignore() {
-    let _ = async {
+    std::mem::drop(async {
         let _upgraded: reqwest::Upgraded = Client::new("")
             .instance_serial()
             .send()
             .await
             .unwrap()
             .into_inner();
-    };
+    });
 }
