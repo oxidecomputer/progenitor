@@ -34,15 +34,18 @@ jobs:
     strategy:
       matrix:
         os: [ ubuntu-latest, windows-latest, macos-latest ]
+        # The first version is the MSRV.
+        rust-version: [ "1.85", stable ]
     steps:
     - uses: actions/checkout@v4
     - name: Install nightly rustfmt
       uses: dtolnay/rust-toolchain@nightly
       with:
         components: rustfmt
-    - name: Install stable
-      uses: dtolnay/rust-toolchain@stable
+    - name: Install Rust
+      uses: dtolnay/rust-toolchain@master
       with:
+        toolchain: ${{ matrix.rust-version }}
         components: rustfmt
     - name: Build
       run: cargo build --locked --tests --verbose
