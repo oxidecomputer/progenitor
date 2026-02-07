@@ -2,7 +2,8 @@
 name = "example-macro"
 version = "0.0.1"
 authors = ["Adam H. Leventhal <ahl@oxidecomputer.com>"]
-edition = "2021"
+edition.workspace = true
+rust-version.workspace = true
 
 [dependencies]
 chrono = { version = "0.4", features = ["serde"] }
