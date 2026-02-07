@@ -4,6 +4,18 @@ pub mod operations {
     #![doc = r" its inner type with a call to `into_inner()`. This can"]
     #![doc = r" be used to explicitly deviate from permitted values."]
     use crate::param_overrides_builder::*;
+    #[doc = r" Apply decoded query parameter pairs to the matcher."]
+    fn apply_query_param_pairs(
+        mut when: ::httpmock::When,
+        pairs: &[(String, String)],
+    ) -> ::httpmock::When {
+        for (key, value) in pairs {
+            when = when.query_param(key, value);
+        }
+
+        when
+    }
+
     pub struct KeyGetWhen(::httpmock::When);
     impl KeyGetWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
@@ -23,7 +35,9 @@ pub mod operations {
             T: Into<Option<bool>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("key", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("key", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("key"))
             }
@@ -34,7 +48,9 @@ pub mod operations {
             T: Into<Option<&'a str>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("uniqueKey", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("uniqueKey", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("uniqueKey"))
             }
