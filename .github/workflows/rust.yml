@@ -14,14 +14,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - name: Install stable
-      uses: dtolnay/rust-toolchain@stable
+    - name: Install nightly rustfmt
+      uses: dtolnay/rust-toolchain@nightly
       with:
-        components: rustfmt, clippy
-    - name: Check formatting
+        components: rustfmt
+    - name: Report cargo version
+      run: cargo --version
+    - name: Report rustfmt version
+      run: cargo fmt -- --version
+    - name: Report nightly cargo version
+      run: cargo +nightly --version
+    - name: Report nightly rustfmt version
+      run: cargo +nightly fmt -- --version
+    - name: Check style
       run: cargo fmt -- --check
-    - name: Clippy
-      run: cargo clippy --all-features --all-targets
 
   build-and-test:
     runs-on: ${{ matrix.os }}

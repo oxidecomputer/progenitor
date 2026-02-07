@@ -13,8 +13,8 @@ members = [
 resolver = "3"
 
 [workspace.package]
-# TODO: migrate to 2024 edition. We currently have a few schemas that have
-# keywords like `gen` in them. We need to escape those as `r#gen`, etc.
+# TODO: migrate to 2024 edition:
+# https://github.com/oxidecomputer/progenitor/issues/1302
 edition = "2021"
 rust-version = "1.88"
 license = "MPL-2.0"

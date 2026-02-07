@@ -27,7 +27,7 @@ where
 }
 
 fn generate_formatted(generator: &mut Generator, spec: &OpenAPI) -> String {
-    let content = generator.generate_tokens(spec).unwrap();
+    let content = generator.generate_tokens(&spec).unwrap();
     reformat_code(content)
 }
 
@@ -165,7 +165,7 @@ fn test_cli_gen() {
 
 #[test]
 fn test_nexus_with_different_timeout() {
-    const OPENAPI_FILE: &str = "nexus.json";
+    const OPENAPI_FILE: &'static str = "nexus.json";
 
     let mut in_path = PathBuf::from("../sample_openapi");
     in_path.push(OPENAPI_FILE);

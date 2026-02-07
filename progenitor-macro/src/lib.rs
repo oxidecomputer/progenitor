@@ -1,4 +1,4 @@
-// Copyright 2022 Oxide Computer Company
+// Copyright 2026 Oxide Computer Company
 
 //! Macros for the progenitor OpenAPI client generator.
 
@@ -15,7 +15,7 @@ use quote::{quote, ToTokens};
 use schemars::schema::SchemaObject;
 use serde::Deserialize;
 use serde_tokenstream::{OrderedMap, ParseWrapper, TokenStreamWrapper};
-use syn::{spanned::Spanned, LitStr};
+use syn::LitStr;
 use token_utils::TypeAndImpls;
 
 mod token_utils;
@@ -38,8 +38,8 @@ struct SpecSource {
     relative_to: RelativeTo,
 }
 
-impl SpecSource {
-    fn from_tokens(tokens: proc_macro2::TokenStream) -> Result<Self, syn::Error> {
+impl syn::parse::Parse for SpecSource {
+    fn parse(input: syn::parse::ParseStream) -> syn::Result<Self> {
         /// Helper struct for deserializing the struct form of SpecSource.
         #[derive(Deserialize)]
         struct SpecSourceStruct {
@@ -47,37 +47,27 @@ impl SpecSource {
             relative_to: RelativeTo,
         }
 
-        let mut iter = tokens.clone().into_iter();
-        match iter.next() {
-            Some(proc_macro2::TokenTree::Literal(_)) => {
-                // spec = "path/to/spec.json"
-                let path = syn::parse2::<LitStr>(tokens)?;
-                Ok(SpecSource {
-                    path,
-                    relative_to: RelativeTo::ManifestDir,
-                })
-            }
-            Some(proc_macro2::TokenTree::Group(group))
-                if group.delimiter() == proc_macro2::Delimiter::Brace =>
-            {
-                // spec = { path = "...", relative_to = ... }
-                let helper: SpecSourceStruct = serde_tokenstream::from_tokenstream_spanned(
-                    &group.delim_span(),
-                    &group.stream(),
-                )?;
-                Ok(SpecSource {
-                    path: helper.path.into_inner(),
-                    relative_to: helper.relative_to,
-                })
-            }
-            Some(other) => Err(syn::Error::new(
-                other.span(),
-                "expected a string or { path = \"...\", relative_to = ... }",
-            )),
-            None => Err(syn::Error::new(
-                tokens.span(),
-                "expected a string or { path = \"...\", relative_to = ... }",
-            )),
+        let lookahead = input.lookahead1();
+        if lookahead.peek(LitStr) {
+            // spec = "path/to/spec.json"
+            let path: LitStr = input.parse()?;
+            Ok(SpecSource {
+                path,
+                relative_to: RelativeTo::ManifestDir,
+            })
+        } else if lookahead.peek(syn::token::Brace) {
+            // spec = { path = "...", relative_to = ... }
+            let content;
+            let brace_token = syn::braced!(content in input);
+            let stream: proc_macro2::TokenStream = content.parse()?;
+            let helper: SpecSourceStruct =
+                serde_tokenstream::from_tokenstream_spanned(&brace_token.span, &stream)?;
+            Ok(SpecSource {
+                path: helper.path.into_inner(),
+                relative_to: helper.relative_to,
+            })
+        } else {
+            Err(lookahead.error())
         }
     }
 }
@@ -96,7 +86,7 @@ impl SpecSource {
 ///     // spec can be a simple path string:
 ///     spec = "path/to/spec.json",
 ///     // Or a struct with path and relative_to:
-///     // spec = { path = "path/to/spec.json", relative_to = OutDir },
+///     spec = { path = "path/to/spec.json", relative_to = OutDir },
 ///     [ interface = ( Positional | Builder ), ]
 ///     [ tags = ( Merged | Separate ), ]
 ///     [ pre_hook = closure::or::path::to::function, ]
@@ -196,6 +186,8 @@ pub fn generate_api(item: TokenStream) -> TokenStream {
 
 #[derive(Deserialize)]
 struct MacroSettings {
+    // Note this is a TokenStreamWrapper and not a ParseWrapper<SpecSource>. The
+    // latter loses span information.
     spec: TokenStreamWrapper,
     #[serde(default)]
     interface: InterfaceStyle,
@@ -366,7 +358,7 @@ fn do_generate_api(item: TokenStream) -> Result<TokenStream, syn::Error> {
             timeout,
         } = serde_tokenstream::from_tokenstream(&item.into())?;
 
-        let spec = SpecSource::from_tokens(spec.into_inner())?;
+        let spec = syn::parse2::<SpecSource>(spec.into_inner())?;
 
         let mut settings = GenerationSettings::default();
         settings.with_interface(interface);

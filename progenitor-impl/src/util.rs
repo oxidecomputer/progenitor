@@ -126,6 +126,6 @@ pub(crate) fn unique_ident_from(
             return ident;
         }
 
-        name.insert(0, '_');
+        name.insert_str(0, "_");
     }
 }

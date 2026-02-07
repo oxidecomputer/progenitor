@@ -85,23 +85,33 @@ struct CrateSpec {
 }
 
 /// Style of generated client.
-#[derive(Clone, Deserialize, PartialEq, Eq, Default)]
+#[derive(Clone, Deserialize, PartialEq, Eq)]
 pub enum InterfaceStyle {
     /// Use positional style.
-    #[default]
     Positional,
     /// Use builder style.
     Builder,
 }
 
+impl Default for InterfaceStyle {
+    fn default() -> Self {
+        Self::Positional
+    }
+}
+
 /// Style for using the OpenAPI tags when generating names in the client.
-#[derive(Clone, Deserialize, Default)]
+#[derive(Clone, Deserialize)]
 pub enum TagStyle {
     /// Merge tags to create names in the generated client.
-    #[default]
     Merged,
     /// Use each tag name to create separate names in the generated client.
     Separate,
+}
+
+impl Default for TagStyle {
+    fn default() -> Self {
+        Self::Merged
+    }
 }
 
 impl GenerationSettings {

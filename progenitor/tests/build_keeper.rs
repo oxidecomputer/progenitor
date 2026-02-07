@@ -4,13 +4,13 @@ mod positional {
     progenitor::generate_api!("../sample_openapi/keeper.json");
 
     fn _ignore() {
-        std::mem::drop(Client::new("").enrol(
+        let _ = Client::new("").enrol(
             "auth token",
             &types::EnrolBody {
                 host: "".to_string(),
                 key: "".to_string(),
             },
-        ));
+        );
     }
 }
 
@@ -22,16 +22,14 @@ mod builder_untagged {
     );
 
     fn _ignore() {
-        std::mem::drop(
-            Client::new("")
-                .enrol()
-                .authorization("")
-                .body(types::EnrolBody {
-                    host: "".to_string(),
-                    key: "".to_string(),
-                })
-                .send(),
-        );
+        let _ = Client::new("")
+            .enrol()
+            .authorization("")
+            .body(types::EnrolBody {
+                host: "".to_string(),
+                key: "".to_string(),
+            })
+            .send();
     }
 }
 
@@ -43,15 +41,13 @@ mod builder_tagged {
     );
 
     fn _ignore() {
-        std::mem::drop(
-            Client::new("")
-                .enrol()
-                .authorization("")
-                .body(types::EnrolBody {
-                    host: "".to_string(),
-                    key: "".to_string(),
-                })
-                .send(),
-        );
+        let _ = Client::new("")
+            .enrol()
+            .authorization("")
+            .body(types::EnrolBody {
+                host: "".to_string(),
+                key: "".to_string(),
+            })
+            .send();
     }
 }
