@@ -132,20 +132,22 @@ impl Client {
         gateway: &'a str,
         body: &'a types::UnoBody,
     ) -> Result<ResponseValue<ByteStream>, Error<()>> {
-        let url = format!("{}/uno", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .json(&body)
-            .query(&progenitor_client::QueryParam::new("gateway", &gateway))
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!("{}/uno", self.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .json(&body)
+                .query(&progenitor_client::QueryParam::new("gateway", &gateway))
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "uno",
         };
