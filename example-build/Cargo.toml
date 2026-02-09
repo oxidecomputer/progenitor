@@ -10,7 +10,7 @@ chrono = { version = "0.4", features = ["serde"] }
 progenitor-client = { path = "../progenitor-client" }
 reqwest = { version = "0.13.1", features = ["json", "query", "stream"] }
 base64 = "0.22"
-rand = "0.9"
+rand = "0.10"
 serde = { version = "1.0", features = ["derive"] }
 uuid = { version = "1.20", features = ["serde", "v4"] }
 
