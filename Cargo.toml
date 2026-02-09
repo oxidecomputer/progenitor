@@ -29,7 +29,7 @@ assert_cmd = "2.1.2"
 base64 = "0.22.1"
 bytes = "1.11.0"
 chrono = { version = "0.4.43", default-features = false, features = ["serde"] }
-clap = { version = "4.5.56" }
+clap = { version = "4.5.57" }
 clap-cargo = "0.18.3"
 dropshot = { version = "0.16.7", default-features = false }
 env_logger = "0.11.8"
