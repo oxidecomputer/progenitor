@@ -5,7 +5,7 @@ use std::{
     error::Error,
 };
 
-use progenitor_client::{encode_path, QueryParam};
+use progenitor_client::{encode_path, query_param_pairs, QueryParam};
 use serde::Serialize;
 
 #[test]
@@ -24,6 +24,11 @@ fn encode_query_param<T: Serialize>(param_name: &str, value: &T) -> Result<Strin
     Ok(url.query().unwrap().to_owned())
 }
 
+/// Helper to unwrap `query_param_pairs` for test assertions.
+fn collect_query_pairs<T: Serialize>(param_name: &str, value: &T) -> Vec<(String, String)> {
+    query_param_pairs(param_name, value).expect("failed to serialize query param pairs")
+}
+
 #[test]
 fn test_query_scalars() {
     let value = "xyz".to_string();
@@ -37,6 +42,18 @@ fn test_query_scalars() {
     let value = -0.05;
     let result = encode_query_param("param_name", &value).unwrap();
     assert_eq!(result, "param_name=-0.05");
+}
+
+/// query_param_pairs mirrors QueryParam for scalar values.
+#[test]
+fn test_query_param_pairs_scalars() {
+    let value = "xyz".to_string();
+    let result = collect_query_pairs("param_name", &value);
+    assert_eq!(result, vec![("param_name".to_string(), "xyz".to_string())]);
+
+    let value = 42;
+    let result = collect_query_pairs("param_name", &value);
+    assert_eq!(result, vec![("param_name".to_string(), "42".to_string())]);
 }
 
 #[test]
@@ -65,6 +82,44 @@ fn test_query_arrays() {
     );
 }
 
+/// query_param_pairs repeats keys for array and set values.
+#[test]
+fn test_query_param_pairs_arrays() {
+    let value = vec!["a", "b", "c"];
+    let result = collect_query_pairs("paramName", &value);
+    assert_eq!(
+        result,
+        vec![
+            ("paramName".to_string(), "a".to_string()),
+            ("paramName".to_string(), "b".to_string()),
+            ("paramName".to_string(), "c".to_string()),
+        ]
+    );
+
+    let value = ["a", "b", "c"].into_iter().collect::<BTreeSet<_>>();
+    let result = collect_query_pairs("paramName", &value);
+    assert_eq!(
+        result,
+        vec![
+            ("paramName".to_string(), "a".to_string()),
+            ("paramName".to_string(), "b".to_string()),
+            ("paramName".to_string(), "c".to_string()),
+        ]
+    );
+
+    let value = ["a", "b", "c"].into_iter().collect::<HashSet<_>>();
+    let mut result = collect_query_pairs("paramName", &value);
+    result.sort();
+    assert_eq!(
+        result,
+        vec![
+            ("paramName".to_string(), "a".to_string()),
+            ("paramName".to_string(), "b".to_string()),
+            ("paramName".to_string(), "c".to_string()),
+        ]
+    );
+}
+
 #[test]
 fn test_query_object() {
     #[derive(Serialize)]
@@ -79,6 +134,40 @@ fn test_query_object() {
     let result = encode_query_param("ignored", &value).unwrap();
 
     assert_eq!(result, "a=a+value&b=b+value");
+}
+
+/// query_param_pairs emits object fields and map entries as pairs.
+#[test]
+fn test_query_param_pairs_object_and_map() {
+    #[derive(Serialize)]
+    struct Value {
+        a: String,
+        b: String,
+    }
+    let value = Value {
+        a: "a value".to_string(),
+        b: "b value".to_string(),
+    };
+    let result = collect_query_pairs("ignored", &value);
+    assert_eq!(
+        result,
+        vec![
+            ("a".to_string(), "a value".to_string()),
+            ("b".to_string(), "b value".to_string()),
+        ]
+    );
+
+    let value = [("a", "a value"), ("b", "b value")]
+        .into_iter()
+        .collect::<BTreeMap<_, _>>();
+    let result = collect_query_pairs("ignored", &value);
+    assert_eq!(
+        result,
+        vec![
+            ("a".to_string(), "a value".to_string()),
+            ("b".to_string(), "b value".to_string()),
+        ]
+    );
 }
 
 #[test]
@@ -113,6 +202,18 @@ fn test_query_enum_external() {
 
     let value = Value::Object { a: 3, b: 4 };
     encode_query_param("ignored", &value).expect_err("variant not supported");
+}
+
+/// query_param_pairs rejects unsupported enum variants.
+#[test]
+fn test_query_param_pairs_invalid_variant() {
+    #[derive(Serialize)]
+    #[serde(rename_all = "snake_case")]
+    enum Value {
+        Tuple(u64, u64),
+    }
+    let value = Value::Tuple(1, 2);
+    assert!(query_param_pairs("ignored", &value).is_err());
 }
 
 #[test]
@@ -218,4 +319,12 @@ fn test_query_option() {
     let value = Some(42);
     let result = encode_query_param("paramName", &value).unwrap();
     assert_eq!(result, "paramName=42");
+}
+
+/// query_param_pairs yields no pairs for empty options.
+#[test]
+fn test_query_param_pairs_empty() {
+    let value = Option::<u64>::None;
+    let result = collect_query_pairs("ignored", &value);
+    assert!(result.is_empty());
 }

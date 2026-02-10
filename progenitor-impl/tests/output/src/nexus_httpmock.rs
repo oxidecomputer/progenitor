@@ -4,6 +4,18 @@ pub mod operations {
     #![doc = r" its inner type with a call to `into_inner()`. This can"]
     #![doc = r" be used to explicitly deviate from permitted values."]
     use crate::nexus_builder::*;
+    #[doc = r" Apply decoded query parameter pairs to the matcher."]
+    fn apply_query_param_pairs(
+        mut when: ::httpmock::When,
+        pairs: &[(String, String)],
+    ) -> ::httpmock::When {
+        for (key, value) in pairs {
+            when = when.query_param(key, value);
+        }
+
+        when
+    }
+
     pub struct DiskViewByIdWhen(::httpmock::When);
     impl DiskViewByIdWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
@@ -827,7 +839,9 @@ pub mod operations {
             T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("limit", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("limit", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("limit"))
             }
@@ -838,7 +852,9 @@ pub mod operations {
             T: Into<Option<&'a str>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("page_token", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("page_token", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("page_token"))
             }
@@ -849,7 +865,9 @@ pub mod operations {
             T: Into<Option<types::IdSortMode>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("sort_by", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("sort_by", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("sort_by"))
             }
@@ -1232,7 +1250,9 @@ pub mod operations {
             T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("limit", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("limit", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("limit"))
             }
@@ -1243,7 +1263,9 @@ pub mod operations {
             T: Into<Option<&'a str>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("page_token", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("page_token", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("page_token"))
             }
@@ -1254,7 +1276,9 @@ pub mod operations {
             T: Into<Option<types::NameOrIdSortMode>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("sort_by", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("sort_by", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("sort_by"))
             }
@@ -1690,7 +1714,9 @@ pub mod operations {
             T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("limit", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("limit", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("limit"))
             }
@@ -1701,7 +1727,9 @@ pub mod operations {
             T: Into<Option<&'a str>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("page_token", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("page_token", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("page_token"))
             }
@@ -1712,7 +1740,9 @@ pub mod operations {
             T: Into<Option<types::NameOrIdSortMode>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("sort_by", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("sort_by", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("sort_by"))
             }
@@ -2077,7 +2107,9 @@ pub mod operations {
             T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("limit", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("limit", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("limit"))
             }
@@ -2088,7 +2120,9 @@ pub mod operations {
             T: Into<Option<&'a str>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("page_token", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("page_token", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("page_token"))
             }
@@ -2099,7 +2133,9 @@ pub mod operations {
             T: Into<Option<types::NameSortMode>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("sort_by", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("sort_by", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("sort_by"))
             }
@@ -2434,7 +2470,9 @@ pub mod operations {
             T: Into<Option<&'a ::chrono::DateTime<::chrono::offset::Utc>>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("end_time", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("end_time", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("end_time"))
             }
@@ -2445,7 +2483,9 @@ pub mod operations {
             T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("limit", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("limit", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("limit"))
             }
@@ -2456,7 +2496,9 @@ pub mod operations {
             T: Into<Option<&'a str>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("page_token", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("page_token", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("page_token"))
             }
@@ -2467,7 +2509,9 @@ pub mod operations {
             T: Into<Option<&'a ::chrono::DateTime<::chrono::offset::Utc>>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("start_time", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("start_time", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("start_time"))
             }
@@ -2549,7 +2593,9 @@ pub mod operations {
             T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("limit", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("limit", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("limit"))
             }
@@ -2560,7 +2606,9 @@ pub mod operations {
             T: Into<Option<&'a str>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("page_token", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("page_token", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("page_token"))
             }
@@ -2571,7 +2619,9 @@ pub mod operations {
             T: Into<Option<types::NameSortMode>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("sort_by", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("sort_by", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("sort_by"))
             }
@@ -2883,7 +2933,9 @@ pub mod operations {
             T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("limit", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("limit", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("limit"))
             }
@@ -2894,7 +2946,9 @@ pub mod operations {
             T: Into<Option<&'a str>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("page_token", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("page_token", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("page_token"))
             }
@@ -2905,7 +2959,9 @@ pub mod operations {
             T: Into<Option<types::NameSortMode>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("sort_by", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("sort_by", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("sort_by"))
             }
@@ -3231,7 +3287,9 @@ pub mod operations {
             T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("limit", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("limit", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("limit"))
             }
@@ -3242,7 +3300,9 @@ pub mod operations {
             T: Into<Option<&'a str>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("page_token", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("page_token", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("page_token"))
             }
@@ -3253,7 +3313,9 @@ pub mod operations {
             T: Into<Option<types::NameSortMode>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("sort_by", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("sort_by", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("sort_by"))
             }
@@ -3701,7 +3763,9 @@ pub mod operations {
             T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("limit", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("limit", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("limit"))
             }
@@ -3712,7 +3776,9 @@ pub mod operations {
             T: Into<Option<&'a str>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("page_token", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("page_token", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("page_token"))
             }
@@ -3723,7 +3789,9 @@ pub mod operations {
             T: Into<Option<types::NameSortMode>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("sort_by", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("sort_by", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("sort_by"))
             }
@@ -4277,7 +4345,9 @@ pub mod operations {
             T: Into<Option<u64>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("from_start", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("from_start", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("from_start"))
             }
@@ -4288,7 +4358,9 @@ pub mod operations {
             T: Into<Option<u64>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("max_bytes", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("max_bytes", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("max_bytes"))
             }
@@ -4299,7 +4371,9 @@ pub mod operations {
             T: Into<Option<u64>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("most_recent", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("most_recent", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("most_recent"))
             }
@@ -4760,7 +4834,9 @@ pub mod operations {
             T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("limit", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("limit", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("limit"))
             }
@@ -4771,7 +4847,9 @@ pub mod operations {
             T: Into<Option<&'a str>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("page_token", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("page_token", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("page_token"))
             }
@@ -4782,7 +4860,9 @@ pub mod operations {
             T: Into<Option<types::NameSortMode>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("sort_by", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("sort_by", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("sort_by"))
             }
@@ -5094,7 +5174,9 @@ pub mod operations {
             T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("limit", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("limit", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("limit"))
             }
@@ -5105,7 +5187,9 @@ pub mod operations {
             T: Into<Option<&'a str>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("page_token", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("page_token", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("page_token"))
             }
@@ -5116,7 +5200,9 @@ pub mod operations {
             T: Into<Option<types::NameSortMode>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("sort_by", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("sort_by", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("sort_by"))
             }
@@ -5698,7 +5784,9 @@ pub mod operations {
             T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("limit", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("limit", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("limit"))
             }
@@ -5709,7 +5797,9 @@ pub mod operations {
             T: Into<Option<&'a str>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("page_token", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("page_token", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("page_token"))
             }
@@ -5720,7 +5810,9 @@ pub mod operations {
             T: Into<Option<types::NameSortMode>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("sort_by", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("sort_by", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("sort_by"))
             }
@@ -6193,7 +6285,9 @@ pub mod operations {
             T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("limit", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("limit", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("limit"))
             }
@@ -6204,7 +6298,9 @@ pub mod operations {
             T: Into<Option<&'a str>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("page_token", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("page_token", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("page_token"))
             }
@@ -6215,7 +6311,9 @@ pub mod operations {
             T: Into<Option<types::NameSortMode>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("sort_by", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("sort_by", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("sort_by"))
             }
@@ -6718,7 +6816,9 @@ pub mod operations {
             T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("limit", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("limit", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("limit"))
             }
@@ -6729,7 +6829,9 @@ pub mod operations {
             T: Into<Option<&'a str>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("page_token", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("page_token", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("page_token"))
             }
@@ -6740,7 +6842,9 @@ pub mod operations {
             T: Into<Option<types::NameSortMode>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("sort_by", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("sort_by", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("sort_by"))
             }
@@ -7214,7 +7318,9 @@ pub mod operations {
             T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("limit", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("limit", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("limit"))
             }
@@ -7225,7 +7331,9 @@ pub mod operations {
             T: Into<Option<&'a str>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("page_token", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("page_token", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("page_token"))
             }
@@ -7236,7 +7344,9 @@ pub mod operations {
             T: Into<Option<types::NameSortMode>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("sort_by", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("sort_by", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("sort_by"))
             }
@@ -7416,7 +7526,9 @@ pub mod operations {
             T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("limit", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("limit", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("limit"))
             }
@@ -7427,7 +7539,9 @@ pub mod operations {
             T: Into<Option<&'a str>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("page_token", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("page_token", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("page_token"))
             }
@@ -7608,7 +7722,9 @@ pub mod operations {
             T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("limit", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("limit", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("limit"))
             }
@@ -7619,7 +7735,9 @@ pub mod operations {
             T: Into<Option<&'a str>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("page_token", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("page_token", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("page_token"))
             }
@@ -7630,7 +7748,9 @@ pub mod operations {
             T: Into<Option<types::IdSortMode>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("sort_by", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("sort_by", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("sort_by"))
             }
@@ -7696,7 +7816,9 @@ pub mod operations {
             T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("limit", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("limit", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("limit"))
             }
@@ -7707,7 +7829,9 @@ pub mod operations {
             T: Into<Option<&'a str>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("page_token", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("page_token", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("page_token"))
             }
@@ -7718,7 +7842,9 @@ pub mod operations {
             T: Into<Option<types::NameSortMode>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("sort_by", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("sort_by", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("sort_by"))
             }
@@ -8143,7 +8269,9 @@ pub mod operations {
             T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("limit", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("limit", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("limit"))
             }
@@ -8154,7 +8282,9 @@ pub mod operations {
             T: Into<Option<&'a str>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("page_token", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("page_token", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("page_token"))
             }
@@ -8165,7 +8295,9 @@ pub mod operations {
             T: Into<Option<types::NameSortMode>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("sort_by", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("sort_by", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("sort_by"))
             }
@@ -8407,7 +8539,9 @@ pub mod operations {
             T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("limit", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("limit", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("limit"))
             }
@@ -8418,7 +8552,9 @@ pub mod operations {
             T: Into<Option<&'a str>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("page_token", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("page_token", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("page_token"))
             }
@@ -8429,7 +8565,9 @@ pub mod operations {
             T: Into<Option<types::IdSortMode>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("sort_by", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("sort_by", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("sort_by"))
             }
@@ -8495,7 +8633,9 @@ pub mod operations {
             T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("limit", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("limit", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("limit"))
             }
@@ -8506,7 +8646,9 @@ pub mod operations {
             T: Into<Option<&'a str>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("page_token", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("page_token", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("page_token"))
             }
@@ -8517,7 +8659,9 @@ pub mod operations {
             T: Into<Option<types::IdSortMode>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("sort_by", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("sort_by", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("sort_by"))
             }
@@ -8644,7 +8788,9 @@ pub mod operations {
             T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("limit", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("limit", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("limit"))
             }
@@ -8655,7 +8801,9 @@ pub mod operations {
             T: Into<Option<&'a str>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("page_token", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("page_token", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("page_token"))
             }
@@ -8666,7 +8814,9 @@ pub mod operations {
             T: Into<Option<types::IdSortMode>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("sort_by", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("sort_by", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("sort_by"))
             }
@@ -8802,7 +8952,9 @@ pub mod operations {
             T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("limit", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("limit", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("limit"))
             }
@@ -8813,7 +8965,9 @@ pub mod operations {
             T: Into<Option<&'a str>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("page_token", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("page_token", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("page_token"))
             }
@@ -8824,7 +8978,9 @@ pub mod operations {
             T: Into<Option<types::IdSortMode>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("sort_by", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("sort_by", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("sort_by"))
             }
@@ -8890,7 +9046,9 @@ pub mod operations {
             T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("limit", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("limit", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("limit"))
             }
@@ -8901,7 +9059,9 @@ pub mod operations {
             T: Into<Option<&'a str>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("page_token", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("page_token", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("page_token"))
             }
@@ -8912,7 +9072,9 @@ pub mod operations {
             T: Into<Option<types::NameSortMode>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("sort_by", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("sort_by", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("sort_by"))
             }
@@ -9152,7 +9314,9 @@ pub mod operations {
             T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("limit", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("limit", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("limit"))
             }
@@ -9163,7 +9327,9 @@ pub mod operations {
             T: Into<Option<&'a str>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("page_token", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("page_token", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("page_token"))
             }
@@ -9174,7 +9340,9 @@ pub mod operations {
             T: Into<Option<types::NameOrIdSortMode>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("sort_by", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("sort_by", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("sort_by"))
             }
@@ -9487,7 +9655,9 @@ pub mod operations {
             T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("limit", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("limit", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("limit"))
             }
@@ -9498,7 +9668,9 @@ pub mod operations {
             T: Into<Option<&'a str>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("page_token", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("page_token", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("page_token"))
             }
@@ -9750,7 +9922,9 @@ pub mod operations {
             T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("limit", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("limit", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("limit"))
             }
@@ -9761,7 +9935,9 @@ pub mod operations {
             T: Into<Option<&'a str>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("page_token", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("page_token", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("page_token"))
             }
@@ -9944,14 +10120,18 @@ pub mod operations {
             T: Into<Option<&'a ::chrono::DateTime<::chrono::offset::Utc>>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("end_time", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("end_time", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("end_time"))
             }
         }
 
         pub fn id(self, value: &::uuid::Uuid) -> Self {
-            Self(self.0.query_param("id", value.to_string()))
+            let expected_pairs = ::progenitor_client::query_param_pairs("id", &value)
+                .expect("failed to serialize query param");
+            Self(apply_query_param_pairs(self.0, &expected_pairs))
         }
 
         pub fn limit<T>(self, value: T) -> Self
@@ -9959,7 +10139,9 @@ pub mod operations {
             T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("limit", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("limit", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("limit"))
             }
@@ -9970,7 +10152,9 @@ pub mod operations {
             T: Into<Option<&'a str>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("page_token", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("page_token", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("page_token"))
             }
@@ -9981,7 +10165,9 @@ pub mod operations {
             T: Into<Option<&'a ::chrono::DateTime<::chrono::offset::Utc>>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("start_time", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("start_time", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("start_time"))
             }
@@ -10161,7 +10347,9 @@ pub mod operations {
             T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("limit", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("limit", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("limit"))
             }
@@ -10172,7 +10360,9 @@ pub mod operations {
             T: Into<Option<&'a str>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("page_token", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("page_token", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("page_token"))
             }
@@ -10183,7 +10373,9 @@ pub mod operations {
             T: Into<Option<types::IdSortMode>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("sort_by", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("sort_by", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("sort_by"))
             }
@@ -10309,7 +10501,9 @@ pub mod operations {
             T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("limit", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("limit", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("limit"))
             }
@@ -10320,7 +10514,9 @@ pub mod operations {
             T: Into<Option<&'a str>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("page_token", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("page_token", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("page_token"))
             }
@@ -10331,7 +10527,9 @@ pub mod operations {
             T: Into<Option<types::NameOrIdSortMode>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("sort_by", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("sort_by", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("sort_by"))
             }
@@ -10578,7 +10776,9 @@ pub mod operations {
             T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("limit", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("limit", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("limit"))
             }
@@ -10589,7 +10789,9 @@ pub mod operations {
             T: Into<Option<&'a str>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("page_token", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("page_token", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("page_token"))
             }
@@ -10600,7 +10802,9 @@ pub mod operations {
             T: Into<Option<types::NameSortMode>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("sort_by", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("sort_by", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("sort_by"))
             }
@@ -11145,7 +11349,9 @@ pub mod operations {
             T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("limit", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("limit", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("limit"))
             }
@@ -11156,7 +11362,9 @@ pub mod operations {
             T: Into<Option<&'a str>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("page_token", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("page_token", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("page_token"))
             }
@@ -11167,7 +11375,9 @@ pub mod operations {
             T: Into<Option<types::IdSortMode>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("sort_by", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("sort_by", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("sort_by"))
             }
@@ -11306,7 +11516,9 @@ pub mod operations {
             T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("limit", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("limit", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("limit"))
             }
@@ -11317,7 +11529,9 @@ pub mod operations {
             T: Into<Option<&'a str>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("page_token", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("page_token", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("page_token"))
             }
@@ -11328,7 +11542,9 @@ pub mod operations {
             T: Into<Option<types::NameSortMode>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("sort_by", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("sort_by", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("sort_by"))
             }
@@ -11454,7 +11670,9 @@ pub mod operations {
             T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("limit", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("limit", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("limit"))
             }
@@ -11465,7 +11683,9 @@ pub mod operations {
             T: Into<Option<&'a str>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("page_token", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("page_token", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("page_token"))
             }
@@ -11531,7 +11751,9 @@ pub mod operations {
             T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("limit", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("limit", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("limit"))
             }
@@ -11542,7 +11764,9 @@ pub mod operations {
             T: Into<Option<&'a str>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("page_token", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("page_token", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("page_token"))
             }
@@ -11553,7 +11777,9 @@ pub mod operations {
             T: Into<Option<types::IdSortMode>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("sort_by", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("sort_by", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("sort_by"))
             }
@@ -11619,7 +11845,9 @@ pub mod operations {
             T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("limit", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("limit", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("limit"))
             }
@@ -11630,7 +11858,9 @@ pub mod operations {
             T: Into<Option<&'a types::NameOrId>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("organization", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("organization", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("organization"))
             }
@@ -11641,7 +11871,9 @@ pub mod operations {
             T: Into<Option<&'a str>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("page_token", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("page_token", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("page_token"))
             }
@@ -11652,7 +11884,9 @@ pub mod operations {
             T: Into<Option<&'a types::NameOrId>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("project", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("project", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("project"))
             }
@@ -11663,7 +11897,9 @@ pub mod operations {
             T: Into<Option<types::NameOrIdSortMode>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("sort_by", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("sort_by", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("sort_by"))
             }
@@ -11729,14 +11965,18 @@ pub mod operations {
             T: Into<Option<&'a types::NameOrId>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("organization", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("organization", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("organization"))
             }
         }
 
         pub fn project(self, value: &types::NameOrId) -> Self {
-            Self(self.0.query_param("project", value.to_string()))
+            let expected_pairs = ::progenitor_client::query_param_pairs("project", &value)
+                .expect("failed to serialize query param");
+            Self(apply_query_param_pairs(self.0, &expected_pairs))
         }
 
         pub fn body(self, value: &types::DiskCreate) -> Self {
@@ -11808,7 +12048,9 @@ pub mod operations {
             T: Into<Option<&'a types::NameOrId>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("organization", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("organization", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("organization"))
             }
@@ -11819,7 +12061,9 @@ pub mod operations {
             T: Into<Option<&'a types::NameOrId>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("project", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("project", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("project"))
             }
@@ -11890,7 +12134,9 @@ pub mod operations {
             T: Into<Option<&'a types::NameOrId>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("organization", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("organization", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("organization"))
             }
@@ -11901,7 +12147,9 @@ pub mod operations {
             T: Into<Option<&'a types::NameOrId>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("project", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("project", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("project"))
             }
@@ -11962,7 +12210,9 @@ pub mod operations {
             T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("limit", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("limit", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("limit"))
             }
@@ -11973,7 +12223,9 @@ pub mod operations {
             T: Into<Option<&'a types::NameOrId>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("organization", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("organization", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("organization"))
             }
@@ -11984,7 +12236,9 @@ pub mod operations {
             T: Into<Option<&'a str>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("page_token", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("page_token", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("page_token"))
             }
@@ -11995,7 +12249,9 @@ pub mod operations {
             T: Into<Option<&'a types::NameOrId>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("project", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("project", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("project"))
             }
@@ -12006,7 +12262,9 @@ pub mod operations {
             T: Into<Option<types::NameOrIdSortMode>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("sort_by", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("sort_by", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("sort_by"))
             }
@@ -12072,14 +12330,18 @@ pub mod operations {
             T: Into<Option<&'a types::NameOrId>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("organization", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("organization", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("organization"))
             }
         }
 
         pub fn project(self, value: &types::NameOrId) -> Self {
-            Self(self.0.query_param("project", value.to_string()))
+            let expected_pairs = ::progenitor_client::query_param_pairs("project", &value)
+                .expect("failed to serialize query param");
+            Self(apply_query_param_pairs(self.0, &expected_pairs))
         }
 
         pub fn body(self, value: &types::InstanceCreate) -> Self {
@@ -12151,7 +12413,9 @@ pub mod operations {
             T: Into<Option<&'a types::NameOrId>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("organization", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("organization", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("organization"))
             }
@@ -12162,7 +12426,9 @@ pub mod operations {
             T: Into<Option<&'a types::NameOrId>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("project", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("project", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("project"))
             }
@@ -12233,7 +12499,9 @@ pub mod operations {
             T: Into<Option<&'a types::NameOrId>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("organization", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("organization", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("organization"))
             }
@@ -12244,7 +12512,9 @@ pub mod operations {
             T: Into<Option<&'a types::NameOrId>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("project", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("project", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("project"))
             }
@@ -12311,7 +12581,9 @@ pub mod operations {
             T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("limit", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("limit", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("limit"))
             }
@@ -12322,7 +12594,9 @@ pub mod operations {
             T: Into<Option<&'a types::NameOrId>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("organization", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("organization", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("organization"))
             }
@@ -12333,7 +12607,9 @@ pub mod operations {
             T: Into<Option<&'a str>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("page_token", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("page_token", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("page_token"))
             }
@@ -12344,7 +12620,9 @@ pub mod operations {
             T: Into<Option<&'a types::NameOrId>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("project", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("project", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("project"))
             }
@@ -12355,7 +12633,9 @@ pub mod operations {
             T: Into<Option<types::NameOrIdSortMode>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("sort_by", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("sort_by", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("sort_by"))
             }
@@ -12430,7 +12710,9 @@ pub mod operations {
             T: Into<Option<&'a types::NameOrId>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("organization", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("organization", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("organization"))
             }
@@ -12441,7 +12723,9 @@ pub mod operations {
             T: Into<Option<&'a types::NameOrId>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("project", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("project", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("project"))
             }
@@ -12520,7 +12804,9 @@ pub mod operations {
             T: Into<Option<&'a types::NameOrId>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("organization", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("organization", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("organization"))
             }
@@ -12531,7 +12817,9 @@ pub mod operations {
             T: Into<Option<&'a types::NameOrId>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("project", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("project", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("project"))
             }
@@ -12607,7 +12895,9 @@ pub mod operations {
             T: Into<Option<&'a types::NameOrId>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("organization", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("organization", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("organization"))
             }
@@ -12618,7 +12908,9 @@ pub mod operations {
             T: Into<Option<&'a types::NameOrId>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("project", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("project", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("project"))
             }
@@ -12694,7 +12986,9 @@ pub mod operations {
             T: Into<Option<&'a types::NameOrId>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("organization", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("organization", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("organization"))
             }
@@ -12705,7 +12999,9 @@ pub mod operations {
             T: Into<Option<&'a types::NameOrId>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("project", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("project", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("project"))
             }
@@ -12780,7 +13076,9 @@ pub mod operations {
             T: Into<Option<u64>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("from_start", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("from_start", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("from_start"))
             }
@@ -12791,7 +13089,9 @@ pub mod operations {
             T: Into<Option<u64>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("max_bytes", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("max_bytes", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("max_bytes"))
             }
@@ -12802,7 +13102,9 @@ pub mod operations {
             T: Into<Option<u64>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("most_recent", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("most_recent", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("most_recent"))
             }
@@ -12813,7 +13115,9 @@ pub mod operations {
             T: Into<Option<&'a types::NameOrId>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("organization", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("organization", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("organization"))
             }
@@ -12824,7 +13128,9 @@ pub mod operations {
             T: Into<Option<&'a types::NameOrId>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("project", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("project", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("project"))
             }
@@ -12897,7 +13203,9 @@ pub mod operations {
             T: Into<Option<&'a types::NameOrId>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("organization", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("organization", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("organization"))
             }
@@ -12908,7 +13216,9 @@ pub mod operations {
             T: Into<Option<&'a types::NameOrId>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("project", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("project", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("project"))
             }
@@ -12959,7 +13269,9 @@ pub mod operations {
             T: Into<Option<&'a types::NameOrId>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("organization", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("organization", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("organization"))
             }
@@ -12970,7 +13282,9 @@ pub mod operations {
             T: Into<Option<&'a types::NameOrId>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("project", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("project", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("project"))
             }
@@ -13042,7 +13356,9 @@ pub mod operations {
             T: Into<Option<&'a types::NameOrId>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("organization", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("organization", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("organization"))
             }
@@ -13053,7 +13369,9 @@ pub mod operations {
             T: Into<Option<&'a types::NameOrId>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("project", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("project", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("project"))
             }
@@ -13119,7 +13437,9 @@ pub mod operations {
             T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("limit", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("limit", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("limit"))
             }
@@ -13130,7 +13450,9 @@ pub mod operations {
             T: Into<Option<&'a str>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("page_token", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("page_token", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("page_token"))
             }
@@ -13141,7 +13463,9 @@ pub mod operations {
             T: Into<Option<types::NameOrIdSortMode>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("sort_by", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("sort_by", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("sort_by"))
             }
@@ -13576,7 +13900,9 @@ pub mod operations {
             T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("limit", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("limit", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("limit"))
             }
@@ -13587,7 +13913,9 @@ pub mod operations {
             T: Into<Option<&'a types::NameOrId>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("organization", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("organization", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("organization"))
             }
@@ -13598,7 +13926,9 @@ pub mod operations {
             T: Into<Option<&'a str>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("page_token", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("page_token", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("page_token"))
             }
@@ -13609,7 +13939,9 @@ pub mod operations {
             T: Into<Option<types::NameOrIdSortMode>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("sort_by", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("sort_by", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("sort_by"))
             }
@@ -13671,7 +14003,9 @@ pub mod operations {
         }
 
         pub fn organization(self, value: &types::NameOrId) -> Self {
-            Self(self.0.query_param("organization", value.to_string()))
+            let expected_pairs = ::progenitor_client::query_param_pairs("organization", &value)
+                .expect("failed to serialize query param");
+            Self(apply_query_param_pairs(self.0, &expected_pairs))
         }
 
         pub fn body(self, value: &types::ProjectCreate) -> Self {
@@ -13743,7 +14077,9 @@ pub mod operations {
             T: Into<Option<&'a types::NameOrId>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("organization", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("organization", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("organization"))
             }
@@ -13814,7 +14150,9 @@ pub mod operations {
             T: Into<Option<&'a types::NameOrId>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("organization", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("organization", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("organization"))
             }
@@ -13889,7 +14227,9 @@ pub mod operations {
             T: Into<Option<&'a types::NameOrId>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("organization", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("organization", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("organization"))
             }
@@ -13956,7 +14296,9 @@ pub mod operations {
             T: Into<Option<&'a types::NameOrId>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("organization", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("organization", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("organization"))
             }
@@ -14028,7 +14370,9 @@ pub mod operations {
             T: Into<Option<&'a types::NameOrId>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("organization", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("organization", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("organization"))
             }
@@ -14098,7 +14442,9 @@ pub mod operations {
             T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("limit", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("limit", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("limit"))
             }
@@ -14109,7 +14455,9 @@ pub mod operations {
             T: Into<Option<&'a str>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("page_token", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("page_token", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("page_token"))
             }
@@ -14120,7 +14468,9 @@ pub mod operations {
             T: Into<Option<types::IdSortMode>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("sort_by", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("sort_by", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("sort_by"))
             }
@@ -14186,7 +14536,9 @@ pub mod operations {
             T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("limit", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("limit", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("limit"))
             }
@@ -14197,7 +14549,9 @@ pub mod operations {
             T: Into<Option<&'a str>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("page_token", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("page_token", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("page_token"))
             }
@@ -14208,7 +14562,9 @@ pub mod operations {
             T: Into<Option<types::IdSortMode>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("sort_by", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("sort_by", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("sort_by"))
             }
@@ -14497,7 +14853,9 @@ pub mod operations {
             T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("limit", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("limit", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("limit"))
             }
@@ -14508,7 +14866,9 @@ pub mod operations {
             T: Into<Option<&'a str>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("page_token", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("page_token", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("page_token"))
             }
@@ -14519,7 +14879,9 @@ pub mod operations {
             T: Into<Option<types::IdSortMode>>,
         {
             if let Some(value) = value.into() {
-                Self(self.0.query_param("sort_by", value.to_string()))
+                let expected_pairs = ::progenitor_client::query_param_pairs("sort_by", &value)
+                    .expect("failed to serialize query param");
+                Self(apply_query_param_pairs(self.0, &expected_pairs))
             } else {
                 Self(self.0.query_param_missing("sort_by"))
             }

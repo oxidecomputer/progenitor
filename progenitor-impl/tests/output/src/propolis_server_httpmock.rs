@@ -4,6 +4,18 @@ pub mod operations {
     #![doc = r" its inner type with a call to `into_inner()`. This can"]
     #![doc = r" be used to explicitly deviate from permitted values."]
     use crate::propolis_server_builder::*;
+    #[doc = r" Apply decoded query parameter pairs to the matcher."]
+    fn apply_query_param_pairs(
+        mut when: ::httpmock::When,
+        pairs: &[(String, String)],
+    ) -> ::httpmock::When {
+        for (key, value) in pairs {
+            when = when.query_param(key, value);
+        }
+
+        when
+    }
+
     pub struct InstanceGetWhen(::httpmock::When);
     impl InstanceGetWhen {
         pub fn new(inner: ::httpmock::When) -> Self {

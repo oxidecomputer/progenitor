@@ -527,6 +527,23 @@ pub fn encode_path(pc: &str) -> String {
 }
 
 #[doc(hidden)]
+/// Serialize a query parameter value into decoded `(key, value)` pairs using
+/// the same rules as [`QueryParam`].
+///
+/// Intended for generated clients and mocks; values are not percent-encoded.
+pub fn query_param_pairs<T>(name: &str, value: &T) -> Result<Vec<(String, String)>, String>
+where
+    T: Serialize,
+{
+    let query =
+        serde_urlencoded::to_string(QueryParam::new(name, value)).map_err(|err| err.to_string())?;
+    if query.is_empty() {
+        return Ok(Vec::new());
+    }
+    serde_urlencoded::from_str::<Vec<(String, String)>>(&query).map_err(|err| err.to_string())
+}
+
+#[doc(hidden)]
 pub trait RequestBuilderExt<E> {
     fn form_urlencoded<T: Serialize + ?Sized>(self, body: &T) -> Result<RequestBuilder, Error<E>>;
 }
