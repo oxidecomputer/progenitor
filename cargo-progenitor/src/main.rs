@@ -151,7 +151,7 @@ fn main() -> Result<()> {
                 "[package]\n\
                 name = \"{}\"\n\
                 version = \"{}\"\n\
-                edition = \"2021\"\n\
+                edition = \"2024\"\n\
                 license = \"{}\"\n",
                 name, version, &args.license_name,
             );
