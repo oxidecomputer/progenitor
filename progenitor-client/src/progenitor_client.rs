@@ -366,6 +366,38 @@ impl<E> Error<E> {
         }
     }
 
+    /// Returns `true` if this error is likely transient and the operation
+    /// could succeed if retried.
+    ///
+    /// The following are considered retryable:
+    ///
+    /// * Communication errors (connection reset, timeout, etc.)
+    /// * 429 Too Many Requests
+    /// * 502 Bad Gateway
+    /// * 503 Service Unavailable
+    /// * 504 Gateway Timeout
+    ///
+    /// These status codes are checked for all error variants that carry an
+    /// HTTP status, since infrastructure components like load balancers
+    /// may return transient errors with bodies that don't conform to the
+    /// API schema.
+    pub fn is_retryable(&self) -> bool {
+        match self {
+            Error::CommunicationError(_) => true,
+            Error::ErrorResponse(rv) => is_retryable_status(rv.status()),
+            Error::UnexpectedResponse(r) => is_retryable_status(r.status()),
+            Error::InvalidUpgrade(e) | Error::ResponseBodyError(e) => {
+                // We expect this to be a 2xx status, but that assumption is a
+                // bit fragile. is_retryable_status returns false for 2xx status
+                // codes anyway, so check for that.
+                e.status().is_some_and(is_retryable_status)
+            }
+            Error::InvalidRequest(_) => false,
+            Error::InvalidResponsePayload(_, _) => false,
+            Error::Custom(_) => false,
+        }
+    }
+
     /// Converts this error into one without a typed body.
     ///
     /// This is useful for unified error handling with APIs that distinguish
@@ -504,6 +536,18 @@ where
             _ => None,
         }
     }
+}
+
+/// Returns `true` if the given HTTP status code is considered transient and
+/// worth retrying.
+fn is_retryable_status(status: reqwest::StatusCode) -> bool {
+    matches!(
+        status,
+        reqwest::StatusCode::TOO_MANY_REQUESTS
+            | reqwest::StatusCode::BAD_GATEWAY
+            | reqwest::StatusCode::SERVICE_UNAVAILABLE
+            | reqwest::StatusCode::GATEWAY_TIMEOUT
+    )
 }
 
 // See https://url.spec.whatwg.org/#url-path-segment-string
