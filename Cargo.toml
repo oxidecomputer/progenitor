@@ -58,7 +58,7 @@ serde_yaml = "0.9"
 syn = { version = "2.0.114", features = ["parsing"] }
 thiserror = "2.0.18"
 tokio = { version = "1.49.0", features = ["rt", "net"] }
-typify = { version = "0.6.0" }
+typify = { version = "0.6.1" }
 url = "2.5.8"
 unicode-ident = "1.0.22"
 uuid = { version = "1.20.0", features = ["serde", "v4"] }
