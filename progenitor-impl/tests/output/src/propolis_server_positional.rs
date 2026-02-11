@@ -252,7 +252,8 @@ pub mod types {
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct DiskRequest {
         pub device: ::std::string::String,
-        pub gen: u64,
+        #[serde(rename = "gen")]
+        pub gen_: u64,
         pub name: ::std::string::String,
         pub read_only: bool,
         pub slot: Slot,
@@ -779,7 +780,8 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct InstanceStateMonitorRequest {
-        pub gen: u64,
+        #[serde(rename = "gen")]
+        pub gen_: u64,
     }
 
     ///`InstanceStateMonitorResponse`
@@ -808,7 +810,8 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct InstanceStateMonitorResponse {
-        pub gen: u64,
+        #[serde(rename = "gen")]
+        pub gen_: u64,
         pub state: InstanceState,
     }
 
@@ -1333,7 +1336,8 @@ pub mod types {
         #[serde(rename = "region")]
         Region {
             block_size: u64,
-            gen: u64,
+            #[serde(rename = "gen")]
+            gen_: u64,
             opts: CrucibleOpts,
         },
         #[serde(rename = "file")]
