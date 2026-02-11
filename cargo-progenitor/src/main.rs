@@ -6,7 +6,7 @@ use std::{
     path::{Path, PathBuf},
 };
 
-use anyhow::{bail, Result};
+use anyhow::{Result, bail};
 use clap::{Parser, ValueEnum};
 use openapiv3::OpenAPI;
 use progenitor::{GenerationSettings, Generator, InterfaceStyle, TagStyle};
@@ -243,8 +243,14 @@ pub fn dependencies(builder: Generator, include_client: bool) -> Vec<String> {
     let mut deps = vec![
         format!("bytes = \"{}\"", DEPENDENCIES.bytes),
         format!("futures-core = \"{}\"", DEPENDENCIES.futures),
-        format!("reqwest = {{ version = \"{}\", default-features=false, features = [\"json\", \"query\", \"stream\"] }}", DEPENDENCIES.reqwest),
-        format!("serde = {{ version = \"{}\", features = [\"derive\"] }}", DEPENDENCIES.serde),
+        format!(
+            "reqwest = {{ version = \"{}\", default-features=false, features = [\"json\", \"query\", \"stream\"] }}",
+            DEPENDENCIES.reqwest
+        ),
+        format!(
+            "serde = {{ version = \"{}\", features = [\"derive\"] }}",
+            DEPENDENCIES.serde
+        ),
         format!("serde_urlencoded = \"{}\"", DEPENDENCIES.serde_urlencoded),
     ];
 

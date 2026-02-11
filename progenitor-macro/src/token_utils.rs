@@ -4,10 +4,10 @@ use std::collections::HashSet;
 
 use quote::ToTokens;
 use syn::{
+    Ident, Path, Token, TraitBoundModifier,
     parse::Parse,
     punctuated::Punctuated,
     token::{Colon, Plus},
-    Ident, Path, Token, TraitBoundModifier,
 };
 
 use progenitor_impl::TypeImpl;
@@ -113,7 +113,7 @@ impl ToTokens for ImplTrait {
 mod tests {
     use super::TypeAndImpls;
 
-    use quote::{quote, ToTokens};
+    use quote::{ToTokens, quote};
 
     #[test]
     fn test_parse_type_and_impls() {

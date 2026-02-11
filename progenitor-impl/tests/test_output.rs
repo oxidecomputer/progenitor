@@ -6,7 +6,7 @@ use std::{
 };
 
 use progenitor_impl::{
-    space_out_items, GenerationSettings, Generator, InterfaceStyle, TagStyle, TypeImpl, TypePatch,
+    GenerationSettings, Generator, InterfaceStyle, TagStyle, TypeImpl, TypePatch, space_out_items,
 };
 
 use openapiv3::OpenAPI;
