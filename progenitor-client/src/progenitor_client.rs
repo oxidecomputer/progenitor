@@ -366,8 +366,8 @@ impl<E> Error<E> {
         }
     }
 
-    /// Returns `true` if this error is likely transient and the operation
-    /// could succeed if retried.
+    /// Returns `true` if this error indicates that it is transient, and that
+    /// the operation could succeed if retried.
     ///
     /// The following are considered retryable:
     ///
@@ -376,20 +376,20 @@ impl<E> Error<E> {
     /// * 502 Bad Gateway
     /// * 503 Service Unavailable
     /// * 504 Gateway Timeout
-    ///
-    /// These status codes are checked for all error variants that carry an
-    /// HTTP status, since infrastructure components like load balancers
-    /// may return transient errors with bodies that don't conform to the
-    /// API schema.
     pub fn is_retryable(&self) -> bool {
         match self {
             Error::CommunicationError(_) => true,
             Error::ErrorResponse(rv) => is_retryable_status(rv.status()),
             Error::UnexpectedResponse(r) => is_retryable_status(r.status()),
             Error::InvalidUpgrade(e) | Error::ResponseBodyError(e) => {
-                // We expect this to be a 2xx status, but that assumption is a
-                // bit fragile. is_retryable_status returns false for 2xx status
-                // codes anyway, so check for that.
+                // We expect InvalidUpgrade and ResponseBodyError to be 2xx
+                // statuses.
+                //
+                // * If they are 2xx statuses, is_retryable_status returns
+                //   false so there's no harm in checking.
+                // * In the unlikely case that they are not 2xx statuses
+                //   (e.g., the error type was created outside of Progenitor),
+                //   it is appropriate to check for retryability.
                 e.status().is_some_and(is_retryable_status)
             }
             Error::InvalidRequest(_) => false,
