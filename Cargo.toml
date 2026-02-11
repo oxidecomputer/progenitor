@@ -12,8 +12,6 @@ members = [
 resolver = "3"
 
 [workspace.package]
-# TODO: migrate to 2024 edition:
-# https://github.com/oxidecomputer/progenitor/issues/1302
 edition = "2024"
 rust-version = "1.88"
 license = "MPL-2.0"
