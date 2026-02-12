@@ -13837,7 +13837,7 @@ impl Client {
     }
 
     ///Sends a `POST` request to `/logout`
-    pub async fn logout<'a>(&'a self) -> Result<ResponseValue<()>, Error<types::Error>> {
+    pub async fn logout(&self) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!("{}/logout", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -18652,8 +18652,8 @@ impl Client {
     ///Fetch the current silo's IAM policy
     ///
     ///Sends a `GET` request to `/policy`
-    pub async fn policy_view<'a>(
-        &'a self,
+    pub async fn policy_view(
+        &self,
     ) -> Result<ResponseValue<types::SiloRolePolicy>, Error<types::Error>> {
         let url = format!("{}/policy", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
@@ -18875,9 +18875,7 @@ impl Client {
     ///Fetch the user associated with the current session
     ///
     ///Sends a `GET` request to `/session/me`
-    pub async fn session_me<'a>(
-        &'a self,
-    ) -> Result<ResponseValue<types::User>, Error<types::Error>> {
+    pub async fn session_me(&self) -> Result<ResponseValue<types::User>, Error<types::Error>> {
         let url = format!("{}/session/me", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -20851,8 +20849,8 @@ impl Client {
     ///Fetch the IP pool used for Oxide services
     ///
     ///Sends a `GET` request to `/system/ip-pools-service`
-    pub async fn ip_pool_service_view<'a>(
-        &'a self,
+    pub async fn ip_pool_service_view(
+        &self,
     ) -> Result<ResponseValue<types::IpPool>, Error<types::Error>> {
         let url = format!("{}/system/ip-pools-service", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
@@ -21144,8 +21142,8 @@ impl Client {
     ///Fetch the top-level IAM policy
     ///
     ///Sends a `GET` request to `/system/policy`
-    pub async fn system_policy_view<'a>(
-        &'a self,
+    pub async fn system_policy_view(
+        &self,
     ) -> Result<ResponseValue<types::FleetRolePolicy>, Error<types::Error>> {
         let url = format!("{}/system/policy", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
@@ -24714,9 +24712,7 @@ impl Client {
     ///Refresh update data
     ///
     ///Sends a `POST` request to `/v1/system/update/refresh`
-    pub async fn system_update_refresh<'a>(
-        &'a self,
-    ) -> Result<ResponseValue<()>, Error<types::Error>> {
+    pub async fn system_update_refresh(&self) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!("{}/v1/system/update/refresh", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -24800,9 +24796,7 @@ impl Client {
     ///If there is no update in progress, do nothing.
     ///
     ///Sends a `POST` request to `/v1/system/update/stop`
-    pub async fn system_update_stop<'a>(
-        &'a self,
-    ) -> Result<ResponseValue<()>, Error<types::Error>> {
+    pub async fn system_update_stop(&self) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!("{}/v1/system/update/stop", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -25030,8 +25024,8 @@ impl Client {
     ///View system version and update status
     ///
     ///Sends a `GET` request to `/v1/system/update/version`
-    pub async fn system_version<'a>(
-        &'a self,
+    pub async fn system_version(
+        &self,
     ) -> Result<ResponseValue<types::SystemVersion>, Error<types::Error>> {
         let url = format!("{}/v1/system/update/version", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
