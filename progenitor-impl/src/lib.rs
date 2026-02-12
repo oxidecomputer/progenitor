@@ -139,24 +139,46 @@ impl GenerationSettings {
     }
 
     /// Hook invoked before issuing the HTTP request.
+    /// The signature for the pre hook function should be either
+    /// * `pre_hook(&request::Client) -> ()` without an inner type, or
+    /// * `pre_hook(&InnerType, &request::Client) -> ()`
+    ///   if an inner type was specified using [`with_inner_type()`](Self::with_inner_type).
     pub fn with_pre_hook(&mut self, pre_hook: TokenStream) -> &mut Self {
         self.pre_hook = Some(pre_hook);
         self
     }
 
     /// Hook invoked before issuing the HTTP request.
+    /// The signature for the pre hook function should be either
+    /// * `async pre_hook(&mut request::Client) -> Result<_,E>` without an inner type, or
+    /// * `async pre_hook(&InnerType, &mut request::Client) -> Result<_,E>`
+    ///   if an inner type was specified using [`with_inner_type()`](Self::with_inner_type).
+    ///
+    /// Returning an error result will abort the call with
+    /// an `Error::PreHookError` (type declared in generated code).
     pub fn with_pre_hook_async(&mut self, pre_hook: TokenStream) -> &mut Self {
         self.pre_hook_async = Some(pre_hook);
         self
     }
 
     /// Hook invoked prior to receiving the HTTP response.
+    /// The signature for the post hook function should be either
+    /// * `post_hook(&Result<reqwest::Response,reqwest::Error>) -> ()` without an inner type, or
+    /// * `post_hook(&InnerType, &Result<reqwest::Response,reqwest::Error>) -> ()`
+    ///   if an inner type was specified using [`with_inner_type()`](Self::with_inner_type).
     pub fn with_post_hook(&mut self, post_hook: TokenStream) -> &mut Self {
         self.post_hook = Some(post_hook);
         self
     }
 
     /// Hook invoked prior to receiving the HTTP response.
+    /// The signature for the post hook function should be either
+    /// * `async post_hook(&Result<reqwest::Response,reqwest::Error>) -> ()` without an innter type, or
+    /// * `async post_hook(&InnerType, &Result<reqwest::Response,reqwest::Error>) -> Result<_,E>`
+    ///   if an inner type was specified using [`with_inner_type()`](Self::with_inner_type).
+    ///
+    /// Returning an error result will abort the call with
+    /// an `Error::PostHookError` (type declared in generated code).
     pub fn with_post_hook_async(&mut self, post_hook: TokenStream) -> &mut Self {
         self.post_hook_async = Some(post_hook);
         self
