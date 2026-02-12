@@ -277,6 +277,47 @@ pub mod builder {
         encode_path, ByteStream, ClientHooks, ClientInfo, Error, OperationInfo, RequestBuilderExt,
         ResponseValue,
     };
+    pub mod built {
+        use super::super::types;
+        #[allow(unused_imports)]
+        use super::super::{
+            encode_path, ByteStream, ClientHooks, ClientInfo, Error, OperationInfo,
+            RequestBuilderExt, ResponseValue,
+        };
+        pub struct DefaultParams<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> DefaultParams<'a> {
+            pub async fn send(self) -> Result<ResponseValue<ByteStream>, Error<ByteStream>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let info = OperationInfo {
+                    operation_id: "default_params",
+                };
+                client.pre(&mut request, &info).await?;
+                let result = client.exec(request, &info).await;
+                client.post(&result, &info).await?;
+                let response = result?;
+                match response.status().as_u16() {
+                    200..=299 => Ok(ResponseValue::stream(response)),
+                    _ => Err(Error::ErrorResponse(ResponseValue::stream(response))),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+    }
+
     ///Builder for [`Client::default_params`]
     ///
     ///[`Client::default_params`]: super::Client::default_params
@@ -318,34 +359,27 @@ pub mod builder {
 
         ///Sends a `POST` request to `/`
         pub async fn send(self) -> Result<ResponseValue<ByteStream>, Error<ByteStream>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::DefaultParams<'a>, Error<ByteStream>> {
             let Self { client, body } = self;
             let body = body
                 .and_then(|v| types::BodyWithDefaults::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!("{}/", client.baseurl,);
-            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-            header_map.append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .post(url)
-                .json(&body)
-                .headers(header_map)
-                .build()?;
-            let info = OperationInfo {
-                operation_id: "default_params",
+            let request = {
+                let url = format!("{}/", client.baseurl,);
+                let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+                header_map.append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
+                );
+                client.client.post(url).json(&body).headers(header_map)
             };
-            client.pre(&mut request, &info).await?;
-            let result = client.exec(request, &info).await;
-            client.post(&result, &info).await?;
-            let response = result?;
-            match response.status().as_u16() {
-                200..=299 => Ok(ResponseValue::stream(response)),
-                _ => Err(Error::ErrorResponse(ResponseValue::stream(response))),
-            }
+            Ok(built::DefaultParams {
+                client: client,
+                request,
+            })
         }
     }
 }

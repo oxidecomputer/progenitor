@@ -121,28 +121,30 @@ impl Client {
         result: bool,
         url: bool,
     ) -> Result<ResponseValue<()>, Error<()>> {
-        let _url = format!("{}/key/{}", self.baseurl, encode_path(&query.to_string()),);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut _request = self
-            .client
-            .get(_url)
-            .query(&progenitor_client::QueryParam::new("client", &client))
-            .query(&progenitor_client::QueryParam::new("request", &request))
-            .query(&progenitor_client::QueryParam::new("response", &response))
-            .query(&progenitor_client::QueryParam::new("result", &result))
-            .query(&progenitor_client::QueryParam::new("url", &url))
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let _url = format!("{}/key/{}", self.baseurl, encode_path(&query.to_string()),);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(_url)
+                .query(&progenitor_client::QueryParam::new("client", &client))
+                .query(&progenitor_client::QueryParam::new("request", &request))
+                .query(&progenitor_client::QueryParam::new("response", &response))
+                .query(&progenitor_client::QueryParam::new("result", &result))
+                .query(&progenitor_client::QueryParam::new("url", &url))
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "key_get",
         };
-        self.pre(&mut _request, &info).await?;
-        let _result = self.exec(_request, &info).await;
+        self.pre(&mut request, &info).await?;
+        let _result = self.exec(request, &info).await;
         self.post(&_result, &info).await?;
         let _response = _result?;
         match _response.status().as_u16() {

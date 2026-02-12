@@ -115,23 +115,25 @@ impl Client {
         key: Option<bool>,
         unique_key: Option<&'a str>,
     ) -> Result<ResponseValue<()>, Error<()>> {
-        let url = format!("{}/key", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .query(&progenitor_client::QueryParam::new("key", &key))
-            .query(&progenitor_client::QueryParam::new(
-                "uniqueKey",
-                &unique_key,
-            ))
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!("{}/key", self.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .query(&progenitor_client::QueryParam::new("key", &key))
+                .query(&progenitor_client::QueryParam::new(
+                    "uniqueKey",
+                    &unique_key,
+                ))
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "key_get",
         };

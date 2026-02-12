@@ -130,6 +130,47 @@ pub mod builder {
         encode_path, ByteStream, ClientHooks, ClientInfo, Error, OperationInfo, RequestBuilderExt,
         ResponseValue,
     };
+    pub mod built {
+        use super::super::types;
+        #[allow(unused_imports)]
+        use super::super::{
+            encode_path, ByteStream, ClientHooks, ClientInfo, Error, OperationInfo,
+            RequestBuilderExt, ResponseValue,
+        };
+        pub struct KeyGet<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> KeyGet<'a> {
+            pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let info = OperationInfo {
+                    operation_id: "key_get",
+                };
+                client.pre(&mut request, &info).await?;
+                let result = client.exec(request, &info).await;
+                client.post(&result, &info).await?;
+                let response = result?;
+                match response.status().as_u16() {
+                    200u16 => Ok(ResponseValue::empty(response)),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+    }
+
     ///Builder for [`Client::key_get`]
     ///
     ///[`Client::key_get`]: super::Client::key_get
@@ -172,6 +213,10 @@ pub mod builder {
 
         ///Sends a `GET` request to `/key`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::KeyGet<'a>, Error<()>> {
             let Self {
                 client,
                 key,
@@ -179,34 +224,27 @@ pub mod builder {
             } = self;
             let key = key.map_err(Error::InvalidRequest)?;
             let unique_key = unique_key.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/key", client.baseurl,);
-            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-            header_map.append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .query(&progenitor_client::QueryParam::new("key", &key))
-                .query(&progenitor_client::QueryParam::new(
-                    "uniqueKey",
-                    &unique_key,
-                ))
-                .headers(header_map)
-                .build()?;
-            let info = OperationInfo {
-                operation_id: "key_get",
+            let request = {
+                let url = format!("{}/key", client.baseurl,);
+                let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+                header_map.append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
+                );
+                client
+                    .client
+                    .get(url)
+                    .query(&progenitor_client::QueryParam::new("key", &key))
+                    .query(&progenitor_client::QueryParam::new(
+                        "uniqueKey",
+                        &unique_key,
+                    ))
+                    .headers(header_map)
             };
-            client.pre(&mut request, &info).await?;
-            let result = client.exec(request, &info).await;
-            client.post(&result, &info).await?;
-            let response = result?;
-            match response.status().as_u16() {
-                200u16 => Ok(ResponseValue::empty(response)),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            Ok(built::KeyGet {
+                client: client,
+                request,
+            })
         }
     }
 }
