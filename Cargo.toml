@@ -35,7 +35,7 @@ dropshot = { version = "0.16.7", default-features = false }
 env_logger = "0.11.8"
 expectorate = { version = "1.2.0", features = ["predicates"] }
 futures = "0.3.31"
-futures-core = "0.3.31"
+futures-core = "0.3.32"
 heck = "0.5.0"
 http = "1.4.0"
 hyper = "1.8.1"
