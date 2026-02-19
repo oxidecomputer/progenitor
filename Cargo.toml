@@ -3,6 +3,7 @@ members = [
 	"cargo-progenitor",
 	"example-build",
 	"example-macro",
+	"example-out-dir",
 	"example-wasm",
 	"progenitor",
 	"progenitor-client",

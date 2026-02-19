@@ -671,6 +671,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "example-out-dir"
+version = "0.0.1"
+dependencies = [
+ "chrono",
+ "progenitor",
+ "reqwest",
+ "serde",
+ "uuid",
+]
+
+[[package]]
 name = "example-wasm"
 version = "0.1.0"
 dependencies = [
