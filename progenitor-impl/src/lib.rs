@@ -729,7 +729,7 @@ pub fn validate_openapi(spec: &OpenAPI) -> Result<()> {
 mod tests {
     use serde_json::json;
 
-    use crate::{validate_openapi_spec_version, Error};
+    use crate::{Error, validate_openapi_spec_version};
 
     #[test]
     fn test_bad_value() {

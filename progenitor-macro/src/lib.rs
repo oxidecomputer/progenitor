@@ -15,7 +15,7 @@ use proc_macro::TokenStream;
 use progenitor_impl::{
     CrateVers, GenerationSettings, Generator, InterfaceStyle, TagStyle, TypePatch, UnknownPolicy,
 };
-use quote::{quote, ToTokens};
+use quote::{ToTokens, quote};
 use schemars::schema::SchemaObject;
 use serde::Deserialize;
 use serde_tokenstream::{OrderedMap, ParseWrapper};

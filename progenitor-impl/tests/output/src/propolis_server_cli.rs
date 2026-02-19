@@ -318,7 +318,7 @@ impl<T: CliConfig> Cli<T> {
     ) -> anyhow::Result<()> {
         let mut request = self.client.instance_state_monitor();
         if let Some(value) = matches.get_one::<u64>("gen") {
-            request = request.body_map(|body| body.gen(value.clone()))
+            request = request.body_map(|body| body.gen_(value.clone()))
         }
 
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
