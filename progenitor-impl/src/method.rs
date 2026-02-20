@@ -145,9 +145,11 @@ impl FromStr for BodyContentType {
 
     fn from_str(s: &str) -> Result<Self> {
         let offset = s.find(';').unwrap_or(s.len());
-        match &s[..offset] {
+        let mediatype = &s[..offset];
+        match mediatype {
             "application/octet-stream" => Ok(Self::OctetStream),
             "application/json" => Ok(Self::Json),
+            t if t.ends_with("+json") => Ok(Self::Json),
             "application/x-www-form-urlencoded" => Ok(Self::FormUrlencoded),
             "text/plain" | "text/x-markdown" => Ok(Self::Text(String::from(&s[..offset]))),
             _ => Err(Error::UnexpectedFormat(format!(
@@ -446,17 +448,20 @@ impl Generator {
                     let (status_code, response) = v?;
 
                     // We categorize responses as "typed" based on the
-                    // "application/json" content type, "upgrade" if it's a
-                    // websocket channel without a meaningful content-type,
-                    // "raw" if there's any other response content type (we don't
-                    // investigate further), or "none" if there is no content.
+                    // "application/json" content type or the "+json" structured
+                    // syntax suffix, "upgrade" if it's a websocket channel
+                    // without a meaningful content-type, "raw" if there's any
+                    // other response content type (we don't investigate further),
+                    // or "none" if there is no content.
                     // TODO if there are multiple response content types we could
                     // treat those like different response types and create an
                     // enum; the generated client method would check for the
                     // content type of the response just as it currently examines
                     // the status code.
                     let typ = if let Some(mt) = response.content.iter().find_map(|(x, v)| {
-                        (x == "application/json" || x.starts_with("application/json;")).then_some(v)
+                        let ct = x.split(';').next().unwrap_or(x);
+
+                        (ct == "application/json" || ct.ends_with("+json")).then_some(v)
                     }) {
                         assert!(mt.encoding.is_empty());
 
