@@ -1,0 +1,168 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Multipart Related Test API",
+    "description": "Test API for multipart/related content type support",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/upload": {
+      "post": {
+        "operationId": "upload_file",
+        "summary": "Upload a file with metadata using multipart/related",
+        "description": "Uploads a file along with JSON metadata in a multipart/related request",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/related": {
+              "schema": {
+                "type": "object",
+                "required": ["metadata", "file"],
+                "properties": {
+                  "metadata": {
+                    "$ref": "#/components/schemas/FileMetadata"
+                  },
+                  "file": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "The file content to upload"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "File uploaded successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UploadResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        }
+      }
+    },
+    "/upload-simple": {
+      "post": {
+        "operationId": "upload_simple",
+        "summary": "Simple upload using multipart/related",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/related": {
+              "schema": {
+                "type": "string",
+                "format": "binary"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Upload successful"
+          }
+        }
+      }
+    },
+    "/upload-multiple": {
+      "post": {
+        "operationId": "upload_multiple_files",
+        "summary": "Upload multiple files with metadata using multipart/related",
+        "description": "Uploads multiple files along with JSON metadata in a single multipart/related request",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/related": {
+              "schema": {
+                "type": "object",
+                "required": ["metadata", "document", "thumbnail"],
+                "properties": {
+                  "metadata": {
+                    "$ref": "#/components/schemas/FileMetadata"
+                  },
+                  "document": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "The main document file"
+                  },
+                  "thumbnail": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "A thumbnail image"
+                  },
+                  "attachment": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "Optional attachment"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Files uploaded successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UploadResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "FileMetadata": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of the file"
+          },
+          "mimeType": {
+            "type": "string",
+            "description": "The MIME type of the file"
+          },
+          "description": {
+            "type": "string",
+            "description": "Optional description of the file"
+          }
+        },
+        "required": ["name", "mimeType"]
+      },
+      "UploadResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The ID of the uploaded file"
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the uploaded file"
+          },
+          "size": {
+            "type": "integer",
+            "description": "The size of the uploaded file in bytes"
+          }
+        },
+        "required": ["id", "name", "size"]
+      }
+    }
+  }
+}
