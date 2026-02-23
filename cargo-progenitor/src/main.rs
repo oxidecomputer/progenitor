@@ -245,7 +245,7 @@ pub fn dependencies(builder: Generator, include_client: bool) -> Vec<String> {
         format!("futures-core = \"{}\"", DEPENDENCIES.futures),
         format!(
             "reqwest = {{ version = \"{}\", default-features=false, features = [\"json\", \"query\", \"stream\"] }}",
-            DEPENDENCIES.reqwest
+            DEPENDENCIES.reqwest,
         ),
         format!(
             "serde = {{ version = \"{}\", features = [\"derive\"] }}",
