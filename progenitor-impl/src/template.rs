@@ -174,7 +174,7 @@ impl ToString for PathTemplate {
 mod tests {
     use std::collections::HashMap;
 
-    use super::{parse, Component, PathTemplate};
+    use super::{Component, PathTemplate, parse};
 
     #[test]
     fn basic() {

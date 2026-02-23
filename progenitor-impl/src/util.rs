@@ -104,7 +104,7 @@ pub(crate) fn sanitize(input: &str, case: Case) -> String {
     };
 
     // Make sure the string is a valid Rust identifier.
-    if syn::parse_str::<syn::Ident>(&out).is_ok() {
+    if typify::accept_as_ident(&out) {
         out
     } else {
         format!("{}_", out)

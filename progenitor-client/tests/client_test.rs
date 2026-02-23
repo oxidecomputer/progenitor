@@ -5,7 +5,7 @@ use std::{
     error::Error,
 };
 
-use progenitor_client::{encode_path, QueryParam};
+use progenitor_client::{QueryParam, encode_path};
 use serde::Serialize;
 
 #[test]

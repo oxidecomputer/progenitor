@@ -7,7 +7,7 @@ mod positional {
         progenitor::generate_api!("../sample_openapi/nexus.json");
     }
 
-    use nexus_client::{types, Client};
+    use nexus_client::{Client, types};
 
     fn _ignore() {
         let _ = async {

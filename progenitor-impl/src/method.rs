@@ -8,13 +8,13 @@ use std::{
 
 use openapiv3::{Components, Parameter, ReferenceOr, Response, StatusCode};
 use proc_macro2::TokenStream;
-use quote::{format_ident, quote, ToTokens};
+use quote::{ToTokens, format_ident, quote};
 use typify::{TypeId, TypeSpace};
 
 use crate::{
-    template::PathTemplate,
-    util::{items, parameter_map, sanitize, unique_ident_from, Case},
     Error, Generator, Result, TagStyle,
+    template::PathTemplate,
+    util::{Case, items, parameter_map, sanitize, unique_ident_from},
 };
 use crate::{to_schema::ToSchema, util::ReferenceOrExt};
 

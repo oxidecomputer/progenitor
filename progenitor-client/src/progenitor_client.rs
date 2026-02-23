@@ -9,7 +9,7 @@ use std::ops::{Deref, DerefMut};
 use bytes::Bytes;
 use futures_core::Stream;
 use reqwest::RequestBuilder;
-use serde::{de::DeserializeOwned, ser::SerializeStruct, Serialize};
+use serde::{Serialize, de::DeserializeOwned, ser::SerializeStruct};
 
 #[cfg(not(target_arch = "wasm32"))]
 type InnerByteStream = std::pin::Pin<Box<dyn Stream<Item = reqwest::Result<Bytes>> + Send + Sync>>;
