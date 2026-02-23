@@ -1,0 +1,12 @@
+[package]
+name = "example-out-dir"
+version = "0.0.1"
+edition.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+chrono = { version = "0.4", features = ["serde"] }
+progenitor = { path = "../progenitor" }
+reqwest = { version = "0.13.1", features = ["json", "query", "stream"] }
+serde = { version = "1.0", features = ["derive"] }
+uuid = { version = "1.20", features = ["serde", "v4"] }
