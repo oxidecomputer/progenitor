@@ -264,7 +264,8 @@ pub mod types {
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct DiskRequest {
         pub device: ::std::string::String,
-        pub gen: u64,
+        #[serde(rename = "gen")]
+        pub gen_: u64,
         pub name: ::std::string::String,
         pub read_only: bool,
         pub slot: Slot,
@@ -857,7 +858,8 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct InstanceStateMonitorRequest {
-        pub gen: u64,
+        #[serde(rename = "gen")]
+        pub gen_: u64,
     }
 
     impl InstanceStateMonitorRequest {
@@ -892,7 +894,8 @@ pub mod types {
     /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct InstanceStateMonitorResponse {
-        pub gen: u64,
+        #[serde(rename = "gen")]
+        pub gen_: u64,
         pub state: InstanceState,
     }
 
@@ -1435,7 +1438,8 @@ pub mod types {
         #[serde(rename = "region")]
         Region {
             block_size: u64,
-            gen: u64,
+            #[serde(rename = "gen")]
+            gen_: u64,
             opts: CrucibleOpts,
         },
         #[serde(rename = "file")]
@@ -1713,7 +1717,7 @@ pub mod types {
         #[derive(Clone, Debug)]
         pub struct DiskRequest {
             device: ::std::result::Result<::std::string::String, ::std::string::String>,
-            gen: ::std::result::Result<u64, ::std::string::String>,
+            gen_: ::std::result::Result<u64, ::std::string::String>,
             name: ::std::result::Result<::std::string::String, ::std::string::String>,
             read_only: ::std::result::Result<bool, ::std::string::String>,
             slot: ::std::result::Result<super::Slot, ::std::string::String>,
@@ -1725,7 +1729,7 @@ pub mod types {
             fn default() -> Self {
                 Self {
                     device: Err("no value supplied for device".to_string()),
-                    gen: Err("no value supplied for gen".to_string()),
+                    gen_: Err("no value supplied for gen_".to_string()),
                     name: Err("no value supplied for name".to_string()),
                     read_only: Err("no value supplied for read_only".to_string()),
                     slot: Err("no value supplied for slot".to_string()),
@@ -1747,14 +1751,14 @@ pub mod types {
                     .map_err(|e| format!("error converting supplied value for device: {e}"));
                 self
             }
-            pub fn gen<T>(mut self, value: T) -> Self
+            pub fn gen_<T>(mut self, value: T) -> Self
             where
                 T: ::std::convert::TryInto<u64>,
                 T::Error: ::std::fmt::Display,
             {
-                self.gen = value
+                self.gen_ = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for gen: {e}"));
+                    .map_err(|e| format!("error converting supplied value for gen_: {e}"));
                 self
             }
             pub fn name<T>(mut self, value: T) -> Self
@@ -1806,7 +1810,7 @@ pub mod types {
             ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     device: value.device?,
-                    gen: value.gen?,
+                    gen_: value.gen_?,
                     name: value.name?,
                     read_only: value.read_only?,
                     slot: value.slot?,
@@ -1819,7 +1823,7 @@ pub mod types {
             fn from(value: super::DiskRequest) -> Self {
                 Self {
                     device: Ok(value.device),
-                    gen: Ok(value.gen),
+                    gen_: Ok(value.gen_),
                     name: Ok(value.name),
                     read_only: Ok(value.read_only),
                     slot: Ok(value.slot),
@@ -2554,26 +2558,26 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct InstanceStateMonitorRequest {
-            gen: ::std::result::Result<u64, ::std::string::String>,
+            gen_: ::std::result::Result<u64, ::std::string::String>,
         }
 
         impl ::std::default::Default for InstanceStateMonitorRequest {
             fn default() -> Self {
                 Self {
-                    gen: Err("no value supplied for gen".to_string()),
+                    gen_: Err("no value supplied for gen_".to_string()),
                 }
             }
         }
 
         impl InstanceStateMonitorRequest {
-            pub fn gen<T>(mut self, value: T) -> Self
+            pub fn gen_<T>(mut self, value: T) -> Self
             where
                 T: ::std::convert::TryInto<u64>,
                 T::Error: ::std::fmt::Display,
             {
-                self.gen = value
+                self.gen_ = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for gen: {e}"));
+                    .map_err(|e| format!("error converting supplied value for gen_: {e}"));
                 self
             }
         }
@@ -2583,40 +2587,42 @@ pub mod types {
             fn try_from(
                 value: InstanceStateMonitorRequest,
             ) -> ::std::result::Result<Self, super::error::ConversionError> {
-                Ok(Self { gen: value.gen? })
+                Ok(Self { gen_: value.gen_? })
             }
         }
 
         impl ::std::convert::From<super::InstanceStateMonitorRequest> for InstanceStateMonitorRequest {
             fn from(value: super::InstanceStateMonitorRequest) -> Self {
-                Self { gen: Ok(value.gen) }
+                Self {
+                    gen_: Ok(value.gen_),
+                }
             }
         }
 
         #[derive(Clone, Debug)]
         pub struct InstanceStateMonitorResponse {
-            gen: ::std::result::Result<u64, ::std::string::String>,
+            gen_: ::std::result::Result<u64, ::std::string::String>,
             state: ::std::result::Result<super::InstanceState, ::std::string::String>,
         }
 
         impl ::std::default::Default for InstanceStateMonitorResponse {
             fn default() -> Self {
                 Self {
-                    gen: Err("no value supplied for gen".to_string()),
+                    gen_: Err("no value supplied for gen_".to_string()),
                     state: Err("no value supplied for state".to_string()),
                 }
             }
         }
 
         impl InstanceStateMonitorResponse {
-            pub fn gen<T>(mut self, value: T) -> Self
+            pub fn gen_<T>(mut self, value: T) -> Self
             where
                 T: ::std::convert::TryInto<u64>,
                 T::Error: ::std::fmt::Display,
             {
-                self.gen = value
+                self.gen_ = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for gen: {e}"));
+                    .map_err(|e| format!("error converting supplied value for gen_: {e}"));
                 self
             }
             pub fn state<T>(mut self, value: T) -> Self
@@ -2637,7 +2643,7 @@ pub mod types {
                 value: InstanceStateMonitorResponse,
             ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
-                    gen: value.gen?,
+                    gen_: value.gen_?,
                     state: value.state?,
                 })
             }
@@ -2646,7 +2652,7 @@ pub mod types {
         impl ::std::convert::From<super::InstanceStateMonitorResponse> for InstanceStateMonitorResponse {
             fn from(value: super::InstanceStateMonitorResponse) -> Self {
                 Self {
-                    gen: Ok(value.gen),
+                    gen_: Ok(value.gen_),
                     state: Ok(value.state),
                 }
             }

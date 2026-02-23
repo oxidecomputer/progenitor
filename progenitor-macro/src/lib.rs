@@ -14,7 +14,7 @@ use progenitor_impl::{
 use quote::{quote, ToTokens};
 use schemars::schema::SchemaObject;
 use serde::Deserialize;
-use serde_tokenstream::{OrderedMap, ParseWrapper, TokenStreamWrapper};
+use serde_tokenstream::{OrderedMap, ParseWrapper};
 use syn::LitStr;
 use token_utils::TypeAndImpls;
 
@@ -186,9 +186,7 @@ pub fn generate_api(item: TokenStream) -> TokenStream {
 
 #[derive(Deserialize)]
 struct MacroSettings {
-    // Note this is a TokenStreamWrapper and not a ParseWrapper<SpecSource>. The
-    // latter loses span information.
-    spec: TokenStreamWrapper,
+    spec: ParseWrapper<SpecSource>,
     #[serde(default)]
     interface: InterfaceStyle,
     #[serde(default)]
@@ -358,7 +356,7 @@ fn do_generate_api(item: TokenStream) -> Result<TokenStream, syn::Error> {
             timeout,
         } = serde_tokenstream::from_tokenstream(&item.into())?;
 
-        let spec = syn::parse2::<SpecSource>(spec.into_inner())?;
+        let spec = spec.into_inner();
 
         let mut settings = GenerationSettings::default();
         settings.with_interface(interface);

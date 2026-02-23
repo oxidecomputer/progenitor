@@ -28,15 +28,15 @@ progenitor-macro = { version = "0.12.0", path = "progenitor-macro" }
 anyhow = "1.0.100"
 assert_cmd = "2.1.2"
 base64 = "0.22.1"
-bytes = "1.11.0"
+bytes = "1.11.1"
 chrono = { version = "0.4.43", default-features = false, features = ["serde"] }
-clap = { version = "4.5.56" }
+clap = { version = "4.5.57" }
 clap-cargo = "0.18.3"
 dropshot = { version = "0.16.7", default-features = false }
 env_logger = "0.11.8"
 expectorate = { version = "1.2.0", features = ["predicates"] }
-futures = "0.3.31"
-futures-core = "0.3.31"
+futures = "0.3.32"
+futures-core = "0.3.32"
 heck = "0.5.0"
 http = "1.4.0"
 hyper = "1.8.1"
@@ -45,8 +45,8 @@ openapiv3 = "2.2.0"
 percent-encoding = "2.3.2"
 proc-macro2 = "1.0.106"
 quote = "1.0.44"
-rand = "0.9.2"
-regex = "1.11.2"
+rand = "0.10.0"
+regex = "1.12.3"
 regress = "0.10.5"
 reqwest = { version = "0.13.1", default-features = false, features = ["json", "query", "stream"] }
 rustfmt-wrapper = "0.2.1"
@@ -56,13 +56,13 @@ serde = { version = "1.0.226", features = ["derive"] }
 serde_json = "1.0.149"
 serde_urlencoded = "0.7.1"
 serde_yaml = "0.9"
-syn = { version = "2.0.114", features = ["parsing"] }
+syn = { version = "2.0.116", features = ["parsing"] }
 thiserror = "2.0.18"
 tokio = { version = "1.49.0", features = ["rt", "net"] }
-typify = { version = "0.6.0" }
+typify = { version = "0.6.1" }
 url = "2.5.8"
 unicode-ident = "1.0.22"
-uuid = { version = "1.20.0", features = ["serde", "v4"] }
+uuid = { version = "1.21.0", features = ["serde", "v4"] }
 
 #[patch.crates-io]
 #typify = { path = "../typify/typify" }
