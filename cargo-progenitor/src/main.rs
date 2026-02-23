@@ -249,7 +249,7 @@ pub fn dependencies(builder: Generator, include_client: bool) -> Vec<String> {
         ),
         format!(
             "serde = {{ version = \"{}\", features = [\"derive\"] }}",
-            DEPENDENCIES.serde
+            DEPENDENCIES.serde,
         ),
         format!("serde_urlencoded = \"{}\"", DEPENDENCIES.serde_urlencoded),
     ];
