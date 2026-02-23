@@ -143,31 +143,33 @@ impl Client {
         in_: &'a str,
         use_: &'a str,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
-        let url = format!(
-            "{}/{}/{}/{}",
-            self.baseurl,
-            encode_path(&ref_.to_string()),
-            encode_path(&type_.to_string()),
-            encode_path(&trait_.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .query(&progenitor_client::QueryParam::new("if", &if_))
-            .query(&progenitor_client::QueryParam::new("in", &in_))
-            .query(&progenitor_client::QueryParam::new("use", &use_))
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/{}/{}/{}",
+                self.baseurl,
+                encode_path(&ref_.to_string()),
+                encode_path(&type_.to_string()),
+                encode_path(&trait_.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .query(&progenitor_client::QueryParam::new("if", &if_))
+                .query(&progenitor_client::QueryParam::new("in", &in_))
+                .query(&progenitor_client::QueryParam::new("use", &use_))
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "renamed_parameters",
         };

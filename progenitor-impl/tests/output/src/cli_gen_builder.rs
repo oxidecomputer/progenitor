@@ -221,6 +221,47 @@ pub mod builder {
         encode_path, ByteStream, ClientHooks, ClientInfo, Error, OperationInfo, RequestBuilderExt,
         ResponseValue,
     };
+    pub mod built {
+        use super::super::types;
+        #[allow(unused_imports)]
+        use super::super::{
+            encode_path, ByteStream, ClientHooks, ClientInfo, Error, OperationInfo,
+            RequestBuilderExt, ResponseValue,
+        };
+        pub struct Uno<'a> {
+            pub(crate) client: &'a super::super::Client,
+            pub(crate) request: reqwest::RequestBuilder,
+        }
+
+        impl<'a> Uno<'a> {
+            pub async fn send(self) -> Result<ResponseValue<ByteStream>, Error<()>> {
+                let Self { client, request } = self;
+                #[allow(unused_mut)]
+                let mut request = request.build()?;
+                let info = OperationInfo {
+                    operation_id: "uno",
+                };
+                client.pre(&mut request, &info).await?;
+                let result = client.exec(request, &info).await;
+                client.post(&result, &info).await?;
+                let response = result?;
+                match response.status().as_u16() {
+                    200..=299 => Ok(ResponseValue::stream(response)),
+                    _ => Err(Error::UnexpectedResponse(response)),
+                }
+            }
+            pub fn map_request<F>(self, f: F) -> Self
+            where
+                F: Fn(reqwest::RequestBuilder) -> reqwest::RequestBuilder,
+            {
+                Self {
+                    client: self.client,
+                    request: f(self.request),
+                }
+            }
+        }
+    }
+
     ///Builder for [`Client::uno`]
     ///
     ///[`Client::uno`]: super::Client::uno
@@ -272,6 +313,10 @@ pub mod builder {
 
         ///Sends a `GET` request to `/uno`
         pub async fn send(self) -> Result<ResponseValue<ByteStream>, Error<()>> {
+            self.build()?.send().await
+        }
+
+        pub fn build(self) -> Result<built::Uno<'a>, Error<()>> {
             let Self {
                 client,
                 gateway,
@@ -281,31 +326,24 @@ pub mod builder {
             let body = body
                 .and_then(|v| types::UnoBody::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!("{}/uno", client.baseurl,);
-            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-            header_map.append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
-            );
-            #[allow(unused_mut)]
-            let mut request = client
-                .client
-                .get(url)
-                .json(&body)
-                .query(&progenitor_client::QueryParam::new("gateway", &gateway))
-                .headers(header_map)
-                .build()?;
-            let info = OperationInfo {
-                operation_id: "uno",
+            let request = {
+                let url = format!("{}/uno", client.baseurl,);
+                let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+                header_map.append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
+                );
+                client
+                    .client
+                    .get(url)
+                    .json(&body)
+                    .query(&progenitor_client::QueryParam::new("gateway", &gateway))
+                    .headers(header_map)
             };
-            client.pre(&mut request, &info).await?;
-            let result = client.exec(request, &info).await;
-            client.post(&result, &info).await?;
-            let response = result?;
-            match response.status().as_u16() {
-                200..=299 => Ok(ResponseValue::stream(response)),
-                _ => Err(Error::UnexpectedResponse(response)),
-            }
+            Ok(built::Uno {
+                client: client,
+                request,
+            })
         }
     }
 }

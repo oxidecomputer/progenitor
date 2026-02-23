@@ -892,22 +892,24 @@ impl ClientHooks<()> for &Client {}
 impl Client {
     ///Sends a `POST` request to `/v1/control/hold`
     pub async fn control_hold<'a>(&'a self) -> Result<ResponseValue<()>, Error<()>> {
-        let url = format!("{}/v1/control/hold", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .post(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!("{}/v1/control/hold", self.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .post(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "control_hold",
         };
@@ -923,14 +925,18 @@ impl Client {
 
     ///Sends a `POST` request to `/v1/control/resume`
     pub async fn control_resume<'a>(&'a self) -> Result<ResponseValue<()>, Error<()>> {
-        let url = format!("{}/v1/control/resume", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self.client.post(url).headers(header_map).build()?;
+        let mut request = {
+            let url = format!("{}/v1/control/resume", self.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client.post(url).headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "control_resume",
         };
@@ -949,26 +955,28 @@ impl Client {
         &'a self,
         task: &'a str,
     ) -> Result<ResponseValue<types::Task>, Error<()>> {
-        let url = format!(
-            "{}/v1/task/{}",
-            self.baseurl,
-            encode_path(&task.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/v1/task/{}",
+                self.baseurl,
+                encode_path(&task.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "task_get",
         };
@@ -986,22 +994,24 @@ impl Client {
     pub async fn tasks_get<'a>(
         &'a self,
     ) -> Result<ResponseValue<::std::vec::Vec<types::Task>>, Error<()>> {
-        let url = format!("{}/v1/tasks", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!("{}/v1/tasks", self.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "tasks_get",
         };
@@ -1020,23 +1030,25 @@ impl Client {
         &'a self,
         body: &'a types::TaskSubmit,
     ) -> Result<ResponseValue<types::TaskSubmitResult>, Error<()>> {
-        let url = format!("{}/v1/tasks", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .post(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .json(&body)
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!("{}/v1/tasks", self.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .post(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .json(&body)
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "task_submit",
         };
@@ -1056,27 +1068,29 @@ impl Client {
         task: &'a str,
         minseq: Option<u32>,
     ) -> Result<ResponseValue<::std::vec::Vec<types::TaskEvent>>, Error<()>> {
-        let url = format!(
-            "{}/v1/tasks/{}/events",
-            self.baseurl,
-            encode_path(&task.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .query(&progenitor_client::QueryParam::new("minseq", &minseq))
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/v1/tasks/{}/events",
+                self.baseurl,
+                encode_path(&task.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .query(&progenitor_client::QueryParam::new("minseq", &minseq))
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "task_events_get",
         };
@@ -1095,26 +1109,28 @@ impl Client {
         &'a self,
         task: &'a str,
     ) -> Result<ResponseValue<::std::vec::Vec<types::TaskOutput>>, Error<()>> {
-        let url = format!(
-            "{}/v1/tasks/{}/outputs",
-            self.baseurl,
-            encode_path(&task.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/v1/tasks/{}/outputs",
+                self.baseurl,
+                encode_path(&task.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "task_outputs_get",
         };
@@ -1134,19 +1150,23 @@ impl Client {
         task: &'a str,
         output: &'a str,
     ) -> Result<ResponseValue<ByteStream>, Error<()>> {
-        let url = format!(
-            "{}/v1/tasks/{}/outputs/{}",
-            self.baseurl,
-            encode_path(&task.to_string()),
-            encode_path(&output.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self.client.get(url).headers(header_map).build()?;
+        let mut request = {
+            let url = format!(
+                "{}/v1/tasks/{}/outputs/{}",
+                self.baseurl,
+                encode_path(&task.to_string()),
+                encode_path(&output.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client.get(url).headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "task_output_download",
         };
@@ -1165,23 +1185,25 @@ impl Client {
         &'a self,
         body: &'a types::UserCreate,
     ) -> Result<ResponseValue<types::UserCreateResult>, Error<()>> {
-        let url = format!("{}/v1/users", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .post(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .json(&body)
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!("{}/v1/users", self.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .post(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .json(&body)
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "user_create",
         };
@@ -1197,22 +1219,24 @@ impl Client {
 
     ///Sends a `GET` request to `/v1/whoami`
     pub async fn whoami<'a>(&'a self) -> Result<ResponseValue<types::WhoamiResult>, Error<()>> {
-        let url = format!("{}/v1/whoami", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!("{}/v1/whoami", self.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "whoami",
         };
@@ -1231,23 +1255,25 @@ impl Client {
         &'a self,
         body: String,
     ) -> Result<ResponseValue<()>, Error<()>> {
-        let url = format!("{}/v1/whoami/name", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .put(url)
-            .header(
-                ::reqwest::header::CONTENT_TYPE,
-                ::reqwest::header::HeaderValue::from_static("text/plain"),
-            )
-            .body(body)
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!("{}/v1/whoami/name", self.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .put(url)
+                .header(
+                    ::reqwest::header::CONTENT_TYPE,
+                    ::reqwest::header::HeaderValue::from_static("text/plain"),
+                )
+                .body(body)
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "whoami_put_name",
         };
@@ -1266,23 +1292,25 @@ impl Client {
         &'a self,
         body: &'a types::WorkerBootstrap,
     ) -> Result<ResponseValue<types::WorkerBootstrapResult>, Error<()>> {
-        let url = format!("{}/v1/worker/bootstrap", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .post(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .json(&body)
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!("{}/v1/worker/bootstrap", self.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .post(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .json(&body)
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "worker_bootstrap",
         };
@@ -1300,22 +1328,24 @@ impl Client {
     pub async fn worker_ping<'a>(
         &'a self,
     ) -> Result<ResponseValue<types::WorkerPingResult>, Error<()>> {
-        let url = format!("{}/v1/worker/ping", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!("{}/v1/worker/ping", self.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "worker_ping",
         };
@@ -1335,23 +1365,22 @@ impl Client {
         task: &'a str,
         body: &'a types::WorkerAppendTask,
     ) -> Result<ResponseValue<()>, Error<()>> {
-        let url = format!(
-            "{}/v1/worker/task/{}/append",
-            self.baseurl,
-            encode_path(&task.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .post(url)
-            .json(&body)
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/v1/worker/task/{}/append",
+                self.baseurl,
+                encode_path(&task.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client.post(url).json(&body).headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "worker_task_append",
         };
@@ -1371,31 +1400,33 @@ impl Client {
         task: &'a str,
         body: B,
     ) -> Result<ResponseValue<types::UploadedChunk>, Error<()>> {
-        let url = format!(
-            "{}/v1/worker/task/{}/chunk",
-            self.baseurl,
-            encode_path(&task.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .post(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .header(
-                ::reqwest::header::CONTENT_TYPE,
-                ::reqwest::header::HeaderValue::from_static("application/octet-stream"),
-            )
-            .body(body)
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/v1/worker/task/{}/chunk",
+                self.baseurl,
+                encode_path(&task.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .post(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .header(
+                    ::reqwest::header::CONTENT_TYPE,
+                    ::reqwest::header::HeaderValue::from_static("application/octet-stream"),
+                )
+                .body(body)
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "worker_task_upload_chunk",
         };
@@ -1415,23 +1446,22 @@ impl Client {
         task: &'a str,
         body: &'a types::WorkerCompleteTask,
     ) -> Result<ResponseValue<()>, Error<()>> {
-        let url = format!(
-            "{}/v1/worker/task/{}/complete",
-            self.baseurl,
-            encode_path(&task.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .post(url)
-            .json(&body)
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/v1/worker/task/{}/complete",
+                self.baseurl,
+                encode_path(&task.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client.post(url).json(&body).headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "worker_task_complete",
         };
@@ -1451,23 +1481,22 @@ impl Client {
         task: &'a str,
         body: &'a types::WorkerAddOutput,
     ) -> Result<ResponseValue<()>, Error<()>> {
-        let url = format!(
-            "{}/v1/worker/task/{}/output",
-            self.baseurl,
-            encode_path(&task.to_string()),
-        );
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .post(url)
-            .json(&body)
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!(
+                "{}/v1/worker/task/{}/output",
+                self.baseurl,
+                encode_path(&task.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client.post(url).json(&body).headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "worker_task_add_output",
         };
@@ -1485,22 +1514,24 @@ impl Client {
     pub async fn workers_list<'a>(
         &'a self,
     ) -> Result<ResponseValue<types::WorkersResult>, Error<()>> {
-        let url = format!("{}/v1/workers", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!("{}/v1/workers", self.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "workers_list",
         };
@@ -1516,14 +1547,18 @@ impl Client {
 
     ///Sends a `POST` request to `/v1/workers/recycle`
     pub async fn workers_recycle<'a>(&'a self) -> Result<ResponseValue<()>, Error<()>> {
-        let url = format!("{}/v1/workers/recycle", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self.client.post(url).headers(header_map).build()?;
+        let mut request = {
+            let url = format!("{}/v1/workers/recycle", self.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client.post(url).headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "workers_recycle",
         };
@@ -1542,23 +1577,25 @@ impl Client {
         &'a self,
         id: Option<&'a types::GetThingOrThingsId>,
     ) -> Result<ResponseValue<::std::string::String>, Error<()>> {
-        let url = format!("{}/v1/things", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .get(url)
-            .header(
-                ::reqwest::header::ACCEPT,
-                ::reqwest::header::HeaderValue::from_static("application/json"),
-            )
-            .query(&progenitor_client::QueryParam::new("id", &id))
-            .headers(header_map)
-            .build()?;
+        let mut request = {
+            let url = format!("{}/v1/things", self.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            self.client
+                .get(url)
+                .header(
+                    ::reqwest::header::ACCEPT,
+                    ::reqwest::header::HeaderValue::from_static("application/json"),
+                )
+                .query(&progenitor_client::QueryParam::new("id", &id))
+                .headers(header_map)
+        }
+
+        .build()?;
         let info = OperationInfo {
             operation_id: "get_thing_or_things",
         };
@@ -1577,18 +1614,21 @@ impl Client {
         &'a self,
         accept_language: Option<types::HeaderArgAcceptLanguage>,
     ) -> Result<ResponseValue<()>, Error<()>> {
-        let url = format!("{}/v1/header-arg", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(2usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
-        if let Some(value) = accept_language {
-            header_map.append("accept-language", value.to_string().try_into()?);
+        #[allow(unused_mut)]
+        let mut request = {
+            let url = format!("{}/v1/header-arg", self.baseurl,);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(2usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
+            if let Some(value) = accept_language {
+                header_map.append("accept-language", value.to_string().try_into()?);
+            }
+            self.client.get(url).headers(header_map)
         }
 
-        #[allow(unused_mut)]
-        let mut request = self.client.get(url).headers(header_map).build()?;
+        .build()?;
         let info = OperationInfo {
             operation_id: "header_arg",
         };
