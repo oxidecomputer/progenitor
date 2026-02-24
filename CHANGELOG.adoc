@@ -15,14 +15,18 @@
 
 https://github.com/oxidecomputer/progenitor/compare/v0.12.0\...HEAD[Full list of commits]
 
+* Update typify to 0.6.1 and use its renaming rules per Rust edition 2024 (#1306)
+* Add `progenitor_client::Error::is_retryable` (#1308)
+* Allow JSON schemas relative to the out dir (#1301)
+
 == 0.12.0 (released 2026-02-03)
 
 https://github.com/oxidecomputer/progenitor/compare/v0.11.2\...v0.12.0[Full list of commits]
 
-* update typify to 0.6.0 (#1296)
-* update reqwest 0.13 (#1279)
-* update httpmock generation to support 0.8 (#1264)
-* don't panic on json-body failure (#1244)
+* Update typify to 0.6.0 (#1296)
+* Update reqwest 0.13 (#1279)
+* Update httpmock generation to support 0.8 (#1264)
+* Don't panic on json-body failure (#1244)
 
 == 0.11.2 (released 2025-10-09)
 
