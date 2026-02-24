@@ -23,7 +23,7 @@ progenitor-client = { version = "0.13.0", path = "progenitor-client" }
 progenitor-impl = { version = "0.13.0", path = "progenitor-impl" }
 progenitor-macro = { version = "0.13.0", path = "progenitor-macro" }
 
-anyhow = "1.0.100"
+anyhow = "1.0.102"
 assert_cmd = "2.1.2"
 base64 = "0.22.1"
 bytes = "1.11.1"
