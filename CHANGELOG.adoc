@@ -13,7 +13,11 @@
 
 == Unreleased changes (release date TBD)
 
-https://github.com/oxidecomputer/progenitor/compare/v0.12.0\...HEAD[Full list of commits]
+https://github.com/oxidecomputer/progenitor/compare/v0.13.0\...HEAD[Full list of commits]
+
+== 0.13.0 (released 2026-02-24)
+
+https://github.com/oxidecomputer/progenitor/compare/v0.12.0\...v0.13.0[Full list of commits]
 
 * Update typify to 0.6.1 and use its renaming rules per Rust edition 2024 (#1306)
 * Add `progenitor_client::Error::is_retryable` (#1308)
