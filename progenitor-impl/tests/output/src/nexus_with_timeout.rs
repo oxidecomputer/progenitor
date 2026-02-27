@@ -16466,7 +16466,7 @@ impl Client {
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
         instance_name: &'a types::Name,
-    ) -> Result<ResponseValue<reqwest::Upgraded>, Error<reqwest::Upgraded>> {
+    ) -> Result<ResponseValue<reqwest::Upgraded>, Error<()>> {
         let url = format!(
             "{}/organizations/{}/projects/{}/instances/{}/serial-console/stream",
             self.baseurl,
@@ -16504,7 +16504,6 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             101u16 => ResponseValue::upgrade(response).await,
-            200..=299 => ResponseValue::upgrade(response).await,
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -23538,7 +23537,7 @@ impl Client {
         instance: &'a types::NameOrId,
         organization: Option<&'a types::NameOrId>,
         project: Option<&'a types::NameOrId>,
-    ) -> Result<ResponseValue<reqwest::Upgraded>, Error<reqwest::Upgraded>> {
+    ) -> Result<ResponseValue<reqwest::Upgraded>, Error<()>> {
         let url = format!(
             "{}/v1/instances/{}/serial-console/stream",
             self.baseurl,
@@ -23579,7 +23578,6 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             101u16 => ResponseValue::upgrade(response).await,
-            200..=299 => ResponseValue::upgrade(response).await,
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }

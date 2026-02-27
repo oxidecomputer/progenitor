@@ -443,7 +443,7 @@ impl Generator {
                     },
                 ))
                 .map(|v: Result<(OperationResponseStatus, &Response)>| {
-                    let (status_code, response) = v?;
+                    let (mut status_code, response) = v?;
 
                     // We categorize responses as "typed" based on the
                     // "application/json" content type, "upgrade" if it's a
@@ -472,7 +472,14 @@ impl Generator {
                         };
 
                         OperationResponseKind::Type(typ)
-                    } else if dropshot_websocket {
+                    } else if status_code == OperationResponseStatus::Code(101)
+                        // TODO: remove when no longer supporting older dropshot
+                        // w/o explicit response codes for WebSocket endpoints:
+                        || (dropshot_websocket && status_code == OperationResponseStatus::Default)
+                    {
+                        // TODO (as above)
+                        status_code = OperationResponseStatus::Code(101);
+
                         OperationResponseKind::Upgrade
                     } else if response.content.first().is_some() {
                         OperationResponseKind::Raw
@@ -484,6 +491,7 @@ impl Generator {
                     if matches!(
                         status_code,
                         OperationResponseStatus::Default
+                            | OperationResponseStatus::Code(101)
                             | OperationResponseStatus::Code(200..=299)
                             | OperationResponseStatus::Range(2)
                     ) {
@@ -514,15 +522,6 @@ impl Generator {
                 typ: OperationResponseKind::Raw,
                 description: None,
             });
-        }
-
-        // Must accept HTTP 101 Switching Protocols
-        if dropshot_websocket {
-            responses.push(OperationResponse {
-                status_code: OperationResponseStatus::Code(101),
-                typ: OperationResponseKind::Upgrade,
-                description: None,
-            })
         }
 
         let dropshot_paginated = self.dropshot_pagination_data(operation, &params, &responses);

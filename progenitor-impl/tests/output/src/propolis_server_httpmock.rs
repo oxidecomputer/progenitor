@@ -275,10 +275,6 @@ pub mod operations {
             self.0
         }
 
-        pub fn default_response(self, status: u16) -> Self {
-            Self(self.0.status(status))
-        }
-
         pub fn switching_protocols(self) -> Self {
             Self(self.0.status(101u16))
         }

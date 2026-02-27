@@ -1586,7 +1586,7 @@ impl Client {
     ///Sends a `GET` request to `/instance/serial`
     pub async fn instance_serial<'a>(
         &'a self,
-    ) -> Result<ResponseValue<reqwest::Upgraded>, Error<reqwest::Upgraded>> {
+    ) -> Result<ResponseValue<reqwest::Upgraded>, Error<()>> {
         let url = format!("{}/instance/serial", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -1618,7 +1618,6 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             101u16 => ResponseValue::upgrade(response).await,
-            200..=299 => ResponseValue::upgrade(response).await,
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
