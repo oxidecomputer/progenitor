@@ -78,3 +78,10 @@ jobs:
       run: |
         cd example-wasm
         CHROMEDRIVER=$(which chromedriver) cargo test --target wasm32-unknown-unknown --locked --verbose
+
+  msrv:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: taiki-e/install-action@cargo-hack
+      - run: cargo hack --no-dev-deps --rust-version --feature-powerset --package progenitor check
