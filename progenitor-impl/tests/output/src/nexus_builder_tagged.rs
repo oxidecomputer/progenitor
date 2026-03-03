@@ -35080,7 +35080,7 @@ pub mod builder {
         ///Sends a `GET` request to
         /// `/organizations/{organization_name}/projects/{project_name}/
         /// instances/{instance_name}/serial-console/stream`
-        pub async fn send(self) -> Result<ResponseValue<reqwest::Upgraded>, Error<()>> {
+        pub async fn send(self) -> Result<ResponseValue<reqwest::Upgraded>, Error<types::Error>> {
             let Self {
                 client,
                 organization_name,
@@ -35127,6 +35127,12 @@ pub mod builder {
             let response = result?;
             match response.status().as_u16() {
                 101u16 => ResponseValue::upgrade(response).await,
+                400u16..=499u16 => Err(Error::ErrorResponse(
+                    ResponseValue::from_response(response).await?,
+                )),
+                500u16..=599u16 => Err(Error::ErrorResponse(
+                    ResponseValue::from_response(response).await?,
+                )),
                 _ => Err(Error::UnexpectedResponse(response)),
             }
         }
@@ -47793,7 +47799,7 @@ pub mod builder {
 
         ///Sends a `GET` request to
         /// `/v1/instances/{instance}/serial-console/stream`
-        pub async fn send(self) -> Result<ResponseValue<reqwest::Upgraded>, Error<()>> {
+        pub async fn send(self) -> Result<ResponseValue<reqwest::Upgraded>, Error<types::Error>> {
             let Self {
                 client,
                 instance,
@@ -47843,6 +47849,12 @@ pub mod builder {
             let response = result?;
             match response.status().as_u16() {
                 101u16 => ResponseValue::upgrade(response).await,
+                400u16..=499u16 => Err(Error::ErrorResponse(
+                    ResponseValue::from_response(response).await?,
+                )),
+                500u16..=599u16 => Err(Error::ErrorResponse(
+                    ResponseValue::from_response(response).await?,
+                )),
                 _ => Err(Error::UnexpectedResponse(response)),
             }
         }
