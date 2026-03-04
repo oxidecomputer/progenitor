@@ -525,6 +525,17 @@ impl Generator {
                 operation_id
             )));
         }
+        if dropshot_websocket
+            && responses
+                .iter()
+                .find(|r| r.status_code == OperationResponseStatus::Code(101))
+                .is_none()
+        {
+            return Err(Error::InvalidExtension(format!(
+                "websocket endpoint {:?} must include an explicit 101 response code",
+                operation_id
+            )));
+        }
 
         Ok(OperationMethod {
             operation_id: sanitize(operation_id, Case::Snake),

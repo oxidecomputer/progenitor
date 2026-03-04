@@ -355,3 +355,41 @@ async fn test_stream_pagination() {
 
     server.close().await.expect("failed to close server");
 }
+
+#[test]
+fn test_websocket_response_validation() {
+    let mut generator = Generator::new(&GenerationSettings::default());
+    let spec: OpenAPI = serde_json::from_value(serde_json::json!({
+        "openapi": "3.0.0",
+        "info": {
+            "description": "Minimal API for testing validation of endpoints \
+                using x-dropshot-websocket with imprecise response schema",
+            "title": "WebSocket extension invalid usages test",
+            "version": "v1"
+        },
+        "paths": {
+            "/websocket/default": {
+                "get": {
+                    "operationId": "websocket_without_101",
+                    "responses": {
+                        "default": {
+                            "description": "",
+                            "content": {
+                                "*/*": {
+                                    "schema": {}
+                                }
+                            }
+                        }
+                    },
+                    "x-dropshot-websocket": {}
+                }
+            }
+        }
+    }))
+    .unwrap();
+
+    let progenitor_impl::Error::InvalidExtension(_) = generator.generate_tokens(&spec).unwrap_err()
+    else {
+        panic!("imprecise definition of websocket endpoint response did not fail validation")
+    };
+}
