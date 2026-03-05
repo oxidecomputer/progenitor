@@ -1,0 +1,26 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "description": "Minimal API for testing generation of endpoints using x-dropshot-websocket with old, imprecise response schema",
+        "title": "WebSocket extension deprecated schema form test",
+        "version": "v1"
+    },
+    "paths": {
+        "/websocket/default": {
+            "get": {
+                "operationId": "websocket_without_explicit_101",
+                "responses": {
+                    "default": {
+                        "description": "",
+                        "content": {
+                            "*/*": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "x-dropshot-websocket": {}
+            }
+        }
+    }
+}

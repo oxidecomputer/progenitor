@@ -164,6 +164,11 @@ fn test_cli_gen() {
 }
 
 #[test]
+fn test_websocket_default_response_code() {
+    verify_apis("websocket-default.json");
+}
+
+#[test]
 fn test_nexus_with_different_timeout() {
     const OPENAPI_FILE: &'static str = "nexus.json";
 
