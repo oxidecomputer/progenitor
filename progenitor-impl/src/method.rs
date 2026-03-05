@@ -445,6 +445,12 @@ impl Generator {
                 .map(|v: Result<(OperationResponseStatus, &Response)>| {
                     let (mut status_code, response) = v?;
 
+                    // A previous version of dropshot websockets failed to
+                    // properly report responses; clean this up here.
+                    if dropshot_websocket && status_code == OperationResponseStatus::Default {
+                        status_code = OperationResponseStatus::Code(101);
+                    }
+
                     // We categorize responses as "typed" based on the
                     // "application/json" content type, "upgrade" if it's a
                     // websocket channel without a meaningful content-type,
@@ -472,14 +478,7 @@ impl Generator {
                         };
 
                         OperationResponseKind::Type(typ)
-                    } else if status_code == OperationResponseStatus::Code(101)
-                        // TODO: remove when no longer supporting older dropshot
-                        // w/o explicit response codes for WebSocket endpoints:
-                        || (dropshot_websocket && status_code == OperationResponseStatus::Default)
-                    {
-                        // TODO (as above)
-                        status_code = OperationResponseStatus::Code(101);
-
+                    } else if status_code == OperationResponseStatus::Code(101) {
                         OperationResponseKind::Upgrade
                     } else if response.content.first().is_some() {
                         OperationResponseKind::Raw

@@ -25573,6 +25573,23 @@ pub trait ClientInstancesExt {
     ///    .await;
     /// ```
     fn instance_serial_console_stream(&self) -> builder::InstanceSerialConsoleStream<'_>;
+    ///Connect to an instance's serial console
+    ///
+    ///Use `GET /v1/instances/{instance}/serial-console/stream` instead
+    ///
+    ///Sends a `GET` request to
+    /// `/organizations/{organization_name}/projects/{project_name}/instances/
+    /// {instance_name}/serial-console/stream_v2`
+    ///
+    ///```ignore
+    /// let response = client.instance_serial_console_stream_v2()
+    ///    .organization_name(organization_name)
+    ///    .project_name(project_name)
+    ///    .instance_name(instance_name)
+    ///    .send()
+    ///    .await;
+    /// ```
+    fn instance_serial_console_stream_v2(&self) -> builder::InstanceSerialConsoleStreamV2<'_>;
     ///Boot an instance
     ///
     ///Use `POST /v1/instances/{instance}/start` instead
@@ -25897,6 +25914,10 @@ impl ClientInstancesExt for Client {
 
     fn instance_serial_console_stream(&self) -> builder::InstanceSerialConsoleStream<'_> {
         builder::InstanceSerialConsoleStream::new(self)
+    }
+
+    fn instance_serial_console_stream_v2(&self) -> builder::InstanceSerialConsoleStreamV2<'_> {
+        builder::InstanceSerialConsoleStreamV2::new(self)
     }
 
     fn instance_start(&self) -> builder::InstanceStart<'_> {
@@ -35080,7 +35101,7 @@ pub mod builder {
         ///Sends a `GET` request to
         /// `/organizations/{organization_name}/projects/{project_name}/
         /// instances/{instance_name}/serial-console/stream`
-        pub async fn send(self) -> Result<ResponseValue<reqwest::Upgraded>, Error<types::Error>> {
+        pub async fn send(self) -> Result<ResponseValue<reqwest::Upgraded>, Error<()>> {
             let Self {
                 client,
                 organization_name,
@@ -35120,6 +35141,112 @@ pub mod builder {
                 .build()?;
             let info = OperationInfo {
                 operation_id: "instance_serial_console_stream",
+            };
+            client.pre(&mut request, &info).await?;
+            let result = client.exec(request, &info).await;
+            client.post(&result, &info).await?;
+            let response = result?;
+            match response.status().as_u16() {
+                101u16 => ResponseValue::upgrade(response).await,
+                _ => Err(Error::UnexpectedResponse(response)),
+            }
+        }
+    }
+
+    ///Builder for [`ClientInstancesExt::instance_serial_console_stream_v2`]
+    ///
+    ///[`ClientInstancesExt::instance_serial_console_stream_v2`]: super::ClientInstancesExt::instance_serial_console_stream_v2
+    #[derive(Debug, Clone)]
+    pub struct InstanceSerialConsoleStreamV2<'a> {
+        client: &'a super::Client,
+        organization_name: Result<types::Name, String>,
+        project_name: Result<types::Name, String>,
+        instance_name: Result<types::Name, String>,
+    }
+
+    impl<'a> InstanceSerialConsoleStreamV2<'a> {
+        pub fn new(client: &'a super::Client) -> Self {
+            Self {
+                client: client,
+                organization_name: Err("organization_name was not initialized".to_string()),
+                project_name: Err("project_name was not initialized".to_string()),
+                instance_name: Err("instance_name was not initialized".to_string()),
+            }
+        }
+
+        pub fn organization_name<V>(mut self, value: V) -> Self
+        where
+            V: std::convert::TryInto<types::Name>,
+        {
+            self.organization_name = value
+                .try_into()
+                .map_err(|_| "conversion to `Name` for organization_name failed".to_string());
+            self
+        }
+
+        pub fn project_name<V>(mut self, value: V) -> Self
+        where
+            V: std::convert::TryInto<types::Name>,
+        {
+            self.project_name = value
+                .try_into()
+                .map_err(|_| "conversion to `Name` for project_name failed".to_string());
+            self
+        }
+
+        pub fn instance_name<V>(mut self, value: V) -> Self
+        where
+            V: std::convert::TryInto<types::Name>,
+        {
+            self.instance_name = value
+                .try_into()
+                .map_err(|_| "conversion to `Name` for instance_name failed".to_string());
+            self
+        }
+
+        ///Sends a `GET` request to
+        /// `/organizations/{organization_name}/projects/{project_name}/
+        /// instances/{instance_name}/serial-console/stream_v2`
+        pub async fn send(self) -> Result<ResponseValue<reqwest::Upgraded>, Error<types::Error>> {
+            let Self {
+                client,
+                organization_name,
+                project_name,
+                instance_name,
+            } = self;
+            let organization_name = organization_name.map_err(Error::InvalidRequest)?;
+            let project_name = project_name.map_err(Error::InvalidRequest)?;
+            let instance_name = instance_name.map_err(Error::InvalidRequest)?;
+            let url = format!(
+                "{}/organizations/{}/projects/{}/instances/{}/serial-console/stream_v2",
+                client.baseurl,
+                encode_path(&organization_name.to_string()),
+                encode_path(&project_name.to_string()),
+                encode_path(&instance_name.to_string()),
+            );
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+            header_map.append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
+            );
+            #[allow(unused_mut)]
+            let mut request = client
+                .client
+                .get(url)
+                .headers(header_map)
+                .header(::reqwest::header::CONNECTION, "Upgrade")
+                .header(::reqwest::header::UPGRADE, "websocket")
+                .header(::reqwest::header::SEC_WEBSOCKET_VERSION, "13")
+                .header(
+                    ::reqwest::header::SEC_WEBSOCKET_KEY,
+                    ::base64::Engine::encode(
+                        &::base64::engine::general_purpose::STANDARD,
+                        ::rand::random::<[u8; 16]>(),
+                    ),
+                )
+                .build()?;
+            let info = OperationInfo {
+                operation_id: "instance_serial_console_stream_v2",
             };
             client.pre(&mut request, &info).await?;
             let result = client.exec(request, &info).await;

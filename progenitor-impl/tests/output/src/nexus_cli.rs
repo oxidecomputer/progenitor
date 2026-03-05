@@ -78,6 +78,9 @@ impl<T: CliConfig> Cli<T> {
             CliCommand::InstanceReboot => Self::cli_instance_reboot(),
             CliCommand::InstanceSerialConsole => Self::cli_instance_serial_console(),
             CliCommand::InstanceSerialConsoleStream => Self::cli_instance_serial_console_stream(),
+            CliCommand::InstanceSerialConsoleStreamV2 => {
+                Self::cli_instance_serial_console_stream_v2()
+            }
             CliCommand::InstanceStart => Self::cli_instance_start(),
             CliCommand::InstanceStop => Self::cli_instance_stop(),
             CliCommand::ProjectPolicyView => Self::cli_project_policy_view(),
@@ -1925,6 +1928,30 @@ impl<T: CliConfig> Cli<T> {
     }
 
     pub fn cli_instance_serial_console_stream() -> ::clap::Command {
+        ::clap::Command::new("")
+            .arg(
+                ::clap::Arg::new("instance-name")
+                    .long("instance-name")
+                    .value_parser(::clap::value_parser!(types::Name))
+                    .required(true),
+            )
+            .arg(
+                ::clap::Arg::new("organization-name")
+                    .long("organization-name")
+                    .value_parser(::clap::value_parser!(types::Name))
+                    .required(true),
+            )
+            .arg(
+                ::clap::Arg::new("project-name")
+                    .long("project-name")
+                    .value_parser(::clap::value_parser!(types::Name))
+                    .required(true),
+            )
+            .about("Connect to an instance's serial console")
+            .long_about("Use `GET /v1/instances/{instance}/serial-console/stream` instead")
+    }
+
+    pub fn cli_instance_serial_console_stream_v2() -> ::clap::Command {
         ::clap::Command::new("")
             .arg(
                 ::clap::Arg::new("instance-name")
@@ -5708,6 +5735,10 @@ impl<T: CliConfig> Cli<T> {
             CliCommand::InstanceSerialConsoleStream => {
                 self.execute_instance_serial_console_stream(matches).await
             }
+            CliCommand::InstanceSerialConsoleStreamV2 => {
+                self.execute_instance_serial_console_stream_v2(matches)
+                    .await
+            }
             CliCommand::InstanceStart => self.execute_instance_start(matches).await,
             CliCommand::InstanceStop => self.execute_instance_stop(matches).await,
             CliCommand::ProjectPolicyView => self.execute_project_policy_view(matches).await,
@@ -7848,6 +7879,37 @@ impl<T: CliConfig> Cli<T> {
 
         self.config
             .execute_instance_serial_console_stream(matches, &mut request)?;
+        let result = request.send().await;
+        match result {
+            Ok(r) => {
+                todo!()
+            }
+            Err(r) => {
+                self.config.error(&r);
+                Err(anyhow::Error::new(r))
+            }
+        }
+    }
+
+    pub async fn execute_instance_serial_console_stream_v2(
+        &self,
+        matches: &::clap::ArgMatches,
+    ) -> anyhow::Result<()> {
+        let mut request = self.client.instance_serial_console_stream_v2();
+        if let Some(value) = matches.get_one::<types::Name>("instance-name") {
+            request = request.instance_name(value.clone());
+        }
+
+        if let Some(value) = matches.get_one::<types::Name>("organization-name") {
+            request = request.organization_name(value.clone());
+        }
+
+        if let Some(value) = matches.get_one::<types::Name>("project-name") {
+            request = request.project_name(value.clone());
+        }
+
+        self.config
+            .execute_instance_serial_console_stream_v2(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
@@ -12963,6 +13025,14 @@ pub trait CliConfig {
         Ok(())
     }
 
+    fn execute_instance_serial_console_stream_v2(
+        &self,
+        matches: &::clap::ArgMatches,
+        request: &mut builder::InstanceSerialConsoleStreamV2,
+    ) -> anyhow::Result<()> {
+        Ok(())
+    }
+
     fn execute_instance_start(
         &self,
         matches: &::clap::ArgMatches,
@@ -14096,6 +14166,7 @@ pub enum CliCommand {
     InstanceReboot,
     InstanceSerialConsole,
     InstanceSerialConsoleStream,
+    InstanceSerialConsoleStreamV2,
     InstanceStart,
     InstanceStop,
     ProjectPolicyView,
@@ -14293,6 +14364,7 @@ impl CliCommand {
             CliCommand::InstanceReboot,
             CliCommand::InstanceSerialConsole,
             CliCommand::InstanceSerialConsoleStream,
+            CliCommand::InstanceSerialConsoleStreamV2,
             CliCommand::InstanceStart,
             CliCommand::InstanceStop,
             CliCommand::ProjectPolicyView,
