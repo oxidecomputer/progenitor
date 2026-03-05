@@ -10,6 +10,7 @@ use bytes::Bytes;
 use futures_core::Stream;
 use reqwest::RequestBuilder;
 use serde::{Serialize, de::DeserializeOwned, ser::SerializeStruct};
+use sha1::Digest;
 
 #[cfg(not(target_arch = "wasm32"))]
 type InnerByteStream = std::pin::Pin<Box<dyn Stream<Item = reqwest::Result<Bytes>> + Send + Sync>>;
@@ -197,6 +198,25 @@ impl ResponseValue<reqwest::Upgraded> {
             })
         } else {
             Err(Error::UnexpectedResponse(response))
+        }
+    }
+    #[doc(hidden)]
+    pub async fn upgrade_websocket<E: std::fmt::Debug>(
+        response: reqwest::Response,
+        sec_websocket_key_base64: &str,
+        sec_websocket_accept_sha1: Vec<u8>,
+    ) -> Result<Self, Error<E>> {
+        // ... field is constructed by concatenating /key/ ...
+        // ... with the string "258EAFA5-E914-47DA-95CA-C5AB0DC85B11" (RFC 6455)
+        const WS_GUID: &[u8] = b"258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
+        let mut sha1 = sha1::Sha1::default();
+        sha1.update(sec_websocket_key_base64);
+        sha1.update(WS_GUID);
+        let expected_accept_sha1 = sha1.finalize();
+        if expected_accept_sha1.to_vec() == sec_websocket_accept_sha1 {
+            Self::upgrade(response).await
+        } else {
+            Err(Error::InvalidHandshake(()))
         }
     }
 }

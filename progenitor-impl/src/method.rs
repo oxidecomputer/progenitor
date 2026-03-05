@@ -843,18 +843,22 @@ impl Generator {
             .headers(header_map)
         };
 
+        let websock_keydef = if method.dropshot_websocket {
+            quote! {
+                let sec_ws_key = ::base64::Engine::encode(
+                    &::base64::engine::general_purpose::STANDARD,
+                    ::rand::random::<[u8; 16]>(),
+                );
+            }
+        } else {
+            quote! {}
+        };
         let websock_hdrs = if method.dropshot_websocket {
             quote! {
                 .header(::reqwest::header::CONNECTION, "Upgrade")
                 .header(::reqwest::header::UPGRADE, "websocket")
                 .header(::reqwest::header::SEC_WEBSOCKET_VERSION, "13")
-                .header(
-                    ::reqwest::header::SEC_WEBSOCKET_KEY,
-                    ::base64::Engine::encode(
-                        &::base64::engine::general_purpose::STANDARD,
-                        ::rand::random::<[u8; 16]>(),
-                    )
-                )
+                .header(::reqwest::header::SEC_WEBSOCKET_KEY, &sec_ws_key)
             }
         } else {
             quote! {}
@@ -955,8 +959,25 @@ impl Generator {
                     }
                 }
                 OperationResponseKind::Upgrade => {
-                    quote! {
-                        ResponseValue::upgrade(#response_ident).await
+                    if method.dropshot_websocket {
+                        quote! {
+                            let sec_ws_accept_sha1 = #response_ident
+                                .headers()
+                                .get(reqwest::header::SEC_WEBSOCKET_ACCEPT)
+                                .and_then(|hv| ::base64::Engine::decode(
+                                    &::base64::engine::general_purpose::STANDARD,
+                                    hv.as_bytes()).ok())
+                                .ok_or_default();
+                            ResponseValue::upgrade_websocket(
+                                #response_ident,
+                                &sec_ws_key,
+                                sec_ws_accept_sha1,
+                            ).await
+                        }
+                    } else {
+                        quote! {
+                            ResponseValue::upgrade(#response_ident).await
+                        }
                     }
                 }
             };
@@ -1089,6 +1110,7 @@ impl Generator {
             #url_path
 
             #headers_build
+            #websock_keydef
 
             #[allow(unused_mut)]
             let mut #request_ident = #client_value.client
