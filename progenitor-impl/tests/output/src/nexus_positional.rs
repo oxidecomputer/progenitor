@@ -16466,7 +16466,7 @@ impl Client {
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
         instance_name: &'a types::Name,
-    ) -> Result<ResponseValue<reqwest::Upgraded>, Error<reqwest::Upgraded>> {
+    ) -> Result<ResponseValue<reqwest::Upgraded>, Error<()>> {
         let url = format!(
             "{}/organizations/{}/projects/{}/instances/{}/serial-console/stream",
             self.baseurl,
@@ -16504,7 +16504,66 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             101u16 => ResponseValue::upgrade(response).await,
-            200..=299 => ResponseValue::upgrade(response).await,
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    ///Connect to an instance's serial console
+    ///
+    ///Use `GET /v1/instances/{instance}/serial-console/stream` instead
+    ///
+    ///Sends a `GET` request to
+    /// `/organizations/{organization_name}/projects/{project_name}/instances/
+    /// {instance_name}/serial-console/stream_v2`
+    pub async fn instance_serial_console_stream_v2<'a>(
+        &'a self,
+        organization_name: &'a types::Name,
+        project_name: &'a types::Name,
+        instance_name: &'a types::Name,
+    ) -> Result<ResponseValue<reqwest::Upgraded>, Error<types::Error>> {
+        let url = format!(
+            "{}/organizations/{}/projects/{}/instances/{}/serial-console/stream_v2",
+            self.baseurl,
+            encode_path(&organization_name.to_string()),
+            encode_path(&project_name.to_string()),
+            encode_path(&instance_name.to_string()),
+        );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
+        #[allow(unused_mut)]
+        let mut request = self
+            .client
+            .get(url)
+            .headers(header_map)
+            .header(::reqwest::header::CONNECTION, "Upgrade")
+            .header(::reqwest::header::UPGRADE, "websocket")
+            .header(::reqwest::header::SEC_WEBSOCKET_VERSION, "13")
+            .header(
+                ::reqwest::header::SEC_WEBSOCKET_KEY,
+                ::base64::Engine::encode(
+                    &::base64::engine::general_purpose::STANDARD,
+                    ::rand::random::<[u8; 16]>(),
+                ),
+            )
+            .build()?;
+        let info = OperationInfo {
+            operation_id: "instance_serial_console_stream_v2",
+        };
+        self.pre(&mut request, &info).await?;
+        let result = self.exec(request, &info).await;
+        self.post(&result, &info).await?;
+        let response = result?;
+        match response.status().as_u16() {
+            101u16 => ResponseValue::upgrade(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -23538,7 +23597,7 @@ impl Client {
         instance: &'a types::NameOrId,
         organization: Option<&'a types::NameOrId>,
         project: Option<&'a types::NameOrId>,
-    ) -> Result<ResponseValue<reqwest::Upgraded>, Error<reqwest::Upgraded>> {
+    ) -> Result<ResponseValue<reqwest::Upgraded>, Error<types::Error>> {
         let url = format!(
             "{}/v1/instances/{}/serial-console/stream",
             self.baseurl,
@@ -23579,7 +23638,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             101u16 => ResponseValue::upgrade(response).await,
-            200..=299 => ResponseValue::upgrade(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }

@@ -443,7 +443,13 @@ impl Generator {
                     },
                 ))
                 .map(|v: Result<(OperationResponseStatus, &Response)>| {
-                    let (status_code, response) = v?;
+                    let (mut status_code, response) = v?;
+
+                    // A previous version of dropshot websockets failed to
+                    // properly report responses; clean this up here.
+                    if dropshot_websocket && status_code == OperationResponseStatus::Default {
+                        status_code = OperationResponseStatus::Code(101);
+                    }
 
                     // We categorize responses as "typed" based on the
                     // "application/json" content type, "upgrade" if it's a
@@ -472,7 +478,7 @@ impl Generator {
                         };
 
                         OperationResponseKind::Type(typ)
-                    } else if dropshot_websocket {
+                    } else if status_code == OperationResponseStatus::Code(101) {
                         OperationResponseKind::Upgrade
                     } else if response.content.first().is_some() {
                         OperationResponseKind::Raw
@@ -484,6 +490,7 @@ impl Generator {
                     if matches!(
                         status_code,
                         OperationResponseStatus::Default
+                            | OperationResponseStatus::Code(101)
                             | OperationResponseStatus::Code(200..=299)
                             | OperationResponseStatus::Range(2)
                     ) {
@@ -516,20 +523,22 @@ impl Generator {
             });
         }
 
-        // Must accept HTTP 101 Switching Protocols
-        if dropshot_websocket {
-            responses.push(OperationResponse {
-                status_code: OperationResponseStatus::Code(101),
-                typ: OperationResponseKind::Upgrade,
-                description: None,
-            })
-        }
-
         let dropshot_paginated = self.dropshot_pagination_data(operation, &params, &responses);
 
         if dropshot_websocket && dropshot_paginated.is_some() {
             return Err(Error::InvalidExtension(format!(
                 "conflicting extensions in {:?}",
+                operation_id
+            )));
+        }
+        if dropshot_websocket
+            && responses
+                .iter()
+                .find(|r| r.status_code == OperationResponseStatus::Code(101))
+                .is_none()
+        {
+            return Err(Error::InvalidExtension(format!(
+                "websocket endpoint {:?} must include an explicit 101 response code",
                 operation_id
             )));
         }
