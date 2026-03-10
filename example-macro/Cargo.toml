@@ -8,7 +8,7 @@ rust-version.workspace = true
 [dependencies]
 chrono = { version = "0.4", features = ["serde"] }
 progenitor = { path = "../progenitor" }
-reqwest = { version = "0.13.1", features = ["json", "query", "stream"] }
+reqwest = { version = "0.13.2", features = ["json", "query", "stream"] }
 schemars = { version = "0.8.22", features = ["uuid1"] }
 serde = { version = "1.0", features = ["derive"] }
 uuid = { version = "1.21", features = ["serde", "v4"] }
