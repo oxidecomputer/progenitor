@@ -1,11 +1,11 @@
-// Copyright 2024 Oxide Computer Company
+// Copyright 2026 Oxide Computer Company
 
 use std::collections::BTreeMap;
 
 use heck::ToKebabCase;
 use openapiv3::OpenAPI;
 use proc_macro2::TokenStream;
-use quote::{ToTokens, format_ident, quote};
+use quote::{format_ident, quote};
 use typify::{Type, TypeEnumVariant, TypeSpaceImpl, TypeStructPropInfo};
 
 use crate::{
@@ -61,14 +61,14 @@ impl Generator {
         let execute_ops = methods.iter().map(|op| &op.execute_fn);
         let trait_ops = methods.iter().map(|op| &op.execute_trait);
 
+        let operation_id = raw_methods.iter().map(|method| &method.operation_id);
+
         let cli_fns = raw_methods
             .iter()
-            .map(|method| format_ident!("cli_{}", sanitize(&method.operation_id, Case::Snake)))
-            .collect::<Vec<_>>();
+            .map(|method| format_ident!("cli_{}", sanitize(&method.operation_id, Case::Snake)));
         let execute_fns = raw_methods
             .iter()
-            .map(|method| format_ident!("execute_{}", sanitize(&method.operation_id, Case::Snake)))
-            .collect::<Vec<_>>();
+            .map(|method| format_ident!("execute_{}", sanitize(&method.operation_id, Case::Snake)));
 
         let cli_variants = raw_methods
             .iter()
@@ -80,12 +80,12 @@ impl Generator {
             path: syn::parse_str(crate_name).unwrap(),
         };
 
-        let cli_bounds: Vec<_> = self
+        let cli_bounds = self
             .settings
             .extra_cli_bounds
             .iter()
-            .map(|b| syn::parse_str::<syn::Path>(b).unwrap().into_token_stream())
-            .collect();
+            .map(|b| syn::parse_str::<syn::Path>(b).unwrap())
+            .collect::<Vec<_>>();
 
         let code = quote! {
             use #crate_path::*;
@@ -168,6 +168,14 @@ impl Generator {
                             CliCommand::#cli_variants,
                         )*
                     ].into_iter()
+                }
+
+                pub fn operation_id(&self) -> &'static str {
+                    match self {
+                        #(
+                            CliCommand::#cli_variants => #operation_id,
+                        )*
+                    }
                 }
             }
 
