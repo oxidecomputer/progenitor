@@ -74,6 +74,10 @@ impl Generator {
             .iter()
             .map(|method| format_ident!("{}", sanitize(&method.operation_id, Case::Pascal)))
             .collect::<Vec<_>>();
+        let operation_ids = raw_methods
+            .iter()
+            .map(|method| &method.operation_id)
+            .collect::<Vec<_>>();
 
         let crate_path = syn::TypePath {
             qself: None,
@@ -168,6 +172,14 @@ impl Generator {
                             CliCommand::#cli_variants,
                         )*
                     ].into_iter()
+                }
+
+                pub fn operation_id(&self) -> &'static str {
+                    match self {
+                        #(
+                            CliCommand::#cli_variants => #operation_ids,
+                        )*
+                    }
                 }
             }
 

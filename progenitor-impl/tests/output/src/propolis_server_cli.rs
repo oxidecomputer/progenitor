@@ -447,4 +447,18 @@ impl CliCommand {
         ]
         .into_iter()
     }
+
+    pub fn operation_id(&self) -> &'static str {
+        match self {
+            CliCommand::InstanceGet => "instance_get",
+            CliCommand::InstanceEnsure => "instance_ensure",
+            CliCommand::InstanceIssueCrucibleSnapshotRequest => {
+                "instance_issue_crucible_snapshot_request"
+            }
+            CliCommand::InstanceMigrateStatus => "instance_migrate_status",
+            CliCommand::InstanceSerial => "instance_serial",
+            CliCommand::InstanceStatePut => "instance_state_put",
+            CliCommand::InstanceStateMonitor => "instance_state_monitor",
+        }
+    }
 }
