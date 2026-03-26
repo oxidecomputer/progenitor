@@ -478,4 +478,15 @@ impl CliCommand {
         ]
         .into_iter()
     }
+
+    pub fn operation_id(&self) -> &'static str {
+        match self {
+            CliCommand::Enrol => "enrol",
+            CliCommand::GlobalJobs => "global_jobs",
+            CliCommand::Ping => "ping",
+            CliCommand::ReportFinish => "report_finish",
+            CliCommand::ReportOutput => "report_output",
+            CliCommand::ReportStart => "report_start",
+        }
+    }
 }
