@@ -43,7 +43,7 @@ openapiv3 = "2.2.0"
 percent-encoding = "2.3.2"
 proc-macro2 = "1.0.106"
 quote = "1.0.45"
-rand = "0.10.0"
+rand = "0.10.1"
 regex = "1.12.3"
 regress = "0.11.1"
 reqwest = { version = "0.13.2", default-features = false, features = ["json", "query", "stream"] }
