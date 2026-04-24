@@ -18,10 +18,10 @@ rust-version = "1.88"
 license = "MPL-2.0"
 
 [workspace.dependencies]
-progenitor = { version = "0.13.0", path = "progenitor", default-features = false }
-progenitor-client = { version = "0.13.0", path = "progenitor-client" }
-progenitor-impl = { version = "0.13.0", path = "progenitor-impl" }
-progenitor-macro = { version = "0.13.0", path = "progenitor-macro" }
+progenitor = { version = "0.14.0", path = "progenitor", default-features = false }
+progenitor-client = { version = "0.14.0", path = "progenitor-client" }
+progenitor-impl = { version = "0.14.0", path = "progenitor-impl" }
+progenitor-macro = { version = "0.14.0", path = "progenitor-macro" }
 
 anyhow = "1.0.102"
 assert_cmd = "2.2.1"
