@@ -15,6 +15,9 @@
 
 https://github.com/oxidecomputer/progenitor/compare/v0.13.0\...HEAD[Full list of commits]
 
+* Add CliCommand::operation_id() to get the original operationId (#1336)
+* Treat connection upgrade (HTTP 101) as normal success. (#1320)
+
 == 0.13.0 (released 2026-02-24)
 
 https://github.com/oxidecomputer/progenitor/compare/v0.12.0\...v0.13.0[Full list of commits]
