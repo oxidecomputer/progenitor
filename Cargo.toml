@@ -60,7 +60,7 @@ tokio = { version = "1.51.1", features = ["rt", "net"] }
 typify = { version = "0.6.1" }
 url = "2.5.8"
 unicode-ident = "1.0.24"
-uuid = { version = "1.23.0", features = ["serde", "v4"] }
+uuid = { version = "1.23.1", features = ["serde", "v4"] }
 
 #[patch.crates-io]
 #typify = { path = "../typify/typify" }
