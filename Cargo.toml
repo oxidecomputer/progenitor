@@ -24,7 +24,7 @@ progenitor-impl = { version = "0.13.0", path = "progenitor-impl" }
 progenitor-macro = { version = "0.13.0", path = "progenitor-macro" }
 
 anyhow = "1.0.102"
-assert_cmd = "2.2.0"
+assert_cmd = "2.2.1"
 base64 = "0.22.1"
 bytes = "1.11.1"
 chrono = { version = "0.4.44", default-features = false, features = ["serde"] }
