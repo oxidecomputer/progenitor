@@ -46,7 +46,7 @@ quote = "1.0.45"
 rand = "0.10.1"
 regex = "1.12.3"
 regress = "0.11.1"
-reqwest = { version = "0.13.2", default-features = false, features = ["json", "query", "stream"] }
+reqwest = { version = "0.13.3", default-features = false, features = ["json", "query", "stream"] }
 rustfmt-wrapper = "0.2.1"
 schemars = { version = "0.8.22", features = ["chrono", "uuid1"] }
 semver = "1.0.28"
