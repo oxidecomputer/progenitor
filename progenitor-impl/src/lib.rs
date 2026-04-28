@@ -374,6 +374,22 @@ impl Generator {
 
         let types = self.type_space.to_stream();
 
+        // Re-export replaced types from the types module so callers can access
+        // them without knowing the replacement path.
+        let mut sorted_replace: Vec<_> = self.settings.replace.iter().collect();
+        sorted_replace.sort_by_key(|(name, _)| name.as_str());
+        let replaced_type_reexports =
+            sorted_replace.iter().map(|(type_name, (replace_path, _))| {
+                let type_ident = quote::format_ident!("{}", type_name);
+                let replace_tokens: TokenStream =
+                    replace_path.parse().expect("invalid replacement type path");
+                quote! {
+                    #[allow(unused_imports)]
+                    pub use #replace_tokens as #type_ident;
+                }
+            });
+        let replaced_type_reexports = quote! { #(#replaced_type_reexports)* };
+
         let (inner_type, inner_fn_value) = match self.settings.inner_type.as_ref() {
             Some(inner_type) => (inner_type.clone(), quote! { &self.inner }),
             None => (quote! { () }, quote! { &() }),
@@ -440,6 +456,7 @@ impl Generator {
             #[allow(clippy::all)]
             pub mod types {
                 #types
+                #replaced_type_reexports
             }
 
             #[derive(Clone, Debug)]

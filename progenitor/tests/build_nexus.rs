@@ -60,6 +60,8 @@ mod builder_untagged {
     pub fn _ignore() {
         // Verify the replacement above.
         let _ignore = nexus_client::types::IpNet::V4("".parse().unwrap());
+        // Verify the replaced type is re-exported from types.
+        let _: nexus_client::types::Ipv4Net = "".parse().unwrap();
 
         let client = Client::new("");
         let stream = client
