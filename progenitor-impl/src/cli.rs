@@ -428,7 +428,7 @@ impl Generator {
             let arg_type = self.type_space.get_type(arg_type_id).unwrap();
             let arg_type_name = arg_type.ident();
 
-            let value_expr = arg_value_tokens(&arg_type);
+            let value_expr = arg_value_tokens(&arg_type, false);
 
             let consumer = quote! {
                 if let Some(value) =
@@ -567,6 +567,7 @@ impl Generator {
             } else {
                 None
             };
+        let is_optional = maybe_inner_type.is_some();
 
         let prop_type = if let Some(inner_type) = maybe_inner_type {
             inner_type
@@ -592,7 +593,7 @@ impl Generator {
 
             let prop_fn = format_ident!("{}", sanitize(name, Case::Snake));
             let prop_type_ident = prop_type.ident();
-            let value_expr = arg_value_tokens(&prop_type);
+            let value_expr = arg_value_tokens(&prop_type, is_optional);
 
             let consumer = quote! {
                 if let Some(value) =
@@ -661,11 +662,11 @@ fn is_copy_type(ty: &Type<'_>) -> bool {
 }
 
 /// Returns the token expression for passing `value: &T` to a builder setter
-/// that accepts `V: TryInto<T>`.
-fn arg_value_tokens(ty: &Type<'_>) -> TokenStream {
+/// accepting either `V: TryInto<T>` or `V: TryInto<Option<T>>`.
+fn arg_value_tokens(ty: &Type<'_>, needs_owned_value: bool) -> TokenStream {
     if is_copy_type(ty) {
         quote! { *value }
-    } else if matches!(ty.details(), typify::TypeDetails::String) {
+    } else if !needs_owned_value && matches!(ty.details(), typify::TypeDetails::String) {
         // &str: TryInto<String> via String: From<&str>, so no clone needed.
         quote! { value.as_str() }
     } else {
