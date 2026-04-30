@@ -5918,7 +5918,7 @@ impl<T: CliConfig> Cli<T> {
     ) -> anyhow::Result<()> {
         let mut request = self.client.disk_view_by_id();
         if let Some(value) = matches.get_one::<::uuid::Uuid>("id") {
-            request = request.id(value.clone());
+            request = request.id(*value);
         }
 
         self.config.execute_disk_view_by_id(matches, &mut request)?;
@@ -5941,7 +5941,7 @@ impl<T: CliConfig> Cli<T> {
     ) -> anyhow::Result<()> {
         let mut request = self.client.image_view_by_id();
         if let Some(value) = matches.get_one::<::uuid::Uuid>("id") {
-            request = request.id(value.clone());
+            request = request.id(*value);
         }
 
         self.config
@@ -5965,7 +5965,7 @@ impl<T: CliConfig> Cli<T> {
     ) -> anyhow::Result<()> {
         let mut request = self.client.instance_view_by_id();
         if let Some(value) = matches.get_one::<::uuid::Uuid>("id") {
-            request = request.id(value.clone());
+            request = request.id(*value);
         }
 
         self.config
@@ -5989,7 +5989,7 @@ impl<T: CliConfig> Cli<T> {
     ) -> anyhow::Result<()> {
         let mut request = self.client.instance_network_interface_view_by_id();
         if let Some(value) = matches.get_one::<::uuid::Uuid>("id") {
-            request = request.id(value.clone());
+            request = request.id(*value);
         }
 
         self.config
@@ -6013,7 +6013,7 @@ impl<T: CliConfig> Cli<T> {
     ) -> anyhow::Result<()> {
         let mut request = self.client.organization_view_by_id();
         if let Some(value) = matches.get_one::<::uuid::Uuid>("id") {
-            request = request.id(value.clone());
+            request = request.id(*value);
         }
 
         self.config
@@ -6037,7 +6037,7 @@ impl<T: CliConfig> Cli<T> {
     ) -> anyhow::Result<()> {
         let mut request = self.client.project_view_by_id();
         if let Some(value) = matches.get_one::<::uuid::Uuid>("id") {
-            request = request.id(value.clone());
+            request = request.id(*value);
         }
 
         self.config
@@ -6061,7 +6061,7 @@ impl<T: CliConfig> Cli<T> {
     ) -> anyhow::Result<()> {
         let mut request = self.client.snapshot_view_by_id();
         if let Some(value) = matches.get_one::<::uuid::Uuid>("id") {
-            request = request.id(value.clone());
+            request = request.id(*value);
         }
 
         self.config
@@ -6085,7 +6085,7 @@ impl<T: CliConfig> Cli<T> {
     ) -> anyhow::Result<()> {
         let mut request = self.client.vpc_router_route_view_by_id();
         if let Some(value) = matches.get_one::<::uuid::Uuid>("id") {
-            request = request.id(value.clone());
+            request = request.id(*value);
         }
 
         self.config
@@ -6109,7 +6109,7 @@ impl<T: CliConfig> Cli<T> {
     ) -> anyhow::Result<()> {
         let mut request = self.client.vpc_router_view_by_id();
         if let Some(value) = matches.get_one::<::uuid::Uuid>("id") {
-            request = request.id(value.clone());
+            request = request.id(*value);
         }
 
         self.config
@@ -6133,7 +6133,7 @@ impl<T: CliConfig> Cli<T> {
     ) -> anyhow::Result<()> {
         let mut request = self.client.vpc_subnet_view_by_id();
         if let Some(value) = matches.get_one::<::uuid::Uuid>("id") {
-            request = request.id(value.clone());
+            request = request.id(*value);
         }
 
         self.config
@@ -6154,7 +6154,7 @@ impl<T: CliConfig> Cli<T> {
     pub async fn execute_vpc_view_by_id(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.vpc_view_by_id();
         if let Some(value) = matches.get_one::<::uuid::Uuid>("id") {
-            request = request.id(value.clone());
+            request = request.id(*value);
         }
 
         self.config.execute_vpc_view_by_id(matches, &mut request)?;
@@ -6177,7 +6177,7 @@ impl<T: CliConfig> Cli<T> {
     ) -> anyhow::Result<()> {
         let mut request = self.client.device_auth_request();
         if let Some(value) = matches.get_one::<::uuid::Uuid>("client-id") {
-            request = request.body_map(|body| body.client_id(value.clone()))
+            request = request.body_map(|body| body.client_id(*value))
         }
 
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
@@ -6207,7 +6207,7 @@ impl<T: CliConfig> Cli<T> {
     ) -> anyhow::Result<()> {
         let mut request = self.client.device_auth_confirm();
         if let Some(value) = matches.get_one::<::std::string::String>("user-code") {
-            request = request.body_map(|body| body.user_code(value.clone()))
+            request = request.body_map(|body| body.user_code(value.as_str()))
         }
 
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
@@ -6239,15 +6239,15 @@ impl<T: CliConfig> Cli<T> {
     ) -> anyhow::Result<()> {
         let mut request = self.client.device_access_token();
         if let Some(value) = matches.get_one::<::uuid::Uuid>("client-id") {
-            request = request.body_map(|body| body.client_id(value.clone()))
+            request = request.body_map(|body| body.client_id(*value))
         }
 
         if let Some(value) = matches.get_one::<::std::string::String>("device-code") {
-            request = request.body_map(|body| body.device_code(value.clone()))
+            request = request.body_map(|body| body.device_code(value.as_str()))
         }
 
         if let Some(value) = matches.get_one::<::std::string::String>("grant-type") {
-            request = request.body_map(|body| body.grant_type(value.clone()))
+            request = request.body_map(|body| body.grant_type(value.as_str()))
         }
 
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
@@ -6274,11 +6274,11 @@ impl<T: CliConfig> Cli<T> {
     pub async fn execute_group_list(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.group_list();
         if let Some(value) = matches.get_one::<::std::num::NonZeroU32>("limit") {
-            request = request.limit(value.clone());
+            request = request.limit(*value);
         }
 
         if let Some(value) = matches.get_one::<types::IdSortMode>("sort-by") {
-            request = request.sort_by(value.clone());
+            request = request.sort_by(*value);
         }
 
         self.config.execute_group_list(matches, &mut request)?;
@@ -6309,7 +6309,7 @@ impl<T: CliConfig> Cli<T> {
     pub async fn execute_login_spoof(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.login_spoof();
         if let Some(value) = matches.get_one::<::std::string::String>("username") {
-            request = request.body_map(|body| body.username(value.clone()))
+            request = request.body_map(|body| body.username(value.as_str()))
         }
 
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
@@ -6441,11 +6441,11 @@ impl<T: CliConfig> Cli<T> {
     ) -> anyhow::Result<()> {
         let mut request = self.client.organization_list();
         if let Some(value) = matches.get_one::<::std::num::NonZeroU32>("limit") {
-            request = request.limit(value.clone());
+            request = request.limit(*value);
         }
 
         if let Some(value) = matches.get_one::<types::NameOrIdSortMode>("sort-by") {
-            request = request.sort_by(value.clone());
+            request = request.sort_by(*value);
         }
 
         self.config
@@ -6481,7 +6481,7 @@ impl<T: CliConfig> Cli<T> {
     ) -> anyhow::Result<()> {
         let mut request = self.client.organization_create();
         if let Some(value) = matches.get_one::<::std::string::String>("description") {
-            request = request.body_map(|body| body.description(value.clone()))
+            request = request.body_map(|body| body.description(value.as_str()))
         }
 
         if let Some(value) = matches.get_one::<types::Name>("name") {
@@ -6658,7 +6658,7 @@ impl<T: CliConfig> Cli<T> {
     pub async fn execute_project_list(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.project_list();
         if let Some(value) = matches.get_one::<::std::num::NonZeroU32>("limit") {
-            request = request.limit(value.clone());
+            request = request.limit(*value);
         }
 
         if let Some(value) = matches.get_one::<types::Name>("organization-name") {
@@ -6666,7 +6666,7 @@ impl<T: CliConfig> Cli<T> {
         }
 
         if let Some(value) = matches.get_one::<types::NameOrIdSortMode>("sort-by") {
-            request = request.sort_by(value.clone());
+            request = request.sort_by(*value);
         }
 
         self.config.execute_project_list(matches, &mut request)?;
@@ -6697,7 +6697,7 @@ impl<T: CliConfig> Cli<T> {
     pub async fn execute_project_create(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.project_create();
         if let Some(value) = matches.get_one::<::std::string::String>("description") {
-            request = request.body_map(|body| body.description(value.clone()))
+            request = request.body_map(|body| body.description(value.as_str()))
         }
 
         if let Some(value) = matches.get_one::<types::Name>("name") {
@@ -6821,7 +6821,7 @@ impl<T: CliConfig> Cli<T> {
     pub async fn execute_disk_list(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.disk_list();
         if let Some(value) = matches.get_one::<::std::num::NonZeroU32>("limit") {
-            request = request.limit(value.clone());
+            request = request.limit(*value);
         }
 
         if let Some(value) = matches.get_one::<types::Name>("organization-name") {
@@ -6833,7 +6833,7 @@ impl<T: CliConfig> Cli<T> {
         }
 
         if let Some(value) = matches.get_one::<types::NameSortMode>("sort-by") {
-            request = request.sort_by(value.clone());
+            request = request.sort_by(*value);
         }
 
         self.config.execute_disk_list(matches, &mut request)?;
@@ -6864,7 +6864,7 @@ impl<T: CliConfig> Cli<T> {
     pub async fn execute_disk_create(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.disk_create();
         if let Some(value) = matches.get_one::<::std::string::String>("description") {
-            request = request.body_map(|body| body.description(value.clone()))
+            request = request.body_map(|body| body.description(value.as_str()))
         }
 
         if let Some(value) = matches.get_one::<types::Name>("name") {
@@ -6973,15 +6973,15 @@ impl<T: CliConfig> Cli<T> {
         if let Some(value) =
             matches.get_one::<::chrono::DateTime<::chrono::offset::Utc>>("end-time")
         {
-            request = request.end_time(value.clone());
+            request = request.end_time(*value);
         }
 
         if let Some(value) = matches.get_one::<::std::num::NonZeroU32>("limit") {
-            request = request.limit(value.clone());
+            request = request.limit(*value);
         }
 
         if let Some(value) = matches.get_one::<types::DiskMetricName>("metric-name") {
-            request = request.metric_name(value.clone());
+            request = request.metric_name(*value);
         }
 
         if let Some(value) = matches.get_one::<types::Name>("organization-name") {
@@ -6995,7 +6995,7 @@ impl<T: CliConfig> Cli<T> {
         if let Some(value) =
             matches.get_one::<::chrono::DateTime<::chrono::offset::Utc>>("start-time")
         {
-            request = request.start_time(value.clone());
+            request = request.start_time(*value);
         }
 
         self.config
@@ -7028,7 +7028,7 @@ impl<T: CliConfig> Cli<T> {
     pub async fn execute_image_list(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.image_list();
         if let Some(value) = matches.get_one::<::std::num::NonZeroU32>("limit") {
-            request = request.limit(value.clone());
+            request = request.limit(*value);
         }
 
         if let Some(value) = matches.get_one::<types::Name>("organization-name") {
@@ -7040,7 +7040,7 @@ impl<T: CliConfig> Cli<T> {
         }
 
         if let Some(value) = matches.get_one::<types::NameSortMode>("sort-by") {
-            request = request.sort_by(value.clone());
+            request = request.sort_by(*value);
         }
 
         self.config.execute_image_list(matches, &mut request)?;
@@ -7071,7 +7071,7 @@ impl<T: CliConfig> Cli<T> {
     pub async fn execute_image_create(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.image_create();
         if let Some(value) = matches.get_one::<::std::string::String>("description") {
-            request = request.body_map(|body| body.description(value.clone()))
+            request = request.body_map(|body| body.description(value.as_str()))
         }
 
         if let Some(value) = matches.get_one::<types::Name>("name") {
@@ -7167,7 +7167,7 @@ impl<T: CliConfig> Cli<T> {
     pub async fn execute_instance_list(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.instance_list();
         if let Some(value) = matches.get_one::<::std::num::NonZeroU32>("limit") {
-            request = request.limit(value.clone());
+            request = request.limit(*value);
         }
 
         if let Some(value) = matches.get_one::<types::Name>("organization-name") {
@@ -7179,7 +7179,7 @@ impl<T: CliConfig> Cli<T> {
         }
 
         if let Some(value) = matches.get_one::<types::NameSortMode>("sort-by") {
-            request = request.sort_by(value.clone());
+            request = request.sort_by(*value);
         }
 
         self.config.execute_instance_list(matches, &mut request)?;
@@ -7213,11 +7213,11 @@ impl<T: CliConfig> Cli<T> {
     ) -> anyhow::Result<()> {
         let mut request = self.client.instance_create();
         if let Some(value) = matches.get_one::<::std::string::String>("description") {
-            request = request.body_map(|body| body.description(value.clone()))
+            request = request.body_map(|body| body.description(value.as_str()))
         }
 
         if let Some(value) = matches.get_one::<::std::string::String>("hostname") {
-            request = request.body_map(|body| body.hostname(value.clone()))
+            request = request.body_map(|body| body.hostname(value.as_str()))
         }
 
         if let Some(value) = matches.get_one::<types::ByteCount>("memory") {
@@ -7241,11 +7241,11 @@ impl<T: CliConfig> Cli<T> {
         }
 
         if let Some(value) = matches.get_one::<bool>("start") {
-            request = request.body_map(|body| body.start(value.clone()))
+            request = request.body_map(|body| body.start(*value))
         }
 
         if let Some(value) = matches.get_one::<::std::string::String>("user-data") {
-            request = request.body_map(|body| body.user_data(value.clone()))
+            request = request.body_map(|body| body.user_data(value.as_str()))
         }
 
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
@@ -7339,7 +7339,7 @@ impl<T: CliConfig> Cli<T> {
         }
 
         if let Some(value) = matches.get_one::<::std::num::NonZeroU32>("limit") {
-            request = request.limit(value.clone());
+            request = request.limit(*value);
         }
 
         if let Some(value) = matches.get_one::<types::Name>("organization-name") {
@@ -7351,7 +7351,7 @@ impl<T: CliConfig> Cli<T> {
         }
 
         if let Some(value) = matches.get_one::<types::NameSortMode>("sort-by") {
-            request = request.sort_by(value.clone());
+            request = request.sort_by(*value);
         }
 
         self.config
@@ -7506,7 +7506,7 @@ impl<T: CliConfig> Cli<T> {
     ) -> anyhow::Result<()> {
         let mut request = self.client.instance_migrate();
         if let Some(value) = matches.get_one::<::uuid::Uuid>("dst-sled-id") {
-            request = request.body_map(|body| body.dst_sled_id(value.clone()))
+            request = request.body_map(|body| body.dst_sled_id(*value))
         }
 
         if let Some(value) = matches.get_one::<types::Name>("instance-name") {
@@ -7554,7 +7554,7 @@ impl<T: CliConfig> Cli<T> {
         }
 
         if let Some(value) = matches.get_one::<::std::num::NonZeroU32>("limit") {
-            request = request.limit(value.clone());
+            request = request.limit(*value);
         }
 
         if let Some(value) = matches.get_one::<types::Name>("organization-name") {
@@ -7566,7 +7566,7 @@ impl<T: CliConfig> Cli<T> {
         }
 
         if let Some(value) = matches.get_one::<types::NameSortMode>("sort-by") {
-            request = request.sort_by(value.clone());
+            request = request.sort_by(*value);
         }
 
         self.config
@@ -7603,7 +7603,7 @@ impl<T: CliConfig> Cli<T> {
     ) -> anyhow::Result<()> {
         let mut request = self.client.instance_network_interface_create();
         if let Some(value) = matches.get_one::<::std::string::String>("description") {
-            request = request.body_map(|body| body.description(value.clone()))
+            request = request.body_map(|body| body.description(value.as_str()))
         }
 
         if let Some(value) = matches.get_one::<types::Name>("instance-name") {
@@ -7611,7 +7611,7 @@ impl<T: CliConfig> Cli<T> {
         }
 
         if let Some(value) = matches.get_one::<::std::net::IpAddr>("ip") {
-            request = request.body_map(|body| body.ip(value.clone()))
+            request = request.body_map(|body| body.ip(*value))
         }
 
         if let Some(value) = matches.get_one::<types::Name>("name") {
@@ -7719,7 +7719,7 @@ impl<T: CliConfig> Cli<T> {
         }
 
         if let Some(value) = matches.get_one::<bool>("primary") {
-            request = request.body_map(|body| body.primary(value.clone()))
+            request = request.body_map(|body| body.primary(*value))
         }
 
         if let Some(value) = matches.get_one::<types::Name>("project-name") {
@@ -7822,7 +7822,7 @@ impl<T: CliConfig> Cli<T> {
     ) -> anyhow::Result<()> {
         let mut request = self.client.instance_serial_console();
         if let Some(value) = matches.get_one::<u64>("from-start") {
-            request = request.from_start(value.clone());
+            request = request.from_start(*value);
         }
 
         if let Some(value) = matches.get_one::<types::Name>("instance-name") {
@@ -7830,11 +7830,11 @@ impl<T: CliConfig> Cli<T> {
         }
 
         if let Some(value) = matches.get_one::<u64>("max-bytes") {
-            request = request.max_bytes(value.clone());
+            request = request.max_bytes(*value);
         }
 
         if let Some(value) = matches.get_one::<u64>("most-recent") {
-            request = request.most_recent(value.clone());
+            request = request.most_recent(*value);
         }
 
         if let Some(value) = matches.get_one::<types::Name>("organization-name") {
@@ -8045,7 +8045,7 @@ impl<T: CliConfig> Cli<T> {
     pub async fn execute_snapshot_list(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.snapshot_list();
         if let Some(value) = matches.get_one::<::std::num::NonZeroU32>("limit") {
-            request = request.limit(value.clone());
+            request = request.limit(*value);
         }
 
         if let Some(value) = matches.get_one::<types::Name>("organization-name") {
@@ -8057,7 +8057,7 @@ impl<T: CliConfig> Cli<T> {
         }
 
         if let Some(value) = matches.get_one::<types::NameSortMode>("sort-by") {
-            request = request.sort_by(value.clone());
+            request = request.sort_by(*value);
         }
 
         self.config.execute_snapshot_list(matches, &mut request)?;
@@ -8091,7 +8091,7 @@ impl<T: CliConfig> Cli<T> {
     ) -> anyhow::Result<()> {
         let mut request = self.client.snapshot_create();
         if let Some(value) = matches.get_one::<::std::string::String>("description") {
-            request = request.body_map(|body| body.description(value.clone()))
+            request = request.body_map(|body| body.description(value.as_str()))
         }
 
         if let Some(value) = matches.get_one::<types::Name>("disk") {
@@ -8194,7 +8194,7 @@ impl<T: CliConfig> Cli<T> {
     pub async fn execute_vpc_list(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.vpc_list();
         if let Some(value) = matches.get_one::<::std::num::NonZeroU32>("limit") {
-            request = request.limit(value.clone());
+            request = request.limit(*value);
         }
 
         if let Some(value) = matches.get_one::<types::Name>("organization-name") {
@@ -8206,7 +8206,7 @@ impl<T: CliConfig> Cli<T> {
         }
 
         if let Some(value) = matches.get_one::<types::NameSortMode>("sort-by") {
-            request = request.sort_by(value.clone());
+            request = request.sort_by(*value);
         }
 
         self.config.execute_vpc_list(matches, &mut request)?;
@@ -8237,7 +8237,7 @@ impl<T: CliConfig> Cli<T> {
     pub async fn execute_vpc_create(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.vpc_create();
         if let Some(value) = matches.get_one::<::std::string::String>("description") {
-            request = request.body_map(|body| body.description(value.clone()))
+            request = request.body_map(|body| body.description(value.as_str()))
         }
 
         if let Some(value) = matches.get_one::<types::Name>("dns-name") {
@@ -8464,7 +8464,7 @@ impl<T: CliConfig> Cli<T> {
     ) -> anyhow::Result<()> {
         let mut request = self.client.vpc_router_list();
         if let Some(value) = matches.get_one::<::std::num::NonZeroU32>("limit") {
-            request = request.limit(value.clone());
+            request = request.limit(*value);
         }
 
         if let Some(value) = matches.get_one::<types::Name>("organization-name") {
@@ -8476,7 +8476,7 @@ impl<T: CliConfig> Cli<T> {
         }
 
         if let Some(value) = matches.get_one::<types::NameSortMode>("sort-by") {
-            request = request.sort_by(value.clone());
+            request = request.sort_by(*value);
         }
 
         if let Some(value) = matches.get_one::<types::Name>("vpc-name") {
@@ -8515,7 +8515,7 @@ impl<T: CliConfig> Cli<T> {
     ) -> anyhow::Result<()> {
         let mut request = self.client.vpc_router_create();
         if let Some(value) = matches.get_one::<::std::string::String>("description") {
-            request = request.body_map(|body| body.description(value.clone()))
+            request = request.body_map(|body| body.description(value.as_str()))
         }
 
         if let Some(value) = matches.get_one::<types::Name>("name") {
@@ -8686,7 +8686,7 @@ impl<T: CliConfig> Cli<T> {
     ) -> anyhow::Result<()> {
         let mut request = self.client.vpc_router_route_list();
         if let Some(value) = matches.get_one::<::std::num::NonZeroU32>("limit") {
-            request = request.limit(value.clone());
+            request = request.limit(*value);
         }
 
         if let Some(value) = matches.get_one::<types::Name>("organization-name") {
@@ -8702,7 +8702,7 @@ impl<T: CliConfig> Cli<T> {
         }
 
         if let Some(value) = matches.get_one::<types::NameSortMode>("sort-by") {
-            request = request.sort_by(value.clone());
+            request = request.sort_by(*value);
         }
 
         if let Some(value) = matches.get_one::<types::Name>("vpc-name") {
@@ -8742,7 +8742,7 @@ impl<T: CliConfig> Cli<T> {
     ) -> anyhow::Result<()> {
         let mut request = self.client.vpc_router_route_create();
         if let Some(value) = matches.get_one::<::std::string::String>("description") {
-            request = request.body_map(|body| body.description(value.clone()))
+            request = request.body_map(|body| body.description(value.as_str()))
         }
 
         if let Some(value) = matches.get_one::<types::Name>("name") {
@@ -8930,7 +8930,7 @@ impl<T: CliConfig> Cli<T> {
     ) -> anyhow::Result<()> {
         let mut request = self.client.vpc_subnet_list();
         if let Some(value) = matches.get_one::<::std::num::NonZeroU32>("limit") {
-            request = request.limit(value.clone());
+            request = request.limit(*value);
         }
 
         if let Some(value) = matches.get_one::<types::Name>("organization-name") {
@@ -8942,7 +8942,7 @@ impl<T: CliConfig> Cli<T> {
         }
 
         if let Some(value) = matches.get_one::<types::NameSortMode>("sort-by") {
-            request = request.sort_by(value.clone());
+            request = request.sort_by(*value);
         }
 
         if let Some(value) = matches.get_one::<types::Name>("vpc-name") {
@@ -8981,7 +8981,7 @@ impl<T: CliConfig> Cli<T> {
     ) -> anyhow::Result<()> {
         let mut request = self.client.vpc_subnet_create();
         if let Some(value) = matches.get_one::<::std::string::String>("description") {
-            request = request.body_map(|body| body.description(value.clone()))
+            request = request.body_map(|body| body.description(value.as_str()))
         }
 
         if let Some(value) = matches.get_one::<types::Ipv4Net>("ipv4-block") {
@@ -9160,7 +9160,7 @@ impl<T: CliConfig> Cli<T> {
     ) -> anyhow::Result<()> {
         let mut request = self.client.vpc_subnet_list_network_interfaces();
         if let Some(value) = matches.get_one::<::std::num::NonZeroU32>("limit") {
-            request = request.limit(value.clone());
+            request = request.limit(*value);
         }
 
         if let Some(value) = matches.get_one::<types::Name>("organization-name") {
@@ -9172,7 +9172,7 @@ impl<T: CliConfig> Cli<T> {
         }
 
         if let Some(value) = matches.get_one::<types::NameSortMode>("sort-by") {
-            request = request.sort_by(value.clone());
+            request = request.sort_by(*value);
         }
 
         if let Some(value) = matches.get_one::<types::Name>("subnet-name") {
@@ -9254,7 +9254,7 @@ impl<T: CliConfig> Cli<T> {
     pub async fn execute_role_list(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.role_list();
         if let Some(value) = matches.get_one::<::std::num::NonZeroU32>("limit") {
-            request = request.limit(value.clone());
+            request = request.limit(*value);
         }
 
         self.config.execute_role_list(matches, &mut request)?;
@@ -9285,7 +9285,7 @@ impl<T: CliConfig> Cli<T> {
     pub async fn execute_role_view(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.role_view();
         if let Some(value) = matches.get_one::<::std::string::String>("role-name") {
-            request = request.role_name(value.clone());
+            request = request.role_name(value.as_str());
         }
 
         self.config.execute_role_view(matches, &mut request)?;
@@ -9324,11 +9324,11 @@ impl<T: CliConfig> Cli<T> {
     ) -> anyhow::Result<()> {
         let mut request = self.client.session_me_groups();
         if let Some(value) = matches.get_one::<::std::num::NonZeroU32>("limit") {
-            request = request.limit(value.clone());
+            request = request.limit(*value);
         }
 
         if let Some(value) = matches.get_one::<types::IdSortMode>("sort-by") {
-            request = request.sort_by(value.clone());
+            request = request.sort_by(*value);
         }
 
         self.config
@@ -9363,11 +9363,11 @@ impl<T: CliConfig> Cli<T> {
     ) -> anyhow::Result<()> {
         let mut request = self.client.session_sshkey_list();
         if let Some(value) = matches.get_one::<::std::num::NonZeroU32>("limit") {
-            request = request.limit(value.clone());
+            request = request.limit(*value);
         }
 
         if let Some(value) = matches.get_one::<types::NameSortMode>("sort-by") {
-            request = request.sort_by(value.clone());
+            request = request.sort_by(*value);
         }
 
         self.config
@@ -9402,7 +9402,7 @@ impl<T: CliConfig> Cli<T> {
     ) -> anyhow::Result<()> {
         let mut request = self.client.session_sshkey_create();
         if let Some(value) = matches.get_one::<::std::string::String>("description") {
-            request = request.body_map(|body| body.description(value.clone()))
+            request = request.body_map(|body| body.description(value.as_str()))
         }
 
         if let Some(value) = matches.get_one::<types::Name>("name") {
@@ -9410,7 +9410,7 @@ impl<T: CliConfig> Cli<T> {
         }
 
         if let Some(value) = matches.get_one::<::std::string::String>("public-key") {
-            request = request.body_map(|body| body.public_key(value.clone()))
+            request = request.body_map(|body| body.public_key(value.as_str()))
         }
 
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
@@ -9490,7 +9490,7 @@ impl<T: CliConfig> Cli<T> {
     ) -> anyhow::Result<()> {
         let mut request = self.client.system_image_view_by_id();
         if let Some(value) = matches.get_one::<::uuid::Uuid>("id") {
-            request = request.id(value.clone());
+            request = request.id(*value);
         }
 
         self.config
@@ -9514,7 +9514,7 @@ impl<T: CliConfig> Cli<T> {
     ) -> anyhow::Result<()> {
         let mut request = self.client.ip_pool_view_by_id();
         if let Some(value) = matches.get_one::<::uuid::Uuid>("id") {
-            request = request.id(value.clone());
+            request = request.id(*value);
         }
 
         self.config
@@ -9538,7 +9538,7 @@ impl<T: CliConfig> Cli<T> {
     ) -> anyhow::Result<()> {
         let mut request = self.client.silo_view_by_id();
         if let Some(value) = matches.get_one::<::uuid::Uuid>("id") {
-            request = request.id(value.clone());
+            request = request.id(*value);
         }
 
         self.config.execute_silo_view_by_id(matches, &mut request)?;
@@ -9561,11 +9561,11 @@ impl<T: CliConfig> Cli<T> {
     ) -> anyhow::Result<()> {
         let mut request = self.client.certificate_list();
         if let Some(value) = matches.get_one::<::std::num::NonZeroU32>("limit") {
-            request = request.limit(value.clone());
+            request = request.limit(*value);
         }
 
         if let Some(value) = matches.get_one::<types::NameSortMode>("sort-by") {
-            request = request.sort_by(value.clone());
+            request = request.sort_by(*value);
         }
 
         self.config
@@ -9601,7 +9601,7 @@ impl<T: CliConfig> Cli<T> {
     ) -> anyhow::Result<()> {
         let mut request = self.client.certificate_create();
         if let Some(value) = matches.get_one::<::std::string::String>("description") {
-            request = request.body_map(|body| body.description(value.clone()))
+            request = request.body_map(|body| body.description(value.as_str()))
         }
 
         if let Some(value) = matches.get_one::<types::Name>("name") {
@@ -9609,7 +9609,7 @@ impl<T: CliConfig> Cli<T> {
         }
 
         if let Some(value) = matches.get_one::<types::ServiceUsingCertificate>("service") {
-            request = request.body_map(|body| body.service(value.clone()))
+            request = request.body_map(|body| body.service(*value))
         }
 
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
@@ -9689,11 +9689,11 @@ impl<T: CliConfig> Cli<T> {
     ) -> anyhow::Result<()> {
         let mut request = self.client.physical_disk_list();
         if let Some(value) = matches.get_one::<::std::num::NonZeroU32>("limit") {
-            request = request.limit(value.clone());
+            request = request.limit(*value);
         }
 
         if let Some(value) = matches.get_one::<types::IdSortMode>("sort-by") {
-            request = request.sort_by(value.clone());
+            request = request.sort_by(*value);
         }
 
         self.config
@@ -9726,11 +9726,11 @@ impl<T: CliConfig> Cli<T> {
     pub async fn execute_rack_list(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.rack_list();
         if let Some(value) = matches.get_one::<::std::num::NonZeroU32>("limit") {
-            request = request.limit(value.clone());
+            request = request.limit(*value);
         }
 
         if let Some(value) = matches.get_one::<types::IdSortMode>("sort-by") {
-            request = request.sort_by(value.clone());
+            request = request.sort_by(*value);
         }
 
         self.config.execute_rack_list(matches, &mut request)?;
@@ -9761,7 +9761,7 @@ impl<T: CliConfig> Cli<T> {
     pub async fn execute_rack_view(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.rack_view();
         if let Some(value) = matches.get_one::<::uuid::Uuid>("rack-id") {
-            request = request.rack_id(value.clone());
+            request = request.rack_id(*value);
         }
 
         self.config.execute_rack_view(matches, &mut request)?;
@@ -9781,11 +9781,11 @@ impl<T: CliConfig> Cli<T> {
     pub async fn execute_sled_list(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.sled_list();
         if let Some(value) = matches.get_one::<::std::num::NonZeroU32>("limit") {
-            request = request.limit(value.clone());
+            request = request.limit(*value);
         }
 
         if let Some(value) = matches.get_one::<types::IdSortMode>("sort-by") {
-            request = request.sort_by(value.clone());
+            request = request.sort_by(*value);
         }
 
         self.config.execute_sled_list(matches, &mut request)?;
@@ -9816,7 +9816,7 @@ impl<T: CliConfig> Cli<T> {
     pub async fn execute_sled_view(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.sled_view();
         if let Some(value) = matches.get_one::<::uuid::Uuid>("sled-id") {
-            request = request.sled_id(value.clone());
+            request = request.sled_id(*value);
         }
 
         self.config.execute_sled_view(matches, &mut request)?;
@@ -9839,15 +9839,15 @@ impl<T: CliConfig> Cli<T> {
     ) -> anyhow::Result<()> {
         let mut request = self.client.sled_physical_disk_list();
         if let Some(value) = matches.get_one::<::std::num::NonZeroU32>("limit") {
-            request = request.limit(value.clone());
+            request = request.limit(*value);
         }
 
         if let Some(value) = matches.get_one::<::uuid::Uuid>("sled-id") {
-            request = request.sled_id(value.clone());
+            request = request.sled_id(*value);
         }
 
         if let Some(value) = matches.get_one::<types::IdSortMode>("sort-by") {
-            request = request.sort_by(value.clone());
+            request = request.sort_by(*value);
         }
 
         self.config
@@ -9883,11 +9883,11 @@ impl<T: CliConfig> Cli<T> {
     ) -> anyhow::Result<()> {
         let mut request = self.client.system_image_list();
         if let Some(value) = matches.get_one::<::std::num::NonZeroU32>("limit") {
-            request = request.limit(value.clone());
+            request = request.limit(*value);
         }
 
         if let Some(value) = matches.get_one::<types::NameSortMode>("sort-by") {
-            request = request.sort_by(value.clone());
+            request = request.sort_by(*value);
         }
 
         self.config
@@ -9923,7 +9923,7 @@ impl<T: CliConfig> Cli<T> {
     ) -> anyhow::Result<()> {
         let mut request = self.client.system_image_create();
         if let Some(value) = matches.get_one::<::std::string::String>("description") {
-            request = request.body_map(|body| body.description(value.clone()))
+            request = request.body_map(|body| body.description(value.as_str()))
         }
 
         if let Some(value) = matches.get_one::<types::Name>("name") {
@@ -10004,11 +10004,11 @@ impl<T: CliConfig> Cli<T> {
     pub async fn execute_ip_pool_list(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.ip_pool_list();
         if let Some(value) = matches.get_one::<::std::num::NonZeroU32>("limit") {
-            request = request.limit(value.clone());
+            request = request.limit(*value);
         }
 
         if let Some(value) = matches.get_one::<types::NameOrIdSortMode>("sort-by") {
-            request = request.sort_by(value.clone());
+            request = request.sort_by(*value);
         }
 
         self.config.execute_ip_pool_list(matches, &mut request)?;
@@ -10039,7 +10039,7 @@ impl<T: CliConfig> Cli<T> {
     pub async fn execute_ip_pool_create(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.ip_pool_create();
         if let Some(value) = matches.get_one::<::std::string::String>("description") {
-            request = request.body_map(|body| body.description(value.clone()))
+            request = request.body_map(|body| body.description(value.as_str()))
         }
 
         if let Some(value) = matches.get_one::<types::Name>("name") {
@@ -10150,7 +10150,7 @@ impl<T: CliConfig> Cli<T> {
     ) -> anyhow::Result<()> {
         let mut request = self.client.ip_pool_range_list();
         if let Some(value) = matches.get_one::<::std::num::NonZeroU32>("limit") {
-            request = request.limit(value.clone());
+            request = request.limit(*value);
         }
 
         if let Some(value) = matches.get_one::<types::Name>("pool-name") {
@@ -10274,7 +10274,7 @@ impl<T: CliConfig> Cli<T> {
     ) -> anyhow::Result<()> {
         let mut request = self.client.ip_pool_service_range_list();
         if let Some(value) = matches.get_one::<::std::num::NonZeroU32>("limit") {
-            request = request.limit(value.clone());
+            request = request.limit(*value);
         }
 
         self.config
@@ -10365,29 +10365,29 @@ impl<T: CliConfig> Cli<T> {
         if let Some(value) =
             matches.get_one::<::chrono::DateTime<::chrono::offset::Utc>>("end-time")
         {
-            request = request.end_time(value.clone());
+            request = request.end_time(*value);
         }
 
         if let Some(value) = matches.get_one::<::uuid::Uuid>("id") {
-            request = request.id(value.clone());
+            request = request.id(*value);
         }
 
         if let Some(value) = matches.get_one::<::std::num::NonZeroU32>("limit") {
-            request = request.limit(value.clone());
+            request = request.limit(*value);
         }
 
         if let Some(value) = matches.get_one::<types::SystemMetricName>("metric-name") {
-            request = request.metric_name(value.clone());
+            request = request.metric_name(*value);
         }
 
         if let Some(value) = matches.get_one::<::std::string::String>("page-token") {
-            request = request.page_token(value.clone());
+            request = request.page_token(value.as_str());
         }
 
         if let Some(value) =
             matches.get_one::<::chrono::DateTime<::chrono::offset::Utc>>("start-time")
         {
-            request = request.start_time(value.clone());
+            request = request.start_time(*value);
         }
 
         self.config.execute_system_metric(matches, &mut request)?;
@@ -10455,11 +10455,11 @@ impl<T: CliConfig> Cli<T> {
     pub async fn execute_saga_list(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.saga_list();
         if let Some(value) = matches.get_one::<::std::num::NonZeroU32>("limit") {
-            request = request.limit(value.clone());
+            request = request.limit(*value);
         }
 
         if let Some(value) = matches.get_one::<types::IdSortMode>("sort-by") {
-            request = request.sort_by(value.clone());
+            request = request.sort_by(*value);
         }
 
         self.config.execute_saga_list(matches, &mut request)?;
@@ -10490,7 +10490,7 @@ impl<T: CliConfig> Cli<T> {
     pub async fn execute_saga_view(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.saga_view();
         if let Some(value) = matches.get_one::<::uuid::Uuid>("saga-id") {
-            request = request.saga_id(value.clone());
+            request = request.saga_id(*value);
         }
 
         self.config.execute_saga_view(matches, &mut request)?;
@@ -10510,11 +10510,11 @@ impl<T: CliConfig> Cli<T> {
     pub async fn execute_silo_list(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.silo_list();
         if let Some(value) = matches.get_one::<::std::num::NonZeroU32>("limit") {
-            request = request.limit(value.clone());
+            request = request.limit(*value);
         }
 
         if let Some(value) = matches.get_one::<types::NameOrIdSortMode>("sort-by") {
-            request = request.sort_by(value.clone());
+            request = request.sort_by(*value);
         }
 
         self.config.execute_silo_list(matches, &mut request)?;
@@ -10549,15 +10549,15 @@ impl<T: CliConfig> Cli<T> {
         }
 
         if let Some(value) = matches.get_one::<::std::string::String>("description") {
-            request = request.body_map(|body| body.description(value.clone()))
+            request = request.body_map(|body| body.description(value.as_str()))
         }
 
         if let Some(value) = matches.get_one::<bool>("discoverable") {
-            request = request.body_map(|body| body.discoverable(value.clone()))
+            request = request.body_map(|body| body.discoverable(*value))
         }
 
         if let Some(value) = matches.get_one::<types::SiloIdentityMode>("identity-mode") {
-            request = request.body_map(|body| body.identity_mode(value.clone()))
+            request = request.body_map(|body| body.identity_mode(*value))
         }
 
         if let Some(value) = matches.get_one::<types::Name>("name") {
@@ -10632,7 +10632,7 @@ impl<T: CliConfig> Cli<T> {
     ) -> anyhow::Result<()> {
         let mut request = self.client.silo_identity_provider_list();
         if let Some(value) = matches.get_one::<::std::num::NonZeroU32>("limit") {
-            request = request.limit(value.clone());
+            request = request.limit(*value);
         }
 
         if let Some(value) = matches.get_one::<types::Name>("silo-name") {
@@ -10640,7 +10640,7 @@ impl<T: CliConfig> Cli<T> {
         }
 
         if let Some(value) = matches.get_one::<types::NameSortMode>("sort-by") {
-            request = request.sort_by(value.clone());
+            request = request.sort_by(*value);
         }
 
         self.config
@@ -10717,7 +10717,7 @@ impl<T: CliConfig> Cli<T> {
         }
 
         if let Some(value) = matches.get_one::<::uuid::Uuid>("user-id") {
-            request = request.user_id(value.clone());
+            request = request.user_id(*value);
         }
 
         self.config
@@ -10745,7 +10745,7 @@ impl<T: CliConfig> Cli<T> {
         }
 
         if let Some(value) = matches.get_one::<::uuid::Uuid>("user-id") {
-            request = request.user_id(value.clone());
+            request = request.user_id(*value);
         }
 
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
@@ -10777,11 +10777,11 @@ impl<T: CliConfig> Cli<T> {
     ) -> anyhow::Result<()> {
         let mut request = self.client.saml_identity_provider_create();
         if let Some(value) = matches.get_one::<::std::string::String>("acs-url") {
-            request = request.body_map(|body| body.acs_url(value.clone()))
+            request = request.body_map(|body| body.acs_url(value.as_str()))
         }
 
         if let Some(value) = matches.get_one::<::std::string::String>("description") {
-            request = request.body_map(|body| body.description(value.clone()))
+            request = request.body_map(|body| body.description(value.as_str()))
         }
 
         if let Some(value) = matches.get_one::<::std::string::String>("group-attribute-name") {
@@ -10789,7 +10789,7 @@ impl<T: CliConfig> Cli<T> {
         }
 
         if let Some(value) = matches.get_one::<::std::string::String>("idp-entity-id") {
-            request = request.body_map(|body| body.idp_entity_id(value.clone()))
+            request = request.body_map(|body| body.idp_entity_id(value.as_str()))
         }
 
         if let Some(value) = matches.get_one::<types::Name>("name") {
@@ -10801,15 +10801,15 @@ impl<T: CliConfig> Cli<T> {
         }
 
         if let Some(value) = matches.get_one::<::std::string::String>("slo-url") {
-            request = request.body_map(|body| body.slo_url(value.clone()))
+            request = request.body_map(|body| body.slo_url(value.as_str()))
         }
 
         if let Some(value) = matches.get_one::<::std::string::String>("sp-client-id") {
-            request = request.body_map(|body| body.sp_client_id(value.clone()))
+            request = request.body_map(|body| body.sp_client_id(value.as_str()))
         }
 
         if let Some(value) = matches.get_one::<::std::string::String>("technical-contact-email") {
-            request = request.body_map(|body| body.technical_contact_email(value.clone()))
+            request = request.body_map(|body| body.technical_contact_email(value.as_str()))
         }
 
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
@@ -10925,7 +10925,7 @@ impl<T: CliConfig> Cli<T> {
     ) -> anyhow::Result<()> {
         let mut request = self.client.silo_users_list();
         if let Some(value) = matches.get_one::<::std::num::NonZeroU32>("limit") {
-            request = request.limit(value.clone());
+            request = request.limit(*value);
         }
 
         if let Some(value) = matches.get_one::<types::Name>("silo-name") {
@@ -10933,7 +10933,7 @@ impl<T: CliConfig> Cli<T> {
         }
 
         if let Some(value) = matches.get_one::<types::IdSortMode>("sort-by") {
-            request = request.sort_by(value.clone());
+            request = request.sort_by(*value);
         }
 
         self.config.execute_silo_users_list(matches, &mut request)?;
@@ -10968,7 +10968,7 @@ impl<T: CliConfig> Cli<T> {
         }
 
         if let Some(value) = matches.get_one::<::uuid::Uuid>("user-id") {
-            request = request.user_id(value.clone());
+            request = request.user_id(*value);
         }
 
         self.config.execute_silo_user_view(matches, &mut request)?;
@@ -10991,11 +10991,11 @@ impl<T: CliConfig> Cli<T> {
     ) -> anyhow::Result<()> {
         let mut request = self.client.system_user_list();
         if let Some(value) = matches.get_one::<::std::num::NonZeroU32>("limit") {
-            request = request.limit(value.clone());
+            request = request.limit(*value);
         }
 
         if let Some(value) = matches.get_one::<types::NameSortMode>("sort-by") {
-            request = request.sort_by(value.clone());
+            request = request.sort_by(*value);
         }
 
         self.config
@@ -11055,7 +11055,7 @@ impl<T: CliConfig> Cli<T> {
     ) -> anyhow::Result<()> {
         let mut request = self.client.timeseries_schema_get();
         if let Some(value) = matches.get_one::<::std::num::NonZeroU32>("limit") {
-            request = request.limit(value.clone());
+            request = request.limit(*value);
         }
 
         self.config
@@ -11089,11 +11089,11 @@ impl<T: CliConfig> Cli<T> {
     pub async fn execute_user_list(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.user_list();
         if let Some(value) = matches.get_one::<::std::num::NonZeroU32>("limit") {
-            request = request.limit(value.clone());
+            request = request.limit(*value);
         }
 
         if let Some(value) = matches.get_one::<types::IdSortMode>("sort-by") {
-            request = request.sort_by(value.clone());
+            request = request.sort_by(*value);
         }
 
         self.config.execute_user_list(matches, &mut request)?;
@@ -11124,7 +11124,7 @@ impl<T: CliConfig> Cli<T> {
     pub async fn execute_disk_list_v1(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.disk_list_v1();
         if let Some(value) = matches.get_one::<::std::num::NonZeroU32>("limit") {
-            request = request.limit(value.clone());
+            request = request.limit(*value);
         }
 
         if let Some(value) = matches.get_one::<types::NameOrId>("organization") {
@@ -11136,7 +11136,7 @@ impl<T: CliConfig> Cli<T> {
         }
 
         if let Some(value) = matches.get_one::<types::NameOrIdSortMode>("sort-by") {
-            request = request.sort_by(value.clone());
+            request = request.sort_by(*value);
         }
 
         self.config.execute_disk_list_v1(matches, &mut request)?;
@@ -11167,7 +11167,7 @@ impl<T: CliConfig> Cli<T> {
     pub async fn execute_disk_create_v1(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.disk_create_v1();
         if let Some(value) = matches.get_one::<::std::string::String>("description") {
-            request = request.body_map(|body| body.description(value.clone()))
+            request = request.body_map(|body| body.description(value.as_str()))
         }
 
         if let Some(value) = matches.get_one::<types::Name>("name") {
@@ -11270,7 +11270,7 @@ impl<T: CliConfig> Cli<T> {
     ) -> anyhow::Result<()> {
         let mut request = self.client.instance_list_v1();
         if let Some(value) = matches.get_one::<::std::num::NonZeroU32>("limit") {
-            request = request.limit(value.clone());
+            request = request.limit(*value);
         }
 
         if let Some(value) = matches.get_one::<types::NameOrId>("organization") {
@@ -11282,7 +11282,7 @@ impl<T: CliConfig> Cli<T> {
         }
 
         if let Some(value) = matches.get_one::<types::NameOrIdSortMode>("sort-by") {
-            request = request.sort_by(value.clone());
+            request = request.sort_by(*value);
         }
 
         self.config
@@ -11317,11 +11317,11 @@ impl<T: CliConfig> Cli<T> {
     ) -> anyhow::Result<()> {
         let mut request = self.client.instance_create_v1();
         if let Some(value) = matches.get_one::<::std::string::String>("description") {
-            request = request.body_map(|body| body.description(value.clone()))
+            request = request.body_map(|body| body.description(value.as_str()))
         }
 
         if let Some(value) = matches.get_one::<::std::string::String>("hostname") {
-            request = request.body_map(|body| body.hostname(value.clone()))
+            request = request.body_map(|body| body.hostname(value.as_str()))
         }
 
         if let Some(value) = matches.get_one::<types::ByteCount>("memory") {
@@ -11345,11 +11345,11 @@ impl<T: CliConfig> Cli<T> {
         }
 
         if let Some(value) = matches.get_one::<bool>("start") {
-            request = request.body_map(|body| body.start(value.clone()))
+            request = request.body_map(|body| body.start(*value))
         }
 
         if let Some(value) = matches.get_one::<::std::string::String>("user-data") {
-            request = request.body_map(|body| body.user_data(value.clone()))
+            request = request.body_map(|body| body.user_data(value.as_str()))
         }
 
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
@@ -11449,7 +11449,7 @@ impl<T: CliConfig> Cli<T> {
         }
 
         if let Some(value) = matches.get_one::<::std::num::NonZeroU32>("limit") {
-            request = request.limit(value.clone());
+            request = request.limit(*value);
         }
 
         if let Some(value) = matches.get_one::<types::NameOrId>("organization") {
@@ -11461,7 +11461,7 @@ impl<T: CliConfig> Cli<T> {
         }
 
         if let Some(value) = matches.get_one::<types::NameOrIdSortMode>("sort-by") {
-            request = request.sort_by(value.clone());
+            request = request.sort_by(*value);
         }
 
         self.config
@@ -11584,7 +11584,7 @@ impl<T: CliConfig> Cli<T> {
     ) -> anyhow::Result<()> {
         let mut request = self.client.instance_migrate_v1();
         if let Some(value) = matches.get_one::<::uuid::Uuid>("dst-sled-id") {
-            request = request.body_map(|body| body.dst_sled_id(value.clone()))
+            request = request.body_map(|body| body.dst_sled_id(*value))
         }
 
         if let Some(value) = matches.get_one::<types::NameOrId>("instance") {
@@ -11660,7 +11660,7 @@ impl<T: CliConfig> Cli<T> {
     ) -> anyhow::Result<()> {
         let mut request = self.client.instance_serial_console_v1();
         if let Some(value) = matches.get_one::<u64>("from-start") {
-            request = request.from_start(value.clone());
+            request = request.from_start(*value);
         }
 
         if let Some(value) = matches.get_one::<types::NameOrId>("instance") {
@@ -11668,11 +11668,11 @@ impl<T: CliConfig> Cli<T> {
         }
 
         if let Some(value) = matches.get_one::<u64>("max-bytes") {
-            request = request.max_bytes(value.clone());
+            request = request.max_bytes(*value);
         }
 
         if let Some(value) = matches.get_one::<u64>("most-recent") {
-            request = request.most_recent(value.clone());
+            request = request.most_recent(*value);
         }
 
         if let Some(value) = matches.get_one::<types::NameOrId>("organization") {
@@ -11799,11 +11799,11 @@ impl<T: CliConfig> Cli<T> {
     ) -> anyhow::Result<()> {
         let mut request = self.client.organization_list_v1();
         if let Some(value) = matches.get_one::<::std::num::NonZeroU32>("limit") {
-            request = request.limit(value.clone());
+            request = request.limit(*value);
         }
 
         if let Some(value) = matches.get_one::<types::NameOrIdSortMode>("sort-by") {
-            request = request.sort_by(value.clone());
+            request = request.sort_by(*value);
         }
 
         self.config
@@ -11839,7 +11839,7 @@ impl<T: CliConfig> Cli<T> {
     ) -> anyhow::Result<()> {
         let mut request = self.client.organization_create_v1();
         if let Some(value) = matches.get_one::<::std::string::String>("description") {
-            request = request.body_map(|body| body.description(value.clone()))
+            request = request.body_map(|body| body.description(value.as_str()))
         }
 
         if let Some(value) = matches.get_one::<types::Name>("name") {
@@ -12019,7 +12019,7 @@ impl<T: CliConfig> Cli<T> {
     ) -> anyhow::Result<()> {
         let mut request = self.client.project_list_v1();
         if let Some(value) = matches.get_one::<::std::num::NonZeroU32>("limit") {
-            request = request.limit(value.clone());
+            request = request.limit(*value);
         }
 
         if let Some(value) = matches.get_one::<types::NameOrId>("organization") {
@@ -12027,7 +12027,7 @@ impl<T: CliConfig> Cli<T> {
         }
 
         if let Some(value) = matches.get_one::<types::NameOrIdSortMode>("sort-by") {
-            request = request.sort_by(value.clone());
+            request = request.sort_by(*value);
         }
 
         self.config.execute_project_list_v1(matches, &mut request)?;
@@ -12061,7 +12061,7 @@ impl<T: CliConfig> Cli<T> {
     ) -> anyhow::Result<()> {
         let mut request = self.client.project_create_v1();
         if let Some(value) = matches.get_one::<::std::string::String>("description") {
-            request = request.body_map(|body| body.description(value.clone()))
+            request = request.body_map(|body| body.description(value.as_str()))
         }
 
         if let Some(value) = matches.get_one::<types::Name>("name") {
@@ -12264,11 +12264,11 @@ impl<T: CliConfig> Cli<T> {
     ) -> anyhow::Result<()> {
         let mut request = self.client.system_component_version_list();
         if let Some(value) = matches.get_one::<::std::num::NonZeroU32>("limit") {
-            request = request.limit(value.clone());
+            request = request.limit(*value);
         }
 
         if let Some(value) = matches.get_one::<types::IdSortMode>("sort-by") {
-            request = request.sort_by(value.clone());
+            request = request.sort_by(*value);
         }
 
         self.config
@@ -12305,11 +12305,11 @@ impl<T: CliConfig> Cli<T> {
     ) -> anyhow::Result<()> {
         let mut request = self.client.update_deployments_list();
         if let Some(value) = matches.get_one::<::std::num::NonZeroU32>("limit") {
-            request = request.limit(value.clone());
+            request = request.limit(*value);
         }
 
         if let Some(value) = matches.get_one::<types::IdSortMode>("sort-by") {
-            request = request.sort_by(value.clone());
+            request = request.sort_by(*value);
         }
 
         self.config
@@ -12346,7 +12346,7 @@ impl<T: CliConfig> Cli<T> {
     ) -> anyhow::Result<()> {
         let mut request = self.client.update_deployment_view();
         if let Some(value) = matches.get_one::<::uuid::Uuid>("id") {
-            request = request.id(value.clone());
+            request = request.id(*value);
         }
 
         self.config
@@ -12442,11 +12442,11 @@ impl<T: CliConfig> Cli<T> {
     ) -> anyhow::Result<()> {
         let mut request = self.client.system_update_list();
         if let Some(value) = matches.get_one::<::std::num::NonZeroU32>("limit") {
-            request = request.limit(value.clone());
+            request = request.limit(*value);
         }
 
         if let Some(value) = matches.get_one::<types::IdSortMode>("sort-by") {
-            request = request.sort_by(value.clone());
+            request = request.sort_by(*value);
         }
 
         self.config

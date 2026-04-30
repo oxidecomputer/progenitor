@@ -53,7 +53,7 @@ impl<T: CliConfig> Cli<T> {
     pub async fn execute_uno(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.uno();
         if let Some(value) = matches.get_one::<::std::string::String>("gateway") {
-            request = request.gateway(value.clone());
+            request = request.gateway(value.as_str());
         }
 
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {

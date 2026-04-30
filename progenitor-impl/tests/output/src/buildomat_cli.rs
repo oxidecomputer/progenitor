@@ -418,7 +418,7 @@ impl<T: CliConfig> Cli<T> {
     pub async fn execute_task_get(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.task_get();
         if let Some(value) = matches.get_one::<::std::string::String>("task") {
-            request = request.task(value.clone());
+            request = request.task(value.as_str());
         }
 
         self.config.execute_task_get(matches, &mut request)?;
@@ -454,15 +454,15 @@ impl<T: CliConfig> Cli<T> {
     pub async fn execute_task_submit(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.task_submit();
         if let Some(value) = matches.get_one::<bool>("default") {
-            request = request.body_map(|body| body.default(value.clone()))
+            request = request.body_map(|body| body.default(*value))
         }
 
         if let Some(value) = matches.get_one::<::std::string::String>("name") {
-            request = request.body_map(|body| body.name(value.clone()))
+            request = request.body_map(|body| body.name(value.as_str()))
         }
 
         if let Some(value) = matches.get_one::<::std::string::String>("script") {
-            request = request.body_map(|body| body.script(value.clone()))
+            request = request.body_map(|body| body.script(value.as_str()))
         }
 
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
@@ -493,11 +493,11 @@ impl<T: CliConfig> Cli<T> {
     ) -> anyhow::Result<()> {
         let mut request = self.client.task_events_get();
         if let Some(value) = matches.get_one::<u32>("minseq") {
-            request = request.minseq(value.clone());
+            request = request.minseq(*value);
         }
 
         if let Some(value) = matches.get_one::<::std::string::String>("task") {
-            request = request.task(value.clone());
+            request = request.task(value.as_str());
         }
 
         self.config.execute_task_events_get(matches, &mut request)?;
@@ -520,7 +520,7 @@ impl<T: CliConfig> Cli<T> {
     ) -> anyhow::Result<()> {
         let mut request = self.client.task_outputs_get();
         if let Some(value) = matches.get_one::<::std::string::String>("task") {
-            request = request.task(value.clone());
+            request = request.task(value.as_str());
         }
 
         self.config
@@ -544,11 +544,11 @@ impl<T: CliConfig> Cli<T> {
     ) -> anyhow::Result<()> {
         let mut request = self.client.task_output_download();
         if let Some(value) = matches.get_one::<::std::string::String>("output") {
-            request = request.output(value.clone());
+            request = request.output(value.as_str());
         }
 
         if let Some(value) = matches.get_one::<::std::string::String>("task") {
-            request = request.task(value.clone());
+            request = request.task(value.as_str());
         }
 
         self.config
@@ -568,7 +568,7 @@ impl<T: CliConfig> Cli<T> {
     pub async fn execute_user_create(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.user_create();
         if let Some(value) = matches.get_one::<::std::string::String>("name") {
-            request = request.body_map(|body| body.name(value.clone()))
+            request = request.body_map(|body| body.name(value.as_str()))
         }
 
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
@@ -634,11 +634,11 @@ impl<T: CliConfig> Cli<T> {
     ) -> anyhow::Result<()> {
         let mut request = self.client.worker_bootstrap();
         if let Some(value) = matches.get_one::<::std::string::String>("bootstrap") {
-            request = request.body_map(|body| body.bootstrap(value.clone()))
+            request = request.body_map(|body| body.bootstrap(value.as_str()))
         }
 
         if let Some(value) = matches.get_one::<::std::string::String>("token") {
-            request = request.body_map(|body| body.token(value.clone()))
+            request = request.body_map(|body| body.token(value.as_str()))
         }
 
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
@@ -686,19 +686,19 @@ impl<T: CliConfig> Cli<T> {
     ) -> anyhow::Result<()> {
         let mut request = self.client.worker_task_append();
         if let Some(value) = matches.get_one::<::std::string::String>("payload") {
-            request = request.body_map(|body| body.payload(value.clone()))
+            request = request.body_map(|body| body.payload(value.as_str()))
         }
 
         if let Some(value) = matches.get_one::<::std::string::String>("stream") {
-            request = request.body_map(|body| body.stream(value.clone()))
+            request = request.body_map(|body| body.stream(value.as_str()))
         }
 
         if let Some(value) = matches.get_one::<::std::string::String>("task") {
-            request = request.task(value.clone());
+            request = request.task(value.as_str());
         }
 
         if let Some(value) = matches.get_one::<::chrono::DateTime<::chrono::offset::Utc>>("time") {
-            request = request.body_map(|body| body.time(value.clone()))
+            request = request.body_map(|body| body.time(*value))
         }
 
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
@@ -730,7 +730,7 @@ impl<T: CliConfig> Cli<T> {
     ) -> anyhow::Result<()> {
         let mut request = self.client.worker_task_upload_chunk();
         if let Some(value) = matches.get_one::<::std::string::String>("task") {
-            request = request.task(value.clone());
+            request = request.task(value.as_str());
         }
 
         self.config
@@ -754,11 +754,11 @@ impl<T: CliConfig> Cli<T> {
     ) -> anyhow::Result<()> {
         let mut request = self.client.worker_task_complete();
         if let Some(value) = matches.get_one::<bool>("failed") {
-            request = request.body_map(|body| body.failed(value.clone()))
+            request = request.body_map(|body| body.failed(*value))
         }
 
         if let Some(value) = matches.get_one::<::std::string::String>("task") {
-            request = request.task(value.clone());
+            request = request.task(value.as_str());
         }
 
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
@@ -790,15 +790,15 @@ impl<T: CliConfig> Cli<T> {
     ) -> anyhow::Result<()> {
         let mut request = self.client.worker_task_add_output();
         if let Some(value) = matches.get_one::<::std::string::String>("path") {
-            request = request.body_map(|body| body.path(value.clone()))
+            request = request.body_map(|body| body.path(value.as_str()))
         }
 
         if let Some(value) = matches.get_one::<i64>("size") {
-            request = request.body_map(|body| body.size(value.clone()))
+            request = request.body_map(|body| body.size(*value))
         }
 
         if let Some(value) = matches.get_one::<::std::string::String>("task") {
-            request = request.task(value.clone());
+            request = request.task(value.as_str());
         }
 
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
@@ -886,7 +886,7 @@ impl<T: CliConfig> Cli<T> {
     pub async fn execute_header_arg(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.header_arg();
         if let Some(value) = matches.get_one::<types::HeaderArgAcceptLanguage>("accept-language") {
-            request = request.accept_language(value.clone());
+            request = request.accept_language(*value);
         }
 
         self.config.execute_header_arg(matches, &mut request)?;

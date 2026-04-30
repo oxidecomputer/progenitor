@@ -205,15 +205,15 @@ impl<T: CliConfig> Cli<T> {
     pub async fn execute_enrol(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.enrol();
         if let Some(value) = matches.get_one::<::std::string::String>("authorization") {
-            request = request.authorization(value.clone());
+            request = request.authorization(value.as_str());
         }
 
         if let Some(value) = matches.get_one::<::std::string::String>("host") {
-            request = request.body_map(|body| body.host(value.clone()))
+            request = request.body_map(|body| body.host(value.as_str()))
         }
 
         if let Some(value) = matches.get_one::<::std::string::String>("key") {
-            request = request.body_map(|body| body.key(value.clone()))
+            request = request.body_map(|body| body.key(value.as_str()))
         }
 
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
@@ -241,7 +241,7 @@ impl<T: CliConfig> Cli<T> {
     pub async fn execute_global_jobs(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.global_jobs();
         if let Some(value) = matches.get_one::<::std::string::String>("authorization") {
-            request = request.authorization(value.clone());
+            request = request.authorization(value.as_str());
         }
 
         self.config.execute_global_jobs(matches, &mut request)?;
@@ -261,7 +261,7 @@ impl<T: CliConfig> Cli<T> {
     pub async fn execute_ping(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.ping();
         if let Some(value) = matches.get_one::<::std::string::String>("authorization") {
-            request = request.authorization(value.clone());
+            request = request.authorization(value.as_str());
         }
 
         self.config.execute_ping(matches, &mut request)?;
@@ -281,21 +281,21 @@ impl<T: CliConfig> Cli<T> {
     pub async fn execute_report_finish(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.report_finish();
         if let Some(value) = matches.get_one::<::std::string::String>("authorization") {
-            request = request.authorization(value.clone());
+            request = request.authorization(value.as_str());
         }
 
         if let Some(value) = matches.get_one::<i32>("duration-millis") {
-            request = request.body_map(|body| body.duration_millis(value.clone()))
+            request = request.body_map(|body| body.duration_millis(*value))
         }
 
         if let Some(value) =
             matches.get_one::<::chrono::DateTime<::chrono::offset::Utc>>("end-time")
         {
-            request = request.body_map(|body| body.end_time(value.clone()))
+            request = request.body_map(|body| body.end_time(*value))
         }
 
         if let Some(value) = matches.get_one::<i32>("exit-status") {
-            request = request.body_map(|body| body.exit_status(value.clone()))
+            request = request.body_map(|body| body.exit_status(*value))
         }
 
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
@@ -323,7 +323,7 @@ impl<T: CliConfig> Cli<T> {
     pub async fn execute_report_output(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.report_output();
         if let Some(value) = matches.get_one::<::std::string::String>("authorization") {
-            request = request.authorization(value.clone());
+            request = request.authorization(value.as_str());
         }
 
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
@@ -351,17 +351,17 @@ impl<T: CliConfig> Cli<T> {
     pub async fn execute_report_start(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.report_start();
         if let Some(value) = matches.get_one::<::std::string::String>("authorization") {
-            request = request.authorization(value.clone());
+            request = request.authorization(value.as_str());
         }
 
         if let Some(value) = matches.get_one::<::std::string::String>("script") {
-            request = request.body_map(|body| body.script(value.clone()))
+            request = request.body_map(|body| body.script(value.as_str()))
         }
 
         if let Some(value) =
             matches.get_one::<::chrono::DateTime<::chrono::offset::Utc>>("start-time")
         {
-            request = request.body_map(|body| body.start_time(value.clone()))
+            request = request.body_map(|body| body.start_time(*value))
         }
 
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {

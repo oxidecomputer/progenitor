@@ -213,11 +213,11 @@ impl<T: CliConfig> Cli<T> {
     ) -> anyhow::Result<()> {
         let mut request = self.client.instance_issue_crucible_snapshot_request();
         if let Some(value) = matches.get_one::<::uuid::Uuid>("id") {
-            request = request.id(value.clone());
+            request = request.id(*value);
         }
 
         if let Some(value) = matches.get_one::<::uuid::Uuid>("snapshot-id") {
-            request = request.snapshot_id(value.clone());
+            request = request.snapshot_id(*value);
         }
 
         self.config
@@ -241,7 +241,7 @@ impl<T: CliConfig> Cli<T> {
     ) -> anyhow::Result<()> {
         let mut request = self.client.instance_migrate_status();
         if let Some(value) = matches.get_one::<::uuid::Uuid>("migration-id") {
-            request = request.body_map(|body| body.migration_id(value.clone()))
+            request = request.body_map(|body| body.migration_id(*value))
         }
 
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
@@ -319,7 +319,7 @@ impl<T: CliConfig> Cli<T> {
     ) -> anyhow::Result<()> {
         let mut request = self.client.instance_state_monitor();
         if let Some(value) = matches.get_one::<u64>("gen") {
-            request = request.body_map(|body| body.gen_(value.clone()))
+            request = request.body_map(|body| body.gen_(*value))
         }
 
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {

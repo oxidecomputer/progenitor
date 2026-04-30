@@ -48,11 +48,11 @@ impl<T: CliConfig> Cli<T> {
     pub async fn execute_key_get(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.key_get();
         if let Some(value) = matches.get_one::<bool>("key") {
-            request = request.key(value.clone());
+            request = request.key(*value);
         }
 
         if let Some(value) = matches.get_one::<::std::string::String>("unique-key") {
-            request = request.unique_key(value.clone());
+            request = request.unique_key(value.as_str());
         }
 
         self.config.execute_key_get(matches, &mut request)?;

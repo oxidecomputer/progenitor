@@ -76,27 +76,27 @@ impl<T: CliConfig> Cli<T> {
     pub async fn execute_key_get(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.key_get();
         if let Some(value) = matches.get_one::<bool>("client") {
-            request = request.client(value.clone());
+            request = request.client(*value);
         }
 
         if let Some(value) = matches.get_one::<bool>("query") {
-            request = request.query(value.clone());
+            request = request.query(*value);
         }
 
         if let Some(value) = matches.get_one::<bool>("request") {
-            request = request.request(value.clone());
+            request = request.request(*value);
         }
 
         if let Some(value) = matches.get_one::<bool>("response") {
-            request = request.response(value.clone());
+            request = request.response(*value);
         }
 
         if let Some(value) = matches.get_one::<bool>("result") {
-            request = request.result(value.clone());
+            request = request.result(*value);
         }
 
         if let Some(value) = matches.get_one::<bool>("url") {
-            request = request.url(value.clone());
+            request = request.url(*value);
         }
 
         self.config.execute_key_get(matches, &mut request)?;
