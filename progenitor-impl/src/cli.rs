@@ -185,10 +185,11 @@ impl Generator {
     }
 
     fn cli_method(&mut self, method: &crate::method::OperationMethod) -> CliOperation {
+        let args = self.cli_method_args(method);
         let CliArg {
             parser: parser_args,
             consumer: consumer_args,
-        } = self.cli_method_args(method);
+        } = args;
 
         let about = method.summary.as_ref().map(|summary| {
             quote! {
@@ -427,13 +428,13 @@ impl Generator {
             let arg_type = self.type_space.get_type(arg_type_id).unwrap();
             let arg_type_name = arg_type.ident();
 
+            let value_expr = arg_value_tokens(&arg_type);
+
             let consumer = quote! {
                 if let Some(value) =
                     matches.get_one::<#arg_type_name>(#arg_name)
                 {
-                    // clone here in case the arg type doesn't impl
-                    // From<&T>
-                    request = request.#arg_fn(value.clone());
+                    request = request.#arg_fn(#value_expr);
                 }
             };
 
@@ -591,16 +592,16 @@ impl Generator {
 
             let prop_fn = format_ident!("{}", sanitize(name, Case::Snake));
             let prop_type_ident = prop_type.ident();
+            let value_expr = arg_value_tokens(&prop_type);
+
             let consumer = quote! {
                 if let Some(value) =
                     matches.get_one::<#prop_type_ident>(
                         #prop_name,
                     )
                 {
-                    // clone here in case the arg type
-                    // doesn't impl TryFrom<&T>
                     request = request.body_map(|body| {
-                        body.#prop_fn(value.clone())
+                        body.#prop_fn(#value_expr)
                     })
                 }
             };
@@ -619,6 +620,57 @@ impl Generator {
         // 3.1 simple enums (should be covered by 1 above)
         //   e.g. enum { A, B }
         //   args for --a and --b that are in a group
+    }
+}
+
+fn is_copy_type(ty: &Type<'_>) -> bool {
+    match ty.details() {
+        // Builtins and native format types that typify emits and we know are Copy.
+        typify::TypeDetails::Builtin(name) => matches!(
+            name,
+            "bool"
+                | "i8"
+                | "i16"
+                | "i32"
+                | "i64"
+                | "u8"
+                | "u16"
+                | "u32"
+                | "u64"
+                | "::std::num::NonZeroU8"
+                | "::std::num::NonZeroU16"
+                | "::std::num::NonZeroU32"
+                | "::std::num::NonZeroU64"
+                | "f32"
+                | "f64"
+                | "::uuid::Uuid"
+                | "::chrono::naive::NaiveDate"
+                | "::chrono::DateTime<::chrono::offset::Utc>"
+                | "::std::net::IpAddr"
+                | "::std::net::Ipv4Addr"
+                | "::std::net::Ipv6Addr"
+        ),
+        // () is Copy.
+        typify::TypeDetails::Unit => true,
+        // Simple enums derive Copy; enums with data do not.
+        typify::TypeDetails::Enum(e) => e
+            .variants_info()
+            .all(|v| matches!(v.details, TypeEnumVariant::Simple)),
+        _ => false,
+    }
+}
+
+/// Returns the token expression for passing `value: &T` to a builder setter
+/// that accepts `V: TryInto<T>`.
+fn arg_value_tokens(ty: &Type<'_>) -> TokenStream {
+    if is_copy_type(ty) {
+        quote! { *value }
+    } else if matches!(ty.details(), typify::TypeDetails::String) {
+        // &str: TryInto<String> via String: From<&str>, so no clone needed.
+        quote! { value.as_str() }
+    } else {
+        // Clone because the builder takes T not &T, and the type may not impl TryFrom<&T>.
+        quote! { value.clone() }
     }
 }
 
