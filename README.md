@@ -92,9 +92,8 @@ Note that the macro will be re-evaluated when the `spec` OpenAPI document
 changes (when its mtime is updated).
 
 If you derive `schemars::JsonSchema` on generated types (see `derives = [ ...
-]` in the macro example above), depend on `schemars` yourself and enable the
-matching feature for each formatted type that appears in your spec, so the
-`JsonSchema` impls for those types are available:
+]` in the macro example above), add a dependency on `schemars` and enable the
+necessary features for each formatted type that appears in your spec. For example:
 
 ```toml
 [dependencies]
