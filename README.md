@@ -91,6 +91,15 @@ generate_api!(
 Note that the macro will be re-evaluated when the `spec` OpenAPI document
 changes (when its mtime is updated).
 
+If you derive `schemars::JsonSchema` on generated types (see `derives = [ ...
+]` in the macro example above), add a dependency on `schemars` and enable the
+necessary features for each formatted type that appears in your spec. For example:
+
+```toml
+[dependencies]
+schemars = { version = "0.8", features = ["chrono", "uuid1"] }
+```
+
 ### `build.rs`
 
 Progenitor includes an interface appropriate for use in a
