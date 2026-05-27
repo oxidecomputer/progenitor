@@ -811,6 +811,85 @@ where
     }
 }
 
+/// Returns true if the body schema contains any non-trivial `oneOf` / `anyOf`
+/// (i.e., the template silently committed to a variant choice). Callers can
+/// surface a hint pointing at `--json-body-schema` for the full grammar.
+#[cfg(feature = "cli")]
+pub fn body_has_variants(root_schema: &RootSchema) -> bool {
+    let mut visited: std::collections::BTreeSet<String> = std::collections::BTreeSet::new();
+    schema_contains_variants(
+        &Schema::Object(root_schema.schema.clone()),
+        &root_schema.definitions,
+        &mut visited,
+    )
+}
+
+#[cfg(feature = "cli")]
+fn schema_contains_variants(
+    schema: &Schema,
+    defs: &std::collections::BTreeMap<String, Schema>,
+    visited: &mut std::collections::BTreeSet<String>,
+) -> bool {
+    let Schema::Object(o) = schema else { return false };
+
+    if let Some(r) = &o.reference {
+        let name = ref_name(r);
+        if !visited.insert(name.clone()) {
+            return false;
+        }
+        let result = defs
+            .get(&name)
+            .map(|def| schema_contains_variants(def, defs, visited))
+            .unwrap_or(false);
+        visited.remove(&name);
+        return result;
+    }
+
+    if let Some(sub) = &o.subschemas {
+        if let Some(variants) = sub.one_of.as_ref().or(sub.any_of.as_ref()) {
+            let non_null = variants.iter().filter(|v| !is_null_schema(v)).count();
+            if non_null > 1 {
+                return true;
+            }
+        }
+        if let Some(all) = &sub.all_of {
+            for s in all {
+                if schema_contains_variants(s, defs, visited) {
+                    return true;
+                }
+            }
+        }
+    }
+
+    if let Some(ov) = &o.object {
+        for v in ov.properties.values() {
+            if schema_contains_variants(v, defs, visited) {
+                return true;
+            }
+        }
+    }
+
+    if let Some(av) = &o.array {
+        match &av.items {
+            Some(SingleOrVec::Single(s)) => {
+                if schema_contains_variants(s, defs, visited) {
+                    return true;
+                }
+            }
+            Some(SingleOrVec::Vec(v)) => {
+                for s in v {
+                    if schema_contains_variants(s, defs, visited) {
+                        return true;
+                    }
+                }
+            }
+            None => {}
+        }
+    }
+
+    false
+}
+
 /// Generate a fill-in JSON template for a request body from its schema.
 ///
 /// The template includes only required fields with placeholder values
@@ -943,6 +1022,16 @@ pub fn render_body_schema(root_schema: &RootSchema) -> String {
 
     let mut referenced: BTreeSet<String> = BTreeSet::new();
     let mut out = String::new();
+
+    // Brief legend so first-time readers know what the conventions mean.
+    out.push_str(&style.dim(
+        "# [foo] = optional   <Type> = named ref   | = alternative",
+    ));
+    out.push('\n');
+    out.push_str(&style.dim(
+        "# (default: X) = default value   (tagged on `f`) = discriminator field",
+    ));
+    out.push_str("\n\n");
 
     out.push_str(&render_production(
         &top_name,

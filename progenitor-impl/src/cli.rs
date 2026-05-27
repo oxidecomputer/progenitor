@@ -383,6 +383,15 @@ impl Generator {
             .as_ref()
             .map(|d| &d.first_page_params);
 
+        // Determine up-front whether this command has a typed body. Path/query
+        // params are emitted before the body args, but their `required_unless`
+        // waiver needs to know if `--json-body-template`/`--json-body-schema`
+        // will exist on this command.
+        let has_body = method.params.iter().any(|param| {
+            matches!(&param.kind, OperationParameterKind::Body(_))
+                && matches!(&param.typ, OperationParameterType::Type(_))
+        });
+
         for param in &method.params {
             let innately_required = match &param.kind {
                 // We're not interetested in the body parameter yet.
@@ -417,7 +426,7 @@ impl Generator {
             // There should be no conflicting path or query parameters.
             assert!(!args.has_arg(&arg_name));
 
-            let parser = clap_arg(&arg_name, volitionality, &param.description, &arg_type);
+            let parser = clap_arg(&arg_name, volitionality, has_body, &param.description, &arg_type);
 
             let arg_fn_name = sanitize(&param.name, Case::Snake);
             let arg_fn = format_ident!("{}", arg_fn_name);
@@ -536,6 +545,12 @@ impl Generator {
                     let schema = schemars::schema_for!(#body_type_ident);
                     let template = progenitor_client::generate_body_template(&schema);
                     println!("{}", serde_json::to_string_pretty(&template).unwrap());
+                    if progenitor_client::body_has_variants(&schema) {
+                        eprintln!(
+                            "note: this body has variant fields; the template picked one. \
+                             Run --json-body-schema for alternatives."
+                        );
+                    }
                     return Ok(());
                 }
                 if matches.get_flag("json-body-schema") {
@@ -613,6 +628,7 @@ impl Generator {
             let parser = clap_arg(
                 &prop_name,
                 volitionality,
+                true, // body args are only generated when the command has a body
                 &description.map(str::to_string),
                 &prop_type,
             );
@@ -659,6 +675,7 @@ enum Volitionality {
 fn clap_arg(
     arg_name: &str,
     volitionality: Volitionality,
+    has_body: bool,
     description: &Option<String>,
     arg_type: &Type,
 ) -> TokenStream {
@@ -713,9 +730,10 @@ fn clap_arg(
 
     let required = match volitionality {
         Volitionality::Optional => quote! { .required(false) },
-        Volitionality::Required => {
+        Volitionality::Required if has_body => {
             quote! { .required_unless_present_any(["json-body-template", "json-body-schema"]) }
         }
+        Volitionality::Required => quote! { .required(true) },
         Volitionality::RequiredIfNoBody => {
             quote! { .required_unless_present_any(["json-body", "json-body-template", "json-body-schema"]) }
         }
