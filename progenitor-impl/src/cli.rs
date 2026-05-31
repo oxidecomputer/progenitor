@@ -482,7 +482,8 @@ impl Generator {
             CliBodyArg::Optional => Some(false),
         })
         .map(|required| {
-            let help = "Path to a file that contains the full json body.";
+            let help =
+                "Path to a file that contains the full json body, or '-' to read from stdin.";
 
             quote! {
                 .arg(
@@ -520,7 +521,13 @@ impl Generator {
                 if let Some(value) =
                     matches.get_one::<std::path::PathBuf>("json-body")
                 {
-                    let body_txt = std::fs::read_to_string(value).with_context(|| format!("failed to read {}", value.display()))?;
+                    let body_txt = if value.as_os_str() == "-" {
+                        let mut buf = String::new();
+                        std::io::Read::read_to_string(&mut std::io::stdin(), &mut buf).context("failed to read from stdin")?;
+                        buf
+                    } else {
+                        std::fs::read_to_string(value).with_context(|| format!("failed to read {}", value.display()))?
+                    };
                     let body_value =
                         serde_json::from_str::<#body_type_ident>(
                             &body_txt,
