@@ -11,3 +11,9 @@ updates:
     ignore:
       - dependency-name: "schemars"
         versions: [">=0.9.0"]
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: daily
+    ignore:
+      - dependency-name: dtolnay/rust-toolchain
