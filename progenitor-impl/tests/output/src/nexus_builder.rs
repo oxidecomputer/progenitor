@@ -399,7 +399,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Serialize, Clone, Debug, schemars :: JsonSchema)]
+    #[derive(:: serde :: Serialize, Clone, Debug)]
     #[serde(transparent)]
     pub struct BlockSize(i64);
     impl ::std::ops::Deref for BlockSize {
@@ -433,6 +433,26 @@ pub mod types {
         {
             Self::try_from(<i64>::deserialize(deserializer)?)
                 .map_err(|e| <D::Error as ::serde::de::Error>::custom(e.to_string()))
+        }
+    }
+
+    impl ::schemars::JsonSchema for BlockSize {
+        fn schema_name() -> ::std::string::String {
+            "BlockSize".to_string()
+        }
+
+        fn json_schema(gen: &mut ::schemars::gen::SchemaGenerator) -> ::schemars::schema::Schema {
+            let mut schema = <i64 as ::schemars::JsonSchema>::json_schema(gen).into_object();
+            schema.enum_values = ::std::option::Option::Some(
+                [
+                    ::serde_json::from_str("512").unwrap(),
+                    ::serde_json::from_str("2048").unwrap(),
+                    ::serde_json::from_str("4096").unwrap(),
+                ]
+                .into_iter()
+                .collect(),
+            );
+            schema.into()
         }
     }
 
