@@ -11,7 +11,7 @@ use proc_macro2::TokenStream;
 use quote::quote;
 use serde::Deserialize;
 use thiserror::Error;
-use typify::{TypeSpace, TypeSpaceSettings};
+use typify::{TypeId, TypeSpace, TypeSpaceSettings};
 
 use crate::to_schema::ToSchema;
 
@@ -47,12 +47,23 @@ pub enum Error {
 #[allow(missing_docs)]
 pub type Result<T> = std::result::Result<T, Error>;
 
+/// Information about a multipart/related type
+struct MultipartRelatedInfo {
+    /// Property names in schema order
+    property_order: Vec<String>,
+    /// Set of required property names
+    required_fields: std::collections::HashSet<String>,
+}
+
 /// OpenAPI generator.
 pub struct Generator {
     type_space: TypeSpace,
+    /// Maps multipart/related type IDs to their schema information
+    multipart_related: indexmap::IndexMap<TypeId, MultipartRelatedInfo>,
     settings: GenerationSettings,
     uses_futures: bool,
     uses_websockets: bool,
+    uses_serde_json: bool,
 }
 
 /// Settings for [Generator].
@@ -261,9 +272,11 @@ impl Default for Generator {
     fn default() -> Self {
         Self {
             type_space: TypeSpace::new(TypeSpaceSettings::default().with_type_mod("types")),
+            multipart_related: Default::default(),
             settings: Default::default(),
             uses_futures: Default::default(),
             uses_websockets: Default::default(),
+            uses_serde_json: Default::default(),
         }
     }
 }
@@ -312,9 +325,11 @@ impl Generator {
 
         Self {
             type_space: TypeSpace::new(&type_settings),
+            multipart_related: Default::default(),
             settings: settings.clone(),
             uses_futures: false,
             uses_websockets: false,
+            uses_serde_json: false,
         }
     }
 
@@ -373,6 +388,148 @@ impl Generator {
         }?;
 
         let types = self.type_space.to_stream();
+
+        // Generate MultipartRelatedBody trait impl for multipart/related types
+        let multipart_helpers = TokenStream::from_iter(
+            self.multipart_related
+                .iter()
+                .map(|(type_id, info)| {
+                    let typ = self.get_type_space().get_type(type_id).unwrap();
+                    let type_name = typ.ident();
+
+                    let td = typ.details();
+                    let typify::TypeDetails::Struct(tstru) = td else {
+                        panic!("multipart/related type must be a struct");
+                    };
+
+                    // Build a map of property names to their type IDs for lookup
+                    let prop_map: std::collections::HashMap<_, _> = tstru.properties().collect();
+
+                    // Generate code to extract each property in the order from the OpenAPI schema
+                    let parts_extraction = info.property_order.iter().filter_map(|prop_name| {
+                        // Skip content_type fields - they're metadata, not parts
+                        if prop_name.ends_with("_content_type") {
+                            return None;
+                        }
+
+                        let prop_id = prop_map.get(prop_name.as_str())?;
+                        let prop_ty = self.get_type_space().get_type(prop_id).ok()?;
+                        let field_ident = quote::format_ident!("{}", prop_name);
+
+                        // Check if this field is optional (not in the required array)
+                        let is_optional = !info.required_fields.contains(prop_name);
+
+                        // Check if this is a binary field
+                        let is_binary = match prop_ty.details() {
+                            // Check for Vec<u8> (required binary field)
+                            typify::TypeDetails::Vec(inner_id) => {
+                                if let Ok(inner_ty) = self.get_type_space().get_type(&inner_id) {
+                                    inner_ty.ident().to_string() == "u8"
+                                } else {
+                                    false
+                                }
+                            }
+                            // Check for Option<Vec<u8>> (optional binary field)
+                            typify::TypeDetails::Option(inner_id) => {
+                                if let Ok(inner_ty) = self.get_type_space().get_type(&inner_id) {
+                                    if let typify::TypeDetails::Vec(vec_inner_id) = inner_ty.details() {
+                                        if let Ok(vec_inner_ty) = self.get_type_space().get_type(&vec_inner_id) {
+                                            vec_inner_ty.ident().to_string() == "u8"
+                                        } else {
+                                            false
+                                        }
+                                    } else {
+                                        false
+                                    }
+                                } else {
+                                    false
+                                }
+                            }
+                            _ => false,
+                        };
+
+                        if is_binary {
+                            let content_type_field = quote::format_ident!("{}_content_type", prop_name);
+                            if is_optional {
+                                // Optional binary field: field is Vec<u8> with #[serde(default)],
+                                // content_type is Option<String>. Only include if content_type is Some and vec is non-empty.
+                                Some(quote! {
+                                    if let Some(ref content_type) = self.#content_type_field {
+                                        if !self.#field_ident.is_empty() {
+                                            Some(crate::progenitor_client::MultipartPart {
+                                                content_type: content_type.as_str(),
+                                                content_id: #prop_name,
+                                                bytes: ::std::borrow::Cow::Borrowed(&self.#field_ident),
+                                            })
+                                        } else {
+                                            None
+                                        }
+                                    } else {
+                                        None
+                                    }
+                                })
+                            } else {
+                                // Required binary field: use Cow::Borrowed to avoid cloning
+                                Some(quote! {
+                                    Some(crate::progenitor_client::MultipartPart {
+                                        content_type: &self.#content_type_field,
+                                        content_id: #prop_name,
+                                        bytes: ::std::borrow::Cow::Borrowed(&self.#field_ident),
+                                    })
+                                })
+                            }
+                        } else if is_optional {
+                            // Optional structured field: JSON serialization creates owned data
+                            Some(quote! {
+                                self.#field_ident.as_ref().map(|value| {
+                                    crate::progenitor_client::MultipartPart {
+                                        content_type: "application/json",
+                                        content_id: #prop_name,
+                                        bytes: ::std::borrow::Cow::Owned(
+                                            ::serde_json::to_vec(value)
+                                                .expect("failed to serialize field")
+                                        ),
+                                    }
+                                })
+                            })
+                        } else {
+                            // Required structured field: JSON serialization creates owned data
+                            Some(quote! {
+                                Some(crate::progenitor_client::MultipartPart {
+                                    content_type: "application/json",
+                                    content_id: #prop_name,
+                                    bytes: ::std::borrow::Cow::Owned(
+                                        ::serde_json::to_vec(&self.#field_ident)
+                                            .expect("failed to serialize field")
+                                    ),
+                                })
+                            })
+                        }
+                    }).collect::<Vec<_>>();
+
+                    // Since this impl is generated inside the types module (see line 523),
+                    // we need to use just the type name without module prefix
+                    let type_name_str = type_name.to_string();
+                    // Remove "types ::" prefix (note: TokenStream.to_string() adds spaces)
+                    let bare_type_name = type_name_str
+                        .strip_prefix("types :: ")
+                        .unwrap_or(&type_name_str);
+                    let bare_type_name = quote::format_ident!("{}", bare_type_name);
+
+                    quote! {
+                        impl crate::progenitor_client::MultipartRelatedBody for #bare_type_name {
+                            fn as_multipart_parts(&self) -> Vec<crate::progenitor_client::MultipartPart> {
+                                vec![
+                                    #(#parts_extraction),*
+                                ]
+                                .into_iter()
+                                .flatten()
+                                .collect()
+                            }
+                        }
+                    }
+                }),
+        );
 
         let (inner_type, inner_fn_value) = match self.settings.inner_type.as_ref() {
             Some(inner_type) => (inner_type.clone(), quote! { &self.inner }),
@@ -440,6 +597,8 @@ impl Generator {
             #[allow(clippy::all)]
             pub mod types {
                 #types
+
+                #multipart_helpers
             }
 
             #[derive(Clone, Debug)]
@@ -663,6 +822,12 @@ impl Generator {
     /// websockets.
     pub fn uses_websockets(&self) -> bool {
         self.uses_websockets
+    }
+
+    /// Whether the generated client uses serde_json (e.g., for multipart/related
+    /// serialization).
+    pub fn uses_serde_json(&self) -> bool {
+        self.uses_serde_json
     }
 }
 
