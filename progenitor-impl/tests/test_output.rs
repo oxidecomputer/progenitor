@@ -6,7 +6,8 @@ use std::{
 };
 
 use progenitor_impl::{
-    GenerationSettings, Generator, InterfaceStyle, TagStyle, TypeImpl, TypePatch, space_out_items,
+    FileLayout, GenerationSettings, Generator, InterfaceStyle, TagStyle, TypeImpl, TypePatch,
+    space_out_items,
 };
 
 use openapiv3::OpenAPI;
@@ -126,6 +127,39 @@ fn verify_apis(openapi_file: &str) {
 #[test]
 fn test_keeper() {
     verify_apis("keeper.json");
+}
+
+#[test]
+fn test_split_files_by_section() {
+    let spec = load_api("../sample_openapi/keeper.json");
+    let mut generator = Generator::new(
+        GenerationSettings::default()
+            .with_interface(InterfaceStyle::Builder)
+            .with_tag(TagStyle::Merged),
+    );
+    let files = generator
+        .generate_files(&spec, FileLayout::BySection)
+        .unwrap();
+
+    let paths = files
+        .iter()
+        .map(|file| file.path.to_str().unwrap())
+        .collect::<std::collections::BTreeSet<_>>();
+
+    assert!(paths.contains("lib.rs"));
+    assert!(paths.contains("generated/client.rs"));
+    assert!(paths.contains("generated/operations.rs"));
+    assert!(paths.contains("generated/types/error.rs"));
+    assert!(paths.contains("generated/types/crate.rs"));
+    assert!(paths.contains("generated/types/builder.rs"));
+
+    let lib = files
+        .iter()
+        .find(|file| file.path == PathBuf::from("lib.rs"))
+        .unwrap();
+    assert!(lib.contents.contains("generated/client.rs"));
+    assert!(lib.contents.contains("generated/operations.rs"));
+    assert!(lib.contents.contains("generated/types/builder.rs"));
 }
 
 #[test]

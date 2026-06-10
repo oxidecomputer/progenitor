@@ -9,7 +9,7 @@ use std::{
 use anyhow::{Result, bail};
 use clap::{Parser, ValueEnum};
 use openapiv3::OpenAPI;
-use progenitor::{GenerationSettings, Generator, InterfaceStyle, TagStyle};
+use progenitor::{FileLayout, GenerationSettings, Generator, InterfaceStyle, TagStyle};
 use progenitor_impl::space_out_items;
 
 fn is_non_release() -> bool {
@@ -54,6 +54,10 @@ struct Args {
     /// Include client code rather than depending on progenitor-client
     #[clap(default_value = match is_non_release() { true => "true", false => "false" }, long, action = clap::ArgAction::Set)]
     include_client: bool,
+
+    /// Split generated Rust source across multiple files
+    #[clap(long)]
+    split_output: bool,
 }
 
 #[derive(Copy, Clone, ValueEnum)]
@@ -92,7 +96,10 @@ fn reformat_code(input: String) -> String {
         wrap_comments: Some(true),
         ..Default::default()
     };
-    space_out_items(rustfmt_wrapper::rustfmt_config(config, input).unwrap()).unwrap()
+    let formatted = rustfmt_wrapper::rustfmt_config(config, input.clone())
+        .or_else(|_| rustfmt_wrapper::rustfmt(input))
+        .unwrap();
+    space_out_items(formatted).unwrap()
 }
 
 fn save<P>(p: P, data: &str) -> Result<()>
@@ -110,6 +117,11 @@ where
     Ok(())
 }
 
+enum GeneratedOutput {
+    SingleFile(String),
+    SplitFiles(Vec<progenitor::GeneratedFile>),
+}
+
 fn main() -> Result<()> {
     env_logger::init();
 
@@ -122,8 +134,18 @@ fn main() -> Result<()> {
             .with_tag(args.tags.into()),
     );
 
-    match builder.generate_tokens(&api) {
-        Ok(api_code) => {
+    let generated = if args.split_output {
+        builder
+            .generate_files(&api, FileLayout::BySection)
+            .map(GeneratedOutput::SplitFiles)
+    } else {
+        builder
+            .generate_tokens(&api)
+            .map(|tokens| GeneratedOutput::SingleFile(tokens.to_string()))
+    };
+
+    match generated {
+        Ok(generated) => {
             let type_space = builder.get_type_space();
 
             println!("-----------------------------------------------------");
@@ -176,17 +198,38 @@ fn main() -> Result<()> {
             src.push("src");
             std::fs::create_dir_all(&src)?;
 
-            // Create the Rust source file containing the generated client:
-            let lib_code = if args.include_client {
-                format!("mod progenitor_client;\n\n{}", api_code)
-            } else {
-                api_code.to_string()
-            };
-            let lib_code = reformat_code(lib_code);
+            match generated {
+                GeneratedOutput::SplitFiles(files) => {
+                    for file in files {
+                        let mut path = src.clone();
+                        path.push(&file.path);
+                        if let Some(parent) = path.parent() {
+                            std::fs::create_dir_all(parent)?;
+                        }
 
-            let mut librs = src.clone();
-            librs.push("lib.rs");
-            save(librs, lib_code.as_str())?;
+                        let code = if file.path == PathBuf::from("lib.rs") && args.include_client {
+                            format!("mod progenitor_client;\n\n{}", file.contents)
+                        } else {
+                            file.contents
+                        };
+                        save(path, reformat_code(code).as_str())?;
+                    }
+                }
+                GeneratedOutput::SingleFile(api_code) => {
+                    // Create the Rust source file containing the generated
+                    // client:
+                    let lib_code = if args.include_client {
+                        format!("mod progenitor_client;\n\n{}", api_code)
+                    } else {
+                        api_code
+                    };
+                    let lib_code = reformat_code(lib_code);
+
+                    let mut librs = src.clone();
+                    librs.push("lib.rs");
+                    save(librs, lib_code.as_str())?;
+                }
+            }
 
             // Create the Rust source file containing the support code:
             if args.include_client {

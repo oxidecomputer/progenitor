@@ -16,6 +16,8 @@
 pub use progenitor_client;
 pub use progenitor_impl::CrateVers;
 pub use progenitor_impl::Error;
+pub use progenitor_impl::FileLayout;
+pub use progenitor_impl::GeneratedFile;
 pub use progenitor_impl::GenerationSettings;
 pub use progenitor_impl::Generator;
 pub use progenitor_impl::InterfaceStyle;

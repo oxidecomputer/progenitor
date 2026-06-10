@@ -21,5 +21,7 @@ Options:
           SDK tag style [default: merged] [possible values: merged, separate]
       --include-client <INCLUDE_CLIENT>
           Include client code rather than depending on progenitor-client [default: true] [possible values: true, false]
+      --split-output
+          Split generated Rust source across multiple files
   -h, --help
           Print help

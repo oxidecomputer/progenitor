@@ -4,14 +4,17 @@
 
 #![deny(missing_docs)]
 
-use std::collections::{BTreeMap, HashMap, HashSet};
+use std::{
+    collections::{BTreeMap, HashMap, HashSet},
+    path::PathBuf,
+};
 
 use openapiv3::OpenAPI;
 use proc_macro2::TokenStream;
 use quote::quote;
 use serde::Deserialize;
 use thiserror::Error;
-use typify::{TypeSpace, TypeSpaceSettings};
+use typify::{TypeOutputItem, TypeOutputSection, TypeSpace, TypeSpaceSettings};
 
 use crate::to_schema::ToSchema;
 
@@ -53,6 +56,181 @@ pub struct Generator {
     settings: GenerationSettings,
     uses_futures: bool,
     uses_websockets: bool,
+}
+
+/// A generated Rust source file.
+pub struct GeneratedFile {
+    /// The path of the generated file, relative to the output source
+    /// directory.
+    pub path: PathBuf,
+    /// The generated Rust source contents.
+    pub contents: String,
+}
+
+/// File layout for generated output.
+#[derive(Clone, Debug, Default)]
+pub enum FileLayout {
+    /// Emit one Rust source file.
+    #[default]
+    SingleFile,
+    /// Emit a small include-based tree split by generated section.
+    BySection,
+}
+
+struct GeneratedSections {
+    root: TokenStream,
+    types: Vec<TypeOutputItem>,
+    client: TokenStream,
+    operations: TokenStream,
+}
+
+impl GeneratedSections {
+    fn types_tokens(&self) -> TokenStream {
+        let mut sections = BTreeMap::<TypeOutputSection, TokenStream>::new();
+        self.types.iter().for_each(|item| {
+            sections
+                .entry(item.section)
+                .or_default()
+                .extend(item.tokens.clone());
+        });
+
+        let section_tokens = sections.into_iter().map(|(section, tokens)| match section {
+            TypeOutputSection::Error => quote! {
+                /// Error types.
+                pub mod error {
+                    #tokens
+                }
+            },
+            TypeOutputSection::Crate => quote! {
+                #tokens
+            },
+            TypeOutputSection::Builder => quote! {
+                /// Types for composing complex structures.
+                pub mod builder {
+                    #tokens
+                }
+            },
+            TypeOutputSection::Defaults => quote! {
+                /// Generation of default values for serde.
+                pub mod defaults {
+                    #tokens
+                }
+            },
+        });
+
+        quote! {
+            #(#section_tokens)*
+        }
+    }
+
+    fn tokens(&self) -> TokenStream {
+        let root = &self.root;
+        let types = self.types_tokens();
+        let client = &self.client;
+        let operations = &self.operations;
+
+        quote! {
+            #root
+
+            /// Types used as operation parameters and responses.
+            #[allow(clippy::all)]
+            pub mod types {
+                #types
+            }
+
+            #client
+
+            #operations
+        }
+    }
+
+    fn files(&self, layout: FileLayout) -> Vec<GeneratedFile> {
+        match layout {
+            FileLayout::SingleFile => vec![GeneratedFile {
+                path: PathBuf::from("lib.rs"),
+                contents: self.tokens().to_string(),
+            }],
+            FileLayout::BySection => self.section_files(),
+        }
+    }
+
+    fn section_files(&self) -> Vec<GeneratedFile> {
+        let mut type_sections = BTreeMap::<TypeOutputSection, TokenStream>::new();
+        self.types.iter().for_each(|item| {
+            type_sections
+                .entry(item.section)
+                .or_default()
+                .extend(item.tokens.clone());
+        });
+
+        let type_includes = type_sections.keys().map(|section| match section {
+            TypeOutputSection::Error => quote! {
+                /// Error types.
+                pub mod error {
+                    include!("generated/types/error.rs");
+                }
+            },
+            TypeOutputSection::Crate => quote! {
+                include!("generated/types/crate.rs");
+            },
+            TypeOutputSection::Builder => quote! {
+                /// Types for composing complex structures.
+                pub mod builder {
+                    include!("generated/types/builder.rs");
+                }
+            },
+            TypeOutputSection::Defaults => quote! {
+                /// Generation of default values for serde.
+                pub mod defaults {
+                    include!("generated/types/defaults.rs");
+                }
+            },
+        });
+
+        let root = &self.root;
+        let lib = quote! {
+            #root
+
+            /// Types used as operation parameters and responses.
+            #[allow(clippy::all)]
+            pub mod types {
+                #(#type_includes)*
+            }
+
+            include!("generated/client.rs");
+            include!("generated/operations.rs");
+        };
+
+        let mut files = vec![
+            GeneratedFile {
+                path: PathBuf::from("lib.rs"),
+                contents: lib.to_string(),
+            },
+            GeneratedFile {
+                path: PathBuf::from("generated/client.rs"),
+                contents: self.client.to_string(),
+            },
+            GeneratedFile {
+                path: PathBuf::from("generated/operations.rs"),
+                contents: self.operations.to_string(),
+            },
+        ];
+
+        files.extend(type_sections.into_iter().map(|(section, tokens)| {
+            let path = match section {
+                TypeOutputSection::Error => "generated/types/error.rs",
+                TypeOutputSection::Crate => "generated/types/crate.rs",
+                TypeOutputSection::Builder => "generated/types/builder.rs",
+                TypeOutputSection::Defaults => "generated/types/defaults.rs",
+            };
+            GeneratedFile {
+                path: PathBuf::from(path),
+                contents: tokens.to_string(),
+            }
+        }));
+
+        files
+    }
 }
 
 /// Settings for [Generator].
@@ -320,6 +498,19 @@ impl Generator {
 
     /// Emit a [TokenStream] containing the generated client code.
     pub fn generate_tokens(&mut self, spec: &OpenAPI) -> Result<TokenStream> {
+        Ok(self.generate_sections(spec)?.tokens())
+    }
+
+    /// Emit generated client code as Rust source files.
+    pub fn generate_files(
+        &mut self,
+        spec: &OpenAPI,
+        layout: FileLayout,
+    ) -> Result<Vec<GeneratedFile>> {
+        Ok(self.generate_sections(spec)?.files(layout))
+    }
+
+    fn generate_sections(&mut self, spec: &OpenAPI) -> Result<GeneratedSections> {
         validate_openapi(spec)?;
 
         // Convert our components dictionary to schemars
@@ -372,7 +563,7 @@ impl Generator {
             }
         }?;
 
-        let types = self.type_space.to_stream();
+        let types = self.type_space.to_output_items();
 
         let (inner_type, inner_fn_value) = match self.settings.inner_type.as_ref() {
             Some(inner_type) => (inner_type.clone(), quote! { &self.inner }),
@@ -419,7 +610,7 @@ impl Generator {
         // 1.76+, in case the generated file is not at the top level of the
         // crate.
 
-        let file = quote! {
+        let root = quote! {
             // Re-export types that are used by the public interface of Client.
             #[allow(unused_imports)]
             pub use progenitor_client::{
@@ -435,13 +626,9 @@ impl Generator {
                 OperationInfo,
                 RequestBuilderExt,
             };
+        };
 
-            /// Types used as operation parameters and responses.
-            #[allow(clippy::all)]
-            pub mod types {
-                #types
-            }
-
+        let client = quote! {
             #[derive(Clone, Debug)]
             #[doc = #client_docstring]
             pub struct Client {
@@ -513,11 +700,14 @@ impl Generator {
             }
 
             impl ClientHooks<#inner_type> for &Client {}
-
-            #operation_code
         };
 
-        Ok(file)
+        Ok(GeneratedSections {
+            root,
+            types,
+            client,
+            operations: operation_code,
+        })
     }
 
     fn generate_tokens_positional_merged(
