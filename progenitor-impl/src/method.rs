@@ -12,7 +12,7 @@ use quote::{ToTokens, format_ident, quote};
 use typify::{TypeId, TypeSpace};
 
 use crate::{
-    Error, Generator, Result, TagStyle,
+    Error, GeneratedOperationItem, Generator, Result, TagStyle, area_item,
     template::PathTemplate,
     util::{Case, items, parameter_map, sanitize, unique_ident_from},
 };
@@ -2026,6 +2026,81 @@ impl Generator {
                 #(pub use super::#ext_use;)*
             },
         )
+    }
+
+    pub(crate) fn builder_tag_root_items(
+        &self,
+        methods: &[OperationMethod],
+        tag_info: &BTreeMap<&String, &openapiv3::Tag>,
+    ) -> Vec<GeneratedOperationItem> {
+        let mut base = Vec::new();
+        let mut ext = BTreeMap::new();
+
+        methods.iter().for_each(|method| {
+            let BuilderImpl { doc, sig, body } = self.builder_helper(method);
+
+            if method.tags.is_empty() {
+                base.push(quote! {
+                    #[doc = #doc]
+                    pub #sig {
+                        #body
+                    }
+                });
+            } else {
+                let trait_sig = quote! {
+                    #[doc = #doc]
+                    #sig;
+                };
+
+                let impl_body = quote! {
+                    #sig {
+                        #body
+                    }
+                };
+                method.tags.iter().for_each(|tag| {
+                    ext.entry(tag.clone())
+                        .or_insert_with(Vec::new)
+                        .push((trait_sig.clone(), impl_body.clone()));
+                });
+            }
+        });
+
+        let base_item = (!base.is_empty()).then(|| {
+            area_item(
+                "untagged",
+                quote! {
+                    impl Client {
+                        #(#base)*
+                    }
+                },
+            )
+        });
+
+        let ext_items = ext.into_iter().map(|(tag, trait_methods)| {
+            let desc = tag_info
+                .get(&tag)
+                .and_then(|tag| tag.description.as_ref())
+                .map(|d| quote! { #[doc = #d] });
+            let tr = format_ident!("Client{}Ext", sanitize(&tag, Case::Pascal));
+            let (trait_methods, trait_impls): (Vec<TokenStream>, Vec<TokenStream>) =
+                trait_methods.into_iter().unzip();
+
+            area_item(
+                sanitize(&tag, Case::Snake),
+                quote! {
+                    #desc
+                    pub trait #tr {
+                        #(#trait_methods)*
+                    }
+
+                    impl #tr for Client {
+                        #(#trait_impls)*
+                    }
+                },
+            )
+        });
+
+        base_item.into_iter().chain(ext_items).collect()
     }
 
     pub(crate) fn builder_impl(&self, method: &OperationMethod) -> TokenStream {

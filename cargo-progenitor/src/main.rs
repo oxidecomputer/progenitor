@@ -4,6 +4,7 @@ use std::{
     fs::{File, OpenOptions},
     io::Write,
     path::{Path, PathBuf},
+    process::{Command, Stdio},
 };
 
 use anyhow::{Result, bail};
@@ -91,15 +92,33 @@ impl From<TagArg> for TagStyle {
 }
 
 fn reformat_code(input: String) -> String {
-    let config = rustfmt_wrapper::config::Config {
-        normalize_doc_attributes: Some(true),
-        wrap_comments: Some(true),
-        ..Default::default()
-    };
-    let formatted = rustfmt_wrapper::rustfmt_config(config, input.clone())
-        .or_else(|_| rustfmt_wrapper::rustfmt(input))
-        .unwrap();
+    let formatted = rustfmt_code(&input).unwrap_or(input);
     space_out_items(formatted).unwrap()
+}
+
+fn rustfmt_code(input: &str) -> Option<String> {
+    let rustfmt = match std::env::var_os("RUSTFMT") {
+        Some(path) if path.is_empty() => return None,
+        Some(path) => PathBuf::from(path),
+        None => PathBuf::from("rustfmt"),
+    };
+
+    let mut command = Command::new(rustfmt)
+        .args(["--edition", "2024"])
+        .stdin(Stdio::piped())
+        .stdout(Stdio::piped())
+        .stderr(Stdio::null())
+        .spawn()
+        .ok()?;
+
+    command.stdin.as_mut()?.write_all(input.as_bytes()).ok()?;
+
+    let output = command.wait_with_output().ok()?;
+    output
+        .status
+        .success()
+        .then(|| String::from_utf8(output.stdout).ok())
+        .flatten()
 }
 
 fn save<P>(p: P, data: &str) -> Result<()>
@@ -136,7 +155,7 @@ fn main() -> Result<()> {
 
     let generated = if args.split_output {
         builder
-            .generate_files(&api, FileLayout::BySection)
+            .generate_files(&api, FileLayout::ByTag)
             .map(GeneratedOutput::SplitFiles)
     } else {
         builder

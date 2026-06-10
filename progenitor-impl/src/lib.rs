@@ -16,7 +16,10 @@ use serde::Deserialize;
 use thiserror::Error;
 use typify::{TypeOutputItem, TypeOutputSection, TypeSpace, TypeSpaceSettings};
 
-use crate::to_schema::ToSchema;
+use crate::{
+    to_schema::ToSchema,
+    util::{Case, sanitize},
+};
 
 pub use typify::CrateVers;
 pub use typify::TypeSpaceImpl as TypeImpl;
@@ -75,13 +78,28 @@ pub enum FileLayout {
     SingleFile,
     /// Emit a small include-based tree split by generated section.
     BySection,
+    /// Emit an include-based tree with operations split by primary OpenAPI tag.
+    ByTag,
 }
 
 struct GeneratedSections {
     root: TokenStream,
     types: Vec<TypeOutputItem>,
     client: TokenStream,
-    operations: TokenStream,
+    operations: GeneratedOperations,
+}
+
+struct GeneratedOperations {
+    tokens: TokenStream,
+    root_items: Vec<GeneratedOperationItem>,
+    builder_imports: Option<TokenStream>,
+    builder_items: Vec<GeneratedOperationItem>,
+    prelude: TokenStream,
+}
+
+struct GeneratedOperationItem {
+    area: String,
+    tokens: TokenStream,
 }
 
 impl GeneratedSections {
@@ -127,7 +145,7 @@ impl GeneratedSections {
         let root = &self.root;
         let types = self.types_tokens();
         let client = &self.client;
-        let operations = &self.operations;
+        let operations = self.operations.tokens();
 
         quote! {
             #root
@@ -151,6 +169,7 @@ impl GeneratedSections {
                 contents: self.tokens().to_string(),
             }],
             FileLayout::BySection => self.section_files(),
+            FileLayout::ByTag => self.tag_files(),
         }
     }
 
@@ -212,7 +231,7 @@ impl GeneratedSections {
             },
             GeneratedFile {
                 path: PathBuf::from("generated/operations.rs"),
-                contents: self.operations.to_string(),
+                contents: self.operations.tokens().to_string(),
             },
         ];
 
@@ -230,6 +249,190 @@ impl GeneratedSections {
         }));
 
         files
+    }
+
+    fn tag_files(&self) -> Vec<GeneratedFile> {
+        let mut type_sections = BTreeMap::<TypeOutputSection, TokenStream>::new();
+        self.types.iter().for_each(|item| {
+            type_sections
+                .entry(item.section)
+                .or_default()
+                .extend(item.tokens.clone());
+        });
+
+        let type_includes = type_sections.keys().map(|section| match section {
+            TypeOutputSection::Error => quote! {
+                /// Error types.
+                pub mod error {
+                    include!("generated/types/error.rs");
+                }
+            },
+            TypeOutputSection::Crate => quote! {
+                include!("generated/types/crate.rs");
+            },
+            TypeOutputSection::Builder => quote! {
+                /// Types for composing complex structures.
+                pub mod builder {
+                    include!("generated/types/builder.rs");
+                }
+            },
+            TypeOutputSection::Defaults => quote! {
+                /// Generation of default values for serde.
+                pub mod defaults {
+                    include!("generated/types/defaults.rs");
+                }
+            },
+        });
+
+        let root = &self.root;
+        let operation_includes = self.operations.root_areas().into_iter().map(|area| {
+            let include_path = format!("generated/operations/{area}.rs");
+            quote! {
+                include!(#include_path);
+            }
+        });
+        let builder_module = self.operations.builder_module_include();
+        let prelude_include = (!self.operations.prelude.is_empty()).then(|| {
+            quote! {
+                include!("generated/operations/prelude.rs");
+            }
+        });
+
+        let lib = quote! {
+            #root
+
+            /// Types used as operation parameters and responses.
+            #[allow(clippy::all)]
+            pub mod types {
+                #(#type_includes)*
+            }
+
+            include!("generated/client.rs");
+            #builder_module
+            #(#operation_includes)*
+            #prelude_include
+        };
+
+        let mut files = vec![
+            GeneratedFile {
+                path: PathBuf::from("lib.rs"),
+                contents: lib.to_string(),
+            },
+            GeneratedFile {
+                path: PathBuf::from("generated/client.rs"),
+                contents: self.client.to_string(),
+            },
+        ];
+
+        files.extend(type_sections.into_iter().map(|(section, tokens)| {
+            let path = match section {
+                TypeOutputSection::Error => "generated/types/error.rs",
+                TypeOutputSection::Crate => "generated/types/crate.rs",
+                TypeOutputSection::Builder => "generated/types/builder.rs",
+                TypeOutputSection::Defaults => "generated/types/defaults.rs",
+            };
+            GeneratedFile {
+                path: PathBuf::from(path),
+                contents: tokens.to_string(),
+            }
+        }));
+
+        files.extend(
+            self.operations
+                .root_files()
+                .into_iter()
+                .map(|(area, tokens)| GeneratedFile {
+                    path: PathBuf::from(format!("generated/operations/{area}.rs")),
+                    contents: tokens.to_string(),
+                }),
+        );
+
+        files.extend(
+            self.operations
+                .builder_files()
+                .into_iter()
+                .map(|(area, tokens)| GeneratedFile {
+                    path: PathBuf::from(format!("generated/operations/builder/{area}.rs")),
+                    contents: tokens.to_string(),
+                }),
+        );
+
+        if !self.operations.prelude.is_empty() {
+            files.push(GeneratedFile {
+                path: PathBuf::from("generated/operations/prelude.rs"),
+                contents: self.operations.prelude.clone().to_string(),
+            });
+        }
+
+        files
+    }
+}
+
+impl GeneratedOperations {
+    fn tokens(&self) -> TokenStream {
+        self.tokens.clone()
+    }
+
+    fn root_areas(&self) -> Vec<String> {
+        grouped_tokens(&self.root_items).into_keys().collect()
+    }
+
+    fn root_files(&self) -> BTreeMap<String, TokenStream> {
+        grouped_tokens(&self.root_items)
+    }
+
+    fn builder_files(&self) -> BTreeMap<String, TokenStream> {
+        grouped_tokens(&self.builder_items)
+    }
+
+    fn builder_module_include(&self) -> Option<TokenStream> {
+        if self.builder_items.is_empty() {
+            return None;
+        }
+
+        let imports = self.builder_imports.as_ref();
+        let includes = self.builder_files().into_keys().map(|area| {
+            let include_path = format!("generated/operations/builder/{area}.rs");
+            quote! {
+                include!(#include_path);
+            }
+        });
+
+        Some(quote! {
+            /// Types for composing operation parameters.
+            #[allow(clippy::all)]
+            pub mod builder {
+                #imports
+                #(#includes)*
+            }
+        })
+    }
+}
+
+fn grouped_tokens(items: &[GeneratedOperationItem]) -> BTreeMap<String, TokenStream> {
+    let mut files = BTreeMap::<String, TokenStream>::new();
+    items.iter().for_each(|item| {
+        files
+            .entry(item.area.clone())
+            .or_default()
+            .extend(item.tokens.clone());
+    });
+    files
+}
+
+fn operation_area(method: &method::OperationMethod) -> String {
+    method
+        .tags
+        .first()
+        .map(|tag| sanitize(tag, Case::Snake))
+        .filter(|tag| !tag.is_empty())
+        .unwrap_or_else(|| "untagged".to_string())
+}
+
+fn area_item(area: impl Into<String>, tokens: TokenStream) -> GeneratedOperationItem {
+    GeneratedOperationItem {
+        area: area.into(),
+        tokens,
     }
 }
 
@@ -714,15 +917,38 @@ impl Generator {
         &mut self,
         input_methods: &[method::OperationMethod],
         has_inner: bool,
-    ) -> Result<TokenStream> {
+    ) -> Result<GeneratedOperations> {
         let methods = input_methods
             .iter()
             .map(|method| self.positional_method(method, has_inner))
             .collect::<Result<Vec<_>>>()?;
 
+        let root_items = input_methods
+            .iter()
+            .zip(methods.iter())
+            .map(|(method, method_tokens)| {
+                area_item(
+                    operation_area(method),
+                    quote! {
+                        #[allow(clippy::all)]
+                        impl Client {
+                            #method_tokens
+                        }
+                    },
+                )
+            })
+            .collect();
+
         // The allow(unused_imports) on the `pub use` is necessary with Rust
         // 1.76+, in case the generated file is not at the top level of the
         // crate.
+        let prelude = quote! {
+            /// Items consumers will typically use such as the Client.
+            pub mod prelude {
+                #[allow(unused_imports)]
+                pub use super::Client;
+            }
+        };
 
         let out = quote! {
             #[allow(clippy::all)]
@@ -730,20 +956,22 @@ impl Generator {
                 #(#methods)*
             }
 
-            /// Items consumers will typically use such as the Client.
-            pub mod prelude {
-                #[allow(unused_imports)]
-                pub use super::Client;
-            }
+            #prelude
         };
-        Ok(out)
+        Ok(GeneratedOperations {
+            tokens: out,
+            root_items,
+            builder_imports: None,
+            builder_items: Vec::new(),
+            prelude,
+        })
     }
 
     fn generate_tokens_builder_merged(
         &mut self,
         input_methods: &[method::OperationMethod],
         has_inner: bool,
-    ) -> Result<TokenStream> {
+    ) -> Result<GeneratedOperations> {
         let builder_struct = input_methods
             .iter()
             .map(|method| self.builder_struct(method, TagStyle::Merged, has_inner))
@@ -754,6 +982,51 @@ impl Generator {
             .map(|method| self.builder_impl(method))
             .collect::<Vec<_>>();
 
+        let root_items = input_methods
+            .iter()
+            .zip(builder_methods.iter())
+            .map(|(method, method_tokens)| {
+                area_item(
+                    operation_area(method),
+                    quote! {
+                        impl Client {
+                            #method_tokens
+                        }
+                    },
+                )
+            })
+            .collect();
+
+        let builder_items = input_methods
+            .iter()
+            .zip(builder_struct.iter())
+            .map(|(method, builder_tokens)| {
+                area_item(operation_area(method), builder_tokens.clone())
+            })
+            .collect();
+
+        let builder_imports = quote! {
+            use super::types;
+            #[allow(unused_imports)]
+            use super::{
+                encode_path,
+                ByteStream,
+                ClientInfo,
+                ClientHooks,
+                Error,
+                OperationInfo,
+                RequestBuilderExt,
+                ResponseValue,
+            };
+        };
+
+        let prelude = quote! {
+            /// Items consumers will typically use such as the Client.
+            pub mod prelude {
+                pub use self::super::Client;
+            }
+        };
+
         let out = quote! {
             impl Client {
                 #(#builder_methods)*
@@ -762,29 +1035,21 @@ impl Generator {
             /// Types for composing operation parameters.
             #[allow(clippy::all)]
             pub mod builder {
-                use super::types;
-                #[allow(unused_imports)]
-                use super::{
-                    encode_path,
-                    ByteStream,
-                    ClientInfo,
-                    ClientHooks,
-                    Error,
-                    OperationInfo,
-                    RequestBuilderExt,
-                    ResponseValue,
-                };
+                #builder_imports
 
                 #(#builder_struct)*
             }
 
-            /// Items consumers will typically use such as the Client.
-            pub mod prelude {
-                pub use self::super::Client;
-            }
+            #prelude
         };
 
-        Ok(out)
+        Ok(GeneratedOperations {
+            tokens: out,
+            root_items,
+            builder_imports: Some(builder_imports),
+            builder_items,
+            prelude,
+        })
     }
 
     fn generate_tokens_builder_separate(
@@ -792,13 +1057,47 @@ impl Generator {
         input_methods: &[method::OperationMethod],
         tag_info: BTreeMap<&String, &openapiv3::Tag>,
         has_inner: bool,
-    ) -> Result<TokenStream> {
+    ) -> Result<GeneratedOperations> {
         let builder_struct = input_methods
             .iter()
             .map(|method| self.builder_struct(method, TagStyle::Separate, has_inner))
             .collect::<Result<Vec<_>>>()?;
 
         let (traits_and_impls, trait_preludes) = self.builder_tags(input_methods, &tag_info);
+
+        let root_items = self.builder_tag_root_items(input_methods, &tag_info);
+        let builder_items = input_methods
+            .iter()
+            .zip(builder_struct.iter())
+            .map(|(method, builder_tokens)| {
+                area_item(operation_area(method), builder_tokens.clone())
+            })
+            .collect();
+
+        let builder_imports = quote! {
+            use super::types;
+            #[allow(unused_imports)]
+            use super::{
+                encode_path,
+                ByteStream,
+                ClientInfo,
+                ClientHooks,
+                Error,
+                OperationInfo,
+                RequestBuilderExt,
+                ResponseValue,
+            };
+        };
+
+        let prelude = quote! {
+            /// Items consumers will typically use such as the Client and
+            /// extension traits.
+            pub mod prelude {
+                #[allow(unused_imports)]
+                pub use super::Client;
+                #trait_preludes
+            }
+        };
 
         // The allow(unused_imports) on the `pub use` is necessary with Rust
         // 1.76+, in case the generated file is not at the top level of the
@@ -810,32 +1109,21 @@ impl Generator {
             /// Types for composing operation parameters.
             #[allow(clippy::all)]
             pub mod builder {
-                use super::types;
-                #[allow(unused_imports)]
-                use super::{
-                    encode_path,
-                    ByteStream,
-                    ClientInfo,
-                    ClientHooks,
-                    Error,
-                    OperationInfo,
-                    RequestBuilderExt,
-                    ResponseValue,
-                };
+                #builder_imports
 
                 #(#builder_struct)*
             }
 
-            /// Items consumers will typically use such as the Client and
-            /// extension traits.
-            pub mod prelude {
-                #[allow(unused_imports)]
-                pub use super::Client;
-                #trait_preludes
-            }
+            #prelude
         };
 
-        Ok(out)
+        Ok(GeneratedOperations {
+            tokens: out,
+            root_items,
+            builder_imports: Some(builder_imports),
+            builder_items,
+            prelude,
+        })
     }
 
     /// Get the [TypeSpace] for schemas present in the OpenAPI specification.

@@ -163,6 +163,46 @@ fn test_split_files_by_section() {
 }
 
 #[test]
+fn test_split_files_by_tag() {
+    let spec = load_api("../sample_openapi/nexus.json");
+    let mut generator = Generator::new(
+        GenerationSettings::default()
+            .with_interface(InterfaceStyle::Builder)
+            .with_tag(TagStyle::Merged),
+    );
+    let files = generator.generate_files(&spec, FileLayout::ByTag).unwrap();
+
+    let paths = files
+        .iter()
+        .map(|file| file.path.to_str().unwrap())
+        .collect::<std::collections::BTreeSet<_>>();
+
+    assert!(paths.contains("lib.rs"));
+    assert!(paths.contains("generated/client.rs"));
+    assert!(paths.contains("generated/operations/disks.rs"));
+    assert!(paths.contains("generated/operations/instances.rs"));
+    assert!(paths.contains("generated/operations/vpcs.rs"));
+    assert!(paths.contains("generated/operations/builder/disks.rs"));
+    assert!(paths.contains("generated/operations/builder/instances.rs"));
+    assert!(paths.contains("generated/operations/builder/vpcs.rs"));
+    assert!(paths.contains("generated/operations/prelude.rs"));
+    assert!(paths.contains("generated/types/error.rs"));
+    assert!(paths.contains("generated/types/crate.rs"));
+    assert!(paths.contains("generated/types/builder.rs"));
+
+    let lib = files
+        .iter()
+        .find(|file| file.path == PathBuf::from("lib.rs"))
+        .unwrap();
+    assert!(lib.contents.contains("generated/operations/disks.rs"));
+    assert!(
+        lib.contents
+            .contains("generated/operations/builder/disks.rs")
+    );
+    assert!(!lib.contents.contains("generated/operations.rs"));
+}
+
+#[test]
 fn test_buildomat() {
     verify_apis("buildomat.json");
 }
