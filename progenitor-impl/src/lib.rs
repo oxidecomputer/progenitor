@@ -11,7 +11,7 @@ use std::{
 
 use openapiv3::OpenAPI;
 use proc_macro2::TokenStream;
-use quote::quote;
+use quote::{format_ident, quote};
 use serde::Deserialize;
 use thiserror::Error;
 use typify::{TypeOutputItem, TypeOutputSection, TypeSpace, TypeSpaceSettings};
@@ -76,9 +76,9 @@ pub enum FileLayout {
     /// Emit one Rust source file.
     #[default]
     SingleFile,
-    /// Emit a small include-based tree split by generated section.
+    /// Emit a small module tree split by generated section.
     BySection,
-    /// Emit an include-based tree with operations split by primary OpenAPI tag.
+    /// Emit a module tree with operations split by primary OpenAPI tag.
     ByTag,
 }
 
@@ -94,7 +94,7 @@ struct GeneratedOperations {
     root_items: Vec<GeneratedOperationItem>,
     builder_imports: Option<TokenStream>,
     builder_items: Vec<GeneratedOperationItem>,
-    prelude: TokenStream,
+    prelude: Option<GeneratedModule>,
 }
 
 struct GeneratedOperationItem {
@@ -102,8 +102,13 @@ struct GeneratedOperationItem {
     tokens: TokenStream,
 }
 
+struct GeneratedModule {
+    docs: &'static str,
+    tokens: TokenStream,
+}
+
 impl GeneratedSections {
-    fn types_tokens(&self) -> TokenStream {
+    fn type_sections(&self) -> BTreeMap<TypeOutputSection, TokenStream> {
         let mut sections = BTreeMap::<TypeOutputSection, TokenStream>::new();
         self.types.iter().for_each(|item| {
             sections
@@ -111,7 +116,11 @@ impl GeneratedSections {
                 .or_default()
                 .extend(item.tokens.clone());
         });
+        sections
+    }
 
+    fn types_tokens(&self) -> TokenStream {
+        let sections = self.type_sections();
         let section_tokens = sections.into_iter().map(|(section, tokens)| match section {
             TypeOutputSection::Error => quote! {
                 /// Error types.
@@ -168,149 +177,33 @@ impl GeneratedSections {
                 path: PathBuf::from("lib.rs"),
                 contents: self.tokens().to_string(),
             }],
-            FileLayout::BySection => self.section_files(),
-            FileLayout::ByTag => self.tag_files(),
+            FileLayout::BySection => self.module_files(false),
+            FileLayout::ByTag => self.module_files(true),
         }
     }
 
-    fn section_files(&self) -> Vec<GeneratedFile> {
-        let mut type_sections = BTreeMap::<TypeOutputSection, TokenStream>::new();
-        self.types.iter().for_each(|item| {
-            type_sections
-                .entry(item.section)
-                .or_default()
-                .extend(item.tokens.clone());
-        });
-
-        let type_includes = type_sections.keys().map(|section| match section {
-            TypeOutputSection::Error => quote! {
-                /// Error types.
-                pub mod error {
-                    include!("generated/types/error.rs");
-                }
-            },
-            TypeOutputSection::Crate => quote! {
-                include!("generated/types/crate.rs");
-            },
-            TypeOutputSection::Builder => quote! {
-                /// Types for composing complex structures.
-                pub mod builder {
-                    include!("generated/types/builder.rs");
-                }
-            },
-            TypeOutputSection::Defaults => quote! {
-                /// Generation of default values for serde.
-                pub mod defaults {
-                    include!("generated/types/defaults.rs");
-                }
-            },
-        });
-
+    fn module_files(&self, split_by_tag: bool) -> Vec<GeneratedFile> {
         let root = &self.root;
+        let client = &self.client;
+        let builder_module = self.operations.builder_module_decl();
+        let prelude_module = self.operations.prelude_module_decl();
         let lib = quote! {
             #root
 
             /// Types used as operation parameters and responses.
             #[allow(clippy::all)]
-            pub mod types {
-                #(#type_includes)*
-            }
+            pub mod types;
 
-            include!("generated/client.rs");
-            include!("generated/operations.rs");
-        };
+            mod client;
+            pub use client::*;
 
-        let mut files = vec![
-            GeneratedFile {
-                path: PathBuf::from("lib.rs"),
-                contents: lib.to_string(),
-            },
-            GeneratedFile {
-                path: PathBuf::from("generated/client.rs"),
-                contents: self.client.to_string(),
-            },
-            GeneratedFile {
-                path: PathBuf::from("generated/operations.rs"),
-                contents: self.operations.tokens().to_string(),
-            },
-        ];
-
-        files.extend(type_sections.into_iter().map(|(section, tokens)| {
-            let path = match section {
-                TypeOutputSection::Error => "generated/types/error.rs",
-                TypeOutputSection::Crate => "generated/types/crate.rs",
-                TypeOutputSection::Builder => "generated/types/builder.rs",
-                TypeOutputSection::Defaults => "generated/types/defaults.rs",
-            };
-            GeneratedFile {
-                path: PathBuf::from(path),
-                contents: tokens.to_string(),
-            }
-        }));
-
-        files
-    }
-
-    fn tag_files(&self) -> Vec<GeneratedFile> {
-        let mut type_sections = BTreeMap::<TypeOutputSection, TokenStream>::new();
-        self.types.iter().for_each(|item| {
-            type_sections
-                .entry(item.section)
-                .or_default()
-                .extend(item.tokens.clone());
-        });
-
-        let type_includes = type_sections.keys().map(|section| match section {
-            TypeOutputSection::Error => quote! {
-                /// Error types.
-                pub mod error {
-                    include!("generated/types/error.rs");
-                }
-            },
-            TypeOutputSection::Crate => quote! {
-                include!("generated/types/crate.rs");
-            },
-            TypeOutputSection::Builder => quote! {
-                /// Types for composing complex structures.
-                pub mod builder {
-                    include!("generated/types/builder.rs");
-                }
-            },
-            TypeOutputSection::Defaults => quote! {
-                /// Generation of default values for serde.
-                pub mod defaults {
-                    include!("generated/types/defaults.rs");
-                }
-            },
-        });
-
-        let root = &self.root;
-        let operation_includes = self.operations.root_areas().into_iter().map(|area| {
-            let include_path = format!("generated/operations/{area}.rs");
-            quote! {
-                include!(#include_path);
-            }
-        });
-        let builder_module = self.operations.builder_module_include();
-        let prelude_include = (!self.operations.prelude.is_empty()).then(|| {
-            quote! {
-                include!("generated/operations/prelude.rs");
-            }
-        });
-
-        let lib = quote! {
-            #root
-
-            /// Types used as operation parameters and responses.
-            #[allow(clippy::all)]
-            pub mod types {
-                #(#type_includes)*
-            }
-
-            include!("generated/client.rs");
             #builder_module
-            #(#operation_includes)*
-            #prelude_include
+
+            mod operations;
+            #[allow(unused_imports)]
+            pub use operations::*;
+
+            #prelude_module
         };
 
         let mut files = vec![
@@ -319,62 +212,63 @@ impl GeneratedSections {
                 contents: lib.to_string(),
             },
             GeneratedFile {
-                path: PathBuf::from("generated/client.rs"),
-                contents: self.client.to_string(),
+                path: PathBuf::from("client.rs"),
+                contents: quote! {
+                    use super::*;
+                    #client
+                }
+                .to_string(),
             },
+            self.type_module_file(),
         ];
 
-        files.extend(type_sections.into_iter().map(|(section, tokens)| {
-            let path = match section {
-                TypeOutputSection::Error => "generated/types/error.rs",
-                TypeOutputSection::Crate => "generated/types/crate.rs",
-                TypeOutputSection::Builder => "generated/types/builder.rs",
-                TypeOutputSection::Defaults => "generated/types/defaults.rs",
-            };
-            GeneratedFile {
-                path: PathBuf::from(path),
-                contents: tokens.to_string(),
-            }
-        }));
-
-        files.extend(
-            self.operations
-                .root_files()
-                .into_iter()
-                .map(|(area, tokens)| GeneratedFile {
-                    path: PathBuf::from(format!("generated/operations/{area}.rs")),
-                    contents: tokens.to_string(),
-                }),
-        );
-
-        files.extend(
-            self.operations
-                .builder_files()
-                .into_iter()
-                .map(|(area, tokens)| GeneratedFile {
-                    path: PathBuf::from(format!("generated/operations/builder/{area}.rs")),
-                    contents: tokens.to_string(),
-                }),
-        );
-
-        if !self.operations.prelude.is_empty() {
-            files.push(GeneratedFile {
-                path: PathBuf::from("generated/operations/prelude.rs"),
-                contents: self.operations.prelude.clone().to_string(),
-            });
-        }
-
+        files.extend(self.type_section_files());
+        files.extend(self.operations.operation_module_files(split_by_tag));
+        files.extend(self.operations.builder_module_files(split_by_tag));
+        files.extend(self.operations.prelude_module_file());
         files
+    }
+
+    fn type_module_file(&self) -> GeneratedFile {
+        let sections = self.type_sections();
+        let section_mods = sections.keys().filter_map(|section| {
+            let module_name = section.module_name()?;
+            let module_name = format_ident!("{}", module_name);
+            let docs = section.description()?;
+            Some(quote! {
+                #[doc = #docs]
+                pub mod #module_name;
+            })
+        });
+        let crate_tokens = sections.get(&TypeOutputSection::Crate);
+
+        GeneratedFile {
+            path: PathBuf::from("types/mod.rs"),
+            contents: quote! {
+                #(#section_mods)*
+                #crate_tokens
+            }
+            .to_string(),
+        }
+    }
+
+    fn type_section_files(&self) -> Vec<GeneratedFile> {
+        self.type_sections()
+            .into_iter()
+            .filter_map(|(section, tokens)| {
+                section.module_name()?;
+                Some(GeneratedFile {
+                    path: PathBuf::from("types").join(section.file_name()),
+                    contents: tokens.to_string(),
+                })
+            })
+            .collect()
     }
 }
 
 impl GeneratedOperations {
     fn tokens(&self) -> TokenStream {
         self.tokens.clone()
-    }
-
-    fn root_areas(&self) -> Vec<String> {
-        grouped_tokens(&self.root_items).into_keys().collect()
     }
 
     fn root_files(&self) -> BTreeMap<String, TokenStream> {
@@ -385,26 +279,140 @@ impl GeneratedOperations {
         grouped_tokens(&self.builder_items)
     }
 
-    fn builder_module_include(&self) -> Option<TokenStream> {
-        if self.builder_items.is_empty() {
-            return None;
+    fn operation_module_files(&self, split_by_tag: bool) -> Vec<GeneratedFile> {
+        if split_by_tag {
+            self.split_operation_module_files()
+        } else {
+            let tokens = self.root_files().into_values();
+            vec![GeneratedFile {
+                path: PathBuf::from("operations.rs"),
+                contents: quote! {
+                    use super::*;
+                    #(#tokens)*
+                }
+                .to_string(),
+            }]
         }
+    }
 
-        let imports = self.builder_imports.as_ref();
-        let includes = self.builder_files().into_keys().map(|area| {
-            let include_path = format!("generated/operations/builder/{area}.rs");
+    fn split_operation_module_files(&self) -> Vec<GeneratedFile> {
+        let root_files = self.root_files();
+        let builder_import = (!self.builder_items.is_empty()).then(|| quote! { builder, });
+        let module_decls = root_files.keys().map(|area| {
+            let module = format_ident!("{}", area);
             quote! {
-                include!(#include_path);
+                mod #module;
+                #[allow(unused_imports)]
+                pub use #module::*;
             }
         });
 
-        Some(quote! {
-            /// Types for composing operation parameters.
-            #[allow(clippy::all)]
-            pub mod builder {
-                #imports
-                #(#includes)*
+        let mut files = vec![GeneratedFile {
+            path: PathBuf::from("operations/mod.rs"),
+            contents: quote! {
+                #[allow(unused_imports)]
+                use super::{ #builder_import Client };
+                #(#module_decls)*
             }
+            .to_string(),
+        }];
+
+        files.extend(root_files.into_iter().map(|(area, tokens)| {
+            GeneratedFile {
+                path: PathBuf::from("operations").join(format!("{area}.rs")),
+                contents: quote! {
+                    use super::*;
+                    #tokens
+                }
+                .to_string(),
+            }
+        }));
+
+        files
+    }
+
+    fn builder_module_decl(&self) -> Option<TokenStream> {
+        (!self.builder_items.is_empty()).then(|| {
+            quote! {
+                /// Types for composing operation parameters.
+                #[allow(clippy::all)]
+                pub mod builder;
+            }
+        })
+    }
+
+    fn builder_module_files(&self, split_by_tag: bool) -> Vec<GeneratedFile> {
+        if self.builder_items.is_empty() {
+            return Vec::new();
+        }
+
+        if split_by_tag {
+            self.split_builder_module_files()
+        } else {
+            let imports = self.builder_imports.as_ref();
+            let tokens = self.builder_files().into_values();
+            vec![GeneratedFile {
+                path: PathBuf::from("builder.rs"),
+                contents: quote! {
+                    #imports
+                    #(#tokens)*
+                }
+                .to_string(),
+            }]
+        }
+    }
+
+    fn split_builder_module_files(&self) -> Vec<GeneratedFile> {
+        let builder_files = self.builder_files();
+        let imports = self.builder_imports.as_ref();
+        let module_decls = builder_files.keys().map(|area| {
+            let module = format_ident!("{}", area);
+            quote! {
+                mod #module;
+                #[allow(unused_imports)]
+                pub use #module::*;
+            }
+        });
+
+        let mut files = vec![GeneratedFile {
+            path: PathBuf::from("builder/mod.rs"),
+            contents: quote! {
+                #imports
+                #[allow(unused_imports)]
+                use super::Client;
+                #(#module_decls)*
+            }
+            .to_string(),
+        }];
+
+        files.extend(builder_files.into_iter().map(|(area, tokens)| {
+            GeneratedFile {
+                path: PathBuf::from("builder").join(format!("{area}.rs")),
+                contents: quote! {
+                    use super::*;
+                    #tokens
+                }
+                .to_string(),
+            }
+        }));
+
+        files
+    }
+
+    fn prelude_module_decl(&self) -> Option<TokenStream> {
+        self.prelude.as_ref().map(|prelude| {
+            let docs = prelude.docs;
+            quote! {
+                #[doc = #docs]
+                pub mod prelude;
+            }
+        })
+    }
+
+    fn prelude_module_file(&self) -> Option<GeneratedFile> {
+        self.prelude.as_ref().map(|prelude| GeneratedFile {
+            path: PathBuf::from("prelude.rs"),
+            contents: prelude.tokens.to_string(),
         })
     }
 }
@@ -942,11 +950,14 @@ impl Generator {
         // The allow(unused_imports) on the `pub use` is necessary with Rust
         // 1.76+, in case the generated file is not at the top level of the
         // crate.
+        let prelude_items = quote! {
+            #[allow(unused_imports)]
+            pub use super::Client;
+        };
         let prelude = quote! {
             /// Items consumers will typically use such as the Client.
             pub mod prelude {
-                #[allow(unused_imports)]
-                pub use super::Client;
+                #prelude_items
             }
         };
 
@@ -963,7 +974,10 @@ impl Generator {
             root_items,
             builder_imports: None,
             builder_items: Vec::new(),
-            prelude,
+            prelude: Some(GeneratedModule {
+                docs: "Items consumers will typically use such as the Client.",
+                tokens: prelude_items,
+            }),
         })
     }
 
@@ -1020,10 +1034,13 @@ impl Generator {
             };
         };
 
+        let prelude_items = quote! {
+            pub use self::super::Client;
+        };
         let prelude = quote! {
             /// Items consumers will typically use such as the Client.
             pub mod prelude {
-                pub use self::super::Client;
+                #prelude_items
             }
         };
 
@@ -1048,7 +1065,10 @@ impl Generator {
             root_items,
             builder_imports: Some(builder_imports),
             builder_items,
-            prelude,
+            prelude: Some(GeneratedModule {
+                docs: "Items consumers will typically use such as the Client.",
+                tokens: prelude_items,
+            }),
         })
     }
 
@@ -1089,13 +1109,16 @@ impl Generator {
             };
         };
 
+        let prelude_items = quote! {
+            #[allow(unused_imports)]
+            pub use super::Client;
+            #trait_preludes
+        };
         let prelude = quote! {
             /// Items consumers will typically use such as the Client and
             /// extension traits.
             pub mod prelude {
-                #[allow(unused_imports)]
-                pub use super::Client;
-                #trait_preludes
+                #prelude_items
             }
         };
 
@@ -1122,7 +1145,10 @@ impl Generator {
             root_items,
             builder_imports: Some(builder_imports),
             builder_items,
-            prelude,
+            prelude: Some(GeneratedModule {
+                docs: "Items consumers will typically use such as the Client and extension traits.",
+                tokens: prelude_items,
+            }),
         })
     }
 

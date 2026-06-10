@@ -63,7 +63,7 @@ unicode-ident = "1.0.24"
 uuid = { version = "1.23.2", features = ["serde", "v4"] }
 
 [patch.crates-io]
-typify = { git = "https://github.com/oxidecomputer/typify", branch = "splits" }
+typify = { git = "https://github.com/oxidecomputer/typify", rev = "54ccdd1811cfb558af3f3b3955315d8662a9426e" }
 
 #[patch.crates-io]
 #serde_tokenstream = { path = "../serde_tokenstream" }

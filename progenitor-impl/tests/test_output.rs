@@ -147,19 +147,22 @@ fn test_split_files_by_section() {
         .collect::<std::collections::BTreeSet<_>>();
 
     assert!(paths.contains("lib.rs"));
-    assert!(paths.contains("generated/client.rs"));
-    assert!(paths.contains("generated/operations.rs"));
-    assert!(paths.contains("generated/types/error.rs"));
-    assert!(paths.contains("generated/types/crate.rs"));
-    assert!(paths.contains("generated/types/builder.rs"));
+    assert!(paths.contains("client.rs"));
+    assert!(paths.contains("operations.rs"));
+    assert!(paths.contains("builder.rs"));
+    assert!(paths.contains("prelude.rs"));
+    assert!(paths.contains("types/mod.rs"));
+    assert!(paths.contains("types/error.rs"));
+    assert!(paths.contains("types/builder.rs"));
 
     let lib = files
         .iter()
         .find(|file| file.path == PathBuf::from("lib.rs"))
         .unwrap();
-    assert!(lib.contents.contains("generated/client.rs"));
-    assert!(lib.contents.contains("generated/operations.rs"));
-    assert!(lib.contents.contains("generated/types/builder.rs"));
+    assert!(lib.contents.contains("mod client"));
+    assert!(lib.contents.contains("mod operations"));
+    assert!(lib.contents.contains("pub mod builder"));
+    assert!(!lib.contents.contains("include!"));
 }
 
 #[test]
@@ -178,28 +181,27 @@ fn test_split_files_by_tag() {
         .collect::<std::collections::BTreeSet<_>>();
 
     assert!(paths.contains("lib.rs"));
-    assert!(paths.contains("generated/client.rs"));
-    assert!(paths.contains("generated/operations/disks.rs"));
-    assert!(paths.contains("generated/operations/instances.rs"));
-    assert!(paths.contains("generated/operations/vpcs.rs"));
-    assert!(paths.contains("generated/operations/builder/disks.rs"));
-    assert!(paths.contains("generated/operations/builder/instances.rs"));
-    assert!(paths.contains("generated/operations/builder/vpcs.rs"));
-    assert!(paths.contains("generated/operations/prelude.rs"));
-    assert!(paths.contains("generated/types/error.rs"));
-    assert!(paths.contains("generated/types/crate.rs"));
-    assert!(paths.contains("generated/types/builder.rs"));
+    assert!(paths.contains("client.rs"));
+    assert!(paths.contains("operations/mod.rs"));
+    assert!(paths.contains("operations/disks.rs"));
+    assert!(paths.contains("operations/instances.rs"));
+    assert!(paths.contains("operations/vpcs.rs"));
+    assert!(paths.contains("builder/mod.rs"));
+    assert!(paths.contains("builder/disks.rs"));
+    assert!(paths.contains("builder/instances.rs"));
+    assert!(paths.contains("builder/vpcs.rs"));
+    assert!(paths.contains("prelude.rs"));
+    assert!(paths.contains("types/error.rs"));
+    assert!(paths.contains("types/mod.rs"));
+    assert!(paths.contains("types/builder.rs"));
 
     let lib = files
         .iter()
         .find(|file| file.path == PathBuf::from("lib.rs"))
         .unwrap();
-    assert!(lib.contents.contains("generated/operations/disks.rs"));
-    assert!(
-        lib.contents
-            .contains("generated/operations/builder/disks.rs")
-    );
-    assert!(!lib.contents.contains("generated/operations.rs"));
+    assert!(lib.contents.contains("mod operations"));
+    assert!(lib.contents.contains("pub mod builder"));
+    assert!(!lib.contents.contains("include!"));
 }
 
 #[test]
