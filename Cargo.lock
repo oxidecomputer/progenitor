@@ -1784,6 +1784,7 @@ dependencies = [
  "futures-core",
  "percent-encoding",
  "reqwest",
+ "schema-doc",
  "serde",
  "serde_json",
  "serde_urlencoded",
@@ -2242,6 +2243,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "891d81b926048e76efe18581bf793546b4c0eaf8448d72be8de2bbee5fd166e1"
 dependencies = [
  "windows-sys 0.61.2",
+]
+
+[[package]]
+name = "schema-doc"
+version = "0.1.0"
+source = "git+https://github.com/oxidecomputer/json-schema-tools#36ea0d96002b3c05b1857f4c3c4f8892b2568396"
+dependencies = [
+ "schemars",
+ "serde_json",
 ]
 
 [[package]]

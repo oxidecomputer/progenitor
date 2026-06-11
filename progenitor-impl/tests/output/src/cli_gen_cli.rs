@@ -22,13 +22,12 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("gateway")
                     .long("gateway")
                     .value_parser(::clap::value_parser!(::std::string::String))
-                    .required(true),
+                    .required_unless_present_any(["json-body-template", "json-body-schema"]),
             )
             .arg(
                 ::clap::Arg::new("json-body")
                     .long("json-body")
                     .value_name("JSON-FILE")
-                    .required(true)
                     .value_parser(::clap::value_parser!(std::path::PathBuf))
                     .help("Path to a file that contains the full json body."),
             )
@@ -36,7 +35,19 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("json-body-template")
                     .long("json-body-template")
                     .action(::clap::ArgAction::SetTrue)
-                    .help("XXX"),
+                    .help("Build a JSON request-body template and exit"),
+            )
+            .arg(
+                ::clap::Arg::new("json-body-schema")
+                    .long("json-body-schema")
+                    .action(::clap::ArgAction::SetTrue)
+                    .help("Output a grammar reference for the request body and exit"),
+            )
+            .group(
+                ::clap::ArgGroup::new("body-source")
+                    .args(["json-body", "json-body-template", "json-body-schema"])
+                    .required(true)
+                    .multiple(false),
             )
     }
 
@@ -54,6 +65,20 @@ impl<T: CliConfig> Cli<T> {
         let mut request = self.client.uno();
         if let Some(value) = matches.get_one::<::std::string::String>("gateway") {
             request = request.gateway(value.clone());
+        }
+
+        if matches.get_flag("json-body-template") {
+            let schema = schemars::schema_for!(types::UnoBody);
+            if let Some(body) = self.config.build_body_template(&schema)? {
+                println!("{}", serde_json::to_string_pretty(&body).unwrap());
+            }
+            return Ok(());
+        }
+
+        if matches.get_flag("json-body-schema") {
+            let schema = schemars::schema_for!(types::UnoBody);
+            print!("{}", progenitor_client::render_body_schema(&schema));
+            return Ok(());
         }
 
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
@@ -98,6 +123,20 @@ pub trait CliConfig {
     fn list_end_error<T>(&self, value: &Error<T>)
     where
         T: std::clone::Clone + schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
+    /// Produce the JSON body for `--json-body-template`. There is no
+    /// generic default: override this to launch an interactive body
+    /// builder for your CLI. Returning `None` prints nothing (e.g.
+    /// the user cancelled).
+    fn build_body_template(
+        &self,
+        _schema: &schemars::schema::RootSchema,
+    ) -> anyhow::Result<Option<serde_json::Value>> {
+        anyhow::bail!(
+            "--json-body-template requires an interactive body builder; override \
+             CliConfig::build_body_template to provide one"
+        )
+    }
+
     fn execute_uno(
         &self,
         matches: &::clap::ArgMatches,

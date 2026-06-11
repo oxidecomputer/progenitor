@@ -807,3 +807,13 @@ where
         self.inner.end()
     }
 }
+
+
+// The request-body grammar renderer lives in the standalone `schema-doc` crate,
+// so it can be reused without depending on progenitor. Re-exported here under
+// the `cli` feature so the generated CLI keeps calling
+// `progenitor_client::render_body_schema` unchanged. (`--json-body-template` is
+// served by the consumer's interactive builder via `CliConfig::build_body_template`,
+// not by a generated fill-in template.)
+#[cfg(feature = "cli")]
+pub use schema_doc::render_body_schema;

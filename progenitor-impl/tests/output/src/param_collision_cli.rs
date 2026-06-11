@@ -134,6 +134,20 @@ pub trait CliConfig {
     fn list_end_error<T>(&self, value: &Error<T>)
     where
         T: std::clone::Clone + schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
+    /// Produce the JSON body for `--json-body-template`. There is no
+    /// generic default: override this to launch an interactive body
+    /// builder for your CLI. Returning `None` prints nothing (e.g.
+    /// the user cancelled).
+    fn build_body_template(
+        &self,
+        _schema: &schemars::schema::RootSchema,
+    ) -> anyhow::Result<Option<serde_json::Value>> {
+        anyhow::bail!(
+            "--json-body-template requires an interactive body builder; override \
+             CliConfig::build_body_template to provide one"
+        )
+    }
+
     fn execute_key_get(
         &self,
         matches: &::clap::ArgMatches,

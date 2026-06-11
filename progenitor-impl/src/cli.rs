@@ -153,6 +153,20 @@ impl Generator {
                 where
                     T: #(#cli_bounds+)* schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
 
+                /// Produce the JSON body for `--json-body-template`. There is no
+                /// generic default: override this to launch an interactive body
+                /// builder for your CLI. Returning `None` prints nothing (e.g.
+                /// the user cancelled).
+                fn build_body_template(
+                    &self,
+                    _schema: &schemars::schema::RootSchema,
+                ) -> anyhow::Result<Option<serde_json::Value>> {
+                    anyhow::bail!(
+                        "--json-body-template requires an interactive body builder; \
+                         override CliConfig::build_body_template to provide one"
+                    )
+                }
+
                 #(#trait_ops)*
             }
 
@@ -383,6 +397,15 @@ impl Generator {
             .as_ref()
             .map(|d| &d.first_page_params);
 
+        // Determine up-front whether this command has a typed body. Path/query
+        // params are emitted before the body args, but their `required_unless`
+        // waiver needs to know if `--json-body-template`/`--json-body-schema`
+        // will exist on this command.
+        let has_body = method.params.iter().any(|param| {
+            matches!(&param.kind, OperationParameterKind::Body(_))
+                && matches!(&param.typ, OperationParameterType::Type(_))
+        });
+
         for param in &method.params {
             let innately_required = match &param.kind {
                 // We're not interetested in the body parameter yet.
@@ -417,7 +440,7 @@ impl Generator {
             // There should be no conflicting path or query parameters.
             assert!(!args.has_arg(&arg_name));
 
-            let parser = clap_arg(&arg_name, volitionality, &param.description, &arg_type);
+            let parser = clap_arg(&arg_name, volitionality, has_body, &param.description, &arg_type);
 
             let arg_fn_name = sanitize(&param.name, Case::Snake);
             let arg_fn = format_ident!("{}", arg_fn_name);
@@ -489,9 +512,6 @@ impl Generator {
                     ::clap::Arg::new("json-body")
                         .long("json-body")
                         .value_name("JSON-FILE")
-                        // Required if we can't turn the body into individual
-                        // parameters.
-                        .required(#required)
                         .value_parser(::clap::value_parser!(std::path::PathBuf))
                         .help(#help)
                 )
@@ -499,7 +519,24 @@ impl Generator {
                     ::clap::Arg::new("json-body-template")
                         .long("json-body-template")
                         .action(::clap::ArgAction::SetTrue)
-                        .help("XXX")
+                        .help("Build a JSON request-body template and exit")
+                )
+                .arg(
+                    ::clap::Arg::new("json-body-schema")
+                        .long("json-body-schema")
+                        .action(::clap::ArgAction::SetTrue)
+                        .help("Output a grammar reference for the request body and exit")
+                )
+                // At most one body source may be given; one is required when
+                // the body can't be expressed as individual parameters.
+                // Hand-written commands that provide alternative inputs can
+                // relax this with
+                // `.mut_group("body-source", |g| g.required(false))`.
+                .group(
+                    ::clap::ArgGroup::new("body-source")
+                        .args(["json-body", "json-body-template", "json-body-schema"])
+                        .required(#required)
+                        .multiple(false)
                 )
             }
         });
@@ -517,6 +554,21 @@ impl Generator {
             let body_type = self.type_space.get_type(body_type_id).unwrap();
             let body_type_ident = body_type.ident();
             quote! {
+                // Handle --json-body-template / --json-body-schema
+                if matches.get_flag("json-body-template") {
+                    let schema = schemars::schema_for!(#body_type_ident);
+                    if let Some(body) = self.config.build_body_template(&schema)? {
+                        println!("{}", serde_json::to_string_pretty(&body).unwrap());
+                    }
+                    return Ok(());
+                }
+                if matches.get_flag("json-body-schema") {
+                    let schema = schemars::schema_for!(#body_type_ident);
+                    print!("{}", progenitor_client::render_body_schema(&schema));
+                    return Ok(());
+                }
+
+                // Handle --json-body
                 if let Some(value) =
                     matches.get_one::<std::path::PathBuf>("json-body")
                 {
@@ -585,6 +637,7 @@ impl Generator {
             let parser = clap_arg(
                 &prop_name,
                 volitionality,
+                true, // body args are only generated when the command has a body
                 &description.map(str::to_string),
                 &prop_type,
             );
@@ -631,6 +684,7 @@ enum Volitionality {
 fn clap_arg(
     arg_name: &str,
     volitionality: Volitionality,
+    has_body: bool,
     description: &Option<String>,
     arg_type: &Type,
 ) -> TokenStream {
@@ -685,9 +739,12 @@ fn clap_arg(
 
     let required = match volitionality {
         Volitionality::Optional => quote! { .required(false) },
+        Volitionality::Required if has_body => {
+            quote! { .required_unless_present_any(["json-body-template", "json-body-schema"]) }
+        }
         Volitionality::Required => quote! { .required(true) },
         Volitionality::RequiredIfNoBody => {
-            quote! { .required_unless_present("json-body") }
+            quote! { .required_unless_present_any(["json-body", "json-body-template", "json-body-schema"]) }
         }
     };
 

@@ -16,6 +16,14 @@ serde = { workspace = true }
 serde_json = { workspace = true }
 serde_urlencoded = { workspace = true }
 
+# Optional dependency for CLI request-body schema tooling (grammar reference +
+# fill-in template), provided by the standalone `schema-doc` crate and
+# re-exported under the `cli` feature.
+schema-doc = { git = "https://github.com/oxidecomputer/json-schema-tools", optional = true }
+
+[features]
+cli = ["schema-doc"]
+
 [dev-dependencies]
 url = { workspace = true }
 uuid = { workspace = true }

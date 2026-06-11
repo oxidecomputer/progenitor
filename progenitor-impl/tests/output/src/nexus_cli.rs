@@ -352,13 +352,16 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("client-id")
                     .long("client-id")
                     .value_parser(::clap::value_parser!(::uuid::Uuid))
-                    .required_unless_present("json-body"),
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ]),
             )
             .arg(
                 ::clap::Arg::new("json-body")
                     .long("json-body")
                     .value_name("JSON-FILE")
-                    .required(false)
                     .value_parser(::clap::value_parser!(std::path::PathBuf))
                     .help("Path to a file that contains the full json body."),
             )
@@ -366,7 +369,19 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("json-body-template")
                     .long("json-body-template")
                     .action(::clap::ArgAction::SetTrue)
-                    .help("XXX"),
+                    .help("Build a JSON request-body template and exit"),
+            )
+            .arg(
+                ::clap::Arg::new("json-body-schema")
+                    .long("json-body-schema")
+                    .action(::clap::ArgAction::SetTrue)
+                    .help("Output a grammar reference for the request body and exit"),
+            )
+            .group(
+                ::clap::ArgGroup::new("body-source")
+                    .args(["json-body", "json-body-template", "json-body-schema"])
+                    .required(false)
+                    .multiple(false),
             )
             .about("Start an OAuth 2.0 Device Authorization Grant")
             .long_about(
@@ -382,13 +397,16 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("user-code")
                     .long("user-code")
                     .value_parser(::clap::value_parser!(::std::string::String))
-                    .required_unless_present("json-body"),
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ]),
             )
             .arg(
                 ::clap::Arg::new("json-body")
                     .long("json-body")
                     .value_name("JSON-FILE")
-                    .required(false)
                     .value_parser(::clap::value_parser!(std::path::PathBuf))
                     .help("Path to a file that contains the full json body."),
             )
@@ -396,7 +414,19 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("json-body-template")
                     .long("json-body-template")
                     .action(::clap::ArgAction::SetTrue)
-                    .help("XXX"),
+                    .help("Build a JSON request-body template and exit"),
+            )
+            .arg(
+                ::clap::Arg::new("json-body-schema")
+                    .long("json-body-schema")
+                    .action(::clap::ArgAction::SetTrue)
+                    .help("Output a grammar reference for the request body and exit"),
+            )
+            .group(
+                ::clap::ArgGroup::new("body-source")
+                    .args(["json-body", "json-body-template", "json-body-schema"])
+                    .required(false)
+                    .multiple(false),
             )
             .about("Confirm an OAuth 2.0 Device Authorization Grant")
             .long_about(
@@ -412,25 +442,36 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("client-id")
                     .long("client-id")
                     .value_parser(::clap::value_parser!(::uuid::Uuid))
-                    .required_unless_present("json-body"),
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ]),
             )
             .arg(
                 ::clap::Arg::new("device-code")
                     .long("device-code")
                     .value_parser(::clap::value_parser!(::std::string::String))
-                    .required_unless_present("json-body"),
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ]),
             )
             .arg(
                 ::clap::Arg::new("grant-type")
                     .long("grant-type")
                     .value_parser(::clap::value_parser!(::std::string::String))
-                    .required_unless_present("json-body"),
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ]),
             )
             .arg(
                 ::clap::Arg::new("json-body")
                     .long("json-body")
                     .value_name("JSON-FILE")
-                    .required(false)
                     .value_parser(::clap::value_parser!(std::path::PathBuf))
                     .help("Path to a file that contains the full json body."),
             )
@@ -438,7 +479,19 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("json-body-template")
                     .long("json-body-template")
                     .action(::clap::ArgAction::SetTrue)
-                    .help("XXX"),
+                    .help("Build a JSON request-body template and exit"),
+            )
+            .arg(
+                ::clap::Arg::new("json-body-schema")
+                    .long("json-body-schema")
+                    .action(::clap::ArgAction::SetTrue)
+                    .help("Output a grammar reference for the request body and exit"),
+            )
+            .group(
+                ::clap::ArgGroup::new("body-source")
+                    .args(["json-body", "json-body-template", "json-body-schema"])
+                    .required(false)
+                    .multiple(false),
             )
             .about("Request a device access token")
             .long_about(
@@ -476,13 +529,16 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("username")
                     .long("username")
                     .value_parser(::clap::value_parser!(::std::string::String))
-                    .required_unless_present("json-body"),
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ]),
             )
             .arg(
                 ::clap::Arg::new("json-body")
                     .long("json-body")
                     .value_name("JSON-FILE")
-                    .required(false)
                     .value_parser(::clap::value_parser!(std::path::PathBuf))
                     .help("Path to a file that contains the full json body."),
             )
@@ -490,7 +546,19 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("json-body-template")
                     .long("json-body-template")
                     .action(::clap::ArgAction::SetTrue)
-                    .help("XXX"),
+                    .help("Build a JSON request-body template and exit"),
+            )
+            .arg(
+                ::clap::Arg::new("json-body-schema")
+                    .long("json-body-schema")
+                    .action(::clap::ArgAction::SetTrue)
+                    .help("Output a grammar reference for the request body and exit"),
+            )
+            .group(
+                ::clap::ArgGroup::new("body-source")
+                    .args(["json-body", "json-body-template", "json-body-schema"])
+                    .required(false)
+                    .multiple(false),
             )
     }
 
@@ -500,25 +568,32 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("password")
                     .long("password")
                     .value_parser(::clap::value_parser!(types::Password))
-                    .required_unless_present("json-body"),
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ]),
             )
             .arg(
                 ::clap::Arg::new("silo-name")
                     .long("silo-name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required(true),
+                    .required_unless_present_any(["json-body-template", "json-body-schema"]),
             )
             .arg(
                 ::clap::Arg::new("username")
                     .long("username")
                     .value_parser(::clap::value_parser!(types::UserId))
-                    .required_unless_present("json-body"),
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ]),
             )
             .arg(
                 ::clap::Arg::new("json-body")
                     .long("json-body")
                     .value_name("JSON-FILE")
-                    .required(false)
                     .value_parser(::clap::value_parser!(std::path::PathBuf))
                     .help("Path to a file that contains the full json body."),
             )
@@ -526,7 +601,19 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("json-body-template")
                     .long("json-body-template")
                     .action(::clap::ArgAction::SetTrue)
-                    .help("XXX"),
+                    .help("Build a JSON request-body template and exit"),
+            )
+            .arg(
+                ::clap::Arg::new("json-body-schema")
+                    .long("json-body-schema")
+                    .action(::clap::ArgAction::SetTrue)
+                    .help("Output a grammar reference for the request body and exit"),
+            )
+            .group(
+                ::clap::ArgGroup::new("body-source")
+                    .args(["json-body", "json-body-template", "json-body-schema"])
+                    .required(false)
+                    .multiple(false),
             )
             .about("Authenticate a user (i.e., log in) via username and password")
     }
@@ -605,19 +692,26 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("description")
                     .long("description")
                     .value_parser(::clap::value_parser!(::std::string::String))
-                    .required_unless_present("json-body"),
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ]),
             )
             .arg(
                 ::clap::Arg::new("name")
                     .long("name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required_unless_present("json-body"),
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ]),
             )
             .arg(
                 ::clap::Arg::new("json-body")
                     .long("json-body")
                     .value_name("JSON-FILE")
-                    .required(false)
                     .value_parser(::clap::value_parser!(std::path::PathBuf))
                     .help("Path to a file that contains the full json body."),
             )
@@ -625,7 +719,19 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("json-body-template")
                     .long("json-body-template")
                     .action(::clap::ArgAction::SetTrue)
-                    .help("XXX"),
+                    .help("Build a JSON request-body template and exit"),
+            )
+            .arg(
+                ::clap::Arg::new("json-body-schema")
+                    .long("json-body-schema")
+                    .action(::clap::ArgAction::SetTrue)
+                    .help("Output a grammar reference for the request body and exit"),
+            )
+            .group(
+                ::clap::ArgGroup::new("body-source")
+                    .args(["json-body", "json-body-template", "json-body-schema"])
+                    .required(false)
+                    .multiple(false),
             )
             .about("Create an organization")
             .long_about("Use `POST /v1/organizations` instead")
@@ -662,14 +768,13 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("organization-name")
                     .long("organization-name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required(true)
+                    .required_unless_present_any(["json-body-template", "json-body-schema"])
                     .help("The organization's unique name."),
             )
             .arg(
                 ::clap::Arg::new("json-body")
                     .long("json-body")
                     .value_name("JSON-FILE")
-                    .required(false)
                     .value_parser(::clap::value_parser!(std::path::PathBuf))
                     .help("Path to a file that contains the full json body."),
             )
@@ -677,7 +782,19 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("json-body-template")
                     .long("json-body-template")
                     .action(::clap::ArgAction::SetTrue)
-                    .help("XXX"),
+                    .help("Build a JSON request-body template and exit"),
+            )
+            .arg(
+                ::clap::Arg::new("json-body-schema")
+                    .long("json-body-schema")
+                    .action(::clap::ArgAction::SetTrue)
+                    .help("Output a grammar reference for the request body and exit"),
+            )
+            .group(
+                ::clap::ArgGroup::new("body-source")
+                    .args(["json-body", "json-body-template", "json-body-schema"])
+                    .required(false)
+                    .multiple(false),
             )
             .about("Update an organization")
             .long_about("Use `PUT /v1/organizations/{organization}` instead")
@@ -715,14 +832,13 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("organization-name")
                     .long("organization-name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required(true)
+                    .required_unless_present_any(["json-body-template", "json-body-schema"])
                     .help("The organization's unique name."),
             )
             .arg(
                 ::clap::Arg::new("json-body")
                     .long("json-body")
                     .value_name("JSON-FILE")
-                    .required(true)
                     .value_parser(::clap::value_parser!(std::path::PathBuf))
                     .help("Path to a file that contains the full json body."),
             )
@@ -730,7 +846,19 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("json-body-template")
                     .long("json-body-template")
                     .action(::clap::ArgAction::SetTrue)
-                    .help("XXX"),
+                    .help("Build a JSON request-body template and exit"),
+            )
+            .arg(
+                ::clap::Arg::new("json-body-schema")
+                    .long("json-body-schema")
+                    .action(::clap::ArgAction::SetTrue)
+                    .help("Output a grammar reference for the request body and exit"),
+            )
+            .group(
+                ::clap::ArgGroup::new("body-source")
+                    .args(["json-body", "json-body-template", "json-body-schema"])
+                    .required(true)
+                    .multiple(false),
             )
             .about("Update an organization's IAM policy")
             .long_about("Use `PUT /v1/organizations/{organization}/policy` instead")
@@ -775,26 +903,33 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("description")
                     .long("description")
                     .value_parser(::clap::value_parser!(::std::string::String))
-                    .required_unless_present("json-body"),
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ]),
             )
             .arg(
                 ::clap::Arg::new("name")
                     .long("name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required_unless_present("json-body"),
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ]),
             )
             .arg(
                 ::clap::Arg::new("organization-name")
                     .long("organization-name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required(true)
+                    .required_unless_present_any(["json-body-template", "json-body-schema"])
                     .help("The organization's unique name."),
             )
             .arg(
                 ::clap::Arg::new("json-body")
                     .long("json-body")
                     .value_name("JSON-FILE")
-                    .required(false)
                     .value_parser(::clap::value_parser!(std::path::PathBuf))
                     .help("Path to a file that contains the full json body."),
             )
@@ -802,7 +937,19 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("json-body-template")
                     .long("json-body-template")
                     .action(::clap::ArgAction::SetTrue)
-                    .help("XXX"),
+                    .help("Build a JSON request-body template and exit"),
+            )
+            .arg(
+                ::clap::Arg::new("json-body-schema")
+                    .long("json-body-schema")
+                    .action(::clap::ArgAction::SetTrue)
+                    .help("Output a grammar reference for the request body and exit"),
+            )
+            .group(
+                ::clap::ArgGroup::new("body-source")
+                    .args(["json-body", "json-body-template", "json-body-schema"])
+                    .required(false)
+                    .multiple(false),
             )
             .about("Create a project")
             .long_about("Use `POST /v1/projects` instead")
@@ -846,21 +993,20 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("organization-name")
                     .long("organization-name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required(true)
+                    .required_unless_present_any(["json-body-template", "json-body-schema"])
                     .help("The organization's unique name."),
             )
             .arg(
                 ::clap::Arg::new("project-name")
                     .long("project-name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required(true)
+                    .required_unless_present_any(["json-body-template", "json-body-schema"])
                     .help("The project's unique name within the organization."),
             )
             .arg(
                 ::clap::Arg::new("json-body")
                     .long("json-body")
                     .value_name("JSON-FILE")
-                    .required(false)
                     .value_parser(::clap::value_parser!(std::path::PathBuf))
                     .help("Path to a file that contains the full json body."),
             )
@@ -868,7 +1014,19 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("json-body-template")
                     .long("json-body-template")
                     .action(::clap::ArgAction::SetTrue)
-                    .help("XXX"),
+                    .help("Build a JSON request-body template and exit"),
+            )
+            .arg(
+                ::clap::Arg::new("json-body-schema")
+                    .long("json-body-schema")
+                    .action(::clap::ArgAction::SetTrue)
+                    .help("Output a grammar reference for the request body and exit"),
+            )
+            .group(
+                ::clap::ArgGroup::new("body-source")
+                    .args(["json-body", "json-body-template", "json-body-schema"])
+                    .required(false)
+                    .multiple(false),
             )
             .about("Update a project")
             .long_about("Use `PUT /v1/projects/{project}` instead")
@@ -938,40 +1096,51 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("description")
                     .long("description")
                     .value_parser(::clap::value_parser!(::std::string::String))
-                    .required_unless_present("json-body"),
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ]),
             )
             .arg(
                 ::clap::Arg::new("name")
                     .long("name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required_unless_present("json-body"),
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ]),
             )
             .arg(
                 ::clap::Arg::new("organization-name")
                     .long("organization-name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required(true)
+                    .required_unless_present_any(["json-body-template", "json-body-schema"])
                     .help("The organization's unique name."),
             )
             .arg(
                 ::clap::Arg::new("project-name")
                     .long("project-name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required(true)
+                    .required_unless_present_any(["json-body-template", "json-body-schema"])
                     .help("The project's unique name within the organization."),
             )
             .arg(
                 ::clap::Arg::new("size")
                     .long("size")
                     .value_parser(::clap::value_parser!(types::ByteCount))
-                    .required_unless_present("json-body")
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ])
                     .help("total size of the Disk in bytes"),
             )
             .arg(
                 ::clap::Arg::new("json-body")
                     .long("json-body")
                     .value_name("JSON-FILE")
-                    .required(true)
                     .value_parser(::clap::value_parser!(std::path::PathBuf))
                     .help("Path to a file that contains the full json body."),
             )
@@ -979,7 +1148,19 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("json-body-template")
                     .long("json-body-template")
                     .action(::clap::ArgAction::SetTrue)
-                    .help("XXX"),
+                    .help("Build a JSON request-body template and exit"),
+            )
+            .arg(
+                ::clap::Arg::new("json-body-schema")
+                    .long("json-body-schema")
+                    .action(::clap::ArgAction::SetTrue)
+                    .help("Output a grammar reference for the request body and exit"),
+            )
+            .group(
+                ::clap::ArgGroup::new("body-source")
+                    .args(["json-body", "json-body-template", "json-body-schema"])
+                    .required(true)
+                    .multiple(false),
             )
             .about("Use `POST /v1/disks` instead")
     }
@@ -1142,33 +1323,40 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("description")
                     .long("description")
                     .value_parser(::clap::value_parser!(::std::string::String))
-                    .required_unless_present("json-body"),
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ]),
             )
             .arg(
                 ::clap::Arg::new("name")
                     .long("name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required_unless_present("json-body"),
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ]),
             )
             .arg(
                 ::clap::Arg::new("organization-name")
                     .long("organization-name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required(true)
+                    .required_unless_present_any(["json-body-template", "json-body-schema"])
                     .help("The organization's unique name."),
             )
             .arg(
                 ::clap::Arg::new("project-name")
                     .long("project-name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required(true)
+                    .required_unless_present_any(["json-body-template", "json-body-schema"])
                     .help("The project's unique name within the organization."),
             )
             .arg(
                 ::clap::Arg::new("json-body")
                     .long("json-body")
                     .value_name("JSON-FILE")
-                    .required(true)
                     .value_parser(::clap::value_parser!(std::path::PathBuf))
                     .help("Path to a file that contains the full json body."),
             )
@@ -1176,7 +1364,19 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("json-body-template")
                     .long("json-body-template")
                     .action(::clap::ArgAction::SetTrue)
-                    .help("XXX"),
+                    .help("Build a JSON request-body template and exit"),
+            )
+            .arg(
+                ::clap::Arg::new("json-body-schema")
+                    .long("json-body-schema")
+                    .action(::clap::ArgAction::SetTrue)
+                    .help("Output a grammar reference for the request body and exit"),
+            )
+            .group(
+                ::clap::ArgGroup::new("body-source")
+                    .args(["json-body", "json-body-template", "json-body-schema"])
+                    .required(true)
+                    .multiple(false),
             )
             .about("Create an image")
             .long_about("Create a new image in a project.")
@@ -1277,44 +1477,64 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("description")
                     .long("description")
                     .value_parser(::clap::value_parser!(::std::string::String))
-                    .required_unless_present("json-body"),
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ]),
             )
             .arg(
                 ::clap::Arg::new("hostname")
                     .long("hostname")
                     .value_parser(::clap::value_parser!(::std::string::String))
-                    .required_unless_present("json-body"),
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ]),
             )
             .arg(
                 ::clap::Arg::new("memory")
                     .long("memory")
                     .value_parser(::clap::value_parser!(types::ByteCount))
-                    .required_unless_present("json-body"),
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ]),
             )
             .arg(
                 ::clap::Arg::new("name")
                     .long("name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required_unless_present("json-body"),
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ]),
             )
             .arg(
                 ::clap::Arg::new("ncpus")
                     .long("ncpus")
                     .value_parser(::clap::value_parser!(types::InstanceCpuCount))
-                    .required_unless_present("json-body"),
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ]),
             )
             .arg(
                 ::clap::Arg::new("organization-name")
                     .long("organization-name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required(true)
+                    .required_unless_present_any(["json-body-template", "json-body-schema"])
                     .help("The organization's unique name."),
             )
             .arg(
                 ::clap::Arg::new("project-name")
                     .long("project-name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required(true)
+                    .required_unless_present_any(["json-body-template", "json-body-schema"])
                     .help("The project's unique name within the organization."),
             )
             .arg(
@@ -1339,7 +1559,6 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("json-body")
                     .long("json-body")
                     .value_name("JSON-FILE")
-                    .required(false)
                     .value_parser(::clap::value_parser!(std::path::PathBuf))
                     .help("Path to a file that contains the full json body."),
             )
@@ -1347,7 +1566,19 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("json-body-template")
                     .long("json-body-template")
                     .action(::clap::ArgAction::SetTrue)
-                    .help("XXX"),
+                    .help("Build a JSON request-body template and exit"),
+            )
+            .arg(
+                ::clap::Arg::new("json-body-schema")
+                    .long("json-body-schema")
+                    .action(::clap::ArgAction::SetTrue)
+                    .help("Output a grammar reference for the request body and exit"),
+            )
+            .group(
+                ::clap::ArgGroup::new("body-source")
+                    .args(["json-body", "json-body-template", "json-body-schema"])
+                    .required(false)
+                    .multiple(false),
             )
             .about("Create an instance")
             .long_about("Use `POST /v1/instances` instead")
@@ -1448,31 +1679,34 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("instance-name")
                     .long("instance-name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required(true),
+                    .required_unless_present_any(["json-body-template", "json-body-schema"]),
             )
             .arg(
                 ::clap::Arg::new("name")
                     .long("name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required_unless_present("json-body"),
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ]),
             )
             .arg(
                 ::clap::Arg::new("organization-name")
                     .long("organization-name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required(true),
+                    .required_unless_present_any(["json-body-template", "json-body-schema"]),
             )
             .arg(
                 ::clap::Arg::new("project-name")
                     .long("project-name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required(true),
+                    .required_unless_present_any(["json-body-template", "json-body-schema"]),
             )
             .arg(
                 ::clap::Arg::new("json-body")
                     .long("json-body")
                     .value_name("JSON-FILE")
-                    .required(false)
                     .value_parser(::clap::value_parser!(std::path::PathBuf))
                     .help("Path to a file that contains the full json body."),
             )
@@ -1480,7 +1714,19 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("json-body-template")
                     .long("json-body-template")
                     .action(::clap::ArgAction::SetTrue)
-                    .help("XXX"),
+                    .help("Build a JSON request-body template and exit"),
+            )
+            .arg(
+                ::clap::Arg::new("json-body-schema")
+                    .long("json-body-schema")
+                    .action(::clap::ArgAction::SetTrue)
+                    .help("Output a grammar reference for the request body and exit"),
+            )
+            .group(
+                ::clap::ArgGroup::new("body-source")
+                    .args(["json-body", "json-body-template", "json-body-schema"])
+                    .required(false)
+                    .multiple(false),
             )
             .about("Attach a disk to an instance")
             .long_about("Use `POST /v1/instances/{instance}/disks/attach` instead")
@@ -1492,31 +1738,34 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("instance-name")
                     .long("instance-name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required(true),
+                    .required_unless_present_any(["json-body-template", "json-body-schema"]),
             )
             .arg(
                 ::clap::Arg::new("name")
                     .long("name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required_unless_present("json-body"),
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ]),
             )
             .arg(
                 ::clap::Arg::new("organization-name")
                     .long("organization-name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required(true),
+                    .required_unless_present_any(["json-body-template", "json-body-schema"]),
             )
             .arg(
                 ::clap::Arg::new("project-name")
                     .long("project-name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required(true),
+                    .required_unless_present_any(["json-body-template", "json-body-schema"]),
             )
             .arg(
                 ::clap::Arg::new("json-body")
                     .long("json-body")
                     .value_name("JSON-FILE")
-                    .required(false)
                     .value_parser(::clap::value_parser!(std::path::PathBuf))
                     .help("Path to a file that contains the full json body."),
             )
@@ -1524,7 +1773,19 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("json-body-template")
                     .long("json-body-template")
                     .action(::clap::ArgAction::SetTrue)
-                    .help("XXX"),
+                    .help("Build a JSON request-body template and exit"),
+            )
+            .arg(
+                ::clap::Arg::new("json-body-schema")
+                    .long("json-body-schema")
+                    .action(::clap::ArgAction::SetTrue)
+                    .help("Output a grammar reference for the request body and exit"),
+            )
+            .group(
+                ::clap::ArgGroup::new("body-source")
+                    .args(["json-body", "json-body-template", "json-body-schema"])
+                    .required(false)
+                    .multiple(false),
             )
             .about("Detach a disk from an instance")
             .long_about("Use `POST /v1/disks/{disk}/detach` instead")
@@ -1559,31 +1820,34 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("dst-sled-id")
                     .long("dst-sled-id")
                     .value_parser(::clap::value_parser!(::uuid::Uuid))
-                    .required_unless_present("json-body"),
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ]),
             )
             .arg(
                 ::clap::Arg::new("instance-name")
                     .long("instance-name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required(true),
+                    .required_unless_present_any(["json-body-template", "json-body-schema"]),
             )
             .arg(
                 ::clap::Arg::new("organization-name")
                     .long("organization-name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required(true),
+                    .required_unless_present_any(["json-body-template", "json-body-schema"]),
             )
             .arg(
                 ::clap::Arg::new("project-name")
                     .long("project-name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required(true),
+                    .required_unless_present_any(["json-body-template", "json-body-schema"]),
             )
             .arg(
                 ::clap::Arg::new("json-body")
                     .long("json-body")
                     .value_name("JSON-FILE")
-                    .required(false)
                     .value_parser(::clap::value_parser!(std::path::PathBuf))
                     .help("Path to a file that contains the full json body."),
             )
@@ -1591,7 +1855,19 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("json-body-template")
                     .long("json-body-template")
                     .action(::clap::ArgAction::SetTrue)
-                    .help("XXX"),
+                    .help("Build a JSON request-body template and exit"),
+            )
+            .arg(
+                ::clap::Arg::new("json-body-schema")
+                    .long("json-body-schema")
+                    .action(::clap::ArgAction::SetTrue)
+                    .help("Output a grammar reference for the request body and exit"),
+            )
+            .group(
+                ::clap::ArgGroup::new("body-source")
+                    .args(["json-body", "json-body-template", "json-body-schema"])
+                    .required(false)
+                    .multiple(false),
             )
             .about("Migrate an instance")
             .long_about("Use `POST /v1/instances/{instance}/migrate` instead")
@@ -1644,13 +1920,17 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("description")
                     .long("description")
                     .value_parser(::clap::value_parser!(::std::string::String))
-                    .required_unless_present("json-body"),
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ]),
             )
             .arg(
                 ::clap::Arg::new("instance-name")
                     .long("instance-name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required(true),
+                    .required_unless_present_any(["json-body-template", "json-body-schema"]),
             )
             .arg(
                 ::clap::Arg::new("ip")
@@ -1666,39 +1946,50 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("name")
                     .long("name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required_unless_present("json-body"),
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ]),
             )
             .arg(
                 ::clap::Arg::new("organization-name")
                     .long("organization-name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required(true),
+                    .required_unless_present_any(["json-body-template", "json-body-schema"]),
             )
             .arg(
                 ::clap::Arg::new("project-name")
                     .long("project-name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required(true),
+                    .required_unless_present_any(["json-body-template", "json-body-schema"]),
             )
             .arg(
                 ::clap::Arg::new("subnet-name")
                     .long("subnet-name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required_unless_present("json-body")
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ])
                     .help("The VPC Subnet in which to create the interface."),
             )
             .arg(
                 ::clap::Arg::new("vpc-name")
                     .long("vpc-name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required_unless_present("json-body")
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ])
                     .help("The VPC in which to create the interface."),
             )
             .arg(
                 ::clap::Arg::new("json-body")
                     .long("json-body")
                     .value_name("JSON-FILE")
-                    .required(false)
                     .value_parser(::clap::value_parser!(std::path::PathBuf))
                     .help("Path to a file that contains the full json body."),
             )
@@ -1706,7 +1997,19 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("json-body-template")
                     .long("json-body-template")
                     .action(::clap::ArgAction::SetTrue)
-                    .help("XXX"),
+                    .help("Build a JSON request-body template and exit"),
+            )
+            .arg(
+                ::clap::Arg::new("json-body-schema")
+                    .long("json-body-schema")
+                    .action(::clap::ArgAction::SetTrue)
+                    .help("Output a grammar reference for the request body and exit"),
+            )
+            .group(
+                ::clap::ArgGroup::new("body-source")
+                    .args(["json-body", "json-body-template", "json-body-schema"])
+                    .required(false)
+                    .multiple(false),
             )
             .about("Create a network interface")
     }
@@ -1752,13 +2055,13 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("instance-name")
                     .long("instance-name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required(true),
+                    .required_unless_present_any(["json-body-template", "json-body-schema"]),
             )
             .arg(
                 ::clap::Arg::new("interface-name")
                     .long("interface-name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required(true),
+                    .required_unless_present_any(["json-body-template", "json-body-schema"]),
             )
             .arg(
                 ::clap::Arg::new("name")
@@ -1770,7 +2073,7 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("organization-name")
                     .long("organization-name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required(true),
+                    .required_unless_present_any(["json-body-template", "json-body-schema"]),
             )
             .arg(
                 ::clap::Arg::new("primary")
@@ -1792,13 +2095,12 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("project-name")
                     .long("project-name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required(true),
+                    .required_unless_present_any(["json-body-template", "json-body-schema"]),
             )
             .arg(
                 ::clap::Arg::new("json-body")
                     .long("json-body")
                     .value_name("JSON-FILE")
-                    .required(false)
                     .value_parser(::clap::value_parser!(std::path::PathBuf))
                     .help("Path to a file that contains the full json body."),
             )
@@ -1806,7 +2108,19 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("json-body-template")
                     .long("json-body-template")
                     .action(::clap::ArgAction::SetTrue)
-                    .help("XXX"),
+                    .help("Build a JSON request-body template and exit"),
+            )
+            .arg(
+                ::clap::Arg::new("json-body-schema")
+                    .long("json-body-schema")
+                    .action(::clap::ArgAction::SetTrue)
+                    .help("Output a grammar reference for the request body and exit"),
+            )
+            .group(
+                ::clap::ArgGroup::new("body-source")
+                    .args(["json-body", "json-body-template", "json-body-schema"])
+                    .required(false)
+                    .multiple(false),
             )
             .about("Update a network interface")
     }
@@ -2049,21 +2363,20 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("organization-name")
                     .long("organization-name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required(true)
+                    .required_unless_present_any(["json-body-template", "json-body-schema"])
                     .help("The organization's unique name."),
             )
             .arg(
                 ::clap::Arg::new("project-name")
                     .long("project-name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required(true)
+                    .required_unless_present_any(["json-body-template", "json-body-schema"])
                     .help("The project's unique name within the organization."),
             )
             .arg(
                 ::clap::Arg::new("json-body")
                     .long("json-body")
                     .value_name("JSON-FILE")
-                    .required(true)
                     .value_parser(::clap::value_parser!(std::path::PathBuf))
                     .help("Path to a file that contains the full json body."),
             )
@@ -2071,7 +2384,19 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("json-body-template")
                     .long("json-body-template")
                     .action(::clap::ArgAction::SetTrue)
-                    .help("XXX"),
+                    .help("Build a JSON request-body template and exit"),
+            )
+            .arg(
+                ::clap::Arg::new("json-body-schema")
+                    .long("json-body-schema")
+                    .action(::clap::ArgAction::SetTrue)
+                    .help("Output a grammar reference for the request body and exit"),
+            )
+            .group(
+                ::clap::ArgGroup::new("body-source")
+                    .args(["json-body", "json-body-template", "json-body-schema"])
+                    .required(true)
+                    .multiple(false),
             )
             .about("Update a project's IAM policy")
     }
@@ -2119,40 +2444,51 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("description")
                     .long("description")
                     .value_parser(::clap::value_parser!(::std::string::String))
-                    .required_unless_present("json-body"),
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ]),
             )
             .arg(
                 ::clap::Arg::new("disk")
                     .long("disk")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required_unless_present("json-body")
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ])
                     .help("The name of the disk to be snapshotted"),
             )
             .arg(
                 ::clap::Arg::new("name")
                     .long("name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required_unless_present("json-body"),
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ]),
             )
             .arg(
                 ::clap::Arg::new("organization-name")
                     .long("organization-name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required(true)
+                    .required_unless_present_any(["json-body-template", "json-body-schema"])
                     .help("The organization's unique name."),
             )
             .arg(
                 ::clap::Arg::new("project-name")
                     .long("project-name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required(true)
+                    .required_unless_present_any(["json-body-template", "json-body-schema"])
                     .help("The project's unique name within the organization."),
             )
             .arg(
                 ::clap::Arg::new("json-body")
                     .long("json-body")
                     .value_name("JSON-FILE")
-                    .required(false)
                     .value_parser(::clap::value_parser!(std::path::PathBuf))
                     .help("Path to a file that contains the full json body."),
             )
@@ -2160,7 +2496,19 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("json-body-template")
                     .long("json-body-template")
                     .action(::clap::ArgAction::SetTrue)
-                    .help("XXX"),
+                    .help("Build a JSON request-body template and exit"),
+            )
+            .arg(
+                ::clap::Arg::new("json-body-schema")
+                    .long("json-body-schema")
+                    .action(::clap::ArgAction::SetTrue)
+                    .help("Output a grammar reference for the request body and exit"),
+            )
+            .group(
+                ::clap::ArgGroup::new("body-source")
+                    .args(["json-body", "json-body-template", "json-body-schema"])
+                    .required(false)
+                    .multiple(false),
             )
             .about("Create a snapshot")
             .long_about("Creates a point-in-time snapshot from a disk.")
@@ -2255,13 +2603,21 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("description")
                     .long("description")
                     .value_parser(::clap::value_parser!(::std::string::String))
-                    .required_unless_present("json-body"),
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ]),
             )
             .arg(
                 ::clap::Arg::new("dns-name")
                     .long("dns-name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required_unless_present("json-body"),
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ]),
             )
             .arg(
                 ::clap::Arg::new("ipv6-prefix")
@@ -2279,27 +2635,30 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("name")
                     .long("name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required_unless_present("json-body"),
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ]),
             )
             .arg(
                 ::clap::Arg::new("organization-name")
                     .long("organization-name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required(true)
+                    .required_unless_present_any(["json-body-template", "json-body-schema"])
                     .help("The organization's unique name."),
             )
             .arg(
                 ::clap::Arg::new("project-name")
                     .long("project-name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required(true)
+                    .required_unless_present_any(["json-body-template", "json-body-schema"])
                     .help("The project's unique name within the organization."),
             )
             .arg(
                 ::clap::Arg::new("json-body")
                     .long("json-body")
                     .value_name("JSON-FILE")
-                    .required(false)
                     .value_parser(::clap::value_parser!(std::path::PathBuf))
                     .help("Path to a file that contains the full json body."),
             )
@@ -2307,7 +2666,19 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("json-body-template")
                     .long("json-body-template")
                     .action(::clap::ArgAction::SetTrue)
-                    .help("XXX"),
+                    .help("Build a JSON request-body template and exit"),
+            )
+            .arg(
+                ::clap::Arg::new("json-body-schema")
+                    .long("json-body-schema")
+                    .action(::clap::ArgAction::SetTrue)
+                    .help("Output a grammar reference for the request body and exit"),
+            )
+            .group(
+                ::clap::ArgGroup::new("body-source")
+                    .args(["json-body", "json-body-template", "json-body-schema"])
+                    .required(false)
+                    .multiple(false),
             )
             .about("Create a VPC")
     }
@@ -2359,25 +2730,24 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("organization-name")
                     .long("organization-name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required(true),
+                    .required_unless_present_any(["json-body-template", "json-body-schema"]),
             )
             .arg(
                 ::clap::Arg::new("project-name")
                     .long("project-name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required(true),
+                    .required_unless_present_any(["json-body-template", "json-body-schema"]),
             )
             .arg(
                 ::clap::Arg::new("vpc-name")
                     .long("vpc-name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required(true),
+                    .required_unless_present_any(["json-body-template", "json-body-schema"]),
             )
             .arg(
                 ::clap::Arg::new("json-body")
                     .long("json-body")
                     .value_name("JSON-FILE")
-                    .required(false)
                     .value_parser(::clap::value_parser!(std::path::PathBuf))
                     .help("Path to a file that contains the full json body."),
             )
@@ -2385,7 +2755,19 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("json-body-template")
                     .long("json-body-template")
                     .action(::clap::ArgAction::SetTrue)
-                    .help("XXX"),
+                    .help("Build a JSON request-body template and exit"),
+            )
+            .arg(
+                ::clap::Arg::new("json-body-schema")
+                    .long("json-body-schema")
+                    .action(::clap::ArgAction::SetTrue)
+                    .help("Output a grammar reference for the request body and exit"),
+            )
+            .group(
+                ::clap::ArgGroup::new("body-source")
+                    .args(["json-body", "json-body-template", "json-body-schema"])
+                    .required(false)
+                    .multiple(false),
             )
             .about("Update a VPC")
     }
@@ -2442,25 +2824,24 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("organization-name")
                     .long("organization-name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required(true),
+                    .required_unless_present_any(["json-body-template", "json-body-schema"]),
             )
             .arg(
                 ::clap::Arg::new("project-name")
                     .long("project-name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required(true),
+                    .required_unless_present_any(["json-body-template", "json-body-schema"]),
             )
             .arg(
                 ::clap::Arg::new("vpc-name")
                     .long("vpc-name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required(true),
+                    .required_unless_present_any(["json-body-template", "json-body-schema"]),
             )
             .arg(
                 ::clap::Arg::new("json-body")
                     .long("json-body")
                     .value_name("JSON-FILE")
-                    .required(true)
                     .value_parser(::clap::value_parser!(std::path::PathBuf))
                     .help("Path to a file that contains the full json body."),
             )
@@ -2468,7 +2849,19 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("json-body-template")
                     .long("json-body-template")
                     .action(::clap::ArgAction::SetTrue)
-                    .help("XXX"),
+                    .help("Build a JSON request-body template and exit"),
+            )
+            .arg(
+                ::clap::Arg::new("json-body-schema")
+                    .long("json-body-schema")
+                    .action(::clap::ArgAction::SetTrue)
+                    .help("Output a grammar reference for the request body and exit"),
+            )
+            .group(
+                ::clap::ArgGroup::new("body-source")
+                    .args(["json-body", "json-body-template", "json-body-schema"])
+                    .required(true)
+                    .multiple(false),
             )
             .about("Replace firewall rules")
     }
@@ -2520,37 +2913,44 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("description")
                     .long("description")
                     .value_parser(::clap::value_parser!(::std::string::String))
-                    .required_unless_present("json-body"),
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ]),
             )
             .arg(
                 ::clap::Arg::new("name")
                     .long("name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required_unless_present("json-body"),
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ]),
             )
             .arg(
                 ::clap::Arg::new("organization-name")
                     .long("organization-name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required(true),
+                    .required_unless_present_any(["json-body-template", "json-body-schema"]),
             )
             .arg(
                 ::clap::Arg::new("project-name")
                     .long("project-name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required(true),
+                    .required_unless_present_any(["json-body-template", "json-body-schema"]),
             )
             .arg(
                 ::clap::Arg::new("vpc-name")
                     .long("vpc-name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required(true),
+                    .required_unless_present_any(["json-body-template", "json-body-schema"]),
             )
             .arg(
                 ::clap::Arg::new("json-body")
                     .long("json-body")
                     .value_name("JSON-FILE")
-                    .required(false)
                     .value_parser(::clap::value_parser!(std::path::PathBuf))
                     .help("Path to a file that contains the full json body."),
             )
@@ -2558,7 +2958,19 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("json-body-template")
                     .long("json-body-template")
                     .action(::clap::ArgAction::SetTrue)
-                    .help("XXX"),
+                    .help("Build a JSON request-body template and exit"),
+            )
+            .arg(
+                ::clap::Arg::new("json-body-schema")
+                    .long("json-body-schema")
+                    .action(::clap::ArgAction::SetTrue)
+                    .help("Output a grammar reference for the request body and exit"),
+            )
+            .group(
+                ::clap::ArgGroup::new("body-source")
+                    .args(["json-body", "json-body-template", "json-body-schema"])
+                    .required(false)
+                    .multiple(false),
             )
             .about("Create a router")
     }
@@ -2610,31 +3022,30 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("organization-name")
                     .long("organization-name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required(true),
+                    .required_unless_present_any(["json-body-template", "json-body-schema"]),
             )
             .arg(
                 ::clap::Arg::new("project-name")
                     .long("project-name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required(true),
+                    .required_unless_present_any(["json-body-template", "json-body-schema"]),
             )
             .arg(
                 ::clap::Arg::new("router-name")
                     .long("router-name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required(true),
+                    .required_unless_present_any(["json-body-template", "json-body-schema"]),
             )
             .arg(
                 ::clap::Arg::new("vpc-name")
                     .long("vpc-name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required(true),
+                    .required_unless_present_any(["json-body-template", "json-body-schema"]),
             )
             .arg(
                 ::clap::Arg::new("json-body")
                     .long("json-body")
                     .value_name("JSON-FILE")
-                    .required(false)
                     .value_parser(::clap::value_parser!(std::path::PathBuf))
                     .help("Path to a file that contains the full json body."),
             )
@@ -2642,7 +3053,19 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("json-body-template")
                     .long("json-body-template")
                     .action(::clap::ArgAction::SetTrue)
-                    .help("XXX"),
+                    .help("Build a JSON request-body template and exit"),
+            )
+            .arg(
+                ::clap::Arg::new("json-body-schema")
+                    .long("json-body-schema")
+                    .action(::clap::ArgAction::SetTrue)
+                    .help("Output a grammar reference for the request body and exit"),
+            )
+            .group(
+                ::clap::ArgGroup::new("body-source")
+                    .args(["json-body", "json-body-template", "json-body-schema"])
+                    .required(false)
+                    .multiple(false),
             )
             .about("Update a router")
     }
@@ -2730,43 +3153,50 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("description")
                     .long("description")
                     .value_parser(::clap::value_parser!(::std::string::String))
-                    .required_unless_present("json-body"),
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ]),
             )
             .arg(
                 ::clap::Arg::new("name")
                     .long("name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required_unless_present("json-body"),
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ]),
             )
             .arg(
                 ::clap::Arg::new("organization-name")
                     .long("organization-name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required(true),
+                    .required_unless_present_any(["json-body-template", "json-body-schema"]),
             )
             .arg(
                 ::clap::Arg::new("project-name")
                     .long("project-name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required(true),
+                    .required_unless_present_any(["json-body-template", "json-body-schema"]),
             )
             .arg(
                 ::clap::Arg::new("router-name")
                     .long("router-name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required(true),
+                    .required_unless_present_any(["json-body-template", "json-body-schema"]),
             )
             .arg(
                 ::clap::Arg::new("vpc-name")
                     .long("vpc-name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required(true),
+                    .required_unless_present_any(["json-body-template", "json-body-schema"]),
             )
             .arg(
                 ::clap::Arg::new("json-body")
                     .long("json-body")
                     .value_name("JSON-FILE")
-                    .required(true)
                     .value_parser(::clap::value_parser!(std::path::PathBuf))
                     .help("Path to a file that contains the full json body."),
             )
@@ -2774,7 +3204,19 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("json-body-template")
                     .long("json-body-template")
                     .action(::clap::ArgAction::SetTrue)
-                    .help("XXX"),
+                    .help("Build a JSON request-body template and exit"),
+            )
+            .arg(
+                ::clap::Arg::new("json-body-schema")
+                    .long("json-body-schema")
+                    .action(::clap::ArgAction::SetTrue)
+                    .help("Output a grammar reference for the request body and exit"),
+            )
+            .group(
+                ::clap::ArgGroup::new("body-source")
+                    .args(["json-body", "json-body-template", "json-body-schema"])
+                    .required(true)
+                    .multiple(false),
             )
             .about("Create a router")
     }
@@ -2832,37 +3274,36 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("organization-name")
                     .long("organization-name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required(true),
+                    .required_unless_present_any(["json-body-template", "json-body-schema"]),
             )
             .arg(
                 ::clap::Arg::new("project-name")
                     .long("project-name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required(true),
+                    .required_unless_present_any(["json-body-template", "json-body-schema"]),
             )
             .arg(
                 ::clap::Arg::new("route-name")
                     .long("route-name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required(true),
+                    .required_unless_present_any(["json-body-template", "json-body-schema"]),
             )
             .arg(
                 ::clap::Arg::new("router-name")
                     .long("router-name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required(true),
+                    .required_unless_present_any(["json-body-template", "json-body-schema"]),
             )
             .arg(
                 ::clap::Arg::new("vpc-name")
                     .long("vpc-name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required(true),
+                    .required_unless_present_any(["json-body-template", "json-body-schema"]),
             )
             .arg(
                 ::clap::Arg::new("json-body")
                     .long("json-body")
                     .value_name("JSON-FILE")
-                    .required(true)
                     .value_parser(::clap::value_parser!(std::path::PathBuf))
                     .help("Path to a file that contains the full json body."),
             )
@@ -2870,7 +3311,19 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("json-body-template")
                     .long("json-body-template")
                     .action(::clap::ArgAction::SetTrue)
-                    .help("XXX"),
+                    .help("Build a JSON request-body template and exit"),
+            )
+            .arg(
+                ::clap::Arg::new("json-body-schema")
+                    .long("json-body-schema")
+                    .action(::clap::ArgAction::SetTrue)
+                    .help("Output a grammar reference for the request body and exit"),
+            )
+            .group(
+                ::clap::ArgGroup::new("body-source")
+                    .args(["json-body", "json-body-template", "json-body-schema"])
+                    .required(true)
+                    .multiple(false),
             )
             .about("Update a route")
     }
@@ -2957,13 +3410,21 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("description")
                     .long("description")
                     .value_parser(::clap::value_parser!(::std::string::String))
-                    .required_unless_present("json-body"),
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ]),
             )
             .arg(
                 ::clap::Arg::new("ipv4-block")
                     .long("ipv4-block")
                     .value_parser(::clap::value_parser!(types::Ipv4Net))
-                    .required_unless_present("json-body")
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ])
                     .help(
                         "The IPv4 address range for this subnet.\n\nIt must be allocated from an \
                          RFC 1918 private address range, and must not overlap with any other \
@@ -2986,31 +3447,34 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("name")
                     .long("name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required_unless_present("json-body"),
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ]),
             )
             .arg(
                 ::clap::Arg::new("organization-name")
                     .long("organization-name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required(true),
+                    .required_unless_present_any(["json-body-template", "json-body-schema"]),
             )
             .arg(
                 ::clap::Arg::new("project-name")
                     .long("project-name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required(true),
+                    .required_unless_present_any(["json-body-template", "json-body-schema"]),
             )
             .arg(
                 ::clap::Arg::new("vpc-name")
                     .long("vpc-name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required(true),
+                    .required_unless_present_any(["json-body-template", "json-body-schema"]),
             )
             .arg(
                 ::clap::Arg::new("json-body")
                     .long("json-body")
                     .value_name("JSON-FILE")
-                    .required(false)
                     .value_parser(::clap::value_parser!(std::path::PathBuf))
                     .help("Path to a file that contains the full json body."),
             )
@@ -3018,7 +3482,19 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("json-body-template")
                     .long("json-body-template")
                     .action(::clap::ArgAction::SetTrue)
-                    .help("XXX"),
+                    .help("Build a JSON request-body template and exit"),
+            )
+            .arg(
+                ::clap::Arg::new("json-body-schema")
+                    .long("json-body-schema")
+                    .action(::clap::ArgAction::SetTrue)
+                    .help("Output a grammar reference for the request body and exit"),
+            )
+            .group(
+                ::clap::ArgGroup::new("body-source")
+                    .args(["json-body", "json-body-template", "json-body-schema"])
+                    .required(false)
+                    .multiple(false),
             )
             .about("Create a subnet")
     }
@@ -3070,31 +3546,30 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("organization-name")
                     .long("organization-name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required(true),
+                    .required_unless_present_any(["json-body-template", "json-body-schema"]),
             )
             .arg(
                 ::clap::Arg::new("project-name")
                     .long("project-name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required(true),
+                    .required_unless_present_any(["json-body-template", "json-body-schema"]),
             )
             .arg(
                 ::clap::Arg::new("subnet-name")
                     .long("subnet-name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required(true),
+                    .required_unless_present_any(["json-body-template", "json-body-schema"]),
             )
             .arg(
                 ::clap::Arg::new("vpc-name")
                     .long("vpc-name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required(true),
+                    .required_unless_present_any(["json-body-template", "json-body-schema"]),
             )
             .arg(
                 ::clap::Arg::new("json-body")
                     .long("json-body")
                     .value_name("JSON-FILE")
-                    .required(false)
                     .value_parser(::clap::value_parser!(std::path::PathBuf))
                     .help("Path to a file that contains the full json body."),
             )
@@ -3102,7 +3577,19 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("json-body-template")
                     .long("json-body-template")
                     .action(::clap::ArgAction::SetTrue)
-                    .help("XXX"),
+                    .help("Build a JSON request-body template and exit"),
+            )
+            .arg(
+                ::clap::Arg::new("json-body-schema")
+                    .long("json-body-schema")
+                    .action(::clap::ArgAction::SetTrue)
+                    .help("Output a grammar reference for the request body and exit"),
+            )
+            .group(
+                ::clap::ArgGroup::new("body-source")
+                    .args(["json-body", "json-body-template", "json-body-schema"])
+                    .required(false)
+                    .multiple(false),
             )
             .about("Update a subnet")
     }
@@ -3193,7 +3680,6 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("json-body")
                     .long("json-body")
                     .value_name("JSON-FILE")
-                    .required(true)
                     .value_parser(::clap::value_parser!(std::path::PathBuf))
                     .help("Path to a file that contains the full json body."),
             )
@@ -3201,7 +3687,19 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("json-body-template")
                     .long("json-body-template")
                     .action(::clap::ArgAction::SetTrue)
-                    .help("XXX"),
+                    .help("Build a JSON request-body template and exit"),
+            )
+            .arg(
+                ::clap::Arg::new("json-body-schema")
+                    .long("json-body-schema")
+                    .action(::clap::ArgAction::SetTrue)
+                    .help("Output a grammar reference for the request body and exit"),
+            )
+            .group(
+                ::clap::ArgGroup::new("body-source")
+                    .args(["json-body", "json-body-template", "json-body-schema"])
+                    .required(true)
+                    .multiple(false),
             )
             .about("Update the current silo's IAM policy")
     }
@@ -3287,26 +3785,37 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("description")
                     .long("description")
                     .value_parser(::clap::value_parser!(::std::string::String))
-                    .required_unless_present("json-body"),
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ]),
             )
             .arg(
                 ::clap::Arg::new("name")
                     .long("name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required_unless_present("json-body"),
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ]),
             )
             .arg(
                 ::clap::Arg::new("public-key")
                     .long("public-key")
                     .value_parser(::clap::value_parser!(::std::string::String))
-                    .required_unless_present("json-body")
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ])
                     .help("SSH public key, e.g., `\"ssh-ed25519 AAAAC3NzaC...\"`"),
             )
             .arg(
                 ::clap::Arg::new("json-body")
                     .long("json-body")
                     .value_name("JSON-FILE")
-                    .required(false)
                     .value_parser(::clap::value_parser!(std::path::PathBuf))
                     .help("Path to a file that contains the full json body."),
             )
@@ -3314,7 +3823,19 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("json-body-template")
                     .long("json-body-template")
                     .action(::clap::ArgAction::SetTrue)
-                    .help("XXX"),
+                    .help("Build a JSON request-body template and exit"),
+            )
+            .arg(
+                ::clap::Arg::new("json-body-schema")
+                    .long("json-body-schema")
+                    .action(::clap::ArgAction::SetTrue)
+                    .help("Output a grammar reference for the request body and exit"),
+            )
+            .group(
+                ::clap::ArgGroup::new("body-source")
+                    .args(["json-body", "json-body-template", "json-body-schema"])
+                    .required(false)
+                    .multiple(false),
             )
             .about("Create an SSH public key")
             .long_about("Create an SSH public key for the currently authenticated user.")
@@ -3413,13 +3934,21 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("description")
                     .long("description")
                     .value_parser(::clap::value_parser!(::std::string::String))
-                    .required_unless_present("json-body"),
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ]),
             )
             .arg(
                 ::clap::Arg::new("name")
                     .long("name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required_unless_present("json-body"),
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ]),
             )
             .arg(
                 ::clap::Arg::new("service")
@@ -3430,14 +3959,17 @@ impl<T: CliConfig> Cli<T> {
                         ]),
                         |s| types::ServiceUsingCertificate::try_from(s).unwrap(),
                     ))
-                    .required_unless_present("json-body")
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ])
                     .help("The service using this certificate"),
             )
             .arg(
                 ::clap::Arg::new("json-body")
                     .long("json-body")
                     .value_name("JSON-FILE")
-                    .required(true)
                     .value_parser(::clap::value_parser!(std::path::PathBuf))
                     .help("Path to a file that contains the full json body."),
             )
@@ -3445,7 +3977,19 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("json-body-template")
                     .long("json-body-template")
                     .action(::clap::ArgAction::SetTrue)
-                    .help("XXX"),
+                    .help("Build a JSON request-body template and exit"),
+            )
+            .arg(
+                ::clap::Arg::new("json-body-schema")
+                    .long("json-body-schema")
+                    .action(::clap::ArgAction::SetTrue)
+                    .help("Output a grammar reference for the request body and exit"),
+            )
+            .group(
+                ::clap::ArgGroup::new("body-source")
+                    .args(["json-body", "json-body-template", "json-body-schema"])
+                    .required(true)
+                    .multiple(false),
             )
             .about("Create a new system-wide x.509 certificate.")
             .long_about(
@@ -3634,19 +4178,26 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("description")
                     .long("description")
                     .value_parser(::clap::value_parser!(::std::string::String))
-                    .required_unless_present("json-body"),
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ]),
             )
             .arg(
                 ::clap::Arg::new("name")
                     .long("name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required_unless_present("json-body"),
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ]),
             )
             .arg(
                 ::clap::Arg::new("json-body")
                     .long("json-body")
                     .value_name("JSON-FILE")
-                    .required(true)
                     .value_parser(::clap::value_parser!(std::path::PathBuf))
                     .help("Path to a file that contains the full json body."),
             )
@@ -3654,7 +4205,19 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("json-body-template")
                     .long("json-body-template")
                     .action(::clap::ArgAction::SetTrue)
-                    .help("XXX"),
+                    .help("Build a JSON request-body template and exit"),
+            )
+            .arg(
+                ::clap::Arg::new("json-body-schema")
+                    .long("json-body-schema")
+                    .action(::clap::ArgAction::SetTrue)
+                    .help("Output a grammar reference for the request body and exit"),
+            )
+            .group(
+                ::clap::ArgGroup::new("body-source")
+                    .args(["json-body", "json-body-template", "json-body-schema"])
+                    .required(true)
+                    .multiple(false),
             )
             .about("Create a system-wide image")
             .long_about(
@@ -3722,19 +4285,26 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("description")
                     .long("description")
                     .value_parser(::clap::value_parser!(::std::string::String))
-                    .required_unless_present("json-body"),
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ]),
             )
             .arg(
                 ::clap::Arg::new("name")
                     .long("name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required_unless_present("json-body"),
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ]),
             )
             .arg(
                 ::clap::Arg::new("json-body")
                     .long("json-body")
                     .value_name("JSON-FILE")
-                    .required(false)
                     .value_parser(::clap::value_parser!(std::path::PathBuf))
                     .help("Path to a file that contains the full json body."),
             )
@@ -3742,7 +4312,19 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("json-body-template")
                     .long("json-body-template")
                     .action(::clap::ArgAction::SetTrue)
-                    .help("XXX"),
+                    .help("Build a JSON request-body template and exit"),
+            )
+            .arg(
+                ::clap::Arg::new("json-body-schema")
+                    .long("json-body-schema")
+                    .action(::clap::ArgAction::SetTrue)
+                    .help("Output a grammar reference for the request body and exit"),
+            )
+            .group(
+                ::clap::ArgGroup::new("body-source")
+                    .args(["json-body", "json-body-template", "json-body-schema"])
+                    .required(false)
+                    .multiple(false),
             )
             .about("Create an IP pool")
     }
@@ -3776,13 +4358,12 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("pool-name")
                     .long("pool-name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required(true),
+                    .required_unless_present_any(["json-body-template", "json-body-schema"]),
             )
             .arg(
                 ::clap::Arg::new("json-body")
                     .long("json-body")
                     .value_name("JSON-FILE")
-                    .required(false)
                     .value_parser(::clap::value_parser!(std::path::PathBuf))
                     .help("Path to a file that contains the full json body."),
             )
@@ -3790,7 +4371,19 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("json-body-template")
                     .long("json-body-template")
                     .action(::clap::ArgAction::SetTrue)
-                    .help("XXX"),
+                    .help("Build a JSON request-body template and exit"),
+            )
+            .arg(
+                ::clap::Arg::new("json-body-schema")
+                    .long("json-body-schema")
+                    .action(::clap::ArgAction::SetTrue)
+                    .help("Output a grammar reference for the request body and exit"),
+            )
+            .group(
+                ::clap::ArgGroup::new("body-source")
+                    .args(["json-body", "json-body-template", "json-body-schema"])
+                    .required(false)
+                    .multiple(false),
             )
             .about("Update an IP Pool")
     }
@@ -3831,13 +4424,12 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("pool-name")
                     .long("pool-name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required(true),
+                    .required_unless_present_any(["json-body-template", "json-body-schema"]),
             )
             .arg(
                 ::clap::Arg::new("json-body")
                     .long("json-body")
                     .value_name("JSON-FILE")
-                    .required(true)
                     .value_parser(::clap::value_parser!(std::path::PathBuf))
                     .help("Path to a file that contains the full json body."),
             )
@@ -3845,7 +4437,19 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("json-body-template")
                     .long("json-body-template")
                     .action(::clap::ArgAction::SetTrue)
-                    .help("XXX"),
+                    .help("Build a JSON request-body template and exit"),
+            )
+            .arg(
+                ::clap::Arg::new("json-body-schema")
+                    .long("json-body-schema")
+                    .action(::clap::ArgAction::SetTrue)
+                    .help("Output a grammar reference for the request body and exit"),
+            )
+            .group(
+                ::clap::ArgGroup::new("body-source")
+                    .args(["json-body", "json-body-template", "json-body-schema"])
+                    .required(true)
+                    .multiple(false),
             )
             .about("Add a range to an IP pool")
     }
@@ -3856,13 +4460,12 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("pool-name")
                     .long("pool-name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required(true),
+                    .required_unless_present_any(["json-body-template", "json-body-schema"]),
             )
             .arg(
                 ::clap::Arg::new("json-body")
                     .long("json-body")
                     .value_name("JSON-FILE")
-                    .required(true)
                     .value_parser(::clap::value_parser!(std::path::PathBuf))
                     .help("Path to a file that contains the full json body."),
             )
@@ -3870,7 +4473,19 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("json-body-template")
                     .long("json-body-template")
                     .action(::clap::ArgAction::SetTrue)
-                    .help("XXX"),
+                    .help("Build a JSON request-body template and exit"),
+            )
+            .arg(
+                ::clap::Arg::new("json-body-schema")
+                    .long("json-body-schema")
+                    .action(::clap::ArgAction::SetTrue)
+                    .help("Output a grammar reference for the request body and exit"),
+            )
+            .group(
+                ::clap::ArgGroup::new("body-source")
+                    .args(["json-body", "json-body-template", "json-body-schema"])
+                    .required(true)
+                    .multiple(false),
             )
             .about("Remove a range from an IP pool")
     }
@@ -3898,7 +4513,6 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("json-body")
                     .long("json-body")
                     .value_name("JSON-FILE")
-                    .required(true)
                     .value_parser(::clap::value_parser!(std::path::PathBuf))
                     .help("Path to a file that contains the full json body."),
             )
@@ -3906,7 +4520,19 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("json-body-template")
                     .long("json-body-template")
                     .action(::clap::ArgAction::SetTrue)
-                    .help("XXX"),
+                    .help("Build a JSON request-body template and exit"),
+            )
+            .arg(
+                ::clap::Arg::new("json-body-schema")
+                    .long("json-body-schema")
+                    .action(::clap::ArgAction::SetTrue)
+                    .help("Output a grammar reference for the request body and exit"),
+            )
+            .group(
+                ::clap::ArgGroup::new("body-source")
+                    .args(["json-body", "json-body-template", "json-body-schema"])
+                    .required(true)
+                    .multiple(false),
             )
             .about("Add a range to an IP pool used for Oxide services.")
     }
@@ -3917,7 +4543,6 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("json-body")
                     .long("json-body")
                     .value_name("JSON-FILE")
-                    .required(true)
                     .value_parser(::clap::value_parser!(std::path::PathBuf))
                     .help("Path to a file that contains the full json body."),
             )
@@ -3925,7 +4550,19 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("json-body-template")
                     .long("json-body-template")
                     .action(::clap::ArgAction::SetTrue)
-                    .help("XXX"),
+                    .help("Build a JSON request-body template and exit"),
+            )
+            .arg(
+                ::clap::Arg::new("json-body-schema")
+                    .long("json-body-schema")
+                    .action(::clap::ArgAction::SetTrue)
+                    .help("Output a grammar reference for the request body and exit"),
+            )
+            .group(
+                ::clap::ArgGroup::new("body-source")
+                    .args(["json-body", "json-body-template", "json-body-schema"])
+                    .required(true)
+                    .multiple(false),
             )
             .about("Remove a range from an IP pool used for Oxide services.")
     }
@@ -3997,7 +4634,6 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("json-body")
                     .long("json-body")
                     .value_name("JSON-FILE")
-                    .required(true)
                     .value_parser(::clap::value_parser!(std::path::PathBuf))
                     .help("Path to a file that contains the full json body."),
             )
@@ -4005,7 +4641,19 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("json-body-template")
                     .long("json-body-template")
                     .action(::clap::ArgAction::SetTrue)
-                    .help("XXX"),
+                    .help("Build a JSON request-body template and exit"),
+            )
+            .arg(
+                ::clap::Arg::new("json-body-schema")
+                    .long("json-body-schema")
+                    .action(::clap::ArgAction::SetTrue)
+                    .help("Output a grammar reference for the request body and exit"),
+            )
+            .group(
+                ::clap::ArgGroup::new("body-source")
+                    .args(["json-body", "json-body-template", "json-body-schema"])
+                    .required(true)
+                    .multiple(false),
             )
             .about("Update the top-level IAM policy")
     }
@@ -4090,13 +4738,21 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("description")
                     .long("description")
                     .value_parser(::clap::value_parser!(::std::string::String))
-                    .required_unless_present("json-body"),
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ]),
             )
             .arg(
                 ::clap::Arg::new("discoverable")
                     .long("discoverable")
                     .value_parser(::clap::value_parser!(bool))
-                    .required_unless_present("json-body"),
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ]),
             )
             .arg(
                 ::clap::Arg::new("identity-mode")
@@ -4108,19 +4764,26 @@ impl<T: CliConfig> Cli<T> {
                         ]),
                         |s| types::SiloIdentityMode::try_from(s).unwrap(),
                     ))
-                    .required_unless_present("json-body"),
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ]),
             )
             .arg(
                 ::clap::Arg::new("name")
                     .long("name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required_unless_present("json-body"),
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ]),
             )
             .arg(
                 ::clap::Arg::new("json-body")
                     .long("json-body")
                     .value_name("JSON-FILE")
-                    .required(false)
                     .value_parser(::clap::value_parser!(std::path::PathBuf))
                     .help("Path to a file that contains the full json body."),
             )
@@ -4128,7 +4791,19 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("json-body-template")
                     .long("json-body-template")
                     .action(::clap::ArgAction::SetTrue)
-                    .help("XXX"),
+                    .help("Build a JSON request-body template and exit"),
+            )
+            .arg(
+                ::clap::Arg::new("json-body-schema")
+                    .long("json-body-schema")
+                    .action(::clap::ArgAction::SetTrue)
+                    .help("Output a grammar reference for the request body and exit"),
+            )
+            .group(
+                ::clap::ArgGroup::new("body-source")
+                    .args(["json-body", "json-body-template", "json-body-schema"])
+                    .required(false)
+                    .multiple(false),
             )
             .about("Create a silo")
     }
@@ -4195,21 +4870,24 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("external-id")
                     .long("external-id")
                     .value_parser(::clap::value_parser!(types::UserId))
-                    .required_unless_present("json-body")
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ])
                     .help("username used to log in"),
             )
             .arg(
                 ::clap::Arg::new("silo-name")
                     .long("silo-name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required(true)
+                    .required_unless_present_any(["json-body-template", "json-body-schema"])
                     .help("The silo's unique name."),
             )
             .arg(
                 ::clap::Arg::new("json-body")
                     .long("json-body")
                     .value_name("JSON-FILE")
-                    .required(true)
                     .value_parser(::clap::value_parser!(std::path::PathBuf))
                     .help("Path to a file that contains the full json body."),
             )
@@ -4217,7 +4895,19 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("json-body-template")
                     .long("json-body-template")
                     .action(::clap::ArgAction::SetTrue)
-                    .help("XXX"),
+                    .help("Build a JSON request-body template and exit"),
+            )
+            .arg(
+                ::clap::Arg::new("json-body-schema")
+                    .long("json-body-schema")
+                    .action(::clap::ArgAction::SetTrue)
+                    .help("Output a grammar reference for the request body and exit"),
+            )
+            .group(
+                ::clap::ArgGroup::new("body-source")
+                    .args(["json-body", "json-body-template", "json-body-schema"])
+                    .required(true)
+                    .multiple(false),
             )
             .about("Create a user")
             .long_about(
@@ -4252,21 +4942,20 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("silo-name")
                     .long("silo-name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required(true)
+                    .required_unless_present_any(["json-body-template", "json-body-schema"])
                     .help("The silo's unique name."),
             )
             .arg(
                 ::clap::Arg::new("user-id")
                     .long("user-id")
                     .value_parser(::clap::value_parser!(::uuid::Uuid))
-                    .required(true)
+                    .required_unless_present_any(["json-body-template", "json-body-schema"])
                     .help("The user's internal id"),
             )
             .arg(
                 ::clap::Arg::new("json-body")
                     .long("json-body")
                     .value_name("JSON-FILE")
-                    .required(true)
                     .value_parser(::clap::value_parser!(std::path::PathBuf))
                     .help("Path to a file that contains the full json body."),
             )
@@ -4274,7 +4963,19 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("json-body-template")
                     .long("json-body-template")
                     .action(::clap::ArgAction::SetTrue)
-                    .help("XXX"),
+                    .help("Build a JSON request-body template and exit"),
+            )
+            .arg(
+                ::clap::Arg::new("json-body-schema")
+                    .long("json-body-schema")
+                    .action(::clap::ArgAction::SetTrue)
+                    .help("Output a grammar reference for the request body and exit"),
+            )
+            .group(
+                ::clap::ArgGroup::new("body-source")
+                    .args(["json-body", "json-body-template", "json-body-schema"])
+                    .required(true)
+                    .multiple(false),
             )
             .about("Set or invalidate a user's password")
             .long_about(
@@ -4288,14 +4989,22 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("acs-url")
                     .long("acs-url")
                     .value_parser(::clap::value_parser!(::std::string::String))
-                    .required_unless_present("json-body")
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ])
                     .help("service provider endpoint where the response will be sent"),
             )
             .arg(
                 ::clap::Arg::new("description")
                     .long("description")
                     .value_parser(::clap::value_parser!(::std::string::String))
-                    .required_unless_present("json-body"),
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ]),
             )
             .arg(
                 ::clap::Arg::new("group-attribute-name")
@@ -4312,48 +5021,67 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("idp-entity-id")
                     .long("idp-entity-id")
                     .value_parser(::clap::value_parser!(::std::string::String))
-                    .required_unless_present("json-body")
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ])
                     .help("idp's entity id"),
             )
             .arg(
                 ::clap::Arg::new("name")
                     .long("name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required_unless_present("json-body"),
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ]),
             )
             .arg(
                 ::clap::Arg::new("silo-name")
                     .long("silo-name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required(true)
+                    .required_unless_present_any(["json-body-template", "json-body-schema"])
                     .help("The silo's unique name."),
             )
             .arg(
                 ::clap::Arg::new("slo-url")
                     .long("slo-url")
                     .value_parser(::clap::value_parser!(::std::string::String))
-                    .required_unless_present("json-body")
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ])
                     .help("service provider endpoint where the idp should send log out requests"),
             )
             .arg(
                 ::clap::Arg::new("sp-client-id")
                     .long("sp-client-id")
                     .value_parser(::clap::value_parser!(::std::string::String))
-                    .required_unless_present("json-body")
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ])
                     .help("sp's client id"),
             )
             .arg(
                 ::clap::Arg::new("technical-contact-email")
                     .long("technical-contact-email")
                     .value_parser(::clap::value_parser!(::std::string::String))
-                    .required_unless_present("json-body")
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ])
                     .help("customer's technical contact for saml configuration"),
             )
             .arg(
                 ::clap::Arg::new("json-body")
                     .long("json-body")
                     .value_name("JSON-FILE")
-                    .required(true)
                     .value_parser(::clap::value_parser!(std::path::PathBuf))
                     .help("Path to a file that contains the full json body."),
             )
@@ -4361,7 +5089,19 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("json-body-template")
                     .long("json-body-template")
                     .action(::clap::ArgAction::SetTrue)
-                    .help("XXX"),
+                    .help("Build a JSON request-body template and exit"),
+            )
+            .arg(
+                ::clap::Arg::new("json-body-schema")
+                    .long("json-body-schema")
+                    .action(::clap::ArgAction::SetTrue)
+                    .help("Output a grammar reference for the request body and exit"),
+            )
+            .group(
+                ::clap::ArgGroup::new("body-source")
+                    .args(["json-body", "json-body-template", "json-body-schema"])
+                    .required(true)
+                    .multiple(false),
             )
             .about("Create a SAML IDP")
     }
@@ -4403,14 +5143,13 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("silo-name")
                     .long("silo-name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required(true)
+                    .required_unless_present_any(["json-body-template", "json-body-schema"])
                     .help("The silo's unique name."),
             )
             .arg(
                 ::clap::Arg::new("json-body")
                     .long("json-body")
                     .value_name("JSON-FILE")
-                    .required(true)
                     .value_parser(::clap::value_parser!(std::path::PathBuf))
                     .help("Path to a file that contains the full json body."),
             )
@@ -4418,7 +5157,19 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("json-body-template")
                     .long("json-body-template")
                     .action(::clap::ArgAction::SetTrue)
-                    .help("XXX"),
+                    .help("Build a JSON request-body template and exit"),
+            )
+            .arg(
+                ::clap::Arg::new("json-body-schema")
+                    .long("json-body-schema")
+                    .action(::clap::ArgAction::SetTrue)
+                    .help("Output a grammar reference for the request body and exit"),
+            )
+            .group(
+                ::clap::ArgGroup::new("body-source")
+                    .args(["json-body", "json-body-template", "json-body-schema"])
+                    .required(true)
+                    .multiple(false),
             )
             .about("Update a silo's IAM policy")
     }
@@ -4585,13 +5336,21 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("description")
                     .long("description")
                     .value_parser(::clap::value_parser!(::std::string::String))
-                    .required_unless_present("json-body"),
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ]),
             )
             .arg(
                 ::clap::Arg::new("name")
                     .long("name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required_unless_present("json-body"),
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ]),
             )
             .arg(
                 ::clap::Arg::new("organization")
@@ -4603,20 +5362,23 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("project")
                     .long("project")
                     .value_parser(::clap::value_parser!(types::NameOrId))
-                    .required(true),
+                    .required_unless_present_any(["json-body-template", "json-body-schema"]),
             )
             .arg(
                 ::clap::Arg::new("size")
                     .long("size")
                     .value_parser(::clap::value_parser!(types::ByteCount))
-                    .required_unless_present("json-body")
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ])
                     .help("total size of the Disk in bytes"),
             )
             .arg(
                 ::clap::Arg::new("json-body")
                     .long("json-body")
                     .value_name("JSON-FILE")
-                    .required(true)
                     .value_parser(::clap::value_parser!(std::path::PathBuf))
                     .help("Path to a file that contains the full json body."),
             )
@@ -4624,7 +5386,19 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("json-body-template")
                     .long("json-body-template")
                     .action(::clap::ArgAction::SetTrue)
-                    .help("XXX"),
+                    .help("Build a JSON request-body template and exit"),
+            )
+            .arg(
+                ::clap::Arg::new("json-body-schema")
+                    .long("json-body-schema")
+                    .action(::clap::ArgAction::SetTrue)
+                    .help("Output a grammar reference for the request body and exit"),
+            )
+            .group(
+                ::clap::ArgGroup::new("body-source")
+                    .args(["json-body", "json-body-template", "json-body-schema"])
+                    .required(true)
+                    .multiple(false),
             )
             .about("Create a disk")
     }
@@ -4718,31 +5492,51 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("description")
                     .long("description")
                     .value_parser(::clap::value_parser!(::std::string::String))
-                    .required_unless_present("json-body"),
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ]),
             )
             .arg(
                 ::clap::Arg::new("hostname")
                     .long("hostname")
                     .value_parser(::clap::value_parser!(::std::string::String))
-                    .required_unless_present("json-body"),
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ]),
             )
             .arg(
                 ::clap::Arg::new("memory")
                     .long("memory")
                     .value_parser(::clap::value_parser!(types::ByteCount))
-                    .required_unless_present("json-body"),
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ]),
             )
             .arg(
                 ::clap::Arg::new("name")
                     .long("name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required_unless_present("json-body"),
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ]),
             )
             .arg(
                 ::clap::Arg::new("ncpus")
                     .long("ncpus")
                     .value_parser(::clap::value_parser!(types::InstanceCpuCount))
-                    .required_unless_present("json-body"),
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ]),
             )
             .arg(
                 ::clap::Arg::new("organization")
@@ -4754,7 +5548,7 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("project")
                     .long("project")
                     .value_parser(::clap::value_parser!(types::NameOrId))
-                    .required(true),
+                    .required_unless_present_any(["json-body-template", "json-body-schema"]),
             )
             .arg(
                 ::clap::Arg::new("start")
@@ -4778,7 +5572,6 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("json-body")
                     .long("json-body")
                     .value_name("JSON-FILE")
-                    .required(false)
                     .value_parser(::clap::value_parser!(std::path::PathBuf))
                     .help("Path to a file that contains the full json body."),
             )
@@ -4786,7 +5579,19 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("json-body-template")
                     .long("json-body-template")
                     .action(::clap::ArgAction::SetTrue)
-                    .help("XXX"),
+                    .help("Build a JSON request-body template and exit"),
+            )
+            .arg(
+                ::clap::Arg::new("json-body-schema")
+                    .long("json-body-schema")
+                    .action(::clap::ArgAction::SetTrue)
+                    .help("Output a grammar reference for the request body and exit"),
+            )
+            .group(
+                ::clap::ArgGroup::new("body-source")
+                    .args(["json-body", "json-body-template", "json-body-schema"])
+                    .required(false)
+                    .multiple(false),
             )
             .about("Create an instance")
     }
@@ -4886,13 +5691,17 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("disk")
                     .long("disk")
                     .value_parser(::clap::value_parser!(types::NameOrId))
-                    .required_unless_present("json-body"),
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ]),
             )
             .arg(
                 ::clap::Arg::new("instance")
                     .long("instance")
                     .value_parser(::clap::value_parser!(types::NameOrId))
-                    .required(true),
+                    .required_unless_present_any(["json-body-template", "json-body-schema"]),
             )
             .arg(
                 ::clap::Arg::new("organization")
@@ -4910,7 +5719,6 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("json-body")
                     .long("json-body")
                     .value_name("JSON-FILE")
-                    .required(false)
                     .value_parser(::clap::value_parser!(std::path::PathBuf))
                     .help("Path to a file that contains the full json body."),
             )
@@ -4918,7 +5726,19 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("json-body-template")
                     .long("json-body-template")
                     .action(::clap::ArgAction::SetTrue)
-                    .help("XXX"),
+                    .help("Build a JSON request-body template and exit"),
+            )
+            .arg(
+                ::clap::Arg::new("json-body-schema")
+                    .long("json-body-schema")
+                    .action(::clap::ArgAction::SetTrue)
+                    .help("Output a grammar reference for the request body and exit"),
+            )
+            .group(
+                ::clap::ArgGroup::new("body-source")
+                    .args(["json-body", "json-body-template", "json-body-schema"])
+                    .required(false)
+                    .multiple(false),
             )
             .about("Attach a disk to an instance")
     }
@@ -4929,13 +5749,17 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("disk")
                     .long("disk")
                     .value_parser(::clap::value_parser!(types::NameOrId))
-                    .required_unless_present("json-body"),
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ]),
             )
             .arg(
                 ::clap::Arg::new("instance")
                     .long("instance")
                     .value_parser(::clap::value_parser!(types::NameOrId))
-                    .required(true),
+                    .required_unless_present_any(["json-body-template", "json-body-schema"]),
             )
             .arg(
                 ::clap::Arg::new("organization")
@@ -4953,7 +5777,6 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("json-body")
                     .long("json-body")
                     .value_name("JSON-FILE")
-                    .required(false)
                     .value_parser(::clap::value_parser!(std::path::PathBuf))
                     .help("Path to a file that contains the full json body."),
             )
@@ -4961,7 +5784,19 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("json-body-template")
                     .long("json-body-template")
                     .action(::clap::ArgAction::SetTrue)
-                    .help("XXX"),
+                    .help("Build a JSON request-body template and exit"),
+            )
+            .arg(
+                ::clap::Arg::new("json-body-schema")
+                    .long("json-body-schema")
+                    .action(::clap::ArgAction::SetTrue)
+                    .help("Output a grammar reference for the request body and exit"),
+            )
+            .group(
+                ::clap::ArgGroup::new("body-source")
+                    .args(["json-body", "json-body-template", "json-body-schema"])
+                    .required(false)
+                    .multiple(false),
             )
             .about("Detach a disk from an instance")
     }
@@ -4972,13 +5807,17 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("dst-sled-id")
                     .long("dst-sled-id")
                     .value_parser(::clap::value_parser!(::uuid::Uuid))
-                    .required_unless_present("json-body"),
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ]),
             )
             .arg(
                 ::clap::Arg::new("instance")
                     .long("instance")
                     .value_parser(::clap::value_parser!(types::NameOrId))
-                    .required(true),
+                    .required_unless_present_any(["json-body-template", "json-body-schema"]),
             )
             .arg(
                 ::clap::Arg::new("organization")
@@ -4996,7 +5835,6 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("json-body")
                     .long("json-body")
                     .value_name("JSON-FILE")
-                    .required(false)
                     .value_parser(::clap::value_parser!(std::path::PathBuf))
                     .help("Path to a file that contains the full json body."),
             )
@@ -5004,7 +5842,19 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("json-body-template")
                     .long("json-body-template")
                     .action(::clap::ArgAction::SetTrue)
-                    .help("XXX"),
+                    .help("Build a JSON request-body template and exit"),
+            )
+            .arg(
+                ::clap::Arg::new("json-body-schema")
+                    .long("json-body-schema")
+                    .action(::clap::ArgAction::SetTrue)
+                    .help("Output a grammar reference for the request body and exit"),
+            )
+            .group(
+                ::clap::ArgGroup::new("body-source")
+                    .args(["json-body", "json-body-template", "json-body-schema"])
+                    .required(false)
+                    .multiple(false),
             )
             .about("Migrate an instance")
     }
@@ -5189,19 +6039,26 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("description")
                     .long("description")
                     .value_parser(::clap::value_parser!(::std::string::String))
-                    .required_unless_present("json-body"),
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ]),
             )
             .arg(
                 ::clap::Arg::new("name")
                     .long("name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required_unless_present("json-body"),
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ]),
             )
             .arg(
                 ::clap::Arg::new("json-body")
                     .long("json-body")
                     .value_name("JSON-FILE")
-                    .required(false)
                     .value_parser(::clap::value_parser!(std::path::PathBuf))
                     .help("Path to a file that contains the full json body."),
             )
@@ -5209,7 +6066,19 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("json-body-template")
                     .long("json-body-template")
                     .action(::clap::ArgAction::SetTrue)
-                    .help("XXX"),
+                    .help("Build a JSON request-body template and exit"),
+            )
+            .arg(
+                ::clap::Arg::new("json-body-schema")
+                    .long("json-body-schema")
+                    .action(::clap::ArgAction::SetTrue)
+                    .help("Output a grammar reference for the request body and exit"),
+            )
+            .group(
+                ::clap::ArgGroup::new("body-source")
+                    .args(["json-body", "json-body-template", "json-body-schema"])
+                    .required(false)
+                    .multiple(false),
             )
             .about("Create an organization")
     }
@@ -5243,13 +6112,12 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("organization")
                     .long("organization")
                     .value_parser(::clap::value_parser!(types::NameOrId))
-                    .required(true),
+                    .required_unless_present_any(["json-body-template", "json-body-schema"]),
             )
             .arg(
                 ::clap::Arg::new("json-body")
                     .long("json-body")
                     .value_name("JSON-FILE")
-                    .required(false)
                     .value_parser(::clap::value_parser!(std::path::PathBuf))
                     .help("Path to a file that contains the full json body."),
             )
@@ -5257,7 +6125,19 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("json-body-template")
                     .long("json-body-template")
                     .action(::clap::ArgAction::SetTrue)
-                    .help("XXX"),
+                    .help("Build a JSON request-body template and exit"),
+            )
+            .arg(
+                ::clap::Arg::new("json-body-schema")
+                    .long("json-body-schema")
+                    .action(::clap::ArgAction::SetTrue)
+                    .help("Output a grammar reference for the request body and exit"),
+            )
+            .group(
+                ::clap::ArgGroup::new("body-source")
+                    .args(["json-body", "json-body-template", "json-body-schema"])
+                    .required(false)
+                    .multiple(false),
             )
             .about("Update an organization")
     }
@@ -5290,13 +6170,12 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("organization")
                     .long("organization")
                     .value_parser(::clap::value_parser!(types::NameOrId))
-                    .required(true),
+                    .required_unless_present_any(["json-body-template", "json-body-schema"]),
             )
             .arg(
                 ::clap::Arg::new("json-body")
                     .long("json-body")
                     .value_name("JSON-FILE")
-                    .required(true)
                     .value_parser(::clap::value_parser!(std::path::PathBuf))
                     .help("Path to a file that contains the full json body."),
             )
@@ -5304,7 +6183,19 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("json-body-template")
                     .long("json-body-template")
                     .action(::clap::ArgAction::SetTrue)
-                    .help("XXX"),
+                    .help("Build a JSON request-body template and exit"),
+            )
+            .arg(
+                ::clap::Arg::new("json-body-schema")
+                    .long("json-body-schema")
+                    .action(::clap::ArgAction::SetTrue)
+                    .help("Output a grammar reference for the request body and exit"),
+            )
+            .group(
+                ::clap::ArgGroup::new("body-source")
+                    .args(["json-body", "json-body-template", "json-body-schema"])
+                    .required(true)
+                    .multiple(false),
             )
             .about("Update an organization's IAM policy")
     }
@@ -5346,25 +6237,32 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("description")
                     .long("description")
                     .value_parser(::clap::value_parser!(::std::string::String))
-                    .required_unless_present("json-body"),
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ]),
             )
             .arg(
                 ::clap::Arg::new("name")
                     .long("name")
                     .value_parser(::clap::value_parser!(types::Name))
-                    .required_unless_present("json-body"),
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ]),
             )
             .arg(
                 ::clap::Arg::new("organization")
                     .long("organization")
                     .value_parser(::clap::value_parser!(types::NameOrId))
-                    .required(true),
+                    .required_unless_present_any(["json-body-template", "json-body-schema"]),
             )
             .arg(
                 ::clap::Arg::new("json-body")
                     .long("json-body")
                     .value_name("JSON-FILE")
-                    .required(false)
                     .value_parser(::clap::value_parser!(std::path::PathBuf))
                     .help("Path to a file that contains the full json body."),
             )
@@ -5372,7 +6270,19 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("json-body-template")
                     .long("json-body-template")
                     .action(::clap::ArgAction::SetTrue)
-                    .help("XXX"),
+                    .help("Build a JSON request-body template and exit"),
+            )
+            .arg(
+                ::clap::Arg::new("json-body-schema")
+                    .long("json-body-schema")
+                    .action(::clap::ArgAction::SetTrue)
+                    .help("Output a grammar reference for the request body and exit"),
+            )
+            .group(
+                ::clap::ArgGroup::new("body-source")
+                    .args(["json-body", "json-body-template", "json-body-schema"])
+                    .required(false)
+                    .multiple(false),
             )
             .about("Create a project")
     }
@@ -5418,13 +6328,12 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("project")
                     .long("project")
                     .value_parser(::clap::value_parser!(types::NameOrId))
-                    .required(true),
+                    .required_unless_present_any(["json-body-template", "json-body-schema"]),
             )
             .arg(
                 ::clap::Arg::new("json-body")
                     .long("json-body")
                     .value_name("JSON-FILE")
-                    .required(false)
                     .value_parser(::clap::value_parser!(std::path::PathBuf))
                     .help("Path to a file that contains the full json body."),
             )
@@ -5432,7 +6341,19 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("json-body-template")
                     .long("json-body-template")
                     .action(::clap::ArgAction::SetTrue)
-                    .help("XXX"),
+                    .help("Build a JSON request-body template and exit"),
+            )
+            .arg(
+                ::clap::Arg::new("json-body-schema")
+                    .long("json-body-schema")
+                    .action(::clap::ArgAction::SetTrue)
+                    .help("Output a grammar reference for the request body and exit"),
+            )
+            .group(
+                ::clap::ArgGroup::new("body-source")
+                    .args(["json-body", "json-body-template", "json-body-schema"])
+                    .required(false)
+                    .multiple(false),
             )
             .about("Update a project")
     }
@@ -5483,13 +6404,12 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("project")
                     .long("project")
                     .value_parser(::clap::value_parser!(types::NameOrId))
-                    .required(true),
+                    .required_unless_present_any(["json-body-template", "json-body-schema"]),
             )
             .arg(
                 ::clap::Arg::new("json-body")
                     .long("json-body")
                     .value_name("JSON-FILE")
-                    .required(true)
                     .value_parser(::clap::value_parser!(std::path::PathBuf))
                     .help("Path to a file that contains the full json body."),
             )
@@ -5497,7 +6417,19 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("json-body-template")
                     .long("json-body-template")
                     .action(::clap::ArgAction::SetTrue)
-                    .help("XXX"),
+                    .help("Build a JSON request-body template and exit"),
+            )
+            .arg(
+                ::clap::Arg::new("json-body-schema")
+                    .long("json-body-schema")
+                    .action(::clap::ArgAction::SetTrue)
+                    .help("Output a grammar reference for the request body and exit"),
+            )
+            .group(
+                ::clap::ArgGroup::new("body-source")
+                    .args(["json-body", "json-body-template", "json-body-schema"])
+                    .required(true)
+                    .multiple(false),
             )
             .about("Update a project's IAM policy")
     }
@@ -5569,13 +6501,16 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("version")
                     .long("version")
                     .value_parser(::clap::value_parser!(types::SemverVersion))
-                    .required_unless_present("json-body"),
+                    .required_unless_present_any([
+                        "json-body",
+                        "json-body-template",
+                        "json-body-schema",
+                    ]),
             )
             .arg(
                 ::clap::Arg::new("json-body")
                     .long("json-body")
                     .value_name("JSON-FILE")
-                    .required(false)
                     .value_parser(::clap::value_parser!(std::path::PathBuf))
                     .help("Path to a file that contains the full json body."),
             )
@@ -5583,7 +6518,19 @@ impl<T: CliConfig> Cli<T> {
                 ::clap::Arg::new("json-body-template")
                     .long("json-body-template")
                     .action(::clap::ArgAction::SetTrue)
-                    .help("XXX"),
+                    .help("Build a JSON request-body template and exit"),
+            )
+            .arg(
+                ::clap::Arg::new("json-body-schema")
+                    .long("json-body-schema")
+                    .action(::clap::ArgAction::SetTrue)
+                    .help("Output a grammar reference for the request body and exit"),
+            )
+            .group(
+                ::clap::ArgGroup::new("body-source")
+                    .args(["json-body", "json-body-template", "json-body-schema"])
+                    .required(false)
+                    .multiple(false),
             )
             .about("Start system update")
     }
@@ -6180,6 +7127,20 @@ impl<T: CliConfig> Cli<T> {
             request = request.body_map(|body| body.client_id(value.clone()))
         }
 
+        if matches.get_flag("json-body-template") {
+            let schema = schemars::schema_for!(types::DeviceAuthRequest);
+            if let Some(body) = self.config.build_body_template(&schema)? {
+                println!("{}", serde_json::to_string_pretty(&body).unwrap());
+            }
+            return Ok(());
+        }
+
+        if matches.get_flag("json-body-schema") {
+            let schema = schemars::schema_for!(types::DeviceAuthRequest);
+            print!("{}", progenitor_client::render_body_schema(&schema));
+            return Ok(());
+        }
+
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
@@ -6208,6 +7169,20 @@ impl<T: CliConfig> Cli<T> {
         let mut request = self.client.device_auth_confirm();
         if let Some(value) = matches.get_one::<::std::string::String>("user-code") {
             request = request.body_map(|body| body.user_code(value.clone()))
+        }
+
+        if matches.get_flag("json-body-template") {
+            let schema = schemars::schema_for!(types::DeviceAuthVerify);
+            if let Some(body) = self.config.build_body_template(&schema)? {
+                println!("{}", serde_json::to_string_pretty(&body).unwrap());
+            }
+            return Ok(());
+        }
+
+        if matches.get_flag("json-body-schema") {
+            let schema = schemars::schema_for!(types::DeviceAuthVerify);
+            print!("{}", progenitor_client::render_body_schema(&schema));
+            return Ok(());
         }
 
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
@@ -6248,6 +7223,20 @@ impl<T: CliConfig> Cli<T> {
 
         if let Some(value) = matches.get_one::<::std::string::String>("grant-type") {
             request = request.body_map(|body| body.grant_type(value.clone()))
+        }
+
+        if matches.get_flag("json-body-template") {
+            let schema = schemars::schema_for!(types::DeviceAccessTokenRequest);
+            if let Some(body) = self.config.build_body_template(&schema)? {
+                println!("{}", serde_json::to_string_pretty(&body).unwrap());
+            }
+            return Ok(());
+        }
+
+        if matches.get_flag("json-body-schema") {
+            let schema = schemars::schema_for!(types::DeviceAccessTokenRequest);
+            print!("{}", progenitor_client::render_body_schema(&schema));
+            return Ok(());
         }
 
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
@@ -6312,6 +7301,20 @@ impl<T: CliConfig> Cli<T> {
             request = request.body_map(|body| body.username(value.clone()))
         }
 
+        if matches.get_flag("json-body-template") {
+            let schema = schemars::schema_for!(types::SpoofLoginBody);
+            if let Some(body) = self.config.build_body_template(&schema)? {
+                println!("{}", serde_json::to_string_pretty(&body).unwrap());
+            }
+            return Ok(());
+        }
+
+        if matches.get_flag("json-body-schema") {
+            let schema = schemars::schema_for!(types::SpoofLoginBody);
+            print!("{}", progenitor_client::render_body_schema(&schema));
+            return Ok(());
+        }
+
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
@@ -6346,6 +7349,20 @@ impl<T: CliConfig> Cli<T> {
 
         if let Some(value) = matches.get_one::<types::UserId>("username") {
             request = request.body_map(|body| body.username(value.clone()))
+        }
+
+        if matches.get_flag("json-body-template") {
+            let schema = schemars::schema_for!(types::UsernamePasswordCredentials);
+            if let Some(body) = self.config.build_body_template(&schema)? {
+                println!("{}", serde_json::to_string_pretty(&body).unwrap());
+            }
+            return Ok(());
+        }
+
+        if matches.get_flag("json-body-schema") {
+            let schema = schemars::schema_for!(types::UsernamePasswordCredentials);
+            print!("{}", progenitor_client::render_body_schema(&schema));
+            return Ok(());
         }
 
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
@@ -6488,6 +7505,20 @@ impl<T: CliConfig> Cli<T> {
             request = request.body_map(|body| body.name(value.clone()))
         }
 
+        if matches.get_flag("json-body-template") {
+            let schema = schemars::schema_for!(types::OrganizationCreate);
+            if let Some(body) = self.config.build_body_template(&schema)? {
+                println!("{}", serde_json::to_string_pretty(&body).unwrap());
+            }
+            return Ok(());
+        }
+
+        if matches.get_flag("json-body-schema") {
+            let schema = schemars::schema_for!(types::OrganizationCreate);
+            print!("{}", progenitor_client::render_body_schema(&schema));
+            return Ok(());
+        }
+
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
@@ -6550,6 +7581,20 @@ impl<T: CliConfig> Cli<T> {
 
         if let Some(value) = matches.get_one::<types::Name>("organization-name") {
             request = request.organization_name(value.clone());
+        }
+
+        if matches.get_flag("json-body-template") {
+            let schema = schemars::schema_for!(types::OrganizationUpdate);
+            if let Some(body) = self.config.build_body_template(&schema)? {
+                println!("{}", serde_json::to_string_pretty(&body).unwrap());
+            }
+            return Ok(());
+        }
+
+        if matches.get_flag("json-body-schema") {
+            let schema = schemars::schema_for!(types::OrganizationUpdate);
+            print!("{}", progenitor_client::render_body_schema(&schema));
+            return Ok(());
         }
 
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
@@ -6632,6 +7677,20 @@ impl<T: CliConfig> Cli<T> {
             request = request.organization_name(value.clone());
         }
 
+        if matches.get_flag("json-body-template") {
+            let schema = schemars::schema_for!(types::OrganizationRolePolicy);
+            if let Some(body) = self.config.build_body_template(&schema)? {
+                println!("{}", serde_json::to_string_pretty(&body).unwrap());
+            }
+            return Ok(());
+        }
+
+        if matches.get_flag("json-body-schema") {
+            let schema = schemars::schema_for!(types::OrganizationRolePolicy);
+            print!("{}", progenitor_client::render_body_schema(&schema));
+            return Ok(());
+        }
+
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
@@ -6708,6 +7767,20 @@ impl<T: CliConfig> Cli<T> {
             request = request.organization_name(value.clone());
         }
 
+        if matches.get_flag("json-body-template") {
+            let schema = schemars::schema_for!(types::ProjectCreate);
+            if let Some(body) = self.config.build_body_template(&schema)? {
+                println!("{}", serde_json::to_string_pretty(&body).unwrap());
+            }
+            return Ok(());
+        }
+
+        if matches.get_flag("json-body-schema") {
+            let schema = schemars::schema_for!(types::ProjectCreate);
+            print!("{}", progenitor_client::render_body_schema(&schema));
+            return Ok(());
+        }
+
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
@@ -6770,6 +7843,20 @@ impl<T: CliConfig> Cli<T> {
 
         if let Some(value) = matches.get_one::<types::Name>("project-name") {
             request = request.project_name(value.clone());
+        }
+
+        if matches.get_flag("json-body-template") {
+            let schema = schemars::schema_for!(types::ProjectUpdate);
+            if let Some(body) = self.config.build_body_template(&schema)? {
+                println!("{}", serde_json::to_string_pretty(&body).unwrap());
+            }
+            return Ok(());
+        }
+
+        if matches.get_flag("json-body-schema") {
+            let schema = schemars::schema_for!(types::ProjectUpdate);
+            print!("{}", progenitor_client::render_body_schema(&schema));
+            return Ok(());
         }
 
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
@@ -6881,6 +7968,20 @@ impl<T: CliConfig> Cli<T> {
 
         if let Some(value) = matches.get_one::<types::ByteCount>("size") {
             request = request.body_map(|body| body.size(value.clone()))
+        }
+
+        if matches.get_flag("json-body-template") {
+            let schema = schemars::schema_for!(types::DiskCreate);
+            if let Some(body) = self.config.build_body_template(&schema)? {
+                println!("{}", serde_json::to_string_pretty(&body).unwrap());
+            }
+            return Ok(());
+        }
+
+        if matches.get_flag("json-body-schema") {
+            let schema = schemars::schema_for!(types::DiskCreate);
+            print!("{}", progenitor_client::render_body_schema(&schema));
+            return Ok(());
         }
 
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
@@ -7086,6 +8187,20 @@ impl<T: CliConfig> Cli<T> {
             request = request.project_name(value.clone());
         }
 
+        if matches.get_flag("json-body-template") {
+            let schema = schemars::schema_for!(types::ImageCreate);
+            if let Some(body) = self.config.build_body_template(&schema)? {
+                println!("{}", serde_json::to_string_pretty(&body).unwrap());
+            }
+            return Ok(());
+        }
+
+        if matches.get_flag("json-body-schema") {
+            let schema = schemars::schema_for!(types::ImageCreate);
+            print!("{}", progenitor_client::render_body_schema(&schema));
+            return Ok(());
+        }
+
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
@@ -7248,6 +8363,20 @@ impl<T: CliConfig> Cli<T> {
             request = request.body_map(|body| body.user_data(value.clone()))
         }
 
+        if matches.get_flag("json-body-template") {
+            let schema = schemars::schema_for!(types::InstanceCreate);
+            if let Some(body) = self.config.build_body_template(&schema)? {
+                println!("{}", serde_json::to_string_pretty(&body).unwrap());
+            }
+            return Ok(());
+        }
+
+        if matches.get_flag("json-body-schema") {
+            let schema = schemars::schema_for!(types::InstanceCreate);
+            print!("{}", progenitor_client::render_body_schema(&schema));
+            return Ok(());
+        }
+
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
@@ -7401,6 +8530,20 @@ impl<T: CliConfig> Cli<T> {
             request = request.project_name(value.clone());
         }
 
+        if matches.get_flag("json-body-template") {
+            let schema = schemars::schema_for!(types::DiskIdentifier);
+            if let Some(body) = self.config.build_body_template(&schema)? {
+                println!("{}", serde_json::to_string_pretty(&body).unwrap());
+            }
+            return Ok(());
+        }
+
+        if matches.get_flag("json-body-schema") {
+            let schema = schemars::schema_for!(types::DiskIdentifier);
+            print!("{}", progenitor_client::render_body_schema(&schema));
+            return Ok(());
+        }
+
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
@@ -7443,6 +8586,20 @@ impl<T: CliConfig> Cli<T> {
 
         if let Some(value) = matches.get_one::<types::Name>("project-name") {
             request = request.project_name(value.clone());
+        }
+
+        if matches.get_flag("json-body-template") {
+            let schema = schemars::schema_for!(types::DiskIdentifier);
+            if let Some(body) = self.config.build_body_template(&schema)? {
+                println!("{}", serde_json::to_string_pretty(&body).unwrap());
+            }
+            return Ok(());
+        }
+
+        if matches.get_flag("json-body-schema") {
+            let schema = schemars::schema_for!(types::DiskIdentifier);
+            print!("{}", progenitor_client::render_body_schema(&schema));
+            return Ok(());
         }
 
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
@@ -7519,6 +8676,20 @@ impl<T: CliConfig> Cli<T> {
 
         if let Some(value) = matches.get_one::<types::Name>("project-name") {
             request = request.project_name(value.clone());
+        }
+
+        if matches.get_flag("json-body-template") {
+            let schema = schemars::schema_for!(types::InstanceMigrate);
+            if let Some(body) = self.config.build_body_template(&schema)? {
+                println!("{}", serde_json::to_string_pretty(&body).unwrap());
+            }
+            return Ok(());
+        }
+
+        if matches.get_flag("json-body-schema") {
+            let schema = schemars::schema_for!(types::InstanceMigrate);
+            print!("{}", progenitor_client::render_body_schema(&schema));
+            return Ok(());
         }
 
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
@@ -7634,6 +8805,20 @@ impl<T: CliConfig> Cli<T> {
             request = request.body_map(|body| body.vpc_name(value.clone()))
         }
 
+        if matches.get_flag("json-body-template") {
+            let schema = schemars::schema_for!(types::NetworkInterfaceCreate);
+            if let Some(body) = self.config.build_body_template(&schema)? {
+                println!("{}", serde_json::to_string_pretty(&body).unwrap());
+            }
+            return Ok(());
+        }
+
+        if matches.get_flag("json-body-schema") {
+            let schema = schemars::schema_for!(types::NetworkInterfaceCreate);
+            print!("{}", progenitor_client::render_body_schema(&schema));
+            return Ok(());
+        }
+
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
@@ -7724,6 +8909,20 @@ impl<T: CliConfig> Cli<T> {
 
         if let Some(value) = matches.get_one::<types::Name>("project-name") {
             request = request.project_name(value.clone());
+        }
+
+        if matches.get_flag("json-body-template") {
+            let schema = schemars::schema_for!(types::NetworkInterfaceUpdate);
+            if let Some(body) = self.config.build_body_template(&schema)? {
+                println!("{}", serde_json::to_string_pretty(&body).unwrap());
+            }
+            return Ok(());
+        }
+
+        if matches.get_flag("json-body-schema") {
+            let schema = schemars::schema_for!(types::NetworkInterfaceUpdate);
+            print!("{}", progenitor_client::render_body_schema(&schema));
+            return Ok(());
         }
 
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
@@ -8019,6 +9218,20 @@ impl<T: CliConfig> Cli<T> {
             request = request.project_name(value.clone());
         }
 
+        if matches.get_flag("json-body-template") {
+            let schema = schemars::schema_for!(types::ProjectRolePolicy);
+            if let Some(body) = self.config.build_body_template(&schema)? {
+                println!("{}", serde_json::to_string_pretty(&body).unwrap());
+            }
+            return Ok(());
+        }
+
+        if matches.get_flag("json-body-schema") {
+            let schema = schemars::schema_for!(types::ProjectRolePolicy);
+            print!("{}", progenitor_client::render_body_schema(&schema));
+            return Ok(());
+        }
+
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
@@ -8108,6 +9321,20 @@ impl<T: CliConfig> Cli<T> {
 
         if let Some(value) = matches.get_one::<types::Name>("project-name") {
             request = request.project_name(value.clone());
+        }
+
+        if matches.get_flag("json-body-template") {
+            let schema = schemars::schema_for!(types::SnapshotCreate);
+            if let Some(body) = self.config.build_body_template(&schema)? {
+                println!("{}", serde_json::to_string_pretty(&body).unwrap());
+            }
+            return Ok(());
+        }
+
+        if matches.get_flag("json-body-schema") {
+            let schema = schemars::schema_for!(types::SnapshotCreate);
+            print!("{}", progenitor_client::render_body_schema(&schema));
+            return Ok(());
         }
 
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
@@ -8260,6 +9487,20 @@ impl<T: CliConfig> Cli<T> {
             request = request.project_name(value.clone());
         }
 
+        if matches.get_flag("json-body-template") {
+            let schema = schemars::schema_for!(types::VpcCreate);
+            if let Some(body) = self.config.build_body_template(&schema)? {
+                println!("{}", serde_json::to_string_pretty(&body).unwrap());
+            }
+            return Ok(());
+        }
+
+        if matches.get_flag("json-body-schema") {
+            let schema = schemars::schema_for!(types::VpcCreate);
+            print!("{}", progenitor_client::render_body_schema(&schema));
+            return Ok(());
+        }
+
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
@@ -8334,6 +9575,20 @@ impl<T: CliConfig> Cli<T> {
 
         if let Some(value) = matches.get_one::<types::Name>("vpc-name") {
             request = request.vpc_name(value.clone());
+        }
+
+        if matches.get_flag("json-body-template") {
+            let schema = schemars::schema_for!(types::VpcUpdate);
+            if let Some(body) = self.config.build_body_template(&schema)? {
+                println!("{}", serde_json::to_string_pretty(&body).unwrap());
+            }
+            return Ok(());
+        }
+
+        if matches.get_flag("json-body-schema") {
+            let schema = schemars::schema_for!(types::VpcUpdate);
+            print!("{}", progenitor_client::render_body_schema(&schema));
+            return Ok(());
         }
 
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
@@ -8435,6 +9690,20 @@ impl<T: CliConfig> Cli<T> {
             request = request.vpc_name(value.clone());
         }
 
+        if matches.get_flag("json-body-template") {
+            let schema = schemars::schema_for!(types::VpcFirewallRuleUpdateParams);
+            if let Some(body) = self.config.build_body_template(&schema)? {
+                println!("{}", serde_json::to_string_pretty(&body).unwrap());
+            }
+            return Ok(());
+        }
+
+        if matches.get_flag("json-body-schema") {
+            let schema = schemars::schema_for!(types::VpcFirewallRuleUpdateParams);
+            print!("{}", progenitor_client::render_body_schema(&schema));
+            return Ok(());
+        }
+
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
@@ -8534,6 +9803,20 @@ impl<T: CliConfig> Cli<T> {
             request = request.vpc_name(value.clone());
         }
 
+        if matches.get_flag("json-body-template") {
+            let schema = schemars::schema_for!(types::VpcRouterCreate);
+            if let Some(body) = self.config.build_body_template(&schema)? {
+                println!("{}", serde_json::to_string_pretty(&body).unwrap());
+            }
+            return Ok(());
+        }
+
+        if matches.get_flag("json-body-schema") {
+            let schema = schemars::schema_for!(types::VpcRouterCreate);
+            print!("{}", progenitor_client::render_body_schema(&schema));
+            return Ok(());
+        }
+
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
@@ -8619,6 +9902,20 @@ impl<T: CliConfig> Cli<T> {
 
         if let Some(value) = matches.get_one::<types::Name>("vpc-name") {
             request = request.vpc_name(value.clone());
+        }
+
+        if matches.get_flag("json-body-template") {
+            let schema = schemars::schema_for!(types::VpcRouterUpdate);
+            if let Some(body) = self.config.build_body_template(&schema)? {
+                println!("{}", serde_json::to_string_pretty(&body).unwrap());
+            }
+            return Ok(());
+        }
+
+        if matches.get_flag("json-body-schema") {
+            let schema = schemars::schema_for!(types::VpcRouterUpdate);
+            print!("{}", progenitor_client::render_body_schema(&schema));
+            return Ok(());
         }
 
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
@@ -8765,6 +10062,20 @@ impl<T: CliConfig> Cli<T> {
             request = request.vpc_name(value.clone());
         }
 
+        if matches.get_flag("json-body-template") {
+            let schema = schemars::schema_for!(types::RouterRouteCreateParams);
+            if let Some(body) = self.config.build_body_template(&schema)? {
+                println!("{}", serde_json::to_string_pretty(&body).unwrap());
+            }
+            return Ok(());
+        }
+
+        if matches.get_flag("json-body-schema") {
+            let schema = schemars::schema_for!(types::RouterRouteCreateParams);
+            print!("{}", progenitor_client::render_body_schema(&schema));
+            return Ok(());
+        }
+
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
@@ -8859,6 +10170,20 @@ impl<T: CliConfig> Cli<T> {
 
         if let Some(value) = matches.get_one::<types::Name>("vpc-name") {
             request = request.vpc_name(value.clone());
+        }
+
+        if matches.get_flag("json-body-template") {
+            let schema = schemars::schema_for!(types::RouterRouteUpdateParams);
+            if let Some(body) = self.config.build_body_template(&schema)? {
+                println!("{}", serde_json::to_string_pretty(&body).unwrap());
+            }
+            return Ok(());
+        }
+
+        if matches.get_flag("json-body-schema") {
+            let schema = schemars::schema_for!(types::RouterRouteUpdateParams);
+            print!("{}", progenitor_client::render_body_schema(&schema));
+            return Ok(());
         }
 
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
@@ -9008,6 +10333,20 @@ impl<T: CliConfig> Cli<T> {
             request = request.vpc_name(value.clone());
         }
 
+        if matches.get_flag("json-body-template") {
+            let schema = schemars::schema_for!(types::VpcSubnetCreate);
+            if let Some(body) = self.config.build_body_template(&schema)? {
+                println!("{}", serde_json::to_string_pretty(&body).unwrap());
+            }
+            return Ok(());
+        }
+
+        if matches.get_flag("json-body-schema") {
+            let schema = schemars::schema_for!(types::VpcSubnetCreate);
+            print!("{}", progenitor_client::render_body_schema(&schema));
+            return Ok(());
+        }
+
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
@@ -9093,6 +10432,20 @@ impl<T: CliConfig> Cli<T> {
 
         if let Some(value) = matches.get_one::<types::Name>("vpc-name") {
             request = request.vpc_name(value.clone());
+        }
+
+        if matches.get_flag("json-body-template") {
+            let schema = schemars::schema_for!(types::VpcSubnetUpdate);
+            if let Some(body) = self.config.build_body_template(&schema)? {
+                println!("{}", serde_json::to_string_pretty(&body).unwrap());
+            }
+            return Ok(());
+        }
+
+        if matches.get_flag("json-body-schema") {
+            let schema = schemars::schema_for!(types::VpcSubnetUpdate);
+            print!("{}", progenitor_client::render_body_schema(&schema));
+            return Ok(());
         }
 
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
@@ -9229,6 +10582,20 @@ impl<T: CliConfig> Cli<T> {
 
     pub async fn execute_policy_update(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.policy_update();
+        if matches.get_flag("json-body-template") {
+            let schema = schemars::schema_for!(types::SiloRolePolicy);
+            if let Some(body) = self.config.build_body_template(&schema)? {
+                println!("{}", serde_json::to_string_pretty(&body).unwrap());
+            }
+            return Ok(());
+        }
+
+        if matches.get_flag("json-body-schema") {
+            let schema = schemars::schema_for!(types::SiloRolePolicy);
+            print!("{}", progenitor_client::render_body_schema(&schema));
+            return Ok(());
+        }
+
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
@@ -9411,6 +10778,20 @@ impl<T: CliConfig> Cli<T> {
 
         if let Some(value) = matches.get_one::<::std::string::String>("public-key") {
             request = request.body_map(|body| body.public_key(value.clone()))
+        }
+
+        if matches.get_flag("json-body-template") {
+            let schema = schemars::schema_for!(types::SshKeyCreate);
+            if let Some(body) = self.config.build_body_template(&schema)? {
+                println!("{}", serde_json::to_string_pretty(&body).unwrap());
+            }
+            return Ok(());
+        }
+
+        if matches.get_flag("json-body-schema") {
+            let schema = schemars::schema_for!(types::SshKeyCreate);
+            print!("{}", progenitor_client::render_body_schema(&schema));
+            return Ok(());
         }
 
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
@@ -9610,6 +10991,20 @@ impl<T: CliConfig> Cli<T> {
 
         if let Some(value) = matches.get_one::<types::ServiceUsingCertificate>("service") {
             request = request.body_map(|body| body.service(value.clone()))
+        }
+
+        if matches.get_flag("json-body-template") {
+            let schema = schemars::schema_for!(types::CertificateCreate);
+            if let Some(body) = self.config.build_body_template(&schema)? {
+                println!("{}", serde_json::to_string_pretty(&body).unwrap());
+            }
+            return Ok(());
+        }
+
+        if matches.get_flag("json-body-schema") {
+            let schema = schemars::schema_for!(types::CertificateCreate);
+            print!("{}", progenitor_client::render_body_schema(&schema));
+            return Ok(());
         }
 
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
@@ -9930,6 +11325,20 @@ impl<T: CliConfig> Cli<T> {
             request = request.body_map(|body| body.name(value.clone()))
         }
 
+        if matches.get_flag("json-body-template") {
+            let schema = schemars::schema_for!(types::GlobalImageCreate);
+            if let Some(body) = self.config.build_body_template(&schema)? {
+                println!("{}", serde_json::to_string_pretty(&body).unwrap());
+            }
+            return Ok(());
+        }
+
+        if matches.get_flag("json-body-schema") {
+            let schema = schemars::schema_for!(types::GlobalImageCreate);
+            print!("{}", progenitor_client::render_body_schema(&schema));
+            return Ok(());
+        }
+
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
@@ -10046,6 +11455,20 @@ impl<T: CliConfig> Cli<T> {
             request = request.body_map(|body| body.name(value.clone()))
         }
 
+        if matches.get_flag("json-body-template") {
+            let schema = schemars::schema_for!(types::IpPoolCreate);
+            if let Some(body) = self.config.build_body_template(&schema)? {
+                println!("{}", serde_json::to_string_pretty(&body).unwrap());
+            }
+            return Ok(());
+        }
+
+        if matches.get_flag("json-body-schema") {
+            let schema = schemars::schema_for!(types::IpPoolCreate);
+            print!("{}", progenitor_client::render_body_schema(&schema));
+            return Ok(());
+        }
+
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
@@ -10100,6 +11523,20 @@ impl<T: CliConfig> Cli<T> {
 
         if let Some(value) = matches.get_one::<types::Name>("pool-name") {
             request = request.pool_name(value.clone());
+        }
+
+        if matches.get_flag("json-body-template") {
+            let schema = schemars::schema_for!(types::IpPoolUpdate);
+            if let Some(body) = self.config.build_body_template(&schema)? {
+                println!("{}", serde_json::to_string_pretty(&body).unwrap());
+            }
+            return Ok(());
+        }
+
+        if matches.get_flag("json-body-schema") {
+            let schema = schemars::schema_for!(types::IpPoolUpdate);
+            print!("{}", progenitor_client::render_body_schema(&schema));
+            return Ok(());
         }
 
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
@@ -10193,6 +11630,20 @@ impl<T: CliConfig> Cli<T> {
             request = request.pool_name(value.clone());
         }
 
+        if matches.get_flag("json-body-template") {
+            let schema = schemars::schema_for!(types::IpRange);
+            if let Some(body) = self.config.build_body_template(&schema)? {
+                println!("{}", serde_json::to_string_pretty(&body).unwrap());
+            }
+            return Ok(());
+        }
+
+        if matches.get_flag("json-body-schema") {
+            let schema = schemars::schema_for!(types::IpRange);
+            print!("{}", progenitor_client::render_body_schema(&schema));
+            return Ok(());
+        }
+
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
@@ -10223,6 +11674,20 @@ impl<T: CliConfig> Cli<T> {
         let mut request = self.client.ip_pool_range_remove();
         if let Some(value) = matches.get_one::<types::Name>("pool-name") {
             request = request.pool_name(value.clone());
+        }
+
+        if matches.get_flag("json-body-template") {
+            let schema = schemars::schema_for!(types::IpRange);
+            if let Some(body) = self.config.build_body_template(&schema)? {
+                println!("{}", serde_json::to_string_pretty(&body).unwrap());
+            }
+            return Ok(());
+        }
+
+        if matches.get_flag("json-body-schema") {
+            let schema = schemars::schema_for!(types::IpRange);
+            print!("{}", progenitor_client::render_body_schema(&schema));
+            return Ok(());
         }
 
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
@@ -10309,6 +11774,20 @@ impl<T: CliConfig> Cli<T> {
         matches: &::clap::ArgMatches,
     ) -> anyhow::Result<()> {
         let mut request = self.client.ip_pool_service_range_add();
+        if matches.get_flag("json-body-template") {
+            let schema = schemars::schema_for!(types::IpRange);
+            if let Some(body) = self.config.build_body_template(&schema)? {
+                println!("{}", serde_json::to_string_pretty(&body).unwrap());
+            }
+            return Ok(());
+        }
+
+        if matches.get_flag("json-body-schema") {
+            let schema = schemars::schema_for!(types::IpRange);
+            print!("{}", progenitor_client::render_body_schema(&schema));
+            return Ok(());
+        }
+
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
@@ -10337,6 +11816,20 @@ impl<T: CliConfig> Cli<T> {
         matches: &::clap::ArgMatches,
     ) -> anyhow::Result<()> {
         let mut request = self.client.ip_pool_service_range_remove();
+        if matches.get_flag("json-body-template") {
+            let schema = schemars::schema_for!(types::IpRange);
+            if let Some(body) = self.config.build_body_template(&schema)? {
+                println!("{}", serde_json::to_string_pretty(&body).unwrap());
+            }
+            return Ok(());
+        }
+
+        if matches.get_flag("json-body-schema") {
+            let schema = schemars::schema_for!(types::IpRange);
+            print!("{}", progenitor_client::render_body_schema(&schema));
+            return Ok(());
+        }
+
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
@@ -10429,6 +11922,20 @@ impl<T: CliConfig> Cli<T> {
         matches: &::clap::ArgMatches,
     ) -> anyhow::Result<()> {
         let mut request = self.client.system_policy_update();
+        if matches.get_flag("json-body-template") {
+            let schema = schemars::schema_for!(types::FleetRolePolicy);
+            if let Some(body) = self.config.build_body_template(&schema)? {
+                println!("{}", serde_json::to_string_pretty(&body).unwrap());
+            }
+            return Ok(());
+        }
+
+        if matches.get_flag("json-body-schema") {
+            let schema = schemars::schema_for!(types::FleetRolePolicy);
+            print!("{}", progenitor_client::render_body_schema(&schema));
+            return Ok(());
+        }
+
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
@@ -10564,6 +12071,20 @@ impl<T: CliConfig> Cli<T> {
             request = request.body_map(|body| body.name(value.clone()))
         }
 
+        if matches.get_flag("json-body-template") {
+            let schema = schemars::schema_for!(types::SiloCreate);
+            if let Some(body) = self.config.build_body_template(&schema)? {
+                println!("{}", serde_json::to_string_pretty(&body).unwrap());
+            }
+            return Ok(());
+        }
+
+        if matches.get_flag("json-body-schema") {
+            let schema = schemars::schema_for!(types::SiloCreate);
+            print!("{}", progenitor_client::render_body_schema(&schema));
+            return Ok(());
+        }
+
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
@@ -10684,6 +12205,20 @@ impl<T: CliConfig> Cli<T> {
             request = request.silo_name(value.clone());
         }
 
+        if matches.get_flag("json-body-template") {
+            let schema = schemars::schema_for!(types::UserCreate);
+            if let Some(body) = self.config.build_body_template(&schema)? {
+                println!("{}", serde_json::to_string_pretty(&body).unwrap());
+            }
+            return Ok(());
+        }
+
+        if matches.get_flag("json-body-schema") {
+            let schema = schemars::schema_for!(types::UserCreate);
+            print!("{}", progenitor_client::render_body_schema(&schema));
+            return Ok(());
+        }
+
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
@@ -10748,6 +12283,20 @@ impl<T: CliConfig> Cli<T> {
             request = request.user_id(value.clone());
         }
 
+        if matches.get_flag("json-body-template") {
+            let schema = schemars::schema_for!(types::UserPassword);
+            if let Some(body) = self.config.build_body_template(&schema)? {
+                println!("{}", serde_json::to_string_pretty(&body).unwrap());
+            }
+            return Ok(());
+        }
+
+        if matches.get_flag("json-body-schema") {
+            let schema = schemars::schema_for!(types::UserPassword);
+            print!("{}", progenitor_client::render_body_schema(&schema));
+            return Ok(());
+        }
+
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
@@ -10810,6 +12359,20 @@ impl<T: CliConfig> Cli<T> {
 
         if let Some(value) = matches.get_one::<::std::string::String>("technical-contact-email") {
             request = request.body_map(|body| body.technical_contact_email(value.clone()))
+        }
+
+        if matches.get_flag("json-body-template") {
+            let schema = schemars::schema_for!(types::SamlIdentityProviderCreate);
+            if let Some(body) = self.config.build_body_template(&schema)? {
+                println!("{}", serde_json::to_string_pretty(&body).unwrap());
+            }
+            return Ok(());
+        }
+
+        if matches.get_flag("json-body-schema") {
+            let schema = schemars::schema_for!(types::SamlIdentityProviderCreate);
+            print!("{}", progenitor_client::render_body_schema(&schema));
+            return Ok(());
         }
 
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
@@ -10894,6 +12457,20 @@ impl<T: CliConfig> Cli<T> {
         let mut request = self.client.silo_policy_update();
         if let Some(value) = matches.get_one::<types::Name>("silo-name") {
             request = request.silo_name(value.clone());
+        }
+
+        if matches.get_flag("json-body-template") {
+            let schema = schemars::schema_for!(types::SiloRolePolicy);
+            if let Some(body) = self.config.build_body_template(&schema)? {
+                println!("{}", serde_json::to_string_pretty(&body).unwrap());
+            }
+            return Ok(());
+        }
+
+        if matches.get_flag("json-body-schema") {
+            let schema = schemars::schema_for!(types::SiloRolePolicy);
+            print!("{}", progenitor_client::render_body_schema(&schema));
+            return Ok(());
         }
 
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
@@ -11186,6 +12763,20 @@ impl<T: CliConfig> Cli<T> {
             request = request.body_map(|body| body.size(value.clone()))
         }
 
+        if matches.get_flag("json-body-template") {
+            let schema = schemars::schema_for!(types::DiskCreate);
+            if let Some(body) = self.config.build_body_template(&schema)? {
+                println!("{}", serde_json::to_string_pretty(&body).unwrap());
+            }
+            return Ok(());
+        }
+
+        if matches.get_flag("json-body-schema") {
+            let schema = schemars::schema_for!(types::DiskCreate);
+            print!("{}", progenitor_client::render_body_schema(&schema));
+            return Ok(());
+        }
+
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
@@ -11352,6 +12943,20 @@ impl<T: CliConfig> Cli<T> {
             request = request.body_map(|body| body.user_data(value.clone()))
         }
 
+        if matches.get_flag("json-body-template") {
+            let schema = schemars::schema_for!(types::InstanceCreate);
+            if let Some(body) = self.config.build_body_template(&schema)? {
+                println!("{}", serde_json::to_string_pretty(&body).unwrap());
+            }
+            return Ok(());
+        }
+
+        if matches.get_flag("json-body-schema") {
+            let schema = schemars::schema_for!(types::InstanceCreate);
+            print!("{}", progenitor_client::render_body_schema(&schema));
+            return Ok(());
+        }
+
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
@@ -11511,6 +13116,20 @@ impl<T: CliConfig> Cli<T> {
             request = request.project(value.clone());
         }
 
+        if matches.get_flag("json-body-template") {
+            let schema = schemars::schema_for!(types::DiskPath);
+            if let Some(body) = self.config.build_body_template(&schema)? {
+                println!("{}", serde_json::to_string_pretty(&body).unwrap());
+            }
+            return Ok(());
+        }
+
+        if matches.get_flag("json-body-schema") {
+            let schema = schemars::schema_for!(types::DiskPath);
+            print!("{}", progenitor_client::render_body_schema(&schema));
+            return Ok(());
+        }
+
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
@@ -11555,6 +13174,20 @@ impl<T: CliConfig> Cli<T> {
             request = request.project(value.clone());
         }
 
+        if matches.get_flag("json-body-template") {
+            let schema = schemars::schema_for!(types::DiskPath);
+            if let Some(body) = self.config.build_body_template(&schema)? {
+                println!("{}", serde_json::to_string_pretty(&body).unwrap());
+            }
+            return Ok(());
+        }
+
+        if matches.get_flag("json-body-schema") {
+            let schema = schemars::schema_for!(types::DiskPath);
+            print!("{}", progenitor_client::render_body_schema(&schema));
+            return Ok(());
+        }
+
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
@@ -11597,6 +13230,20 @@ impl<T: CliConfig> Cli<T> {
 
         if let Some(value) = matches.get_one::<types::NameOrId>("project") {
             request = request.project(value.clone());
+        }
+
+        if matches.get_flag("json-body-template") {
+            let schema = schemars::schema_for!(types::InstanceMigrate);
+            if let Some(body) = self.config.build_body_template(&schema)? {
+                println!("{}", serde_json::to_string_pretty(&body).unwrap());
+            }
+            return Ok(());
+        }
+
+        if matches.get_flag("json-body-schema") {
+            let schema = schemars::schema_for!(types::InstanceMigrate);
+            print!("{}", progenitor_client::render_body_schema(&schema));
+            return Ok(());
         }
 
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
@@ -11846,6 +13493,20 @@ impl<T: CliConfig> Cli<T> {
             request = request.body_map(|body| body.name(value.clone()))
         }
 
+        if matches.get_flag("json-body-template") {
+            let schema = schemars::schema_for!(types::OrganizationCreate);
+            if let Some(body) = self.config.build_body_template(&schema)? {
+                println!("{}", serde_json::to_string_pretty(&body).unwrap());
+            }
+            return Ok(());
+        }
+
+        if matches.get_flag("json-body-schema") {
+            let schema = schemars::schema_for!(types::OrganizationCreate);
+            print!("{}", progenitor_client::render_body_schema(&schema));
+            return Ok(());
+        }
+
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
@@ -11908,6 +13569,20 @@ impl<T: CliConfig> Cli<T> {
 
         if let Some(value) = matches.get_one::<types::NameOrId>("organization") {
             request = request.organization(value.clone());
+        }
+
+        if matches.get_flag("json-body-template") {
+            let schema = schemars::schema_for!(types::OrganizationUpdate);
+            if let Some(body) = self.config.build_body_template(&schema)? {
+                println!("{}", serde_json::to_string_pretty(&body).unwrap());
+            }
+            return Ok(());
+        }
+
+        if matches.get_flag("json-body-schema") {
+            let schema = schemars::schema_for!(types::OrganizationUpdate);
+            print!("{}", progenitor_client::render_body_schema(&schema));
+            return Ok(());
         }
 
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
@@ -11988,6 +13663,20 @@ impl<T: CliConfig> Cli<T> {
         let mut request = self.client.organization_policy_update_v1();
         if let Some(value) = matches.get_one::<types::NameOrId>("organization") {
             request = request.organization(value.clone());
+        }
+
+        if matches.get_flag("json-body-template") {
+            let schema = schemars::schema_for!(types::OrganizationRolePolicy);
+            if let Some(body) = self.config.build_body_template(&schema)? {
+                println!("{}", serde_json::to_string_pretty(&body).unwrap());
+            }
+            return Ok(());
+        }
+
+        if matches.get_flag("json-body-schema") {
+            let schema = schemars::schema_for!(types::OrganizationRolePolicy);
+            print!("{}", progenitor_client::render_body_schema(&schema));
+            return Ok(());
         }
 
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
@@ -12072,6 +13761,20 @@ impl<T: CliConfig> Cli<T> {
             request = request.organization(value.clone());
         }
 
+        if matches.get_flag("json-body-template") {
+            let schema = schemars::schema_for!(types::ProjectCreate);
+            if let Some(body) = self.config.build_body_template(&schema)? {
+                println!("{}", serde_json::to_string_pretty(&body).unwrap());
+            }
+            return Ok(());
+        }
+
+        if matches.get_flag("json-body-schema") {
+            let schema = schemars::schema_for!(types::ProjectCreate);
+            print!("{}", progenitor_client::render_body_schema(&schema));
+            return Ok(());
+        }
+
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
@@ -12141,6 +13844,20 @@ impl<T: CliConfig> Cli<T> {
 
         if let Some(value) = matches.get_one::<types::NameOrId>("project") {
             request = request.project(value.clone());
+        }
+
+        if matches.get_flag("json-body-template") {
+            let schema = schemars::schema_for!(types::ProjectUpdate);
+            if let Some(body) = self.config.build_body_template(&schema)? {
+                println!("{}", serde_json::to_string_pretty(&body).unwrap());
+            }
+            return Ok(());
+        }
+
+        if matches.get_flag("json-body-schema") {
+            let schema = schemars::schema_for!(types::ProjectUpdate);
+            print!("{}", progenitor_client::render_body_schema(&schema));
+            return Ok(());
         }
 
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
@@ -12233,6 +13950,20 @@ impl<T: CliConfig> Cli<T> {
 
         if let Some(value) = matches.get_one::<types::NameOrId>("project") {
             request = request.project(value.clone());
+        }
+
+        if matches.get_flag("json-body-template") {
+            let schema = schemars::schema_for!(types::ProjectRolePolicy);
+            if let Some(body) = self.config.build_body_template(&schema)? {
+                println!("{}", serde_json::to_string_pretty(&body).unwrap());
+            }
+            return Ok(());
+        }
+
+        if matches.get_flag("json-body-schema") {
+            let schema = schemars::schema_for!(types::ProjectRolePolicy);
+            print!("{}", progenitor_client::render_body_schema(&schema));
+            return Ok(());
         }
 
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
@@ -12391,6 +14122,20 @@ impl<T: CliConfig> Cli<T> {
         let mut request = self.client.system_update_start();
         if let Some(value) = matches.get_one::<types::SemverVersion>("version") {
             request = request.body_map(|body| body.version(value.clone()))
+        }
+
+        if matches.get_flag("json-body-template") {
+            let schema = schemars::schema_for!(types::SystemUpdateStart);
+            if let Some(body) = self.config.build_body_template(&schema)? {
+                println!("{}", serde_json::to_string_pretty(&body).unwrap());
+            }
+            return Ok(());
+        }
+
+        if matches.get_flag("json-body-schema") {
+            let schema = schemars::schema_for!(types::SystemUpdateStart);
+            print!("{}", progenitor_client::render_body_schema(&schema));
+            return Ok(());
         }
 
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
@@ -12561,6 +14306,20 @@ pub trait CliConfig {
     fn list_end_error<T>(&self, value: &Error<T>)
     where
         T: std::clone::Clone + schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
+    /// Produce the JSON body for `--json-body-template`. There is no
+    /// generic default: override this to launch an interactive body
+    /// builder for your CLI. Returning `None` prints nothing (e.g.
+    /// the user cancelled).
+    fn build_body_template(
+        &self,
+        _schema: &schemars::schema::RootSchema,
+    ) -> anyhow::Result<Option<serde_json::Value>> {
+        anyhow::bail!(
+            "--json-body-template requires an interactive body builder; override \
+             CliConfig::build_body_template to provide one"
+        )
+    }
+
     fn execute_disk_view_by_id(
         &self,
         matches: &::clap::ArgMatches,
