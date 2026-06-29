@@ -190,15 +190,31 @@ impl Generator {
             consumer: consumer_args,
         } = self.cli_method_args(method);
 
-        let about = method.summary.as_ref().map(|summary| {
+        // A clap command has two help fields, `about` and `long_about`. When
+        // both are set, `-h` (and the parent's subcommand listing) shows
+        // `about`, while `--help` shows `long_about`. The natural mapping --
+        // short summary into `about`, description into `long_about` -- exploits
+        // that to keep listings to one line, but it means `-h` and `--help`
+        // behave differently, and `-h` never shows the description, and
+        // `--help` is missing the summary.
+        //
+        // We instead merge summary and description into a single `about` and
+        // set no `long_about`. clap only diverges `-h` from `--help` when there
+        // is "long" content (a `long_about`, or an arg with `long_help`), so
+        // with only `about` set the two views render identically and always
+        // show the full prose. The downside is that the parent's subcommand
+        // listing prints this combined text untruncated, so multi-paragraph
+        // descriptions make for tall rows. On the other hand, a) in Nexus, long
+        // descriptions are relatively rare, and b) that information is useful
+        // even if it makes the listing less visually neat.
+        let about_text = match (&method.summary, &method.description) {
+            (Some(summary), Some(description)) => Some(format!("{summary}\n\n{description}")),
+            (Some(text), None) | (None, Some(text)) => Some(text.clone()),
+            (None, None) => None,
+        };
+        let about = about_text.map(|about| {
             quote! {
-                .about(#summary)
-            }
-        });
-
-        let long_about = method.description.as_ref().map(|description| {
-            quote! {
-                .long_about(#description)
+                .about(#about)
             }
         });
 
@@ -210,7 +226,6 @@ impl Generator {
                 ::clap::Command::new("")
                 #parser_args
                 #about
-                #long_about
             }
         };
 

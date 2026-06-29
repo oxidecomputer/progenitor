@@ -32,7 +32,7 @@ impl<T: CliConfig> Cli<T> {
                     .required(false)
                     .help("A key parameter that will not be overridden by the path spec"),
             )
-            .long_about("Gets a key")
+            .about("Gets a key")
     }
 
     pub async fn execute(
