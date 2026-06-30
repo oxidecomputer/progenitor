@@ -64,12 +64,6 @@ pub mod types {
         pub name: ::std::string::String,
     }
 
-    impl ::std::convert::From<&UploadForm> for UploadForm {
-        fn from(value: &UploadForm) -> Self {
-            value.clone()
-        }
-    }
-
     impl UploadForm {
         /// Convert this form into an iterator of `(field_name, field_value)`
         /// pairs

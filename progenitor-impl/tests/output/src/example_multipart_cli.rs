@@ -127,4 +127,10 @@ impl CliCommand {
     pub fn iter() -> impl Iterator<Item = CliCommand> {
         vec![CliCommand::Upload].into_iter()
     }
+
+    pub fn operation_id(&self) -> &'static str {
+        match self {
+            CliCommand::Upload => "upload",
+        }
+    }
 }

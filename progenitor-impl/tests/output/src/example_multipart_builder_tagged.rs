@@ -64,12 +64,6 @@ pub mod types {
         pub name: ::std::string::String,
     }
 
-    impl ::std::convert::From<&UploadForm> for UploadForm {
-        fn from(value: &UploadForm) -> Self {
-            value.clone()
-        }
-    }
-
     impl UploadForm {
         pub fn builder() -> builder::UploadForm {
             Default::default()
@@ -101,7 +95,7 @@ pub mod types {
             {
                 self.file = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for file: {}", e));
+                    .map_err(|e| format!("error converting supplied value for file: {e}"));
                 self
             }
             pub fn name<T>(mut self, value: T) -> Self
@@ -111,7 +105,7 @@ pub mod types {
             {
                 self.name = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for name: {}", e));
+                    .map_err(|e| format!("error converting supplied value for name: {e}"));
                 self
             }
         }
