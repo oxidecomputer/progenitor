@@ -68,12 +68,6 @@ pub mod types {
         pub message: ::std::string::String,
         pub request_id: ::std::string::String,
     }
-
-    impl ::std::convert::From<&Error> for Error {
-        fn from(value: &Error) -> Self {
-            value.clone()
-        }
-    }
 }
 
 #[derive(Clone, Debug)]

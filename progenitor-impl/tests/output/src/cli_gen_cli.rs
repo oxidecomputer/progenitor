@@ -116,4 +116,10 @@ impl CliCommand {
     pub fn iter() -> impl Iterator<Item = CliCommand> {
         vec![CliCommand::Uno].into_iter()
     }
+
+    pub fn operation_id(&self) -> &'static str {
+        match self {
+            CliCommand::Uno => "uno",
+        }
+    }
 }

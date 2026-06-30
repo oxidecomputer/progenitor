@@ -69,12 +69,6 @@ pub mod types {
         pub request_id: ::std::string::String,
     }
 
-    impl ::std::convert::From<&Error> for Error {
-        fn from(value: &Error) -> Self {
-            value.clone()
-        }
-    }
-
     ///A single page of results
     ///
     /// <details><summary>JSON schema</summary>
@@ -115,12 +109,6 @@ pub mod types {
         ///token used to fetch the next page of results (if any)
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         pub next_page: ::std::option::Option<::std::string::String>,
-    }
-
-    impl ::std::convert::From<&Uint32ResultsPage> for Uint32ResultsPage {
-        fn from(value: &Uint32ResultsPage) -> Self {
-            value.clone()
-        }
     }
 }
 

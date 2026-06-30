@@ -59,12 +59,6 @@ pub mod types {
         pub gateway: ::std::option::Option<::std::string::String>,
         pub required: ::serde_json::Value,
     }
-
-    impl ::std::convert::From<&UnoBody> for UnoBody {
-        fn from(value: &UnoBody) -> Self {
-            value.clone()
-        }
-    }
 }
 
 #[derive(Clone, Debug)]

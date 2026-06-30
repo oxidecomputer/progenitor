@@ -279,7 +279,8 @@ impl<T: CliConfig> Cli<T> {
                 todo!()
             }
             Err(r) => {
-                todo!()
+                self.config.error(&r);
+                Err(anyhow::Error::new(r))
             }
         }
     }
@@ -318,7 +319,7 @@ impl<T: CliConfig> Cli<T> {
     ) -> anyhow::Result<()> {
         let mut request = self.client.instance_state_monitor();
         if let Some(value) = matches.get_one::<u64>("gen") {
-            request = request.body_map(|body| body.gen(value.clone()))
+            request = request.body_map(|body| body.gen_(value.clone()))
         }
 
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
@@ -445,5 +446,19 @@ impl CliCommand {
             CliCommand::InstanceStateMonitor,
         ]
         .into_iter()
+    }
+
+    pub fn operation_id(&self) -> &'static str {
+        match self {
+            CliCommand::InstanceGet => "instance_get",
+            CliCommand::InstanceEnsure => "instance_ensure",
+            CliCommand::InstanceIssueCrucibleSnapshotRequest => {
+                "instance_issue_crucible_snapshot_request"
+            }
+            CliCommand::InstanceMigrateStatus => "instance_migrate_status",
+            CliCommand::InstanceSerial => "instance_serial",
+            CliCommand::InstanceStatePut => "instance_state_put",
+            CliCommand::InstanceStateMonitor => "instance_state_monitor",
+        }
     }
 }

@@ -4402,12 +4402,89 @@ pub mod operations {
             self.0
         }
 
-        pub fn default_response(self, status: u16) -> Self {
-            Self(self.0.status(status))
+        pub fn switching_protocols(self) -> Self {
+            Self(self.0.status(101u16))
+        }
+    }
+
+    pub struct InstanceSerialConsoleStreamV2When(::httpmock::When);
+    impl InstanceSerialConsoleStreamV2When {
+        pub fn new(inner: ::httpmock::When) -> Self {
+            Self(
+                inner.method(::httpmock::Method::GET).path_matches(
+                    regex::Regex::new(
+                        "^/organizations/[^/]*/projects/[^/]*/instances/[^/]*/serial-console/\
+                         stream_v2$",
+                    )
+                    .unwrap(),
+                ),
+            )
+        }
+
+        pub fn into_inner(self) -> ::httpmock::When {
+            self.0
+        }
+
+        pub fn organization_name(self, value: &types::Name) -> Self {
+            let re = regex::Regex::new(&format!(
+                "^/organizations/{}/projects/.*/instances/.*/serial-console/stream_v2$",
+                value.to_string()
+            ))
+            .unwrap();
+            Self(self.0.path_matches(re))
+        }
+
+        pub fn project_name(self, value: &types::Name) -> Self {
+            let re = regex::Regex::new(&format!(
+                "^/organizations/.*/projects/{}/instances/.*/serial-console/stream_v2$",
+                value.to_string()
+            ))
+            .unwrap();
+            Self(self.0.path_matches(re))
+        }
+
+        pub fn instance_name(self, value: &types::Name) -> Self {
+            let re = regex::Regex::new(&format!(
+                "^/organizations/.*/projects/.*/instances/{}/serial-console/stream_v2$",
+                value.to_string()
+            ))
+            .unwrap();
+            Self(self.0.path_matches(re))
+        }
+    }
+
+    pub struct InstanceSerialConsoleStreamV2Then(::httpmock::Then);
+    impl InstanceSerialConsoleStreamV2Then {
+        pub fn new(inner: ::httpmock::Then) -> Self {
+            Self(inner)
+        }
+
+        pub fn into_inner(self) -> ::httpmock::Then {
+            self.0
         }
 
         pub fn switching_protocols(self) -> Self {
             Self(self.0.status(101u16))
+        }
+
+        pub fn client_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 4u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn server_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 5u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
         }
     }
 
@@ -12925,12 +13002,28 @@ pub mod operations {
             self.0
         }
 
-        pub fn default_response(self, status: u16) -> Self {
-            Self(self.0.status(status))
-        }
-
         pub fn switching_protocols(self) -> Self {
             Self(self.0.status(101u16))
+        }
+
+        pub fn client_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 4u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn server_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 5u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
         }
     }
 
@@ -14950,6 +15043,12 @@ pub trait MockServerExt {
             operations::InstanceSerialConsoleStreamWhen,
             operations::InstanceSerialConsoleStreamThen,
         );
+    fn instance_serial_console_stream_v2<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
+    where
+        F: FnOnce(
+            operations::InstanceSerialConsoleStreamV2When,
+            operations::InstanceSerialConsoleStreamV2Then,
+        );
     fn instance_start<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceStartWhen, operations::InstanceStartThen);
@@ -16101,6 +16200,21 @@ impl MockServerExt for ::httpmock::MockServer {
             config_fn(
                 operations::InstanceSerialConsoleStreamWhen::new(when),
                 operations::InstanceSerialConsoleStreamThen::new(then),
+            )
+        })
+    }
+
+    fn instance_serial_console_stream_v2<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
+    where
+        F: FnOnce(
+            operations::InstanceSerialConsoleStreamV2When,
+            operations::InstanceSerialConsoleStreamV2Then,
+        ),
+    {
+        self.mock(|when, then| {
+            config_fn(
+                operations::InstanceSerialConsoleStreamV2When::new(when),
+                operations::InstanceSerialConsoleStreamV2Then::new(then),
             )
         })
     }

@@ -1145,4 +1145,30 @@ impl CliCommand {
         ]
         .into_iter()
     }
+
+    pub fn operation_id(&self) -> &'static str {
+        match self {
+            CliCommand::ControlHold => "control_hold",
+            CliCommand::ControlResume => "control_resume",
+            CliCommand::TaskGet => "task_get",
+            CliCommand::TasksGet => "tasks_get",
+            CliCommand::TaskSubmit => "task_submit",
+            CliCommand::TaskEventsGet => "task_events_get",
+            CliCommand::TaskOutputsGet => "task_outputs_get",
+            CliCommand::TaskOutputDownload => "task_output_download",
+            CliCommand::UserCreate => "user_create",
+            CliCommand::Whoami => "whoami",
+            CliCommand::WhoamiPutName => "whoami_put_name",
+            CliCommand::WorkerBootstrap => "worker_bootstrap",
+            CliCommand::WorkerPing => "worker_ping",
+            CliCommand::WorkerTaskAppend => "worker_task_append",
+            CliCommand::WorkerTaskUploadChunk => "worker_task_upload_chunk",
+            CliCommand::WorkerTaskComplete => "worker_task_complete",
+            CliCommand::WorkerTaskAddOutput => "worker_task_add_output",
+            CliCommand::WorkersList => "workers_list",
+            CliCommand::WorkersRecycle => "workers_recycle",
+            CliCommand::GetThingOrThings => "get_thing_or_things",
+            CliCommand::HeaderArg => "header_arg",
+        }
+    }
 }

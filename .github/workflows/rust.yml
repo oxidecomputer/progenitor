@@ -34,15 +34,18 @@ jobs:
     strategy:
       matrix:
         os: [ ubuntu-latest, windows-latest, macos-latest ]
+        # The first version is the MSRV.
+        rust-version: [ "1.88", stable ]
     steps:
     - uses: actions/checkout@v4
     - name: Install nightly rustfmt
       uses: dtolnay/rust-toolchain@nightly
       with:
         components: rustfmt
-    - name: Install stable
-      uses: dtolnay/rust-toolchain@stable
+    - name: Install Rust
+      uses: dtolnay/rust-toolchain@master
       with:
+        toolchain: ${{ matrix.rust-version }}
         components: rustfmt
     - name: Build
       run: cargo build --locked --tests --verbose
@@ -69,8 +72,11 @@ jobs:
         components: rustfmt
         target: wasm32-unknown-unknown
     - uses: nanasess/setup-chromedriver@v2
-    - name: Install wasm-bindgen-cli
-      run: cargo install --version 0.2.104 wasm-bindgen-cli
+    - name: Install matching wasm-bindgen-cli
+      run: |
+        VERSION=$(cargo metadata --format-version 1 \
+          | jq -r '.packages[] | select(.name=="wasm-bindgen") | .version')
+        cargo install --version "$VERSION" wasm-bindgen-cli
     - name: Run tests
       run: |
         cd example-wasm

@@ -64,12 +64,6 @@ pub mod types {
         pub key: ::std::string::String,
     }
 
-    impl ::std::convert::From<&EnrolBody> for EnrolBody {
-        fn from(value: &EnrolBody) -> Self {
-            value.clone()
-        }
-    }
-
     ///`GlobalJobsResult`
     ///
     /// <details><summary>JSON schema</summary>
@@ -95,12 +89,6 @@ pub mod types {
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct GlobalJobsResult {
         pub summary: ::std::vec::Vec<ReportSummary>,
-    }
-
-    impl ::std::convert::From<&GlobalJobsResult> for GlobalJobsResult {
-        fn from(value: &GlobalJobsResult) -> Self {
-            value.clone()
-        }
     }
 
     ///`OutputRecord`
@@ -137,12 +125,6 @@ pub mod types {
         pub time: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
-    impl ::std::convert::From<&OutputRecord> for OutputRecord {
-        fn from(value: &OutputRecord) -> Self {
-            value.clone()
-        }
-    }
-
     ///`PingResult`
     ///
     /// <details><summary>JSON schema</summary>
@@ -170,12 +152,6 @@ pub mod types {
     pub struct PingResult {
         pub host: ::std::string::String,
         pub ok: bool,
-    }
-
-    impl ::std::convert::From<&PingResult> for PingResult {
-        fn from(value: &PingResult) -> Self {
-            value.clone()
-        }
     }
 
     ///`ReportFinishBody`
@@ -218,12 +194,6 @@ pub mod types {
         pub end_time: ::chrono::DateTime<::chrono::offset::Utc>,
         pub exit_status: i32,
         pub id: ReportId,
-    }
-
-    impl ::std::convert::From<&ReportFinishBody> for ReportFinishBody {
-        fn from(value: &ReportFinishBody) -> Self {
-            value.clone()
-        }
     }
 
     ///`ReportId`
@@ -272,12 +242,6 @@ pub mod types {
         pub uuid: ::std::string::String,
     }
 
-    impl ::std::convert::From<&ReportId> for ReportId {
-        fn from(value: &ReportId) -> Self {
-            value.clone()
-        }
-    }
-
     ///`ReportOutputBody`
     ///
     /// <details><summary>JSON schema</summary>
@@ -307,12 +271,6 @@ pub mod types {
         pub record: OutputRecord,
     }
 
-    impl ::std::convert::From<&ReportOutputBody> for ReportOutputBody {
-        fn from(value: &ReportOutputBody) -> Self {
-            value.clone()
-        }
-    }
-
     ///`ReportResult`
     ///
     /// <details><summary>JSON schema</summary>
@@ -335,12 +293,6 @@ pub mod types {
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct ReportResult {
         pub existed_already: bool,
-    }
-
-    impl ::std::convert::From<&ReportResult> for ReportResult {
-        fn from(value: &ReportResult) -> Self {
-            value.clone()
-        }
     }
 
     ///`ReportStartBody`
@@ -376,12 +328,6 @@ pub mod types {
         pub id: ReportId,
         pub script: ::std::string::String,
         pub start_time: ::chrono::DateTime<::chrono::offset::Utc>,
-    }
-
-    impl ::std::convert::From<&ReportStartBody> for ReportStartBody {
-        fn from(value: &ReportStartBody) -> Self {
-            value.clone()
-        }
     }
 
     ///`ReportSummary`
@@ -434,12 +380,6 @@ pub mod types {
         pub job: ::std::string::String,
         pub status: i32,
         pub when: ::chrono::DateTime<::chrono::offset::Utc>,
-    }
-
-    impl ::std::convert::From<&ReportSummary> for ReportSummary {
-        fn from(value: &ReportSummary) -> Self {
-            value.clone()
-        }
     }
 }
 

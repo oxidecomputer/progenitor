@@ -81,12 +81,6 @@ pub mod types {
         pub yes: bool,
     }
 
-    impl ::std::convert::From<&BodyWithDefaults> for BodyWithDefaults {
-        fn from(value: &BodyWithDefaults) -> Self {
-            value.clone()
-        }
-    }
-
     impl BodyWithDefaults {
         pub fn builder() -> builder::BodyWithDefaults {
             Default::default()
@@ -122,7 +116,7 @@ pub mod types {
             {
                 self.forty_two = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for forty_two: {}", e));
+                    .map_err(|e| format!("error converting supplied value for forty_two: {e}"));
                 self
             }
             pub fn s<T>(mut self, value: T) -> Self
@@ -132,7 +126,7 @@ pub mod types {
             {
                 self.s = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for s: {}", e));
+                    .map_err(|e| format!("error converting supplied value for s: {e}"));
                 self
             }
             pub fn something<T>(mut self, value: T) -> Self
@@ -142,7 +136,7 @@ pub mod types {
             {
                 self.something = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for something: {}", e));
+                    .map_err(|e| format!("error converting supplied value for something: {e}"));
                 self
             }
             pub fn yes<T>(mut self, value: T) -> Self
@@ -152,7 +146,7 @@ pub mod types {
             {
                 self.yes = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for yes: {}", e));
+                    .map_err(|e| format!("error converting supplied value for yes: {e}"));
                 self
             }
         }

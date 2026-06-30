@@ -4,16 +4,17 @@
 
 use openapiv3::OpenAPI;
 use proc_macro2::TokenStream;
-use quote::{format_ident, quote, ToTokens};
+use quote::{ToTokens, format_ident, quote};
 
 use crate::{
+    Generator, Result,
     method::{
         BodyContentType, HttpMethod, OperationParameter, OperationParameterKind,
         OperationParameterType, OperationResponse, OperationResponseStatus,
     },
     to_schema::ToSchema,
-    util::{sanitize, Case},
-    validate_openapi, Generator, Result,
+    util::{Case, sanitize},
+    validate_openapi,
 };
 
 struct MockOp {

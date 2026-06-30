@@ -2,16 +2,17 @@
 name = "example-build"
 version = "0.0.1"
 authors = ["Adam H. Leventhal <ahl@oxidecomputer.com>"]
-edition = "2021"
+edition.workspace = true
+rust-version.workspace = true
 
 [dependencies]
 chrono = { version = "0.4", features = ["serde"] }
 progenitor-client = { path = "../progenitor-client" }
-reqwest = { version = "0.12.28", features = ["json", "stream"] }
+reqwest = { version = "0.13.4", features = ["json", "query", "stream"] }
 base64 = "0.22"
-rand = "0.9"
+rand = "0.10"
 serde = { version = "1.0", features = ["derive"] }
-uuid = { version = "1.19", features = ["serde", "v4"] }
+uuid = { version = "1.23", features = ["serde", "v4"] }
 
 [build-dependencies]
 prettyplease = "0.2.37"

@@ -151,7 +151,7 @@ fn main() -> Result<()> {
                 "[package]\n\
                 name = \"{}\"\n\
                 version = \"{}\"\n\
-                edition = \"2021\"\n\
+                edition = \"2024\"\n\
                 license = \"{}\"\n",
                 name, version, &args.license_name,
             );
@@ -232,7 +232,7 @@ static DEPENDENCIES: Dependencies = Dependencies {
     percent_encoding: "2.3",
     rand: "0.8",
     regress: "0.10",
-    reqwest: "0.12",
+    reqwest: "0.13",
     serde: "1.0",
     serde_json: "1.0",
     serde_urlencoded: "0.7",

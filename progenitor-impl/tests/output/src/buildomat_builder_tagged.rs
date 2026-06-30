@@ -62,12 +62,6 @@ pub mod types {
         Array(::std::vec::Vec<::std::string::String>),
     }
 
-    impl ::std::convert::From<&Self> for GetThingOrThingsId {
-        fn from(value: &GetThingOrThingsId) -> Self {
-            value.clone()
-        }
-    }
-
     impl ::std::convert::From<::std::vec::Vec<::std::string::String>> for GetThingOrThingsId {
         fn from(value: ::std::vec::Vec<::std::string::String>) -> Self {
             Self::Array(value)
@@ -106,12 +100,6 @@ pub mod types {
         De,
         #[serde(rename = "en")]
         En,
-    }
-
-    impl ::std::convert::From<&Self> for HeaderArgAcceptLanguage {
-        fn from(value: &HeaderArgAcceptLanguage) -> Self {
-            value.clone()
-        }
     }
 
     impl ::std::fmt::Display for HeaderArgAcceptLanguage {
@@ -225,12 +213,6 @@ pub mod types {
         pub things: ::std::vec::Vec<::std::option::Option<Task>>,
     }
 
-    impl ::std::convert::From<&ObjWithOptionArray> for ObjWithOptionArray {
-        fn from(value: &ObjWithOptionArray) -> Self {
-            value.clone()
-        }
-    }
-
     impl ObjWithOptionArray {
         pub fn builder() -> builder::ObjWithOptionArray {
             Default::default()
@@ -283,12 +265,6 @@ pub mod types {
         pub state: ::std::string::String,
     }
 
-    impl ::std::convert::From<&Task> for Task {
-        fn from(value: &Task) -> Self {
-            value.clone()
-        }
-    }
-
     impl Task {
         pub fn builder() -> builder::Task {
             Default::default()
@@ -336,12 +312,6 @@ pub mod types {
         pub time: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
-    impl ::std::convert::From<&TaskEvent> for TaskEvent {
-        fn from(value: &TaskEvent) -> Self {
-            value.clone()
-        }
-    }
-
     impl TaskEvent {
         pub fn builder() -> builder::TaskEvent {
             Default::default()
@@ -381,12 +351,6 @@ pub mod types {
         pub id: ::std::string::String,
         pub path: ::std::string::String,
         pub size: u64,
-    }
-
-    impl ::std::convert::From<&TaskOutput> for TaskOutput {
-        fn from(value: &TaskOutput) -> Self {
-            value.clone()
-        }
     }
 
     impl TaskOutput {
@@ -436,12 +400,6 @@ pub mod types {
         pub script: ::std::string::String,
     }
 
-    impl ::std::convert::From<&TaskSubmit> for TaskSubmit {
-        fn from(value: &TaskSubmit) -> Self {
-            value.clone()
-        }
-    }
-
     impl TaskSubmit {
         pub fn builder() -> builder::TaskSubmit {
             Default::default()
@@ -469,12 +427,6 @@ pub mod types {
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct TaskSubmitResult {
         pub id: ::std::string::String,
-    }
-
-    impl ::std::convert::From<&TaskSubmitResult> for TaskSubmitResult {
-        fn from(value: &TaskSubmitResult) -> Self {
-            value.clone()
-        }
     }
 
     impl TaskSubmitResult {
@@ -506,12 +458,6 @@ pub mod types {
         pub id: ::std::string::String,
     }
 
-    impl ::std::convert::From<&UploadedChunk> for UploadedChunk {
-        fn from(value: &UploadedChunk) -> Self {
-            value.clone()
-        }
-    }
-
     impl UploadedChunk {
         pub fn builder() -> builder::UploadedChunk {
             Default::default()
@@ -539,12 +485,6 @@ pub mod types {
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct UserCreate {
         pub name: ::std::string::String,
-    }
-
-    impl ::std::convert::From<&UserCreate> for UserCreate {
-        fn from(value: &UserCreate) -> Self {
-            value.clone()
-        }
     }
 
     impl UserCreate {
@@ -586,12 +526,6 @@ pub mod types {
         pub token: ::std::string::String,
     }
 
-    impl ::std::convert::From<&UserCreateResult> for UserCreateResult {
-        fn from(value: &UserCreateResult) -> Self {
-            value.clone()
-        }
-    }
-
     impl UserCreateResult {
         pub fn builder() -> builder::UserCreateResult {
             Default::default()
@@ -624,12 +558,6 @@ pub mod types {
     pub struct WhoamiResult {
         pub id: ::std::string::String,
         pub name: ::std::string::String,
-    }
-
-    impl ::std::convert::From<&WhoamiResult> for WhoamiResult {
-        fn from(value: &WhoamiResult) -> Self {
-            value.clone()
-        }
     }
 
     impl WhoamiResult {
@@ -690,12 +618,6 @@ pub mod types {
         pub tasks: ::std::vec::Vec<WorkerTask>,
     }
 
-    impl ::std::convert::From<&Worker> for Worker {
-        fn from(value: &Worker) -> Self {
-            value.clone()
-        }
-    }
-
     impl Worker {
         pub fn builder() -> builder::Worker {
             Default::default()
@@ -739,12 +661,6 @@ pub mod types {
         pub size: i64,
     }
 
-    impl ::std::convert::From<&WorkerAddOutput> for WorkerAddOutput {
-        fn from(value: &WorkerAddOutput) -> Self {
-            value.clone()
-        }
-    }
-
     impl WorkerAddOutput {
         pub fn builder() -> builder::WorkerAddOutput {
             Default::default()
@@ -785,12 +701,6 @@ pub mod types {
         pub time: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
-    impl ::std::convert::From<&WorkerAppendTask> for WorkerAppendTask {
-        fn from(value: &WorkerAppendTask) -> Self {
-            value.clone()
-        }
-    }
-
     impl WorkerAppendTask {
         pub fn builder() -> builder::WorkerAppendTask {
             Default::default()
@@ -825,12 +735,6 @@ pub mod types {
         pub token: ::std::string::String,
     }
 
-    impl ::std::convert::From<&WorkerBootstrap> for WorkerBootstrap {
-        fn from(value: &WorkerBootstrap) -> Self {
-            value.clone()
-        }
-    }
-
     impl WorkerBootstrap {
         pub fn builder() -> builder::WorkerBootstrap {
             Default::default()
@@ -860,12 +764,6 @@ pub mod types {
         pub id: ::std::string::String,
     }
 
-    impl ::std::convert::From<&WorkerBootstrapResult> for WorkerBootstrapResult {
-        fn from(value: &WorkerBootstrapResult) -> Self {
-            value.clone()
-        }
-    }
-
     impl WorkerBootstrapResult {
         pub fn builder() -> builder::WorkerBootstrapResult {
             Default::default()
@@ -893,12 +791,6 @@ pub mod types {
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct WorkerCompleteTask {
         pub failed: bool,
-    }
-
-    impl ::std::convert::From<&WorkerCompleteTask> for WorkerCompleteTask {
-        fn from(value: &WorkerCompleteTask) -> Self {
-            value.clone()
-        }
     }
 
     impl WorkerCompleteTask {
@@ -933,12 +825,6 @@ pub mod types {
         pub poweroff: bool,
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         pub task: ::std::option::Option<WorkerPingTask>,
-    }
-
-    impl ::std::convert::From<&WorkerPingResult> for WorkerPingResult {
-        fn from(value: &WorkerPingResult) -> Self {
-            value.clone()
-        }
     }
 
     impl WorkerPingResult {
@@ -983,12 +869,6 @@ pub mod types {
         pub script: ::std::string::String,
     }
 
-    impl ::std::convert::From<&WorkerPingTask> for WorkerPingTask {
-        fn from(value: &WorkerPingTask) -> Self {
-            value.clone()
-        }
-    }
-
     impl WorkerPingTask {
         pub fn builder() -> builder::WorkerPingTask {
             Default::default()
@@ -1028,12 +908,6 @@ pub mod types {
         pub owner: ::std::string::String,
     }
 
-    impl ::std::convert::From<&WorkerTask> for WorkerTask {
-        fn from(value: &WorkerTask) -> Self {
-            value.clone()
-        }
-    }
-
     impl WorkerTask {
         pub fn builder() -> builder::WorkerTask {
             Default::default()
@@ -1064,12 +938,6 @@ pub mod types {
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct WorkersResult {
         pub workers: ::std::vec::Vec<Worker>,
-    }
-
-    impl ::std::convert::From<&WorkersResult> for WorkersResult {
-        fn from(value: &WorkersResult) -> Self {
-            value.clone()
-        }
     }
 
     impl WorkersResult {
@@ -1108,7 +976,7 @@ pub mod types {
                 T::Error: ::std::fmt::Display,
             {
                 self.stranger_things = value.try_into().map_err(|e| {
-                    format!("error converting supplied value for stranger_things: {}", e)
+                    format!("error converting supplied value for stranger_things: {e}")
                 });
                 self
             }
@@ -1119,7 +987,7 @@ pub mod types {
             {
                 self.things = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for things: {}", e));
+                    .map_err(|e| format!("error converting supplied value for things: {e}"));
                 self
             }
         }
@@ -1177,7 +1045,7 @@ pub mod types {
             {
                 self.id = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for id: {}", e));
+                    .map_err(|e| format!("error converting supplied value for id: {e}"));
                 self
             }
             pub fn name<T>(mut self, value: T) -> Self
@@ -1187,7 +1055,7 @@ pub mod types {
             {
                 self.name = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for name: {}", e));
+                    .map_err(|e| format!("error converting supplied value for name: {e}"));
                 self
             }
             pub fn output_rules<T>(mut self, value: T) -> Self
@@ -1195,9 +1063,9 @@ pub mod types {
                 T: ::std::convert::TryInto<::std::vec::Vec<::std::string::String>>,
                 T::Error: ::std::fmt::Display,
             {
-                self.output_rules = value.try_into().map_err(|e| {
-                    format!("error converting supplied value for output_rules: {}", e)
-                });
+                self.output_rules = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for output_rules: {e}"));
                 self
             }
             pub fn script<T>(mut self, value: T) -> Self
@@ -1207,7 +1075,7 @@ pub mod types {
             {
                 self.script = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for script: {}", e));
+                    .map_err(|e| format!("error converting supplied value for script: {e}"));
                 self
             }
             pub fn state<T>(mut self, value: T) -> Self
@@ -1217,7 +1085,7 @@ pub mod types {
             {
                 self.state = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for state: {}", e));
+                    .map_err(|e| format!("error converting supplied value for state: {e}"));
                 self
             }
         }
@@ -1277,7 +1145,7 @@ pub mod types {
             {
                 self.payload = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for payload: {}", e));
+                    .map_err(|e| format!("error converting supplied value for payload: {e}"));
                 self
             }
             pub fn seq<T>(mut self, value: T) -> Self
@@ -1287,7 +1155,7 @@ pub mod types {
             {
                 self.seq = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for seq: {}", e));
+                    .map_err(|e| format!("error converting supplied value for seq: {e}"));
                 self
             }
             pub fn stream<T>(mut self, value: T) -> Self
@@ -1297,7 +1165,7 @@ pub mod types {
             {
                 self.stream = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for stream: {}", e));
+                    .map_err(|e| format!("error converting supplied value for stream: {e}"));
                 self
             }
             pub fn time<T>(mut self, value: T) -> Self
@@ -1307,7 +1175,7 @@ pub mod types {
             {
                 self.time = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for time: {}", e));
+                    .map_err(|e| format!("error converting supplied value for time: {e}"));
                 self
             }
         }
@@ -1362,7 +1230,7 @@ pub mod types {
             {
                 self.id = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for id: {}", e));
+                    .map_err(|e| format!("error converting supplied value for id: {e}"));
                 self
             }
             pub fn path<T>(mut self, value: T) -> Self
@@ -1372,7 +1240,7 @@ pub mod types {
             {
                 self.path = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for path: {}", e));
+                    .map_err(|e| format!("error converting supplied value for path: {e}"));
                 self
             }
             pub fn size<T>(mut self, value: T) -> Self
@@ -1382,7 +1250,7 @@ pub mod types {
             {
                 self.size = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for size: {}", e));
+                    .map_err(|e| format!("error converting supplied value for size: {e}"));
                 self
             }
         }
@@ -1440,7 +1308,7 @@ pub mod types {
             {
                 self.default = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for default: {}", e));
+                    .map_err(|e| format!("error converting supplied value for default: {e}"));
                 self
             }
             pub fn name<T>(mut self, value: T) -> Self
@@ -1450,7 +1318,7 @@ pub mod types {
             {
                 self.name = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for name: {}", e));
+                    .map_err(|e| format!("error converting supplied value for name: {e}"));
                 self
             }
             pub fn output_rules<T>(mut self, value: T) -> Self
@@ -1458,9 +1326,9 @@ pub mod types {
                 T: ::std::convert::TryInto<::std::vec::Vec<::std::string::String>>,
                 T::Error: ::std::fmt::Display,
             {
-                self.output_rules = value.try_into().map_err(|e| {
-                    format!("error converting supplied value for output_rules: {}", e)
-                });
+                self.output_rules = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for output_rules: {e}"));
                 self
             }
             pub fn script<T>(mut self, value: T) -> Self
@@ -1470,7 +1338,7 @@ pub mod types {
             {
                 self.script = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for script: {}", e));
+                    .map_err(|e| format!("error converting supplied value for script: {e}"));
                 self
             }
         }
@@ -1521,7 +1389,7 @@ pub mod types {
             {
                 self.id = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for id: {}", e));
+                    .map_err(|e| format!("error converting supplied value for id: {e}"));
                 self
             }
         }
@@ -1562,7 +1430,7 @@ pub mod types {
             {
                 self.id = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for id: {}", e));
+                    .map_err(|e| format!("error converting supplied value for id: {e}"));
                 self
             }
         }
@@ -1603,7 +1471,7 @@ pub mod types {
             {
                 self.name = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for name: {}", e));
+                    .map_err(|e| format!("error converting supplied value for name: {e}"));
                 self
             }
         }
@@ -1650,7 +1518,7 @@ pub mod types {
             {
                 self.id = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for id: {}", e));
+                    .map_err(|e| format!("error converting supplied value for id: {e}"));
                 self
             }
             pub fn name<T>(mut self, value: T) -> Self
@@ -1660,7 +1528,7 @@ pub mod types {
             {
                 self.name = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for name: {}", e));
+                    .map_err(|e| format!("error converting supplied value for name: {e}"));
                 self
             }
             pub fn token<T>(mut self, value: T) -> Self
@@ -1670,7 +1538,7 @@ pub mod types {
             {
                 self.token = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for token: {}", e));
+                    .map_err(|e| format!("error converting supplied value for token: {e}"));
                 self
             }
         }
@@ -1721,7 +1589,7 @@ pub mod types {
             {
                 self.id = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for id: {}", e));
+                    .map_err(|e| format!("error converting supplied value for id: {e}"));
                 self
             }
             pub fn name<T>(mut self, value: T) -> Self
@@ -1731,7 +1599,7 @@ pub mod types {
             {
                 self.name = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for name: {}", e));
+                    .map_err(|e| format!("error converting supplied value for name: {e}"));
                 self
             }
         }
@@ -1794,7 +1662,7 @@ pub mod types {
             {
                 self.deleted = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for deleted: {}", e));
+                    .map_err(|e| format!("error converting supplied value for deleted: {e}"));
                 self
             }
             pub fn id<T>(mut self, value: T) -> Self
@@ -1804,7 +1672,7 @@ pub mod types {
             {
                 self.id = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for id: {}", e));
+                    .map_err(|e| format!("error converting supplied value for id: {e}"));
                 self
             }
             pub fn instance_id<T>(mut self, value: T) -> Self
@@ -1814,7 +1682,7 @@ pub mod types {
             {
                 self.instance_id = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for instance_id: {}", e));
+                    .map_err(|e| format!("error converting supplied value for instance_id: {e}"));
                 self
             }
             pub fn lastping<T>(mut self, value: T) -> Self
@@ -1826,7 +1694,7 @@ pub mod types {
             {
                 self.lastping = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for lastping: {}", e));
+                    .map_err(|e| format!("error converting supplied value for lastping: {e}"));
                 self
             }
             pub fn recycle<T>(mut self, value: T) -> Self
@@ -1836,7 +1704,7 @@ pub mod types {
             {
                 self.recycle = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for recycle: {}", e));
+                    .map_err(|e| format!("error converting supplied value for recycle: {e}"));
                 self
             }
             pub fn tasks<T>(mut self, value: T) -> Self
@@ -1846,7 +1714,7 @@ pub mod types {
             {
                 self.tasks = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for tasks: {}", e));
+                    .map_err(|e| format!("error converting supplied value for tasks: {e}"));
                 self
             }
         }
@@ -1908,7 +1776,7 @@ pub mod types {
             {
                 self.chunks = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for chunks: {}", e));
+                    .map_err(|e| format!("error converting supplied value for chunks: {e}"));
                 self
             }
             pub fn path<T>(mut self, value: T) -> Self
@@ -1918,7 +1786,7 @@ pub mod types {
             {
                 self.path = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for path: {}", e));
+                    .map_err(|e| format!("error converting supplied value for path: {e}"));
                 self
             }
             pub fn size<T>(mut self, value: T) -> Self
@@ -1928,7 +1796,7 @@ pub mod types {
             {
                 self.size = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for size: {}", e));
+                    .map_err(|e| format!("error converting supplied value for size: {e}"));
                 self
             }
         }
@@ -1984,7 +1852,7 @@ pub mod types {
             {
                 self.payload = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for payload: {}", e));
+                    .map_err(|e| format!("error converting supplied value for payload: {e}"));
                 self
             }
             pub fn stream<T>(mut self, value: T) -> Self
@@ -1994,7 +1862,7 @@ pub mod types {
             {
                 self.stream = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for stream: {}", e));
+                    .map_err(|e| format!("error converting supplied value for stream: {e}"));
                 self
             }
             pub fn time<T>(mut self, value: T) -> Self
@@ -2004,7 +1872,7 @@ pub mod types {
             {
                 self.time = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for time: {}", e));
+                    .map_err(|e| format!("error converting supplied value for time: {e}"));
                 self
             }
         }
@@ -2055,7 +1923,7 @@ pub mod types {
             {
                 self.bootstrap = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for bootstrap: {}", e));
+                    .map_err(|e| format!("error converting supplied value for bootstrap: {e}"));
                 self
             }
             pub fn token<T>(mut self, value: T) -> Self
@@ -2065,7 +1933,7 @@ pub mod types {
             {
                 self.token = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for token: {}", e));
+                    .map_err(|e| format!("error converting supplied value for token: {e}"));
                 self
             }
         }
@@ -2112,7 +1980,7 @@ pub mod types {
             {
                 self.id = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for id: {}", e));
+                    .map_err(|e| format!("error converting supplied value for id: {e}"));
                 self
             }
         }
@@ -2153,7 +2021,7 @@ pub mod types {
             {
                 self.failed = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for failed: {}", e));
+                    .map_err(|e| format!("error converting supplied value for failed: {e}"));
                 self
             }
         }
@@ -2203,7 +2071,7 @@ pub mod types {
             {
                 self.poweroff = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for poweroff: {}", e));
+                    .map_err(|e| format!("error converting supplied value for poweroff: {e}"));
                 self
             }
             pub fn task<T>(mut self, value: T) -> Self
@@ -2213,7 +2081,7 @@ pub mod types {
             {
                 self.task = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for task: {}", e));
+                    .map_err(|e| format!("error converting supplied value for task: {e}"));
                 self
             }
         }
@@ -2267,7 +2135,7 @@ pub mod types {
             {
                 self.id = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for id: {}", e));
+                    .map_err(|e| format!("error converting supplied value for id: {e}"));
                 self
             }
             pub fn output_rules<T>(mut self, value: T) -> Self
@@ -2275,9 +2143,9 @@ pub mod types {
                 T: ::std::convert::TryInto<::std::vec::Vec<::std::string::String>>,
                 T::Error: ::std::fmt::Display,
             {
-                self.output_rules = value.try_into().map_err(|e| {
-                    format!("error converting supplied value for output_rules: {}", e)
-                });
+                self.output_rules = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for output_rules: {e}"));
                 self
             }
             pub fn script<T>(mut self, value: T) -> Self
@@ -2287,7 +2155,7 @@ pub mod types {
             {
                 self.script = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for script: {}", e));
+                    .map_err(|e| format!("error converting supplied value for script: {e}"));
                 self
             }
         }
@@ -2340,7 +2208,7 @@ pub mod types {
             {
                 self.id = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for id: {}", e));
+                    .map_err(|e| format!("error converting supplied value for id: {e}"));
                 self
             }
             pub fn name<T>(mut self, value: T) -> Self
@@ -2350,7 +2218,7 @@ pub mod types {
             {
                 self.name = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for name: {}", e));
+                    .map_err(|e| format!("error converting supplied value for name: {e}"));
                 self
             }
             pub fn owner<T>(mut self, value: T) -> Self
@@ -2360,7 +2228,7 @@ pub mod types {
             {
                 self.owner = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for owner: {}", e));
+                    .map_err(|e| format!("error converting supplied value for owner: {e}"));
                 self
             }
         }
@@ -2409,7 +2277,7 @@ pub mod types {
             {
                 self.workers = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for workers: {}", e));
+                    .map_err(|e| format!("error converting supplied value for workers: {e}"));
                 self
             }
         }

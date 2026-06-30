@@ -62,12 +62,6 @@ pub mod types {
         Array(::std::vec::Vec<::std::string::String>),
     }
 
-    impl ::std::convert::From<&Self> for GetThingOrThingsId {
-        fn from(value: &GetThingOrThingsId) -> Self {
-            value.clone()
-        }
-    }
-
     impl ::std::convert::From<::std::vec::Vec<::std::string::String>> for GetThingOrThingsId {
         fn from(value: ::std::vec::Vec<::std::string::String>) -> Self {
             Self::Array(value)
@@ -106,12 +100,6 @@ pub mod types {
         De,
         #[serde(rename = "en")]
         En,
-    }
-
-    impl ::std::convert::From<&Self> for HeaderArgAcceptLanguage {
-        fn from(value: &HeaderArgAcceptLanguage) -> Self {
-            value.clone()
-        }
     }
 
     impl ::std::fmt::Display for HeaderArgAcceptLanguage {
@@ -225,12 +213,6 @@ pub mod types {
         pub things: ::std::vec::Vec<::std::option::Option<Task>>,
     }
 
-    impl ::std::convert::From<&ObjWithOptionArray> for ObjWithOptionArray {
-        fn from(value: &ObjWithOptionArray) -> Self {
-            value.clone()
-        }
-    }
-
     ///`Task`
     ///
     /// <details><summary>JSON schema</summary>
@@ -277,12 +259,6 @@ pub mod types {
         pub state: ::std::string::String,
     }
 
-    impl ::std::convert::From<&Task> for Task {
-        fn from(value: &Task) -> Self {
-            value.clone()
-        }
-    }
-
     ///`TaskEvent`
     ///
     /// <details><summary>JSON schema</summary>
@@ -324,12 +300,6 @@ pub mod types {
         pub time: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
-    impl ::std::convert::From<&TaskEvent> for TaskEvent {
-        fn from(value: &TaskEvent) -> Self {
-            value.clone()
-        }
-    }
-
     ///`TaskOutput`
     ///
     /// <details><summary>JSON schema</summary>
@@ -363,12 +333,6 @@ pub mod types {
         pub id: ::std::string::String,
         pub path: ::std::string::String,
         pub size: u64,
-    }
-
-    impl ::std::convert::From<&TaskOutput> for TaskOutput {
-        fn from(value: &TaskOutput) -> Self {
-            value.clone()
-        }
     }
 
     ///`TaskSubmit`
@@ -412,12 +376,6 @@ pub mod types {
         pub script: ::std::string::String,
     }
 
-    impl ::std::convert::From<&TaskSubmit> for TaskSubmit {
-        fn from(value: &TaskSubmit) -> Self {
-            value.clone()
-        }
-    }
-
     ///`TaskSubmitResult`
     ///
     /// <details><summary>JSON schema</summary>
@@ -439,12 +397,6 @@ pub mod types {
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct TaskSubmitResult {
         pub id: ::std::string::String,
-    }
-
-    impl ::std::convert::From<&TaskSubmitResult> for TaskSubmitResult {
-        fn from(value: &TaskSubmitResult) -> Self {
-            value.clone()
-        }
     }
 
     ///`UploadedChunk`
@@ -470,12 +422,6 @@ pub mod types {
         pub id: ::std::string::String,
     }
 
-    impl ::std::convert::From<&UploadedChunk> for UploadedChunk {
-        fn from(value: &UploadedChunk) -> Self {
-            value.clone()
-        }
-    }
-
     ///`UserCreate`
     ///
     /// <details><summary>JSON schema</summary>
@@ -497,12 +443,6 @@ pub mod types {
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct UserCreate {
         pub name: ::std::string::String,
-    }
-
-    impl ::std::convert::From<&UserCreate> for UserCreate {
-        fn from(value: &UserCreate) -> Self {
-            value.clone()
-        }
     }
 
     ///`UserCreateResult`
@@ -538,12 +478,6 @@ pub mod types {
         pub token: ::std::string::String,
     }
 
-    impl ::std::convert::From<&UserCreateResult> for UserCreateResult {
-        fn from(value: &UserCreateResult) -> Self {
-            value.clone()
-        }
-    }
-
     ///`WhoamiResult`
     ///
     /// <details><summary>JSON schema</summary>
@@ -570,12 +504,6 @@ pub mod types {
     pub struct WhoamiResult {
         pub id: ::std::string::String,
         pub name: ::std::string::String,
-    }
-
-    impl ::std::convert::From<&WhoamiResult> for WhoamiResult {
-        fn from(value: &WhoamiResult) -> Self {
-            value.clone()
-        }
     }
 
     ///`Worker`
@@ -630,12 +558,6 @@ pub mod types {
         pub tasks: ::std::vec::Vec<WorkerTask>,
     }
 
-    impl ::std::convert::From<&Worker> for Worker {
-        fn from(value: &Worker) -> Self {
-            value.clone()
-        }
-    }
-
     ///`WorkerAddOutput`
     ///
     /// <details><summary>JSON schema</summary>
@@ -673,12 +595,6 @@ pub mod types {
         pub size: i64,
     }
 
-    impl ::std::convert::From<&WorkerAddOutput> for WorkerAddOutput {
-        fn from(value: &WorkerAddOutput) -> Self {
-            value.clone()
-        }
-    }
-
     ///`WorkerAppendTask`
     ///
     /// <details><summary>JSON schema</summary>
@@ -713,12 +629,6 @@ pub mod types {
         pub time: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
-    impl ::std::convert::From<&WorkerAppendTask> for WorkerAppendTask {
-        fn from(value: &WorkerAppendTask) -> Self {
-            value.clone()
-        }
-    }
-
     ///`WorkerBootstrap`
     ///
     /// <details><summary>JSON schema</summary>
@@ -747,12 +657,6 @@ pub mod types {
         pub token: ::std::string::String,
     }
 
-    impl ::std::convert::From<&WorkerBootstrap> for WorkerBootstrap {
-        fn from(value: &WorkerBootstrap) -> Self {
-            value.clone()
-        }
-    }
-
     ///`WorkerBootstrapResult`
     ///
     /// <details><summary>JSON schema</summary>
@@ -776,12 +680,6 @@ pub mod types {
         pub id: ::std::string::String,
     }
 
-    impl ::std::convert::From<&WorkerBootstrapResult> for WorkerBootstrapResult {
-        fn from(value: &WorkerBootstrapResult) -> Self {
-            value.clone()
-        }
-    }
-
     ///`WorkerCompleteTask`
     ///
     /// <details><summary>JSON schema</summary>
@@ -803,12 +701,6 @@ pub mod types {
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct WorkerCompleteTask {
         pub failed: bool,
-    }
-
-    impl ::std::convert::From<&WorkerCompleteTask> for WorkerCompleteTask {
-        fn from(value: &WorkerCompleteTask) -> Self {
-            value.clone()
-        }
     }
 
     ///`WorkerPingResult`
@@ -837,12 +729,6 @@ pub mod types {
         pub poweroff: bool,
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         pub task: ::std::option::Option<WorkerPingTask>,
-    }
-
-    impl ::std::convert::From<&WorkerPingResult> for WorkerPingResult {
-        fn from(value: &WorkerPingResult) -> Self {
-            value.clone()
-        }
     }
 
     ///`WorkerPingTask`
@@ -881,12 +767,6 @@ pub mod types {
         pub script: ::std::string::String,
     }
 
-    impl ::std::convert::From<&WorkerPingTask> for WorkerPingTask {
-        fn from(value: &WorkerPingTask) -> Self {
-            value.clone()
-        }
-    }
-
     ///`WorkerTask`
     ///
     /// <details><summary>JSON schema</summary>
@@ -920,12 +800,6 @@ pub mod types {
         pub owner: ::std::string::String,
     }
 
-    impl ::std::convert::From<&WorkerTask> for WorkerTask {
-        fn from(value: &WorkerTask) -> Self {
-            value.clone()
-        }
-    }
-
     ///`WorkersResult`
     ///
     /// <details><summary>JSON schema</summary>
@@ -950,12 +824,6 @@ pub mod types {
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct WorkersResult {
         pub workers: ::std::vec::Vec<Worker>,
-    }
-
-    impl ::std::convert::From<&WorkersResult> for WorkersResult {
-        fn from(value: &WorkersResult) -> Self {
-            value.clone()
-        }
     }
 }
 
