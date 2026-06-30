@@ -59,11 +59,3 @@ url = "2.5.7"
 unicode-ident = "1.0.22"
 uuid = { version = "1.19.0", features = ["serde", "v4"] }
 assert_matches = "1.5.0"
-
-#[patch."https://github.com/oxidecomputer/typify"]
-#typify = { path = "../typify/typify" }
-
-#[patch.crates-io]
-#serde_tokenstream = { path = "../serde_tokenstream" }
-#typify = { path = "../typify/typify" }
-#rustfmt-wrapper = { path = "../rustfmt-wrapper" }

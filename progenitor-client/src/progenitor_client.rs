@@ -931,11 +931,6 @@ where
 {
     fn form_urlencoded<T: Serialize + ?Sized>(self, body: &T) -> Result<RequestBuilder, Error<E>>;
 
-    fn form_from_raw<S: AsRef<str>, T: AsRef<[u8]>, I: Sized + IntoIterator<Item = (S, T)>>(
-        self,
-        iter: I,
-    ) -> Result<Self, Error<E>>;
-
     fn form_from_parts<S: AsRef<str>, I: Sized + IntoIterator<Item = (S, FormPart)>>(
         self,
         iter: I,
@@ -953,24 +948,6 @@ impl<E> RequestBuilderExt<E> for RequestBuilder {
                 serde_urlencoded::to_string(body)
                     .map_err(|_| Error::InvalidRequest("failed to serialize body".to_string()))?,
             ))
-    }
-
-    fn form_from_raw<S: AsRef<str>, T: AsRef<[u8]>, I: Sized + IntoIterator<Item = (S, T)>>(
-        self,
-        iter: I,
-    ) -> Result<Self, Error<E>> {
-        use reqwest::multipart::Form;
-
-        let mut form = Form::new();
-        for (name, value) in iter {
-            form = form.part(
-                name.as_ref().to_owned(),
-                Part::stream(Vec::from(value.as_ref())),
-            );
-        }
-        // Note: reqwest's .multipart() automatically sets the Content-Type header
-        // with the correct boundary, so we don't set it manually here.
-        Ok(self.multipart(form))
     }
 
     fn form_from_parts<S: AsRef<str>, I: Sized + IntoIterator<Item = (S, FormPart)>>(
