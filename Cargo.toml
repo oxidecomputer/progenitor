@@ -46,7 +46,7 @@ quote = "1.0.45"
 rand = "0.10.1"
 regex = "1.12.3"
 regress = "0.11.1"
-reqwest = { version = "0.13.4", default-features = false, features = ["json", "query", "stream"] }
+reqwest = { version = "0.13.4", default-features = false, features = ["json", "query", "stream", "multipart"] }
 rustfmt-wrapper = "0.2.1"
 schemars = "0.8.22"
 semver = "1.0.28"
@@ -56,11 +56,12 @@ serde_urlencoded = "0.7.1"
 serde_yaml = "0.9"
 syn = { version = "2.0.117", features = ["parsing"] }
 thiserror = "2.0.18"
-tokio = { version = "1.52.3", features = ["rt", "net"] }
+tokio = { version = "1.52.3", features = ["macros", "rt", "net"] }
 typify = { version = "0.7.0" }
 url = "2.5.8"
 unicode-ident = "1.0.24"
 uuid = { version = "1.23.2", features = ["serde", "v4"] }
+assert_matches = "1.5.0"
 
 #[patch.crates-io]
 #typify = { path = "../typify/typify" }
