@@ -421,6 +421,63 @@ mod multipart_tests {
         .unwrap()
     }
 
+    fn make_multipart_component_ref_spec(operation_id: &str) -> OpenAPI {
+        serde_json::from_value(serde_json::json!({
+            "openapi": "3.0.0",
+            "info": { "title": "Example", "version": "1.0.0" },
+            "paths": {
+                "/resource": {
+                    "post": {
+                        "operationId": operation_id,
+                        "requestBody": {
+                            "required": true,
+                            "content": {
+                                "multipart/form-data": {
+                                    "schema": {
+                                        "$ref": "#/components/schemas/UploadRequestDto"
+                                    }
+                                }
+                            }
+                        },
+                        "responses": {
+                            "201": {
+                                "description": "Created",
+                                "content": {
+                                    "application/json": {
+                                        "schema": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": { "type": "string" }
+                                            },
+                                            "required": ["id"]
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "components": {
+                "schemas": {
+                    "UploadRequestDto": {
+                        "type": "object",
+                        "properties": {
+                            "data": { "type": "string", "format": "binary" },
+                            "plainString": { "type": "string" },
+                            "someDate": { "type": "string", "format": "date-time" },
+                            "flag": { "type": "boolean" },
+                            "identifier": { "type": "string", "format": "uuid" },
+                            "extra": { "type": "string", "format": "binary" }
+                        },
+                        "required": ["data", "plainString", "someDate", "identifier"]
+                    }
+                }
+            }
+        }))
+        .unwrap()
+    }
+
     fn make_builder_generator() -> Generator {
         Generator::new(GenerationSettings::default().with_interface(InterfaceStyle::Builder))
     }
@@ -847,5 +904,23 @@ mod multipart_tests {
             }),
         );
         assert_generates_ok(&spec, "Enum string fields in multipart should be supported");
+    }
+
+    #[test]
+    fn test_multipart_component_ref_supports_string_formats_and_api_field_names() {
+        let spec = make_multipart_component_ref_spec("upload");
+        let code = assert_generates_ok(
+            &spec,
+            "Multipart component refs with string formats should be supported",
+        );
+
+        assert!(code.contains("self . plain_string"));
+        assert!(code.contains("\"plainString\""));
+        assert!(code.contains("self . some_date"));
+        assert!(code.contains("\"someDate\""));
+        assert!(code.contains("self . identifier"));
+        assert!(code.contains("\"identifier\""));
+        assert!(code.contains("self . flag"));
+        assert!(code.contains("self . extra"));
     }
 }
