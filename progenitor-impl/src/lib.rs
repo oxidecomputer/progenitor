@@ -447,7 +447,8 @@ impl Generator {
                         if let Some(ref val) = self.#ident {
                             parts.push((#api_name, progenitor_client::FormPart::Text(
                                 progenitor_client::TextFormPart {
-                                    value: serde_json::to_string(val).unwrap_or_default(),
+                                    value: serde_json::to_string(val)
+                                        .expect("multipart form field serialization should not fail"),
                                     content_type: #json_content_type,
                                 }
                             )));
@@ -472,8 +473,8 @@ impl Generator {
 
             quote! {
                 impl #form_name {
-                    /// Convert this form into an iterator of (field_name, field_value) pairs
-                    /// suitable for multipart/form-data encoding.
+                    /// Convert this form into an iterator of `(field_name, field_value)` pairs
+                    /// suitable for `multipart/form-data` encoding.
                     pub fn as_form(&self) -> Vec<(&'static str, progenitor_client::FormPart)> {
                         let mut parts = Vec::new();
                         #(#field_conversions)*

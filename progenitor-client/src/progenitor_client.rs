@@ -8,7 +8,7 @@ use std::ops::{Deref, DerefMut};
 
 use bytes::Bytes;
 use futures_core::Stream;
-use reqwest::{multipart::Part, RequestBuilder};
+use reqwest::{multipart::Part, Body, RequestBuilder};
 use serde::{de::DeserializeOwned, ser::SerializeStruct, Serialize};
 
 #[cfg(not(target_arch = "wasm32"))]
@@ -965,7 +965,8 @@ impl<E> RequestBuilderExt<E> for RequestBuilder {
                     filename,
                     content_type,
                 }) => {
-                    let mut p = Part::stream(data.to_vec());
+                    let body = Body::from(data);
+                    let mut p = Part::stream(body);
                     if let Some(fname) = filename {
                         p = p.file_name(fname.into_string());
                     }

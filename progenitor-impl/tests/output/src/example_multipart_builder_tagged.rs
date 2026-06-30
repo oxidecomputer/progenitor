@@ -139,9 +139,9 @@ pub mod types {
     }
 
     impl UploadForm {
-        /// Convert this form into an iterator of (field_name, field_value)
+        /// Convert this form into an iterator of `(field_name, field_value)`
         /// pairs
-        /// suitable for multipart/form-data encoding.
+        /// suitable for `multipart/form-data` encoding.
         pub fn as_form(&self) -> Vec<(&'static str, progenitor_client::FormPart)> {
             let mut parts = Vec::new();
             if let Some(ref val) = self.file {
