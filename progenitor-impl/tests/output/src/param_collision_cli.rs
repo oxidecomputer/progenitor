@@ -60,7 +60,7 @@ impl<T: CliConfig> Cli<T> {
                     .required(true)
                     .help("Parameter name that was previously colliding"),
             )
-            .long_about("Gets a key")
+            .about("Gets a key")
     }
 
     pub async fn execute(

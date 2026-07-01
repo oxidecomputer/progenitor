@@ -230,8 +230,7 @@ impl<T: CliConfig> Cli<T> {
                     .value_parser(::clap::value_parser!(::uuid::Uuid))
                     .required(true),
             )
-            .about("Fetch a disk by id")
-            .long_about("Use `GET /v1/disks/{disk}` instead")
+            .about("Fetch a disk by id\n\nUse `GET /v1/disks/{disk}` instead")
     }
 
     pub fn cli_image_view_by_id() -> ::clap::Command {
@@ -275,8 +274,9 @@ impl<T: CliConfig> Cli<T> {
                     .value_parser(::clap::value_parser!(::uuid::Uuid))
                     .required(true),
             )
-            .about("Fetch an organization by id")
-            .long_about("Use `GET /v1/organizations/{organization}` instead")
+            .about(
+                "Fetch an organization by id\n\nUse `GET /v1/organizations/{organization}` instead",
+            )
     }
 
     pub fn cli_project_view_by_id() -> ::clap::Command {
@@ -287,8 +287,7 @@ impl<T: CliConfig> Cli<T> {
                     .value_parser(::clap::value_parser!(::uuid::Uuid))
                     .required(true),
             )
-            .about("Fetch a project by id")
-            .long_about("Use `GET /v1/projects/{project}` instead")
+            .about("Fetch a project by id\n\nUse `GET /v1/projects/{project}` instead")
     }
 
     pub fn cli_snapshot_view_by_id() -> ::clap::Command {
@@ -368,11 +367,11 @@ impl<T: CliConfig> Cli<T> {
                     .action(::clap::ArgAction::SetTrue)
                     .help("XXX"),
             )
-            .about("Start an OAuth 2.0 Device Authorization Grant")
-            .long_about(
-                "This endpoint is designed to be accessed from an *unauthenticated* API client. \
-                 It generates and records a `device_code` and `user_code` which must be verified \
-                 and confirmed prior to a token being granted.",
+            .about(
+                "Start an OAuth 2.0 Device Authorization Grant\n\nThis endpoint is designed to be \
+                 accessed from an *unauthenticated* API client. It generates and records a \
+                 `device_code` and `user_code` which must be verified and confirmed prior to a \
+                 token being granted.",
             )
     }
 
@@ -398,11 +397,11 @@ impl<T: CliConfig> Cli<T> {
                     .action(::clap::ArgAction::SetTrue)
                     .help("XXX"),
             )
-            .about("Confirm an OAuth 2.0 Device Authorization Grant")
-            .long_about(
-                "This endpoint is designed to be accessed by the user agent (browser), not the \
-                 client requesting the token. So we do not actually return the token here; it \
-                 will be returned in response to the poll on `/device/token`.",
+            .about(
+                "Confirm an OAuth 2.0 Device Authorization Grant\n\nThis endpoint is designed to \
+                 be accessed by the user agent (browser), not the client requesting the token. So \
+                 we do not actually return the token here; it will be returned in response to the \
+                 poll on `/device/token`.",
             )
     }
 
@@ -440,10 +439,9 @@ impl<T: CliConfig> Cli<T> {
                     .action(::clap::ArgAction::SetTrue)
                     .help("XXX"),
             )
-            .about("Request a device access token")
-            .long_about(
-                "This endpoint should be polled by the client until the user code is verified and \
-                 the grant is confirmed.",
+            .about(
+                "Request a device access token\n\nThis endpoint should be polled by the client \
+                 until the user code is verified and the grant is confirmed.",
             )
     }
 
@@ -545,10 +543,9 @@ impl<T: CliConfig> Cli<T> {
                     .value_parser(::clap::value_parser!(types::Name))
                     .required(true),
             )
-            .about("Prompt user login")
-            .long_about(
-                "Either display a page asking a user for their credentials, or redirect them to \
-                 their identity provider.",
+            .about(
+                "Prompt user login\n\nEither display a page asking a user for their credentials, \
+                 or redirect them to their identity provider.",
             )
     }
 
@@ -595,8 +592,7 @@ impl<T: CliConfig> Cli<T> {
                     ))
                     .required(false),
             )
-            .about("List organizations")
-            .long_about("Use `GET /v1/organizations` instead")
+            .about("List organizations\n\nUse `GET /v1/organizations` instead")
     }
 
     pub fn cli_organization_create() -> ::clap::Command {
@@ -627,8 +623,7 @@ impl<T: CliConfig> Cli<T> {
                     .action(::clap::ArgAction::SetTrue)
                     .help("XXX"),
             )
-            .about("Create an organization")
-            .long_about("Use `POST /v1/organizations` instead")
+            .about("Create an organization\n\nUse `POST /v1/organizations` instead")
     }
 
     pub fn cli_organization_view() -> ::clap::Command {
@@ -640,8 +635,7 @@ impl<T: CliConfig> Cli<T> {
                     .required(true)
                     .help("The organization's unique name."),
             )
-            .about("Fetch an organization")
-            .long_about("Use `GET /v1/organizations/{organization}` instead")
+            .about("Fetch an organization\n\nUse `GET /v1/organizations/{organization}` instead")
     }
 
     pub fn cli_organization_update() -> ::clap::Command {
@@ -679,8 +673,7 @@ impl<T: CliConfig> Cli<T> {
                     .action(::clap::ArgAction::SetTrue)
                     .help("XXX"),
             )
-            .about("Update an organization")
-            .long_about("Use `PUT /v1/organizations/{organization}` instead")
+            .about("Update an organization\n\nUse `PUT /v1/organizations/{organization}` instead")
     }
 
     pub fn cli_organization_delete() -> ::clap::Command {
@@ -692,8 +685,9 @@ impl<T: CliConfig> Cli<T> {
                     .required(true)
                     .help("The organization's unique name."),
             )
-            .about("Delete an organization")
-            .long_about("Use `DELETE /v1/organizations/{organization}` instead")
+            .about(
+                "Delete an organization\n\nUse `DELETE /v1/organizations/{organization}` instead",
+            )
     }
 
     pub fn cli_organization_policy_view() -> ::clap::Command {
@@ -705,8 +699,10 @@ impl<T: CliConfig> Cli<T> {
                     .required(true)
                     .help("The organization's unique name."),
             )
-            .about("Fetch an organization's IAM policy")
-            .long_about("Use `GET /v1/organizations/{organization}/policy` instead")
+            .about(
+                "Fetch an organization's IAM policy\n\nUse `GET \
+                 /v1/organizations/{organization}/policy` instead",
+            )
     }
 
     pub fn cli_organization_policy_update() -> ::clap::Command {
@@ -732,8 +728,10 @@ impl<T: CliConfig> Cli<T> {
                     .action(::clap::ArgAction::SetTrue)
                     .help("XXX"),
             )
-            .about("Update an organization's IAM policy")
-            .long_about("Use `PUT /v1/organizations/{organization}/policy` instead")
+            .about(
+                "Update an organization's IAM policy\n\nUse `PUT \
+                 /v1/organizations/{organization}/policy` instead",
+            )
     }
 
     pub fn cli_project_list() -> ::clap::Command {
@@ -765,8 +763,7 @@ impl<T: CliConfig> Cli<T> {
                     ))
                     .required(false),
             )
-            .about("List projects")
-            .long_about("Use `GET /v1/projects` instead")
+            .about("List projects\n\nUse `GET /v1/projects` instead")
     }
 
     pub fn cli_project_create() -> ::clap::Command {
@@ -804,8 +801,7 @@ impl<T: CliConfig> Cli<T> {
                     .action(::clap::ArgAction::SetTrue)
                     .help("XXX"),
             )
-            .about("Create a project")
-            .long_about("Use `POST /v1/projects` instead")
+            .about("Create a project\n\nUse `POST /v1/projects` instead")
     }
 
     pub fn cli_project_view() -> ::clap::Command {
@@ -824,8 +820,7 @@ impl<T: CliConfig> Cli<T> {
                     .required(true)
                     .help("The project's unique name within the organization."),
             )
-            .about("Fetch a project")
-            .long_about("Use `GET /v1/projects/{project}` instead")
+            .about("Fetch a project\n\nUse `GET /v1/projects/{project}` instead")
     }
 
     pub fn cli_project_update() -> ::clap::Command {
@@ -870,8 +865,7 @@ impl<T: CliConfig> Cli<T> {
                     .action(::clap::ArgAction::SetTrue)
                     .help("XXX"),
             )
-            .about("Update a project")
-            .long_about("Use `PUT /v1/projects/{project}` instead")
+            .about("Update a project\n\nUse `PUT /v1/projects/{project}` instead")
     }
 
     pub fn cli_project_delete() -> ::clap::Command {
@@ -890,8 +884,7 @@ impl<T: CliConfig> Cli<T> {
                     .required(true)
                     .help("The project's unique name within the organization."),
             )
-            .about("Delete a project")
-            .long_about("Use `DELETE /v1/projects/{project}` instead")
+            .about("Delete a project\n\nUse `DELETE /v1/projects/{project}` instead")
     }
 
     pub fn cli_disk_list() -> ::clap::Command {
@@ -928,8 +921,7 @@ impl<T: CliConfig> Cli<T> {
                     ))
                     .required(false),
             )
-            .about("List disks")
-            .long_about("Use `GET /v1/disks` instead")
+            .about("List disks\n\nUse `GET /v1/disks` instead")
     }
 
     pub fn cli_disk_create() -> ::clap::Command {
@@ -1004,8 +996,7 @@ impl<T: CliConfig> Cli<T> {
                     .value_parser(::clap::value_parser!(types::Name))
                     .required(true),
             )
-            .about("Fetch a disk")
-            .long_about("Use `GET /v1/disks/{disk}` instead")
+            .about("Fetch a disk\n\nUse `GET /v1/disks/{disk}` instead")
     }
 
     pub fn cli_disk_delete() -> ::clap::Command {
@@ -1129,10 +1120,9 @@ impl<T: CliConfig> Cli<T> {
                     ))
                     .required(false),
             )
-            .about("List images")
-            .long_about(
-                "List images in a project. The images are returned sorted by creation date, with \
-                 the most recent images appearing first.",
+            .about(
+                "List images\n\nList images in a project. The images are returned sorted by \
+                 creation date, with the most recent images appearing first.",
             )
     }
 
@@ -1178,8 +1168,7 @@ impl<T: CliConfig> Cli<T> {
                     .action(::clap::ArgAction::SetTrue)
                     .help("XXX"),
             )
-            .about("Create an image")
-            .long_about("Create a new image in a project.")
+            .about("Create an image\n\nCreate a new image in a project.")
     }
 
     pub fn cli_image_view() -> ::clap::Command {
@@ -1202,8 +1191,7 @@ impl<T: CliConfig> Cli<T> {
                     .value_parser(::clap::value_parser!(types::Name))
                     .required(true),
             )
-            .about("Fetch an image")
-            .long_about("Fetch the details for a specific image in a project.")
+            .about("Fetch an image\n\nFetch the details for a specific image in a project.")
     }
 
     pub fn cli_image_delete() -> ::clap::Command {
@@ -1226,11 +1214,10 @@ impl<T: CliConfig> Cli<T> {
                     .value_parser(::clap::value_parser!(types::Name))
                     .required(true),
             )
-            .about("Delete an image")
-            .long_about(
-                "Permanently delete an image from a project. This operation cannot be undone. Any \
-                 instances in the project using the image will continue to run, however new \
-                 instances can not be created with this image.",
+            .about(
+                "Delete an image\n\nPermanently delete an image from a project. This operation \
+                 cannot be undone. Any instances in the project using the image will continue to \
+                 run, however new instances can not be created with this image.",
             )
     }
 
@@ -1349,8 +1336,7 @@ impl<T: CliConfig> Cli<T> {
                     .action(::clap::ArgAction::SetTrue)
                     .help("XXX"),
             )
-            .about("Create an instance")
-            .long_about("Use `POST /v1/instances` instead")
+            .about("Create an instance\n\nUse `POST /v1/instances` instead")
     }
 
     pub fn cli_instance_view() -> ::clap::Command {
@@ -1373,8 +1359,7 @@ impl<T: CliConfig> Cli<T> {
                     .value_parser(::clap::value_parser!(types::Name))
                     .required(true),
             )
-            .about("Fetch an instance")
-            .long_about("Use `GET /v1/instances/{instance}` instead")
+            .about("Fetch an instance\n\nUse `GET /v1/instances/{instance}` instead")
     }
 
     pub fn cli_instance_delete() -> ::clap::Command {
@@ -1438,8 +1423,7 @@ impl<T: CliConfig> Cli<T> {
                     ))
                     .required(false),
             )
-            .about("List an instance's disks")
-            .long_about("Use `GET /v1/instances/{instance}/disks` instead")
+            .about("List an instance's disks\n\nUse `GET /v1/instances/{instance}/disks` instead")
     }
 
     pub fn cli_instance_disk_attach() -> ::clap::Command {
@@ -1482,8 +1466,10 @@ impl<T: CliConfig> Cli<T> {
                     .action(::clap::ArgAction::SetTrue)
                     .help("XXX"),
             )
-            .about("Attach a disk to an instance")
-            .long_about("Use `POST /v1/instances/{instance}/disks/attach` instead")
+            .about(
+                "Attach a disk to an instance\n\nUse `POST /v1/instances/{instance}/disks/attach` \
+                 instead",
+            )
     }
 
     pub fn cli_instance_disk_detach() -> ::clap::Command {
@@ -1526,8 +1512,7 @@ impl<T: CliConfig> Cli<T> {
                     .action(::clap::ArgAction::SetTrue)
                     .help("XXX"),
             )
-            .about("Detach a disk from an instance")
-            .long_about("Use `POST /v1/disks/{disk}/detach` instead")
+            .about("Detach a disk from an instance\n\nUse `POST /v1/disks/{disk}/detach` instead")
     }
 
     pub fn cli_instance_external_ip_list() -> ::clap::Command {
@@ -1593,8 +1578,7 @@ impl<T: CliConfig> Cli<T> {
                     .action(::clap::ArgAction::SetTrue)
                     .help("XXX"),
             )
-            .about("Migrate an instance")
-            .long_about("Use `POST /v1/instances/{instance}/migrate` instead")
+            .about("Migrate an instance\n\nUse `POST /v1/instances/{instance}/migrate` instead")
     }
 
     pub fn cli_instance_network_interface_list() -> ::clap::Command {
@@ -1837,11 +1821,11 @@ impl<T: CliConfig> Cli<T> {
                     .value_parser(::clap::value_parser!(types::Name))
                     .required(true),
             )
-            .about("Delete a network interface")
-            .long_about(
-                "Note that the primary interface for an instance cannot be deleted if there are \
-                 any secondary interfaces. A new primary interface must be designated first. The \
-                 primary interface can be deleted if there are no secondary interfaces.",
+            .about(
+                "Delete a network interface\n\nNote that the primary interface for an instance \
+                 cannot be deleted if there are any secondary interfaces. A new primary interface \
+                 must be designated first. The primary interface can be deleted if there are no \
+                 secondary interfaces.",
             )
     }
 
@@ -1865,8 +1849,7 @@ impl<T: CliConfig> Cli<T> {
                     .value_parser(::clap::value_parser!(types::Name))
                     .required(true),
             )
-            .about("Reboot an instance")
-            .long_about("Use `POST /v1/instances/{instance}/reboot` instead")
+            .about("Reboot an instance\n\nUse `POST /v1/instances/{instance}/reboot` instead")
     }
 
     pub fn cli_instance_serial_console() -> ::clap::Command {
@@ -1923,8 +1906,10 @@ impl<T: CliConfig> Cli<T> {
                     .value_parser(::clap::value_parser!(types::Name))
                     .required(true),
             )
-            .about("Fetch an instance's serial console")
-            .long_about("Use `GET /v1/instances/{instance}/serial-console` instead")
+            .about(
+                "Fetch an instance's serial console\n\nUse `GET \
+                 /v1/instances/{instance}/serial-console` instead",
+            )
     }
 
     pub fn cli_instance_serial_console_stream() -> ::clap::Command {
@@ -1947,8 +1932,10 @@ impl<T: CliConfig> Cli<T> {
                     .value_parser(::clap::value_parser!(types::Name))
                     .required(true),
             )
-            .about("Connect to an instance's serial console")
-            .long_about("Use `GET /v1/instances/{instance}/serial-console/stream` instead")
+            .about(
+                "Connect to an instance's serial console\n\nUse `GET \
+                 /v1/instances/{instance}/serial-console/stream` instead",
+            )
     }
 
     pub fn cli_instance_serial_console_stream_v2() -> ::clap::Command {
@@ -1971,8 +1958,10 @@ impl<T: CliConfig> Cli<T> {
                     .value_parser(::clap::value_parser!(types::Name))
                     .required(true),
             )
-            .about("Connect to an instance's serial console")
-            .long_about("Use `GET /v1/instances/{instance}/serial-console/stream` instead")
+            .about(
+                "Connect to an instance's serial console\n\nUse `GET \
+                 /v1/instances/{instance}/serial-console/stream` instead",
+            )
     }
 
     pub fn cli_instance_start() -> ::clap::Command {
@@ -1995,8 +1984,7 @@ impl<T: CliConfig> Cli<T> {
                     .value_parser(::clap::value_parser!(types::Name))
                     .required(true),
             )
-            .about("Boot an instance")
-            .long_about("Use `POST /v1/instances/{instance}/start` instead")
+            .about("Boot an instance\n\nUse `POST /v1/instances/{instance}/start` instead")
     }
 
     pub fn cli_instance_stop() -> ::clap::Command {
@@ -2019,8 +2007,7 @@ impl<T: CliConfig> Cli<T> {
                     .value_parser(::clap::value_parser!(types::Name))
                     .required(true),
             )
-            .about("Halt an instance")
-            .long_about("Use `POST /v1/instances/{instance}/stop` instead")
+            .about("Halt an instance\n\nUse `POST /v1/instances/{instance}/stop` instead")
     }
 
     pub fn cli_project_policy_view() -> ::clap::Command {
@@ -2039,8 +2026,9 @@ impl<T: CliConfig> Cli<T> {
                     .required(true)
                     .help("The project's unique name within the organization."),
             )
-            .about("Fetch a project's IAM policy")
-            .long_about("Use `GET /v1/projects/{project}/policy` instead")
+            .about(
+                "Fetch a project's IAM policy\n\nUse `GET /v1/projects/{project}/policy` instead",
+            )
     }
 
     pub fn cli_project_policy_update() -> ::clap::Command {
@@ -2162,8 +2150,7 @@ impl<T: CliConfig> Cli<T> {
                     .action(::clap::ArgAction::SetTrue)
                     .help("XXX"),
             )
-            .about("Create a snapshot")
-            .long_about("Creates a point-in-time snapshot from a disk.")
+            .about("Create a snapshot\n\nCreates a point-in-time snapshot from a disk.")
     }
 
     pub fn cli_snapshot_view() -> ::clap::Command {
@@ -2720,8 +2707,7 @@ impl<T: CliConfig> Cli<T> {
                     .value_parser(::clap::value_parser!(types::Name))
                     .required(true),
             )
-            .about("List routes")
-            .long_about("List the routes associated with a router in a particular VPC.")
+            .about("List routes\n\nList the routes associated with a router in a particular VPC.")
     }
 
     pub fn cli_vpc_router_route_create() -> ::clap::Command {
@@ -3277,8 +3263,10 @@ impl<T: CliConfig> Cli<T> {
                     ))
                     .required(false),
             )
-            .about("List SSH public keys")
-            .long_about("Lists SSH public keys for the currently authenticated user.")
+            .about(
+                "List SSH public keys\n\nLists SSH public keys for the currently authenticated \
+                 user.",
+            )
     }
 
     pub fn cli_session_sshkey_create() -> ::clap::Command {
@@ -3316,8 +3304,10 @@ impl<T: CliConfig> Cli<T> {
                     .action(::clap::ArgAction::SetTrue)
                     .help("XXX"),
             )
-            .about("Create an SSH public key")
-            .long_about("Create an SSH public key for the currently authenticated user.")
+            .about(
+                "Create an SSH public key\n\nCreate an SSH public key for the currently \
+                 authenticated user.",
+            )
     }
 
     pub fn cli_session_sshkey_view() -> ::clap::Command {
@@ -3328,8 +3318,10 @@ impl<T: CliConfig> Cli<T> {
                     .value_parser(::clap::value_parser!(types::Name))
                     .required(true),
             )
-            .about("Fetch an SSH public key")
-            .long_about("Fetch an SSH public key associated with the currently authenticated user.")
+            .about(
+                "Fetch an SSH public key\n\nFetch an SSH public key associated with the currently \
+                 authenticated user.",
+            )
     }
 
     pub fn cli_session_sshkey_delete() -> ::clap::Command {
@@ -3340,9 +3332,9 @@ impl<T: CliConfig> Cli<T> {
                     .value_parser(::clap::value_parser!(types::Name))
                     .required(true),
             )
-            .about("Delete an SSH public key")
-            .long_about(
-                "Delete an SSH public key associated with the currently authenticated user.",
+            .about(
+                "Delete an SSH public key\n\nDelete an SSH public key associated with the \
+                 currently authenticated user.",
             )
     }
 
@@ -3399,11 +3391,10 @@ impl<T: CliConfig> Cli<T> {
                     ))
                     .required(false),
             )
-            .about("List system-wide certificates")
-            .long_about(
-                "Returns a list of all the system-wide certificates. System-wide certificates are \
-                 returned sorted by creation date, with the most recent certificates appearing \
-                 first.",
+            .about(
+                "List system-wide certificates\n\nReturns a list of all the system-wide \
+                 certificates. System-wide certificates are returned sorted by creation date, \
+                 with the most recent certificates appearing first.",
             )
     }
 
@@ -3447,10 +3438,9 @@ impl<T: CliConfig> Cli<T> {
                     .action(::clap::ArgAction::SetTrue)
                     .help("XXX"),
             )
-            .about("Create a new system-wide x.509 certificate.")
-            .long_about(
-                "This certificate is automatically used by the Oxide Control plane to serve \
-                 external connections.",
+            .about(
+                "Create a new system-wide x.509 certificate.\n\nThis certificate is automatically \
+                 used by the Oxide Control plane to serve external connections.",
             )
     }
 
@@ -3462,8 +3452,7 @@ impl<T: CliConfig> Cli<T> {
                     .value_parser(::clap::value_parser!(types::NameOrId))
                     .required(true),
             )
-            .about("Fetch a certificate")
-            .long_about("Returns the details of a specific certificate")
+            .about("Fetch a certificate\n\nReturns the details of a specific certificate")
     }
 
     pub fn cli_certificate_delete() -> ::clap::Command {
@@ -3474,8 +3463,10 @@ impl<T: CliConfig> Cli<T> {
                     .value_parser(::clap::value_parser!(types::NameOrId))
                     .required(true),
             )
-            .about("Delete a certificate")
-            .long_about("Permanently delete a certificate. This operation cannot be undone.")
+            .about(
+                "Delete a certificate\n\nPermanently delete a certificate. This operation cannot \
+                 be undone.",
+            )
     }
 
     pub fn cli_physical_disk_list() -> ::clap::Command {
@@ -3621,10 +3612,10 @@ impl<T: CliConfig> Cli<T> {
                     ))
                     .required(false),
             )
-            .about("List system-wide images")
-            .long_about(
-                "Returns a list of all the system-wide images. System-wide images are returned \
-                 sorted by creation date, with the most recent images appearing first.",
+            .about(
+                "List system-wide images\n\nReturns a list of all the system-wide images. \
+                 System-wide images are returned sorted by creation date, with the most recent \
+                 images appearing first.",
             )
     }
 
@@ -3656,10 +3647,9 @@ impl<T: CliConfig> Cli<T> {
                     .action(::clap::ArgAction::SetTrue)
                     .help("XXX"),
             )
-            .about("Create a system-wide image")
-            .long_about(
-                "Create a new system-wide image. This image can then be used by any user in any \
-                 silo as a base for instances.",
+            .about(
+                "Create a system-wide image\n\nCreate a new system-wide image. This image can \
+                 then be used by any user in any silo as a base for instances.",
             )
     }
 
@@ -3671,8 +3661,9 @@ impl<T: CliConfig> Cli<T> {
                     .value_parser(::clap::value_parser!(types::Name))
                     .required(true),
             )
-            .about("Fetch a system-wide image")
-            .long_about("Returns the details of a specific system-wide image.")
+            .about(
+                "Fetch a system-wide image\n\nReturns the details of a specific system-wide image.",
+            )
     }
 
     pub fn cli_system_image_delete() -> ::clap::Command {
@@ -3683,11 +3674,10 @@ impl<T: CliConfig> Cli<T> {
                     .value_parser(::clap::value_parser!(types::Name))
                     .required(true),
             )
-            .about("Delete a system-wide image")
-            .long_about(
-                "Permanently delete a system-wide image. This operation cannot be undone. Any \
-                 instances using the system-wide image will continue to run, however new \
-                 instances can not be created with this image.",
+            .about(
+                "Delete a system-wide image\n\nPermanently delete a system-wide image. This \
+                 operation cannot be undone. Any instances using the system-wide image will \
+                 continue to run, however new instances can not be created with this image.",
             )
     }
 
@@ -3821,8 +3811,7 @@ impl<T: CliConfig> Cli<T> {
                     .value_parser(::clap::value_parser!(types::Name))
                     .required(true),
             )
-            .about("List ranges for an IP pool")
-            .long_about("Ranges are ordered by their first address.")
+            .about("List ranges for an IP pool\n\nRanges are ordered by their first address.")
     }
 
     pub fn cli_ip_pool_range_add() -> ::clap::Command {
@@ -3888,8 +3877,10 @@ impl<T: CliConfig> Cli<T> {
                     .required(false)
                     .help("Maximum number of items returned by a single call"),
             )
-            .about("List ranges for the IP pool used for Oxide services.")
-            .long_about("Ranges are ordered by their first address.")
+            .about(
+                "List ranges for the IP pool used for Oxide services.\n\nRanges are ordered by \
+                 their first address.",
+            )
     }
 
     pub fn cli_ip_pool_service_range_add() -> ::clap::Command {
@@ -4066,8 +4057,9 @@ impl<T: CliConfig> Cli<T> {
                     ))
                     .required(false),
             )
-            .about("List silos")
-            .long_about("Lists silos that are discoverable based on the current permissions.")
+            .about(
+                "List silos\n\nLists silos that are discoverable based on the current permissions.",
+            )
     }
 
     pub fn cli_silo_create() -> ::clap::Command {
@@ -4142,8 +4134,7 @@ impl<T: CliConfig> Cli<T> {
                     .required(true)
                     .help("The silo's unique name."),
             )
-            .about("Fetch a silo")
-            .long_about("Fetch a silo by name.")
+            .about("Fetch a silo\n\nFetch a silo by name.")
     }
 
     pub fn cli_silo_delete() -> ::clap::Command {
@@ -4155,8 +4146,7 @@ impl<T: CliConfig> Cli<T> {
                     .required(true)
                     .help("The silo's unique name."),
             )
-            .about("Delete a silo")
-            .long_about("Delete a silo by name.")
+            .about("Delete a silo\n\nDelete a silo by name.")
     }
 
     pub fn cli_silo_identity_provider_list() -> ::clap::Command {
@@ -4219,11 +4209,10 @@ impl<T: CliConfig> Cli<T> {
                     .action(::clap::ArgAction::SetTrue)
                     .help("XXX"),
             )
-            .about("Create a user")
-            .long_about(
-                "Users can only be created in Silos with `provision_type` == `Fixed`. Otherwise, \
-                 Silo users are just-in-time (JIT) provisioned when a user first logs in using an \
-                 external Identity Provider.",
+            .about(
+                "Create a user\n\nUsers can only be created in Silos with `provision_type` == \
+                 `Fixed`. Otherwise, Silo users are just-in-time (JIT) provisioned when a user \
+                 first logs in using an external Identity Provider.",
             )
     }
 
@@ -4276,9 +4265,9 @@ impl<T: CliConfig> Cli<T> {
                     .action(::clap::ArgAction::SetTrue)
                     .help("XXX"),
             )
-            .about("Set or invalidate a user's password")
-            .long_about(
-                "Passwords can only be updated for users in Silos with identity mode `LocalOnly`.",
+            .about(
+                "Set or invalidate a user's password\n\nPasswords can only be updated for users \
+                 in Silos with identity mode `LocalOnly`.",
             )
     }
 
@@ -5590,8 +5579,7 @@ impl<T: CliConfig> Cli<T> {
 
     pub fn cli_system_update_stop() -> ::clap::Command {
         ::clap::Command::new("")
-            .about("Stop system update")
-            .long_about("If there is no update in progress, do nothing.")
+            .about("Stop system update\n\nIf there is no update in progress, do nothing.")
     }
 
     pub fn cli_system_update_list() -> ::clap::Command {
