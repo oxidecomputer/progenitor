@@ -452,10 +452,12 @@ impl Convert<schemars::schema::Schema> for openapiv3::Schema {
                     so.string().pattern = Some(pattern.clone());
                 }
                 if let Some(min_length) = min_length {
-                    so.string().min_length = Some(*min_length as u32);
+                    so.string().min_length =
+                        Some(u32::try_from(*min_length).expect("minimum length exceeds u32"));
                 }
                 if let Some(max_length) = max_length {
-                    so.string().max_length = Some(*max_length as u32);
+                    so.string().max_length =
+                        Some(u32::try_from(*max_length).expect("maximum length exceeds u32"));
                 }
 
                 // Number
@@ -498,10 +500,14 @@ impl Convert<schemars::schema::Schema> for openapiv3::Schema {
                     so.object().additional_properties = additional_properties.convert();
                 }
                 if let Some(min_properties) = min_properties {
-                    so.object().min_properties = Some(*min_properties as u32);
+                    so.object().min_properties = Some(
+                        u32::try_from(*min_properties).expect("minimum property count exceeds u32"),
+                    );
                 }
                 if let Some(max_properties) = max_properties {
-                    so.object().max_properties = Some(*max_properties as u32);
+                    so.object().max_properties = Some(
+                        u32::try_from(*max_properties).expect("maximum property count exceeds u32"),
+                    );
                 }
 
                 // Array
@@ -509,10 +515,12 @@ impl Convert<schemars::schema::Schema> for openapiv3::Schema {
                     so.array().items = items.convert().clone().map(SingleOrVec::Single);
                 }
                 if let Some(min_items) = min_items {
-                    so.array().min_items = Some(*min_items as u32);
+                    so.array().min_items =
+                        Some(u32::try_from(*min_items).expect("minimum item count exceeds u32"));
                 }
                 if let Some(max_items) = max_items {
-                    so.array().max_items = Some(*max_items as u32);
+                    so.array().max_items =
+                        Some(u32::try_from(*max_items).expect("maximum item count exceeds u32"));
                 }
                 if let Some(unique_items) = unique_items {
                     so.array().unique_items = Some(*unique_items);
@@ -748,7 +756,7 @@ fn oneof_nullable_wrapper(
 
 impl Convert<Option<u32>> for Option<usize> {
     fn convert(&self) -> Option<u32> {
-        (*self).map(|m| m as u32)
+        (*self).map(|m| u32::try_from(m).expect("schema bound exceeds u32"))
     }
 }
 
