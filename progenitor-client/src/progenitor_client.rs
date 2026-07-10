@@ -26,11 +26,13 @@ impl ByteStream {
     /// Creates a new [`ByteStream`].
     ///
     /// Useful for generating test fixtures.
+    #[must_use]
     pub fn new(inner: InnerByteStream) -> Self {
         Self(inner)
     }
 
     /// Consumes the [`ByteStream`] and return its inner [`Stream`].
+    #[must_use]
     pub fn into_inner(self) -> InnerByteStream {
         self.0
     }
@@ -205,6 +207,7 @@ impl ResponseValue<reqwest::Upgraded> {
 
 impl ResponseValue<ByteStream> {
     #[doc(hidden)]
+    #[must_use]
     pub fn stream(response: reqwest::Response) -> Self {
         let status = response.status();
         let headers = response.headers().clone();
@@ -218,6 +221,7 @@ impl ResponseValue<ByteStream> {
 
 impl ResponseValue<()> {
     #[doc(hidden)]
+    #[must_use]
     pub fn empty(response: reqwest::Response) -> Self {
         let status = response.status();
         let headers = response.headers().clone();
@@ -290,6 +294,7 @@ impl<T> ResponseValue<T> {
 
 impl ResponseValue<ByteStream> {
     /// Consumes the `ResponseValue`, returning the wrapped [`Stream`].
+    #[must_use]
     pub fn into_inner_stream(self) -> InnerByteStream {
         self.into_inner().into_inner()
     }
@@ -568,6 +573,7 @@ const PATH_SET: &percent_encoding::AsciiSet = &percent_encoding::CONTROLS
 
 #[doc(hidden)]
 /// Percent encode input string.
+#[must_use]
 pub fn encode_path(pc: &str) -> String {
     percent_encoding::utf8_percent_encode(pc, PATH_SET).to_string()
 }

@@ -13,6 +13,7 @@ pub use crate::progenitor_client::*;
 // need to determine the provenance of progenitor (crates.io, github, etc.)
 // when generating the stand-alone crate.
 #[doc(hidden)]
+#[must_use]
 pub fn code() -> &'static str {
     include_str!("progenitor_client.rs")
 }

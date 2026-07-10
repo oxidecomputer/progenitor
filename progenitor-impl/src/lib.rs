@@ -106,6 +106,7 @@ pub enum TagStyle {
 
 impl GenerationSettings {
     /// Create new generator settings with default values.
+    #[must_use]
     pub fn new() -> Self {
         Self::default()
     }
@@ -260,6 +261,7 @@ impl Default for Generator {
 
 impl Generator {
     /// Create a new generator with default values.
+    #[must_use]
     pub fn new(settings: &GenerationSettings) -> Self {
         let mut type_settings = TypeSpaceSettings::default();
         type_settings
@@ -446,6 +448,7 @@ impl Generator {
                 /// `baseurl` is the base URL provided to the internal
                 /// `reqwest::Client`, and should include a scheme and hostname,
                 /// as well as port and a path stem if applicable.
+                #[must_use]
                 pub fn new(
                     baseurl: &str,
                     #inner_parameter
@@ -471,6 +474,7 @@ impl Generator {
                 /// `baseurl` is the base URL provided to the internal
                 /// `reqwest::Client`, and should include a scheme and hostname,
                 /// as well as port and a path stem if applicable.
+                #[must_use]
                 pub fn new_with_client(
                     baseurl: &str,
                     client: reqwest::Client,
@@ -651,18 +655,21 @@ impl Generator {
     }
 
     /// Get the [`TypeSpace`] for schemas present in the `OpenAPI` specification.
+    #[must_use]
     pub fn get_type_space(&self) -> &TypeSpace {
         &self.type_space
     }
 
     /// Whether the generated client needs to use additional crates to support
     /// futures.
+    #[must_use]
     pub fn uses_futures(&self) -> bool {
         self.uses_futures
     }
 
     /// Whether the generated client needs to use additional crates to support
     /// websockets.
+    #[must_use]
     pub fn uses_websockets(&self) -> bool {
         self.uses_websockets
     }

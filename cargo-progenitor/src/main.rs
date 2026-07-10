@@ -239,6 +239,7 @@ static DEPENDENCIES: Dependencies = Dependencies {
     uuid: "1.0",
 };
 
+#[must_use]
 pub fn dependencies(builder: Generator, include_client: bool) -> Vec<String> {
     let mut deps = vec![
         format!("bytes = \"{}\"", DEPENDENCIES.bytes),
