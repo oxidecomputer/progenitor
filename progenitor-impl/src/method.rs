@@ -1059,9 +1059,10 @@ impl Generator {
             }
         };
 
-        let inner = match has_inner {
-            true => quote! { &#client_value.inner, },
-            false => quote! {},
+        let inner = if has_inner {
+            quote! { &#client_value.inner, }
+        } else {
+            quote! {}
         };
         let pre_hook = self.settings.pre_hook.as_ref().map(|hook| {
             quote! {
