@@ -202,6 +202,10 @@ impl Generator {
     }
 
     #[allow(clippy::too_many_lines, reason = "mirrors the generated CLI method")]
+    #[allow(
+        clippy::single_match_else,
+        reason = "the match documents both request execution modes"
+    )]
     fn cli_method(&mut self, method: &crate::method::OperationMethod) -> CliOperation {
         let CliArg {
             parser: parser_args,

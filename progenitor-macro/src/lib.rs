@@ -430,14 +430,13 @@ fn do_generate_api(item: TokenStream) -> Result<TokenStream, syn::Error> {
     let path_str = path.to_string_lossy();
 
     let mut f = open_file(&path, spec_path.span())?;
-    let oapi: OpenAPI = match serde_json::from_reader(f) {
-        Ok(json_value) => json_value,
-        _ => {
-            f = open_file(&path, spec_path.span())?;
-            serde_yaml::from_reader(f).map_err(|e| {
-                syn::Error::new(spec_path.span(), format!("failed to parse {path_str}: {e}"))
-            })?
-        }
+    let oapi: OpenAPI = if let Ok(json_value) = serde_json::from_reader(f) {
+        json_value
+    } else {
+        f = open_file(&path, spec_path.span())?;
+        serde_yaml::from_reader(f).map_err(|e| {
+            syn::Error::new(spec_path.span(), format!("failed to parse {path_str}: {e}"))
+        })?
     };
 
     let mut builder = Generator::new(&settings);

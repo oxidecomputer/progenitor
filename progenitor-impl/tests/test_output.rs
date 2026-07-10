@@ -17,12 +17,11 @@ where
     P: AsRef<Path> + std::clone::Clone + std::fmt::Debug,
 {
     let mut f = File::open(p.clone()).unwrap();
-    match serde_json::from_reader(f) {
-        Ok(json_value) => json_value,
-        _ => {
-            f = File::open(p).unwrap();
-            serde_yaml::from_reader(f).unwrap()
-        }
+    if let Ok(json_value) = serde_json::from_reader(f) {
+        json_value
+    } else {
+        f = File::open(p).unwrap();
+        serde_yaml::from_reader(f).unwrap()
     }
 }
 
