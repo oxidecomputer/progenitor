@@ -99,7 +99,7 @@ pub struct OperationInfo {
 /// implement this for `&Client`; to override the default behavior, implement
 /// some or all of the interfaces for the `Client` type (without the
 /// reference). This mechanism relies on so-called "auto-ref specialization".
-#[allow(async_fn_in_trait, unused)]
+#[allow(async_fn_in_trait, unused_variables)]
 pub trait ClientHooks<Inner = ()>
 where
     Self: ClientInfo<Inner>,
