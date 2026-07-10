@@ -365,11 +365,11 @@ impl Generator {
             .collect::<Result<Vec<_>>>()?;
 
         let operation_code = match (&self.settings.interface, &self.settings.tag) {
-            (InterfaceStyle::Positional, TagStyle::Merged) => self
+            (InterfaceStyle::Positional, TagStyle::Merged) => Ok(self
                 .generate_tokens_positional_merged(
                     &raw_methods,
                     self.settings.inner_type.is_some(),
-                ),
+                )),
             (InterfaceStyle::Positional, TagStyle::Separate) => {
                 unimplemented!("positional arguments with separate tags are currently unsupported")
             }
@@ -551,11 +551,11 @@ impl Generator {
         &mut self,
         input_methods: &[method::OperationMethod],
         has_inner: bool,
-    ) -> Result<TokenStream> {
+    ) -> TokenStream {
         let methods = input_methods
             .iter()
             .map(|method| self.positional_method(method, has_inner))
-            .collect::<Result<Vec<_>>>()?;
+            .collect::<Vec<_>>();
 
         // The allow(unused_imports) on the `pub use` is necessary with Rust
         // 1.76+, in case the generated file is not at the top level of the
@@ -581,7 +581,7 @@ impl Generator {
                 pub use super::Client;
             }
         };
-        Ok(out)
+        out
     }
 
     fn generate_tokens_builder_merged(

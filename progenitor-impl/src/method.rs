@@ -559,7 +559,7 @@ impl Generator {
         &mut self,
         method: &OperationMethod,
         has_inner: bool,
-    ) -> Result<TokenStream> {
+    ) -> TokenStream {
         let operation_id = format_ident!("{}", method.operation_id);
 
         // Render each parameter as it will appear in the method signature.
@@ -616,7 +616,7 @@ impl Generator {
             success: success_type,
             error: error_type,
             body,
-        } = self.method_sig_body(method, &quote! { Self }, &quote! { self }, has_inner)?;
+        } = self.method_sig_body(method, &quote! { Self }, &quote! { self }, has_inner);
 
         let method_impl = quote! {
             #[doc = #doc_comment]
@@ -764,7 +764,7 @@ impl Generator {
             #stream_impl
         };
 
-        Ok(all)
+        all
     }
 
     /// Common code generation between positional and builder interface-styles.
@@ -777,7 +777,7 @@ impl Generator {
         client_type: &TokenStream,
         client_value: &TokenStream,
         has_inner: bool,
-    ) -> Result<MethodSigBody> {
+    ) -> MethodSigBody {
         let param_names = method
             .params
             .iter()
@@ -1167,11 +1167,11 @@ impl Generator {
             }
         };
 
-        Ok(MethodSigBody {
+        MethodSigBody {
             success: response_type.into_tokens(&self.type_space),
             error: error_type.into_tokens(&self.type_space),
             body: body_impl,
-        })
+        }
     }
 
     /// Extract responses that match criteria specified by the `filter`. The
@@ -1665,7 +1665,7 @@ impl Generator {
             &quote! { super::Client },
             &quote! { #client_ident },
             has_inner,
-        )?;
+        );
 
         let send_doc = format!(
             "Sends a `{}` request to `{}`\n\n\

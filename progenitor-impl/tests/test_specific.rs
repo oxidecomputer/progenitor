@@ -133,6 +133,10 @@ fn forty_two() -> u32 {
     42
 }
 
+#[allow(
+    clippy::unnecessary_wraps,
+    reason = "serde default must match the Option field type"
+)]
 fn yes_yes() -> Option<bool> {
     Some(true)
 }
