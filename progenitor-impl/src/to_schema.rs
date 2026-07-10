@@ -71,6 +71,10 @@ where
 }
 
 impl Convert<schemars::schema::Schema> for openapiv3::Schema {
+    #[allow(
+        clippy::too_many_lines,
+        reason = "covers the complete schema conversion"
+    )]
     fn convert(&self) -> schemars::schema::Schema {
         // TODO the discriminator field is used in a way that seems both
         // important and unfortunately redundant. It corresponds to the same

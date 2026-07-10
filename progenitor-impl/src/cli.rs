@@ -34,6 +34,7 @@ impl Generator {
     ///
     /// Panics if validated component references violate an internal generator
     /// invariant.
+    #[allow(clippy::too_many_lines, reason = "keeps generation stages together")]
     pub fn cli(&mut self, spec: &OpenAPI, crate_name: &str) -> Result<TokenStream> {
         validate_openapi(spec)?;
 
@@ -200,6 +201,7 @@ impl Generator {
         Ok(code)
     }
 
+    #[allow(clippy::too_many_lines, reason = "mirrors the generated CLI method")]
     fn cli_method(&mut self, method: &crate::method::OperationMethod) -> CliOperation {
         let CliArg {
             parser: parser_args,
@@ -406,6 +408,7 @@ impl Generator {
         }
     }
 
+    #[allow(clippy::too_many_lines, reason = "keeps argument generation cohesive")]
     fn cli_method_args(&self, method: &crate::method::OperationMethod) -> CliArg {
         let mut args = CliOperationArgs::default();
 

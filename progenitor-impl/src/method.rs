@@ -282,6 +282,7 @@ impl OperationResponseKind {
 }
 
 impl Generator {
+    #[allow(clippy::too_many_lines, reason = "keeps operation analysis cohesive")]
     pub(crate) fn process_operation(
         &mut self,
         operation: &openapiv3::Operation,
@@ -553,6 +554,7 @@ impl Generator {
         })
     }
 
+    #[allow(clippy::too_many_lines, reason = "mirrors the generated method")]
     pub(crate) fn positional_method(
         &mut self,
         method: &OperationMethod,
@@ -768,6 +770,7 @@ impl Generator {
     /// Common code generation between positional and builder interface-styles.
     /// Returns a struct with the success and error types and the core body
     /// implementation that marshals arguments and executes the request.
+    #[allow(clippy::too_many_lines, reason = "mirrors the generated request body")]
     fn method_sig_body(
         &self,
         method: &OperationMethod,
@@ -1414,6 +1417,7 @@ impl Generator {
     /// Finally, paginated interfaces have a `stream()` method which uses the
     /// `send()` method above to fetch each page of results to assemble the
     /// items into a single `impl Stream`.
+    #[allow(clippy::too_many_lines, reason = "mirrors the generated builder")]
     pub(crate) fn builder_struct(
         &mut self,
         method: &OperationMethod,

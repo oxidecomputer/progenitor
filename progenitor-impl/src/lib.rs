@@ -326,6 +326,10 @@ impl Generator {
     ///
     /// Panics if validated component references violate an internal generator
     /// invariant.
+    #[allow(
+        clippy::too_many_lines,
+        reason = "keeps top-level generation stages together"
+    )]
     pub fn generate_tokens(&mut self, spec: &OpenAPI) -> Result<TokenStream> {
         validate_openapi(spec)?;
 

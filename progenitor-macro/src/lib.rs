@@ -333,6 +333,10 @@ fn open_file(path: &Path, span: proc_macro2::Span) -> Result<File, syn::Error> {
     })
 }
 
+#[allow(
+    clippy::too_many_lines,
+    reason = "keeps macro expansion stages together"
+)]
 fn do_generate_api(item: TokenStream) -> Result<TokenStream, syn::Error> {
     let (spec_source, settings) = if let Ok(spec) = syn::parse::<LitStr>(item.clone()) {
         let spec_source = SpecSource {
