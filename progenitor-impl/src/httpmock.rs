@@ -30,6 +30,11 @@ impl Generator {
     /// The `crate_path` parameter should be a valid Rust path corresponding to
     /// the SDK. This can include `::` and instances of `-` in the crate name
     /// should be converted to `_`.
+    ///
+    /// # Errors
+    ///
+    /// Returns an error if the `OpenAPI` document or crate path is invalid, or
+    /// if its types cannot be converted into mock definitions.
     pub fn httpmock(&mut self, spec: &OpenAPI, crate_path: &str) -> Result<TokenStream> {
         validate_openapi(spec)?;
 

@@ -2853,7 +2853,12 @@ impl ClientHooks<()> for &Client {}
 impl Client {
     ///Sends a `GET` request to `/instance`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.instance_get()
     ///    .send()
     ///    .await;
@@ -2864,7 +2869,12 @@ impl Client {
 
     ///Sends a `PUT` request to `/instance`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.instance_ensure()
     ///    .body(body)
     ///    .send()
@@ -2878,7 +2888,12 @@ impl Client {
     ///
     ///Sends a `POST` request to `/instance/disk/{id}/snapshot/{snapshot_id}`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.instance_issue_crucible_snapshot_request()
     ///    .id(id)
     ///    .snapshot_id(snapshot_id)
@@ -2893,7 +2908,12 @@ impl Client {
 
     ///Sends a `GET` request to `/instance/migrate/status`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.instance_migrate_status()
     ///    .body(body)
     ///    .send()
@@ -2905,7 +2925,12 @@ impl Client {
 
     ///Sends a `GET` request to `/instance/serial`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.instance_serial()
     ///    .send()
     ///    .await;
@@ -2916,7 +2941,12 @@ impl Client {
 
     ///Sends a `PUT` request to `/instance/state`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.instance_state_put()
     ///    .body(body)
     ///    .send()
@@ -2928,7 +2958,12 @@ impl Client {
 
     ///Sends a `GET` request to `/instance/state-monitor`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.instance_state_monitor()
     ///    .body(body)
     ///    .send()
@@ -2970,6 +3005,11 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/instance`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::InstanceGetResponse>, Error<types::Error>> {
@@ -3052,6 +3092,11 @@ pub mod builder {
         }
 
         ///Sends a `PUT` request to `/instance`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::InstanceEnsureResponse>, Error<types::Error>> {
@@ -3137,6 +3182,11 @@ pub mod builder {
 
         ///Sends a `POST` request to
         /// `/instance/disk/{id}/snapshot/{snapshot_id}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
             let Self {
                 client,
@@ -3229,6 +3279,11 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/instance/migrate/status`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::InstanceMigrateStatusResponse>, Error<types::Error>>
@@ -3290,6 +3345,11 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/instance/serial`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<reqwest::Upgraded>, Error<types::Error>> {
             let Self { client } = self;
             let url = format!("{}/instance/serial", client.baseurl);
@@ -3362,6 +3422,11 @@ pub mod builder {
         }
 
         ///Sends a `PUT` request to `/instance/state`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
             let Self { client, body } = self;
             let body = body.map_err(Error::InvalidRequest)?;
@@ -3445,6 +3510,11 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/instance/state-monitor`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::InstanceStateMonitorResponse>, Error<types::Error>>

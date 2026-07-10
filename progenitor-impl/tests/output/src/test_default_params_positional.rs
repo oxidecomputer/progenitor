@@ -175,6 +175,12 @@ impl ClientHooks<()> for &Client {}
 )]
 impl Client {
     ///Sends a `POST` request to `/`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn default_params<'a>(
         &'a self,
         body: &'a types::BodyWithDefaults,

@@ -114,6 +114,12 @@ impl ClientHooks<()> for &Client {}
 )]
 impl Client {
     ///Sends a `GET` request to `/`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn freeform_response<'a>(
         &'a self,
     ) -> Result<ResponseValue<ByteStream>, Error<ByteStream>> {

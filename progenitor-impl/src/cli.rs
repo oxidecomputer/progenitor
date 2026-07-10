@@ -24,6 +24,11 @@ struct CliOperation {
 
 impl Generator {
     /// Generate a `clap`-based CLI.
+    ///
+    /// # Errors
+    ///
+    /// Returns an error if the `OpenAPI` document is invalid or its types
+    /// cannot be converted into CLI arguments.
     pub fn cli(&mut self, spec: &OpenAPI, crate_name: &str) -> Result<TokenStream> {
         validate_openapi(spec)?;
 

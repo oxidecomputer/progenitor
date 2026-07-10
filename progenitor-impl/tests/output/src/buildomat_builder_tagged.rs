@@ -2373,7 +2373,12 @@ impl ClientHooks<()> for &Client {}
 impl Client {
     ///Sends a `POST` request to `/v1/control/hold`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.control_hold()
     ///    .send()
     ///    .await;
@@ -2384,7 +2389,12 @@ impl Client {
 
     ///Sends a `POST` request to `/v1/control/resume`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.control_resume()
     ///    .send()
     ///    .await;
@@ -2395,7 +2405,12 @@ impl Client {
 
     ///Sends a `GET` request to `/v1/task/{Task}`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.task_get()
     ///    .task(task)
     ///    .send()
@@ -2407,7 +2422,12 @@ impl Client {
 
     ///Sends a `GET` request to `/v1/tasks`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.tasks_get()
     ///    .send()
     ///    .await;
@@ -2418,7 +2438,12 @@ impl Client {
 
     ///Sends a `POST` request to `/v1/tasks`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.task_submit()
     ///    .body(body)
     ///    .send()
@@ -2430,7 +2455,12 @@ impl Client {
 
     ///Sends a `GET` request to `/v1/tasks/{task}/events`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.task_events_get()
     ///    .task(task)
     ///    .minseq(minseq)
@@ -2443,7 +2473,12 @@ impl Client {
 
     ///Sends a `GET` request to `/v1/tasks/{task}/outputs`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.task_outputs_get()
     ///    .task(task)
     ///    .send()
@@ -2455,7 +2490,12 @@ impl Client {
 
     ///Sends a `GET` request to `/v1/tasks/{task}/outputs/{output}`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.task_output_download()
     ///    .task(task)
     ///    .output(output)
@@ -2468,7 +2508,12 @@ impl Client {
 
     ///Sends a `POST` request to `/v1/users`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.user_create()
     ///    .body(body)
     ///    .send()
@@ -2480,7 +2525,12 @@ impl Client {
 
     ///Sends a `GET` request to `/v1/whoami`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.whoami()
     ///    .send()
     ///    .await;
@@ -2491,7 +2541,12 @@ impl Client {
 
     ///Sends a `PUT` request to `/v1/whoami/name`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.whoami_put_name()
     ///    .body(body)
     ///    .send()
@@ -2503,7 +2558,12 @@ impl Client {
 
     ///Sends a `POST` request to `/v1/worker/bootstrap`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.worker_bootstrap()
     ///    .body(body)
     ///    .send()
@@ -2515,7 +2575,12 @@ impl Client {
 
     ///Sends a `GET` request to `/v1/worker/ping`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.worker_ping()
     ///    .send()
     ///    .await;
@@ -2526,7 +2591,12 @@ impl Client {
 
     ///Sends a `POST` request to `/v1/worker/task/{task}/append`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.worker_task_append()
     ///    .task(task)
     ///    .body(body)
@@ -2539,7 +2609,12 @@ impl Client {
 
     ///Sends a `POST` request to `/v1/worker/task/{task}/chunk`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.worker_task_upload_chunk()
     ///    .task(task)
     ///    .body(body)
@@ -2552,7 +2627,12 @@ impl Client {
 
     ///Sends a `POST` request to `/v1/worker/task/{task}/complete`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.worker_task_complete()
     ///    .task(task)
     ///    .body(body)
@@ -2565,7 +2645,12 @@ impl Client {
 
     ///Sends a `POST` request to `/v1/worker/task/{task}/output`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.worker_task_add_output()
     ///    .task(task)
     ///    .body(body)
@@ -2578,7 +2663,12 @@ impl Client {
 
     ///Sends a `GET` request to `/v1/workers`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.workers_list()
     ///    .send()
     ///    .await;
@@ -2589,7 +2679,12 @@ impl Client {
 
     ///Sends a `POST` request to `/v1/workers/recycle`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.workers_recycle()
     ///    .send()
     ///    .await;
@@ -2600,7 +2695,12 @@ impl Client {
 
     ///Sends a `GET` request to `/v1/things`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.get_thing_or_things()
     ///    .id(id)
     ///    .send()
@@ -2612,7 +2712,12 @@ impl Client {
 
     ///Sends a `GET` request to `/v1/header-arg`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.header_arg()
     ///    .accept_language(accept_language)
     ///    .send()
@@ -2654,6 +2759,11 @@ pub mod builder {
         }
 
         ///Sends a `POST` request to `/v1/control/hold`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
             let Self { client } = self;
             let url = format!("{}/v1/control/hold", client.baseurl);
@@ -2700,6 +2810,11 @@ pub mod builder {
         }
 
         ///Sends a `POST` request to `/v1/control/resume`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
             let Self { client } = self;
             let url = format!("{}/v1/control/resume", client.baseurl);
@@ -2752,6 +2867,11 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/v1/task/{Task}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::Task>, Error<()>> {
             let Self { client, task } = self;
             let task = task.map_err(Error::InvalidRequest)?;
@@ -2803,6 +2923,11 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/v1/tasks`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<::std::vec::Vec<types::Task>>, Error<()>> {
             let Self { client } = self;
             let url = format!("{}/v1/tasks", client.baseurl);
@@ -2873,6 +2998,11 @@ pub mod builder {
         }
 
         ///Sends a `POST` request to `/v1/tasks`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::TaskSubmitResult>, Error<()>> {
             let Self { client, body } = self;
             let body = body
@@ -2950,6 +3080,11 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/v1/tasks/{task}/events`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<::std::vec::Vec<types::TaskEvent>>, Error<()>> {
@@ -3023,6 +3158,11 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/v1/tasks/{task}/outputs`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<::std::vec::Vec<types::TaskOutput>>, Error<()>> {
@@ -3102,6 +3242,11 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/v1/tasks/{task}/outputs/{output}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<ByteStream>, Error<()>> {
             let Self {
                 client,
@@ -3175,6 +3320,11 @@ pub mod builder {
         }
 
         ///Sends a `POST` request to `/v1/users`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::UserCreateResult>, Error<()>> {
             let Self { client, body } = self;
             let body = body
@@ -3225,6 +3375,11 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/v1/whoami`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::WhoamiResult>, Error<()>> {
             let Self { client } = self;
             let url = format!("{}/v1/whoami", client.baseurl);
@@ -3286,6 +3441,11 @@ pub mod builder {
         }
 
         ///Sends a `PUT` request to `/v1/whoami/name`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
             let Self { client, body } = self;
             let body = body.map_err(Error::InvalidRequest)?;
@@ -3358,6 +3518,11 @@ pub mod builder {
         }
 
         ///Sends a `POST` request to `/v1/worker/bootstrap`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::WorkerBootstrapResult>, Error<()>> {
             let Self { client, body } = self;
             let body = body
@@ -3408,6 +3573,11 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/v1/worker/ping`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::WorkerPingResult>, Error<()>> {
             let Self { client } = self;
             let url = format!("{}/v1/worker/ping", client.baseurl);
@@ -3492,6 +3662,11 @@ pub mod builder {
         }
 
         ///Sends a `POST` request to `/v1/worker/task/{task}/append`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
             let Self { client, task, body } = self;
             let task = task.map_err(Error::InvalidRequest)?;
@@ -3569,6 +3744,11 @@ pub mod builder {
         }
 
         ///Sends a `POST` request to `/v1/worker/task/{task}/chunk`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::UploadedChunk>, Error<()>> {
             let Self { client, task, body } = self;
             let task = task.map_err(Error::InvalidRequest)?;
@@ -3664,6 +3844,11 @@ pub mod builder {
         }
 
         ///Sends a `POST` request to `/v1/worker/task/{task}/complete`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
             let Self { client, task, body } = self;
             let task = task.map_err(Error::InvalidRequest)?;
@@ -3751,6 +3936,11 @@ pub mod builder {
         }
 
         ///Sends a `POST` request to `/v1/worker/task/{task}/output`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
             let Self { client, task, body } = self;
             let task = task.map_err(Error::InvalidRequest)?;
@@ -3802,6 +3992,11 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/v1/workers`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::WorkersResult>, Error<()>> {
             let Self { client } = self;
             let url = format!("{}/v1/workers", client.baseurl);
@@ -3848,6 +4043,11 @@ pub mod builder {
         }
 
         ///Sends a `POST` request to `/v1/workers/recycle`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
             let Self { client } = self;
             let url = format!("{}/v1/workers/recycle", client.baseurl);
@@ -3901,6 +4101,11 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/v1/things`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<::std::string::String>, Error<()>> {
             let Self { client, id } = self;
             let id = id.map_err(Error::InvalidRequest)?;
@@ -3963,6 +4168,11 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/v1/header-arg`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
             let Self {
                 client,

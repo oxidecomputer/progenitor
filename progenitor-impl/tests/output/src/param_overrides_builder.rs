@@ -115,7 +115,12 @@ impl Client {
     ///   parameter
     /// - `unique_key`: A key parameter that will not be overridden by the path
     ///   spec
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.key_get()
     ///    .key(key)
     ///    .unique_key(unique_key)
@@ -185,6 +190,11 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/key`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
             let Self {
                 client,

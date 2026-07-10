@@ -1429,6 +1429,12 @@ impl ClientHooks<()> for &Client {}
 )]
 impl Client {
     ///Sends a `GET` request to `/instance`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn instance_get<'a>(
         &'a self,
     ) -> Result<ResponseValue<types::InstanceGetResponse>, Error<types::Error>> {
@@ -1468,6 +1474,12 @@ impl Client {
     }
 
     ///Sends a `PUT` request to `/instance`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn instance_ensure<'a>(
         &'a self,
         body: &'a types::InstanceEnsureRequest,
@@ -1511,6 +1523,12 @@ impl Client {
     ///Issue a snapshot request to a crucible backend
     ///
     ///Sends a `POST` request to `/instance/disk/{id}/snapshot/{snapshot_id}`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn instance_issue_crucible_snapshot_request<'a>(
         &'a self,
         id: &'a ::uuid::Uuid,
@@ -1557,6 +1575,12 @@ impl Client {
     }
 
     ///Sends a `GET` request to `/instance/migrate/status`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn instance_migrate_status<'a>(
         &'a self,
         body: &'a types::InstanceMigrateStatusRequest,
@@ -1598,6 +1622,12 @@ impl Client {
     }
 
     ///Sends a `GET` request to `/instance/serial`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn instance_serial<'a>(
         &'a self,
     ) -> Result<ResponseValue<reqwest::Upgraded>, Error<types::Error>> {
@@ -1643,6 +1673,12 @@ impl Client {
     }
 
     ///Sends a `PUT` request to `/instance/state`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn instance_state_put<'a>(
         &'a self,
         body: types::InstanceStateRequested,
@@ -1684,6 +1720,12 @@ impl Client {
     }
 
     ///Sends a `GET` request to `/instance/state-monitor`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn instance_state_monitor<'a>(
         &'a self,
         body: &'a types::InstanceStateMonitorRequest,

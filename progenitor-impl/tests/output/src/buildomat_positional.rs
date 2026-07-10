@@ -905,6 +905,12 @@ impl ClientHooks<()> for &Client {}
 )]
 impl Client {
     ///Sends a `POST` request to `/v1/control/hold`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn control_hold<'a>(&'a self) -> Result<ResponseValue<()>, Error<()>> {
         let url = format!("{}/v1/control/hold", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
@@ -936,6 +942,12 @@ impl Client {
     }
 
     ///Sends a `POST` request to `/v1/control/resume`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn control_resume<'a>(&'a self) -> Result<ResponseValue<()>, Error<()>> {
         let url = format!("{}/v1/control/resume", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
@@ -959,6 +971,12 @@ impl Client {
     }
 
     ///Sends a `GET` request to `/v1/task/{Task}`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn task_get<'a>(
         &'a self,
         task: &'a str,
@@ -997,6 +1015,12 @@ impl Client {
     }
 
     ///Sends a `GET` request to `/v1/tasks`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn tasks_get<'a>(
         &'a self,
     ) -> Result<ResponseValue<::std::vec::Vec<types::Task>>, Error<()>> {
@@ -1030,6 +1054,12 @@ impl Client {
     }
 
     ///Sends a `POST` request to `/v1/tasks`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn task_submit<'a>(
         &'a self,
         body: &'a types::TaskSubmit,
@@ -1065,6 +1095,12 @@ impl Client {
     }
 
     ///Sends a `GET` request to `/v1/tasks/{task}/events`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn task_events_get<'a>(
         &'a self,
         task: &'a str,
@@ -1105,6 +1141,12 @@ impl Client {
     }
 
     ///Sends a `GET` request to `/v1/tasks/{task}/outputs`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn task_outputs_get<'a>(
         &'a self,
         task: &'a str,
@@ -1143,6 +1185,12 @@ impl Client {
     }
 
     ///Sends a `GET` request to `/v1/tasks/{task}/outputs/{output}`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn task_output_download<'a>(
         &'a self,
         task: &'a str,
@@ -1175,6 +1223,12 @@ impl Client {
     }
 
     ///Sends a `POST` request to `/v1/users`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn user_create<'a>(
         &'a self,
         body: &'a types::UserCreate,
@@ -1210,6 +1264,12 @@ impl Client {
     }
 
     ///Sends a `GET` request to `/v1/whoami`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn whoami<'a>(&'a self) -> Result<ResponseValue<types::WhoamiResult>, Error<()>> {
         let url = format!("{}/v1/whoami", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
@@ -1241,6 +1301,12 @@ impl Client {
     }
 
     ///Sends a `PUT` request to `/v1/whoami/name`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn whoami_put_name<'a>(
         &'a self,
         body: String,
@@ -1276,6 +1342,12 @@ impl Client {
     }
 
     ///Sends a `POST` request to `/v1/worker/bootstrap`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn worker_bootstrap<'a>(
         &'a self,
         body: &'a types::WorkerBootstrap,
@@ -1311,6 +1383,12 @@ impl Client {
     }
 
     ///Sends a `GET` request to `/v1/worker/ping`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn worker_ping<'a>(
         &'a self,
     ) -> Result<ResponseValue<types::WorkerPingResult>, Error<()>> {
@@ -1344,6 +1422,12 @@ impl Client {
     }
 
     ///Sends a `POST` request to `/v1/worker/task/{task}/append`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn worker_task_append<'a>(
         &'a self,
         task: &'a str,
@@ -1380,6 +1464,12 @@ impl Client {
     }
 
     ///Sends a `POST` request to `/v1/worker/task/{task}/chunk`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn worker_task_upload_chunk<'a, B: Into<reqwest::Body>>(
         &'a self,
         task: &'a str,
@@ -1424,6 +1514,12 @@ impl Client {
     }
 
     ///Sends a `POST` request to `/v1/worker/task/{task}/complete`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn worker_task_complete<'a>(
         &'a self,
         task: &'a str,
@@ -1460,6 +1556,12 @@ impl Client {
     }
 
     ///Sends a `POST` request to `/v1/worker/task/{task}/output`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn worker_task_add_output<'a>(
         &'a self,
         task: &'a str,
@@ -1496,6 +1598,12 @@ impl Client {
     }
 
     ///Sends a `GET` request to `/v1/workers`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn workers_list<'a>(
         &'a self,
     ) -> Result<ResponseValue<types::WorkersResult>, Error<()>> {
@@ -1529,6 +1637,12 @@ impl Client {
     }
 
     ///Sends a `POST` request to `/v1/workers/recycle`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn workers_recycle<'a>(&'a self) -> Result<ResponseValue<()>, Error<()>> {
         let url = format!("{}/v1/workers/recycle", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
@@ -1552,6 +1666,12 @@ impl Client {
     }
 
     ///Sends a `GET` request to `/v1/things`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn get_thing_or_things<'a>(
         &'a self,
         id: Option<&'a types::GetThingOrThingsId>,
@@ -1587,6 +1707,12 @@ impl Client {
     }
 
     ///Sends a `GET` request to `/v1/header-arg`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn header_arg<'a>(
         &'a self,
         accept_language: Option<types::HeaderArgAcceptLanguage>,

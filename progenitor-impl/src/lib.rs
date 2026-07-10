@@ -316,6 +316,11 @@ impl Generator {
     }
 
     /// Emit a [`TokenStream`] containing the generated client code.
+    ///
+    /// # Errors
+    ///
+    /// Returns an error if the `OpenAPI` document is invalid or its schemas
+    /// cannot be converted into Rust types.
     pub fn generate_tokens(&mut self, spec: &OpenAPI) -> Result<TokenStream> {
         validate_openapi(spec)?;
 
@@ -703,6 +708,10 @@ impl Generator {
 }
 
 /// Add newlines after end-braces at <= two levels of indentation.
+///
+/// # Errors
+///
+/// This function currently always returns `Ok`.
 pub fn space_out_items(content: &str) -> Result<String> {
     Ok(if cfg!(not(windows)) {
         let regex = regex::Regex::new(r"(\n\s*})(\n\s{0,8}[^} ])").unwrap();
@@ -725,6 +734,11 @@ fn validate_openapi_spec_version(spec_version: &str) -> Result<()> {
 }
 
 /// Do some very basic checks of the `OpenAPI` documents.
+///
+/// # Errors
+///
+/// Returns an error if the document uses an unsupported version, contains
+/// unresolved path references, or repeats an operation ID.
 pub fn validate_openapi(spec: &OpenAPI) -> Result<()> {
     validate_openapi_spec_version(spec.openapi.as_str())?;
 

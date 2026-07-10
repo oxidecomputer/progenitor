@@ -126,6 +126,11 @@ impl Client {
     /// - `response`: Parameter name that was previously colliding
     /// - `result`: Parameter name that was previously colliding
     /// - `url`: Parameter name that was previously colliding
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn key_get<'a>(
         &'a self,
         query: bool,

@@ -141,6 +141,12 @@ impl ClientHooks<()> for &Client {}
 )]
 impl Client {
     ///Sends a `GET` request to `/uno`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn uno<'a>(
         &'a self,
         gateway: &'a str,

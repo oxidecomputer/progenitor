@@ -148,6 +148,12 @@ impl ClientHooks<()> for &Client {}
 )]
 impl Client {
     ///Sends a `GET` request to `/{ref}/{type}/{trait}`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn renamed_parameters<'a>(
         &'a self,
         ref_: &'a str,

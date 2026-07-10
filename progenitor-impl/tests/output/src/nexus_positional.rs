@@ -12949,6 +12949,12 @@ impl Client {
     ///Use `GET /v1/disks/{disk}` instead
     ///
     ///Sends a `GET` request to `/by-id/disks/{id}`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn disk_view_by_id<'a>(
         &'a self,
         id: &'a ::uuid::Uuid,
@@ -12995,6 +13001,12 @@ impl Client {
     ///Fetch an image by id
     ///
     ///Sends a `GET` request to `/by-id/images/{id}`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn image_view_by_id<'a>(
         &'a self,
         id: &'a ::uuid::Uuid,
@@ -13041,6 +13053,12 @@ impl Client {
     ///Fetch an instance by id
     ///
     ///Sends a `GET` request to `/by-id/instances/{id}`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn instance_view_by_id<'a>(
         &'a self,
         id: &'a ::uuid::Uuid,
@@ -13087,6 +13105,12 @@ impl Client {
     ///Fetch a network interface by id
     ///
     ///Sends a `GET` request to `/by-id/network-interfaces/{id}`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn instance_network_interface_view_by_id<'a>(
         &'a self,
         id: &'a ::uuid::Uuid,
@@ -13135,6 +13159,12 @@ impl Client {
     ///Use `GET /v1/organizations/{organization}` instead
     ///
     ///Sends a `GET` request to `/by-id/organizations/{id}`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn organization_view_by_id<'a>(
         &'a self,
         id: &'a ::uuid::Uuid,
@@ -13183,6 +13213,12 @@ impl Client {
     ///Use `GET /v1/projects/{project}` instead
     ///
     ///Sends a `GET` request to `/by-id/projects/{id}`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn project_view_by_id<'a>(
         &'a self,
         id: &'a ::uuid::Uuid,
@@ -13229,6 +13265,12 @@ impl Client {
     ///Fetch a snapshot by id
     ///
     ///Sends a `GET` request to `/by-id/snapshots/{id}`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn snapshot_view_by_id<'a>(
         &'a self,
         id: &'a ::uuid::Uuid,
@@ -13275,6 +13317,12 @@ impl Client {
     ///Fetch a route by id
     ///
     ///Sends a `GET` request to `/by-id/vpc-router-routes/{id}`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn vpc_router_route_view_by_id<'a>(
         &'a self,
         id: &'a ::uuid::Uuid,
@@ -13321,6 +13369,12 @@ impl Client {
     ///Get a router by id
     ///
     ///Sends a `GET` request to `/by-id/vpc-routers/{id}`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn vpc_router_view_by_id<'a>(
         &'a self,
         id: &'a ::uuid::Uuid,
@@ -13367,6 +13421,12 @@ impl Client {
     ///Fetch a subnet by id
     ///
     ///Sends a `GET` request to `/by-id/vpc-subnets/{id}`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn vpc_subnet_view_by_id<'a>(
         &'a self,
         id: &'a ::uuid::Uuid,
@@ -13413,6 +13473,12 @@ impl Client {
     ///Fetch a VPC
     ///
     ///Sends a `GET` request to `/by-id/vpcs/{id}`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn vpc_view_by_id<'a>(
         &'a self,
         id: &'a ::uuid::Uuid,
@@ -13463,6 +13529,12 @@ impl Client {
     /// must be verified and confirmed prior to a token being granted.
     ///
     ///Sends a `POST` request to `/device/auth`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn device_auth_request<'a>(
         &'a self,
         body: &'a types::DeviceAuthRequest,
@@ -13501,6 +13573,12 @@ impl Client {
     /// `/device/token`.
     ///
     ///Sends a `POST` request to `/device/confirm`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn device_auth_confirm<'a>(
         &'a self,
         body: &'a types::DeviceAuthVerify,
@@ -13547,6 +13625,12 @@ impl Client {
     /// verified and the grant is confirmed.
     ///
     ///Sends a `POST` request to `/device/token`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn device_access_token<'a>(
         &'a self,
         body: &'a types::DeviceAccessTokenRequest,
@@ -13586,6 +13670,11 @@ impl Client {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn group_list<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
@@ -13673,6 +13762,12 @@ impl Client {
     }
 
     ///Sends a `POST` request to `/login`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn login_spoof<'a>(
         &'a self,
         body: &'a types::SpoofLoginBody,
@@ -13716,6 +13811,12 @@ impl Client {
     ///Authenticate a user (i.e., log in) via username and password
     ///
     ///Sends a `POST` request to `/login/{silo_name}/local`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn login_local<'a>(
         &'a self,
         silo_name: &'a types::Name,
@@ -13763,6 +13864,12 @@ impl Client {
     /// them to their identity provider.
     ///
     ///Sends a `GET` request to `/login/{silo_name}/saml/{provider_name}`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn login_saml_begin<'a>(
         &'a self,
         silo_name: &'a types::Name,
@@ -13803,6 +13910,12 @@ impl Client {
     ///Authenticate a user (i.e., log in) via SAML
     ///
     ///Sends a `POST` request to `/login/{silo_name}/saml/{provider_name}`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn login_saml<'a, B: Into<reqwest::Body>>(
         &'a self,
         silo_name: &'a types::Name,
@@ -13851,6 +13964,12 @@ impl Client {
     }
 
     ///Sends a `POST` request to `/logout`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn logout<'a>(&'a self) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!("{}/logout", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
@@ -13898,6 +14017,11 @@ impl Client {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn organization_list<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
@@ -13992,6 +14116,12 @@ impl Client {
     ///Use `POST /v1/organizations` instead
     ///
     ///Sends a `POST` request to `/organizations`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn organization_create<'a>(
         &'a self,
         body: &'a types::OrganizationCreate,
@@ -14040,6 +14170,11 @@ impl Client {
     ///
     ///Arguments:
     /// - `organization_name`: The organization's unique name.
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn organization_view<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -14092,6 +14227,11 @@ impl Client {
     ///Arguments:
     /// - `organization_name`: The organization's unique name.
     /// - `body`
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn organization_update<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -14145,6 +14285,11 @@ impl Client {
     ///
     ///Arguments:
     /// - `organization_name`: The organization's unique name.
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn organization_delete<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -14196,6 +14341,11 @@ impl Client {
     ///
     ///Arguments:
     /// - `organization_name`: The organization's unique name.
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn organization_policy_view<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -14248,6 +14398,11 @@ impl Client {
     ///Arguments:
     /// - `organization_name`: The organization's unique name.
     /// - `body`
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn organization_policy_update<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -14305,6 +14460,11 @@ impl Client {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn project_list<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -14410,6 +14570,11 @@ impl Client {
     ///Arguments:
     /// - `organization_name`: The organization's unique name.
     /// - `body`
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn project_create<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -14465,6 +14630,11 @@ impl Client {
     ///Arguments:
     /// - `organization_name`: The organization's unique name.
     /// - `project_name`: The project's unique name within the organization.
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn project_view<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -14521,6 +14691,11 @@ impl Client {
     /// - `organization_name`: The organization's unique name.
     /// - `project_name`: The project's unique name within the organization.
     /// - `body`
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn project_update<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -14578,6 +14753,11 @@ impl Client {
     ///Arguments:
     /// - `organization_name`: The organization's unique name.
     /// - `project_name`: The project's unique name within the organization.
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn project_delete<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -14637,6 +14817,11 @@ impl Client {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn disk_list<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -14752,6 +14937,11 @@ impl Client {
     /// - `organization_name`: The organization's unique name.
     /// - `project_name`: The project's unique name within the organization.
     /// - `body`
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn disk_create<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -14806,6 +14996,12 @@ impl Client {
     ///Sends a `GET` request to
     /// `/organizations/{organization_name}/projects/{project_name}/disks/
     /// {disk_name}`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn disk_view<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -14858,6 +15054,12 @@ impl Client {
     ///Sends a `DELETE` request to
     /// `/organizations/{organization_name}/projects/{project_name}/disks/
     /// {disk_name}`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn disk_delete<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -14921,6 +15123,11 @@ impl Client {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `start_time`: An inclusive start time of metrics.
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn disk_metrics_list<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -15068,6 +15275,11 @@ impl Client {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn image_list<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -15186,6 +15398,11 @@ impl Client {
     /// - `organization_name`: The organization's unique name.
     /// - `project_name`: The project's unique name within the organization.
     /// - `body`
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn image_create<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -15240,6 +15457,12 @@ impl Client {
     ///Sends a `GET` request to
     /// `/organizations/{organization_name}/projects/{project_name}/images/
     /// {image_name}`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn image_view<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -15296,6 +15519,12 @@ impl Client {
     ///Sends a `DELETE` request to
     /// `/organizations/{organization_name}/projects/{project_name}/images/
     /// {image_name}`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn image_delete<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -15355,6 +15584,11 @@ impl Client {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn instance_list<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -15471,6 +15705,11 @@ impl Client {
     /// - `organization_name`: The organization's unique name.
     /// - `project_name`: The project's unique name within the organization.
     /// - `body`
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn instance_create<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -15525,6 +15764,12 @@ impl Client {
     ///Sends a `GET` request to
     /// `/organizations/{organization_name}/projects/{project_name}/instances/
     /// {instance_name}`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn instance_view<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -15577,6 +15822,12 @@ impl Client {
     ///Sends a `DELETE` request to
     /// `/organizations/{organization_name}/projects/{project_name}/instances/
     /// {instance_name}`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn instance_delete<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -15640,6 +15891,11 @@ impl Client {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn instance_disk_list<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -15765,6 +16021,12 @@ impl Client {
     ///Sends a `POST` request to
     /// `/organizations/{organization_name}/projects/{project_name}/instances/
     /// {instance_name}/disks/attach`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn instance_disk_attach<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -15821,6 +16083,12 @@ impl Client {
     ///Sends a `POST` request to
     /// `/organizations/{organization_name}/projects/{project_name}/instances/
     /// {instance_name}/disks/detach`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn instance_disk_detach<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -15875,6 +16143,12 @@ impl Client {
     ///Sends a `GET` request to
     /// `/organizations/{organization_name}/projects/{project_name}/instances/
     /// {instance_name}/external-ips`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn instance_external_ip_list<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -15929,6 +16203,12 @@ impl Client {
     ///Sends a `POST` request to
     /// `/organizations/{organization_name}/projects/{project_name}/instances/
     /// {instance_name}/migrate`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn instance_migrate<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -15992,6 +16272,11 @@ impl Client {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn instance_network_interface_list<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -16114,6 +16399,12 @@ impl Client {
     ///Sends a `POST` request to
     /// `/organizations/{organization_name}/projects/{project_name}/instances/
     /// {instance_name}/network-interfaces`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn instance_network_interface_create<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -16168,6 +16459,12 @@ impl Client {
     ///Sends a `GET` request to
     /// `/organizations/{organization_name}/projects/{project_name}/instances/
     /// {instance_name}/network-interfaces/{interface_name}`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn instance_network_interface_view<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -16222,6 +16519,12 @@ impl Client {
     ///Sends a `PUT` request to
     /// `/organizations/{organization_name}/projects/{project_name}/instances/
     /// {instance_name}/network-interfaces/{interface_name}`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn instance_network_interface_update<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -16283,6 +16586,12 @@ impl Client {
     ///Sends a `DELETE` request to
     /// `/organizations/{organization_name}/projects/{project_name}/instances/
     /// {instance_name}/network-interfaces/{interface_name}`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn instance_network_interface_delete<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -16339,6 +16648,12 @@ impl Client {
     ///Sends a `POST` request to
     /// `/organizations/{organization_name}/projects/{project_name}/instances/
     /// {instance_name}/reboot`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn instance_reboot<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -16409,6 +16724,11 @@ impl Client {
     ///   read, counting *backward* from the most recently buffered data
     ///   retrieved from the instance. (See note on `from_start` about mutual
     ///   exclusivity)
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn instance_serial_console<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -16475,6 +16795,12 @@ impl Client {
     ///Sends a `GET` request to
     /// `/organizations/{organization_name}/projects/{project_name}/instances/
     /// {instance_name}/serial-console/stream`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn instance_serial_console_stream<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -16529,6 +16855,12 @@ impl Client {
     ///Sends a `GET` request to
     /// `/organizations/{organization_name}/projects/{project_name}/instances/
     /// {instance_name}/serial-console/stream_v2`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn instance_serial_console_stream_v2<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -16589,6 +16921,12 @@ impl Client {
     ///Sends a `POST` request to
     /// `/organizations/{organization_name}/projects/{project_name}/instances/
     /// {instance_name}/start`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn instance_start<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -16643,6 +16981,12 @@ impl Client {
     ///Sends a `POST` request to
     /// `/organizations/{organization_name}/projects/{project_name}/instances/
     /// {instance_name}/stop`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn instance_stop<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -16700,6 +17044,11 @@ impl Client {
     ///Arguments:
     /// - `organization_name`: The organization's unique name.
     /// - `project_name`: The project's unique name within the organization.
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn project_policy_view<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -16754,6 +17103,11 @@ impl Client {
     /// - `organization_name`: The organization's unique name.
     /// - `project_name`: The project's unique name within the organization.
     /// - `body`
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn project_policy_update<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -16813,6 +17167,11 @@ impl Client {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn snapshot_list<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -16929,6 +17288,11 @@ impl Client {
     /// - `organization_name`: The organization's unique name.
     /// - `project_name`: The project's unique name within the organization.
     /// - `body`
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn snapshot_create<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -16981,6 +17345,12 @@ impl Client {
     ///Sends a `GET` request to
     /// `/organizations/{organization_name}/projects/{project_name}/snapshots/
     /// {snapshot_name}`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn snapshot_view<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -17033,6 +17403,12 @@ impl Client {
     ///Sends a `DELETE` request to
     /// `/organizations/{organization_name}/projects/{project_name}/snapshots/
     /// {snapshot_name}`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn snapshot_delete<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -17092,6 +17468,11 @@ impl Client {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn vpc_list<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -17205,6 +17586,11 @@ impl Client {
     /// - `organization_name`: The organization's unique name.
     /// - `project_name`: The project's unique name within the organization.
     /// - `body`
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn vpc_create<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -17257,6 +17643,12 @@ impl Client {
     ///Sends a `GET` request to
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
     /// {vpc_name}`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn vpc_view<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -17309,6 +17701,12 @@ impl Client {
     ///Sends a `PUT` request to
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
     /// {vpc_name}`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn vpc_update<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -17363,6 +17761,12 @@ impl Client {
     ///Sends a `DELETE` request to
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
     /// {vpc_name}`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn vpc_delete<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -17415,6 +17819,12 @@ impl Client {
     ///Sends a `GET` request to
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
     /// {vpc_name}/firewall/rules`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn vpc_firewall_rules_view<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -17467,6 +17877,12 @@ impl Client {
     ///Sends a `PUT` request to
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
     /// {vpc_name}/firewall/rules`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn vpc_firewall_rules_update<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -17530,6 +17946,11 @@ impl Client {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn vpc_router_list<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -17652,6 +18073,12 @@ impl Client {
     ///Sends a `POST` request to
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
     /// {vpc_name}/routers`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn vpc_router_create<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -17706,6 +18133,12 @@ impl Client {
     ///Sends a `GET` request to
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
     /// {vpc_name}/routers/{router_name}`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn vpc_router_view<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -17760,6 +18193,12 @@ impl Client {
     ///Sends a `PUT` request to
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
     /// {vpc_name}/routers/{router_name}`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn vpc_router_update<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -17816,6 +18255,12 @@ impl Client {
     ///Sends a `DELETE` request to
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
     /// {vpc_name}/routers/{router_name}`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn vpc_router_delete<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -17882,6 +18327,11 @@ impl Client {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn vpc_router_route_list<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -18013,6 +18463,12 @@ impl Client {
     ///Sends a `POST` request to
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
     /// {vpc_name}/routers/{router_name}/routes`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn vpc_router_route_create<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -18069,6 +18525,12 @@ impl Client {
     ///Sends a `GET` request to
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
     /// {vpc_name}/routers/{router_name}/routes/{route_name}`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn vpc_router_route_view<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -18125,6 +18587,12 @@ impl Client {
     ///Sends a `PUT` request to
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
     /// {vpc_name}/routers/{router_name}/routes/{route_name}`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn vpc_router_route_update<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -18183,6 +18651,12 @@ impl Client {
     ///Sends a `DELETE` request to
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
     /// {vpc_name}/routers/{router_name}/routes/{route_name}`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn vpc_router_route_delete<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -18248,6 +18722,11 @@ impl Client {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn vpc_subnet_list<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -18370,6 +18849,12 @@ impl Client {
     ///Sends a `POST` request to
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
     /// {vpc_name}/subnets`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn vpc_subnet_create<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -18424,6 +18909,12 @@ impl Client {
     ///Sends a `GET` request to
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
     /// {vpc_name}/subnets/{subnet_name}`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn vpc_subnet_view<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -18478,6 +18969,12 @@ impl Client {
     ///Sends a `PUT` request to
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
     /// {vpc_name}/subnets/{subnet_name}`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn vpc_subnet_update<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -18534,6 +19031,12 @@ impl Client {
     ///Sends a `DELETE` request to
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
     /// {vpc_name}/subnets/{subnet_name}`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn vpc_subnet_delete<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -18598,6 +19101,11 @@ impl Client {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn vpc_subnet_list_network_interfaces<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -18725,6 +19233,12 @@ impl Client {
     ///Fetch the current silo's IAM policy
     ///
     ///Sends a `GET` request to `/policy`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn policy_view<'a>(
         &'a self,
     ) -> Result<ResponseValue<types::SiloRolePolicy>, Error<types::Error>> {
@@ -18766,6 +19280,12 @@ impl Client {
     ///Update the current silo's IAM policy
     ///
     ///Sends a `PUT` request to `/policy`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn policy_update<'a>(
         &'a self,
         body: &'a types::SiloRolePolicy,
@@ -18814,6 +19334,11 @@ impl Client {
     /// - `limit`: Maximum number of items returned by a single call
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn role_list<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
@@ -18902,6 +19427,11 @@ impl Client {
     ///
     ///Arguments:
     /// - `role_name`: The built-in role's unique name.
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn role_view<'a>(
         &'a self,
         role_name: &'a str,
@@ -18948,6 +19478,12 @@ impl Client {
     ///Fetch the user associated with the current session
     ///
     ///Sends a `GET` request to `/session/me`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn session_me<'a>(
         &'a self,
     ) -> Result<ResponseValue<types::User>, Error<types::Error>> {
@@ -18995,6 +19531,11 @@ impl Client {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn session_me_groups<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
@@ -19092,6 +19633,11 @@ impl Client {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn session_sshkey_list<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
@@ -19185,6 +19731,12 @@ impl Client {
     ///Create an SSH public key for the currently authenticated user.
     ///
     ///Sends a `POST` request to `/session/me/sshkeys`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn session_sshkey_create<'a>(
         &'a self,
         body: &'a types::SshKeyCreate,
@@ -19231,6 +19783,12 @@ impl Client {
     /// user.
     ///
     ///Sends a `GET` request to `/session/me/sshkeys/{ssh_key_name}`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn session_sshkey_view<'a>(
         &'a self,
         ssh_key_name: &'a types::Name,
@@ -19280,6 +19838,12 @@ impl Client {
     /// user.
     ///
     ///Sends a `DELETE` request to `/session/me/sshkeys/{ssh_key_name}`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn session_sshkey_delete<'a>(
         &'a self,
         ssh_key_name: &'a types::Name,
@@ -19326,6 +19890,12 @@ impl Client {
     ///Fetch a system-wide image by id
     ///
     ///Sends a `GET` request to `/system/by-id/images/{id}`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn system_image_view_by_id<'a>(
         &'a self,
         id: &'a ::uuid::Uuid,
@@ -19372,6 +19942,12 @@ impl Client {
     ///Fetch an IP pool by id
     ///
     ///Sends a `GET` request to `/system/by-id/ip-pools/{id}`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn ip_pool_view_by_id<'a>(
         &'a self,
         id: &'a ::uuid::Uuid,
@@ -19418,6 +19994,12 @@ impl Client {
     ///Fetch a silo by id
     ///
     ///Sends a `GET` request to `/system/by-id/silos/{id}`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn silo_view_by_id<'a>(
         &'a self,
         id: &'a ::uuid::Uuid,
@@ -19474,6 +20056,11 @@ impl Client {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn certificate_list<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
@@ -19571,6 +20158,12 @@ impl Client {
     /// serve external connections.
     ///
     ///Sends a `POST` request to `/system/certificates`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn certificate_create<'a>(
         &'a self,
         body: &'a types::CertificateCreate,
@@ -19616,6 +20209,12 @@ impl Client {
     ///Returns the details of a specific certificate
     ///
     ///Sends a `GET` request to `/system/certificates/{certificate}`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn certificate_view<'a>(
         &'a self,
         certificate: &'a types::NameOrId,
@@ -19664,6 +20263,12 @@ impl Client {
     ///Permanently delete a certificate. This operation cannot be undone.
     ///
     ///Sends a `DELETE` request to `/system/certificates/{certificate}`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn certificate_delete<'a>(
         &'a self,
         certificate: &'a types::NameOrId,
@@ -19716,6 +20321,11 @@ impl Client {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn physical_disk_list<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
@@ -19812,6 +20422,11 @@ impl Client {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn rack_list<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
@@ -19904,6 +20519,11 @@ impl Client {
     ///
     ///Arguments:
     /// - `rack_id`: The rack's unique ID.
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn rack_view<'a>(
         &'a self,
         rack_id: &'a ::uuid::Uuid,
@@ -19956,6 +20576,11 @@ impl Client {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn sled_list<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
@@ -20048,6 +20673,11 @@ impl Client {
     ///
     ///Arguments:
     /// - `sled_id`: The sled's unique ID.
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn sled_view<'a>(
         &'a self,
         sled_id: &'a ::uuid::Uuid,
@@ -20101,6 +20731,11 @@ impl Client {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn sled_physical_disk_list<'a>(
         &'a self,
         sled_id: &'a ::uuid::Uuid,
@@ -20209,6 +20844,11 @@ impl Client {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn system_image_list<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
@@ -20306,6 +20946,12 @@ impl Client {
     /// in any silo as a base for instances.
     ///
     ///Sends a `POST` request to `/system/images`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn system_image_create<'a>(
         &'a self,
         body: &'a types::GlobalImageCreate,
@@ -20351,6 +20997,12 @@ impl Client {
     ///Returns the details of a specific system-wide image.
     ///
     ///Sends a `GET` request to `/system/images/{image_name}`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn system_image_view<'a>(
         &'a self,
         image_name: &'a types::Name,
@@ -20401,6 +21053,12 @@ impl Client {
     /// new instances can not be created with this image.
     ///
     ///Sends a `DELETE` request to `/system/images/{image_name}`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn system_image_delete<'a>(
         &'a self,
         image_name: &'a types::Name,
@@ -20453,6 +21111,11 @@ impl Client {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn ip_pool_list<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
@@ -20542,6 +21205,12 @@ impl Client {
     ///Create an IP pool
     ///
     ///Sends a `POST` request to `/system/ip-pools`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn ip_pool_create<'a>(
         &'a self,
         body: &'a types::IpPoolCreate,
@@ -20585,6 +21254,12 @@ impl Client {
     ///Fetch an IP pool
     ///
     ///Sends a `GET` request to `/system/ip-pools/{pool_name}`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn ip_pool_view<'a>(
         &'a self,
         pool_name: &'a types::Name,
@@ -20631,6 +21306,12 @@ impl Client {
     ///Update an IP Pool
     ///
     ///Sends a `PUT` request to `/system/ip-pools/{pool_name}`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn ip_pool_update<'a>(
         &'a self,
         pool_name: &'a types::Name,
@@ -20679,6 +21360,12 @@ impl Client {
     ///Delete an IP Pool
     ///
     ///Sends a `DELETE` request to `/system/ip-pools/{pool_name}`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn ip_pool_delete<'a>(
         &'a self,
         pool_name: &'a types::Name,
@@ -20733,6 +21420,11 @@ impl Client {
     /// - `limit`: Maximum number of items returned by a single call
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn ip_pool_range_list<'a>(
         &'a self,
         pool_name: &'a types::Name,
@@ -20828,6 +21520,12 @@ impl Client {
     ///Add a range to an IP pool
     ///
     ///Sends a `POST` request to `/system/ip-pools/{pool_name}/ranges/add`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn ip_pool_range_add<'a>(
         &'a self,
         pool_name: &'a types::Name,
@@ -20876,6 +21574,12 @@ impl Client {
     ///Remove a range from an IP pool
     ///
     ///Sends a `POST` request to `/system/ip-pools/{pool_name}/ranges/remove`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn ip_pool_range_remove<'a>(
         &'a self,
         pool_name: &'a types::Name,
@@ -20924,6 +21628,12 @@ impl Client {
     ///Fetch the IP pool used for Oxide services
     ///
     ///Sends a `GET` request to `/system/ip-pools-service`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn ip_pool_service_view<'a>(
         &'a self,
     ) -> Result<ResponseValue<types::IpPool>, Error<types::Error>> {
@@ -20972,6 +21682,11 @@ impl Client {
     /// - `limit`: Maximum number of items returned by a single call
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn ip_pool_service_range_list<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
@@ -21060,6 +21775,12 @@ impl Client {
     ///Add a range to an IP pool used for Oxide services
     ///
     ///Sends a `POST` request to `/system/ip-pools-service/ranges/add`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn ip_pool_service_range_add<'a>(
         &'a self,
         body: &'a types::IpRange,
@@ -21103,6 +21824,12 @@ impl Client {
     ///Remove a range from an IP pool used for Oxide services
     ///
     ///Sends a `POST` request to `/system/ip-pools-service/ranges/remove`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn ip_pool_service_range_remove<'a>(
         &'a self,
         body: &'a types::IpRange,
@@ -21155,6 +21882,11 @@ impl Client {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `start_time`: An inclusive start time of metrics.
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn system_metric<'a>(
         &'a self,
         metric_name: types::SystemMetricName,
@@ -21217,6 +21949,12 @@ impl Client {
     ///Fetch the top-level IAM policy
     ///
     ///Sends a `GET` request to `/system/policy`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn system_policy_view<'a>(
         &'a self,
     ) -> Result<ResponseValue<types::FleetRolePolicy>, Error<types::Error>> {
@@ -21258,6 +21996,12 @@ impl Client {
     ///Update the top-level IAM policy
     ///
     ///Sends a `PUT` request to `/system/policy`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn system_policy_update<'a>(
         &'a self,
         body: &'a types::FleetRolePolicy,
@@ -21307,6 +22051,11 @@ impl Client {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn saga_list<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
@@ -21396,6 +22145,12 @@ impl Client {
     ///Fetch a saga
     ///
     ///Sends a `GET` request to `/system/sagas/{saga_id}`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn saga_view<'a>(
         &'a self,
         saga_id: &'a ::uuid::Uuid,
@@ -21450,6 +22205,11 @@ impl Client {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn silo_list<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
@@ -21541,6 +22301,12 @@ impl Client {
     ///Create a silo
     ///
     ///Sends a `POST` request to `/system/silos`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn silo_create<'a>(
         &'a self,
         body: &'a types::SiloCreate,
@@ -21589,6 +22355,11 @@ impl Client {
     ///
     ///Arguments:
     /// - `silo_name`: The silo's unique name.
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn silo_view<'a>(
         &'a self,
         silo_name: &'a types::Name,
@@ -21640,6 +22411,11 @@ impl Client {
     ///
     ///Arguments:
     /// - `silo_name`: The silo's unique name.
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn silo_delete<'a>(
         &'a self,
         silo_name: &'a types::Name,
@@ -21693,6 +22469,11 @@ impl Client {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn silo_identity_provider_list<'a>(
         &'a self,
         silo_name: &'a types::Name,
@@ -21800,6 +22581,11 @@ impl Client {
     ///Arguments:
     /// - `silo_name`: The silo's unique name.
     /// - `body`
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn local_idp_user_create<'a>(
         &'a self,
         silo_name: &'a types::Name,
@@ -21853,6 +22639,11 @@ impl Client {
     ///Arguments:
     /// - `silo_name`: The silo's unique name.
     /// - `user_id`: The user's internal id
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn local_idp_user_delete<'a>(
         &'a self,
         silo_name: &'a types::Name,
@@ -21911,6 +22702,11 @@ impl Client {
     /// - `silo_name`: The silo's unique name.
     /// - `user_id`: The user's internal id
     /// - `body`
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn local_idp_user_set_password<'a>(
         &'a self,
         silo_name: &'a types::Name,
@@ -21966,6 +22762,11 @@ impl Client {
     ///Arguments:
     /// - `silo_name`: The silo's unique name.
     /// - `body`
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn saml_identity_provider_create<'a>(
         &'a self,
         silo_name: &'a types::Name,
@@ -22019,6 +22820,11 @@ impl Client {
     ///Arguments:
     /// - `silo_name`: The silo's unique name.
     /// - `provider_name`: The SAML identity provider's name
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn saml_identity_provider_view<'a>(
         &'a self,
         silo_name: &'a types::Name,
@@ -22070,6 +22876,11 @@ impl Client {
     ///
     ///Arguments:
     /// - `silo_name`: The silo's unique name.
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn silo_policy_view<'a>(
         &'a self,
         silo_name: &'a types::Name,
@@ -22120,6 +22931,11 @@ impl Client {
     ///Arguments:
     /// - `silo_name`: The silo's unique name.
     /// - `body`
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn silo_policy_update<'a>(
         &'a self,
         silo_name: &'a types::Name,
@@ -22175,6 +22991,11 @@ impl Client {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn silo_users_list<'a>(
         &'a self,
         silo_name: &'a types::Name,
@@ -22275,6 +23096,11 @@ impl Client {
     ///Arguments:
     /// - `silo_name`: The silo's unique name.
     /// - `user_id`: The user's internal id
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn silo_user_view<'a>(
         &'a self,
         silo_name: &'a types::Name,
@@ -22329,6 +23155,11 @@ impl Client {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn system_user_list<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
@@ -22422,6 +23253,11 @@ impl Client {
     ///
     ///Arguments:
     /// - `user_name`: The built-in user's unique name.
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn system_user_view<'a>(
         &'a self,
         user_name: &'a types::Name,
@@ -22473,6 +23309,11 @@ impl Client {
     /// - `limit`: Maximum number of items returned by a single call
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn timeseries_schema_get<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
@@ -22565,6 +23406,11 @@ impl Client {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn user_list<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
@@ -22662,6 +23508,11 @@ impl Client {
     ///   subsequent page
     /// - `project`
     /// - `sort_by`
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn disk_list_v1<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
@@ -22762,6 +23613,12 @@ impl Client {
     ///Create a disk
     ///
     ///Sends a `POST` request to `/v1/disks`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn disk_create_v1<'a>(
         &'a self,
         organization: Option<&'a types::NameOrId>,
@@ -22812,6 +23669,12 @@ impl Client {
     ///Fetch a disk
     ///
     ///Sends a `GET` request to `/v1/disks/{disk}`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn disk_view_v1<'a>(
         &'a self,
         disk: &'a types::NameOrId,
@@ -22865,6 +23728,12 @@ impl Client {
     ///Delete a disk
     ///
     ///Sends a `DELETE` request to `/v1/disks/{disk}`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn disk_delete_v1<'a>(
         &'a self,
         disk: &'a types::NameOrId,
@@ -22926,6 +23795,11 @@ impl Client {
     ///   subsequent page
     /// - `project`
     /// - `sort_by`
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn instance_list_v1<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
@@ -23027,6 +23901,12 @@ impl Client {
     ///Create an instance
     ///
     ///Sends a `POST` request to `/v1/instances`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn instance_create_v1<'a>(
         &'a self,
         organization: Option<&'a types::NameOrId>,
@@ -23077,6 +23957,12 @@ impl Client {
     ///Fetch an instance
     ///
     ///Sends a `GET` request to `/v1/instances/{instance}`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn instance_view_v1<'a>(
         &'a self,
         instance: &'a types::NameOrId,
@@ -23130,6 +24016,12 @@ impl Client {
     ///Delete an instance
     ///
     ///Sends a `DELETE` request to `/v1/instances/{instance}`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn instance_delete_v1<'a>(
         &'a self,
         instance: &'a types::NameOrId,
@@ -23192,6 +24084,11 @@ impl Client {
     ///   subsequent page
     /// - `project`
     /// - `sort_by`
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn instance_disk_list_v1<'a>(
         &'a self,
         instance: &'a types::NameOrId,
@@ -23306,6 +24203,12 @@ impl Client {
     ///Attach a disk to an instance
     ///
     ///Sends a `POST` request to `/v1/instances/{instance}/disks/attach`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn instance_disk_attach_v1<'a>(
         &'a self,
         instance: &'a types::NameOrId,
@@ -23361,6 +24264,12 @@ impl Client {
     ///Detach a disk from an instance
     ///
     ///Sends a `POST` request to `/v1/instances/{instance}/disks/detach`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn instance_disk_detach_v1<'a>(
         &'a self,
         instance: &'a types::NameOrId,
@@ -23416,6 +24325,12 @@ impl Client {
     ///Migrate an instance
     ///
     ///Sends a `POST` request to `/v1/instances/{instance}/migrate`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn instance_migrate_v1<'a>(
         &'a self,
         instance: &'a types::NameOrId,
@@ -23471,6 +24386,12 @@ impl Client {
     ///Reboot an instance
     ///
     ///Sends a `POST` request to `/v1/instances/{instance}/reboot`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn instance_reboot_v1<'a>(
         &'a self,
         instance: &'a types::NameOrId,
@@ -23540,6 +24461,11 @@ impl Client {
     ///   exclusivity)
     /// - `organization`
     /// - `project`
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn instance_serial_console_v1<'a>(
         &'a self,
         instance: &'a types::NameOrId,
@@ -23606,6 +24532,12 @@ impl Client {
     ///
     ///Sends a `GET` request to
     /// `/v1/instances/{instance}/serial-console/stream`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn instance_serial_console_stream_v1<'a>(
         &'a self,
         instance: &'a types::NameOrId,
@@ -23665,6 +24597,12 @@ impl Client {
     ///Boot an instance
     ///
     ///Sends a `POST` request to `/v1/instances/{instance}/start`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn instance_start_v1<'a>(
         &'a self,
         instance: &'a types::NameOrId,
@@ -23718,6 +24656,12 @@ impl Client {
     ///Stop an instance
     ///
     ///Sends a `POST` request to `/v1/instances/{instance}/stop`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn instance_stop_v1<'a>(
         &'a self,
         instance: &'a types::NameOrId,
@@ -23777,6 +24721,11 @@ impl Client {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn organization_list_v1<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
@@ -23867,6 +24816,12 @@ impl Client {
     ///Create an organization
     ///
     ///Sends a `POST` request to `/v1/organizations`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn organization_create_v1<'a>(
         &'a self,
         body: &'a types::OrganizationCreate,
@@ -23910,6 +24865,12 @@ impl Client {
     ///Fetch an organization
     ///
     ///Sends a `GET` request to `/v1/organizations/{organization}`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn organization_view_v1<'a>(
         &'a self,
         organization: &'a types::NameOrId,
@@ -23956,6 +24917,12 @@ impl Client {
     ///Update an organization
     ///
     ///Sends a `PUT` request to `/v1/organizations/{organization}`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn organization_update_v1<'a>(
         &'a self,
         organization: &'a types::NameOrId,
@@ -24004,6 +24971,12 @@ impl Client {
     ///Delete an organization
     ///
     ///Sends a `DELETE` request to `/v1/organizations/{organization}`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn organization_delete_v1<'a>(
         &'a self,
         organization: &'a types::NameOrId,
@@ -24050,6 +25023,12 @@ impl Client {
     ///Fetch an organization's IAM policy
     ///
     ///Sends a `GET` request to `/v1/organizations/{organization}/policy`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn organization_policy_view_v1<'a>(
         &'a self,
         organization: &'a types::NameOrId,
@@ -24096,6 +25075,12 @@ impl Client {
     ///Update an organization's IAM policy
     ///
     ///Sends a `PUT` request to `/v1/organizations/{organization}/policy`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn organization_policy_update_v1<'a>(
         &'a self,
         organization: &'a types::NameOrId,
@@ -24151,6 +25136,11 @@ impl Client {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn project_list_v1<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
@@ -24247,6 +25237,12 @@ impl Client {
     ///Create a project
     ///
     ///Sends a `POST` request to `/v1/projects`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn project_create_v1<'a>(
         &'a self,
         organization: &'a types::NameOrId,
@@ -24295,6 +25291,12 @@ impl Client {
     ///Fetch a project
     ///
     ///Sends a `GET` request to `/v1/projects/{project}`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn project_view_v1<'a>(
         &'a self,
         project: &'a types::NameOrId,
@@ -24346,6 +25348,12 @@ impl Client {
     ///Update a project
     ///
     ///Sends a `PUT` request to `/v1/projects/{project}`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn project_update_v1<'a>(
         &'a self,
         project: &'a types::NameOrId,
@@ -24399,6 +25407,12 @@ impl Client {
     ///Delete a project
     ///
     ///Sends a `DELETE` request to `/v1/projects/{project}`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn project_delete_v1<'a>(
         &'a self,
         project: &'a types::NameOrId,
@@ -24450,6 +25464,12 @@ impl Client {
     ///Fetch a project's IAM policy
     ///
     ///Sends a `GET` request to `/v1/projects/{project}/policy`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn project_policy_view_v1<'a>(
         &'a self,
         project: &'a types::NameOrId,
@@ -24501,6 +25521,12 @@ impl Client {
     ///Update a project's IAM policy
     ///
     ///Sends a `PUT` request to `/v1/projects/{project}/policy`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn project_policy_update_v1<'a>(
         &'a self,
         project: &'a types::NameOrId,
@@ -24560,6 +25586,11 @@ impl Client {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn system_component_version_list<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
@@ -24656,6 +25687,11 @@ impl Client {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn update_deployments_list<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
@@ -24746,6 +25782,12 @@ impl Client {
     ///Fetch a system update deployment
     ///
     ///Sends a `GET` request to `/v1/system/update/deployments/{id}`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn update_deployment_view<'a>(
         &'a self,
         id: &'a ::uuid::Uuid,
@@ -24792,6 +25834,12 @@ impl Client {
     ///Refresh update data
     ///
     ///Sends a `POST` request to `/v1/system/update/refresh`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn system_update_refresh<'a>(
         &'a self,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
@@ -24833,6 +25881,12 @@ impl Client {
     ///Start system update
     ///
     ///Sends a `POST` request to `/v1/system/update/start`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn system_update_start<'a>(
         &'a self,
         body: &'a types::SystemUpdateStart,
@@ -24878,6 +25932,12 @@ impl Client {
     ///If there is no update in progress, do nothing.
     ///
     ///Sends a `POST` request to `/v1/system/update/stop`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn system_update_stop<'a>(
         &'a self,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
@@ -24925,6 +25985,11 @@ impl Client {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn system_update_list<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
@@ -25015,6 +26080,12 @@ impl Client {
     ///View system update
     ///
     ///Sends a `GET` request to `/v1/system/update/updates/{version}`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn system_update_view<'a>(
         &'a self,
         version: &'a types::SemverVersion,
@@ -25062,6 +26133,12 @@ impl Client {
     ///
     ///Sends a `GET` request to
     /// `/v1/system/update/updates/{version}/components`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn system_update_components_list<'a>(
         &'a self,
         version: &'a types::SemverVersion,
@@ -25108,6 +26185,12 @@ impl Client {
     ///View system version and update status
     ///
     ///Sends a `GET` request to `/v1/system/update/version`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn system_version<'a>(
         &'a self,
     ) -> Result<ResponseValue<types::SystemVersion>, Error<types::Error>> {

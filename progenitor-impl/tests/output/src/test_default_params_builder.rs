@@ -263,7 +263,12 @@ impl ClientHooks<()> for &Client {}
 impl Client {
     ///Sends a `POST` request to `/`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.default_params()
     ///    .body(body)
     ///    .send()
@@ -331,6 +336,11 @@ pub mod builder {
         }
 
         ///Sends a `POST` request to `/`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<ByteStream>, Error<ByteStream>> {
             let Self { client, body } = self;
             let body = body

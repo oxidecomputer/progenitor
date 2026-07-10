@@ -467,6 +467,11 @@ impl Client {
     ///Arguments:
     /// - `authorization`: Authorization header (bearer token)
     /// - `body`
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn enrol<'a>(
         &'a self,
         authorization: &'a str,
@@ -503,6 +508,11 @@ impl Client {
     ///
     ///Arguments:
     /// - `authorization`: Authorization header (bearer token)
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn global_jobs<'a>(
         &'a self,
         authorization: &'a str,
@@ -541,6 +551,11 @@ impl Client {
     ///
     ///Arguments:
     /// - `authorization`: Authorization header (bearer token)
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn ping<'a>(
         &'a self,
         authorization: &'a str,
@@ -580,6 +595,11 @@ impl Client {
     ///Arguments:
     /// - `authorization`: Authorization header (bearer token)
     /// - `body`
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn report_finish<'a>(
         &'a self,
         authorization: &'a str,
@@ -621,6 +641,11 @@ impl Client {
     ///Arguments:
     /// - `authorization`: Authorization header (bearer token)
     /// - `body`
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn report_output<'a>(
         &'a self,
         authorization: &'a str,
@@ -662,6 +687,11 @@ impl Client {
     ///Arguments:
     /// - `authorization`: Authorization header (bearer token)
     /// - `body`
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn report_start<'a>(
         &'a self,
         authorization: &'a str,

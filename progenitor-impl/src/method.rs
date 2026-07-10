@@ -1664,7 +1664,9 @@ impl Generator {
         )?;
 
         let send_doc = format!(
-            "Sends a `{}` request to `{}`",
+            "Sends a `{}` request to `{}`\n\n\
+             # Errors\n\n\
+             Returns an error if request construction, transport, or response decoding fails.",
             method.method.as_str().to_ascii_uppercase(),
             method.path,
         );
@@ -2197,6 +2199,10 @@ fn make_doc_comment(method: &OperationMethod) -> String {
             buf.push('\n');
         }
     }
+
+    buf.push_str(
+        "\n# Errors\n\nReturns an error if request construction, transport, or response decoding fails.\n",
+    );
 
     buf
 }

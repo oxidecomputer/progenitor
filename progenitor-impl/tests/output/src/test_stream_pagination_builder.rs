@@ -339,7 +339,12 @@ impl Client {
     /// - `limit`: Maximum number of items returned by a single call
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.paginated_u32s()
     ///    .limit(limit)
     ///    .page_token(page_token)
@@ -408,6 +413,11 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::Uint32ResultsPage>, Error<types::Error>> {

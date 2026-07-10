@@ -1273,7 +1273,12 @@ impl Client {
     ///Arguments:
     /// - `authorization`: Authorization header (bearer token)
     /// - `body`
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.enrol()
     ///    .authorization(authorization)
     ///    .body(body)
@@ -1288,7 +1293,12 @@ impl Client {
     ///
     ///Arguments:
     /// - `authorization`: Authorization header (bearer token)
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.global_jobs()
     ///    .authorization(authorization)
     ///    .send()
@@ -1302,7 +1312,12 @@ impl Client {
     ///
     ///Arguments:
     /// - `authorization`: Authorization header (bearer token)
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.ping()
     ///    .authorization(authorization)
     ///    .send()
@@ -1317,7 +1332,12 @@ impl Client {
     ///Arguments:
     /// - `authorization`: Authorization header (bearer token)
     /// - `body`
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.report_finish()
     ///    .authorization(authorization)
     ///    .body(body)
@@ -1333,7 +1353,12 @@ impl Client {
     ///Arguments:
     /// - `authorization`: Authorization header (bearer token)
     /// - `body`
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.report_output()
     ///    .authorization(authorization)
     ///    .body(body)
@@ -1349,7 +1374,12 @@ impl Client {
     ///Arguments:
     /// - `authorization`: Authorization header (bearer token)
     /// - `body`
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.report_start()
     ///    .authorization(authorization)
     ///    .body(body)
@@ -1428,6 +1458,11 @@ pub mod builder {
         }
 
         ///Sends a `POST` request to `/enrol`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
             let Self {
                 client,
@@ -1494,6 +1529,11 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/global/jobs`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::GlobalJobsResult>, Error<()>> {
             let Self {
                 client,
@@ -1559,6 +1599,11 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/ping`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::PingResult>, Error<()>> {
             let Self {
                 client,
@@ -1648,6 +1693,11 @@ pub mod builder {
         }
 
         ///Sends a `POST` request to `/report/finish`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::ReportResult>, Error<()>> {
             let Self {
                 client,
@@ -1742,6 +1792,11 @@ pub mod builder {
         }
 
         ///Sends a `POST` request to `/report/output`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::ReportResult>, Error<()>> {
             let Self {
                 client,
@@ -1834,6 +1889,11 @@ pub mod builder {
         }
 
         ///Sends a `POST` request to `/report/start`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::ReportResult>, Error<()>> {
             let Self {
                 client,

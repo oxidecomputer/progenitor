@@ -195,6 +195,11 @@ impl Client {
     /// - `limit`: Maximum number of items returned by a single call
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn paginated_u32s<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,

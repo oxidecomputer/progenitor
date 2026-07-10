@@ -124,6 +124,11 @@ impl Client {
     ///   parameter
     /// - `unique_key`: A key parameter that will not be overridden by the path
     ///   spec
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn key_get<'a>(
         &'a self,
         key: Option<bool>,

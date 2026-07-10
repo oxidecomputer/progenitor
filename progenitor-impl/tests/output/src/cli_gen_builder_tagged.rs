@@ -204,7 +204,12 @@ impl ClientHooks<()> for &Client {}
 impl Client {
     ///Sends a `GET` request to `/uno`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.uno()
     ///    .gateway(gateway)
     ///    .body(body)
@@ -283,6 +288,11 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/uno`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<ByteStream>, Error<()>> {
             let Self {
                 client,
