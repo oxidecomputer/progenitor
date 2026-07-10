@@ -200,7 +200,7 @@ impl Client {
         limit: Option<::std::num::NonZeroU32>,
         page_token: Option<&'a str>,
     ) -> Result<ResponseValue<types::Uint32ResultsPage>, Error<types::Error>> {
-        let url = format!("{}/", self.baseurl,);
+        let url = format!("{}/", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),

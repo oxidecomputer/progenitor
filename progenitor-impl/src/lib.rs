@@ -721,7 +721,7 @@ pub fn validate_openapi(spec: &OpenAPI) -> Result<()> {
     spec.paths.paths.iter().try_for_each(|p| {
         match p.1 {
             openapiv3::ReferenceOr::Reference { reference: _ } => Err(Error::UnexpectedFormat(
-                format!("path {} uses reference, unsupported", p.0,),
+                format!("path {} uses reference, unsupported", p.0),
             )),
             openapiv3::ReferenceOr::Item(item) => {
                 // Make sure every operation has an operation ID, and that each

@@ -146,7 +146,7 @@ impl Client {
         gateway: &'a str,
         body: &'a types::UnoBody,
     ) -> Result<ResponseValue<ByteStream>, Error<()>> {
-        let url = format!("{}/uno", self.baseurl,);
+        let url = format!("{}/uno", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),

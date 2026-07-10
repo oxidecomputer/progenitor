@@ -193,7 +193,7 @@ pub mod builder {
             } = self;
             let key = key.map_err(Error::InvalidRequest)?;
             let unique_key = unique_key.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/key", client.baseurl,);
+            let url = format!("{}/key", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),

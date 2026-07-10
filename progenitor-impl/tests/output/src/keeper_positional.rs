@@ -472,7 +472,7 @@ impl Client {
         authorization: &'a str,
         body: &'a types::EnrolBody,
     ) -> Result<ResponseValue<()>, Error<()>> {
-        let url = format!("{}/enrol", self.baseurl,);
+        let url = format!("{}/enrol", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(2usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
@@ -507,7 +507,7 @@ impl Client {
         &'a self,
         authorization: &'a str,
     ) -> Result<ResponseValue<types::GlobalJobsResult>, Error<()>> {
-        let url = format!("{}/global/jobs", self.baseurl,);
+        let url = format!("{}/global/jobs", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(2usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
@@ -545,7 +545,7 @@ impl Client {
         &'a self,
         authorization: &'a str,
     ) -> Result<ResponseValue<types::PingResult>, Error<()>> {
-        let url = format!("{}/ping", self.baseurl,);
+        let url = format!("{}/ping", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(2usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
@@ -585,7 +585,7 @@ impl Client {
         authorization: &'a str,
         body: &'a types::ReportFinishBody,
     ) -> Result<ResponseValue<types::ReportResult>, Error<()>> {
-        let url = format!("{}/report/finish", self.baseurl,);
+        let url = format!("{}/report/finish", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(2usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
@@ -626,7 +626,7 @@ impl Client {
         authorization: &'a str,
         body: &'a types::ReportOutputBody,
     ) -> Result<ResponseValue<types::ReportResult>, Error<()>> {
-        let url = format!("{}/report/output", self.baseurl,);
+        let url = format!("{}/report/output", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(2usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
@@ -667,7 +667,7 @@ impl Client {
         authorization: &'a str,
         body: &'a types::ReportStartBody,
     ) -> Result<ResponseValue<types::ReportResult>, Error<()>> {
-        let url = format!("{}/report/start", self.baseurl,);
+        let url = format!("{}/report/start", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(2usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),

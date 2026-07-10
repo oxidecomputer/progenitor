@@ -1438,7 +1438,7 @@ pub mod builder {
             let body = body
                 .and_then(|v| types::EnrolBody::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!("{}/enrol", client.baseurl,);
+            let url = format!("{}/enrol", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(2usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
@@ -1500,7 +1500,7 @@ pub mod builder {
                 authorization,
             } = self;
             let authorization = authorization.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/global/jobs", client.baseurl,);
+            let url = format!("{}/global/jobs", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(2usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
@@ -1565,7 +1565,7 @@ pub mod builder {
                 authorization,
             } = self;
             let authorization = authorization.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/ping", client.baseurl,);
+            let url = format!("{}/ping", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(2usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
@@ -1658,7 +1658,7 @@ pub mod builder {
             let body = body
                 .and_then(|v| types::ReportFinishBody::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!("{}/report/finish", client.baseurl,);
+            let url = format!("{}/report/finish", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(2usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
@@ -1752,7 +1752,7 @@ pub mod builder {
             let body = body
                 .and_then(|v| types::ReportOutputBody::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!("{}/report/output", client.baseurl,);
+            let url = format!("{}/report/output", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(2usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
@@ -1844,7 +1844,7 @@ pub mod builder {
             let body = body
                 .and_then(|v| types::ReportStartBody::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!("{}/report/start", client.baseurl,);
+            let url = format!("{}/report/start", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(2usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),

@@ -179,7 +179,7 @@ impl Client {
         &'a self,
         body: &'a types::BodyWithDefaults,
     ) -> Result<ResponseValue<ByteStream>, Error<ByteStream>> {
-        let url = format!("{}/", self.baseurl,);
+        let url = format!("{}/", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),

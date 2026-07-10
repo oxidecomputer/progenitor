@@ -295,7 +295,7 @@ pub mod builder {
             let body = body
                 .and_then(|v| types::UnoBody::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!("{}/uno", client.baseurl,);
+            let url = format!("{}/uno", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),

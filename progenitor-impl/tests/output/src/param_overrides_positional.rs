@@ -129,7 +129,7 @@ impl Client {
         key: Option<bool>,
         unique_key: Option<&'a str>,
     ) -> Result<ResponseValue<()>, Error<()>> {
-        let url = format!("{}/key", self.baseurl,);
+        let url = format!("{}/key", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),

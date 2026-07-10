@@ -390,13 +390,13 @@ impl Generator {
                         })
                     }
                     openapiv3::Parameter::Path { style, .. } => Err(Error::UnexpectedFormat(
-                        format!("unsupported style of path parameter {style:#?}",),
+                        format!("unsupported style of path parameter {style:#?}"),
                     )),
                     openapiv3::Parameter::Query { style, .. } => Err(Error::UnexpectedFormat(
-                        format!("unsupported style of query parameter {style:#?}",),
+                        format!("unsupported style of query parameter {style:#?}"),
                     )),
                     cookie @ openapiv3::Parameter::Cookie { .. } => Err(Error::UnexpectedFormat(
-                        format!("cookie parameters are not supported {cookie:#?}",),
+                        format!("cookie parameters are not supported {cookie:#?}"),
                     )),
                 }
             })
@@ -467,7 +467,7 @@ impl Generator {
                         let typ = if let Some(schema) = &mt.schema {
                             let schema = schema.to_schema();
                             let name = sanitize(
-                                &format!("{}-response", operation.operation_id.as_ref().unwrap(),),
+                                &format!("{}-response", operation.operation_id.as_ref().unwrap()),
                                 Case::Pascal,
                             );
                             self.type_space.add_type_with_name(&schema, Some(name))?
@@ -1617,7 +1617,7 @@ impl Generator {
                     OperationParameterType::RawBody => match param.kind {
                         OperationParameterKind::Body(BodyContentType::OctetStream) => {
                             let err_msg =
-                                format!("conversion to `reqwest::Body` for {} failed", param.name,);
+                                format!("conversion to `reqwest::Body` for {} failed", param.name);
 
                             Ok(quote! {
                                 pub fn #param_name<B>(mut self, value: B) -> Self
@@ -1631,7 +1631,7 @@ impl Generator {
                         }
                         OperationParameterKind::Body(BodyContentType::Text(_)) => {
                             let err_msg =
-                                format!("conversion to `String` for {} failed", param.name,);
+                                format!("conversion to `String` for {} failed", param.name);
 
                             Ok(quote! {
                                 pub fn #param_name<V>(mut self, value: V) -> Self
@@ -1815,7 +1815,7 @@ impl Generator {
         let struct_doc = match (tag_style, method.tags.len(), method.tags.first()) {
             (TagStyle::Merged, _, _) | (TagStyle::Separate, 0, _) => {
                 let ty = format!("Client::{}", method.operation_id);
-                format!("Builder for [`{ty}`]\n\n[`{ty}`]: super::{ty}",)
+                format!("Builder for [`{ty}`]\n\n[`{ty}`]: super::{ty}")
             }
             (TagStyle::Separate, 1, Some(tag)) => {
                 let ty = format!(
@@ -1823,7 +1823,7 @@ impl Generator {
                     sanitize(tag, Case::Pascal),
                     method.operation_id
                 );
-                format!("Builder for [`{ty}`]\n\n[`{ty}`]: super::{ty}",)
+                format!("Builder for [`{ty}`]\n\n[`{ty}`]: super::{ty}")
             }
             (TagStyle::Separate, _, _) => {
                 format!(
@@ -2139,7 +2139,7 @@ impl Generator {
                     todo!("media type encoding not empty: {:#?}", media_type);
                 }
                 let name = sanitize(
-                    &format!("{}-body", operation.operation_id.as_ref().unwrap(),),
+                    &format!("{}-body", operation.operation_id.as_ref().unwrap()),
                     Case::Pascal,
                 );
                 let typ = self

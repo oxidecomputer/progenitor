@@ -257,7 +257,7 @@ pub mod builder {
             let _url = format!(
                 "{}/key/{}",
                 _client.baseurl,
-                encode_path(&query.to_string()),
+                encode_path(&query.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(

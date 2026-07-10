@@ -12956,7 +12956,7 @@ impl Client {
         let url = format!(
             "{}/by-id/disks/{}",
             self.baseurl,
-            encode_path(&id.to_string()),
+            encode_path(&id.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -13002,7 +13002,7 @@ impl Client {
         let url = format!(
             "{}/by-id/images/{}",
             self.baseurl,
-            encode_path(&id.to_string()),
+            encode_path(&id.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -13048,7 +13048,7 @@ impl Client {
         let url = format!(
             "{}/by-id/instances/{}",
             self.baseurl,
-            encode_path(&id.to_string()),
+            encode_path(&id.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -13094,7 +13094,7 @@ impl Client {
         let url = format!(
             "{}/by-id/network-interfaces/{}",
             self.baseurl,
-            encode_path(&id.to_string()),
+            encode_path(&id.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -13142,7 +13142,7 @@ impl Client {
         let url = format!(
             "{}/by-id/organizations/{}",
             self.baseurl,
-            encode_path(&id.to_string()),
+            encode_path(&id.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -13190,7 +13190,7 @@ impl Client {
         let url = format!(
             "{}/by-id/projects/{}",
             self.baseurl,
-            encode_path(&id.to_string()),
+            encode_path(&id.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -13236,7 +13236,7 @@ impl Client {
         let url = format!(
             "{}/by-id/snapshots/{}",
             self.baseurl,
-            encode_path(&id.to_string()),
+            encode_path(&id.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -13282,7 +13282,7 @@ impl Client {
         let url = format!(
             "{}/by-id/vpc-router-routes/{}",
             self.baseurl,
-            encode_path(&id.to_string()),
+            encode_path(&id.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -13328,7 +13328,7 @@ impl Client {
         let url = format!(
             "{}/by-id/vpc-routers/{}",
             self.baseurl,
-            encode_path(&id.to_string()),
+            encode_path(&id.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -13374,7 +13374,7 @@ impl Client {
         let url = format!(
             "{}/by-id/vpc-subnets/{}",
             self.baseurl,
-            encode_path(&id.to_string()),
+            encode_path(&id.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -13420,7 +13420,7 @@ impl Client {
         let url = format!(
             "{}/by-id/vpcs/{}",
             self.baseurl,
-            encode_path(&id.to_string()),
+            encode_path(&id.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -13467,7 +13467,7 @@ impl Client {
         &'a self,
         body: &'a types::DeviceAuthRequest,
     ) -> Result<ResponseValue<ByteStream>, Error<ByteStream>> {
-        let url = format!("{}/device/auth", self.baseurl,);
+        let url = format!("{}/device/auth", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
@@ -13505,7 +13505,7 @@ impl Client {
         &'a self,
         body: &'a types::DeviceAuthVerify,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
-        let url = format!("{}/device/confirm", self.baseurl,);
+        let url = format!("{}/device/confirm", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
@@ -13551,7 +13551,7 @@ impl Client {
         &'a self,
         body: &'a types::DeviceAccessTokenRequest,
     ) -> Result<ResponseValue<ByteStream>, Error<ByteStream>> {
-        let url = format!("{}/device/token", self.baseurl,);
+        let url = format!("{}/device/token", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
@@ -13592,7 +13592,7 @@ impl Client {
         page_token: Option<&'a str>,
         sort_by: Option<types::IdSortMode>,
     ) -> Result<ResponseValue<types::GroupResultsPage>, Error<types::Error>> {
-        let url = format!("{}/groups", self.baseurl,);
+        let url = format!("{}/groups", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
@@ -13677,7 +13677,7 @@ impl Client {
         &'a self,
         body: &'a types::SpoofLoginBody,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
-        let url = format!("{}/login", self.baseurl,);
+        let url = format!("{}/login", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
@@ -13724,7 +13724,7 @@ impl Client {
         let url = format!(
             "{}/login/{}/local",
             self.baseurl,
-            encode_path(&silo_name.to_string()),
+            encode_path(&silo_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -13772,7 +13772,7 @@ impl Client {
             "{}/login/{}/saml/{}",
             self.baseurl,
             encode_path(&silo_name.to_string()),
-            encode_path(&provider_name.to_string()),
+            encode_path(&provider_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -13813,7 +13813,7 @@ impl Client {
             "{}/login/{}/saml/{}",
             self.baseurl,
             encode_path(&silo_name.to_string()),
-            encode_path(&provider_name.to_string()),
+            encode_path(&provider_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -13852,7 +13852,7 @@ impl Client {
 
     ///Sends a `POST` request to `/logout`
     pub async fn logout<'a>(&'a self) -> Result<ResponseValue<()>, Error<types::Error>> {
-        let url = format!("{}/logout", self.baseurl,);
+        let url = format!("{}/logout", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
@@ -13904,7 +13904,7 @@ impl Client {
         page_token: Option<&'a str>,
         sort_by: Option<types::NameOrIdSortMode>,
     ) -> Result<ResponseValue<types::OrganizationResultsPage>, Error<types::Error>> {
-        let url = format!("{}/organizations", self.baseurl,);
+        let url = format!("{}/organizations", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
@@ -13996,7 +13996,7 @@ impl Client {
         &'a self,
         body: &'a types::OrganizationCreate,
     ) -> Result<ResponseValue<types::Organization>, Error<types::Error>> {
-        let url = format!("{}/organizations", self.baseurl,);
+        let url = format!("{}/organizations", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
@@ -14047,7 +14047,7 @@ impl Client {
         let url = format!(
             "{}/organizations/{}",
             self.baseurl,
-            encode_path(&organization_name.to_string()),
+            encode_path(&organization_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -14100,7 +14100,7 @@ impl Client {
         let url = format!(
             "{}/organizations/{}",
             self.baseurl,
-            encode_path(&organization_name.to_string()),
+            encode_path(&organization_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -14152,7 +14152,7 @@ impl Client {
         let url = format!(
             "{}/organizations/{}",
             self.baseurl,
-            encode_path(&organization_name.to_string()),
+            encode_path(&organization_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -14203,7 +14203,7 @@ impl Client {
         let url = format!(
             "{}/organizations/{}/policy",
             self.baseurl,
-            encode_path(&organization_name.to_string()),
+            encode_path(&organization_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -14256,7 +14256,7 @@ impl Client {
         let url = format!(
             "{}/organizations/{}/policy",
             self.baseurl,
-            encode_path(&organization_name.to_string()),
+            encode_path(&organization_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -14315,7 +14315,7 @@ impl Client {
         let url = format!(
             "{}/organizations/{}/projects",
             self.baseurl,
-            encode_path(&organization_name.to_string()),
+            encode_path(&organization_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -14418,7 +14418,7 @@ impl Client {
         let url = format!(
             "{}/organizations/{}/projects",
             self.baseurl,
-            encode_path(&organization_name.to_string()),
+            encode_path(&organization_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -14474,7 +14474,7 @@ impl Client {
             "{}/organizations/{}/projects/{}",
             self.baseurl,
             encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
+            encode_path(&project_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -14531,7 +14531,7 @@ impl Client {
             "{}/organizations/{}/projects/{}",
             self.baseurl,
             encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
+            encode_path(&project_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -14587,7 +14587,7 @@ impl Client {
             "{}/organizations/{}/projects/{}",
             self.baseurl,
             encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
+            encode_path(&project_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -14649,7 +14649,7 @@ impl Client {
             "{}/organizations/{}/projects/{}/disks",
             self.baseurl,
             encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
+            encode_path(&project_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -14762,7 +14762,7 @@ impl Client {
             "{}/organizations/{}/projects/{}/disks",
             self.baseurl,
             encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
+            encode_path(&project_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -14817,7 +14817,7 @@ impl Client {
             self.baseurl,
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
-            encode_path(&disk_name.to_string()),
+            encode_path(&disk_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -14869,7 +14869,7 @@ impl Client {
             self.baseurl,
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
-            encode_path(&disk_name.to_string()),
+            encode_path(&disk_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -14938,7 +14938,7 @@ impl Client {
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
             encode_path(&disk_name.to_string()),
-            encode_path(&metric_name.to_string()),
+            encode_path(&metric_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -15080,7 +15080,7 @@ impl Client {
             "{}/organizations/{}/projects/{}/images",
             self.baseurl,
             encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
+            encode_path(&project_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -15196,7 +15196,7 @@ impl Client {
             "{}/organizations/{}/projects/{}/images",
             self.baseurl,
             encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
+            encode_path(&project_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -15251,7 +15251,7 @@ impl Client {
             self.baseurl,
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
-            encode_path(&image_name.to_string()),
+            encode_path(&image_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -15307,7 +15307,7 @@ impl Client {
             self.baseurl,
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
-            encode_path(&image_name.to_string()),
+            encode_path(&image_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -15367,7 +15367,7 @@ impl Client {
             "{}/organizations/{}/projects/{}/instances",
             self.baseurl,
             encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
+            encode_path(&project_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -15481,7 +15481,7 @@ impl Client {
             "{}/organizations/{}/projects/{}/instances",
             self.baseurl,
             encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
+            encode_path(&project_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -15536,7 +15536,7 @@ impl Client {
             self.baseurl,
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
-            encode_path(&instance_name.to_string()),
+            encode_path(&instance_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -15588,7 +15588,7 @@ impl Client {
             self.baseurl,
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
-            encode_path(&instance_name.to_string()),
+            encode_path(&instance_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -15654,7 +15654,7 @@ impl Client {
             self.baseurl,
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
-            encode_path(&instance_name.to_string()),
+            encode_path(&instance_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -15777,7 +15777,7 @@ impl Client {
             self.baseurl,
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
-            encode_path(&instance_name.to_string()),
+            encode_path(&instance_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -15833,7 +15833,7 @@ impl Client {
             self.baseurl,
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
-            encode_path(&instance_name.to_string()),
+            encode_path(&instance_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -15886,7 +15886,7 @@ impl Client {
             self.baseurl,
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
-            encode_path(&instance_name.to_string()),
+            encode_path(&instance_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -15941,7 +15941,7 @@ impl Client {
             self.baseurl,
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
-            encode_path(&instance_name.to_string()),
+            encode_path(&instance_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -16006,7 +16006,7 @@ impl Client {
             self.baseurl,
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
-            encode_path(&instance_name.to_string()),
+            encode_path(&instance_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -16126,7 +16126,7 @@ impl Client {
             self.baseurl,
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
-            encode_path(&instance_name.to_string()),
+            encode_path(&instance_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -16181,7 +16181,7 @@ impl Client {
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
             encode_path(&instance_name.to_string()),
-            encode_path(&interface_name.to_string()),
+            encode_path(&interface_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -16236,7 +16236,7 @@ impl Client {
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
             encode_path(&instance_name.to_string()),
-            encode_path(&interface_name.to_string()),
+            encode_path(&interface_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -16296,7 +16296,7 @@ impl Client {
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
             encode_path(&instance_name.to_string()),
-            encode_path(&interface_name.to_string()),
+            encode_path(&interface_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -16350,7 +16350,7 @@ impl Client {
             self.baseurl,
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
-            encode_path(&instance_name.to_string()),
+            encode_path(&instance_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -16423,7 +16423,7 @@ impl Client {
             self.baseurl,
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
-            encode_path(&instance_name.to_string()),
+            encode_path(&instance_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -16486,7 +16486,7 @@ impl Client {
             self.baseurl,
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
-            encode_path(&instance_name.to_string()),
+            encode_path(&instance_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -16540,7 +16540,7 @@ impl Client {
             self.baseurl,
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
-            encode_path(&instance_name.to_string()),
+            encode_path(&instance_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -16600,7 +16600,7 @@ impl Client {
             self.baseurl,
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
-            encode_path(&instance_name.to_string()),
+            encode_path(&instance_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -16654,7 +16654,7 @@ impl Client {
             self.baseurl,
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
-            encode_path(&instance_name.to_string()),
+            encode_path(&instance_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -16709,7 +16709,7 @@ impl Client {
             "{}/organizations/{}/projects/{}/policy",
             self.baseurl,
             encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
+            encode_path(&project_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -16764,7 +16764,7 @@ impl Client {
             "{}/organizations/{}/projects/{}/policy",
             self.baseurl,
             encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
+            encode_path(&project_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -16825,7 +16825,7 @@ impl Client {
             "{}/organizations/{}/projects/{}/snapshots",
             self.baseurl,
             encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
+            encode_path(&project_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -16939,7 +16939,7 @@ impl Client {
             "{}/organizations/{}/projects/{}/snapshots",
             self.baseurl,
             encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
+            encode_path(&project_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -16992,7 +16992,7 @@ impl Client {
             self.baseurl,
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
-            encode_path(&snapshot_name.to_string()),
+            encode_path(&snapshot_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -17044,7 +17044,7 @@ impl Client {
             self.baseurl,
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
-            encode_path(&snapshot_name.to_string()),
+            encode_path(&snapshot_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -17104,7 +17104,7 @@ impl Client {
             "{}/organizations/{}/projects/{}/vpcs",
             self.baseurl,
             encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
+            encode_path(&project_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -17215,7 +17215,7 @@ impl Client {
             "{}/organizations/{}/projects/{}/vpcs",
             self.baseurl,
             encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
+            encode_path(&project_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -17268,7 +17268,7 @@ impl Client {
             self.baseurl,
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
-            encode_path(&vpc_name.to_string()),
+            encode_path(&vpc_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -17321,7 +17321,7 @@ impl Client {
             self.baseurl,
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
-            encode_path(&vpc_name.to_string()),
+            encode_path(&vpc_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -17374,7 +17374,7 @@ impl Client {
             self.baseurl,
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
-            encode_path(&vpc_name.to_string()),
+            encode_path(&vpc_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -17426,7 +17426,7 @@ impl Client {
             self.baseurl,
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
-            encode_path(&vpc_name.to_string()),
+            encode_path(&vpc_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -17479,7 +17479,7 @@ impl Client {
             self.baseurl,
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
-            encode_path(&vpc_name.to_string()),
+            encode_path(&vpc_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -17544,7 +17544,7 @@ impl Client {
             self.baseurl,
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
-            encode_path(&vpc_name.to_string()),
+            encode_path(&vpc_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -17664,7 +17664,7 @@ impl Client {
             self.baseurl,
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
-            encode_path(&vpc_name.to_string()),
+            encode_path(&vpc_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -17719,7 +17719,7 @@ impl Client {
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
             encode_path(&vpc_name.to_string()),
-            encode_path(&router_name.to_string()),
+            encode_path(&router_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -17774,7 +17774,7 @@ impl Client {
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
             encode_path(&vpc_name.to_string()),
-            encode_path(&router_name.to_string()),
+            encode_path(&router_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -17829,7 +17829,7 @@ impl Client {
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
             encode_path(&vpc_name.to_string()),
-            encode_path(&router_name.to_string()),
+            encode_path(&router_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -17898,7 +17898,7 @@ impl Client {
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
             encode_path(&vpc_name.to_string()),
-            encode_path(&router_name.to_string()),
+            encode_path(&router_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -18027,7 +18027,7 @@ impl Client {
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
             encode_path(&vpc_name.to_string()),
-            encode_path(&router_name.to_string()),
+            encode_path(&router_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -18084,7 +18084,7 @@ impl Client {
             encode_path(&project_name.to_string()),
             encode_path(&vpc_name.to_string()),
             encode_path(&router_name.to_string()),
-            encode_path(&route_name.to_string()),
+            encode_path(&route_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -18141,7 +18141,7 @@ impl Client {
             encode_path(&project_name.to_string()),
             encode_path(&vpc_name.to_string()),
             encode_path(&router_name.to_string()),
-            encode_path(&route_name.to_string()),
+            encode_path(&route_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -18198,7 +18198,7 @@ impl Client {
             encode_path(&project_name.to_string()),
             encode_path(&vpc_name.to_string()),
             encode_path(&router_name.to_string()),
-            encode_path(&route_name.to_string()),
+            encode_path(&route_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -18262,7 +18262,7 @@ impl Client {
             self.baseurl,
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
-            encode_path(&vpc_name.to_string()),
+            encode_path(&vpc_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -18382,7 +18382,7 @@ impl Client {
             self.baseurl,
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
-            encode_path(&vpc_name.to_string()),
+            encode_path(&vpc_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -18437,7 +18437,7 @@ impl Client {
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
             encode_path(&vpc_name.to_string()),
-            encode_path(&subnet_name.to_string()),
+            encode_path(&subnet_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -18492,7 +18492,7 @@ impl Client {
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
             encode_path(&vpc_name.to_string()),
-            encode_path(&subnet_name.to_string()),
+            encode_path(&subnet_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -18547,7 +18547,7 @@ impl Client {
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
             encode_path(&vpc_name.to_string()),
-            encode_path(&subnet_name.to_string()),
+            encode_path(&subnet_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -18614,7 +18614,7 @@ impl Client {
             encode_path(&organization_name.to_string()),
             encode_path(&project_name.to_string()),
             encode_path(&vpc_name.to_string()),
-            encode_path(&subnet_name.to_string()),
+            encode_path(&subnet_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -18728,7 +18728,7 @@ impl Client {
     pub async fn policy_view<'a>(
         &'a self,
     ) -> Result<ResponseValue<types::SiloRolePolicy>, Error<types::Error>> {
-        let url = format!("{}/policy", self.baseurl,);
+        let url = format!("{}/policy", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
@@ -18770,7 +18770,7 @@ impl Client {
         &'a self,
         body: &'a types::SiloRolePolicy,
     ) -> Result<ResponseValue<types::SiloRolePolicy>, Error<types::Error>> {
-        let url = format!("{}/policy", self.baseurl,);
+        let url = format!("{}/policy", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
@@ -18819,7 +18819,7 @@ impl Client {
         limit: Option<::std::num::NonZeroU32>,
         page_token: Option<&'a str>,
     ) -> Result<ResponseValue<types::RoleResultsPage>, Error<types::Error>> {
-        let url = format!("{}/roles", self.baseurl,);
+        let url = format!("{}/roles", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
@@ -18909,7 +18909,7 @@ impl Client {
         let url = format!(
             "{}/roles/{}",
             self.baseurl,
-            encode_path(&role_name.to_string()),
+            encode_path(&role_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -18951,7 +18951,7 @@ impl Client {
     pub async fn session_me<'a>(
         &'a self,
     ) -> Result<ResponseValue<types::User>, Error<types::Error>> {
-        let url = format!("{}/session/me", self.baseurl,);
+        let url = format!("{}/session/me", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
@@ -19001,7 +19001,7 @@ impl Client {
         page_token: Option<&'a str>,
         sort_by: Option<types::IdSortMode>,
     ) -> Result<ResponseValue<types::GroupResultsPage>, Error<types::Error>> {
-        let url = format!("{}/session/me/groups", self.baseurl,);
+        let url = format!("{}/session/me/groups", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
@@ -19098,7 +19098,7 @@ impl Client {
         page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
     ) -> Result<ResponseValue<types::SshKeyResultsPage>, Error<types::Error>> {
-        let url = format!("{}/session/me/sshkeys", self.baseurl,);
+        let url = format!("{}/session/me/sshkeys", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
@@ -19189,7 +19189,7 @@ impl Client {
         &'a self,
         body: &'a types::SshKeyCreate,
     ) -> Result<ResponseValue<types::SshKey>, Error<types::Error>> {
-        let url = format!("{}/session/me/sshkeys", self.baseurl,);
+        let url = format!("{}/session/me/sshkeys", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
@@ -19238,7 +19238,7 @@ impl Client {
         let url = format!(
             "{}/session/me/sshkeys/{}",
             self.baseurl,
-            encode_path(&ssh_key_name.to_string()),
+            encode_path(&ssh_key_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -19287,7 +19287,7 @@ impl Client {
         let url = format!(
             "{}/session/me/sshkeys/{}",
             self.baseurl,
-            encode_path(&ssh_key_name.to_string()),
+            encode_path(&ssh_key_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -19333,7 +19333,7 @@ impl Client {
         let url = format!(
             "{}/system/by-id/images/{}",
             self.baseurl,
-            encode_path(&id.to_string()),
+            encode_path(&id.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -19379,7 +19379,7 @@ impl Client {
         let url = format!(
             "{}/system/by-id/ip-pools/{}",
             self.baseurl,
-            encode_path(&id.to_string()),
+            encode_path(&id.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -19425,7 +19425,7 @@ impl Client {
         let url = format!(
             "{}/system/by-id/silos/{}",
             self.baseurl,
-            encode_path(&id.to_string()),
+            encode_path(&id.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -19480,7 +19480,7 @@ impl Client {
         page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
     ) -> Result<ResponseValue<types::CertificateResultsPage>, Error<types::Error>> {
-        let url = format!("{}/system/certificates", self.baseurl,);
+        let url = format!("{}/system/certificates", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
@@ -19575,7 +19575,7 @@ impl Client {
         &'a self,
         body: &'a types::CertificateCreate,
     ) -> Result<ResponseValue<types::Certificate>, Error<types::Error>> {
-        let url = format!("{}/system/certificates", self.baseurl,);
+        let url = format!("{}/system/certificates", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
@@ -19623,7 +19623,7 @@ impl Client {
         let url = format!(
             "{}/system/certificates/{}",
             self.baseurl,
-            encode_path(&certificate.to_string()),
+            encode_path(&certificate.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -19671,7 +19671,7 @@ impl Client {
         let url = format!(
             "{}/system/certificates/{}",
             self.baseurl,
-            encode_path(&certificate.to_string()),
+            encode_path(&certificate.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -19722,7 +19722,7 @@ impl Client {
         page_token: Option<&'a str>,
         sort_by: Option<types::IdSortMode>,
     ) -> Result<ResponseValue<types::PhysicalDiskResultsPage>, Error<types::Error>> {
-        let url = format!("{}/system/hardware/disks", self.baseurl,);
+        let url = format!("{}/system/hardware/disks", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
@@ -19818,7 +19818,7 @@ impl Client {
         page_token: Option<&'a str>,
         sort_by: Option<types::IdSortMode>,
     ) -> Result<ResponseValue<types::RackResultsPage>, Error<types::Error>> {
-        let url = format!("{}/system/hardware/racks", self.baseurl,);
+        let url = format!("{}/system/hardware/racks", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
@@ -19911,7 +19911,7 @@ impl Client {
         let url = format!(
             "{}/system/hardware/racks/{}",
             self.baseurl,
-            encode_path(&rack_id.to_string()),
+            encode_path(&rack_id.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -19962,7 +19962,7 @@ impl Client {
         page_token: Option<&'a str>,
         sort_by: Option<types::IdSortMode>,
     ) -> Result<ResponseValue<types::SledResultsPage>, Error<types::Error>> {
-        let url = format!("{}/system/hardware/sleds", self.baseurl,);
+        let url = format!("{}/system/hardware/sleds", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
@@ -20055,7 +20055,7 @@ impl Client {
         let url = format!(
             "{}/system/hardware/sleds/{}",
             self.baseurl,
-            encode_path(&sled_id.to_string()),
+            encode_path(&sled_id.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -20111,7 +20111,7 @@ impl Client {
         let url = format!(
             "{}/system/hardware/sleds/{}/disks",
             self.baseurl,
-            encode_path(&sled_id.to_string()),
+            encode_path(&sled_id.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -20215,7 +20215,7 @@ impl Client {
         page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
     ) -> Result<ResponseValue<types::GlobalImageResultsPage>, Error<types::Error>> {
-        let url = format!("{}/system/images", self.baseurl,);
+        let url = format!("{}/system/images", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
@@ -20310,7 +20310,7 @@ impl Client {
         &'a self,
         body: &'a types::GlobalImageCreate,
     ) -> Result<ResponseValue<types::GlobalImage>, Error<types::Error>> {
-        let url = format!("{}/system/images", self.baseurl,);
+        let url = format!("{}/system/images", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
@@ -20358,7 +20358,7 @@ impl Client {
         let url = format!(
             "{}/system/images/{}",
             self.baseurl,
-            encode_path(&image_name.to_string()),
+            encode_path(&image_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -20408,7 +20408,7 @@ impl Client {
         let url = format!(
             "{}/system/images/{}",
             self.baseurl,
-            encode_path(&image_name.to_string()),
+            encode_path(&image_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -20459,7 +20459,7 @@ impl Client {
         page_token: Option<&'a str>,
         sort_by: Option<types::NameOrIdSortMode>,
     ) -> Result<ResponseValue<types::IpPoolResultsPage>, Error<types::Error>> {
-        let url = format!("{}/system/ip-pools", self.baseurl,);
+        let url = format!("{}/system/ip-pools", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
@@ -20546,7 +20546,7 @@ impl Client {
         &'a self,
         body: &'a types::IpPoolCreate,
     ) -> Result<ResponseValue<types::IpPool>, Error<types::Error>> {
-        let url = format!("{}/system/ip-pools", self.baseurl,);
+        let url = format!("{}/system/ip-pools", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
@@ -20592,7 +20592,7 @@ impl Client {
         let url = format!(
             "{}/system/ip-pools/{}",
             self.baseurl,
-            encode_path(&pool_name.to_string()),
+            encode_path(&pool_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -20639,7 +20639,7 @@ impl Client {
         let url = format!(
             "{}/system/ip-pools/{}",
             self.baseurl,
-            encode_path(&pool_name.to_string()),
+            encode_path(&pool_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -20686,7 +20686,7 @@ impl Client {
         let url = format!(
             "{}/system/ip-pools/{}",
             self.baseurl,
-            encode_path(&pool_name.to_string()),
+            encode_path(&pool_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -20742,7 +20742,7 @@ impl Client {
         let url = format!(
             "{}/system/ip-pools/{}/ranges",
             self.baseurl,
-            encode_path(&pool_name.to_string()),
+            encode_path(&pool_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -20836,7 +20836,7 @@ impl Client {
         let url = format!(
             "{}/system/ip-pools/{}/ranges/add",
             self.baseurl,
-            encode_path(&pool_name.to_string()),
+            encode_path(&pool_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -20884,7 +20884,7 @@ impl Client {
         let url = format!(
             "{}/system/ip-pools/{}/ranges/remove",
             self.baseurl,
-            encode_path(&pool_name.to_string()),
+            encode_path(&pool_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -20927,7 +20927,7 @@ impl Client {
     pub async fn ip_pool_service_view<'a>(
         &'a self,
     ) -> Result<ResponseValue<types::IpPool>, Error<types::Error>> {
-        let url = format!("{}/system/ip-pools-service", self.baseurl,);
+        let url = format!("{}/system/ip-pools-service", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
@@ -20977,7 +20977,7 @@ impl Client {
         limit: Option<::std::num::NonZeroU32>,
         page_token: Option<&'a str>,
     ) -> Result<ResponseValue<types::IpPoolRangeResultsPage>, Error<types::Error>> {
-        let url = format!("{}/system/ip-pools-service/ranges", self.baseurl,);
+        let url = format!("{}/system/ip-pools-service/ranges", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
@@ -21064,7 +21064,7 @@ impl Client {
         &'a self,
         body: &'a types::IpRange,
     ) -> Result<ResponseValue<types::IpPoolRange>, Error<types::Error>> {
-        let url = format!("{}/system/ip-pools-service/ranges/add", self.baseurl,);
+        let url = format!("{}/system/ip-pools-service/ranges/add", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
@@ -21107,7 +21107,7 @@ impl Client {
         &'a self,
         body: &'a types::IpRange,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
-        let url = format!("{}/system/ip-pools-service/ranges/remove", self.baseurl,);
+        let url = format!("{}/system/ip-pools-service/ranges/remove", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
@@ -21167,7 +21167,7 @@ impl Client {
         let url = format!(
             "{}/system/metrics/{}",
             self.baseurl,
-            encode_path(&metric_name.to_string()),
+            encode_path(&metric_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -21220,7 +21220,7 @@ impl Client {
     pub async fn system_policy_view<'a>(
         &'a self,
     ) -> Result<ResponseValue<types::FleetRolePolicy>, Error<types::Error>> {
-        let url = format!("{}/system/policy", self.baseurl,);
+        let url = format!("{}/system/policy", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
@@ -21262,7 +21262,7 @@ impl Client {
         &'a self,
         body: &'a types::FleetRolePolicy,
     ) -> Result<ResponseValue<types::FleetRolePolicy>, Error<types::Error>> {
-        let url = format!("{}/system/policy", self.baseurl,);
+        let url = format!("{}/system/policy", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
@@ -21313,7 +21313,7 @@ impl Client {
         page_token: Option<&'a str>,
         sort_by: Option<types::IdSortMode>,
     ) -> Result<ResponseValue<types::SagaResultsPage>, Error<types::Error>> {
-        let url = format!("{}/system/sagas", self.baseurl,);
+        let url = format!("{}/system/sagas", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
@@ -21403,7 +21403,7 @@ impl Client {
         let url = format!(
             "{}/system/sagas/{}",
             self.baseurl,
-            encode_path(&saga_id.to_string()),
+            encode_path(&saga_id.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -21456,7 +21456,7 @@ impl Client {
         page_token: Option<&'a str>,
         sort_by: Option<types::NameOrIdSortMode>,
     ) -> Result<ResponseValue<types::SiloResultsPage>, Error<types::Error>> {
-        let url = format!("{}/system/silos", self.baseurl,);
+        let url = format!("{}/system/silos", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
@@ -21545,7 +21545,7 @@ impl Client {
         &'a self,
         body: &'a types::SiloCreate,
     ) -> Result<ResponseValue<types::Silo>, Error<types::Error>> {
-        let url = format!("{}/system/silos", self.baseurl,);
+        let url = format!("{}/system/silos", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
@@ -21596,7 +21596,7 @@ impl Client {
         let url = format!(
             "{}/system/silos/{}",
             self.baseurl,
-            encode_path(&silo_name.to_string()),
+            encode_path(&silo_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -21647,7 +21647,7 @@ impl Client {
         let url = format!(
             "{}/system/silos/{}",
             self.baseurl,
-            encode_path(&silo_name.to_string()),
+            encode_path(&silo_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -21703,7 +21703,7 @@ impl Client {
         let url = format!(
             "{}/system/silos/{}/identity-providers",
             self.baseurl,
-            encode_path(&silo_name.to_string()),
+            encode_path(&silo_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -21808,7 +21808,7 @@ impl Client {
         let url = format!(
             "{}/system/silos/{}/identity-providers/local/users",
             self.baseurl,
-            encode_path(&silo_name.to_string()),
+            encode_path(&silo_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -21862,7 +21862,7 @@ impl Client {
             "{}/system/silos/{}/identity-providers/local/users/{}",
             self.baseurl,
             encode_path(&silo_name.to_string()),
-            encode_path(&user_id.to_string()),
+            encode_path(&user_id.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -21921,7 +21921,7 @@ impl Client {
             "{}/system/silos/{}/identity-providers/local/users/{}/set-password",
             self.baseurl,
             encode_path(&silo_name.to_string()),
-            encode_path(&user_id.to_string()),
+            encode_path(&user_id.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -21974,7 +21974,7 @@ impl Client {
         let url = format!(
             "{}/system/silos/{}/identity-providers/saml",
             self.baseurl,
-            encode_path(&silo_name.to_string()),
+            encode_path(&silo_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -22028,7 +22028,7 @@ impl Client {
             "{}/system/silos/{}/identity-providers/saml/{}",
             self.baseurl,
             encode_path(&silo_name.to_string()),
-            encode_path(&provider_name.to_string()),
+            encode_path(&provider_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -22077,7 +22077,7 @@ impl Client {
         let url = format!(
             "{}/system/silos/{}/policy",
             self.baseurl,
-            encode_path(&silo_name.to_string()),
+            encode_path(&silo_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -22128,7 +22128,7 @@ impl Client {
         let url = format!(
             "{}/system/silos/{}/policy",
             self.baseurl,
-            encode_path(&silo_name.to_string()),
+            encode_path(&silo_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -22185,7 +22185,7 @@ impl Client {
         let url = format!(
             "{}/system/silos/{}/users/all",
             self.baseurl,
-            encode_path(&silo_name.to_string()),
+            encode_path(&silo_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -22284,7 +22284,7 @@ impl Client {
             "{}/system/silos/{}/users/id/{}",
             self.baseurl,
             encode_path(&silo_name.to_string()),
-            encode_path(&user_id.to_string()),
+            encode_path(&user_id.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -22335,7 +22335,7 @@ impl Client {
         page_token: Option<&'a str>,
         sort_by: Option<types::NameSortMode>,
     ) -> Result<ResponseValue<types::UserBuiltinResultsPage>, Error<types::Error>> {
-        let url = format!("{}/system/user", self.baseurl,);
+        let url = format!("{}/system/user", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
@@ -22429,7 +22429,7 @@ impl Client {
         let url = format!(
             "{}/system/user/{}",
             self.baseurl,
-            encode_path(&user_name.to_string()),
+            encode_path(&user_name.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -22478,7 +22478,7 @@ impl Client {
         limit: Option<::std::num::NonZeroU32>,
         page_token: Option<&'a str>,
     ) -> Result<ResponseValue<types::TimeseriesSchemaResultsPage>, Error<types::Error>> {
-        let url = format!("{}/timeseries/schema", self.baseurl,);
+        let url = format!("{}/timeseries/schema", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
@@ -22571,7 +22571,7 @@ impl Client {
         page_token: Option<&'a str>,
         sort_by: Option<types::IdSortMode>,
     ) -> Result<ResponseValue<types::UserResultsPage>, Error<types::Error>> {
-        let url = format!("{}/users", self.baseurl,);
+        let url = format!("{}/users", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
@@ -22670,7 +22670,7 @@ impl Client {
         project: Option<&'a types::NameOrId>,
         sort_by: Option<types::NameOrIdSortMode>,
     ) -> Result<ResponseValue<types::DiskResultsPage>, Error<types::Error>> {
-        let url = format!("{}/v1/disks", self.baseurl,);
+        let url = format!("{}/v1/disks", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
@@ -22768,7 +22768,7 @@ impl Client {
         project: &'a types::NameOrId,
         body: &'a types::DiskCreate,
     ) -> Result<ResponseValue<types::Disk>, Error<types::Error>> {
-        let url = format!("{}/v1/disks", self.baseurl,);
+        let url = format!("{}/v1/disks", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
@@ -22821,7 +22821,7 @@ impl Client {
         let url = format!(
             "{}/v1/disks/{}",
             self.baseurl,
-            encode_path(&disk.to_string()),
+            encode_path(&disk.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -22874,7 +22874,7 @@ impl Client {
         let url = format!(
             "{}/v1/disks/{}",
             self.baseurl,
-            encode_path(&disk.to_string()),
+            encode_path(&disk.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -22934,7 +22934,7 @@ impl Client {
         project: Option<&'a types::NameOrId>,
         sort_by: Option<types::NameOrIdSortMode>,
     ) -> Result<ResponseValue<types::InstanceResultsPage>, Error<types::Error>> {
-        let url = format!("{}/v1/instances", self.baseurl,);
+        let url = format!("{}/v1/instances", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
@@ -23033,7 +23033,7 @@ impl Client {
         project: &'a types::NameOrId,
         body: &'a types::InstanceCreate,
     ) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
-        let url = format!("{}/v1/instances", self.baseurl,);
+        let url = format!("{}/v1/instances", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
@@ -23086,7 +23086,7 @@ impl Client {
         let url = format!(
             "{}/v1/instances/{}",
             self.baseurl,
-            encode_path(&instance.to_string()),
+            encode_path(&instance.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -23139,7 +23139,7 @@ impl Client {
         let url = format!(
             "{}/v1/instances/{}",
             self.baseurl,
-            encode_path(&instance.to_string()),
+            encode_path(&instance.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -23204,7 +23204,7 @@ impl Client {
         let url = format!(
             "{}/v1/instances/{}/disks",
             self.baseurl,
-            encode_path(&instance.to_string()),
+            encode_path(&instance.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -23316,7 +23316,7 @@ impl Client {
         let url = format!(
             "{}/v1/instances/{}/disks/attach",
             self.baseurl,
-            encode_path(&instance.to_string()),
+            encode_path(&instance.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -23371,7 +23371,7 @@ impl Client {
         let url = format!(
             "{}/v1/instances/{}/disks/detach",
             self.baseurl,
-            encode_path(&instance.to_string()),
+            encode_path(&instance.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -23426,7 +23426,7 @@ impl Client {
         let url = format!(
             "{}/v1/instances/{}/migrate",
             self.baseurl,
-            encode_path(&instance.to_string()),
+            encode_path(&instance.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -23480,7 +23480,7 @@ impl Client {
         let url = format!(
             "{}/v1/instances/{}/reboot",
             self.baseurl,
-            encode_path(&instance.to_string()),
+            encode_path(&instance.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -23552,7 +23552,7 @@ impl Client {
         let url = format!(
             "{}/v1/instances/{}/serial-console",
             self.baseurl,
-            encode_path(&instance.to_string()),
+            encode_path(&instance.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -23615,7 +23615,7 @@ impl Client {
         let url = format!(
             "{}/v1/instances/{}/serial-console/stream",
             self.baseurl,
-            encode_path(&instance.to_string()),
+            encode_path(&instance.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -23674,7 +23674,7 @@ impl Client {
         let url = format!(
             "{}/v1/instances/{}/start",
             self.baseurl,
-            encode_path(&instance.to_string()),
+            encode_path(&instance.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -23727,7 +23727,7 @@ impl Client {
         let url = format!(
             "{}/v1/instances/{}/stop",
             self.baseurl,
-            encode_path(&instance.to_string()),
+            encode_path(&instance.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -23783,7 +23783,7 @@ impl Client {
         page_token: Option<&'a str>,
         sort_by: Option<types::NameOrIdSortMode>,
     ) -> Result<ResponseValue<types::OrganizationResultsPage>, Error<types::Error>> {
-        let url = format!("{}/v1/organizations", self.baseurl,);
+        let url = format!("{}/v1/organizations", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
@@ -23871,7 +23871,7 @@ impl Client {
         &'a self,
         body: &'a types::OrganizationCreate,
     ) -> Result<ResponseValue<types::Organization>, Error<types::Error>> {
-        let url = format!("{}/v1/organizations", self.baseurl,);
+        let url = format!("{}/v1/organizations", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
@@ -23917,7 +23917,7 @@ impl Client {
         let url = format!(
             "{}/v1/organizations/{}",
             self.baseurl,
-            encode_path(&organization.to_string()),
+            encode_path(&organization.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -23964,7 +23964,7 @@ impl Client {
         let url = format!(
             "{}/v1/organizations/{}",
             self.baseurl,
-            encode_path(&organization.to_string()),
+            encode_path(&organization.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -24011,7 +24011,7 @@ impl Client {
         let url = format!(
             "{}/v1/organizations/{}",
             self.baseurl,
-            encode_path(&organization.to_string()),
+            encode_path(&organization.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -24057,7 +24057,7 @@ impl Client {
         let url = format!(
             "{}/v1/organizations/{}/policy",
             self.baseurl,
-            encode_path(&organization.to_string()),
+            encode_path(&organization.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -24104,7 +24104,7 @@ impl Client {
         let url = format!(
             "{}/v1/organizations/{}/policy",
             self.baseurl,
-            encode_path(&organization.to_string()),
+            encode_path(&organization.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -24158,7 +24158,7 @@ impl Client {
         page_token: Option<&'a str>,
         sort_by: Option<types::NameOrIdSortMode>,
     ) -> Result<ResponseValue<types::ProjectResultsPage>, Error<types::Error>> {
-        let url = format!("{}/v1/projects", self.baseurl,);
+        let url = format!("{}/v1/projects", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
@@ -24252,7 +24252,7 @@ impl Client {
         organization: &'a types::NameOrId,
         body: &'a types::ProjectCreate,
     ) -> Result<ResponseValue<types::Project>, Error<types::Error>> {
-        let url = format!("{}/v1/projects", self.baseurl,);
+        let url = format!("{}/v1/projects", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
@@ -24303,7 +24303,7 @@ impl Client {
         let url = format!(
             "{}/v1/projects/{}",
             self.baseurl,
-            encode_path(&project.to_string()),
+            encode_path(&project.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -24355,7 +24355,7 @@ impl Client {
         let url = format!(
             "{}/v1/projects/{}",
             self.baseurl,
-            encode_path(&project.to_string()),
+            encode_path(&project.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -24407,7 +24407,7 @@ impl Client {
         let url = format!(
             "{}/v1/projects/{}",
             self.baseurl,
-            encode_path(&project.to_string()),
+            encode_path(&project.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -24458,7 +24458,7 @@ impl Client {
         let url = format!(
             "{}/v1/projects/{}/policy",
             self.baseurl,
-            encode_path(&project.to_string()),
+            encode_path(&project.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -24510,7 +24510,7 @@ impl Client {
         let url = format!(
             "{}/v1/projects/{}/policy",
             self.baseurl,
-            encode_path(&project.to_string()),
+            encode_path(&project.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -24566,7 +24566,7 @@ impl Client {
         page_token: Option<&'a str>,
         sort_by: Option<types::IdSortMode>,
     ) -> Result<ResponseValue<types::UpdateableComponentResultsPage>, Error<types::Error>> {
-        let url = format!("{}/v1/system/update/components", self.baseurl,);
+        let url = format!("{}/v1/system/update/components", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
@@ -24662,7 +24662,7 @@ impl Client {
         page_token: Option<&'a str>,
         sort_by: Option<types::IdSortMode>,
     ) -> Result<ResponseValue<types::UpdateDeploymentResultsPage>, Error<types::Error>> {
-        let url = format!("{}/v1/system/update/deployments", self.baseurl,);
+        let url = format!("{}/v1/system/update/deployments", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
@@ -24753,7 +24753,7 @@ impl Client {
         let url = format!(
             "{}/v1/system/update/deployments/{}",
             self.baseurl,
-            encode_path(&id.to_string()),
+            encode_path(&id.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -24795,7 +24795,7 @@ impl Client {
     pub async fn system_update_refresh<'a>(
         &'a self,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
-        let url = format!("{}/v1/system/update/refresh", self.baseurl,);
+        let url = format!("{}/v1/system/update/refresh", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
@@ -24837,7 +24837,7 @@ impl Client {
         &'a self,
         body: &'a types::SystemUpdateStart,
     ) -> Result<ResponseValue<types::UpdateDeployment>, Error<types::Error>> {
-        let url = format!("{}/v1/system/update/start", self.baseurl,);
+        let url = format!("{}/v1/system/update/start", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
@@ -24881,7 +24881,7 @@ impl Client {
     pub async fn system_update_stop<'a>(
         &'a self,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
-        let url = format!("{}/v1/system/update/stop", self.baseurl,);
+        let url = format!("{}/v1/system/update/stop", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
@@ -24931,7 +24931,7 @@ impl Client {
         page_token: Option<&'a str>,
         sort_by: Option<types::IdSortMode>,
     ) -> Result<ResponseValue<types::SystemUpdateResultsPage>, Error<types::Error>> {
-        let url = format!("{}/v1/system/update/updates", self.baseurl,);
+        let url = format!("{}/v1/system/update/updates", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
@@ -25022,7 +25022,7 @@ impl Client {
         let url = format!(
             "{}/v1/system/update/updates/{}",
             self.baseurl,
-            encode_path(&version.to_string()),
+            encode_path(&version.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -25069,7 +25069,7 @@ impl Client {
         let url = format!(
             "{}/v1/system/update/updates/{}/components",
             self.baseurl,
-            encode_path(&version.to_string()),
+            encode_path(&version.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -25111,7 +25111,7 @@ impl Client {
     pub async fn system_version<'a>(
         &'a self,
     ) -> Result<ResponseValue<types::SystemVersion>, Error<types::Error>> {
-        let url = format!("{}/v1/system/update/version", self.baseurl,);
+        let url = format!("{}/v1/system/update/version", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),

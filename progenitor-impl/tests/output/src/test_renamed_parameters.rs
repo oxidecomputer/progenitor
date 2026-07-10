@@ -162,7 +162,7 @@ impl Client {
             self.baseurl,
             encode_path(&ref_.to_string()),
             encode_path(&type_.to_string()),
-            encode_path(&trait_.to_string()),
+            encode_path(&trait_.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(

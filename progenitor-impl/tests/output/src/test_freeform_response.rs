@@ -117,7 +117,7 @@ impl Client {
     pub async fn freeform_response<'a>(
         &'a self,
     ) -> Result<ResponseValue<ByteStream>, Error<ByteStream>> {
-        let url = format!("{}/", self.baseurl,);
+        let url = format!("{}/", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
