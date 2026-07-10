@@ -22,7 +22,7 @@ impl PathTemplate {
     pub fn compile(&self, rename: &HashMap<&String, &String>, client: &TokenStream) -> TokenStream {
         let mut fmt = String::new();
         fmt.push_str("{}");
-        for c in self.components.iter() {
+        for c in &self.components {
             match c {
                 Component::Constant(n) => fmt.push_str(n),
                 Component::Parameter(_) => fmt.push_str("{}"),
@@ -256,7 +256,7 @@ mod tests {
             ),
         ];
 
-        for (path, expect_string, want) in trials.iter() {
+        for (path, expect_string, want) in &trials {
             match parse(path) {
                 Ok(t) => {
                     assert_eq!(&t, want);
@@ -278,7 +278,7 @@ mod tests {
             ),
         ];
 
-        for (path, want) in trials.iter() {
+        for (path, want) in &trials {
             match parse(path) {
                 Ok(t) => assert_eq!(&t.names(), want),
                 Err(e) => panic!("path {path} {e}"),
