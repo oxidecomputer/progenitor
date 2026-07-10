@@ -1897,8 +1897,7 @@ impl Generator {
             .params
             .iter()
             .map(|param| format!("\n    .{}({})", param.name, param.name))
-            .collect::<Vec<_>>()
-            .join("");
+            .collect::<String>();
 
         let eg = format!(
             "\
