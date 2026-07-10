@@ -75,6 +75,10 @@ impl Convert<schemars::schema::Schema> for openapiv3::Schema {
         clippy::too_many_lines,
         reason = "covers the complete schema conversion"
     )]
+    #[allow(
+        clippy::cast_precision_loss,
+        reason = "OpenAPI represents numeric constraints as f64"
+    )]
     fn convert(&self) -> schemars::schema::Schema {
         // TODO the discriminator field is used in a way that seems both
         // important and unfortunately redundant. It corresponds to the same
