@@ -379,31 +379,29 @@ fn do_generate_api(item: TokenStream) -> Result<TokenStream, syn::Error> {
         map_type.map(|map_type| settings.with_map_type(map_type.to_token_stream()));
 
         settings.with_unknown_crates(unknown_crates);
-        crates.into_iter().for_each(
-            |(CrateName(crate_name), MacroCrateSpec { original, version })| {
-                if let Some(original_crate) = original {
-                    settings.with_crate(original_crate, version, Some(&crate_name));
-                } else {
-                    settings.with_crate(crate_name, version, None);
-                }
-            },
-        );
+        for (CrateName(crate_name), MacroCrateSpec { original, version }) in crates {
+            if let Some(original_crate) = original {
+                settings.with_crate(original_crate, version, Some(&crate_name));
+            } else {
+                settings.with_crate(crate_name, version, None);
+            }
+        }
 
-        derives.into_iter().for_each(|derive| {
+        for derive in derives {
             settings.with_derive(derive.to_token_stream());
-        });
-        patch.into_iter().for_each(|(type_name, patch)| {
+        }
+        for (type_name, patch) in patch {
             settings.with_patch(type_name.to_token_stream().to_string(), &patch.into());
-        });
-        replace.into_iter().for_each(|(type_name, type_and_impls)| {
+        }
+        for (type_name, type_and_impls) in replace {
             let type_name = type_name.to_token_stream();
             let (replace_name, impls) = type_and_impls.into_inner().into_name_and_impls();
             settings.with_replacement(type_name, replace_name, impls);
-        });
-        convert.into_iter().for_each(|(schema, type_and_impls)| {
+        }
+        for (schema, type_and_impls) in convert {
             let (type_name, impls) = type_and_impls.into_inner().into_name_and_impls();
             settings.with_conversion(schema, type_name, impls);
-        });
+        }
         if let Some(timeout) = timeout {
             settings.with_timeout(timeout);
         }

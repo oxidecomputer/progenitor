@@ -1951,7 +1951,7 @@ impl Generator {
         let mut base = Vec::new();
         let mut ext = BTreeMap::new();
 
-        methods.iter().for_each(|method| {
+        for method in methods {
             let BuilderImpl { doc, sig, body } = self.builder_helper(method);
 
             if method.tags.is_empty() {
@@ -1973,13 +1973,13 @@ impl Generator {
                         #body
                     }
                 };
-                method.tags.iter().for_each(|tag| {
+                for tag in &method.tags {
                     ext.entry(tag.clone())
                         .or_insert_with(Vec::new)
                         .push((trait_sig.clone(), impl_body.clone()));
-                });
+                }
             }
-        });
+        }
 
         let base_impl = (!base.is_empty()).then(|| {
             quote! {
