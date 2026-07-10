@@ -1,6 +1,8 @@
 // Copyright 2025 Oxide Computer Company
 
 #![allow(dead_code)]
+// `Error` is public API. Boxing its large variants would be a breaking change.
+#![allow(clippy::result_large_err)]
 
 //! Support code for generated clients.
 

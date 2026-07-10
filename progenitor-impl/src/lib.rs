@@ -536,6 +536,10 @@ impl Generator {
 
         let out = quote! {
             #[allow(clippy::all)]
+            #[allow(
+                clippy::result_large_err,
+                reason = "generated methods preserve the public Error representation"
+            )]
             impl Client {
                 #(#methods)*
             }
@@ -571,6 +575,10 @@ impl Generator {
 
             /// Types for composing operation parameters.
             #[allow(clippy::all)]
+            #[allow(
+                clippy::result_large_err,
+                reason = "generated methods preserve the public Error representation"
+            )]
             pub mod builder {
                 use super::types;
                 #[allow(unused_imports)]
@@ -619,6 +627,10 @@ impl Generator {
 
             /// Types for composing operation parameters.
             #[allow(clippy::all)]
+            #[allow(
+                clippy::result_large_err,
+                reason = "generated methods preserve the public Error representation"
+            )]
             pub mod builder {
                 use super::types;
                 #[allow(unused_imports)]

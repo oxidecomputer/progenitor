@@ -159,6 +159,10 @@ impl ClientInfo<()> for Client {
 
 impl ClientHooks<()> for &Client {}
 #[allow(clippy::all)]
+#[allow(
+    clippy::result_large_err,
+    reason = "generated methods preserve the public Error representation"
+)]
 impl Client {
     ///Sends a `POST` request to `/`
     pub async fn default_params<'a>(
