@@ -1014,12 +1014,12 @@ impl Generator {
                 OperationResponseKind::Upgrade => {
                     if response.status_code == OperationResponseStatus::Default {
                         return quote! {}; // catch-all handled below
-                    } else {
-                        todo!(
-                            "non-default error response handling for \
-                                upgrade requests is not yet implemented"
-                        );
                     }
+
+                    todo!(
+                        "non-default error response handling for \
+                                upgrade requests is not yet implemented"
+                    );
                 }
             };
 
