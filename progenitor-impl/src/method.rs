@@ -120,11 +120,11 @@ pub enum OperationParameterKind {
 impl OperationParameterKind {
     fn is_required(&self) -> bool {
         match self {
-            OperationParameterKind::Path => true,
-            OperationParameterKind::Query(required) => *required,
-            OperationParameterKind::Header(required) => *required,
+            OperationParameterKind::Query(required) | OperationParameterKind::Header(required) => {
+                *required
+            }
             // TODO may be optional
-            OperationParameterKind::Body(_) => true,
+            OperationParameterKind::Path | OperationParameterKind::Body(_) => true,
         }
     }
     fn is_optional(&self) -> bool {
@@ -2270,43 +2270,37 @@ fn sort_params(raw_params: &mut [OperationParameter], names: &[String]) {
                         .unwrap_or_else(|| panic!("{b_name} missing from path"));
                     a_index.cmp(&b_index)
                 }
-                (OperationParameterKind::Path, OperationParameterKind::Query(_)) => Ordering::Less,
-                (OperationParameterKind::Path, OperationParameterKind::Body(_)) => Ordering::Less,
-                (OperationParameterKind::Path, OperationParameterKind::Header(_)) => Ordering::Less,
+                (
+                    OperationParameterKind::Path,
+                    OperationParameterKind::Query(_)
+                    | OperationParameterKind::Body(_)
+                    | OperationParameterKind::Header(_),
+                )
+                | (
+                    OperationParameterKind::Query(_),
+                    OperationParameterKind::Body(_) | OperationParameterKind::Header(_),
+                ) => Ordering::Less,
 
                 // Query params are in lexicographic order.
-                (OperationParameterKind::Query(_), OperationParameterKind::Body(_)) => {
-                    Ordering::Less
-                }
-                (OperationParameterKind::Query(_), OperationParameterKind::Query(_)) => {
+                (OperationParameterKind::Query(_), OperationParameterKind::Query(_))
+                | (OperationParameterKind::Header(_), OperationParameterKind::Header(_)) => {
                     a_name.cmp(b_name)
-                }
-                (OperationParameterKind::Query(_), OperationParameterKind::Path) => {
-                    Ordering::Greater
-                }
-                (OperationParameterKind::Query(_), OperationParameterKind::Header(_)) => {
-                    Ordering::Less
                 }
 
                 // Body params are last and should be singular.
-                (OperationParameterKind::Body(_), OperationParameterKind::Path) => {
-                    Ordering::Greater
-                }
-                (OperationParameterKind::Body(_), OperationParameterKind::Query(_)) => {
-                    Ordering::Greater
-                }
-                (OperationParameterKind::Body(_), OperationParameterKind::Header(_)) => {
-                    Ordering::Greater
-                }
                 (OperationParameterKind::Body(_), OperationParameterKind::Body(_)) => {
                     panic!("should only be one body")
                 }
 
-                // Header params are in lexicographic order.
-                (OperationParameterKind::Header(_), OperationParameterKind::Header(_)) => {
-                    a_name.cmp(b_name)
-                }
-                (OperationParameterKind::Header(_), _) => Ordering::Greater,
+                (OperationParameterKind::Query(_), OperationParameterKind::Path)
+                | (
+                    OperationParameterKind::Body(_),
+                    OperationParameterKind::Path
+                    | OperationParameterKind::Query(_)
+                    | OperationParameterKind::Header(_),
+                )
+                // Header params sort after every other parameter kind.
+                | (OperationParameterKind::Header(_), _) => Ordering::Greater,
             }
         },
     );

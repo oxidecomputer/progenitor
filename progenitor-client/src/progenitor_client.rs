@@ -362,13 +362,13 @@ impl<E> Error<E> {
     /// Returns the status code, if the error was generated from a response.
     pub fn status(&self) -> Option<reqwest::StatusCode> {
         match self {
-            Error::InvalidRequest(_) => None,
-            Error::Custom(_) => None,
-            Error::CommunicationError(e) => e.status(),
+            Error::InvalidRequest(_) | Error::Custom(_) | Error::InvalidResponsePayload(_, _) => {
+                None
+            }
+            Error::CommunicationError(e)
+            | Error::InvalidUpgrade(e)
+            | Error::ResponseBodyError(e) => e.status(),
             Error::ErrorResponse(rv) => Some(rv.status()),
-            Error::InvalidUpgrade(e) => e.status(),
-            Error::ResponseBodyError(e) => e.status(),
-            Error::InvalidResponsePayload(_, _) => None,
             Error::UnexpectedResponse(r) => Some(r.status()),
         }
     }
@@ -399,9 +399,9 @@ impl<E> Error<E> {
                 //   it is appropriate to check for retryability.
                 e.status().is_some_and(is_retryable_status)
             }
-            Error::InvalidRequest(_) => false,
-            Error::InvalidResponsePayload(_, _) => false,
-            Error::Custom(_) => false,
+            Error::InvalidRequest(_) | Error::InvalidResponsePayload(_, _) | Error::Custom(_) => {
+                false
+            }
         }
     }
 
@@ -536,9 +536,9 @@ where
 {
     fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
         match self {
-            Error::CommunicationError(e) => Some(e),
-            Error::InvalidUpgrade(e) => Some(e),
-            Error::ResponseBodyError(e) => Some(e),
+            Error::CommunicationError(e)
+            | Error::InvalidUpgrade(e)
+            | Error::ResponseBodyError(e) => Some(e),
             Error::InvalidResponsePayload(_b, e) => Some(e),
             _ => None,
         }

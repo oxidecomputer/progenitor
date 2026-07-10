@@ -404,8 +404,8 @@ impl Generator {
                 OperationParameterKind::Body(_) => continue,
 
                 OperationParameterKind::Path => true,
-                OperationParameterKind::Query(required) => *required,
-                OperationParameterKind::Header(required) => *required,
+                OperationParameterKind::Query(required)
+                | OperationParameterKind::Header(required) => *required,
             };
 
             // For paginated endpoints, we don't generate 'page_token' args.

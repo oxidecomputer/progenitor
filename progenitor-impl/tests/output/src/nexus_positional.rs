@@ -12935,6 +12935,10 @@ impl ClientHooks<()> for &Client {}
     clippy::result_large_err,
     reason = "generated methods preserve the public Error representation"
 )]
+#[allow(
+    clippy::match_same_arms,
+    reason = "generated status ranges remain explicit"
+)]
 impl Client {
     ///Fetch a disk by id
     ///

@@ -28698,6 +28698,10 @@ impl ClientVpcsExt for Client {
     clippy::result_large_err,
     reason = "generated methods preserve the public Error representation"
 )]
+#[allow(
+    clippy::match_same_arms,
+    reason = "generated status ranges remain explicit"
+)]
 pub mod builder {
     use super::types;
     #[allow(unused_imports)]
