@@ -27,7 +27,7 @@ where
 }
 
 fn generate_formatted(generator: &mut Generator, spec: &OpenAPI) -> String {
-    let content = generator.generate_tokens(&spec).unwrap();
+    let content = generator.generate_tokens(spec).unwrap();
     reformat_code(content)
 }
 
