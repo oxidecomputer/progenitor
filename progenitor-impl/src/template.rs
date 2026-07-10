@@ -179,7 +179,7 @@ mod tests {
 
     #[test]
     fn basic() {
-        let trials = vec![
+        let trials = [
             (
                 "/info",
                 "/info",
@@ -272,7 +272,7 @@ mod tests {
 
     #[test]
     fn names() {
-        let trials = vec![
+        let trials = [
             ("/info", vec![]),
             ("/measure/{number}", vec!["number".to_string()]),
             (
