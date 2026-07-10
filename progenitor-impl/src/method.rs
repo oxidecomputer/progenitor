@@ -1290,9 +1290,8 @@ impl Generator {
         };
 
         let typ = self.type_space.get_type(success_response).ok()?;
-        let details = match typ.details() {
-            typify::TypeDetails::Struct(details) => details,
-            _ => return None,
+        let typify::TypeDetails::Struct(details) = typ.details() else {
+            return None;
         };
 
         let properties = details.properties().collect::<BTreeMap<_, _>>();
