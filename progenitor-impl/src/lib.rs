@@ -288,13 +288,13 @@ impl Generator {
             .replace
             .iter()
             .for_each(|(type_name, (replace_name, impls))| {
-                type_settings.with_replacement(type_name, replace_name, impls.iter().cloned());
+                type_settings.with_replacement(type_name, replace_name, impls.iter().copied());
             });
         settings
             .convert
             .iter()
             .for_each(|(schema, type_name, impls)| {
-                type_settings.with_conversion(schema.clone(), type_name, impls.iter().cloned());
+                type_settings.with_conversion(schema.clone(), type_name, impls.iter().copied());
             });
 
         // Set the map type if specified.
