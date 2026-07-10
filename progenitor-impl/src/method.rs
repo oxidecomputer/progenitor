@@ -315,7 +315,7 @@ impl Generator {
                         let schema = parameter_data.schema()?.to_schema();
 
                         let name = sanitize(
-                            &format!("{}-{}", operation_id, &parameter_data.name),
+                            &format!("{}-{}", operation_id, parameter_data.name),
                             Case::Pascal,
                         );
                         let typ = self.type_space.add_type_with_name(&schema, Some(name))?;
@@ -339,7 +339,7 @@ impl Generator {
                             &format!(
                                 "{}-{}",
                                 operation.operation_id.as_ref().unwrap(),
-                                &parameter_data.name,
+                                parameter_data.name,
                             ),
                             Case::Pascal,
                         );
@@ -376,7 +376,7 @@ impl Generator {
                             &format!(
                                 "{}-{}",
                                 operation.operation_id.as_ref().unwrap(),
-                                &parameter_data.name,
+                                parameter_data.name,
                             ),
                             Case::Pascal,
                         );

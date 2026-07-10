@@ -408,7 +408,7 @@ impl Generator {
                 s.push_str(ss);
             }
 
-            s.push_str(&format!("\n\nVersion: {}", &spec.info.version));
+            s.push_str(&format!("\n\nVersion: {}", spec.info.version));
 
             s
         };
