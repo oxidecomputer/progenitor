@@ -54,7 +54,7 @@ impl PathTemplate {
         self.components
             .iter()
             .filter_map(|c| match c {
-                Component::Parameter(name) => Some(name.to_string()),
+                Component::Parameter(name) => Some(name.clone()),
                 Component::Constant(_) => None,
             })
             .collect()

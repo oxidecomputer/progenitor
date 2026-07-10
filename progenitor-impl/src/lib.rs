@@ -728,7 +728,7 @@ pub fn validate_openapi(spec: &OpenAPI) -> Result<()> {
                 // operation ID is only used once in the document.
                 item.iter().try_for_each(|(_, o)| {
                     if let Some(oid) = o.operation_id.as_ref() {
-                        if !opids.insert(oid.to_string()) {
+                        if !opids.insert(oid.clone()) {
                             return Err(Error::UnexpectedFormat(format!(
                                 "duplicate operation ID: {oid}",
                             )));
