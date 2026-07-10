@@ -321,6 +321,11 @@ impl Generator {
     ///
     /// Returns an error if the `OpenAPI` document is invalid or its schemas
     /// cannot be converted into Rust types.
+    ///
+    /// # Panics
+    ///
+    /// Panics if validated component references violate an internal generator
+    /// invariant.
     pub fn generate_tokens(&mut self, spec: &OpenAPI) -> Result<TokenStream> {
         validate_openapi(spec)?;
 
@@ -468,6 +473,10 @@ impl Generator {
                 /// `baseurl` is the base URL provided to the internal
                 /// `reqwest::Client`, and should include a scheme and hostname,
                 /// as well as port and a path stem if applicable.
+                ///
+                /// # Panics
+                ///
+                /// Panics if the default `reqwest::Client` cannot be built.
                 #[must_use]
                 pub fn new(
                     baseurl: &str,
@@ -712,6 +721,10 @@ impl Generator {
 /// # Errors
 ///
 /// This function currently always returns `Ok`.
+///
+/// # Panics
+///
+/// Panics if one of the built-in regular expressions is invalid.
 pub fn space_out_items(content: &str) -> Result<String> {
     Ok(if cfg!(not(windows)) {
         let regex = regex::Regex::new(r"(\n\s*})(\n\s{0,8}[^} ])").unwrap();

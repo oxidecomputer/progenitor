@@ -29,6 +29,11 @@ impl Generator {
     ///
     /// Returns an error if the `OpenAPI` document is invalid or its types
     /// cannot be converted into CLI arguments.
+    ///
+    /// # Panics
+    ///
+    /// Panics if validated component references violate an internal generator
+    /// invariant.
     pub fn cli(&mut self, spec: &OpenAPI, crate_name: &str) -> Result<TokenStream> {
         validate_openapi(spec)?;
 

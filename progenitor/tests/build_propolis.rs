@@ -11,7 +11,7 @@ mod propolis_client {
 
 use propolis_client::Client;
 
-pub fn _ignore() {
+fn _ignore() {
     let _future = async {
         let _upgraded: reqwest::Upgraded = Client::new("")
             .instance_serial()

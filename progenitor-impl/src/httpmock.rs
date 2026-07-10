@@ -35,6 +35,11 @@ impl Generator {
     ///
     /// Returns an error if the `OpenAPI` document or crate path is invalid, or
     /// if its types cannot be converted into mock definitions.
+    ///
+    /// # Panics
+    ///
+    /// Panics if validated component references violate an internal generator
+    /// invariant.
     pub fn httpmock(&mut self, spec: &OpenAPI, crate_path: &str) -> Result<TokenStream> {
         validate_openapi(spec)?;
 
