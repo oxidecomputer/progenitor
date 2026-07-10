@@ -12,6 +12,7 @@ readme = "../README.md"
 heck = { workspace = true }
 http = { workspace = true }
 indexmap = { workspace = true }
+mime = { workspace = true }
 openapiv3 = { workspace = true }
 proc-macro2 = { workspace = true }
 quote = { workspace = true }
