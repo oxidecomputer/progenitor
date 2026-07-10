@@ -13530,7 +13530,7 @@ impl Client {
         self.post(&result, &info).await?;
         let response = result?;
         match response.status().as_u16() {
-            204u16 => Ok(ResponseValue::empty(response)),
+            204u16 => Ok(ResponseValue::empty(&response)),
             400u16..=499u16 => Err(Error::ErrorResponse(
                 ResponseValue::from_response(response).await?,
             )),
@@ -13702,7 +13702,7 @@ impl Client {
         self.post(&result, &info).await?;
         let response = result?;
         match response.status().as_u16() {
-            204u16 => Ok(ResponseValue::empty(response)),
+            204u16 => Ok(ResponseValue::empty(&response)),
             400u16..=499u16 => Err(Error::ErrorResponse(
                 ResponseValue::from_response(response).await?,
             )),
@@ -13876,7 +13876,7 @@ impl Client {
         self.post(&result, &info).await?;
         let response = result?;
         match response.status().as_u16() {
-            204u16 => Ok(ResponseValue::empty(response)),
+            204u16 => Ok(ResponseValue::empty(&response)),
             400u16..=499u16 => Err(Error::ErrorResponse(
                 ResponseValue::from_response(response).await?,
             )),
@@ -14177,7 +14177,7 @@ impl Client {
         self.post(&result, &info).await?;
         let response = result?;
         match response.status().as_u16() {
-            204u16 => Ok(ResponseValue::empty(response)),
+            204u16 => Ok(ResponseValue::empty(&response)),
             400u16..=499u16 => Err(Error::ErrorResponse(
                 ResponseValue::from_response(response).await?,
             )),
@@ -14612,7 +14612,7 @@ impl Client {
         self.post(&result, &info).await?;
         let response = result?;
         match response.status().as_u16() {
-            204u16 => Ok(ResponseValue::empty(response)),
+            204u16 => Ok(ResponseValue::empty(&response)),
             400u16..=499u16 => Err(Error::ErrorResponse(
                 ResponseValue::from_response(response).await?,
             )),
@@ -14894,7 +14894,7 @@ impl Client {
         self.post(&result, &info).await?;
         let response = result?;
         match response.status().as_u16() {
-            204u16 => Ok(ResponseValue::empty(response)),
+            204u16 => Ok(ResponseValue::empty(&response)),
             400u16..=499u16 => Err(Error::ErrorResponse(
                 ResponseValue::from_response(response).await?,
             )),
@@ -15332,7 +15332,7 @@ impl Client {
         self.post(&result, &info).await?;
         let response = result?;
         match response.status().as_u16() {
-            204u16 => Ok(ResponseValue::empty(response)),
+            204u16 => Ok(ResponseValue::empty(&response)),
             400u16..=499u16 => Err(Error::ErrorResponse(
                 ResponseValue::from_response(response).await?,
             )),
@@ -15613,7 +15613,7 @@ impl Client {
         self.post(&result, &info).await?;
         let response = result?;
         match response.status().as_u16() {
-            204u16 => Ok(ResponseValue::empty(response)),
+            204u16 => Ok(ResponseValue::empty(&response)),
             400u16..=499u16 => Err(Error::ErrorResponse(
                 ResponseValue::from_response(response).await?,
             )),
@@ -16321,7 +16321,7 @@ impl Client {
         self.post(&result, &info).await?;
         let response = result?;
         match response.status().as_u16() {
-            204u16 => Ok(ResponseValue::empty(response)),
+            204u16 => Ok(ResponseValue::empty(&response)),
             400u16..=499u16 => Err(Error::ErrorResponse(
                 ResponseValue::from_response(response).await?,
             )),
@@ -17069,7 +17069,7 @@ impl Client {
         self.post(&result, &info).await?;
         let response = result?;
         match response.status().as_u16() {
-            204u16 => Ok(ResponseValue::empty(response)),
+            204u16 => Ok(ResponseValue::empty(&response)),
             400u16..=499u16 => Err(Error::ErrorResponse(
                 ResponseValue::from_response(response).await?,
             )),
@@ -17399,7 +17399,7 @@ impl Client {
         self.post(&result, &info).await?;
         let response = result?;
         match response.status().as_u16() {
-            204u16 => Ok(ResponseValue::empty(response)),
+            204u16 => Ok(ResponseValue::empty(&response)),
             400u16..=499u16 => Err(Error::ErrorResponse(
                 ResponseValue::from_response(response).await?,
             )),
@@ -17854,7 +17854,7 @@ impl Client {
         self.post(&result, &info).await?;
         let response = result?;
         match response.status().as_u16() {
-            204u16 => Ok(ResponseValue::empty(response)),
+            204u16 => Ok(ResponseValue::empty(&response)),
             400u16..=499u16 => Err(Error::ErrorResponse(
                 ResponseValue::from_response(response).await?,
             )),
@@ -18223,7 +18223,7 @@ impl Client {
         self.post(&result, &info).await?;
         let response = result?;
         match response.status().as_u16() {
-            204u16 => Ok(ResponseValue::empty(response)),
+            204u16 => Ok(ResponseValue::empty(&response)),
             400u16..=499u16 => Err(Error::ErrorResponse(
                 ResponseValue::from_response(response).await?,
             )),
@@ -18572,7 +18572,7 @@ impl Client {
         self.post(&result, &info).await?;
         let response = result?;
         match response.status().as_u16() {
-            204u16 => Ok(ResponseValue::empty(response)),
+            204u16 => Ok(ResponseValue::empty(&response)),
             400u16..=499u16 => Err(Error::ErrorResponse(
                 ResponseValue::from_response(response).await?,
             )),
@@ -19312,7 +19312,7 @@ impl Client {
         self.post(&result, &info).await?;
         let response = result?;
         match response.status().as_u16() {
-            204u16 => Ok(ResponseValue::empty(response)),
+            204u16 => Ok(ResponseValue::empty(&response)),
             400u16..=499u16 => Err(Error::ErrorResponse(
                 ResponseValue::from_response(response).await?,
             )),
@@ -19696,7 +19696,7 @@ impl Client {
         self.post(&result, &info).await?;
         let response = result?;
         match response.status().as_u16() {
-            204u16 => Ok(ResponseValue::empty(response)),
+            204u16 => Ok(ResponseValue::empty(&response)),
             400u16..=499u16 => Err(Error::ErrorResponse(
                 ResponseValue::from_response(response).await?,
             )),
@@ -20433,7 +20433,7 @@ impl Client {
         self.post(&result, &info).await?;
         let response = result?;
         match response.status().as_u16() {
-            204u16 => Ok(ResponseValue::empty(response)),
+            204u16 => Ok(ResponseValue::empty(&response)),
             400u16..=499u16 => Err(Error::ErrorResponse(
                 ResponseValue::from_response(response).await?,
             )),
@@ -20711,7 +20711,7 @@ impl Client {
         self.post(&result, &info).await?;
         let response = result?;
         match response.status().as_u16() {
-            204u16 => Ok(ResponseValue::empty(response)),
+            204u16 => Ok(ResponseValue::empty(&response)),
             400u16..=499u16 => Err(Error::ErrorResponse(
                 ResponseValue::from_response(response).await?,
             )),
@@ -20910,7 +20910,7 @@ impl Client {
         self.post(&result, &info).await?;
         let response = result?;
         match response.status().as_u16() {
-            204u16 => Ok(ResponseValue::empty(response)),
+            204u16 => Ok(ResponseValue::empty(&response)),
             400u16..=499u16 => Err(Error::ErrorResponse(
                 ResponseValue::from_response(response).await?,
             )),
@@ -21132,7 +21132,7 @@ impl Client {
         self.post(&result, &info).await?;
         let response = result?;
         match response.status().as_u16() {
-            204u16 => Ok(ResponseValue::empty(response)),
+            204u16 => Ok(ResponseValue::empty(&response)),
             400u16..=499u16 => Err(Error::ErrorResponse(
                 ResponseValue::from_response(response).await?,
             )),
@@ -21672,7 +21672,7 @@ impl Client {
         self.post(&result, &info).await?;
         let response = result?;
         match response.status().as_u16() {
-            204u16 => Ok(ResponseValue::empty(response)),
+            204u16 => Ok(ResponseValue::empty(&response)),
             400u16..=499u16 => Err(Error::ErrorResponse(
                 ResponseValue::from_response(response).await?,
             )),
@@ -21887,7 +21887,7 @@ impl Client {
         self.post(&result, &info).await?;
         let response = result?;
         match response.status().as_u16() {
-            204u16 => Ok(ResponseValue::empty(response)),
+            204u16 => Ok(ResponseValue::empty(&response)),
             400u16..=499u16 => Err(Error::ErrorResponse(
                 ResponseValue::from_response(response).await?,
             )),
@@ -21947,7 +21947,7 @@ impl Client {
         self.post(&result, &info).await?;
         let response = result?;
         match response.status().as_u16() {
-            204u16 => Ok(ResponseValue::empty(response)),
+            204u16 => Ok(ResponseValue::empty(&response)),
             400u16..=499u16 => Err(Error::ErrorResponse(
                 ResponseValue::from_response(response).await?,
             )),
@@ -22904,7 +22904,7 @@ impl Client {
         self.post(&result, &info).await?;
         let response = result?;
         match response.status().as_u16() {
-            204u16 => Ok(ResponseValue::empty(response)),
+            204u16 => Ok(ResponseValue::empty(&response)),
             400u16..=499u16 => Err(Error::ErrorResponse(
                 ResponseValue::from_response(response).await?,
             )),
@@ -23169,7 +23169,7 @@ impl Client {
         self.post(&result, &info).await?;
         let response = result?;
         match response.status().as_u16() {
-            204u16 => Ok(ResponseValue::empty(response)),
+            204u16 => Ok(ResponseValue::empty(&response)),
             400u16..=499u16 => Err(Error::ErrorResponse(
                 ResponseValue::from_response(response).await?,
             )),
@@ -24036,7 +24036,7 @@ impl Client {
         self.post(&result, &info).await?;
         let response = result?;
         match response.status().as_u16() {
-            204u16 => Ok(ResponseValue::empty(response)),
+            204u16 => Ok(ResponseValue::empty(&response)),
             400u16..=499u16 => Err(Error::ErrorResponse(
                 ResponseValue::from_response(response).await?,
             )),
@@ -24436,7 +24436,7 @@ impl Client {
         self.post(&result, &info).await?;
         let response = result?;
         match response.status().as_u16() {
-            204u16 => Ok(ResponseValue::empty(response)),
+            204u16 => Ok(ResponseValue::empty(&response)),
             400u16..=499u16 => Err(Error::ErrorResponse(
                 ResponseValue::from_response(response).await?,
             )),
@@ -24819,7 +24819,7 @@ impl Client {
         self.post(&result, &info).await?;
         let response = result?;
         match response.status().as_u16() {
-            204u16 => Ok(ResponseValue::empty(response)),
+            204u16 => Ok(ResponseValue::empty(&response)),
             400u16..=499u16 => Err(Error::ErrorResponse(
                 ResponseValue::from_response(response).await?,
             )),
@@ -24905,7 +24905,7 @@ impl Client {
         self.post(&result, &info).await?;
         let response = result?;
         match response.status().as_u16() {
-            204u16 => Ok(ResponseValue::empty(response)),
+            204u16 => Ok(ResponseValue::empty(&response)),
             400u16..=499u16 => Err(Error::ErrorResponse(
                 ResponseValue::from_response(response).await?,
             )),

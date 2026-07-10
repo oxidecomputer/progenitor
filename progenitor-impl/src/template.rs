@@ -19,7 +19,7 @@ pub struct PathTemplate {
 }
 
 impl PathTemplate {
-    pub fn compile(&self, rename: HashMap<&String, &String>, client: TokenStream) -> TokenStream {
+    pub fn compile(&self, rename: &HashMap<&String, &String>, client: &TokenStream) -> TokenStream {
         let mut fmt = String::new();
         fmt.push_str("{}");
         for c in self.components.iter() {
@@ -292,7 +292,7 @@ mod tests {
         let number = "number".to_string();
         rename.insert(&number, &number);
         let t = parse("/measure/{number}").unwrap();
-        let out = t.compile(rename, quote::quote! { self });
+        let out = t.compile(&rename, &quote::quote! { self });
         let want = quote::quote! {
             format!("{}/measure/{}",
                 self.baseurl,
@@ -312,7 +312,7 @@ mod tests {
         rename.insert(&two, &two);
         rename.insert(&three, &three);
         let t = parse("/abc/def:{one}:jkl/{two}/a:{three}").unwrap();
-        let out = t.compile(rename, quote::quote! { self });
+        let out = t.compile(&rename, &quote::quote! { self });
         let want = quote::quote! {
             format!("{}/abc/def:{}:jkl/{}/a:{}",
                 self.baseurl,

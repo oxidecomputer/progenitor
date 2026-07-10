@@ -1440,7 +1440,7 @@ pub mod builder {
             client.post(&result, &info).await?;
             let response = result?;
             match response.status().as_u16() {
-                201u16 => Ok(ResponseValue::empty(response)),
+                201u16 => Ok(ResponseValue::empty(&response)),
                 _ => Err(Error::UnexpectedResponse(response)),
             }
         }

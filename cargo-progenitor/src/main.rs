@@ -92,7 +92,7 @@ fn reformat_code(input: String) -> String {
         wrap_comments: Some(true),
         ..Default::default()
     };
-    space_out_items(rustfmt_wrapper::rustfmt_config(config, input).unwrap()).unwrap()
+    space_out_items(&rustfmt_wrapper::rustfmt_config(config, input).unwrap()).unwrap()
 }
 
 fn save<P>(p: P, data: &str) -> Result<()>
@@ -164,7 +164,7 @@ fn main() -> Result<()> {
                 [dependencies]\n\
                 {}\n\
                 \n",
-                    dependencies(builder, args.include_client).join("\n"),
+                    dependencies(&builder, args.include_client).join("\n"),
                 )
                 .chars(),
             );
@@ -240,7 +240,7 @@ static DEPENDENCIES: Dependencies = Dependencies {
 };
 
 #[must_use]
-pub fn dependencies(builder: Generator, include_client: bool) -> Vec<String> {
+pub fn dependencies(builder: &Generator, include_client: bool) -> Vec<String> {
     let mut deps = vec![
         format!("bytes = \"{}\"", DEPENDENCIES.bytes),
         format!("futures-core = \"{}\"", DEPENDENCIES.futures),

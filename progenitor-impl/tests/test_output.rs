@@ -38,7 +38,7 @@ fn reformat_code(content: TokenStream) -> String {
         wrap_comments: Some(true),
         ..Default::default()
     };
-    space_out_items(rustfmt_wrapper::rustfmt_config(rustfmt_config, content).unwrap()).unwrap()
+    space_out_items(&rustfmt_wrapper::rustfmt_config(rustfmt_config, content).unwrap()).unwrap()
 }
 
 #[track_caller]
@@ -116,7 +116,7 @@ fn verify_apis(openapi_file: &str) {
     )
     .unwrap();
 
-    let output = progenitor_impl::space_out_items(output).unwrap();
+    let output = progenitor_impl::space_out_items(&output).unwrap();
     expectorate::assert_contents(
         format!("tests/output/src/{openapi_stem}_httpmock.rs"),
         &output,

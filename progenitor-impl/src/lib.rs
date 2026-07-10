@@ -107,6 +107,8 @@ pub enum TagStyle {
     Separate,
 }
 
+// These public builder methods intentionally accept owned or borrowed values.
+#[allow(clippy::needless_pass_by_value)]
 impl GenerationSettings {
     /// Create new generator settings with default values.
     #[must_use]
@@ -361,7 +363,7 @@ impl Generator {
                     .collect::<BTreeMap<_, _>>();
                 self.generate_tokens_builder_separate(
                     &raw_methods,
-                    tag_info,
+                    &tag_info,
                     self.settings.inner_type.is_some(),
                 )
             }
@@ -617,7 +619,7 @@ impl Generator {
     fn generate_tokens_builder_separate(
         &mut self,
         input_methods: &[method::OperationMethod],
-        tag_info: BTreeMap<&String, &openapiv3::Tag>,
+        tag_info: &BTreeMap<&String, &openapiv3::Tag>,
         has_inner: bool,
     ) -> Result<TokenStream> {
         let builder_struct = input_methods
@@ -625,7 +627,7 @@ impl Generator {
             .map(|method| self.builder_struct(method, TagStyle::Separate, has_inner))
             .collect::<Result<Vec<_>>>()?;
 
-        let (traits_and_impls, trait_preludes) = self.builder_tags(input_methods, &tag_info);
+        let (traits_and_impls, trait_preludes) = self.builder_tags(input_methods, tag_info);
 
         // The allow(unused_imports) on the `pub use` is necessary with Rust
         // 1.76+, in case the generated file is not at the top level of the
@@ -695,13 +697,13 @@ impl Generator {
 }
 
 /// Add newlines after end-braces at <= two levels of indentation.
-pub fn space_out_items(content: String) -> Result<String> {
+pub fn space_out_items(content: &str) -> Result<String> {
     Ok(if cfg!(not(windows)) {
         let regex = regex::Regex::new(r"(\n\s*})(\n\s{0,8}[^} ])").unwrap();
-        regex.replace_all(&content, "$1\n$2").to_string()
+        regex.replace_all(content, "$1\n$2").to_string()
     } else {
         let regex = regex::Regex::new(r"(\n\s*})(\r\n\s{0,8}[^} ])").unwrap();
-        regex.replace_all(&content, "$1\r\n$2").to_string()
+        regex.replace_all(content, "$1\r\n$2").to_string()
     })
 }
 

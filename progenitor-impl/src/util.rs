@@ -75,6 +75,7 @@ impl ComponentLookup for Schema {
     }
 }
 
+#[derive(Clone, Copy)]
 pub(crate) enum Case {
     Pascal,
     Snake,

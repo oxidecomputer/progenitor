@@ -614,7 +614,7 @@ impl Generator {
             success: success_type,
             error: error_type,
             body,
-        } = self.method_sig_body(method, quote! { Self }, quote! { self }, has_inner)?;
+        } = self.method_sig_body(method, &quote! { Self }, &quote! { self }, has_inner)?;
 
         let method_impl = quote! {
             #[doc = #doc_comment]
@@ -771,8 +771,8 @@ impl Generator {
     fn method_sig_body(
         &self,
         method: &OperationMethod,
-        client_type: TokenStream,
-        client_value: TokenStream,
+        client_type: &TokenStream,
+        client_value: &TokenStream,
         has_inner: bool,
     ) -> Result<MethodSigBody> {
         let param_names = method
@@ -876,7 +876,7 @@ impl Generator {
             })
             .collect();
 
-        let url_path = method.path.compile(url_renames, client_value.clone());
+        let url_path = method.path.compile(&url_renames, client_value);
         let url_path = quote! {
             let #url_ident = #url_path;
         };
@@ -951,7 +951,7 @@ impl Generator {
                 }
                 OperationResponseKind::None => {
                     quote! {
-                        Ok(ResponseValue::empty(#response_ident))
+                        Ok(ResponseValue::empty(&#response_ident))
                     }
                 }
                 OperationResponseKind::Raw => {
@@ -1001,7 +1001,7 @@ impl Generator {
                 OperationResponseKind::None => {
                     quote! {
                         Err(Error::ErrorResponse(
-                            ResponseValue::empty(#response_ident)
+                            ResponseValue::empty(&#response_ident)
                         ))
                     }
                 }
@@ -1658,8 +1658,8 @@ impl Generator {
             body,
         } = self.method_sig_body(
             method,
-            quote! { super::Client },
-            quote! { #client_ident },
+            &quote! { super::Client },
+            &quote! { #client_ident },
             has_inner,
         )?;
 

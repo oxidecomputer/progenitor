@@ -222,7 +222,7 @@ impl ResponseValue<ByteStream> {
 impl ResponseValue<()> {
     #[doc(hidden)]
     #[must_use]
-    pub fn empty(response: reqwest::Response) -> Self {
+    pub fn empty(response: &reqwest::Response) -> Self {
         let status = response.status();
         let headers = response.headers().clone();
         // TODO is there anything we want to do to confirm that there is no
