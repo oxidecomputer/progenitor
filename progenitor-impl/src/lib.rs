@@ -4,7 +4,10 @@
 
 #![deny(missing_docs)]
 
-use std::collections::{BTreeMap, HashMap, HashSet};
+use std::{
+    collections::{BTreeMap, HashMap, HashSet},
+    fmt::Write as _,
+};
 
 use openapiv3::OpenAPI;
 use proc_macro2::TokenStream;
@@ -400,7 +403,7 @@ impl Generator {
                 s.push_str(ss);
             }
 
-            s.push_str(&format!("\n\nVersion: {}", spec.info.version));
+            write!(&mut s, "\n\nVersion: {}", spec.info.version).unwrap();
 
             s
         };

@@ -3,6 +3,7 @@
 use std::{
     cmp::Ordering,
     collections::{BTreeMap, BTreeSet},
+    fmt::Write as _,
     str::FromStr,
 };
 
@@ -2171,11 +2172,13 @@ fn make_doc_comment(method: &OperationMethod) -> String {
         buf.push_str("\n\n");
     }
 
-    buf.push_str(&format!(
+    write!(
+        &mut buf,
         "Sends a `{}` request to `{}`\n\n",
         method.method.as_str().to_ascii_uppercase(),
         method.path,
-    ));
+    )
+    .unwrap();
 
     if method
         .params
@@ -2186,7 +2189,7 @@ fn make_doc_comment(method: &OperationMethod) -> String {
     {
         buf.push_str("Arguments:\n");
         for param in &method.params {
-            buf.push_str(&format!("- `{}`", param.name));
+            write!(&mut buf, "- `{}`", param.name).unwrap();
             if let Some(description) = &param.description {
                 buf.push_str(": ");
                 buf.push_str(description);
@@ -2210,11 +2213,13 @@ fn make_stream_doc_comment(method: &OperationMethod) -> String {
         buf.push_str("\n\n");
     }
 
-    buf.push_str(&format!(
+    write!(
+        &mut buf,
         "Sends repeated `{}` requests to `{}` until there are no more results.\n\n",
         method.method.as_str().to_ascii_uppercase(),
         method.path,
-    ));
+    )
+    .unwrap();
 
     if method
         .params
@@ -2230,7 +2235,7 @@ fn make_stream_doc_comment(method: &OperationMethod) -> String {
                 continue;
             }
 
-            buf.push_str(&format!("- `{}`", param.name));
+            write!(&mut buf, "- `{}`", param.name).unwrap();
             if let Some(description) = &param.description {
                 buf.push_str(": ");
                 buf.push_str(description);
