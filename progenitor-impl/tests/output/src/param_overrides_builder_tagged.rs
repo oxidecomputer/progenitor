@@ -37,7 +37,7 @@ pub mod types {
 }
 
 #[derive(Clone, Debug)]
-///Client for Parameter override test
+///Client for `Parameter override test`
 ///
 ///Minimal API for testing parameter overrides
 ///

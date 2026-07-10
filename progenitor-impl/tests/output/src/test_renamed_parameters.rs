@@ -71,7 +71,7 @@ pub mod types {
 }
 
 #[derive(Clone, Debug)]
-///Client for pagination-demo
+///Client for `pagination-demo`
 ///
 ///Version: 9000.0.0
 pub struct Client {

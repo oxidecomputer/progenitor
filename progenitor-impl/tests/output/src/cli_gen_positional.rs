@@ -62,7 +62,7 @@ pub mod types {
 }
 
 #[derive(Clone, Debug)]
-///Client for CLI gen test
+///Client for `CLI gen test`
 ///
 ///Test case to exercise CLI generation
 ///

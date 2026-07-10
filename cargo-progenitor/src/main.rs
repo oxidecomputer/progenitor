@@ -23,10 +23,10 @@ enum CargoCli {
     Progenitor(Args),
 }
 
-/// Generate a stand-alone crate from an OpenAPI document
+/// Generate a stand-alone crate from an `OpenAPI` document
 #[derive(Parser)]
 struct Args {
-    /// OpenAPI definition document (JSON or YAML)
+    /// `OpenAPI` definition document (JSON or YAML)
     #[clap(short = 'i', long)]
     input: String,
     /// Output directory for Rust crate

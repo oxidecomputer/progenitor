@@ -384,7 +384,7 @@ pub mod types {
 }
 
 #[derive(Clone, Debug)]
-///Client for Keeper API
+///Client for `Keeper API`
 ///
 ///report execution of cron jobs through a mechanism other than mail
 ///

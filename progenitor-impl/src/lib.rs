@@ -1,6 +1,6 @@
 // Copyright 2025 Oxide Computer Company
 
-//! Core implementation for the progenitor OpenAPI client generator.
+//! Core implementation for the progenitor `OpenAPI` client generator.
 
 #![deny(missing_docs)]
 
@@ -47,7 +47,7 @@ pub enum Error {
 #[allow(missing_docs)]
 pub type Result<T> = std::result::Result<T, Error>;
 
-/// OpenAPI generator.
+/// `OpenAPI` generator.
 pub struct Generator {
     type_space: TypeSpace,
     settings: GenerationSettings,
@@ -94,7 +94,7 @@ pub enum InterfaceStyle {
     Builder,
 }
 
-/// Style for using the OpenAPI tags when generating names in the client.
+/// Style for using the `OpenAPI` tags when generating names in the client.
 #[derive(Clone, Deserialize, Default)]
 pub enum TagStyle {
     /// Merge tags to create names in the generated client.
@@ -110,13 +110,13 @@ impl GenerationSettings {
         Self::default()
     }
 
-    /// Set the [InterfaceStyle].
+    /// Set the [`InterfaceStyle`].
     pub fn with_interface(&mut self, interface: InterfaceStyle) -> &mut Self {
         self.interface = interface;
         self
     }
 
-    /// Set the [TagStyle].
+    /// Set the [`TagStyle`].
     pub fn with_tag(&mut self, tag: TagStyle) -> &mut Self {
         self.tag = tag;
         self
@@ -165,7 +165,7 @@ impl GenerationSettings {
     }
 
     /// Modify a type with the given name.
-    /// See [typify::TypeSpaceSettings::with_patch].
+    /// See [`typify::TypeSpaceSettings::with_patch`].
     pub fn with_patch<S: AsRef<str>>(&mut self, type_name: S, patch: &TypePatch) -> &mut Self {
         self.patch
             .insert(type_name.as_ref().to_string(), patch.clone());
@@ -173,7 +173,7 @@ impl GenerationSettings {
     }
 
     /// Replace a referenced type with a named type.
-    /// See [typify::TypeSpaceSettings::with_replacement].
+    /// See [`typify::TypeSpaceSettings::with_replacement`].
     pub fn with_replacement<TS: ToString, RS: ToString, I: Iterator<Item = TypeImpl>>(
         &mut self,
         type_name: TS,
@@ -188,7 +188,7 @@ impl GenerationSettings {
     }
 
     /// Replace a given schema with a named type.
-    /// See [typify::TypeSpaceSettings::with_conversion].
+    /// See [`typify::TypeSpaceSettings::with_conversion`].
     pub fn with_conversion<S: ToString, I: Iterator<Item = TypeImpl>>(
         &mut self,
         schema: schemars::schema::SchemaObject,
@@ -201,8 +201,8 @@ impl GenerationSettings {
     }
 
     /// Policy regarding crates referenced by the schema extension
-    /// `x-rust-type` not explicitly specified via [Self::with_crate].
-    /// See [typify::TypeSpaceSettings::with_unknown_crates].
+    /// `x-rust-type` not explicitly specified via [`Self::with_crate`].
+    /// See [`typify::TypeSpaceSettings::with_unknown_crates`].
     pub fn with_unknown_crates(&mut self, policy: UnknownPolicy) -> &mut Self {
         self.unknown_crates = policy;
         self
@@ -211,7 +211,7 @@ impl GenerationSettings {
     /// Explicitly named crates whose types may be used during generation
     /// rather than generating new types based on their schemas (base on the
     /// presence of the x-rust-type extension).
-    /// See [typify::TypeSpaceSettings::with_crate].
+    /// See [`typify::TypeSpaceSettings::with_crate`].
     pub fn with_crate<S1: ToString>(
         &mut self,
         crate_name: S1,
@@ -234,7 +234,7 @@ impl GenerationSettings {
     /// - [`indexmap::IndexMap`]
     ///
     /// The requiremnets for a map type can be found in the
-    /// [typify::TypeSpaceSettings::with_map_type] documentation.
+    /// [`typify::TypeSpaceSettings::with_map_type`] documentation.
     pub fn with_map_type<MT: ToString>(&mut self, map_type: MT) -> &mut Self {
         self.map_type = Some(map_type.to_string());
         self
@@ -308,7 +308,7 @@ impl Generator {
         }
     }
 
-    /// Emit a [TokenStream] containing the generated client code.
+    /// Emit a [`TokenStream`] containing the generated client code.
     pub fn generate_tokens(&mut self, spec: &OpenAPI) -> Result<TokenStream> {
         validate_openapi(spec)?;
 
@@ -387,7 +387,7 @@ impl Generator {
         let client_timeout = self.settings.timeout.unwrap_or(15);
 
         let client_docstring = {
-            let mut s = format!("Client for {}", spec.info.title);
+            let mut s = format!("Client for `{}`", spec.info.title);
 
             if let Some(ss) = &spec.info.description {
                 s.push_str("\n\n");
@@ -650,7 +650,7 @@ impl Generator {
         Ok(out)
     }
 
-    /// Get the [TypeSpace] for schemas present in the OpenAPI specification.
+    /// Get the [`TypeSpace`] for schemas present in the `OpenAPI` specification.
     pub fn get_type_space(&self) -> &TypeSpace {
         &self.type_space
     }
@@ -690,7 +690,7 @@ fn validate_openapi_spec_version(spec_version: &str) -> Result<()> {
     }
 }
 
-/// Do some very basic checks of the OpenAPI documents.
+/// Do some very basic checks of the `OpenAPI` documents.
 pub fn validate_openapi(spec: &OpenAPI) -> Result<()> {
     validate_openapi_spec_version(spec.openapi.as_str())?;
 

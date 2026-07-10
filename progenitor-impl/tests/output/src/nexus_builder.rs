@@ -25135,7 +25135,7 @@ pub mod types {
 }
 
 #[derive(Clone, Debug)]
-///Client for Oxide Region API
+///Client for `Oxide Region API`
 ///
 ///API for interacting with the Oxide control plane
 ///

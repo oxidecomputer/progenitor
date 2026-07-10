@@ -1376,7 +1376,7 @@ impl Generator {
     /// }
     /// ```
     ///
-    /// The Client's operation_id method simply invokes the builder's new
+    /// The client's `operation_id` method simply invokes the builder's new
     /// method, which assigns an error value to mandatory field and a
     /// `Ok(None)` value to optional ones:
     /// ```ignore
@@ -1920,7 +1920,7 @@ impl Generator {
         BuilderImpl { doc, sig, body }
     }
 
-    /// Generates a pair of TokenStreams.
+    /// Generates a pair of `TokenStream`s.
     ///
     /// The first includes all the operation code; impl Client for operations
     /// with no tags and code of this form for each tag:

@@ -1,6 +1,6 @@
 // Copyright 2026 Oxide Computer Company
 
-//! Macros for the progenitor OpenAPI client generator.
+//! Macros for the progenitor `OpenAPI` client generator.
 
 #![deny(missing_docs)]
 
@@ -23,13 +23,13 @@ mod token_utils;
 /// Where to resolve the spec path relative to.
 #[derive(Debug, Clone, Copy, Deserialize)]
 enum RelativeTo {
-    /// Resolve relative to CARGO_MANIFEST_DIR (the default).
+    /// Resolve relative to `CARGO_MANIFEST_DIR` (the default).
     ManifestDir,
-    /// Resolve relative to OUT_DIR.
+    /// Resolve relative to `OUT_DIR`.
     OutDir,
 }
 
-/// Specification of where to find the OpenAPI document.
+/// Specification of where to find the `OpenAPI` document.
 #[derive(Debug)]
 struct SpecSource {
     /// The path to the spec file.
@@ -40,7 +40,7 @@ struct SpecSource {
 
 impl syn::parse::Parse for SpecSource {
     fn parse(input: syn::parse::ParseStream) -> syn::Result<Self> {
-        /// Helper struct for deserializing the struct form of SpecSource.
+        /// Helper struct for deserializing the struct form of `SpecSource`.
         #[derive(Deserialize)]
         struct SpecSourceStruct {
             path: ParseWrapper<LitStr>,
@@ -72,10 +72,10 @@ impl syn::parse::Parse for SpecSource {
     }
 }
 
-/// Generates a client from the given OpenAPI document
+/// Generates a client from the given `OpenAPI` document
 ///
 /// `generate_api!` can be invoked in two ways. The simple form, takes a path
-/// to the OpenAPI document:
+/// to the `OpenAPI` document:
 /// ```ignore
 /// generate_api!("path/to/spec.json");
 /// ```
@@ -106,7 +106,7 @@ impl syn::parse::Parse for SpecSource {
 /// );
 /// ```
 ///
-/// The `spec` key is required; it is the OpenAPI document (JSON or YAML) from
+/// The `spec` key is required; it is the `OpenAPI` document (JSON or YAML) from
 /// which the client is derived. It can be specified as a simple string path, or
 /// as a struct with `path` and `relative_to` fields. The `relative_to`
 /// field controls where the path is resolved from:

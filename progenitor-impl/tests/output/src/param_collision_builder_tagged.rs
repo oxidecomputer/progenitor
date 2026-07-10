@@ -37,7 +37,7 @@ pub mod types {
 }
 
 #[derive(Clone, Debug)]
-///Client for Parameter name collision test
+///Client for `Parameter name collision test`
 ///
 ///Minimal API for testing collision between parameter names and generated code
 ///

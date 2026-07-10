@@ -111,7 +111,7 @@ pub(crate) fn sanitize(input: &str, case: Case) -> String {
     }
 }
 
-/// Given a desired name and a slice of proc_macro2::Ident, generate a new
+/// Given a desired name and a slice of `proc_macro2::Ident`, generate a new
 /// Ident that is unique from the slice.
 pub(crate) fn unique_ident_from(
     name: &str,

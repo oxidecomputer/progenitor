@@ -23,7 +23,7 @@ type InnerByteStream = std::pin::Pin<Box<dyn Stream<Item = reqwest::Result<Bytes
 pub struct ByteStream(InnerByteStream);
 
 impl ByteStream {
-    /// Creates a new ByteStream
+    /// Creates a new [`ByteStream`].
     ///
     /// Useful for generating test fixtures.
     pub fn new(inner: InnerByteStream) -> Self {
@@ -54,7 +54,7 @@ impl DerefMut for ByteStream {
 pub trait ClientInfo<Inner> {
     /// Get the version of this API.
     ///
-    /// This string is pulled directly from the source OpenAPI document and may
+    /// This string is pulled directly from the source `OpenAPI` document and may
     /// be in any format the API selects.
     fn api_version() -> &'static str;
 
@@ -91,7 +91,7 @@ where
 
 /// Information about an operation, consumed by hook implementations.
 pub struct OperationInfo {
-    /// The corresponding operationId from the source OpenAPI document.
+    /// The corresponding operationId from the source `OpenAPI` document.
     pub operation_id: &'static str,
 }
 
@@ -243,7 +243,7 @@ impl<T> ResponseValue<T> {
         }
     }
 
-    /// Consumes the ResponseValue, returning the wrapped value.
+    /// Consumes the [`ResponseValue`], returning the wrapped value.
     pub fn into_inner(self) -> T {
         self.inner
     }

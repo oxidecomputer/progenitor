@@ -2347,7 +2347,7 @@ pub mod types {
 }
 
 #[derive(Clone, Debug)]
-///Client for Buildomat
+///Client for `Buildomat`
 ///
 ///Version: 1.0
 pub struct Client {

@@ -2782,7 +2782,7 @@ pub mod types {
 }
 
 #[derive(Clone, Debug)]
-///Client for Oxide Propolis Server API
+///Client for `Oxide Propolis Server API`
 ///
 ///API for interacting with the Propolis hypervisor frontend.
 ///

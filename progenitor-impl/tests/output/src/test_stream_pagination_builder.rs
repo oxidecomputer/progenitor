@@ -266,7 +266,7 @@ pub mod types {
 }
 
 #[derive(Clone, Debug)]
-///Client for test_stream_pagination
+///Client for `test_stream_pagination`
 ///
 ///Version: 1.0.0
 pub struct Client {
