@@ -1,5 +1,7 @@
 // Copyright 2024 Oxide Computer Company
 
+use std::collections::BTreeMap;
+
 use indexmap::IndexMap;
 use openapiv3::AnySchema;
 use schemars::schema::SingleOrVec;
@@ -721,7 +723,7 @@ fn oneof_nullable_wrapper(
         let extensions = schema.extensions;
 
         schema.metadata = None;
-        schema.extensions = Default::default();
+        schema.extensions = BTreeMap::default();
 
         schemars::schema::SchemaObject {
             metadata,

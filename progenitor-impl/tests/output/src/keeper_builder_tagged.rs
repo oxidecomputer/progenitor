@@ -4,6 +4,10 @@ use progenitor_client::{encode_path, ClientHooks, OperationInfo, RequestBuilderE
 pub use progenitor_client::{ByteStream, ClientInfo, Error, ResponseValue};
 /// Types used as operation parameters and responses.
 #[allow(clippy::all)]
+#[allow(
+    clippy::default_trait_access,
+    reason = "default expressions are emitted by typify"
+)]
 pub mod types {
     /// Error types.
     pub mod error {

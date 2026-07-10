@@ -252,7 +252,7 @@ impl Default for Generator {
     fn default() -> Self {
         Self {
             type_space: TypeSpace::new(TypeSpaceSettings::default().with_type_mod("types")),
-            settings: Default::default(),
+            settings: GenerationSettings::default(),
             uses_futures: Default::default(),
             uses_websockets: Default::default(),
         }
@@ -430,6 +430,10 @@ impl Generator {
 
             /// Types used as operation parameters and responses.
             #[allow(clippy::all)]
+            #[allow(
+                clippy::default_trait_access,
+                reason = "default expressions are emitted by typify"
+            )]
             pub mod types {
                 #types
             }
