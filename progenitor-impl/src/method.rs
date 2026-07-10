@@ -1671,7 +1671,7 @@ impl Generator {
         let send_doc = format!(
             "Sends a `{}` request to `{}`",
             method.method.as_str().to_ascii_uppercase(),
-            method.path.to_string(),
+            method.path,
         );
         let send_impl = quote! {
             #[doc = #send_doc]
@@ -1732,7 +1732,7 @@ impl Generator {
             let stream_doc = format!(
                 "Streams `{}` requests to `{}`",
                 method.method.as_str().to_ascii_uppercase(),
-                method.path.to_string(),
+                method.path,
             );
 
             quote! {
@@ -2182,7 +2182,7 @@ fn make_doc_comment(method: &OperationMethod) -> String {
     buf.push_str(&format!(
         "Sends a `{}` request to `{}`\n\n",
         method.method.as_str().to_ascii_uppercase(),
-        method.path.to_string(),
+        method.path,
     ));
 
     if method
@@ -2221,7 +2221,7 @@ fn make_stream_doc_comment(method: &OperationMethod) -> String {
     buf.push_str(&format!(
         "Sends repeated `{}` requests to `{}` until there are no more results.\n\n",
         method.method.as_str().to_ascii_uppercase(),
-        method.path.to_string(),
+        method.path,
     ));
 
     if method
