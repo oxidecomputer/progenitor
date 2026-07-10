@@ -35,7 +35,7 @@ impl PathTemplate {
                     "{}",
                     rename
                         .get(&n)
-                        .unwrap_or_else(|| panic!("missing path name mapping {}", n)),
+                        .unwrap_or_else(|| panic!("missing path name mapping {n}")),
                 );
                 Some(quote! {
                     encode_path(&#param.to_string())
@@ -69,7 +69,7 @@ impl PathTemplate {
                 Component::Parameter(_) => "[^/]*".to_string(),
             })
             .collect::<String>();
-        format!("^{}$", inner)
+        format!("^{inner}$")
     }
 
     pub fn as_wildcard_param(&self, param: &str) -> String {
@@ -82,7 +82,7 @@ impl PathTemplate {
                 Component::Parameter(_) => ".*".to_string(),
             })
             .collect::<String>();
-        format!("^{}$", inner)
+        format!("^{inner}$")
     }
 }
 
@@ -133,10 +133,7 @@ pub fn parse(t: &str) -> Result<PathTemplate> {
             State::Parameter => {
                 if c == '}' {
                     if a.contains('/') || a.contains('{') {
-                        return Err(Error::InvalidPath(format!(
-                            "invalid parameter name {:?}",
-                            a,
-                        )));
+                        return Err(Error::InvalidPath(format!("invalid parameter name {a:?}",)));
                     }
                     components.push(Component::Parameter(a));
                     a = String::new();
@@ -163,7 +160,7 @@ impl std::fmt::Display for PathTemplate {
         for component in &self.components {
             match component {
                 Component::Constant(s) => f.write_str(s)?,
-                Component::Parameter(s) => write!(f, "{{{}}}", s)?,
+                Component::Parameter(s) => write!(f, "{{{s}}}")?,
             }
         }
 
@@ -265,7 +262,7 @@ mod tests {
                     assert_eq!(&t, want);
                     assert_eq!(t.to_string().as_str(), *expect_string);
                 }
-                Err(e) => panic!("path {} {}", path, e),
+                Err(e) => panic!("path {path} {e}"),
             }
         }
     }
@@ -284,7 +281,7 @@ mod tests {
         for (path, want) in trials.iter() {
             match parse(path) {
                 Ok(t) => assert_eq!(&t.names(), want),
-                Err(e) => panic!("path {} {}", path, e),
+                Err(e) => panic!("path {path} {e}"),
             }
         }
     }

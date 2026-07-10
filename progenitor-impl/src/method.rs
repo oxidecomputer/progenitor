@@ -56,7 +56,7 @@ impl std::str::FromStr for HttpMethod {
             "head" => Ok(Self::Head),
             "patch" => Ok(Self::Patch),
             "trace" => Ok(Self::Trace),
-            _ => Err(Error::InternalError(format!("bad method: {}", s))),
+            _ => Err(Error::InternalError(format!("bad method: {s}"))),
         }
     }
 }
@@ -151,8 +151,7 @@ impl FromStr for BodyContentType {
             "application/x-www-form-urlencoded" => Ok(Self::FormUrlencoded),
             "text/plain" | "text/x-markdown" => Ok(Self::Text(String::from(&s[..offset]))),
             _ => Err(Error::UnexpectedFormat(format!(
-                "unexpected content type: {}",
-                s
+                "unexpected content type: {s}"
             ))),
         }
     }
@@ -392,13 +391,13 @@ impl Generator {
                         })
                     }
                     openapiv3::Parameter::Path { style, .. } => Err(Error::UnexpectedFormat(
-                        format!("unsupported style of path parameter {:#?}", style,),
+                        format!("unsupported style of path parameter {style:#?}",),
                     )),
                     openapiv3::Parameter::Query { style, .. } => Err(Error::UnexpectedFormat(
-                        format!("unsupported style of query parameter {:#?}", style,),
+                        format!("unsupported style of query parameter {style:#?}",),
                     )),
                     cookie @ openapiv3::Parameter::Cookie { .. } => Err(Error::UnexpectedFormat(
-                        format!("cookie parameters are not supported {:#?}", cookie,),
+                        format!("cookie parameters are not supported {cookie:#?}",),
                     )),
                 }
             })
@@ -527,8 +526,7 @@ impl Generator {
 
         if dropshot_websocket && dropshot_paginated.is_some() {
             return Err(Error::InvalidExtension(format!(
-                "conflicting extensions in {:?}",
-                operation_id
+                "conflicting extensions in {operation_id:?}"
             )));
         }
         if dropshot_websocket
@@ -538,8 +536,7 @@ impl Generator {
                 .is_none()
         {
             return Err(Error::InvalidExtension(format!(
-                "websocket endpoint {:?} must include an explicit 101 response code",
-                operation_id
+                "websocket endpoint {operation_id:?} must include an explicit 101 response code"
             )));
         }
 
@@ -1821,7 +1818,7 @@ impl Generator {
         let struct_doc = match (tag_style, method.tags.len(), method.tags.first()) {
             (TagStyle::Merged, _, _) | (TagStyle::Separate, 0, _) => {
                 let ty = format!("Client::{}", method.operation_id);
-                format!("Builder for [`{}`]\n\n[`{}`]: super::{}", ty, ty, ty,)
+                format!("Builder for [`{ty}`]\n\n[`{ty}`]: super::{ty}",)
             }
             (TagStyle::Separate, 1, Some(tag)) => {
                 let ty = format!(
@@ -1829,7 +1826,7 @@ impl Generator {
                     sanitize(tag, Case::Pascal),
                     method.operation_id
                 );
-                format!("Builder for [`{}`]\n\n[`{}`]: super::{}", ty, ty, ty,)
+                format!("Builder for [`{ty}`]\n\n[`{ty}`]: super::{ty}",)
             }
             (TagStyle::Separate, _, _) => {
                 format!(
@@ -1856,7 +1853,7 @@ impl Generator {
                                 sanitize(tag, Case::Pascal),
                                 method.operation_id,
                             );
-                            format!("[`{}`]: super::{}", ty, ty)
+                            format!("[`{ty}`]: super::{ty}")
                         })
                         .collect::<Vec<_>>()
                         .join("\n"),
@@ -2099,8 +2096,7 @@ impl Generator {
                             )),
                     } if enumeration.is_empty() => Ok(()),
                     _ => Err(Error::UnexpectedFormat(format!(
-                        "invalid schema for application/octet-stream: {:?}",
-                        schema
+                        "invalid schema for application/octet-stream: {schema:?}"
                     ))),
                 }?;
                 OperationParameterType::RawBody
@@ -2133,8 +2129,7 @@ impl Generator {
                             )),
                     } if enumeration.is_empty() => Ok(()),
                     _ => Err(Error::UnexpectedFormat(format!(
-                        "invalid schema for {}: {:?}",
-                        content_type, schema
+                        "invalid schema for {content_type}: {schema:?}"
                     ))),
                 }?;
                 OperationParameterType::RawBody
@@ -2268,11 +2263,11 @@ fn sort_params(raw_params: &mut [OperationParameter], names: &[String]) {
                     let a_index = names
                         .iter()
                         .position(|x| x == a_name)
-                        .unwrap_or_else(|| panic!("{} missing from path", a_name));
+                        .unwrap_or_else(|| panic!("{a_name} missing from path"));
                     let b_index = names
                         .iter()
                         .position(|x| x == b_name)
-                        .unwrap_or_else(|| panic!("{} missing from path", b_name));
+                        .unwrap_or_else(|| panic!("{b_name} missing from path"));
                     a_index.cmp(&b_index)
                 }
                 (OperationParameterKind::Path, OperationParameterKind::Query(_)) => Ordering::Less,
@@ -2326,7 +2321,7 @@ impl ParameterDataExt for openapiv3::ParameterData {
         match &self.format {
             openapiv3::ParameterSchemaOrContent::Schema(s) => Ok(s),
             openapiv3::ParameterSchemaOrContent::Content(c) => Err(Error::UnexpectedFormat(
-                format!("unexpected content {:#?}", c),
+                format!("unexpected content {c:#?}"),
             )),
         }
     }

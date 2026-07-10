@@ -25,7 +25,7 @@ impl<T: ComponentLookup> ReferenceOrExt<T> for openapiv3::ReferenceOr<T> {
                 let parameters = T::get_components(components.as_ref().unwrap());
                 parameters
                     .get(key)
-                    .unwrap_or_else(|| panic!("key {} is missing", key))
+                    .unwrap_or_else(|| panic!("key {key} is missing"))
                     .item(components)
             }
         }
@@ -100,14 +100,14 @@ pub(crate) fn sanitize(input: &str, case: Case) -> String {
     let out = match out.chars().next() {
         None => to_case("x"),
         Some(c) if is_xid_start(c) => out,
-        Some(_) => format!("_{}", out),
+        Some(_) => format!("_{out}"),
     };
 
     // Make sure the string is a valid Rust identifier.
     if typify::accept_as_ident(&out) {
         out
     } else {
-        format!("{}_", out)
+        format!("{out}_")
     }
 }
 

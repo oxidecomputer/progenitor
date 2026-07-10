@@ -5,7 +5,7 @@ use progenitor::generate_api;
 generate_api!(
     spec = "../sample_openapi/keeper.json",
     pre_hook = (|request| {
-        println!("doing this {:?}", request);
+        println!("doing this {request:?}");
     }),
     pre_hook_async = crate::add_auth_headers,
     post_hook = crate::all_done,
