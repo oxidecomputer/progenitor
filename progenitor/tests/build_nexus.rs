@@ -10,13 +10,13 @@ mod positional {
     use nexus_client::{Client, types};
 
     fn _ignore() {
-        let _ = async {
+        let _future = async {
             let client = Client::new("");
             let org = types::Name::try_from("org").unwrap();
             let project = types::Name::try_from("project").unwrap();
             let instance = types::Name::try_from("instance").unwrap();
             let stream = client.instance_disk_list_stream(&org, &project, &instance, None, None);
-            let _ = stream.collect::<Vec<_>>();
+            let _collect_future = stream.collect::<Vec<_>>();
         };
     }
 }
@@ -68,7 +68,7 @@ mod builder_untagged {
             .project_name("project")
             .instance_name("instance")
             .stream();
-        let _ = stream.collect::<Vec<_>>();
+        let _future = stream.collect::<Vec<_>>();
     }
 }
 
@@ -95,7 +95,7 @@ mod builder_tagged {
             .project_name("project")
             .instance_name("instance")
             .stream();
-        let _ = stream.collect::<Vec<_>>();
+        let _future = stream.collect::<Vec<_>>();
 
         let _ = client
             .instance_create()
