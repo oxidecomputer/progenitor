@@ -158,15 +158,16 @@ pub fn parse(t: &str) -> Result<PathTemplate> {
     Ok(PathTemplate { components })
 }
 
-impl ToString for PathTemplate {
-    fn to_string(&self) -> std::string::String {
-        self.components
-            .iter()
-            .map(|component| match component {
-                Component::Constant(s) => s.clone(),
-                Component::Parameter(s) => format!("{{{}}}", s),
-            })
-            .fold(String::new(), |a, b| a + &b)
+impl std::fmt::Display for PathTemplate {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        for component in &self.components {
+            match component {
+                Component::Constant(s) => f.write_str(s)?,
+                Component::Parameter(s) => write!(f, "{{{}}}", s)?,
+            }
+        }
+
+        Ok(())
     }
 }
 
