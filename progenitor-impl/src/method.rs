@@ -221,8 +221,7 @@ impl OperationResponseStatus {
         matches!(
             self,
             OperationResponseStatus::Default
-                | OperationResponseStatus::Code(101)
-                | OperationResponseStatus::Code(200..=299)
+                | OperationResponseStatus::Code(101 | 200..=299)
                 | OperationResponseStatus::Range(2)
         )
     }
@@ -489,8 +488,7 @@ impl Generator {
                     if matches!(
                         status_code,
                         OperationResponseStatus::Default
-                            | OperationResponseStatus::Code(101)
-                            | OperationResponseStatus::Code(200..=299)
+                            | OperationResponseStatus::Code(101 | 200..=299)
                             | OperationResponseStatus::Range(2)
                     ) {
                         success = true;
@@ -1238,8 +1236,7 @@ impl Generator {
             .filter(|param| {
                 matches!(
                     (param.api_name.as_str(), &param.kind),
-                    ("page_token", OperationParameterKind::Query(false))
-                        | ("limit", OperationParameterKind::Query(false))
+                    ("page_token" | "limit", OperationParameterKind::Query(false))
                 )
             })
             .count()
