@@ -285,7 +285,7 @@ impl Generator {
     pub(crate) fn process_operation(
         &mut self,
         operation: &openapiv3::Operation,
-        components: &Option<Components>,
+        components: Option<&Components>,
         path: &str,
         method: &str,
         path_parameters: &[ReferenceOr<Parameter>],
@@ -2038,7 +2038,7 @@ impl Generator {
     fn get_body_param(
         &mut self,
         operation: &openapiv3::Operation,
-        components: &Option<Components>,
+        components: Option<&Components>,
     ) -> Result<Option<OperationParameter>> {
         let body = match &operation.request_body {
             Some(body) => body.item(components)?,

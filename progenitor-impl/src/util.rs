@@ -9,20 +9,20 @@ use unicode_ident::{is_xid_continue, is_xid_start};
 use crate::Result;
 
 pub(crate) trait ReferenceOrExt<T: ComponentLookup> {
-    fn item<'a>(&'a self, components: &'a Option<Components>) -> Result<&'a T>;
+    fn item<'a>(&'a self, components: Option<&'a Components>) -> Result<&'a T>;
 }
 pub(crate) trait ComponentLookup: Sized {
     fn get_components(components: &Components) -> &IndexMap<String, ReferenceOr<Self>>;
 }
 
 impl<T: ComponentLookup> ReferenceOrExt<T> for openapiv3::ReferenceOr<T> {
-    fn item<'a>(&'a self, components: &'a Option<Components>) -> Result<&'a T> {
+    fn item<'a>(&'a self, components: Option<&'a Components>) -> Result<&'a T> {
         match self {
             ReferenceOr::Item(item) => Ok(item),
             ReferenceOr::Reference { reference } => {
                 let idx = reference.rfind('/').unwrap();
                 let key = &reference[idx + 1..];
-                let parameters = T::get_components(components.as_ref().unwrap());
+                let parameters = T::get_components(components.unwrap());
                 parameters
                     .get(key)
                     .unwrap_or_else(|| panic!("key {key} is missing"))
@@ -34,17 +34,17 @@ impl<T: ComponentLookup> ReferenceOrExt<T> for openapiv3::ReferenceOr<T> {
 
 pub(crate) fn items<'a, T>(
     refs: &'a [ReferenceOr<T>],
-    components: &'a Option<Components>,
+    components: Option<&'a Components>,
 ) -> impl Iterator<Item = Result<&'a T>>
 where
     T: ComponentLookup,
 {
-    refs.iter().map(|r| r.item(components))
+    refs.iter().map(move |r| r.item(components))
 }
 
 pub(crate) fn parameter_map<'a>(
     refs: &'a [ReferenceOr<Parameter>],
-    components: &'a Option<Components>,
+    components: Option<&'a Components>,
 ) -> Result<BTreeMap<&'a String, &'a Parameter>> {
     items(refs, components)
         .map(|res| res.map(|param| (&param.parameter_data_ref().name, param)))

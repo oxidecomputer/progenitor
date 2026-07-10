@@ -340,7 +340,13 @@ impl Generator {
                 })
             })
             .map(|(path, method, operation, path_parameters)| {
-                self.process_operation(operation, &spec.components, path, method, path_parameters)
+                self.process_operation(
+                    operation,
+                    spec.components.as_ref(),
+                    path,
+                    method,
+                    path_parameters,
+                )
             })
             .collect::<Result<Vec<_>>>()?;
 

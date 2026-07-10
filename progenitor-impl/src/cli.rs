@@ -48,7 +48,13 @@ impl Generator {
                 })
             })
             .map(|(path, method, operation, path_parameters)| {
-                self.process_operation(operation, &spec.components, path, method, path_parameters)
+                self.process_operation(
+                    operation,
+                    spec.components.as_ref(),
+                    path,
+                    method,
+                    path_parameters,
+                )
             })
             .collect::<Result<Vec<_>>>()?;
 
@@ -432,7 +438,12 @@ impl Generator {
             // There should be no conflicting path or query parameters.
             assert!(!args.has_arg(&arg_name));
 
-            let parser = clap_arg(&arg_name, volitionality, &param.description, &arg_type);
+            let parser = clap_arg(
+                &arg_name,
+                volitionality,
+                param.description.as_ref(),
+                &arg_type,
+            );
 
             let arg_fn_name = sanitize(&param.name, Case::Snake);
             let arg_fn = format_ident!("{}", arg_fn_name);
@@ -600,7 +611,7 @@ impl Generator {
             let parser = clap_arg(
                 &prop_name,
                 volitionality,
-                &description.map(str::to_string),
+                description.map(str::to_string).as_ref(),
                 &prop_type,
             );
 
@@ -647,10 +658,10 @@ enum Volitionality {
 fn clap_arg(
     arg_name: &str,
     volitionality: Volitionality,
-    description: &Option<String>,
+    description: Option<&String>,
     arg_type: &Type,
 ) -> TokenStream {
-    let help = description.as_ref().map(|description| {
+    let help = description.map(|description| {
         quote! {
             .help(#description)
         }
