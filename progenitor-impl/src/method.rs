@@ -1194,8 +1194,8 @@ impl Generator {
         // since it will never be hit. Note that this is a no-op for error
         // responses.
         let len = response_items.len();
-        if len >= 2 {
-            if let (
+        if len >= 2
+            && let (
                 OperationResponse {
                     status_code: OperationResponseStatus::Range(2),
                     ..
@@ -1205,9 +1205,8 @@ impl Generator {
                     ..
                 },
             ) = (&response_items[len - 2], &response_items[len - 1])
-            {
-                response_items.pop();
-            }
+        {
+            response_items.pop();
         }
 
         let response_types = response_items
