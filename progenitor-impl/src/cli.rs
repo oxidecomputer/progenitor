@@ -690,7 +690,7 @@ fn clap_arg(
         let maybe_var_names = e
             .variants()
             .map(|(var_name, var_details)| {
-                if let TypeEnumVariant::Simple = var_details {
+                if matches!(var_details, TypeEnumVariant::Simple) {
                     Some(format_ident!("{}", var_name))
                 } else {
                     None
