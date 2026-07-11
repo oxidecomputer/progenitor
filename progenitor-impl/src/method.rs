@@ -936,7 +936,7 @@ impl Generator {
         assert!(body_func.clone().count() <= 1);
 
         let (success_response_items, response_type) =
-            self.extract_responses(method, OperationResponseStatus::is_success_or_default);
+            Self::extract_responses(method, OperationResponseStatus::is_success_or_default);
 
         let success_response_matches = success_response_items.iter().map(|response| {
             let pat = match &response.status_code {
@@ -974,7 +974,7 @@ impl Generator {
 
         // Errors...
         let (error_response_items, error_type) =
-            self.extract_responses(method, OperationResponseStatus::is_error_or_default);
+            Self::extract_responses(method, OperationResponseStatus::is_error_or_default);
 
         let error_response_matches = error_response_items.iter().map(|response| {
             let pat = match &response.status_code {
@@ -1179,7 +1179,6 @@ impl Generator {
     /// the filter, and a `TokenStream` that represents the generated type for
     /// those cases.
     pub(crate) fn extract_responses<'a>(
-        &self,
         method: &'a OperationMethod,
         filter: fn(&OperationResponseStatus) -> bool,
     ) -> (Vec<&'a OperationResponse>, OperationResponseKind) {
@@ -1888,7 +1887,7 @@ impl Generator {
         })
     }
 
-    fn builder_helper(&self, method: &OperationMethod) -> BuilderImpl {
+    fn builder_helper(method: &OperationMethod) -> BuilderImpl {
         let operation_id = format_ident!("{}", method.operation_id);
         let struct_name = sanitize(&method.operation_id, Case::Pascal);
         let struct_ident = format_ident!("{}", struct_name);
@@ -1944,7 +1943,6 @@ impl Generator {
     /// pub use super::ClientTagExt;
     /// ```
     pub(crate) fn builder_tags(
-        &self,
         methods: &[OperationMethod],
         tag_info: &BTreeMap<&String, &openapiv3::Tag>,
     ) -> (TokenStream, TokenStream) {
@@ -1952,7 +1950,7 @@ impl Generator {
         let mut ext = BTreeMap::new();
 
         for method in methods {
-            let BuilderImpl { doc, sig, body } = self.builder_helper(method);
+            let BuilderImpl { doc, sig, body } = Self::builder_helper(method);
 
             if method.tags.is_empty() {
                 let impl_body = quote! {
@@ -2027,8 +2025,8 @@ impl Generator {
         )
     }
 
-    pub(crate) fn builder_impl(&self, method: &OperationMethod) -> TokenStream {
-        let BuilderImpl { doc, sig, body } = self.builder_helper(method);
+    pub(crate) fn builder_impl(method: &OperationMethod) -> TokenStream {
+        let BuilderImpl { doc, sig, body } = Self::builder_helper(method);
 
         let impl_body = quote! {
             #[doc = #doc]

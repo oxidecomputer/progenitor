@@ -596,7 +596,7 @@ impl Generator {
 
         let builder_methods = input_methods
             .iter()
-            .map(|method| self.builder_impl(method))
+            .map(Self::builder_impl)
             .collect::<Vec<_>>();
 
         let out = quote! {
@@ -651,7 +651,7 @@ impl Generator {
             .map(|method| self.builder_struct(method, TagStyle::Separate, has_inner))
             .collect::<Result<Vec<_>>>()?;
 
-        let (traits_and_impls, trait_preludes) = self.builder_tags(input_methods, tag_info);
+        let (traits_and_impls, trait_preludes) = Self::builder_tags(input_methods, tag_info);
 
         // The allow(unused_imports) on the `pub use` is necessary with Rust
         // 1.76+, in case the generated file is not at the top level of the
