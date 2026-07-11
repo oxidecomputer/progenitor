@@ -256,15 +256,13 @@ pub fn dependencies(builder: &Generator, include_client: bool) -> Vec<String> {
     ];
 
     let type_space = builder.get_type_space();
-    let mut needs_serde_json = false;
-
-    if include_client {
+    let needs_serde_json = if include_client {
         // code included from progenitor-client needs extra dependencies
         deps.push(format!(
             "percent-encoding = \"{}\"",
             DEPENDENCIES.percent_encoding
         ));
-        needs_serde_json = true;
+        true
     } else {
         let crate_version =
             if let (false, Some(value)) = (is_non_release(), option_env!("CARGO_PKG_VERSION")) {
@@ -274,7 +272,8 @@ pub fn dependencies(builder: &Generator, include_client: bool) -> Vec<String> {
             };
         let client_version_dep = format!("progenitor-client = \"{crate_version}\"");
         deps.push(client_version_dep);
-    }
+        false
+    };
 
     if type_space.uses_regress() {
         deps.push(format!("regress = \"{}\"", DEPENDENCIES.regress));
