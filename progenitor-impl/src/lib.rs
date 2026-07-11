@@ -568,6 +568,10 @@ impl Generator {
         let out = quote! {
             #[allow(clippy::all)]
             #[allow(
+                clippy::too_many_arguments,
+                reason = "generated parameters mirror the OpenAPI operation"
+            )]
+            #[allow(
                 clippy::result_large_err,
                 reason = "generated methods preserve the public Error representation"
             )]
