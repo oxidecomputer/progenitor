@@ -3053,6 +3053,10 @@ pub mod builder {
     }
 
     impl<'a> InstanceGet<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self { client: client }
         }
@@ -3113,6 +3117,10 @@ pub mod builder {
     }
 
     impl<'a> InstanceEnsure<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client: client,
@@ -3205,6 +3213,10 @@ pub mod builder {
     }
 
     impl<'a> InstanceIssueCrucibleSnapshotRequest<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client: client,
@@ -3299,6 +3311,10 @@ pub mod builder {
     }
 
     impl<'a> InstanceMigrateStatus<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client: client,
@@ -3393,6 +3409,10 @@ pub mod builder {
     }
 
     impl<'a> InstanceSerial<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self { client: client }
         }
@@ -3457,6 +3477,10 @@ pub mod builder {
     }
 
     impl<'a> InstanceStatePut<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client: client,
@@ -3530,6 +3554,10 @@ pub mod builder {
     }
 
     impl<'a> InstanceStateMonitor<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client: client,

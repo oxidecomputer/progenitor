@@ -14,6 +14,6 @@ pub use crate::progenitor_client::*;
 // when generating the stand-alone crate.
 #[doc(hidden)]
 #[must_use]
-pub fn code() -> &'static str {
+pub const fn code() -> &'static str {
     include_str!("progenitor_client.rs")
 }

@@ -178,6 +178,10 @@ pub mod builder {
     }
 
     impl<'a> KeyGet<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 _client: client,

@@ -27,7 +27,7 @@ async fn add_auth_headers(
     Ok(())
 }
 
-fn all_done(_result: &reqwest::Result<reqwest::Response>) {}
+const fn all_done(_result: &reqwest::Result<reqwest::Response>) {}
 
 mod buildomat {
     use progenitor::generate_api;
@@ -35,4 +35,4 @@ mod buildomat {
     generate_api!("../sample_openapi/buildomat.json");
 }
 
-fn main() {}
+const fn main() {}

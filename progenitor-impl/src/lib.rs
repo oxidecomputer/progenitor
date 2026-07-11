@@ -117,13 +117,13 @@ impl GenerationSettings {
     }
 
     /// Set the [`InterfaceStyle`].
-    pub fn with_interface(&mut self, interface: InterfaceStyle) -> &mut Self {
+    pub const fn with_interface(&mut self, interface: InterfaceStyle) -> &mut Self {
         self.interface = interface;
         self
     }
 
     /// Set the [`TagStyle`].
-    pub fn with_tag(&mut self, tag: TagStyle) -> &mut Self {
+    pub const fn with_tag(&mut self, tag: TagStyle) -> &mut Self {
         self.tag = tag;
         self
     }
@@ -209,7 +209,7 @@ impl GenerationSettings {
     /// Policy regarding crates referenced by the schema extension
     /// `x-rust-type` not explicitly specified via [`Self::with_crate`].
     /// See [`typify::TypeSpaceSettings::with_unknown_crates`].
-    pub fn with_unknown_crates(&mut self, policy: UnknownPolicy) -> &mut Self {
+    pub const fn with_unknown_crates(&mut self, policy: UnknownPolicy) -> &mut Self {
         self.unknown_crates = policy;
         self
     }
@@ -247,7 +247,7 @@ impl GenerationSettings {
     }
 
     /// Set the underlying reqwest client's timeout
-    pub fn with_timeout(&mut self, timeout: u64) -> &mut Self {
+    pub const fn with_timeout(&mut self, timeout: u64) -> &mut Self {
         self.timeout = Some(timeout);
         self
     }
@@ -705,21 +705,21 @@ impl Generator {
 
     /// Get the [`TypeSpace`] for schemas present in the `OpenAPI` specification.
     #[must_use]
-    pub fn get_type_space(&self) -> &TypeSpace {
+    pub const fn get_type_space(&self) -> &TypeSpace {
         &self.type_space
     }
 
     /// Whether the generated client needs to use additional crates to support
     /// futures.
     #[must_use]
-    pub fn uses_futures(&self) -> bool {
+    pub const fn uses_futures(&self) -> bool {
         self.uses_futures
     }
 
     /// Whether the generated client needs to use additional crates to support
     /// websockets.
     #[must_use]
-    pub fn uses_websockets(&self) -> bool {
+    pub const fn uses_websockets(&self) -> bool {
         self.uses_websockets
     }
 }

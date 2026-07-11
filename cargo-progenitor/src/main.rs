@@ -12,7 +12,7 @@ use openapiv3::OpenAPI;
 use progenitor::{GenerationSettings, Generator, InterfaceStyle, TagStyle};
 use progenitor_impl::space_out_items;
 
-fn is_non_release() -> bool {
+const fn is_non_release() -> bool {
     cfg!(debug_assertions)
 }
 

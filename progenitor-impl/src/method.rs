@@ -62,7 +62,7 @@ impl std::str::FromStr for HttpMethod {
     }
 }
 impl HttpMethod {
-    fn as_str(&self) -> &'static str {
+    const fn as_str(&self) -> &'static str {
         match self {
             HttpMethod::Get => "get",
             HttpMethod::Put => "put",
@@ -119,7 +119,7 @@ pub enum OperationParameterKind {
 }
 
 impl OperationParameterKind {
-    fn is_required(&self) -> bool {
+    const fn is_required(&self) -> bool {
         match self {
             OperationParameterKind::Query(required) | OperationParameterKind::Header(required) => {
                 *required
@@ -128,7 +128,7 @@ impl OperationParameterKind {
             OperationParameterKind::Path | OperationParameterKind::Body(_) => true,
         }
     }
-    fn is_optional(&self) -> bool {
+    const fn is_optional(&self) -> bool {
         !self.is_required()
     }
 }
@@ -218,7 +218,7 @@ impl OperationResponseStatus {
         }
     }
 
-    pub fn is_success_or_default(&self) -> bool {
+    pub const fn is_success_or_default(&self) -> bool {
         matches!(
             self,
             OperationResponseStatus::Default
@@ -227,7 +227,7 @@ impl OperationResponseStatus {
         )
     }
 
-    pub fn is_error_or_default(&self) -> bool {
+    pub const fn is_error_or_default(&self) -> bool {
         matches!(
             self,
             OperationResponseStatus::Default
@@ -236,7 +236,7 @@ impl OperationResponseStatus {
         )
     }
 
-    pub fn is_default(&self) -> bool {
+    pub const fn is_default(&self) -> bool {
         matches!(self, OperationResponseStatus::Default)
     }
 }
@@ -1877,6 +1877,10 @@ impl Generator {
             }
 
             impl<'a> #struct_ident<'a> {
+                #[allow(
+                    clippy::missing_const_for_fn,
+                    reason = "operation parameter defaults may require non-const initialization"
+                )]
                 pub fn new(client: &'a super::Client) -> Self {
                     Self {
                         #client_ident: client,

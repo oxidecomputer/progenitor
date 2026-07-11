@@ -2805,6 +2805,10 @@ pub mod builder {
     }
 
     impl<'a> ControlHold<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self { client: client }
         }
@@ -2856,6 +2860,10 @@ pub mod builder {
     }
 
     impl<'a> ControlResume<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self { client: client }
         }
@@ -2900,6 +2908,10 @@ pub mod builder {
     }
 
     impl<'a> TaskGet<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client: client,
@@ -2969,6 +2981,10 @@ pub mod builder {
     }
 
     impl<'a> TasksGet<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self { client: client }
         }
@@ -3021,6 +3037,10 @@ pub mod builder {
     }
 
     impl<'a> TaskSubmit<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client: client,
@@ -3101,6 +3121,10 @@ pub mod builder {
     }
 
     impl<'a> TaskEventsGet<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client: client,
@@ -3191,6 +3215,10 @@ pub mod builder {
     }
 
     impl<'a> TaskOutputsGet<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client: client,
@@ -3264,6 +3292,10 @@ pub mod builder {
     }
 
     impl<'a> TaskOutputDownload<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client: client,
@@ -3343,6 +3375,10 @@ pub mod builder {
     }
 
     impl<'a> UserCreate<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client: client,
@@ -3421,6 +3457,10 @@ pub mod builder {
     }
 
     impl<'a> Whoami<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self { client: client }
         }
@@ -3473,6 +3513,10 @@ pub mod builder {
     }
 
     impl<'a> WhoamiPutName<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client: client,
@@ -3541,6 +3585,10 @@ pub mod builder {
     }
 
     impl<'a> WorkerBootstrap<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client: client,
@@ -3619,6 +3667,10 @@ pub mod builder {
     }
 
     impl<'a> WorkerPing<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self { client: client }
         }
@@ -3672,6 +3724,10 @@ pub mod builder {
     }
 
     impl<'a> WorkerTaskAppend<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client: client,
@@ -3766,6 +3822,10 @@ pub mod builder {
     }
 
     impl<'a> WorkerTaskUploadChunk<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client: client,
@@ -3854,6 +3914,10 @@ pub mod builder {
     }
 
     impl<'a> WorkerTaskComplete<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client: client,
@@ -3948,6 +4012,10 @@ pub mod builder {
     }
 
     impl<'a> WorkerTaskAddOutput<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client: client,
@@ -4038,6 +4106,10 @@ pub mod builder {
     }
 
     impl<'a> WorkersList<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self { client: client }
         }
@@ -4089,6 +4161,10 @@ pub mod builder {
     }
 
     impl<'a> WorkersRecycle<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self { client: client }
         }
@@ -4133,6 +4209,10 @@ pub mod builder {
     }
 
     impl<'a> GetThingOrThings<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client: client,
@@ -4201,6 +4281,10 @@ pub mod builder {
     }
 
     impl<'a> HeaderArg<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client: client,

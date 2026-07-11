@@ -1407,6 +1407,10 @@ pub mod builder {
     }
 
     impl<'a> Enrol<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client: client,
@@ -1499,6 +1503,10 @@ pub mod builder {
     }
 
     impl<'a> GlobalJobs<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client: client,
@@ -1569,6 +1577,10 @@ pub mod builder {
     }
 
     impl<'a> Ping<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client: client,
@@ -1640,6 +1652,10 @@ pub mod builder {
     }
 
     impl<'a> ReportFinish<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client: client,
@@ -1739,6 +1755,10 @@ pub mod builder {
     }
 
     impl<'a> ReportOutput<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client: client,
@@ -1838,6 +1858,10 @@ pub mod builder {
     }
 
     impl<'a> ReportStart<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
                 client: client,

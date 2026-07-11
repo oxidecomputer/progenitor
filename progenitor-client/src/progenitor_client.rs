@@ -240,7 +240,11 @@ impl<T> ResponseValue<T> {
     /// Creates a [`ResponseValue`] from the inner type, status, and headers.
     ///
     /// Useful for generating test fixtures.
-    pub fn new(inner: T, status: reqwest::StatusCode, headers: reqwest::header::HeaderMap) -> Self {
+    pub const fn new(
+        inner: T,
+        status: reqwest::StatusCode,
+        headers: reqwest::header::HeaderMap,
+    ) -> Self {
         Self {
             inner,
             status,
@@ -254,12 +258,12 @@ impl<T> ResponseValue<T> {
     }
 
     /// Gets the status from this response.
-    pub fn status(&self) -> reqwest::StatusCode {
+    pub const fn status(&self) -> reqwest::StatusCode {
         self.status
     }
 
     /// Gets the headers from this response.
-    pub fn headers(&self) -> &reqwest::header::HeaderMap {
+    pub const fn headers(&self) -> &reqwest::header::HeaderMap {
         &self.headers
     }
 
@@ -606,7 +610,7 @@ pub struct QueryParam<'a, T> {
 
 impl<'a, T> QueryParam<'a, T> {
     #[doc(hidden)]
-    pub fn new(name: &'a str, value: &'a T) -> Self {
+    pub const fn new(name: &'a str, value: &'a T) -> Self {
         Self { name, value }
     }
 }

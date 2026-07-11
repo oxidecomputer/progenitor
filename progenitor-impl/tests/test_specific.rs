@@ -129,7 +129,7 @@ struct BodyWithDefaults {
     something: Option<bool>,
 }
 
-fn forty_two() -> u32 {
+const fn forty_two() -> u32 {
     42
 }
 
@@ -137,7 +137,7 @@ fn forty_two() -> u32 {
     clippy::unnecessary_wraps,
     reason = "serde default must match the Option field type"
 )]
-fn yes_yes() -> Option<bool> {
+const fn yes_yes() -> Option<bool> {
     Some(true)
 }
 
