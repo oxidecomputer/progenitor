@@ -12,7 +12,7 @@ mod propolis_client {
 use propolis_client::Client;
 
 fn _ignore() {
-    let _future = async {
+    let future = async {
         let _upgraded: reqwest::Upgraded = Client::new("")
             .instance_serial()
             .send()
@@ -20,4 +20,5 @@ fn _ignore() {
             .unwrap()
             .into_inner();
     };
+    std::mem::drop(future);
 }

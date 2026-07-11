@@ -10,7 +10,7 @@ mod positional {
     use nexus_client::{Client, types};
 
     fn _ignore() {
-        let _future = async {
+        let future = async {
             let client = Client::new("");
             let org = types::Name::try_from("org").unwrap();
             let project = types::Name::try_from("project").unwrap();
@@ -18,6 +18,7 @@ mod positional {
             let stream = client.instance_disk_list_stream(&org, &project, &instance, None, None);
             let _collect_future = stream.collect::<Vec<_>>();
         };
+        std::mem::drop(future);
     }
 }
 
