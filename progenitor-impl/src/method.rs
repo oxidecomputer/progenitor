@@ -524,10 +524,9 @@ impl Generator {
             )));
         }
         if dropshot_websocket
-            && responses
+            && !responses
                 .iter()
-                .find(|r| r.status_code == OperationResponseStatus::Code(101))
-                .is_none()
+                .any(|r| r.status_code == OperationResponseStatus::Code(101))
         {
             return Err(Error::InvalidExtension(format!(
                 "websocket endpoint {operation_id:?} must include an explicit 101 response code"
