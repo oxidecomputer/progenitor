@@ -717,35 +717,29 @@ impl Convert<String> for openapiv3::IntegerFormat {
 
 impl Convert<Value> for Option<String> {
     fn convert(&self) -> Value {
-        match self {
-            Some(value) => Value::String(value.clone()),
-            None => Value::Null,
-        }
+        self.as_ref()
+            .map_or(Value::Null, |value| Value::String(value.clone()))
     }
 }
 
 impl Convert<Value> for Option<f64> {
     fn convert(&self) -> Value {
-        match self {
-            Some(value) => Value::Number(serde_json::Number::from_f64(*value).unwrap()),
-            None => Value::Null,
-        }
+        self.as_ref().map_or(Value::Null, |value| {
+            Value::Number(serde_json::Number::from_f64(*value).unwrap())
+        })
     }
 }
 impl Convert<Value> for Option<i64> {
     fn convert(&self) -> Value {
-        match self {
-            Some(value) => Value::Number(serde_json::Number::from(*value)),
-            None => Value::Null,
-        }
+        self.as_ref().map_or(Value::Null, |value| {
+            Value::Number(serde_json::Number::from(*value))
+        })
     }
 }
 impl Convert<Value> for Option<bool> {
     fn convert(&self) -> Value {
-        match self {
-            Some(value) => Value::Bool(*value),
-            None => Value::Null,
-        }
+        self.as_ref()
+            .map_or(Value::Null, |value| Value::Bool(*value))
     }
 }
 

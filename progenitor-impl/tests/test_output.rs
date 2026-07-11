@@ -16,13 +16,11 @@ fn load_api<P>(p: P) -> OpenAPI
 where
     P: AsRef<Path> + std::clone::Clone + std::fmt::Debug,
 {
-    let mut f = File::open(p.clone()).unwrap();
-    if let Ok(json_value) = serde_json::from_reader(f) {
-        json_value
-    } else {
-        f = File::open(p).unwrap();
+    let f = File::open(p.clone()).unwrap();
+    serde_json::from_reader(f).unwrap_or_else(|_| {
+        let f = File::open(p).unwrap();
         serde_yaml::from_reader(f).unwrap()
-    }
+    })
 }
 
 fn generate_formatted(generator: &mut Generator, spec: &OpenAPI) -> String {

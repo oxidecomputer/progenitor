@@ -610,11 +610,7 @@ impl Generator {
                 None
             };
 
-        let prop_type = if let Some(inner_type) = maybe_inner_type {
-            inner_type
-        } else {
-            prop_type
-        };
+        let prop_type = maybe_inner_type.unwrap_or(prop_type);
 
         let scalar = prop_type.has_impl(TypeSpaceImpl::FromStr);
 
@@ -716,16 +712,14 @@ fn clap_arg(
         None
     };
 
-    let value_parser = if let Some(enum_parser) = maybe_enum_parser {
-        enum_parser
-    } else {
+    let value_parser = maybe_enum_parser.unwrap_or_else(|| {
         // Let clap pick a value parser for us. This has the benefit of
         // allowing for override implementations. A generated client may
         // implement ValueParserFactory for a type to create a custom parser.
         quote! {
             ::clap::value_parser!(#arg_type_name)
         }
-    };
+    });
 
     let required = match volitionality {
         Volitionality::Optional => quote! { .required(false) },
