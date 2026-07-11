@@ -1178,10 +1178,10 @@ impl Generator {
     /// result is a `Vec<OperationResponse>` that enumerates the cases matching
     /// the filter, and a `TokenStream` that represents the generated type for
     /// those cases.
-    pub(crate) fn extract_responses<'a>(
-        method: &'a OperationMethod,
+    pub(crate) fn extract_responses(
+        method: &OperationMethod,
         filter: fn(&OperationResponseStatus) -> bool,
-    ) -> (Vec<&'a OperationResponse>, OperationResponseKind) {
+    ) -> (Vec<&OperationResponse>, OperationResponseKind) {
         let mut response_items = method
             .responses
             .iter()
