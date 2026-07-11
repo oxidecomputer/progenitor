@@ -183,7 +183,7 @@ fn test_nexus_with_different_timeout() {
 // TODO this file is full of inconsistencies and incorrectly specified types.
 // It's an interesting test to consider whether we try to do our best to
 // interpret the intent or just fail.
-#[ignore]
+#[ignore = "sample contains inconsistent and invalid types"]
 #[test]
 fn test_github() {
     verify_apis("api.github.com.json");
