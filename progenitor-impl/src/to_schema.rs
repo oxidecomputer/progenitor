@@ -538,7 +538,7 @@ impl Convert<schemars::schema::Schema> for openapiv3::Schema {
 
                 // Array
                 if items.is_some() {
-                    so.array().items = items.convert().clone().map(SingleOrVec::Single);
+                    so.array().items = items.convert().map(SingleOrVec::Single);
                 }
                 if let Some(min_items) = min_items {
                     so.array().min_items =
