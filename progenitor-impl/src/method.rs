@@ -696,6 +696,10 @@ impl Generator {
 
             quote! {
                 #[doc = #doc_comment]
+                #[allow(
+                    clippy::elidable_lifetime_names,
+                    reason = "the lifetime also binds borrowed stream parameters"
+                )]
                 pub fn #stream_id #bounds (
                     &'a self,
                     #(#stream_params),*

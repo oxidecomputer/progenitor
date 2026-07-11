@@ -253,6 +253,10 @@ impl Client {
     ///
     ///Arguments:
     /// - `limit`: Maximum number of items returned by a single call
+    #[allow(
+        clippy::elidable_lifetime_names,
+        reason = "the lifetime also binds borrowed stream parameters"
+    )]
     pub fn paginated_u32s_stream<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,

@@ -13734,6 +13734,10 @@ impl Client {
     ///Arguments:
     /// - `limit`: Maximum number of items returned by a single call
     /// - `sort_by`
+    #[allow(
+        clippy::elidable_lifetime_names,
+        reason = "the lifetime also binds borrowed stream parameters"
+    )]
     pub fn group_list_stream<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
@@ -14083,6 +14087,10 @@ impl Client {
     ///Arguments:
     /// - `limit`: Maximum number of items returned by a single call
     /// - `sort_by`
+    #[allow(
+        clippy::elidable_lifetime_names,
+        reason = "the lifetime also binds borrowed stream parameters"
+    )]
     pub fn organization_list_stream<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
@@ -14533,6 +14541,10 @@ impl Client {
     /// - `organization_name`: The organization's unique name.
     /// - `limit`: Maximum number of items returned by a single call
     /// - `sort_by`
+    #[allow(
+        clippy::elidable_lifetime_names,
+        reason = "the lifetime also binds borrowed stream parameters"
+    )]
     pub fn project_list_stream<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -14893,6 +14905,10 @@ impl Client {
     /// - `project_name`: The project's unique name within the organization.
     /// - `limit`: Maximum number of items returned by a single call
     /// - `sort_by`
+    #[allow(
+        clippy::elidable_lifetime_names,
+        reason = "the lifetime also binds borrowed stream parameters"
+    )]
     pub fn disk_list_stream<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -15209,6 +15225,10 @@ impl Client {
     /// - `end_time`: An exclusive end time of metrics.
     /// - `limit`: Maximum number of items returned by a single call
     /// - `start_time`: An inclusive start time of metrics.
+    #[allow(
+        clippy::elidable_lifetime_names,
+        reason = "the lifetime also binds borrowed stream parameters"
+    )]
     pub fn disk_metrics_list_stream<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -15352,6 +15372,10 @@ impl Client {
     /// - `project_name`: The project's unique name within the organization.
     /// - `limit`: Maximum number of items returned by a single call
     /// - `sort_by`
+    #[allow(
+        clippy::elidable_lifetime_names,
+        reason = "the lifetime also binds borrowed stream parameters"
+    )]
     pub fn image_list_stream<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -15658,6 +15682,10 @@ impl Client {
     /// - `project_name`: The project's unique name within the organization.
     /// - `limit`: Maximum number of items returned by a single call
     /// - `sort_by`
+    #[allow(
+        clippy::elidable_lifetime_names,
+        reason = "the lifetime also binds borrowed stream parameters"
+    )]
     pub fn instance_list_stream<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -15970,6 +15998,10 @@ impl Client {
     /// - `instance_name`
     /// - `limit`: Maximum number of items returned by a single call
     /// - `sort_by`
+    #[allow(
+        clippy::elidable_lifetime_names,
+        reason = "the lifetime also binds borrowed stream parameters"
+    )]
     pub fn instance_disk_list_stream<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -16349,6 +16381,10 @@ impl Client {
     /// - `instance_name`
     /// - `limit`: Maximum number of items returned by a single call
     /// - `sort_by`
+    #[allow(
+        clippy::elidable_lifetime_names,
+        reason = "the lifetime also binds borrowed stream parameters"
+    )]
     pub fn instance_network_interface_list_stream<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -17241,6 +17277,10 @@ impl Client {
     /// - `project_name`: The project's unique name within the organization.
     /// - `limit`: Maximum number of items returned by a single call
     /// - `sort_by`
+    #[allow(
+        clippy::elidable_lifetime_names,
+        reason = "the lifetime also binds borrowed stream parameters"
+    )]
     pub fn snapshot_list_stream<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -17542,6 +17582,10 @@ impl Client {
     /// - `project_name`: The project's unique name within the organization.
     /// - `limit`: Maximum number of items returned by a single call
     /// - `sort_by`
+    #[allow(
+        clippy::elidable_lifetime_names,
+        reason = "the lifetime also binds borrowed stream parameters"
+    )]
     pub fn vpc_list_stream<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -18023,6 +18067,10 @@ impl Client {
     /// - `vpc_name`
     /// - `limit`: Maximum number of items returned by a single call
     /// - `sort_by`
+    #[allow(
+        clippy::elidable_lifetime_names,
+        reason = "the lifetime also binds borrowed stream parameters"
+    )]
     pub fn vpc_router_list_stream<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -18410,6 +18458,10 @@ impl Client {
     /// - `router_name`
     /// - `limit`: Maximum number of items returned by a single call
     /// - `sort_by`
+    #[allow(
+        clippy::elidable_lifetime_names,
+        reason = "the lifetime also binds borrowed stream parameters"
+    )]
     pub fn vpc_router_route_list_stream<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -18799,6 +18851,10 @@ impl Client {
     /// - `vpc_name`
     /// - `limit`: Maximum number of items returned by a single call
     /// - `sort_by`
+    #[allow(
+        clippy::elidable_lifetime_names,
+        reason = "the lifetime also binds borrowed stream parameters"
+    )]
     pub fn vpc_subnet_list_stream<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -19182,6 +19238,10 @@ impl Client {
     /// - `subnet_name`
     /// - `limit`: Maximum number of items returned by a single call
     /// - `sort_by`
+    #[allow(
+        clippy::elidable_lifetime_names,
+        reason = "the lifetime also binds borrowed stream parameters"
+    )]
     pub fn vpc_subnet_list_network_interfaces_stream<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -19395,6 +19455,10 @@ impl Client {
     ///
     ///Arguments:
     /// - `limit`: Maximum number of items returned by a single call
+    #[allow(
+        clippy::elidable_lifetime_names,
+        reason = "the lifetime also binds borrowed stream parameters"
+    )]
     pub fn role_list_stream<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
@@ -19595,6 +19659,10 @@ impl Client {
     ///Arguments:
     /// - `limit`: Maximum number of items returned by a single call
     /// - `sort_by`
+    #[allow(
+        clippy::elidable_lifetime_names,
+        reason = "the lifetime also binds borrowed stream parameters"
+    )]
     pub fn session_me_groups_stream<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
@@ -19699,6 +19767,10 @@ impl Client {
     ///Arguments:
     /// - `limit`: Maximum number of items returned by a single call
     /// - `sort_by`
+    #[allow(
+        clippy::elidable_lifetime_names,
+        reason = "the lifetime also binds borrowed stream parameters"
+    )]
     pub fn session_sshkey_list_stream<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
@@ -20124,6 +20196,10 @@ impl Client {
     ///Arguments:
     /// - `limit`: Maximum number of items returned by a single call
     /// - `sort_by`
+    #[allow(
+        clippy::elidable_lifetime_names,
+        reason = "the lifetime also binds borrowed stream parameters"
+    )]
     pub fn certificate_list_stream<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
@@ -20385,6 +20461,10 @@ impl Client {
     ///Arguments:
     /// - `limit`: Maximum number of items returned by a single call
     /// - `sort_by`
+    #[allow(
+        clippy::elidable_lifetime_names,
+        reason = "the lifetime also binds borrowed stream parameters"
+    )]
     pub fn physical_disk_list_stream<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
@@ -20486,6 +20566,10 @@ impl Client {
     ///Arguments:
     /// - `limit`: Maximum number of items returned by a single call
     /// - `sort_by`
+    #[allow(
+        clippy::elidable_lifetime_names,
+        reason = "the lifetime also binds borrowed stream parameters"
+    )]
     pub fn rack_list_stream<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
@@ -20640,6 +20724,10 @@ impl Client {
     ///Arguments:
     /// - `limit`: Maximum number of items returned by a single call
     /// - `sort_by`
+    #[allow(
+        clippy::elidable_lifetime_names,
+        reason = "the lifetime also binds borrowed stream parameters"
+    )]
     pub fn sled_list_stream<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
@@ -20802,6 +20890,10 @@ impl Client {
     /// - `sled_id`: The sled's unique ID.
     /// - `limit`: Maximum number of items returned by a single call
     /// - `sort_by`
+    #[allow(
+        clippy::elidable_lifetime_names,
+        reason = "the lifetime also binds borrowed stream parameters"
+    )]
     pub fn sled_physical_disk_list_stream<'a>(
         &'a self,
         sled_id: &'a ::uuid::Uuid,
@@ -20912,6 +21004,10 @@ impl Client {
     ///Arguments:
     /// - `limit`: Maximum number of items returned by a single call
     /// - `sort_by`
+    #[allow(
+        clippy::elidable_lifetime_names,
+        reason = "the lifetime also binds borrowed stream parameters"
+    )]
     pub fn system_image_list_stream<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
@@ -21175,6 +21271,10 @@ impl Client {
     ///Arguments:
     /// - `limit`: Maximum number of items returned by a single call
     /// - `sort_by`
+    #[allow(
+        clippy::elidable_lifetime_names,
+        reason = "the lifetime also binds borrowed stream parameters"
+    )]
     pub fn ip_pool_list_stream<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
@@ -21489,6 +21589,10 @@ impl Client {
     ///Arguments:
     /// - `pool_name`
     /// - `limit`: Maximum number of items returned by a single call
+    #[allow(
+        clippy::elidable_lifetime_names,
+        reason = "the lifetime also binds borrowed stream parameters"
+    )]
     pub fn ip_pool_range_list_stream<'a>(
         &'a self,
         pool_name: &'a types::Name,
@@ -21745,6 +21849,10 @@ impl Client {
     ///
     ///Arguments:
     /// - `limit`: Maximum number of items returned by a single call
+    #[allow(
+        clippy::elidable_lifetime_names,
+        reason = "the lifetime also binds borrowed stream parameters"
+    )]
     pub fn ip_pool_service_range_list_stream<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
@@ -22115,6 +22223,10 @@ impl Client {
     ///Arguments:
     /// - `limit`: Maximum number of items returned by a single call
     /// - `sort_by`
+    #[allow(
+        clippy::elidable_lifetime_names,
+        reason = "the lifetime also binds borrowed stream parameters"
+    )]
     pub fn saga_list_stream<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
@@ -22271,6 +22383,10 @@ impl Client {
     ///Arguments:
     /// - `limit`: Maximum number of items returned by a single call
     /// - `sort_by`
+    #[allow(
+        clippy::elidable_lifetime_names,
+        reason = "the lifetime also binds borrowed stream parameters"
+    )]
     pub fn silo_list_stream<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
@@ -22540,6 +22656,10 @@ impl Client {
     /// - `silo_name`: The silo's unique name.
     /// - `limit`: Maximum number of items returned by a single call
     /// - `sort_by`
+    #[allow(
+        clippy::elidable_lifetime_names,
+        reason = "the lifetime also binds borrowed stream parameters"
+    )]
     pub fn silo_identity_provider_list_stream<'a>(
         &'a self,
         silo_name: &'a types::Name,
@@ -23061,6 +23181,10 @@ impl Client {
     /// - `silo_name`: The silo's unique name.
     /// - `limit`: Maximum number of items returned by a single call
     /// - `sort_by`
+    #[allow(
+        clippy::elidable_lifetime_names,
+        reason = "the lifetime also binds borrowed stream parameters"
+    )]
     pub fn silo_users_list_stream<'a>(
         &'a self,
         silo_name: &'a types::Name,
@@ -23219,6 +23343,10 @@ impl Client {
     ///Arguments:
     /// - `limit`: Maximum number of items returned by a single call
     /// - `sort_by`
+    #[allow(
+        clippy::elidable_lifetime_names,
+        reason = "the lifetime also binds borrowed stream parameters"
+    )]
     pub fn system_user_list_stream<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
@@ -23370,6 +23498,10 @@ impl Client {
     ///
     ///Arguments:
     /// - `limit`: Maximum number of items returned by a single call
+    #[allow(
+        clippy::elidable_lifetime_names,
+        reason = "the lifetime also binds borrowed stream parameters"
+    )]
     pub fn timeseries_schema_get_stream<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
@@ -23470,6 +23602,10 @@ impl Client {
     ///Arguments:
     /// - `limit`: Maximum number of items returned by a single call
     /// - `sort_by`
+    #[allow(
+        clippy::elidable_lifetime_names,
+        reason = "the lifetime also binds borrowed stream parameters"
+    )]
     pub fn user_list_stream<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
@@ -23581,6 +23717,10 @@ impl Client {
     /// - `organization`
     /// - `project`
     /// - `sort_by`
+    #[allow(
+        clippy::elidable_lifetime_names,
+        reason = "the lifetime also binds borrowed stream parameters"
+    )]
     pub fn disk_list_v1_stream<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
@@ -23868,6 +24008,10 @@ impl Client {
     /// - `organization`
     /// - `project`
     /// - `sort_by`
+    #[allow(
+        clippy::elidable_lifetime_names,
+        reason = "the lifetime also binds borrowed stream parameters"
+    )]
     pub fn instance_list_v1_stream<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
@@ -24163,6 +24307,10 @@ impl Client {
     /// - `organization`
     /// - `project`
     /// - `sort_by`
+    #[allow(
+        clippy::elidable_lifetime_names,
+        reason = "the lifetime also binds borrowed stream parameters"
+    )]
     pub fn instance_disk_list_v1_stream<'a>(
         &'a self,
         instance: &'a types::NameOrId,
@@ -24785,6 +24933,10 @@ impl Client {
     ///Arguments:
     /// - `limit`: Maximum number of items returned by a single call
     /// - `sort_by`
+    #[allow(
+        clippy::elidable_lifetime_names,
+        reason = "the lifetime also binds borrowed stream parameters"
+    )]
     pub fn organization_list_v1_stream<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
@@ -25206,6 +25358,10 @@ impl Client {
     /// - `limit`: Maximum number of items returned by a single call
     /// - `organization`
     /// - `sort_by`
+    #[allow(
+        clippy::elidable_lifetime_names,
+        reason = "the lifetime also binds borrowed stream parameters"
+    )]
     pub fn project_list_v1_stream<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
@@ -25650,6 +25806,10 @@ impl Client {
     ///Arguments:
     /// - `limit`: Maximum number of items returned by a single call
     /// - `sort_by`
+    #[allow(
+        clippy::elidable_lifetime_names,
+        reason = "the lifetime also binds borrowed stream parameters"
+    )]
     pub fn system_component_version_list_stream<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
@@ -25751,6 +25911,10 @@ impl Client {
     ///Arguments:
     /// - `limit`: Maximum number of items returned by a single call
     /// - `sort_by`
+    #[allow(
+        clippy::elidable_lifetime_names,
+        reason = "the lifetime also binds borrowed stream parameters"
+    )]
     pub fn update_deployments_list_stream<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
@@ -26049,6 +26213,10 @@ impl Client {
     ///Arguments:
     /// - `limit`: Maximum number of items returned by a single call
     /// - `sort_by`
+    #[allow(
+        clippy::elidable_lifetime_names,
+        reason = "the lifetime also binds borrowed stream parameters"
+    )]
     pub fn system_update_list_stream<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
