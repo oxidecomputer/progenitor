@@ -1433,7 +1433,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 authorization: Err("authorization was not initialized".to_string()),
                 body: Ok(::std::default::Default::default()),
             }
@@ -1529,7 +1529,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 authorization: Err("authorization was not initialized".to_string()),
             }
         }
@@ -1603,7 +1603,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 authorization: Err("authorization was not initialized".to_string()),
             }
         }
@@ -1678,7 +1678,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 authorization: Err("authorization was not initialized".to_string()),
                 body: Ok(::std::default::Default::default()),
             }
@@ -1781,7 +1781,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 authorization: Err("authorization was not initialized".to_string()),
                 body: Ok(::std::default::Default::default()),
             }
@@ -1884,7 +1884,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 authorization: Err("authorization was not initialized".to_string()),
                 body: Ok(::std::default::Default::default()),
             }

@@ -174,7 +174,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 key: Ok(None),
                 unique_key: Ok(None),
             }

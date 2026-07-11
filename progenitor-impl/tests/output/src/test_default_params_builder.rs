@@ -320,7 +320,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 body: Ok(::std::default::Default::default()),
             }
         }

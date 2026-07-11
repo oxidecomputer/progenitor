@@ -29702,7 +29702,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 id: Err("id was not initialized".to_string()),
             }
         }
@@ -29782,7 +29782,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 id: Err("id was not initialized".to_string()),
             }
         }
@@ -29862,7 +29862,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 id: Err("id was not initialized".to_string()),
             }
         }
@@ -29943,7 +29943,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 id: Err("id was not initialized".to_string()),
             }
         }
@@ -30025,7 +30025,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 id: Err("id was not initialized".to_string()),
             }
         }
@@ -30105,7 +30105,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 id: Err("id was not initialized".to_string()),
             }
         }
@@ -30185,7 +30185,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 id: Err("id was not initialized".to_string()),
             }
         }
@@ -30265,7 +30265,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 id: Err("id was not initialized".to_string()),
             }
         }
@@ -30345,7 +30345,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 id: Err("id was not initialized".to_string()),
             }
         }
@@ -30425,7 +30425,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 id: Err("id was not initialized".to_string()),
             }
         }
@@ -30505,7 +30505,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 id: Err("id was not initialized".to_string()),
             }
         }
@@ -30585,7 +30585,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 body: Ok(::std::default::Default::default()),
             }
         }
@@ -30666,7 +30666,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 body: Ok(::std::default::Default::default()),
             }
         }
@@ -30757,7 +30757,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 body: Ok(::std::default::Default::default()),
             }
         }
@@ -30844,7 +30844,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 limit: Ok(None),
                 page_token: Ok(None),
                 sort_by: Ok(None),
@@ -31004,7 +31004,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 body: Ok(::std::default::Default::default()),
             }
         }
@@ -31094,7 +31094,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 silo_name: Err("silo_name was not initialized".to_string()),
                 body: Ok(::std::default::Default::default()),
             }
@@ -31207,7 +31207,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 silo_name: Err("silo_name was not initialized".to_string()),
                 provider_name: Err("provider_name was not initialized".to_string()),
             }
@@ -31298,7 +31298,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 silo_name: Err("silo_name was not initialized".to_string()),
                 provider_name: Err("provider_name was not initialized".to_string()),
                 body: Err("body was not initialized".to_string()),
@@ -31407,7 +31407,7 @@ pub mod builder {
             reason = "operation parameter defaults may require non-const initialization"
         )]
         pub fn new(client: &'a super::Client) -> Self {
-            Self { client: client }
+            Self { client }
         }
 
         ///Sends a `POST` request to `/logout`
@@ -31472,7 +31472,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 limit: Ok(None),
                 page_token: Ok(None),
                 sort_by: Ok(None),
@@ -31632,7 +31632,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 body: Ok(::std::default::Default::default()),
             }
         }
@@ -31723,7 +31723,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
             }
         }
@@ -31807,7 +31807,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 body: Ok(::std::default::Default::default()),
             }
@@ -31918,7 +31918,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
             }
         }
@@ -32001,7 +32001,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
             }
         }
@@ -32087,7 +32087,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 body: Ok(::std::default::Default::default()),
             }
@@ -32205,7 +32205,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 limit: Ok(None),
                 page_token: Ok(None),
@@ -32385,7 +32385,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 body: Ok(::std::default::Default::default()),
             }
@@ -32496,7 +32496,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
             }
@@ -32596,7 +32596,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 body: Ok(::std::default::Default::default()),
@@ -32721,7 +32721,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
             }
@@ -32823,7 +32823,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 limit: Ok(None),
@@ -33018,7 +33018,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 body: Ok(::std::default::Default::default()),
@@ -33144,7 +33144,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 disk_name: Err("disk_name was not initialized".to_string()),
@@ -33259,7 +33259,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 disk_name: Err("disk_name was not initialized".to_string()),
@@ -33379,7 +33379,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 disk_name: Err("disk_name was not initialized".to_string()),
@@ -33627,7 +33627,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 limit: Ok(None),
@@ -33822,7 +33822,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 body: Ok(::std::default::Default::default()),
@@ -33948,7 +33948,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 image_name: Err("image_name was not initialized".to_string()),
@@ -34063,7 +34063,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 image_name: Err("image_name was not initialized".to_string()),
@@ -34180,7 +34180,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 limit: Ok(None),
@@ -34377,7 +34377,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 body: Ok(::std::default::Default::default()),
@@ -34504,7 +34504,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 instance_name: Err("instance_name was not initialized".to_string()),
@@ -34619,7 +34619,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 instance_name: Err("instance_name was not initialized".to_string()),
@@ -34737,7 +34737,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 instance_name: Err("instance_name was not initialized".to_string()),
@@ -34949,7 +34949,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 instance_name: Err("instance_name was not initialized".to_string()),
@@ -35091,7 +35091,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 instance_name: Err("instance_name was not initialized".to_string()),
@@ -35232,7 +35232,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 instance_name: Err("instance_name was not initialized".to_string()),
@@ -35350,7 +35350,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 instance_name: Err("instance_name was not initialized".to_string()),
@@ -35494,7 +35494,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 instance_name: Err("instance_name was not initialized".to_string()),
@@ -35707,7 +35707,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 instance_name: Err("instance_name was not initialized".to_string()),
@@ -35855,7 +35855,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 instance_name: Err("instance_name was not initialized".to_string()),
@@ -35988,7 +35988,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 instance_name: Err("instance_name was not initialized".to_string()),
@@ -36150,7 +36150,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 instance_name: Err("instance_name was not initialized".to_string()),
@@ -36279,7 +36279,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 instance_name: Err("instance_name was not initialized".to_string()),
@@ -36397,7 +36397,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 instance_name: Err("instance_name was not initialized".to_string()),
@@ -36565,7 +36565,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 instance_name: Err("instance_name was not initialized".to_string()),
@@ -36680,7 +36680,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 instance_name: Err("instance_name was not initialized".to_string()),
@@ -36801,7 +36801,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 instance_name: Err("instance_name was not initialized".to_string()),
@@ -36916,7 +36916,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 instance_name: Err("instance_name was not initialized".to_string()),
@@ -37030,7 +37030,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
             }
@@ -37132,7 +37132,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 body: Ok(::std::default::Default::default()),
@@ -37264,7 +37264,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 limit: Ok(None),
@@ -37461,7 +37461,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 body: Ok(::std::default::Default::default()),
@@ -37588,7 +37588,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 snapshot_name: Err("snapshot_name was not initialized".to_string()),
@@ -37703,7 +37703,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 snapshot_name: Err("snapshot_name was not initialized".to_string()),
@@ -37820,7 +37820,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 limit: Ok(None),
@@ -38015,7 +38015,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 body: Ok(::std::default::Default::default()),
@@ -38141,7 +38141,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 vpc_name: Err("vpc_name was not initialized".to_string()),
@@ -38257,7 +38257,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 vpc_name: Err("vpc_name was not initialized".to_string()),
@@ -38398,7 +38398,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 vpc_name: Err("vpc_name was not initialized".to_string()),
@@ -38513,7 +38513,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 vpc_name: Err("vpc_name was not initialized".to_string()),
@@ -38631,7 +38631,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 vpc_name: Err("vpc_name was not initialized".to_string()),
@@ -38784,7 +38784,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 vpc_name: Err("vpc_name was not initialized".to_string()),
@@ -38996,7 +38996,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 vpc_name: Err("vpc_name was not initialized".to_string()),
@@ -39138,7 +39138,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 vpc_name: Err("vpc_name was not initialized".to_string()),
@@ -39269,7 +39269,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 vpc_name: Err("vpc_name was not initialized".to_string()),
@@ -39425,7 +39425,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 vpc_name: Err("vpc_name was not initialized".to_string()),
@@ -39558,7 +39558,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 vpc_name: Err("vpc_name was not initialized".to_string()),
@@ -39785,7 +39785,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 vpc_name: Err("vpc_name was not initialized".to_string()),
@@ -39948,7 +39948,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 vpc_name: Err("vpc_name was not initialized".to_string()),
@@ -40094,7 +40094,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 vpc_name: Err("vpc_name was not initialized".to_string()),
@@ -40271,7 +40271,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 vpc_name: Err("vpc_name was not initialized".to_string()),
@@ -40417,7 +40417,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 vpc_name: Err("vpc_name was not initialized".to_string()),
@@ -40629,7 +40629,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 vpc_name: Err("vpc_name was not initialized".to_string()),
@@ -40771,7 +40771,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 vpc_name: Err("vpc_name was not initialized".to_string()),
@@ -40902,7 +40902,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 vpc_name: Err("vpc_name was not initialized".to_string()),
@@ -41058,7 +41058,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 vpc_name: Err("vpc_name was not initialized".to_string()),
@@ -41191,7 +41191,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 vpc_name: Err("vpc_name was not initialized".to_string()),
@@ -41413,7 +41413,7 @@ pub mod builder {
             reason = "operation parameter defaults may require non-const initialization"
         )]
         pub fn new(client: &'a super::Client) -> Self {
-            Self { client: client }
+            Self { client }
         }
 
         ///Sends a `GET` request to `/policy`
@@ -41478,7 +41478,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 body: Ok(::std::default::Default::default()),
             }
         }
@@ -41570,7 +41570,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 limit: Ok(None),
                 page_token: Ok(None),
             }
@@ -41714,7 +41714,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 role_name: Err("role_name was not initialized".to_string()),
             }
         }
@@ -41792,7 +41792,7 @@ pub mod builder {
             reason = "operation parameter defaults may require non-const initialization"
         )]
         pub fn new(client: &'a super::Client) -> Self {
-            Self { client: client }
+            Self { client }
         }
 
         ///Sends a `GET` request to `/session/me`
@@ -41857,7 +41857,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 limit: Ok(None),
                 page_token: Ok(None),
                 sort_by: Ok(None),
@@ -42019,7 +42019,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 limit: Ok(None),
                 page_token: Ok(None),
                 sort_by: Ok(None),
@@ -42179,7 +42179,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 body: Ok(::std::default::Default::default()),
             }
         }
@@ -42268,7 +42268,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 ssh_key_name: Err("ssh_key_name was not initialized".to_string()),
             }
         }
@@ -42351,7 +42351,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 ssh_key_name: Err("ssh_key_name was not initialized".to_string()),
             }
         }
@@ -42434,7 +42434,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 id: Err("id was not initialized".to_string()),
             }
         }
@@ -42514,7 +42514,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 id: Err("id was not initialized".to_string()),
             }
         }
@@ -42594,7 +42594,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 id: Err("id was not initialized".to_string()),
             }
         }
@@ -42676,7 +42676,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 limit: Ok(None),
                 page_token: Ok(None),
                 sort_by: Ok(None),
@@ -42836,7 +42836,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 body: Ok(::std::default::Default::default()),
             }
         }
@@ -42927,7 +42927,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 certificate: Err("certificate was not initialized".to_string()),
             }
         }
@@ -43010,7 +43010,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 certificate: Err("certificate was not initialized".to_string()),
             }
         }
@@ -43095,7 +43095,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 limit: Ok(None),
                 page_token: Ok(None),
                 sort_by: Ok(None),
@@ -43257,7 +43257,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 limit: Ok(None),
                 page_token: Ok(None),
                 sort_by: Ok(None),
@@ -43417,7 +43417,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 rack_id: Err("rack_id was not initialized".to_string()),
             }
         }
@@ -43499,7 +43499,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 limit: Ok(None),
                 page_token: Ok(None),
                 sort_by: Ok(None),
@@ -43659,7 +43659,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 sled_id: Err("sled_id was not initialized".to_string()),
             }
         }
@@ -43742,7 +43742,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 sled_id: Err("sled_id was not initialized".to_string()),
                 limit: Ok(None),
                 page_token: Ok(None),
@@ -43921,7 +43921,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 limit: Ok(None),
                 page_token: Ok(None),
                 sort_by: Ok(None),
@@ -44081,7 +44081,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 body: Ok(::std::default::Default::default()),
             }
         }
@@ -44172,7 +44172,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 image_name: Err("image_name was not initialized".to_string()),
             }
         }
@@ -44252,7 +44252,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 image_name: Err("image_name was not initialized".to_string()),
             }
         }
@@ -44334,7 +44334,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 limit: Ok(None),
                 page_token: Ok(None),
                 sort_by: Ok(None),
@@ -44494,7 +44494,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 body: Ok(::std::default::Default::default()),
             }
         }
@@ -44583,7 +44583,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 pool_name: Err("pool_name was not initialized".to_string()),
             }
         }
@@ -44664,7 +44664,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 pool_name: Err("pool_name was not initialized".to_string()),
                 body: Ok(::std::default::Default::default()),
             }
@@ -44773,7 +44773,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 pool_name: Err("pool_name was not initialized".to_string()),
             }
         }
@@ -44855,7 +44855,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 pool_name: Err("pool_name was not initialized".to_string()),
                 limit: Ok(None),
                 page_token: Ok(None),
@@ -45017,7 +45017,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 pool_name: Err("pool_name was not initialized".to_string()),
                 body: Err("body was not initialized".to_string()),
             }
@@ -45115,7 +45115,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 pool_name: Err("pool_name was not initialized".to_string()),
                 body: Err("body was not initialized".to_string()),
             }
@@ -45211,7 +45211,7 @@ pub mod builder {
             reason = "operation parameter defaults may require non-const initialization"
         )]
         pub fn new(client: &'a super::Client) -> Self {
-            Self { client: client }
+            Self { client }
         }
 
         ///Sends a `GET` request to `/system/ip-pools-service`
@@ -45275,7 +45275,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 limit: Ok(None),
                 page_token: Ok(None),
             }
@@ -45419,7 +45419,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 body: Err("body was not initialized".to_string()),
             }
         }
@@ -45496,7 +45496,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 body: Err("body was not initialized".to_string()),
             }
         }
@@ -45578,7 +45578,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 metric_name: Err("metric_name was not initialized".to_string()),
                 end_time: Ok(None),
                 id: Err("id was not initialized".to_string()),
@@ -45741,7 +45741,7 @@ pub mod builder {
             reason = "operation parameter defaults may require non-const initialization"
         )]
         pub fn new(client: &'a super::Client) -> Self {
-            Self { client: client }
+            Self { client }
         }
 
         ///Sends a `GET` request to `/system/policy`
@@ -45806,7 +45806,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 body: Ok(::std::default::Default::default()),
             }
         }
@@ -45899,7 +45899,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 limit: Ok(None),
                 page_token: Ok(None),
                 sort_by: Ok(None),
@@ -46059,7 +46059,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 saga_id: Err("saga_id was not initialized".to_string()),
             }
         }
@@ -46141,7 +46141,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 limit: Ok(None),
                 page_token: Ok(None),
                 sort_by: Ok(None),
@@ -46301,7 +46301,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 body: Ok(::std::default::Default::default()),
             }
         }
@@ -46390,7 +46390,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 silo_name: Err("silo_name was not initialized".to_string()),
             }
         }
@@ -46470,7 +46470,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 silo_name: Err("silo_name was not initialized".to_string()),
             }
         }
@@ -46553,7 +46553,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 silo_name: Err("silo_name was not initialized".to_string()),
                 limit: Ok(None),
                 page_token: Ok(None),
@@ -46734,7 +46734,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 silo_name: Err("silo_name was not initialized".to_string()),
                 body: Ok(::std::default::Default::default()),
             }
@@ -46845,7 +46845,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 silo_name: Err("silo_name was not initialized".to_string()),
                 user_id: Err("user_id was not initialized".to_string()),
             }
@@ -46945,7 +46945,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 silo_name: Err("silo_name was not initialized".to_string()),
                 user_id: Err("user_id was not initialized".to_string()),
                 body: Err("body was not initialized".to_string()),
@@ -47059,7 +47059,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 silo_name: Err("silo_name was not initialized".to_string()),
                 body: Ok(::std::default::Default::default()),
             }
@@ -47179,7 +47179,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 silo_name: Err("silo_name was not initialized".to_string()),
                 provider_name: Err("provider_name was not initialized".to_string()),
             }
@@ -47279,7 +47279,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 silo_name: Err("silo_name was not initialized".to_string()),
             }
         }
@@ -47362,7 +47362,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 silo_name: Err("silo_name was not initialized".to_string()),
                 body: Ok(::std::default::Default::default()),
             }
@@ -47476,7 +47476,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 silo_name: Err("silo_name was not initialized".to_string()),
                 limit: Ok(None),
                 page_token: Ok(None),
@@ -47654,7 +47654,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 silo_name: Err("silo_name was not initialized".to_string()),
                 user_id: Err("user_id was not initialized".to_string()),
             }
@@ -47754,7 +47754,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 limit: Ok(None),
                 page_token: Ok(None),
                 sort_by: Ok(None),
@@ -47914,7 +47914,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 user_name: Err("user_name was not initialized".to_string()),
             }
         }
@@ -47995,7 +47995,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 limit: Ok(None),
                 page_token: Ok(None),
             }
@@ -48142,7 +48142,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 limit: Ok(None),
                 page_token: Ok(None),
                 sort_by: Ok(None),
@@ -48306,7 +48306,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 limit: Ok(None),
                 organization: Ok(None),
                 page_token: Ok(None),
@@ -48503,7 +48503,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization: Ok(None),
                 project: Err("project was not initialized".to_string()),
                 body: Ok(::std::default::Default::default()),
@@ -48629,7 +48629,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 disk: Err("disk was not initialized".to_string()),
                 organization: Ok(None),
                 project: Ok(None),
@@ -48747,7 +48747,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 disk: Err("disk was not initialized".to_string()),
                 organization: Ok(None),
                 project: Ok(None),
@@ -48867,7 +48867,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 limit: Ok(None),
                 organization: Ok(None),
                 page_token: Ok(None),
@@ -49064,7 +49064,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization: Ok(None),
                 project: Err("project was not initialized".to_string()),
                 body: Ok(::std::default::Default::default()),
@@ -49190,7 +49190,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 instance: Err("instance was not initialized".to_string()),
                 organization: Ok(None),
                 project: Ok(None),
@@ -49308,7 +49308,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 instance: Err("instance was not initialized".to_string()),
                 organization: Ok(None),
                 project: Ok(None),
@@ -49429,7 +49429,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 instance: Err("instance was not initialized".to_string()),
                 limit: Ok(None),
                 organization: Ok(None),
@@ -49644,7 +49644,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 instance: Err("instance was not initialized".to_string()),
                 organization: Ok(None),
                 project: Ok(None),
@@ -49789,7 +49789,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 instance: Err("instance was not initialized".to_string()),
                 organization: Ok(None),
                 project: Ok(None),
@@ -49934,7 +49934,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 instance: Err("instance was not initialized".to_string()),
                 organization: Ok(None),
                 project: Ok(None),
@@ -50078,7 +50078,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 instance: Err("instance was not initialized".to_string()),
                 organization: Ok(None),
                 project: Ok(None),
@@ -50199,7 +50199,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 instance: Err("instance was not initialized".to_string()),
                 from_start: Ok(None),
                 max_bytes: Ok(None),
@@ -50370,7 +50370,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 instance: Err("instance was not initialized".to_string()),
                 organization: Ok(None),
                 project: Ok(None),
@@ -50495,7 +50495,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 instance: Err("instance was not initialized".to_string()),
                 organization: Ok(None),
                 project: Ok(None),
@@ -50613,7 +50613,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 instance: Err("instance was not initialized".to_string()),
                 organization: Ok(None),
                 project: Ok(None),
@@ -50731,7 +50731,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 limit: Ok(None),
                 page_token: Ok(None),
                 sort_by: Ok(None),
@@ -50891,7 +50891,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 body: Ok(::std::default::Default::default()),
             }
         }
@@ -50982,7 +50982,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization: Err("organization was not initialized".to_string()),
             }
         }
@@ -51066,7 +51066,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization: Err("organization was not initialized".to_string()),
                 body: Ok(::std::default::Default::default()),
             }
@@ -51177,7 +51177,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization: Err("organization was not initialized".to_string()),
             }
         }
@@ -51260,7 +51260,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization: Err("organization was not initialized".to_string()),
             }
         }
@@ -51346,7 +51346,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization: Err("organization was not initialized".to_string()),
                 body: Ok(::std::default::Default::default()),
             }
@@ -51464,7 +51464,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 limit: Ok(None),
                 organization: Ok(None),
                 page_token: Ok(None),
@@ -51644,7 +51644,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization: Err("organization was not initialized".to_string()),
                 body: Ok(::std::default::Default::default()),
             }
@@ -51754,7 +51754,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 project: Err("project was not initialized".to_string()),
                 organization: Ok(None),
             }
@@ -51857,7 +51857,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 project: Err("project was not initialized".to_string()),
                 organization: Ok(None),
                 body: Ok(::std::default::Default::default()),
@@ -51985,7 +51985,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 project: Err("project was not initialized".to_string()),
                 organization: Ok(None),
             }
@@ -52087,7 +52087,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 project: Err("project was not initialized".to_string()),
                 organization: Ok(None),
             }
@@ -52192,7 +52192,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 project: Err("project was not initialized".to_string()),
                 organization: Ok(None),
                 body: Ok(::std::default::Default::default()),
@@ -52325,7 +52325,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 limit: Ok(None),
                 page_token: Ok(None),
                 sort_by: Ok(None),
@@ -52489,7 +52489,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 limit: Ok(None),
                 page_token: Ok(None),
                 sort_by: Ok(None),
@@ -52650,7 +52650,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 id: Err("id was not initialized".to_string()),
             }
         }
@@ -52730,7 +52730,7 @@ pub mod builder {
             reason = "operation parameter defaults may require non-const initialization"
         )]
         pub fn new(client: &'a super::Client) -> Self {
-            Self { client: client }
+            Self { client }
         }
 
         ///Sends a `POST` request to `/v1/system/update/refresh`
@@ -52793,7 +52793,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 body: Ok(::std::default::Default::default()),
             }
         }
@@ -52884,7 +52884,7 @@ pub mod builder {
             reason = "operation parameter defaults may require non-const initialization"
         )]
         pub fn new(client: &'a super::Client) -> Self {
-            Self { client: client }
+            Self { client }
         }
 
         ///Sends a `POST` request to `/v1/system/update/stop`
@@ -52949,7 +52949,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 limit: Ok(None),
                 page_token: Ok(None),
                 sort_by: Ok(None),
@@ -53109,7 +53109,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 version: Err("version was not initialized".to_string()),
             }
         }
@@ -53189,7 +53189,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 version: Err("version was not initialized".to_string()),
             }
         }
@@ -53270,7 +53270,7 @@ pub mod builder {
             reason = "operation parameter defaults may require non-const initialization"
         )]
         pub fn new(client: &'a super::Client) -> Self {
-            Self { client: client }
+            Self { client }
         }
 
         ///Sends a `GET` request to `/v1/system/update/version`

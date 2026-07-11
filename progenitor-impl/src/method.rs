@@ -1431,6 +1431,11 @@ impl Generator {
             .collect::<Vec<_>>();
 
         let client_ident = unique_ident_from("client", &param_names);
+        let client_init = if client_ident == format_ident!("client") {
+            quote! { client }
+        } else {
+            quote! { #client_ident: client }
+        };
 
         let mut cloneable = true;
 
@@ -1876,7 +1881,7 @@ impl Generator {
                 )]
                 pub fn new(client: &'a super::Client) -> Self {
                     Self {
-                        #client_ident: client,
+                        #client_init,
                         #( #param_names: #param_values, )*
                     }
                 }

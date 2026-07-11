@@ -2767,7 +2767,7 @@ pub mod builder {
             reason = "operation parameter defaults may require non-const initialization"
         )]
         pub fn new(client: &'a super::Client) -> Self {
-            Self { client: client }
+            Self { client }
         }
 
         ///Sends a `POST` request to `/v1/control/hold`
@@ -2822,7 +2822,7 @@ pub mod builder {
             reason = "operation parameter defaults may require non-const initialization"
         )]
         pub fn new(client: &'a super::Client) -> Self {
-            Self { client: client }
+            Self { client }
         }
 
         ///Sends a `POST` request to `/v1/control/resume`
@@ -2871,7 +2871,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 task: Err("task was not initialized".to_string()),
             }
         }
@@ -2943,7 +2943,7 @@ pub mod builder {
             reason = "operation parameter defaults may require non-const initialization"
         )]
         pub fn new(client: &'a super::Client) -> Self {
-            Self { client: client }
+            Self { client }
         }
 
         ///Sends a `GET` request to `/v1/tasks`
@@ -3000,7 +3000,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 body: Ok(::std::default::Default::default()),
             }
         }
@@ -3084,7 +3084,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 task: Err("task was not initialized".to_string()),
                 minseq: Ok(None),
             }
@@ -3178,7 +3178,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 task: Err("task was not initialized".to_string()),
             }
         }
@@ -3255,7 +3255,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 task: Err("task was not initialized".to_string()),
                 output: Err("output was not initialized".to_string()),
             }
@@ -3338,7 +3338,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 body: Ok(::std::default::Default::default()),
             }
         }
@@ -3419,7 +3419,7 @@ pub mod builder {
             reason = "operation parameter defaults may require non-const initialization"
         )]
         pub fn new(client: &'a super::Client) -> Self {
-            Self { client: client }
+            Self { client }
         }
 
         ///Sends a `GET` request to `/v1/whoami`
@@ -3476,7 +3476,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 body: Err("body was not initialized".to_string()),
             }
         }
@@ -3548,7 +3548,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 body: Ok(::std::default::Default::default()),
             }
         }
@@ -3629,7 +3629,7 @@ pub mod builder {
             reason = "operation parameter defaults may require non-const initialization"
         )]
         pub fn new(client: &'a super::Client) -> Self {
-            Self { client: client }
+            Self { client }
         }
 
         ///Sends a `GET` request to `/v1/worker/ping`
@@ -3687,7 +3687,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 task: Err("task was not initialized".to_string()),
                 body: Ok(::std::default::Default::default()),
             }
@@ -3785,7 +3785,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 task: Err("task was not initialized".to_string()),
                 body: Err("body was not initialized".to_string()),
             }
@@ -3877,7 +3877,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 task: Err("task was not initialized".to_string()),
                 body: Ok(::std::default::Default::default()),
             }
@@ -3975,7 +3975,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 task: Err("task was not initialized".to_string()),
                 body: Ok(::std::default::Default::default()),
             }
@@ -4068,7 +4068,7 @@ pub mod builder {
             reason = "operation parameter defaults may require non-const initialization"
         )]
         pub fn new(client: &'a super::Client) -> Self {
-            Self { client: client }
+            Self { client }
         }
 
         ///Sends a `GET` request to `/v1/workers`
@@ -4123,7 +4123,7 @@ pub mod builder {
             reason = "operation parameter defaults may require non-const initialization"
         )]
         pub fn new(client: &'a super::Client) -> Self {
-            Self { client: client }
+            Self { client }
         }
 
         ///Sends a `POST` request to `/v1/workers/recycle`
@@ -4172,7 +4172,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 id: Ok(None),
             }
         }
@@ -4244,7 +4244,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 accept_language: Ok(None),
             }
         }

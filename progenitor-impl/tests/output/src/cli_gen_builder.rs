@@ -265,7 +265,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 gateway: Err("gateway was not initialized".to_string()),
                 body: Ok(::std::default::Default::default()),
             }

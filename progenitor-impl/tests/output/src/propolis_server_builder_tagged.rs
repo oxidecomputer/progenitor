@@ -3013,7 +3013,7 @@ pub mod builder {
             reason = "operation parameter defaults may require non-const initialization"
         )]
         pub fn new(client: &'a super::Client) -> Self {
-            Self { client: client }
+            Self { client }
         }
 
         ///Sends a `GET` request to `/instance`
@@ -3078,7 +3078,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 body: Ok(::std::default::Default::default()),
             }
         }
@@ -3174,7 +3174,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 id: Err("id was not initialized".to_string()),
                 snapshot_id: Err("snapshot_id was not initialized".to_string()),
             }
@@ -3272,7 +3272,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 body: Ok(::std::default::Default::default()),
             }
         }
@@ -3369,7 +3369,7 @@ pub mod builder {
             reason = "operation parameter defaults may require non-const initialization"
         )]
         pub fn new(client: &'a super::Client) -> Self {
-            Self { client: client }
+            Self { client }
         }
 
         ///Sends a `GET` request to `/instance/serial`
@@ -3438,7 +3438,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 body: Err("body was not initialized".to_string()),
             }
         }
@@ -3515,7 +3515,7 @@ pub mod builder {
         )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 body: Ok(::std::default::Default::default()),
             }
         }
