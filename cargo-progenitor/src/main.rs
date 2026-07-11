@@ -65,8 +65,8 @@ enum InterfaceArg {
 impl From<InterfaceArg> for InterfaceStyle {
     fn from(arg: InterfaceArg) -> Self {
         match arg {
-            InterfaceArg::Positional => InterfaceStyle::Positional,
-            InterfaceArg::Builder => InterfaceStyle::Builder,
+            InterfaceArg::Positional => Self::Positional,
+            InterfaceArg::Builder => Self::Builder,
         }
     }
 }
@@ -80,8 +80,8 @@ enum TagArg {
 impl From<TagArg> for TagStyle {
     fn from(arg: TagArg) -> Self {
         match arg {
-            TagArg::Merged => TagStyle::Merged,
-            TagArg::Separate => TagStyle::Separate,
+            TagArg::Merged => Self::Merged,
+            TagArg::Separate => Self::Separate,
         }
     }
 }

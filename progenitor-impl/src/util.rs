@@ -18,8 +18,8 @@ pub trait ComponentLookup: Sized {
 impl<T: ComponentLookup> ReferenceOrExt<T> for openapiv3::ReferenceOr<T> {
     fn item<'a>(&'a self, components: Option<&'a Components>) -> Result<&'a T> {
         match self {
-            ReferenceOr::Item(item) => Ok(item),
-            ReferenceOr::Reference { reference } => {
+            Self::Item(item) => Ok(item),
+            Self::Reference { reference } => {
                 let idx = reference.rfind('/').unwrap();
                 let key = &reference[idx + 1..];
                 let parameters = T::get_components(components.unwrap());

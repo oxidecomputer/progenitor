@@ -64,14 +64,14 @@ impl std::str::FromStr for HttpMethod {
 impl HttpMethod {
     const fn as_str(&self) -> &'static str {
         match self {
-            HttpMethod::Get => "get",
-            HttpMethod::Put => "put",
-            HttpMethod::Post => "post",
-            HttpMethod::Delete => "delete",
-            HttpMethod::Options => "options",
-            HttpMethod::Head => "head",
-            HttpMethod::Patch => "patch",
-            HttpMethod::Trace => "trace",
+            Self::Get => "get",
+            Self::Put => "put",
+            Self::Post => "post",
+            Self::Delete => "delete",
+            Self::Options => "options",
+            Self::Head => "head",
+            Self::Patch => "patch",
+            Self::Trace => "trace",
         }
     }
 }
@@ -121,11 +121,9 @@ pub enum OperationParameterKind {
 impl OperationParameterKind {
     const fn is_required(&self) -> bool {
         match self {
-            OperationParameterKind::Query(required) | OperationParameterKind::Header(required) => {
-                *required
-            }
+            Self::Query(required) | Self::Header(required) => *required,
             // TODO may be optional
-            OperationParameterKind::Path | OperationParameterKind::Body(_) => true,
+            Self::Path | Self::Body(_) => true,
         }
     }
     const fn is_optional(&self) -> bool {
@@ -206,38 +204,34 @@ pub enum OperationResponseStatus {
 impl OperationResponseStatus {
     fn to_value(&self) -> u16 {
         match self {
-            OperationResponseStatus::Code(code) => {
+            Self::Code(code) => {
                 assert!(*code < 1000);
                 *code
             }
-            OperationResponseStatus::Range(range) => {
+            Self::Range(range) => {
                 assert!(*range < 10);
                 *range * 100
             }
-            OperationResponseStatus::Default => 1000,
+            Self::Default => 1000,
         }
     }
 
     pub const fn is_success_or_default(&self) -> bool {
         matches!(
             self,
-            OperationResponseStatus::Default
-                | OperationResponseStatus::Code(101 | 200..=299)
-                | OperationResponseStatus::Range(2)
+            Self::Default | Self::Code(101 | 200..=299) | Self::Range(2)
         )
     }
 
     pub const fn is_error_or_default(&self) -> bool {
         matches!(
             self,
-            OperationResponseStatus::Default
-                | OperationResponseStatus::Code(400..=599)
-                | OperationResponseStatus::Range(4..=5)
+            Self::Default | Self::Code(400..=599) | Self::Range(4..=5)
         )
     }
 
     pub const fn is_default(&self) -> bool {
-        matches!(self, OperationResponseStatus::Default)
+        matches!(self, Self::Default)
     }
 }
 
@@ -264,17 +258,17 @@ pub enum OperationResponseKind {
 impl OperationResponseKind {
     pub fn into_tokens(self, type_space: &TypeSpace) -> TokenStream {
         match self {
-            OperationResponseKind::Type(ref type_id) => {
+            Self::Type(ref type_id) => {
                 let type_name = type_space.get_type(type_id).unwrap().ident();
                 quote! { #type_name }
             }
-            OperationResponseKind::None => {
+            Self::None => {
                 quote! { () }
             }
-            OperationResponseKind::Raw => {
+            Self::Raw => {
                 quote! { ByteStream }
             }
-            OperationResponseKind::Upgrade => {
+            Self::Upgrade => {
                 quote! { reqwest::Upgraded }
             }
         }

@@ -55,7 +55,7 @@ impl syn::parse::Parse for SpecSource {
         if lookahead.peek(LitStr) {
             // spec = "path/to/spec.json"
             let path: LitStr = input.parse()?;
-            Ok(SpecSource {
+            Ok(Self {
                 path,
                 relative_to: RelativeTo::ManifestDir,
             })
@@ -66,7 +66,7 @@ impl syn::parse::Parse for SpecSource {
             let stream: proc_macro2::TokenStream = content.parse()?;
             let helper: SpecSourceStruct =
                 serde_tokenstream::from_tokenstream_spanned(&brace_token.span, &stream)?;
-            Ok(SpecSource {
+            Ok(Self {
                 path: helper.path.into_inner(),
                 relative_to: helper.relative_to,
             })

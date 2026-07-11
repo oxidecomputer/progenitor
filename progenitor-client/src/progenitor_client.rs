@@ -367,14 +367,12 @@ impl<E> Error<E> {
     /// Returns the status code, if the error was generated from a response.
     pub fn status(&self) -> Option<reqwest::StatusCode> {
         match self {
-            Error::InvalidRequest(_) | Error::Custom(_) | Error::InvalidResponsePayload(_, _) => {
-                None
+            Self::InvalidRequest(_) | Self::Custom(_) | Self::InvalidResponsePayload(_, _) => None,
+            Self::CommunicationError(e) | Self::InvalidUpgrade(e) | Self::ResponseBodyError(e) => {
+                e.status()
             }
-            Error::CommunicationError(e)
-            | Error::InvalidUpgrade(e)
-            | Error::ResponseBodyError(e) => e.status(),
-            Error::ErrorResponse(rv) => Some(rv.status()),
-            Error::UnexpectedResponse(r) => Some(r.status()),
+            Self::ErrorResponse(rv) => Some(rv.status()),
+            Self::UnexpectedResponse(r) => Some(r.status()),
         }
     }
 
@@ -390,10 +388,10 @@ impl<E> Error<E> {
     /// * 504 Gateway Timeout
     pub fn is_retryable(&self) -> bool {
         match self {
-            Error::CommunicationError(_) => true,
-            Error::ErrorResponse(rv) => is_retryable_status(rv.status()),
-            Error::UnexpectedResponse(r) => is_retryable_status(r.status()),
-            Error::InvalidUpgrade(e) | Error::ResponseBodyError(e) => {
+            Self::CommunicationError(_) => true,
+            Self::ErrorResponse(rv) => is_retryable_status(rv.status()),
+            Self::UnexpectedResponse(r) => is_retryable_status(r.status()),
+            Self::InvalidUpgrade(e) | Self::ResponseBodyError(e) => {
                 // We expect InvalidUpgrade and ResponseBodyError to be 2xx
                 // statuses.
                 //
@@ -404,9 +402,7 @@ impl<E> Error<E> {
                 //   it is appropriate to check for retryability.
                 e.status().is_some_and(is_retryable_status)
             }
-            Error::InvalidRequest(_) | Error::InvalidResponsePayload(_, _) | Error::Custom(_) => {
-                false
-            }
+            Self::InvalidRequest(_) | Self::InvalidResponsePayload(_, _) | Self::Custom(_) => false,
         }
     }
 
@@ -416,10 +412,10 @@ impl<E> Error<E> {
     /// various error response bodies.
     pub fn into_untyped(self) -> Error {
         match self {
-            Error::InvalidRequest(s) => Error::InvalidRequest(s),
-            Error::Custom(s) => Error::Custom(s),
-            Error::CommunicationError(e) => Error::CommunicationError(e),
-            Error::ErrorResponse(ResponseValue {
+            Self::InvalidRequest(s) => Error::InvalidRequest(s),
+            Self::Custom(s) => Error::Custom(s),
+            Self::CommunicationError(e) => Error::CommunicationError(e),
+            Self::ErrorResponse(ResponseValue {
                 inner: _,
                 status,
                 headers,
@@ -428,10 +424,10 @@ impl<E> Error<E> {
                 status,
                 headers,
             }),
-            Error::InvalidUpgrade(e) => Error::InvalidUpgrade(e),
-            Error::ResponseBodyError(e) => Error::ResponseBodyError(e),
-            Error::InvalidResponsePayload(b, e) => Error::InvalidResponsePayload(b, e),
-            Error::UnexpectedResponse(r) => Error::UnexpectedResponse(r),
+            Self::InvalidUpgrade(e) => Error::InvalidUpgrade(e),
+            Self::ResponseBodyError(e) => Error::ResponseBodyError(e),
+            Self::InvalidResponsePayload(b, e) => Error::InvalidResponsePayload(b, e),
+            Self::UnexpectedResponse(r) => Error::UnexpectedResponse(r),
         }
     }
 }
@@ -460,29 +456,29 @@ where
 {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            Error::InvalidRequest(s) => {
+            Self::InvalidRequest(s) => {
                 write!(f, "Invalid Request: {s}")?;
             }
-            Error::CommunicationError(e) => {
+            Self::CommunicationError(e) => {
                 write!(f, "Communication Error: {e}")?;
             }
-            Error::ErrorResponse(rve) => {
+            Self::ErrorResponse(rve) => {
                 write!(f, "Error Response: ")?;
                 rve.fmt_info(f)?;
             }
-            Error::InvalidUpgrade(e) => {
+            Self::InvalidUpgrade(e) => {
                 write!(f, "Invalid Response Upgrade: {e}")?;
             }
-            Error::ResponseBodyError(e) => {
+            Self::ResponseBodyError(e) => {
                 write!(f, "Invalid Response Body Bytes: {e}")?;
             }
-            Error::InvalidResponsePayload(b, e) => {
+            Self::InvalidResponsePayload(b, e) => {
                 write!(f, "Invalid Response Payload ({b:?}): {e}")?;
             }
-            Error::UnexpectedResponse(r) => {
+            Self::UnexpectedResponse(r) => {
                 write!(f, "Unexpected Response: {r:?}")?;
             }
-            Error::Custom(s) => {
+            Self::Custom(s) => {
                 write!(f, "Error: {s}")?;
             }
         }
@@ -541,10 +537,10 @@ where
 {
     fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
         match self {
-            Error::CommunicationError(e)
-            | Error::InvalidUpgrade(e)
-            | Error::ResponseBodyError(e) => Some(e),
-            Error::InvalidResponsePayload(_b, e) => Some(e),
+            Self::CommunicationError(e) | Self::InvalidUpgrade(e) | Self::ResponseBodyError(e) => {
+                Some(e)
+            }
+            Self::InvalidResponsePayload(_b, e) => Some(e),
             _ => None,
         }
     }
