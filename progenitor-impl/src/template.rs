@@ -291,6 +291,10 @@ mod tests {
         let mut rename = HashMap::new();
         let number = "number".to_string();
         rename.insert(&number, &number);
+        #[allow(
+            clippy::literal_string_with_formatting_args,
+            reason = "braces delimit path template parameters"
+        )]
         let t = parse("/measure/{number}").unwrap();
         let out = t.compile(&rename, &quote::quote! { self });
         let want = quote::quote! {
@@ -311,6 +315,10 @@ mod tests {
         rename.insert(&one, &one);
         rename.insert(&two, &two);
         rename.insert(&three, &three);
+        #[allow(
+            clippy::literal_string_with_formatting_args,
+            reason = "braces delimit path template parameters"
+        )]
         let t = parse("/abc/def:{one}:jkl/{two}/a:{three}").unwrap();
         let out = t.compile(&rename, &quote::quote! { self });
         let want = quote::quote! {
