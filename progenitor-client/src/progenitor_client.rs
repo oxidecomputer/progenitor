@@ -169,6 +169,13 @@ pub struct ResponseValue<T> {
 
 impl<T: DeserializeOwned> ResponseValue<T> {
     #[doc(hidden)]
+    #[cfg_attr(
+        target_arch = "wasm32",
+        allow(
+            clippy::future_not_send,
+            reason = "reqwest response futures use browser-local state on wasm"
+        )
+    )]
     pub async fn from_response<E>(response: reqwest::Response) -> Result<Self, Error<E>> {
         let status = response.status();
         let headers = response.headers().clone();

@@ -1435,6 +1435,13 @@ impl ClientHooks<()> for &Client {}
     clippy::result_large_err,
     reason = "generated methods preserve the public Error representation"
 )]
+#[cfg_attr(
+    target_arch = "wasm32",
+    allow(
+        clippy::future_not_send,
+        reason = "reqwest futures use browser-local state on wasm"
+    )
+)]
 #[allow(
     clippy::match_same_arms,
     reason = "generated status ranges remain explicit"
