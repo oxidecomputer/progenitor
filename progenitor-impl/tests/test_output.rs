@@ -68,7 +68,7 @@ fn verify_apis(openapi_file: &str) {
                     ..Default::default()
                 },
                 "usize",
-                [TypeImpl::Display].into_iter(),
+                std::iter::once(TypeImpl::Display),
             ),
     );
     let output = generate_formatted(&mut generator, &spec);
