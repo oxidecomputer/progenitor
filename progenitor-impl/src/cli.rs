@@ -24,6 +24,17 @@ struct CliOperation {
 
 impl Generator {
     /// Generate a `clap`-based CLI.
+    ///
+    /// # Errors
+    ///
+    /// Returns an error if the `OpenAPI` document is invalid or its types
+    /// cannot be converted into CLI arguments.
+    ///
+    /// # Panics
+    ///
+    /// Panics if validated component references violate an internal generator
+    /// invariant.
+    #[allow(clippy::too_many_lines, reason = "keeps generation stages together")]
     pub fn cli(&mut self, spec: &OpenAPI, crate_name: &str) -> Result<TokenStream> {
         validate_openapi(spec)?;
 
@@ -48,7 +59,13 @@ impl Generator {
                 })
             })
             .map(|(path, method, operation, path_parameters)| {
-                self.process_operation(operation, &spec.components, path, method, path_parameters)
+                self.process_operation(
+                    operation,
+                    spec.components.as_ref(),
+                    path,
+                    method,
+                    path_parameters,
+                )
             })
             .collect::<Result<Vec<_>>>()?;
 
@@ -184,7 +201,12 @@ impl Generator {
         Ok(code)
     }
 
-    fn cli_method(&mut self, method: &crate::method::OperationMethod) -> CliOperation {
+    #[allow(clippy::too_many_lines, reason = "mirrors the generated CLI method")]
+    #[allow(
+        clippy::single_match_else,
+        reason = "the match documents both request execution modes"
+    )]
+    fn cli_method(&self, method: &crate::method::OperationMethod) -> CliOperation {
         let CliArg {
             parser: parser_args,
             consumer: consumer_args,
@@ -233,9 +255,9 @@ impl Generator {
         let op_name = format_ident!("{}", &method.operation_id);
 
         let (_, success_kind) =
-            self.extract_responses(method, OperationResponseStatus::is_success_or_default);
+            Self::extract_responses(method, OperationResponseStatus::is_success_or_default);
         let (_, error_kind) =
-            self.extract_responses(method, OperationResponseStatus::is_error_or_default);
+            Self::extract_responses(method, OperationResponseStatus::is_error_or_default);
 
         let execute_and_output = match method.dropshot_paginated {
             // Normal, one-shot API calls.
@@ -390,6 +412,7 @@ impl Generator {
         }
     }
 
+    #[allow(clippy::too_many_lines, reason = "keeps argument generation cohesive")]
     fn cli_method_args(&self, method: &crate::method::OperationMethod) -> CliArg {
         let mut args = CliOperationArgs::default();
 
@@ -404,8 +427,8 @@ impl Generator {
                 OperationParameterKind::Body(_) => continue,
 
                 OperationParameterKind::Path => true,
-                OperationParameterKind::Query(required) => *required,
-                OperationParameterKind::Header(required) => *required,
+                OperationParameterKind::Query(required)
+                | OperationParameterKind::Header(required) => *required,
             };
 
             // For paginated endpoints, we don't generate 'page_token' args.
@@ -413,8 +436,8 @@ impl Generator {
                 continue;
             }
 
-            let first_page_required = first_page_required_set
-                .map_or(false, |required| required.contains(&param.api_name));
+            let first_page_required =
+                first_page_required_set.is_some_and(|required| required.contains(&param.api_name));
 
             let volitionality = if innately_required || first_page_required {
                 Volitionality::Required
@@ -432,7 +455,12 @@ impl Generator {
             // There should be no conflicting path or query parameters.
             assert!(!args.has_arg(&arg_name));
 
-            let parser = clap_arg(&arg_name, volitionality, &param.description, &arg_type);
+            let parser = clap_arg(
+                &arg_name,
+                volitionality,
+                param.description.as_ref(),
+                &arg_type,
+            );
 
             let arg_fn_name = sanitize(&param.name, Case::Snake);
             let arg_fn = format_ident!("{}", arg_fn_name);
@@ -452,7 +480,7 @@ impl Generator {
                 }
             };
 
-            args.add_arg(arg_name, CliArg { parser, consumer })
+            args.add_arg(arg_name, CliArg { parser, consumer });
         }
 
         let maybe_body_type_id = method
@@ -476,14 +504,14 @@ impl Generator {
             match details {
                 typify::TypeDetails::Struct(struct_info) => {
                     for prop_info in struct_info.properties_info() {
-                        self.cli_method_body_arg(&mut args, prop_info)
+                        self.cli_method_body_arg(&mut args, prop_info);
                     }
                 }
 
                 _ => {
                     // If the body is not a struct, we don't know what's
                     // required or how to generate it
-                    args.body_required()
+                    args.body_required();
                 }
             }
         }
@@ -582,11 +610,7 @@ impl Generator {
                 None
             };
 
-        let prop_type = if let Some(inner_type) = maybe_inner_type {
-            inner_type
-        } else {
-            prop_type
-        };
+        let prop_type = maybe_inner_type.unwrap_or(prop_type);
 
         let scalar = prop_type.has_impl(TypeSpaceImpl::FromStr);
 
@@ -600,7 +624,7 @@ impl Generator {
             let parser = clap_arg(
                 &prop_name,
                 volitionality,
-                &description.map(str::to_string),
+                description.map(str::to_string).as_ref(),
                 &prop_type,
             );
 
@@ -619,9 +643,9 @@ impl Generator {
                     })
                 }
             };
-            args.add_arg(prop_name, CliArg { parser, consumer })
+            args.add_arg(prop_name, CliArg { parser, consumer });
         } else if required {
-            args.body_required()
+            args.body_required();
         }
 
         // Cases
@@ -637,6 +661,7 @@ impl Generator {
     }
 }
 
+#[derive(Clone, Copy)]
 enum Volitionality {
     Optional,
     Required,
@@ -646,10 +671,10 @@ enum Volitionality {
 fn clap_arg(
     arg_name: &str,
     volitionality: Volitionality,
-    description: &Option<String>,
+    description: Option<&String>,
     arg_type: &Type,
 ) -> TokenStream {
-    let help = description.as_ref().map(|description| {
+    let help = description.map(|description| {
         quote! {
             .help(#description)
         }
@@ -665,7 +690,7 @@ fn clap_arg(
         let maybe_var_names = e
             .variants()
             .map(|(var_name, var_details)| {
-                if let TypeEnumVariant::Simple = var_details {
+                if matches!(var_details, TypeEnumVariant::Simple) {
                     Some(format_ident!("{}", var_name))
                 } else {
                     None
@@ -687,16 +712,14 @@ fn clap_arg(
         None
     };
 
-    let value_parser = if let Some(enum_parser) = maybe_enum_parser {
-        enum_parser
-    } else {
+    let value_parser = maybe_enum_parser.unwrap_or_else(|| {
         // Let clap pick a value parser for us. This has the benefit of
         // allowing for override implementations. A generated client may
         // implement ValueParserFactory for a type to create a custom parser.
         quote! {
             ::clap::value_parser!(#arg_type_name)
         }
-    };
+    });
 
     let required = match volitionality {
         Volitionality::Optional => quote! { .required(false) },

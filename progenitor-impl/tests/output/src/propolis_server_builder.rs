@@ -4,6 +4,14 @@ use progenitor_client::{encode_path, ClientHooks, OperationInfo, RequestBuilderE
 pub use progenitor_client::{ByteStream, ClientInfo, Error, ResponseValue};
 /// Types used as operation parameters and responses.
 #[allow(clippy::all)]
+#[allow(
+    clippy::struct_field_names,
+    reason = "type definitions are emitted by typify"
+)]
+#[allow(
+    clippy::default_trait_access,
+    reason = "default expressions are emitted by typify"
+)]
 pub mod types {
     /// Error types.
     pub mod error {
@@ -2827,7 +2835,7 @@ pub mod types {
 }
 
 #[derive(Clone, Debug)]
-///Client for Oxide Propolis Server API
+///Client for `Oxide Propolis Server API`
 ///
 ///API for interacting with the Propolis hypervisor frontend.
 ///
@@ -2843,6 +2851,11 @@ impl Client {
     /// `baseurl` is the base URL provided to the internal
     /// `reqwest::Client`, and should include a scheme and hostname,
     /// as well as port and a path stem if applicable.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the default `reqwest::Client` cannot be built.
+    #[must_use]
     pub fn new(baseurl: &str) -> Self {
         #[cfg(not(target_arch = "wasm32"))]
         let client = {
@@ -2862,6 +2875,7 @@ impl Client {
     /// `baseurl` is the base URL provided to the internal
     /// `reqwest::Client`, and should include a scheme and hostname,
     /// as well as port and a path stem if applicable.
+    #[must_use]
     pub fn new_with_client(baseurl: &str, client: reqwest::Client) -> Self {
         Self {
             baseurl: baseurl.to_string(),
@@ -2892,7 +2906,12 @@ impl ClientHooks<()> for &Client {}
 impl Client {
     ///Sends a `GET` request to `/instance`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.instance_get()
     ///    .send()
     ///    .await;
@@ -2903,7 +2922,12 @@ impl Client {
 
     ///Sends a `PUT` request to `/instance`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.instance_ensure()
     ///    .body(body)
     ///    .send()
@@ -2917,7 +2941,12 @@ impl Client {
     ///
     ///Sends a `POST` request to `/instance/disk/{id}/snapshot/{snapshot_id}`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.instance_issue_crucible_snapshot_request()
     ///    .id(id)
     ///    .snapshot_id(snapshot_id)
@@ -2932,7 +2961,12 @@ impl Client {
 
     ///Sends a `GET` request to `/instance/migrate/status`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.instance_migrate_status()
     ///    .body(body)
     ///    .send()
@@ -2944,7 +2978,12 @@ impl Client {
 
     ///Sends a `GET` request to `/instance/serial`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.instance_serial()
     ///    .send()
     ///    .await;
@@ -2955,7 +2994,12 @@ impl Client {
 
     ///Sends a `PUT` request to `/instance/state`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.instance_state_put()
     ///    .body(body)
     ///    .send()
@@ -2967,7 +3011,12 @@ impl Client {
 
     ///Sends a `GET` request to `/instance/state-monitor`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.instance_state_monitor()
     ///    .body(body)
     ///    .send()
@@ -2980,6 +3029,21 @@ impl Client {
 
 /// Types for composing operation parameters.
 #[allow(clippy::all)]
+#[allow(
+    clippy::result_large_err,
+    reason = "generated methods preserve the public Error representation"
+)]
+#[cfg_attr(
+    target_arch = "wasm32",
+    allow(
+        clippy::future_not_send,
+        reason = "reqwest futures use browser-local state on wasm"
+    )
+)]
+#[allow(
+    clippy::match_same_arms,
+    reason = "generated status ranges remain explicit"
+)]
 pub mod builder {
     use super::types;
     #[allow(unused_imports)]
@@ -2996,16 +3060,25 @@ pub mod builder {
     }
 
     impl<'a> InstanceGet<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
-            Self { client: client }
+            Self { client }
         }
 
         ///Sends a `GET` request to `/instance`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::InstanceGetResponse>, Error<types::Error>> {
             let Self { client } = self;
-            let url = format!("{}/instance", client.baseurl,);
+            let url = format!("{}/instance", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
@@ -3051,9 +3124,13 @@ pub mod builder {
     }
 
     impl<'a> InstanceEnsure<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 body: Ok(::std::default::Default::default()),
             }
         }
@@ -3083,6 +3160,11 @@ pub mod builder {
         }
 
         ///Sends a `PUT` request to `/instance`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::InstanceEnsureResponse>, Error<types::Error>> {
@@ -3090,7 +3172,7 @@ pub mod builder {
             let body = body
                 .and_then(|v| types::InstanceEnsureRequest::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!("{}/instance", client.baseurl,);
+            let url = format!("{}/instance", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
@@ -3138,9 +3220,13 @@ pub mod builder {
     }
 
     impl<'a> InstanceIssueCrucibleSnapshotRequest<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 id: Err("id was not initialized".to_string()),
                 snapshot_id: Err("snapshot_id was not initialized".to_string()),
             }
@@ -3168,6 +3254,11 @@ pub mod builder {
 
         ///Sends a `POST` request to
         /// `/instance/disk/{id}/snapshot/{snapshot_id}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
             let Self {
                 client,
@@ -3180,7 +3271,7 @@ pub mod builder {
                 "{}/instance/disk/{}/snapshot/{}",
                 client.baseurl,
                 encode_path(&id.to_string()),
-                encode_path(&snapshot_id.to_string()),
+                encode_path(&snapshot_id.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -3227,9 +3318,13 @@ pub mod builder {
     }
 
     impl<'a> InstanceMigrateStatus<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 body: Ok(::std::default::Default::default()),
             }
         }
@@ -3260,6 +3355,11 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/instance/migrate/status`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::InstanceMigrateStatusResponse>, Error<types::Error>>
@@ -3270,7 +3370,7 @@ pub mod builder {
                     types::InstanceMigrateStatusRequest::try_from(v).map_err(|e| e.to_string())
                 })
                 .map_err(Error::InvalidRequest)?;
-            let url = format!("{}/instance/migrate/status", client.baseurl,);
+            let url = format!("{}/instance/migrate/status", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
@@ -3316,14 +3416,23 @@ pub mod builder {
     }
 
     impl<'a> InstanceSerial<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
-            Self { client: client }
+            Self { client }
         }
 
         ///Sends a `GET` request to `/instance/serial`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<reqwest::Upgraded>, Error<types::Error>> {
             let Self { client } = self;
-            let url = format!("{}/instance/serial", client.baseurl,);
+            let url = format!("{}/instance/serial", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
@@ -3375,9 +3484,13 @@ pub mod builder {
     }
 
     impl<'a> InstanceStatePut<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 body: Err("body was not initialized".to_string()),
             }
         }
@@ -3393,10 +3506,15 @@ pub mod builder {
         }
 
         ///Sends a `PUT` request to `/instance/state`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
             let Self { client, body } = self;
             let body = body.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/instance/state", client.baseurl,);
+            let url = format!("{}/instance/state", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
@@ -3421,7 +3539,7 @@ pub mod builder {
             client.post(&result, &info).await?;
             let response = result?;
             match response.status().as_u16() {
-                204u16 => Ok(ResponseValue::empty(response)),
+                204u16 => Ok(ResponseValue::empty(&response)),
                 400u16..=499u16 => Err(Error::ErrorResponse(
                     ResponseValue::from_response(response).await?,
                 )),
@@ -3443,9 +3561,13 @@ pub mod builder {
     }
 
     impl<'a> InstanceStateMonitor<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 body: Ok(::std::default::Default::default()),
             }
         }
@@ -3476,6 +3598,11 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/instance/state-monitor`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::InstanceStateMonitorResponse>, Error<types::Error>>
@@ -3486,7 +3613,7 @@ pub mod builder {
                     types::InstanceStateMonitorRequest::try_from(v).map_err(|e| e.to_string())
                 })
                 .map_err(Error::InvalidRequest)?;
-            let url = format!("{}/instance/state-monitor", client.baseurl,);
+            let url = format!("{}/instance/state-monitor", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),

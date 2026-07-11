@@ -1,5 +1,7 @@
 // Copyright 2024 Oxide Computer Company
 
+use std::collections::BTreeMap;
+
 use indexmap::IndexMap;
 use openapiv3::AnySchema;
 use schemars::schema::SingleOrVec;
@@ -50,10 +52,10 @@ where
 impl Convert<schemars::schema::Schema> for openapiv3::ReferenceOr<openapiv3::Schema> {
     fn convert(&self) -> schemars::schema::Schema {
         match self {
-            openapiv3::ReferenceOr::Reference { reference } => {
+            Self::Reference { reference } => {
                 schemars::schema::SchemaObject::new_ref(reference.clone()).into()
             }
-            openapiv3::ReferenceOr::Item(schema) => schema.convert(),
+            Self::Item(schema) => schema.convert(),
         }
     }
 }
@@ -69,6 +71,14 @@ where
 }
 
 impl Convert<schemars::schema::Schema> for openapiv3::Schema {
+    #[allow(
+        clippy::too_many_lines,
+        reason = "covers the complete schema conversion"
+    )]
+    #[allow(
+        clippy::cast_precision_loss,
+        reason = "OpenAPI represents numeric constraints as f64"
+    )]
     fn convert(&self) -> schemars::schema::Schema {
         // TODO the discriminator field is used in a way that seems both
         // important and unfortunately redundant. It corresponds to the same
@@ -129,7 +139,10 @@ impl Convert<schemars::schema::Schema> for openapiv3::Schema {
                 max_length,
             })) => schemars::schema::SchemaObject {
                 metadata,
-                instance_type: instance_type(schemars::schema::InstanceType::String, nullable),
+                instance_type: Some(instance_type(
+                    schemars::schema::InstanceType::String,
+                    nullable,
+                )),
                 format: format.convert(),
                 enum_values: enumeration.convert(),
                 string: Some(Box::new(schemars::schema::StringValidation {
@@ -160,7 +173,10 @@ impl Convert<schemars::schema::Schema> for openapiv3::Schema {
                 };
                 schemars::schema::SchemaObject {
                     metadata,
-                    instance_type: instance_type(schemars::schema::InstanceType::Number, nullable),
+                    instance_type: Some(instance_type(
+                        schemars::schema::InstanceType::Number,
+                        nullable,
+                    )),
                     format: format.convert(),
                     enum_values: enumeration.convert(),
                     number: Some(Box::new(schemars::schema::NumberValidation {
@@ -197,7 +213,10 @@ impl Convert<schemars::schema::Schema> for openapiv3::Schema {
                 };
                 schemars::schema::SchemaObject {
                     metadata,
-                    instance_type: instance_type(schemars::schema::InstanceType::Integer, nullable),
+                    instance_type: Some(instance_type(
+                        schemars::schema::InstanceType::Integer,
+                        nullable,
+                    )),
                     format: format.convert(),
                     enum_values: enumeration.convert(),
                     number: Some(Box::new(schemars::schema::NumberValidation {
@@ -221,7 +240,10 @@ impl Convert<schemars::schema::Schema> for openapiv3::Schema {
                 max_properties,
             })) => schemars::schema::SchemaObject {
                 metadata,
-                instance_type: instance_type(schemars::schema::InstanceType::Object, nullable),
+                instance_type: Some(instance_type(
+                    schemars::schema::InstanceType::Object,
+                    nullable,
+                )),
                 object: Some(Box::new(schemars::schema::ObjectValidation {
                     max_properties: max_properties.convert(),
                     min_properties: min_properties.convert(),
@@ -243,7 +265,10 @@ impl Convert<schemars::schema::Schema> for openapiv3::Schema {
                 unique_items,
             })) => schemars::schema::SchemaObject {
                 metadata,
-                instance_type: instance_type(schemars::schema::InstanceType::Array, nullable),
+                instance_type: Some(instance_type(
+                    schemars::schema::InstanceType::Array,
+                    nullable,
+                )),
                 array: Some(Box::new(schemars::schema::ArrayValidation {
                     items: items.as_ref().map(|items| {
                         schemars::schema::SingleOrVec::Single(Box::new(items.convert()))
@@ -263,7 +288,10 @@ impl Convert<schemars::schema::Schema> for openapiv3::Schema {
                 enumeration,
             })) => schemars::schema::SchemaObject {
                 metadata,
-                instance_type: instance_type(schemars::schema::InstanceType::Boolean, nullable),
+                instance_type: Some(instance_type(
+                    schemars::schema::InstanceType::Boolean,
+                    nullable,
+                )),
                 enum_values: enumeration.convert(),
                 extensions,
                 ..Default::default()
@@ -450,10 +478,12 @@ impl Convert<schemars::schema::Schema> for openapiv3::Schema {
                     so.string().pattern = Some(pattern.clone());
                 }
                 if let Some(min_length) = min_length {
-                    so.string().min_length = Some(*min_length as u32);
+                    so.string().min_length =
+                        Some(u32::try_from(*min_length).expect("minimum length exceeds u32"));
                 }
                 if let Some(max_length) = max_length {
-                    so.string().max_length = Some(*max_length as u32);
+                    so.string().max_length =
+                        Some(u32::try_from(*max_length).expect("maximum length exceeds u32"));
                 }
 
                 // Number
@@ -496,21 +526,27 @@ impl Convert<schemars::schema::Schema> for openapiv3::Schema {
                     so.object().additional_properties = additional_properties.convert();
                 }
                 if let Some(min_properties) = min_properties {
-                    so.object().min_properties = Some(*min_properties as u32);
+                    so.object().min_properties = Some(
+                        u32::try_from(*min_properties).expect("minimum property count exceeds u32"),
+                    );
                 }
                 if let Some(max_properties) = max_properties {
-                    so.object().max_properties = Some(*max_properties as u32);
+                    so.object().max_properties = Some(
+                        u32::try_from(*max_properties).expect("maximum property count exceeds u32"),
+                    );
                 }
 
                 // Array
                 if items.is_some() {
-                    so.array().items = items.convert().clone().map(SingleOrVec::Single);
+                    so.array().items = items.convert().map(SingleOrVec::Single);
                 }
                 if let Some(min_items) = min_items {
-                    so.array().min_items = Some(*min_items as u32);
+                    so.array().min_items =
+                        Some(u32::try_from(*min_items).expect("minimum item count exceeds u32"));
                 }
                 if let Some(max_items) = max_items {
-                    so.array().max_items = Some(*max_items as u32);
+                    so.array().max_items =
+                        Some(u32::try_from(*max_items).expect("maximum item count exceeds u32"));
                 }
                 if let Some(unique_items) = unique_items {
                     so.array().unique_items = Some(*unique_items);
@@ -533,28 +569,40 @@ impl Convert<schemars::schema::Schema> for openapiv3::Schema {
                 // We do this last so we can infer types if none are specified.
                 match (typ.as_deref(), nullable) {
                     (Some("boolean"), _) => {
-                        so.instance_type =
-                            instance_type(schemars::schema::InstanceType::Boolean, nullable);
+                        so.instance_type = Some(instance_type(
+                            schemars::schema::InstanceType::Boolean,
+                            nullable,
+                        ));
                     }
                     (Some("object"), _) => {
-                        so.instance_type =
-                            instance_type(schemars::schema::InstanceType::Object, nullable);
+                        so.instance_type = Some(instance_type(
+                            schemars::schema::InstanceType::Object,
+                            nullable,
+                        ));
                     }
                     (Some("array"), _) => {
-                        so.instance_type =
-                            instance_type(schemars::schema::InstanceType::Array, nullable);
+                        so.instance_type = Some(instance_type(
+                            schemars::schema::InstanceType::Array,
+                            nullable,
+                        ));
                     }
                     (Some("number"), _) => {
-                        so.instance_type =
-                            instance_type(schemars::schema::InstanceType::Number, nullable);
+                        so.instance_type = Some(instance_type(
+                            schemars::schema::InstanceType::Number,
+                            nullable,
+                        ));
                     }
                     (Some("string"), _) => {
-                        so.instance_type =
-                            instance_type(schemars::schema::InstanceType::String, nullable);
+                        so.instance_type = Some(instance_type(
+                            schemars::schema::InstanceType::String,
+                            nullable,
+                        ));
                     }
                     (Some("integer"), _) => {
-                        so.instance_type =
-                            instance_type(schemars::schema::InstanceType::Integer, nullable);
+                        so.instance_type = Some(instance_type(
+                            schemars::schema::InstanceType::Integer,
+                            nullable,
+                        ));
                     }
 
                     (Some(typ), _) => todo!("invalid type: {}", typ),
@@ -594,7 +642,7 @@ impl Convert<schemars::schema::Schema> for openapiv3::Schema {
                             (None, _) => None,
                         };
                     }
-                };
+                }
 
                 // If we have exactly one type, and it's null, and we have
                 // subschemas that means that we must have had a bunch of
@@ -627,9 +675,9 @@ where
 {
     fn convert(&self) -> Option<String> {
         match self {
-            openapiv3::VariantOrUnknownOrEmpty::Item(i) => Some(i.convert()),
-            openapiv3::VariantOrUnknownOrEmpty::Unknown(s) => Some(s.clone()),
-            openapiv3::VariantOrUnknownOrEmpty::Empty => None,
+            Self::Item(i) => Some(i.convert()),
+            Self::Unknown(s) => Some(s.clone()),
+            Self::Empty => None,
         }
     }
 }
@@ -637,11 +685,11 @@ where
 impl Convert<String> for openapiv3::StringFormat {
     fn convert(&self) -> String {
         match self {
-            openapiv3::StringFormat::Date => "date",
-            openapiv3::StringFormat::DateTime => "date-time",
-            openapiv3::StringFormat::Password => "password",
-            openapiv3::StringFormat::Byte => "byte",
-            openapiv3::StringFormat::Binary => "binary",
+            Self::Date => "date",
+            Self::DateTime => "date-time",
+            Self::Password => "password",
+            Self::Byte => "byte",
+            Self::Binary => "binary",
         }
         .to_string()
     }
@@ -650,8 +698,8 @@ impl Convert<String> for openapiv3::StringFormat {
 impl Convert<String> for openapiv3::NumberFormat {
     fn convert(&self) -> String {
         match self {
-            openapiv3::NumberFormat::Float => "float",
-            openapiv3::NumberFormat::Double => "double",
+            Self::Float => "float",
+            Self::Double => "double",
         }
         .to_string()
     }
@@ -660,8 +708,8 @@ impl Convert<String> for openapiv3::NumberFormat {
 impl Convert<String> for openapiv3::IntegerFormat {
     fn convert(&self) -> String {
         match self {
-            openapiv3::IntegerFormat::Int32 => "int32",
-            openapiv3::IntegerFormat::Int64 => "int64",
+            Self::Int32 => "int32",
+            Self::Int64 => "int64",
         }
         .to_string()
     }
@@ -669,46 +717,40 @@ impl Convert<String> for openapiv3::IntegerFormat {
 
 impl Convert<Value> for Option<String> {
     fn convert(&self) -> Value {
-        match self {
-            Some(value) => Value::String(value.clone()),
-            None => Value::Null,
-        }
+        self.as_ref()
+            .map_or(Value::Null, |value| Value::String(value.clone()))
     }
 }
 
 impl Convert<Value> for Option<f64> {
     fn convert(&self) -> Value {
-        match self {
-            Some(value) => Value::Number(serde_json::Number::from_f64(*value).unwrap()),
-            None => Value::Null,
-        }
+        self.as_ref().map_or(Value::Null, |value| {
+            Value::Number(serde_json::Number::from_f64(*value).unwrap())
+        })
     }
 }
 impl Convert<Value> for Option<i64> {
     fn convert(&self) -> Value {
-        match self {
-            Some(value) => Value::Number(serde_json::Number::from(*value)),
-            None => Value::Null,
-        }
+        self.as_ref().map_or(Value::Null, |value| {
+            Value::Number(serde_json::Number::from(*value))
+        })
     }
 }
 impl Convert<Value> for Option<bool> {
     fn convert(&self) -> Value {
-        match self {
-            Some(value) => Value::Bool(*value),
-            None => Value::Null,
-        }
+        self.as_ref()
+            .map_or(Value::Null, |value| Value::Bool(*value))
     }
 }
 
 fn instance_type(
     instance_type: schemars::schema::InstanceType,
     nullable: bool,
-) -> Option<schemars::schema::SingleOrVec<schemars::schema::InstanceType>> {
+) -> schemars::schema::SingleOrVec<schemars::schema::InstanceType> {
     if nullable {
-        Some(vec![instance_type, schemars::schema::InstanceType::Null].into())
+        vec![instance_type, schemars::schema::InstanceType::Null].into()
     } else {
-        Some(instance_type.into())
+        instance_type.into()
     }
 }
 
@@ -721,7 +763,7 @@ fn oneof_nullable_wrapper(
         let extensions = schema.extensions;
 
         schema.metadata = None;
-        schema.extensions = Default::default();
+        schema.extensions = BTreeMap::default();
 
         schemars::schema::SchemaObject {
             metadata,
@@ -746,12 +788,12 @@ fn oneof_nullable_wrapper(
 
 impl Convert<Option<u32>> for Option<usize> {
     fn convert(&self) -> Option<u32> {
-        (*self).map(|m| m as u32)
+        (*self).map(|m| u32::try_from(m).expect("schema bound exceeds u32"))
     }
 }
 
-impl Convert<Option<f64>> for Option<f64> {
-    fn convert(&self) -> Option<f64> {
+impl Convert<Self> for Option<f64> {
+    fn convert(&self) -> Self {
         *self
     }
 }
@@ -791,8 +833,8 @@ where
 impl Convert<schemars::schema::Schema> for openapiv3::AdditionalProperties {
     fn convert(&self) -> schemars::schema::Schema {
         match self {
-            openapiv3::AdditionalProperties::Any(b) => schemars::schema::Schema::Bool(*b),
-            openapiv3::AdditionalProperties::Schema(schema) => schema.convert(),
+            Self::Any(b) => schemars::schema::Schema::Bool(*b),
+            Self::Schema(schema) => schema.convert(),
         }
     }
 }

@@ -3,6 +3,7 @@
 use std::{
     cmp::Ordering,
     collections::{BTreeMap, BTreeSet},
+    fmt::Write as _,
     str::FromStr,
 };
 
@@ -19,7 +20,7 @@ use crate::{
 use crate::{to_schema::ToSchema, util::ReferenceOrExt};
 
 /// The intermediate representation of an operation that will become a method.
-pub(crate) struct OperationMethod {
+pub struct OperationMethod {
     pub operation_id: String,
     pub tags: Vec<String>,
     pub method: HttpMethod,
@@ -56,21 +57,21 @@ impl std::str::FromStr for HttpMethod {
             "head" => Ok(Self::Head),
             "patch" => Ok(Self::Patch),
             "trace" => Ok(Self::Trace),
-            _ => Err(Error::InternalError(format!("bad method: {}", s))),
+            _ => Err(Error::InternalError(format!("bad method: {s}"))),
         }
     }
 }
 impl HttpMethod {
-    fn as_str(&self) -> &'static str {
+    const fn as_str(&self) -> &'static str {
         match self {
-            HttpMethod::Get => "get",
-            HttpMethod::Put => "put",
-            HttpMethod::Post => "post",
-            HttpMethod::Delete => "delete",
-            HttpMethod::Options => "options",
-            HttpMethod::Head => "head",
-            HttpMethod::Patch => "patch",
-            HttpMethod::Trace => "trace",
+            Self::Get => "get",
+            Self::Put => "put",
+            Self::Post => "post",
+            Self::Delete => "delete",
+            Self::Options => "options",
+            Self::Head => "head",
+            Self::Patch => "patch",
+            Self::Trace => "trace",
         }
     }
 }
@@ -118,16 +119,14 @@ pub enum OperationParameterKind {
 }
 
 impl OperationParameterKind {
-    fn is_required(&self) -> bool {
+    const fn is_required(&self) -> bool {
         match self {
-            OperationParameterKind::Path => true,
-            OperationParameterKind::Query(required) => *required,
-            OperationParameterKind::Header(required) => *required,
+            Self::Query(required) | Self::Header(required) => *required,
             // TODO may be optional
-            OperationParameterKind::Body(_) => true,
+            Self::Path | Self::Body(_) => true,
         }
     }
-    fn is_optional(&self) -> bool {
+    const fn is_optional(&self) -> bool {
         !self.is_required()
     }
 }
@@ -151,8 +150,7 @@ impl FromStr for BodyContentType {
             "application/x-www-form-urlencoded" => Ok(Self::FormUrlencoded),
             "text/plain" | "text/x-markdown" => Ok(Self::Text(String::from(&s[..offset]))),
             _ => Err(Error::UnexpectedFormat(format!(
-                "unexpected content type: {}",
-                s
+                "unexpected content type: {s}"
             ))),
         }
     }
@@ -170,7 +168,7 @@ impl std::fmt::Display for BodyContentType {
 }
 
 #[derive(Debug)]
-pub(crate) struct OperationResponse {
+pub struct OperationResponse {
     pub status_code: OperationResponseStatus,
     pub typ: OperationResponseKind,
     // TODO this isn't currently used because dropshot doesn't give us a
@@ -197,7 +195,7 @@ impl PartialOrd for OperationResponse {
 }
 
 #[derive(Debug, Clone, Eq, PartialEq)]
-pub(crate) enum OperationResponseStatus {
+pub enum OperationResponseStatus {
     Code(u16),
     Range(u16),
     Default,
@@ -206,39 +204,34 @@ pub(crate) enum OperationResponseStatus {
 impl OperationResponseStatus {
     fn to_value(&self) -> u16 {
         match self {
-            OperationResponseStatus::Code(code) => {
+            Self::Code(code) => {
                 assert!(*code < 1000);
                 *code
             }
-            OperationResponseStatus::Range(range) => {
+            Self::Range(range) => {
                 assert!(*range < 10);
                 *range * 100
             }
-            OperationResponseStatus::Default => 1000,
+            Self::Default => 1000,
         }
     }
 
-    pub fn is_success_or_default(&self) -> bool {
+    pub const fn is_success_or_default(&self) -> bool {
         matches!(
             self,
-            OperationResponseStatus::Default
-                | OperationResponseStatus::Code(101)
-                | OperationResponseStatus::Code(200..=299)
-                | OperationResponseStatus::Range(2)
+            Self::Default | Self::Code(101 | 200..=299) | Self::Range(2)
         )
     }
 
-    pub fn is_error_or_default(&self) -> bool {
+    pub const fn is_error_or_default(&self) -> bool {
         matches!(
             self,
-            OperationResponseStatus::Default
-                | OperationResponseStatus::Code(400..=599)
-                | OperationResponseStatus::Range(4..=5)
+            Self::Default | Self::Code(400..=599) | Self::Range(4..=5)
         )
     }
 
-    pub fn is_default(&self) -> bool {
-        matches!(self, OperationResponseStatus::Default)
+    pub const fn is_default(&self) -> bool {
+        matches!(self, Self::Default)
     }
 }
 
@@ -255,7 +248,7 @@ impl PartialOrd for OperationResponseStatus {
 }
 
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone)]
-pub(crate) enum OperationResponseKind {
+pub enum OperationResponseKind {
     Type(TypeId),
     None,
     Raw,
@@ -265,17 +258,17 @@ pub(crate) enum OperationResponseKind {
 impl OperationResponseKind {
     pub fn into_tokens(self, type_space: &TypeSpace) -> TokenStream {
         match self {
-            OperationResponseKind::Type(ref type_id) => {
+            Self::Type(ref type_id) => {
                 let type_name = type_space.get_type(type_id).unwrap().ident();
                 quote! { #type_name }
             }
-            OperationResponseKind::None => {
+            Self::None => {
                 quote! { () }
             }
-            OperationResponseKind::Raw => {
+            Self::Raw => {
                 quote! { ByteStream }
             }
-            OperationResponseKind::Upgrade => {
+            Self::Upgrade => {
                 quote! { reqwest::Upgraded }
             }
         }
@@ -283,10 +276,11 @@ impl OperationResponseKind {
 }
 
 impl Generator {
+    #[allow(clippy::too_many_lines, reason = "keeps operation analysis cohesive")]
     pub(crate) fn process_operation(
         &mut self,
         operation: &openapiv3::Operation,
-        components: &Option<Components>,
+        components: Option<&Components>,
         path: &str,
         method: &str,
         path_parameters: &[ReferenceOr<Parameter>],
@@ -315,7 +309,7 @@ impl Generator {
                         let schema = parameter_data.schema()?.to_schema();
 
                         let name = sanitize(
-                            &format!("{}-{}", operation_id, &parameter_data.name),
+                            &format!("{}-{}", operation_id, parameter_data.name),
                             Case::Pascal,
                         );
                         let typ = self.type_space.add_type_with_name(&schema, Some(name))?;
@@ -339,7 +333,7 @@ impl Generator {
                             &format!(
                                 "{}-{}",
                                 operation.operation_id.as_ref().unwrap(),
-                                &parameter_data.name,
+                                parameter_data.name,
                             ),
                             Case::Pascal,
                         );
@@ -376,7 +370,7 @@ impl Generator {
                             &format!(
                                 "{}-{}",
                                 operation.operation_id.as_ref().unwrap(),
-                                &parameter_data.name,
+                                parameter_data.name,
                             ),
                             Case::Pascal,
                         );
@@ -392,13 +386,13 @@ impl Generator {
                         })
                     }
                     openapiv3::Parameter::Path { style, .. } => Err(Error::UnexpectedFormat(
-                        format!("unsupported style of path parameter {:#?}", style,),
+                        format!("unsupported style of path parameter {style:#?}"),
                     )),
                     openapiv3::Parameter::Query { style, .. } => Err(Error::UnexpectedFormat(
-                        format!("unsupported style of query parameter {:#?}", style,),
+                        format!("unsupported style of query parameter {style:#?}"),
                     )),
                     cookie @ openapiv3::Parameter::Cookie { .. } => Err(Error::UnexpectedFormat(
-                        format!("cookie parameters are not supported {:#?}", cookie,),
+                        format!("cookie parameters are not supported {cookie:#?}"),
                     )),
                 }
             })
@@ -469,7 +463,7 @@ impl Generator {
                         let typ = if let Some(schema) = &mt.schema {
                             let schema = schema.to_schema();
                             let name = sanitize(
-                                &format!("{}-response", operation.operation_id.as_ref().unwrap(),),
+                                &format!("{}-response", operation.operation_id.as_ref().unwrap()),
                                 Case::Pascal,
                             );
                             self.type_space.add_type_with_name(&schema, Some(name))?
@@ -490,8 +484,7 @@ impl Generator {
                     if matches!(
                         status_code,
                         OperationResponseStatus::Default
-                            | OperationResponseStatus::Code(101)
-                            | OperationResponseStatus::Code(200..=299)
+                            | OperationResponseStatus::Code(101 | 200..=299)
                             | OperationResponseStatus::Range(2)
                     ) {
                         success = true;
@@ -527,19 +520,16 @@ impl Generator {
 
         if dropshot_websocket && dropshot_paginated.is_some() {
             return Err(Error::InvalidExtension(format!(
-                "conflicting extensions in {:?}",
-                operation_id
+                "conflicting extensions in {operation_id:?}"
             )));
         }
         if dropshot_websocket
-            && responses
+            && !responses
                 .iter()
-                .find(|r| r.status_code == OperationResponseStatus::Code(101))
-                .is_none()
+                .any(|r| r.status_code == OperationResponseStatus::Code(101))
         {
             return Err(Error::InvalidExtension(format!(
-                "websocket endpoint {:?} must include an explicit 101 response code",
-                operation_id
+                "websocket endpoint {operation_id:?} must include an explicit 101 response code"
             )));
         }
 
@@ -557,11 +547,12 @@ impl Generator {
         })
     }
 
+    #[allow(clippy::too_many_lines, reason = "mirrors the generated method")]
     pub(crate) fn positional_method(
         &mut self,
         method: &OperationMethod,
         has_inner: bool,
-    ) -> Result<TokenStream> {
+    ) -> TokenStream {
         let operation_id = format_ident!("{}", method.operation_id);
 
         // Render each parameter as it will appear in the method signature.
@@ -618,7 +609,7 @@ impl Generator {
             success: success_type,
             error: error_type,
             body,
-        } = self.method_sig_body(method, quote! { Self }, quote! { self }, has_inner)?;
+        } = self.method_sig_body(method, &quote! { Self }, &quote! { self }, has_inner);
 
         let method_impl = quote! {
             #[doc = #doc_comment]
@@ -698,6 +689,10 @@ impl Generator {
 
             quote! {
                 #[doc = #doc_comment]
+                #[allow(
+                    clippy::elidable_lifetime_names,
+                    reason = "the lifetime also binds borrowed stream parameters"
+                )]
                 pub fn #stream_id #bounds (
                     &'a self,
                     #(#stream_params),*
@@ -766,19 +761,20 @@ impl Generator {
             #stream_impl
         };
 
-        Ok(all)
+        all
     }
 
     /// Common code generation between positional and builder interface-styles.
     /// Returns a struct with the success and error types and the core body
     /// implementation that marshals arguments and executes the request.
+    #[allow(clippy::too_many_lines, reason = "mirrors the generated request body")]
     fn method_sig_body(
         &self,
         method: &OperationMethod,
-        client_type: TokenStream,
-        client_value: TokenStream,
+        client_type: &TokenStream,
+        client_value: &TokenStream,
         has_inner: bool,
-    ) -> Result<MethodSigBody> {
+    ) -> MethodSigBody {
         let param_names = method
             .params
             .iter()
@@ -880,7 +876,7 @@ impl Generator {
             })
             .collect();
 
-        let url_path = method.path.compile(url_renames, client_value.clone());
+        let url_path = method.path.compile(&url_renames, client_value);
         let url_path = quote! {
             let #url_ident = #url_path;
         };
@@ -937,7 +933,7 @@ impl Generator {
         assert!(body_func.clone().count() <= 1);
 
         let (success_response_items, response_type) =
-            self.extract_responses(method, OperationResponseStatus::is_success_or_default);
+            Self::extract_responses(method, OperationResponseStatus::is_success_or_default);
 
         let success_response_matches = success_response_items.iter().map(|response| {
             let pat = match &response.status_code {
@@ -955,7 +951,7 @@ impl Generator {
                 }
                 OperationResponseKind::None => {
                     quote! {
-                        Ok(ResponseValue::empty(#response_ident))
+                        Ok(ResponseValue::empty(&#response_ident))
                     }
                 }
                 OperationResponseKind::Raw => {
@@ -975,7 +971,7 @@ impl Generator {
 
         // Errors...
         let (error_response_items, error_type) =
-            self.extract_responses(method, OperationResponseStatus::is_error_or_default);
+            Self::extract_responses(method, OperationResponseStatus::is_error_or_default);
 
         let error_response_matches = error_response_items.iter().map(|response| {
             let pat = match &response.status_code {
@@ -1005,7 +1001,7 @@ impl Generator {
                 OperationResponseKind::None => {
                     quote! {
                         Err(Error::ErrorResponse(
-                            ResponseValue::empty(#response_ident)
+                            ResponseValue::empty(&#response_ident)
                         ))
                     }
                 }
@@ -1019,12 +1015,12 @@ impl Generator {
                 OperationResponseKind::Upgrade => {
                     if response.status_code == OperationResponseStatus::Default {
                         return quote! {}; // catch-all handled below
-                    } else {
-                        todo!(
-                            "non-default error response handling for \
-                                upgrade requests is not yet implemented"
-                        );
                     }
+
+                    todo!(
+                        "non-default error response handling for \
+                                upgrade requests is not yet implemented"
+                    );
                 }
             };
 
@@ -1060,9 +1056,10 @@ impl Generator {
             }
         };
 
-        let inner = match has_inner {
-            true => quote! { &#client_value.inner, },
-            false => quote! {},
+        let inner = if has_inner {
+            quote! { &#client_value.inner, }
+        } else {
+            quote! {}
         };
         let pre_hook = self.settings.pre_hook.as_ref().map(|hook| {
             quote! {
@@ -1167,22 +1164,21 @@ impl Generator {
             }
         };
 
-        Ok(MethodSigBody {
+        MethodSigBody {
             success: response_type.into_tokens(&self.type_space),
             error: error_type.into_tokens(&self.type_space),
             body: body_impl,
-        })
+        }
     }
 
     /// Extract responses that match criteria specified by the `filter`. The
     /// result is a `Vec<OperationResponse>` that enumerates the cases matching
     /// the filter, and a `TokenStream` that represents the generated type for
     /// those cases.
-    pub(crate) fn extract_responses<'a>(
-        &self,
-        method: &'a OperationMethod,
+    pub(crate) fn extract_responses(
+        method: &OperationMethod,
         filter: fn(&OperationResponseStatus) -> bool,
-    ) -> (Vec<&'a OperationResponse>, OperationResponseKind) {
+    ) -> (Vec<&OperationResponse>, OperationResponseKind) {
         let mut response_items = method
             .responses
             .iter()
@@ -1194,8 +1190,8 @@ impl Generator {
         // since it will never be hit. Note that this is a no-op for error
         // responses.
         let len = response_items.len();
-        if len >= 2 {
-            if let (
+        if len >= 2
+            && let (
                 OperationResponse {
                     status_code: OperationResponseStatus::Range(2),
                     ..
@@ -1205,9 +1201,8 @@ impl Generator {
                     ..
                 },
             ) = (&response_items[len - 2], &response_items[len - 1])
-            {
-                response_items.pop();
-            }
+        {
+            response_items.pop();
         }
 
         let response_types = response_items
@@ -1242,8 +1237,7 @@ impl Generator {
             .filter(|param| {
                 matches!(
                     (param.api_name.as_str(), &param.kind),
-                    ("page_token", OperationParameterKind::Query(false))
-                        | ("limit", OperationParameterKind::Query(false))
+                    ("page_token" | "limit", OperationParameterKind::Query(false))
                 )
             })
             .count()
@@ -1292,9 +1286,8 @@ impl Generator {
         };
 
         let typ = self.type_space.get_type(success_response).ok()?;
-        let details = match typ.details() {
-            typify::TypeDetails::Struct(details) => details,
-            _ => return None,
+        let typify::TypeDetails::Struct(details) = typ.details() else {
+            return None;
         };
 
         let properties = details.properties().collect::<BTreeMap<_, _>>();
@@ -1380,7 +1373,7 @@ impl Generator {
     /// }
     /// ```
     ///
-    /// The Client's operation_id method simply invokes the builder's new
+    /// The client's `operation_id` method simply invokes the builder's new
     /// method, which assigns an error value to mandatory field and a
     /// `Ok(None)` value to optional ones:
     /// ```ignore
@@ -1420,6 +1413,7 @@ impl Generator {
     /// Finally, paginated interfaces have a `stream()` method which uses the
     /// `send()` method above to fetch each page of results to assemble the
     /// items into a single `impl Stream`.
+    #[allow(clippy::too_many_lines, reason = "mirrors the generated builder")]
     pub(crate) fn builder_struct(
         &mut self,
         method: &OperationMethod,
@@ -1437,6 +1431,11 @@ impl Generator {
             .collect::<Vec<_>>();
 
         let client_ident = unique_ident_from("client", &param_names);
+        let client_init = if client_ident == format_ident!("client") {
+            quote! { client }
+        } else {
+            quote! { #client_ident: client }
+        };
 
         let mut cloneable = true;
 
@@ -1624,7 +1623,7 @@ impl Generator {
                     OperationParameterType::RawBody => match param.kind {
                         OperationParameterKind::Body(BodyContentType::OctetStream) => {
                             let err_msg =
-                                format!("conversion to `reqwest::Body` for {} failed", param.name,);
+                                format!("conversion to `reqwest::Body` for {} failed", param.name);
 
                             Ok(quote! {
                                 pub fn #param_name<B>(mut self, value: B) -> Self
@@ -1638,7 +1637,7 @@ impl Generator {
                         }
                         OperationParameterKind::Body(BodyContentType::Text(_)) => {
                             let err_msg =
-                                format!("conversion to `String` for {} failed", param.name,);
+                                format!("conversion to `String` for {} failed", param.name);
 
                             Ok(quote! {
                                 pub fn #param_name<V>(mut self, value: V) -> Self
@@ -1664,15 +1663,17 @@ impl Generator {
             body,
         } = self.method_sig_body(
             method,
-            quote! { super::Client },
-            quote! { #client_ident },
+            &quote! { super::Client },
+            &quote! { #client_ident },
             has_inner,
-        )?;
+        );
 
         let send_doc = format!(
-            "Sends a `{}` request to `{}`",
+            "Sends a `{}` request to `{}`\n\n\
+             # Errors\n\n\
+             Returns an error if request construction, transport, or response decoding fails.",
             method.method.as_str().to_ascii_uppercase(),
-            method.path.to_string(),
+            method.path,
         );
         let send_impl = quote! {
             #[doc = #send_doc]
@@ -1733,7 +1734,7 @@ impl Generator {
             let stream_doc = format!(
                 "Streams `{}` requests to `{}`",
                 method.method.as_str().to_ascii_uppercase(),
-                method.path.to_string(),
+                method.path,
             );
 
             quote! {
@@ -1822,7 +1823,7 @@ impl Generator {
         let struct_doc = match (tag_style, method.tags.len(), method.tags.first()) {
             (TagStyle::Merged, _, _) | (TagStyle::Separate, 0, _) => {
                 let ty = format!("Client::{}", method.operation_id);
-                format!("Builder for [`{}`]\n\n[`{}`]: super::{}", ty, ty, ty,)
+                format!("Builder for [`{ty}`]\n\n[`{ty}`]: super::{ty}")
             }
             (TagStyle::Separate, 1, Some(tag)) => {
                 let ty = format!(
@@ -1830,7 +1831,7 @@ impl Generator {
                     sanitize(tag, Case::Pascal),
                     method.operation_id
                 );
-                format!("Builder for [`{}`]\n\n[`{}`]: super::{}", ty, ty, ty,)
+                format!("Builder for [`{ty}`]\n\n[`{ty}`]: super::{ty}")
             }
             (TagStyle::Separate, _, _) => {
                 format!(
@@ -1857,7 +1858,7 @@ impl Generator {
                                 sanitize(tag, Case::Pascal),
                                 method.operation_id,
                             );
-                            format!("[`{}`]: super::{}", ty, ty)
+                            format!("[`{ty}`]: super::{ty}")
                         })
                         .collect::<Vec<_>>()
                         .join("\n"),
@@ -1874,9 +1875,13 @@ impl Generator {
             }
 
             impl<'a> #struct_ident<'a> {
+                #[allow(
+                    clippy::missing_const_for_fn,
+                    reason = "operation parameter defaults may require non-const initialization"
+                )]
                 pub fn new(client: &'a super::Client) -> Self {
                     Self {
-                        #client_ident: client,
+                        #client_init,
                         #( #param_names: #param_values, )*
                     }
                 }
@@ -1888,17 +1893,15 @@ impl Generator {
         })
     }
 
-    fn builder_helper(&self, method: &OperationMethod) -> BuilderImpl {
+    fn builder_helper(method: &OperationMethod) -> BuilderImpl {
         let operation_id = format_ident!("{}", method.operation_id);
         let struct_name = sanitize(&method.operation_id, Case::Pascal);
         let struct_ident = format_ident!("{}", struct_name);
 
-        let params = method
-            .params
-            .iter()
-            .map(|param| format!("\n    .{}({})", param.name, param.name))
-            .collect::<Vec<_>>()
-            .join("");
+        let mut params = String::new();
+        for param in &method.params {
+            write!(&mut params, "\n    .{}({})", param.name, param.name).unwrap();
+        }
 
         let eg = format!(
             "\
@@ -1924,7 +1927,7 @@ impl Generator {
         BuilderImpl { doc, sig, body }
     }
 
-    /// Generates a pair of TokenStreams.
+    /// Generates a pair of `TokenStream`s.
     ///
     /// The first includes all the operation code; impl Client for operations
     /// with no tags and code of this form for each tag:
@@ -1945,15 +1948,14 @@ impl Generator {
     /// pub use super::ClientTagExt;
     /// ```
     pub(crate) fn builder_tags(
-        &self,
         methods: &[OperationMethod],
         tag_info: &BTreeMap<&String, &openapiv3::Tag>,
     ) -> (TokenStream, TokenStream) {
         let mut base = Vec::new();
         let mut ext = BTreeMap::new();
 
-        methods.iter().for_each(|method| {
-            let BuilderImpl { doc, sig, body } = self.builder_helper(method);
+        for method in methods {
+            let BuilderImpl { doc, sig, body } = Self::builder_helper(method);
 
             if method.tags.is_empty() {
                 let impl_body = quote! {
@@ -1974,13 +1976,13 @@ impl Generator {
                         #body
                     }
                 };
-                method.tags.iter().for_each(|tag| {
+                for tag in &method.tags {
                     ext.entry(tag.clone())
                         .or_insert_with(Vec::new)
                         .push((trait_sig.clone(), impl_body.clone()));
-                });
+                }
             }
-        });
+        }
 
         let base_impl = (!base.is_empty()).then(|| {
             quote! {
@@ -2028,8 +2030,8 @@ impl Generator {
         )
     }
 
-    pub(crate) fn builder_impl(&self, method: &OperationMethod) -> TokenStream {
-        let BuilderImpl { doc, sig, body } = self.builder_helper(method);
+    pub(crate) fn builder_impl(method: &OperationMethod) -> TokenStream {
+        let BuilderImpl { doc, sig, body } = Self::builder_helper(method);
 
         let impl_body = quote! {
             #[doc = #doc]
@@ -2044,7 +2046,7 @@ impl Generator {
     fn get_body_param(
         &mut self,
         operation: &openapiv3::Operation,
-        components: &Option<Components>,
+        components: Option<&Components>,
     ) -> Result<Option<OperationParameter>> {
         let body = match &operation.request_body {
             Some(body) => body.item(components)?,
@@ -2100,8 +2102,7 @@ impl Generator {
                             )),
                     } if enumeration.is_empty() => Ok(()),
                     _ => Err(Error::UnexpectedFormat(format!(
-                        "invalid schema for application/octet-stream: {:?}",
-                        schema
+                        "invalid schema for application/octet-stream: {schema:?}"
                     ))),
                 }?;
                 OperationParameterType::RawBody
@@ -2134,8 +2135,7 @@ impl Generator {
                             )),
                     } if enumeration.is_empty() => Ok(()),
                     _ => Err(Error::UnexpectedFormat(format!(
-                        "invalid schema for {}: {:?}",
-                        content_type, schema
+                        "invalid schema for {content_type}: {schema:?}"
                     ))),
                 }?;
                 OperationParameterType::RawBody
@@ -2148,7 +2148,7 @@ impl Generator {
                     todo!("media type encoding not empty: {:#?}", media_type);
                 }
                 let name = sanitize(
-                    &format!("{}-body", operation.operation_id.as_ref().unwrap(),),
+                    &format!("{}-body", operation.operation_id.as_ref().unwrap()),
                     Case::Pascal,
                 );
                 let typ = self
@@ -2180,11 +2180,13 @@ fn make_doc_comment(method: &OperationMethod) -> String {
         buf.push_str("\n\n");
     }
 
-    buf.push_str(&format!(
+    write!(
+        &mut buf,
         "Sends a `{}` request to `{}`\n\n",
         method.method.as_str().to_ascii_uppercase(),
-        method.path.to_string(),
-    ));
+        method.path,
+    )
+    .unwrap();
 
     if method
         .params
@@ -2195,7 +2197,7 @@ fn make_doc_comment(method: &OperationMethod) -> String {
     {
         buf.push_str("Arguments:\n");
         for param in &method.params {
-            buf.push_str(&format!("- `{}`", param.name));
+            write!(&mut buf, "- `{}`", param.name).unwrap();
             if let Some(description) = &param.description {
                 buf.push_str(": ");
                 buf.push_str(description);
@@ -2203,6 +2205,10 @@ fn make_doc_comment(method: &OperationMethod) -> String {
             buf.push('\n');
         }
     }
+
+    buf.push_str(
+        "\n# Errors\n\nReturns an error if request construction, transport, or response decoding fails.\n",
+    );
 
     buf
 }
@@ -2219,11 +2225,13 @@ fn make_stream_doc_comment(method: &OperationMethod) -> String {
         buf.push_str("\n\n");
     }
 
-    buf.push_str(&format!(
+    write!(
+        &mut buf,
         "Sends repeated `{}` requests to `{}` until there are no more results.\n\n",
         method.method.as_str().to_ascii_uppercase(),
-        method.path.to_string(),
-    ));
+        method.path,
+    )
+    .unwrap();
 
     if method
         .params
@@ -2239,7 +2247,7 @@ fn make_stream_doc_comment(method: &OperationMethod) -> String {
                 continue;
             }
 
-            buf.push_str(&format!("- `{}`", param.name));
+            write!(&mut buf, "- `{}`", param.name).unwrap();
             if let Some(description) = &param.description {
                 buf.push_str(": ");
                 buf.push_str(description);
@@ -2269,50 +2277,44 @@ fn sort_params(raw_params: &mut [OperationParameter], names: &[String]) {
                     let a_index = names
                         .iter()
                         .position(|x| x == a_name)
-                        .unwrap_or_else(|| panic!("{} missing from path", a_name));
+                        .unwrap_or_else(|| panic!("{a_name} missing from path"));
                     let b_index = names
                         .iter()
                         .position(|x| x == b_name)
-                        .unwrap_or_else(|| panic!("{} missing from path", b_name));
+                        .unwrap_or_else(|| panic!("{b_name} missing from path"));
                     a_index.cmp(&b_index)
                 }
-                (OperationParameterKind::Path, OperationParameterKind::Query(_)) => Ordering::Less,
-                (OperationParameterKind::Path, OperationParameterKind::Body(_)) => Ordering::Less,
-                (OperationParameterKind::Path, OperationParameterKind::Header(_)) => Ordering::Less,
+                (
+                    OperationParameterKind::Path,
+                    OperationParameterKind::Query(_)
+                    | OperationParameterKind::Body(_)
+                    | OperationParameterKind::Header(_),
+                )
+                | (
+                    OperationParameterKind::Query(_),
+                    OperationParameterKind::Body(_) | OperationParameterKind::Header(_),
+                ) => Ordering::Less,
 
                 // Query params are in lexicographic order.
-                (OperationParameterKind::Query(_), OperationParameterKind::Body(_)) => {
-                    Ordering::Less
-                }
-                (OperationParameterKind::Query(_), OperationParameterKind::Query(_)) => {
+                (OperationParameterKind::Query(_), OperationParameterKind::Query(_))
+                | (OperationParameterKind::Header(_), OperationParameterKind::Header(_)) => {
                     a_name.cmp(b_name)
-                }
-                (OperationParameterKind::Query(_), OperationParameterKind::Path) => {
-                    Ordering::Greater
-                }
-                (OperationParameterKind::Query(_), OperationParameterKind::Header(_)) => {
-                    Ordering::Less
                 }
 
                 // Body params are last and should be singular.
-                (OperationParameterKind::Body(_), OperationParameterKind::Path) => {
-                    Ordering::Greater
-                }
-                (OperationParameterKind::Body(_), OperationParameterKind::Query(_)) => {
-                    Ordering::Greater
-                }
-                (OperationParameterKind::Body(_), OperationParameterKind::Header(_)) => {
-                    Ordering::Greater
-                }
                 (OperationParameterKind::Body(_), OperationParameterKind::Body(_)) => {
                     panic!("should only be one body")
                 }
 
-                // Header params are in lexicographic order.
-                (OperationParameterKind::Header(_), OperationParameterKind::Header(_)) => {
-                    a_name.cmp(b_name)
-                }
-                (OperationParameterKind::Header(_), _) => Ordering::Greater,
+                (OperationParameterKind::Query(_), OperationParameterKind::Path)
+                | (
+                    OperationParameterKind::Body(_),
+                    OperationParameterKind::Path
+                    | OperationParameterKind::Query(_)
+                    | OperationParameterKind::Header(_),
+                )
+                // Header params sort after every other parameter kind.
+                | (OperationParameterKind::Header(_), _) => Ordering::Greater,
             }
         },
     );
@@ -2327,7 +2329,7 @@ impl ParameterDataExt for openapiv3::ParameterData {
         match &self.format {
             openapiv3::ParameterSchemaOrContent::Schema(s) => Ok(s),
             openapiv3::ParameterSchemaOrContent::Content(c) => Err(Error::UnexpectedFormat(
-                format!("unexpected content {:#?}", c),
+                format!("unexpected content {c:#?}"),
             )),
         }
     }

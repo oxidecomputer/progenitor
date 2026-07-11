@@ -1,6 +1,8 @@
 // Copyright 2025 Oxide Computer Company
 
 #![allow(dead_code)]
+// `Error` is public API. Boxing its large variants would be a breaking change.
+#![allow(clippy::result_large_err)]
 
 //! Support code for generated clients.
 
@@ -21,14 +23,16 @@ type InnerByteStream = std::pin::Pin<Box<dyn Stream<Item = reqwest::Result<Bytes
 pub struct ByteStream(InnerByteStream);
 
 impl ByteStream {
-    /// Creates a new ByteStream
+    /// Creates a new [`ByteStream`].
     ///
     /// Useful for generating test fixtures.
+    #[must_use]
     pub fn new(inner: InnerByteStream) -> Self {
         Self(inner)
     }
 
     /// Consumes the [`ByteStream`] and return its inner [`Stream`].
+    #[must_use]
     pub fn into_inner(self) -> InnerByteStream {
         self.0
     }
@@ -52,7 +56,7 @@ impl DerefMut for ByteStream {
 pub trait ClientInfo<Inner> {
     /// Get the version of this API.
     ///
-    /// This string is pulled directly from the source OpenAPI document and may
+    /// This string is pulled directly from the source `OpenAPI` document and may
     /// be in any format the API selects.
     fn api_version() -> &'static str;
 
@@ -89,15 +93,16 @@ where
 
 /// Information about an operation, consumed by hook implementations.
 pub struct OperationInfo {
-    /// The corresponding operationId from the source OpenAPI document.
+    /// The corresponding operationId from the source `OpenAPI` document.
     pub operation_id: &'static str,
 }
 
-/// Interface for changing the behavior of generated clients. All clients
-/// implement this for `&Client`; to override the default behavior, implement
-/// some or all of the interfaces for the `Client` type (without the
+/// Interface for changing the behavior of generated clients.
+///
+/// All clients implement this for `&Client`; to override the default behavior,
+/// implement some or all of the interfaces for the `Client` type (without the
 /// reference). This mechanism relies on so-called "auto-ref specialization".
-#[allow(async_fn_in_trait, unused)]
+#[allow(async_fn_in_trait, unused_variables)]
 pub trait ClientHooks<Inner = ()>
 where
     Self: ClientInfo<Inner>,
@@ -164,6 +169,13 @@ pub struct ResponseValue<T> {
 
 impl<T: DeserializeOwned> ResponseValue<T> {
     #[doc(hidden)]
+    #[cfg_attr(
+        target_arch = "wasm32",
+        allow(
+            clippy::future_not_send,
+            reason = "reqwest response futures use browser-local state on wasm"
+        )
+    )]
     pub async fn from_response<E>(response: reqwest::Response) -> Result<Self, Error<E>> {
         let status = response.status();
         let headers = response.headers().clone();
@@ -203,6 +215,7 @@ impl ResponseValue<reqwest::Upgraded> {
 
 impl ResponseValue<ByteStream> {
     #[doc(hidden)]
+    #[must_use]
     pub fn stream(response: reqwest::Response) -> Self {
         let status = response.status();
         let headers = response.headers().clone();
@@ -216,7 +229,8 @@ impl ResponseValue<ByteStream> {
 
 impl ResponseValue<()> {
     #[doc(hidden)]
-    pub fn empty(response: reqwest::Response) -> Self {
+    #[must_use]
+    pub fn empty(response: &reqwest::Response) -> Self {
         let status = response.status();
         let headers = response.headers().clone();
         // TODO is there anything we want to do to confirm that there is no
@@ -233,7 +247,11 @@ impl<T> ResponseValue<T> {
     /// Creates a [`ResponseValue`] from the inner type, status, and headers.
     ///
     /// Useful for generating test fixtures.
-    pub fn new(inner: T, status: reqwest::StatusCode, headers: reqwest::header::HeaderMap) -> Self {
+    pub const fn new(
+        inner: T,
+        status: reqwest::StatusCode,
+        headers: reqwest::header::HeaderMap,
+    ) -> Self {
         Self {
             inner,
             status,
@@ -241,18 +259,18 @@ impl<T> ResponseValue<T> {
         }
     }
 
-    /// Consumes the ResponseValue, returning the wrapped value.
+    /// Consumes the [`ResponseValue`], returning the wrapped value.
     pub fn into_inner(self) -> T {
         self.inner
     }
 
     /// Gets the status from this response.
-    pub fn status(&self) -> reqwest::StatusCode {
+    pub const fn status(&self) -> reqwest::StatusCode {
         self.status
     }
 
     /// Gets the headers from this response.
-    pub fn headers(&self) -> &reqwest::header::HeaderMap {
+    pub const fn headers(&self) -> &reqwest::header::HeaderMap {
         &self.headers
     }
 
@@ -288,6 +306,7 @@ impl<T> ResponseValue<T> {
 
 impl ResponseValue<ByteStream> {
     /// Consumes the `ResponseValue`, returning the wrapped [`Stream`].
+    #[must_use]
     pub fn into_inner_stream(self) -> InnerByteStream {
         self.into_inner().into_inner()
     }
@@ -355,14 +374,12 @@ impl<E> Error<E> {
     /// Returns the status code, if the error was generated from a response.
     pub fn status(&self) -> Option<reqwest::StatusCode> {
         match self {
-            Error::InvalidRequest(_) => None,
-            Error::Custom(_) => None,
-            Error::CommunicationError(e) => e.status(),
-            Error::ErrorResponse(rv) => Some(rv.status()),
-            Error::InvalidUpgrade(e) => e.status(),
-            Error::ResponseBodyError(e) => e.status(),
-            Error::InvalidResponsePayload(_, _) => None,
-            Error::UnexpectedResponse(r) => Some(r.status()),
+            Self::InvalidRequest(_) | Self::Custom(_) | Self::InvalidResponsePayload(_, _) => None,
+            Self::CommunicationError(e) | Self::InvalidUpgrade(e) | Self::ResponseBodyError(e) => {
+                e.status()
+            }
+            Self::ErrorResponse(rv) => Some(rv.status()),
+            Self::UnexpectedResponse(r) => Some(r.status()),
         }
     }
 
@@ -378,10 +395,10 @@ impl<E> Error<E> {
     /// * 504 Gateway Timeout
     pub fn is_retryable(&self) -> bool {
         match self {
-            Error::CommunicationError(_) => true,
-            Error::ErrorResponse(rv) => is_retryable_status(rv.status()),
-            Error::UnexpectedResponse(r) => is_retryable_status(r.status()),
-            Error::InvalidUpgrade(e) | Error::ResponseBodyError(e) => {
+            Self::CommunicationError(_) => true,
+            Self::ErrorResponse(rv) => is_retryable_status(rv.status()),
+            Self::UnexpectedResponse(r) => is_retryable_status(r.status()),
+            Self::InvalidUpgrade(e) | Self::ResponseBodyError(e) => {
                 // We expect InvalidUpgrade and ResponseBodyError to be 2xx
                 // statuses.
                 //
@@ -392,9 +409,7 @@ impl<E> Error<E> {
                 //   it is appropriate to check for retryability.
                 e.status().is_some_and(is_retryable_status)
             }
-            Error::InvalidRequest(_) => false,
-            Error::InvalidResponsePayload(_, _) => false,
-            Error::Custom(_) => false,
+            Self::InvalidRequest(_) | Self::InvalidResponsePayload(_, _) | Self::Custom(_) => false,
         }
     }
 
@@ -404,10 +419,10 @@ impl<E> Error<E> {
     /// various error response bodies.
     pub fn into_untyped(self) -> Error {
         match self {
-            Error::InvalidRequest(s) => Error::InvalidRequest(s),
-            Error::Custom(s) => Error::Custom(s),
-            Error::CommunicationError(e) => Error::CommunicationError(e),
-            Error::ErrorResponse(ResponseValue {
+            Self::InvalidRequest(s) => Error::InvalidRequest(s),
+            Self::Custom(s) => Error::Custom(s),
+            Self::CommunicationError(e) => Error::CommunicationError(e),
+            Self::ErrorResponse(ResponseValue {
                 inner: _,
                 status,
                 headers,
@@ -416,10 +431,10 @@ impl<E> Error<E> {
                 status,
                 headers,
             }),
-            Error::InvalidUpgrade(e) => Error::InvalidUpgrade(e),
-            Error::ResponseBodyError(e) => Error::ResponseBodyError(e),
-            Error::InvalidResponsePayload(b, e) => Error::InvalidResponsePayload(b, e),
-            Error::UnexpectedResponse(r) => Error::UnexpectedResponse(r),
+            Self::InvalidUpgrade(e) => Error::InvalidUpgrade(e),
+            Self::ResponseBodyError(e) => Error::ResponseBodyError(e),
+            Self::InvalidResponsePayload(b, e) => Error::InvalidResponsePayload(b, e),
+            Self::UnexpectedResponse(r) => Error::UnexpectedResponse(r),
         }
     }
 }
@@ -448,30 +463,30 @@ where
 {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            Error::InvalidRequest(s) => {
-                write!(f, "Invalid Request: {}", s)?;
+            Self::InvalidRequest(s) => {
+                write!(f, "Invalid Request: {s}")?;
             }
-            Error::CommunicationError(e) => {
-                write!(f, "Communication Error: {}", e)?;
+            Self::CommunicationError(e) => {
+                write!(f, "Communication Error: {e}")?;
             }
-            Error::ErrorResponse(rve) => {
+            Self::ErrorResponse(rve) => {
                 write!(f, "Error Response: ")?;
                 rve.fmt_info(f)?;
             }
-            Error::InvalidUpgrade(e) => {
-                write!(f, "Invalid Response Upgrade: {}", e)?;
+            Self::InvalidUpgrade(e) => {
+                write!(f, "Invalid Response Upgrade: {e}")?;
             }
-            Error::ResponseBodyError(e) => {
-                write!(f, "Invalid Response Body Bytes: {}", e)?;
+            Self::ResponseBodyError(e) => {
+                write!(f, "Invalid Response Body Bytes: {e}")?;
             }
-            Error::InvalidResponsePayload(b, e) => {
-                write!(f, "Invalid Response Payload ({:?}): {}", b, e)?;
+            Self::InvalidResponsePayload(b, e) => {
+                write!(f, "Invalid Response Payload ({b:?}): {e}")?;
             }
-            Error::UnexpectedResponse(r) => {
-                write!(f, "Unexpected Response: {:?}", r)?;
+            Self::UnexpectedResponse(r) => {
+                write!(f, "Unexpected Response: {r:?}")?;
             }
-            Error::Custom(s) => {
-                write!(f, "Error: {}", s)?;
+            Self::Custom(s) => {
+                write!(f, "Error: {s}")?;
             }
         }
 
@@ -529,10 +544,10 @@ where
 {
     fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
         match self {
-            Error::CommunicationError(e) => Some(e),
-            Error::InvalidUpgrade(e) => Some(e),
-            Error::ResponseBodyError(e) => Some(e),
-            Error::InvalidResponsePayload(_b, e) => Some(e),
+            Self::CommunicationError(e) | Self::InvalidUpgrade(e) | Self::ResponseBodyError(e) => {
+                Some(e)
+            }
+            Self::InvalidResponsePayload(_b, e) => Some(e),
             _ => None,
         }
     }
@@ -566,6 +581,7 @@ const PATH_SET: &percent_encoding::AsciiSet = &percent_encoding::CONTROLS
 
 #[doc(hidden)]
 /// Percent encode input string.
+#[must_use]
 pub fn encode_path(pc: &str) -> String {
     percent_encoding::utf8_percent_encode(pc, PATH_SET).to_string()
 }
@@ -597,7 +613,7 @@ pub struct QueryParam<'a, T> {
 
 impl<'a, T> QueryParam<'a, T> {
     #[doc(hidden)]
-    pub fn new(name: &'a str, value: &'a T) -> Self {
+    pub const fn new(name: &'a str, value: &'a T) -> Self {
         Self { name, value }
     }
 }
@@ -617,7 +633,7 @@ where
     }
 }
 
-pub(crate) struct QuerySerializer<'a, S> {
+struct QuerySerializer<'a, S> {
     inner: S,
     name: &'a str,
 }

@@ -1,10 +1,13 @@
 // Copyright 2025 Oxide Computer Company
 
-//! Core implementation for the progenitor OpenAPI client generator.
+//! Core implementation for the progenitor `OpenAPI` client generator.
 
 #![deny(missing_docs)]
 
-use std::collections::{BTreeMap, HashMap, HashSet};
+use std::{
+    collections::{BTreeMap, HashMap, HashSet},
+    fmt::Write as _,
+};
 
 use openapiv3::OpenAPI;
 use proc_macro2::TokenStream;
@@ -47,7 +50,7 @@ pub enum Error {
 #[allow(missing_docs)]
 pub type Result<T> = std::result::Result<T, Error>;
 
-/// OpenAPI generator.
+/// `OpenAPI` generator.
 pub struct Generator {
     type_space: TypeSpace,
     settings: GenerationSettings,
@@ -85,49 +88,42 @@ struct CrateSpec {
 }
 
 /// Style of generated client.
-#[derive(Clone, Deserialize, PartialEq, Eq)]
+#[derive(Clone, Deserialize, PartialEq, Eq, Default)]
 pub enum InterfaceStyle {
     /// Use positional style.
+    #[default]
     Positional,
     /// Use builder style.
     Builder,
 }
 
-impl Default for InterfaceStyle {
-    fn default() -> Self {
-        Self::Positional
-    }
-}
-
-/// Style for using the OpenAPI tags when generating names in the client.
-#[derive(Clone, Deserialize)]
+/// Style for using the `OpenAPI` tags when generating names in the client.
+#[derive(Clone, Deserialize, Default)]
 pub enum TagStyle {
     /// Merge tags to create names in the generated client.
+    #[default]
     Merged,
     /// Use each tag name to create separate names in the generated client.
     Separate,
 }
 
-impl Default for TagStyle {
-    fn default() -> Self {
-        Self::Merged
-    }
-}
-
+// These public builder methods intentionally accept owned or borrowed values.
+#[allow(clippy::needless_pass_by_value)]
 impl GenerationSettings {
     /// Create new generator settings with default values.
+    #[must_use]
     pub fn new() -> Self {
         Self::default()
     }
 
-    /// Set the [InterfaceStyle].
-    pub fn with_interface(&mut self, interface: InterfaceStyle) -> &mut Self {
+    /// Set the [`InterfaceStyle`].
+    pub const fn with_interface(&mut self, interface: InterfaceStyle) -> &mut Self {
         self.interface = interface;
         self
     }
 
-    /// Set the [TagStyle].
-    pub fn with_tag(&mut self, tag: TagStyle) -> &mut Self {
+    /// Set the [`TagStyle`].
+    pub const fn with_tag(&mut self, tag: TagStyle) -> &mut Self {
         self.tag = tag;
         self
     }
@@ -175,7 +171,7 @@ impl GenerationSettings {
     }
 
     /// Modify a type with the given name.
-    /// See [typify::TypeSpaceSettings::with_patch].
+    /// See [`typify::TypeSpaceSettings::with_patch`].
     pub fn with_patch<S: AsRef<str>>(&mut self, type_name: S, patch: &TypePatch) -> &mut Self {
         self.patch
             .insert(type_name.as_ref().to_string(), patch.clone());
@@ -183,7 +179,7 @@ impl GenerationSettings {
     }
 
     /// Replace a referenced type with a named type.
-    /// See [typify::TypeSpaceSettings::with_replacement].
+    /// See [`typify::TypeSpaceSettings::with_replacement`].
     pub fn with_replacement<TS: ToString, RS: ToString, I: Iterator<Item = TypeImpl>>(
         &mut self,
         type_name: TS,
@@ -198,7 +194,7 @@ impl GenerationSettings {
     }
 
     /// Replace a given schema with a named type.
-    /// See [typify::TypeSpaceSettings::with_conversion].
+    /// See [`typify::TypeSpaceSettings::with_conversion`].
     pub fn with_conversion<S: ToString, I: Iterator<Item = TypeImpl>>(
         &mut self,
         schema: schemars::schema::SchemaObject,
@@ -211,9 +207,9 @@ impl GenerationSettings {
     }
 
     /// Policy regarding crates referenced by the schema extension
-    /// `x-rust-type` not explicitly specified via [Self::with_crate].
-    /// See [typify::TypeSpaceSettings::with_unknown_crates].
-    pub fn with_unknown_crates(&mut self, policy: UnknownPolicy) -> &mut Self {
+    /// `x-rust-type` not explicitly specified via [`Self::with_crate`].
+    /// See [`typify::TypeSpaceSettings::with_unknown_crates`].
+    pub const fn with_unknown_crates(&mut self, policy: UnknownPolicy) -> &mut Self {
         self.unknown_crates = policy;
         self
     }
@@ -221,7 +217,7 @@ impl GenerationSettings {
     /// Explicitly named crates whose types may be used during generation
     /// rather than generating new types based on their schemas (base on the
     /// presence of the x-rust-type extension).
-    /// See [typify::TypeSpaceSettings::with_crate].
+    /// See [`typify::TypeSpaceSettings::with_crate`].
     pub fn with_crate<S1: ToString>(
         &mut self,
         crate_name: S1,
@@ -244,14 +240,14 @@ impl GenerationSettings {
     /// - [`indexmap::IndexMap`]
     ///
     /// The requiremnets for a map type can be found in the
-    /// [typify::TypeSpaceSettings::with_map_type] documentation.
+    /// [`typify::TypeSpaceSettings::with_map_type`] documentation.
     pub fn with_map_type<MT: ToString>(&mut self, map_type: MT) -> &mut Self {
         self.map_type = Some(map_type.to_string());
         self
     }
 
     /// Set the underlying reqwest client's timeout
-    pub fn with_timeout(&mut self, timeout: u64) -> &mut Self {
+    pub const fn with_timeout(&mut self, timeout: u64) -> &mut Self {
         self.timeout = Some(timeout);
         self
     }
@@ -261,7 +257,7 @@ impl Default for Generator {
     fn default() -> Self {
         Self {
             type_space: TypeSpace::new(TypeSpaceSettings::default().with_type_mod("types")),
-            settings: Default::default(),
+            settings: GenerationSettings::default(),
             uses_futures: Default::default(),
             uses_websockets: Default::default(),
         }
@@ -270,6 +266,7 @@ impl Default for Generator {
 
 impl Generator {
     /// Create a new generator with default values.
+    #[must_use]
     pub fn new(settings: &GenerationSettings) -> Self {
         let mut type_settings = TypeSpaceSettings::default();
         type_settings
@@ -296,13 +293,13 @@ impl Generator {
             .replace
             .iter()
             .for_each(|(type_name, (replace_name, impls))| {
-                type_settings.with_replacement(type_name, replace_name, impls.iter().cloned());
+                type_settings.with_replacement(type_name, replace_name, impls.iter().copied());
             });
         settings
             .convert
             .iter()
             .for_each(|(schema, type_name, impls)| {
-                type_settings.with_conversion(schema.clone(), type_name, impls.iter().cloned());
+                type_settings.with_conversion(schema.clone(), type_name, impls.iter().copied());
             });
 
         // Set the map type if specified.
@@ -318,7 +315,21 @@ impl Generator {
         }
     }
 
-    /// Emit a [TokenStream] containing the generated client code.
+    /// Emit a [`TokenStream`] containing the generated client code.
+    ///
+    /// # Errors
+    ///
+    /// Returns an error if the `OpenAPI` document is invalid or its schemas
+    /// cannot be converted into Rust types.
+    ///
+    /// # Panics
+    ///
+    /// Panics if validated component references violate an internal generator
+    /// invariant.
+    #[allow(
+        clippy::too_many_lines,
+        reason = "keeps top-level generation stages together"
+    )]
     pub fn generate_tokens(&mut self, spec: &OpenAPI) -> Result<TokenStream> {
         validate_openapi(spec)?;
 
@@ -343,16 +354,22 @@ impl Generator {
                 })
             })
             .map(|(path, method, operation, path_parameters)| {
-                self.process_operation(operation, &spec.components, path, method, path_parameters)
+                self.process_operation(
+                    operation,
+                    spec.components.as_ref(),
+                    path,
+                    method,
+                    path_parameters,
+                )
             })
             .collect::<Result<Vec<_>>>()?;
 
         let operation_code = match (&self.settings.interface, &self.settings.tag) {
-            (InterfaceStyle::Positional, TagStyle::Merged) => self
+            (InterfaceStyle::Positional, TagStyle::Merged) => Ok(self
                 .generate_tokens_positional_merged(
                     &raw_methods,
                     self.settings.inner_type.is_some(),
-                ),
+                )),
             (InterfaceStyle::Positional, TagStyle::Separate) => {
                 unimplemented!("positional arguments with separate tags are currently unsupported")
             }
@@ -366,7 +383,7 @@ impl Generator {
                     .collect::<BTreeMap<_, _>>();
                 self.generate_tokens_builder_separate(
                     &raw_methods,
-                    tag_info,
+                    &tag_info,
                     self.settings.inner_type.is_some(),
                 )
             }
@@ -374,10 +391,10 @@ impl Generator {
 
         let types = self.type_space.to_stream();
 
-        let (inner_type, inner_fn_value) = match self.settings.inner_type.as_ref() {
-            Some(inner_type) => (inner_type.clone(), quote! { &self.inner }),
-            None => (quote! { () }, quote! { &() }),
-        };
+        let (inner_type, inner_fn_value) = self.settings.inner_type.as_ref().map_or_else(
+            || (quote! { () }, quote! { &() }),
+            |inner_type| (inner_type.clone(), quote! { &self.inner }),
+        );
 
         let inner_property = self.settings.inner_type.as_ref().map(|inner| {
             quote! {
@@ -397,7 +414,7 @@ impl Generator {
         let client_timeout = self.settings.timeout.unwrap_or(15);
 
         let client_docstring = {
-            let mut s = format!("Client for {}", spec.info.title);
+            let mut s = format!("Client for `{}`", spec.info.title);
 
             if let Some(ss) = &spec.info.description {
                 s.push_str("\n\n");
@@ -408,7 +425,7 @@ impl Generator {
                 s.push_str(ss);
             }
 
-            s.push_str(&format!("\n\nVersion: {}", &spec.info.version));
+            write!(&mut s, "\n\nVersion: {}", spec.info.version).unwrap();
 
             s
         };
@@ -438,6 +455,14 @@ impl Generator {
 
             /// Types used as operation parameters and responses.
             #[allow(clippy::all)]
+            #[allow(
+                clippy::struct_field_names,
+                reason = "type definitions are emitted by typify"
+            )]
+            #[allow(
+                clippy::default_trait_access,
+                reason = "default expressions are emitted by typify"
+            )]
             pub mod types {
                 #types
             }
@@ -456,6 +481,11 @@ impl Generator {
                 /// `baseurl` is the base URL provided to the internal
                 /// `reqwest::Client`, and should include a scheme and hostname,
                 /// as well as port and a path stem if applicable.
+                ///
+                /// # Panics
+                ///
+                /// Panics if the default `reqwest::Client` cannot be built.
+                #[must_use]
                 pub fn new(
                     baseurl: &str,
                     #inner_parameter
@@ -481,6 +511,7 @@ impl Generator {
                 /// `baseurl` is the base URL provided to the internal
                 /// `reqwest::Client`, and should include a scheme and hostname,
                 /// as well as port and a path stem if applicable.
+                #[must_use]
                 pub fn new_with_client(
                     baseurl: &str,
                     client: reqwest::Client,
@@ -524,11 +555,11 @@ impl Generator {
         &mut self,
         input_methods: &[method::OperationMethod],
         has_inner: bool,
-    ) -> Result<TokenStream> {
+    ) -> TokenStream {
         let methods = input_methods
             .iter()
             .map(|method| self.positional_method(method, has_inner))
-            .collect::<Result<Vec<_>>>()?;
+            .collect::<Vec<_>>();
 
         // The allow(unused_imports) on the `pub use` is necessary with Rust
         // 1.76+, in case the generated file is not at the top level of the
@@ -536,6 +567,25 @@ impl Generator {
 
         let out = quote! {
             #[allow(clippy::all)]
+            #[allow(
+                clippy::too_many_arguments,
+                reason = "generated parameters mirror the OpenAPI operation"
+            )]
+            #[allow(
+                clippy::result_large_err,
+                reason = "generated methods preserve the public Error representation"
+            )]
+            #[cfg_attr(
+                target_arch = "wasm32",
+                allow(
+                    clippy::future_not_send,
+                    reason = "reqwest futures use browser-local state on wasm"
+                )
+            )]
+            #[allow(
+                clippy::match_same_arms,
+                reason = "generated status ranges remain explicit"
+            )]
             impl Client {
                 #(#methods)*
             }
@@ -546,7 +596,7 @@ impl Generator {
                 pub use super::Client;
             }
         };
-        Ok(out)
+        out
     }
 
     fn generate_tokens_builder_merged(
@@ -561,7 +611,7 @@ impl Generator {
 
         let builder_methods = input_methods
             .iter()
-            .map(|method| self.builder_impl(method))
+            .map(Self::builder_impl)
             .collect::<Vec<_>>();
 
         let out = quote! {
@@ -571,6 +621,21 @@ impl Generator {
 
             /// Types for composing operation parameters.
             #[allow(clippy::all)]
+            #[allow(
+                clippy::result_large_err,
+                reason = "generated methods preserve the public Error representation"
+            )]
+            #[cfg_attr(
+                target_arch = "wasm32",
+                allow(
+                    clippy::future_not_send,
+                    reason = "reqwest futures use browser-local state on wasm"
+                )
+            )]
+            #[allow(
+                clippy::match_same_arms,
+                reason = "generated status ranges remain explicit"
+            )]
             pub mod builder {
                 use super::types;
                 #[allow(unused_imports)]
@@ -600,7 +665,7 @@ impl Generator {
     fn generate_tokens_builder_separate(
         &mut self,
         input_methods: &[method::OperationMethod],
-        tag_info: BTreeMap<&String, &openapiv3::Tag>,
+        tag_info: &BTreeMap<&String, &openapiv3::Tag>,
         has_inner: bool,
     ) -> Result<TokenStream> {
         let builder_struct = input_methods
@@ -608,7 +673,7 @@ impl Generator {
             .map(|method| self.builder_struct(method, TagStyle::Separate, has_inner))
             .collect::<Result<Vec<_>>>()?;
 
-        let (traits_and_impls, trait_preludes) = self.builder_tags(input_methods, &tag_info);
+        let (traits_and_impls, trait_preludes) = Self::builder_tags(input_methods, tag_info);
 
         // The allow(unused_imports) on the `pub use` is necessary with Rust
         // 1.76+, in case the generated file is not at the top level of the
@@ -619,6 +684,21 @@ impl Generator {
 
             /// Types for composing operation parameters.
             #[allow(clippy::all)]
+            #[allow(
+                clippy::result_large_err,
+                reason = "generated methods preserve the public Error representation"
+            )]
+            #[cfg_attr(
+                target_arch = "wasm32",
+                allow(
+                    clippy::future_not_send,
+                    reason = "reqwest futures use browser-local state on wasm"
+                )
+            )]
+            #[allow(
+                clippy::match_same_arms,
+                reason = "generated status ranges remain explicit"
+            )]
             pub mod builder {
                 use super::types;
                 #[allow(unused_imports)]
@@ -648,32 +728,43 @@ impl Generator {
         Ok(out)
     }
 
-    /// Get the [TypeSpace] for schemas present in the OpenAPI specification.
-    pub fn get_type_space(&self) -> &TypeSpace {
+    /// Get the [`TypeSpace`] for schemas present in the `OpenAPI` specification.
+    #[must_use]
+    pub const fn get_type_space(&self) -> &TypeSpace {
         &self.type_space
     }
 
     /// Whether the generated client needs to use additional crates to support
     /// futures.
-    pub fn uses_futures(&self) -> bool {
+    #[must_use]
+    pub const fn uses_futures(&self) -> bool {
         self.uses_futures
     }
 
     /// Whether the generated client needs to use additional crates to support
     /// websockets.
-    pub fn uses_websockets(&self) -> bool {
+    #[must_use]
+    pub const fn uses_websockets(&self) -> bool {
         self.uses_websockets
     }
 }
 
 /// Add newlines after end-braces at <= two levels of indentation.
-pub fn space_out_items(content: String) -> Result<String> {
+///
+/// # Errors
+///
+/// This function currently always returns `Ok`.
+///
+/// # Panics
+///
+/// Panics if one of the built-in regular expressions is invalid.
+pub fn space_out_items(content: &str) -> Result<String> {
     Ok(if cfg!(not(windows)) {
-        let regex = regex::Regex::new(r#"(\n\s*})(\n\s{0,8}[^} ])"#).unwrap();
-        regex.replace_all(&content, "$1\n$2").to_string()
+        let regex = regex::Regex::new(r"(\n\s*})(\n\s{0,8}[^} ])").unwrap();
+        regex.replace_all(content, "$1\n$2").to_string()
     } else {
-        let regex = regex::Regex::new(r#"(\n\s*})(\r\n\s{0,8}[^} ])"#).unwrap();
-        regex.replace_all(&content, "$1\r\n$2").to_string()
+        let regex = regex::Regex::new(r"(\n\s*})(\r\n\s{0,8}[^} ])").unwrap();
+        regex.replace_all(content, "$1\r\n$2").to_string()
     })
 }
 
@@ -683,13 +774,17 @@ fn validate_openapi_spec_version(spec_version: &str) -> Result<()> {
         Ok(())
     } else {
         Err(Error::UnexpectedFormat(format!(
-            "invalid version: {}",
-            spec_version
+            "invalid version: {spec_version}"
         )))
     }
 }
 
-/// Do some very basic checks of the OpenAPI documents.
+/// Do some very basic checks of the `OpenAPI` documents.
+///
+/// # Errors
+///
+/// Returns an error if the document uses an unsupported version, contains
+/// unresolved path references, or repeats an operation ID.
 pub fn validate_openapi(spec: &OpenAPI) -> Result<()> {
     validate_openapi_spec_version(spec.openapi.as_str())?;
 
@@ -697,17 +792,16 @@ pub fn validate_openapi(spec: &OpenAPI) -> Result<()> {
     spec.paths.paths.iter().try_for_each(|p| {
         match p.1 {
             openapiv3::ReferenceOr::Reference { reference: _ } => Err(Error::UnexpectedFormat(
-                format!("path {} uses reference, unsupported", p.0,),
+                format!("path {} uses reference, unsupported", p.0),
             )),
             openapiv3::ReferenceOr::Item(item) => {
                 // Make sure every operation has an operation ID, and that each
                 // operation ID is only used once in the document.
                 item.iter().try_for_each(|(_, o)| {
                     if let Some(oid) = o.operation_id.as_ref() {
-                        if !opids.insert(oid.to_string()) {
+                        if !opids.insert(oid.clone()) {
                             return Err(Error::UnexpectedFormat(format!(
-                                "duplicate operation ID: {}",
-                                oid,
+                                "duplicate operation ID: {oid}",
                             )));
                         }
                     } else {

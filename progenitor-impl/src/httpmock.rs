@@ -30,6 +30,16 @@ impl Generator {
     /// The `crate_path` parameter should be a valid Rust path corresponding to
     /// the SDK. This can include `::` and instances of `-` in the crate name
     /// should be converted to `_`.
+    ///
+    /// # Errors
+    ///
+    /// Returns an error if the `OpenAPI` document or crate path is invalid, or
+    /// if its types cannot be converted into mock definitions.
+    ///
+    /// # Panics
+    ///
+    /// Panics if validated component references violate an internal generator
+    /// invariant.
     pub fn httpmock(&mut self, spec: &OpenAPI, crate_path: &str) -> Result<TokenStream> {
         validate_openapi(spec)?;
 
@@ -54,7 +64,13 @@ impl Generator {
                 })
             })
             .map(|(path, method, operation, path_parameters)| {
-                self.process_operation(operation, &spec.components, path, method, path_parameters)
+                self.process_operation(
+                    operation,
+                    spec.components.as_ref(),
+                    path,
+                    method,
+                    path_parameters,
+                )
             })
             .collect::<Result<Vec<_>>>()?;
 
@@ -75,7 +91,7 @@ impl Generator {
         let crate_path = syn::TypePath {
             qself: None,
             path: syn::parse_str(crate_path)
-                .unwrap_or_else(|_| panic!("{} is not a valid identifier", crate_path)),
+                .unwrap_or_else(|_| panic!("{crate_path} is not a valid identifier")),
         };
 
         let code = quote! {
@@ -127,7 +143,8 @@ impl Generator {
         Ok(code)
     }
 
-    fn httpmock_method(&mut self, method: &crate::method::OperationMethod) -> MockOp {
+    #[allow(clippy::too_many_lines, reason = "mirrors the generated mock method")]
+    fn httpmock_method(&self, method: &crate::method::OperationMethod) -> MockOp {
         let when_name = sanitize(&format!("{}-when", method.operation_id), Case::Pascal);
         let when = format_ident!("{}", when_name).to_token_stream();
         let then_name = sanitize(&format!("{}-then", method.operation_id), Case::Pascal);
@@ -328,7 +345,8 @@ impl Generator {
                             },
                         )
                     }
-                    crate::method::OperationResponseKind::None => Default::default(),
+                    crate::method::OperationResponseKind::None
+                    | crate::method::OperationResponseKind::Upgrade => Default::default(),
                     crate::method::OperationResponseKind::Raw => (
                         quote! {
                             value: ::serde_json::Value,
@@ -338,7 +356,6 @@ impl Generator {
                             .json_body(value)
                         },
                     ),
-                    crate::method::OperationResponseKind::Upgrade => Default::default(),
                 };
 
                 match status_code {

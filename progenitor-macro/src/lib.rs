@@ -1,10 +1,14 @@
 // Copyright 2026 Oxide Computer Company
 
-//! Macros for the progenitor OpenAPI client generator.
+//! Macros for the progenitor `OpenAPI` client generator.
 
 #![deny(missing_docs)]
 
-use std::{collections::HashMap, fs::File, path::PathBuf};
+use std::{
+    collections::HashMap,
+    fs::File,
+    path::{Path, PathBuf},
+};
 
 use openapiv3::OpenAPI;
 use proc_macro::TokenStream;
@@ -23,13 +27,13 @@ mod token_utils;
 /// Where to resolve the spec path relative to.
 #[derive(Debug, Clone, Copy, Deserialize)]
 enum RelativeTo {
-    /// Resolve relative to CARGO_MANIFEST_DIR (the default).
+    /// Resolve relative to `CARGO_MANIFEST_DIR` (the default).
     ManifestDir,
-    /// Resolve relative to OUT_DIR.
+    /// Resolve relative to `OUT_DIR`.
     OutDir,
 }
 
-/// Specification of where to find the OpenAPI document.
+/// Specification of where to find the `OpenAPI` document.
 #[derive(Debug)]
 struct SpecSource {
     /// The path to the spec file.
@@ -40,7 +44,7 @@ struct SpecSource {
 
 impl syn::parse::Parse for SpecSource {
     fn parse(input: syn::parse::ParseStream) -> syn::Result<Self> {
-        /// Helper struct for deserializing the struct form of SpecSource.
+        /// Helper struct for deserializing the struct form of `SpecSource`.
         #[derive(Deserialize)]
         struct SpecSourceStruct {
             path: ParseWrapper<LitStr>,
@@ -51,7 +55,7 @@ impl syn::parse::Parse for SpecSource {
         if lookahead.peek(LitStr) {
             // spec = "path/to/spec.json"
             let path: LitStr = input.parse()?;
-            Ok(SpecSource {
+            Ok(Self {
                 path,
                 relative_to: RelativeTo::ManifestDir,
             })
@@ -62,7 +66,7 @@ impl syn::parse::Parse for SpecSource {
             let stream: proc_macro2::TokenStream = content.parse()?;
             let helper: SpecSourceStruct =
                 serde_tokenstream::from_tokenstream_spanned(&brace_token.span, &stream)?;
-            Ok(SpecSource {
+            Ok(Self {
                 path: helper.path.into_inner(),
                 relative_to: helper.relative_to,
             })
@@ -72,10 +76,10 @@ impl syn::parse::Parse for SpecSource {
     }
 }
 
-/// Generates a client from the given OpenAPI document
+/// Generates a client from the given `OpenAPI` document
 ///
 /// `generate_api!` can be invoked in two ways. The simple form, takes a path
-/// to the OpenAPI document:
+/// to the `OpenAPI` document:
 /// ```ignore
 /// generate_api!("path/to/spec.json");
 /// ```
@@ -106,7 +110,7 @@ impl syn::parse::Parse for SpecSource {
 /// );
 /// ```
 ///
-/// The `spec` key is required; it is the OpenAPI document (JSON or YAML) from
+/// The `spec` key is required; it is the `OpenAPI` document (JSON or YAML) from
 /// which the client is derived. It can be specified as a simple string path, or
 /// as a struct with `path` and `relative_to` fields. The `relative_to`
 /// field controls where the path is resolved from:
@@ -322,13 +326,17 @@ fn is_crate(s: &str) -> bool {
     !s.contains(|cc: char| !cc.is_alphanumeric() && cc != '_' && cc != '-')
 }
 
-fn open_file(path: PathBuf, span: proc_macro2::Span) -> Result<File, syn::Error> {
-    File::open(path.clone()).map_err(|e| {
+fn open_file(path: &Path, span: proc_macro2::Span) -> Result<File, syn::Error> {
+    File::open(path).map_err(|e| {
         let path_str = path.to_string_lossy();
-        syn::Error::new(span, format!("couldn't read file {}: {}", path_str, e))
+        syn::Error::new(span, format!("couldn't read file {path_str}: {e}"))
     })
 }
 
+#[allow(
+    clippy::too_many_lines,
+    reason = "keeps macro expansion stages together"
+)]
 fn do_generate_api(item: TokenStream) -> Result<TokenStream, syn::Error> {
     let (spec_source, settings) = if let Ok(spec) = syn::parse::<LitStr>(item.clone()) {
         let spec_source = SpecSource {
@@ -371,31 +379,29 @@ fn do_generate_api(item: TokenStream) -> Result<TokenStream, syn::Error> {
         map_type.map(|map_type| settings.with_map_type(map_type.to_token_stream()));
 
         settings.with_unknown_crates(unknown_crates);
-        crates.into_iter().for_each(
-            |(CrateName(crate_name), MacroCrateSpec { original, version })| {
-                if let Some(original_crate) = original {
-                    settings.with_crate(original_crate, version, Some(&crate_name));
-                } else {
-                    settings.with_crate(crate_name, version, None);
-                }
-            },
-        );
+        for (CrateName(crate_name), MacroCrateSpec { original, version }) in crates {
+            if let Some(original_crate) = original {
+                settings.with_crate(original_crate, version, Some(&crate_name));
+            } else {
+                settings.with_crate(crate_name, version, None);
+            }
+        }
 
-        derives.into_iter().for_each(|derive| {
+        for derive in derives {
             settings.with_derive(derive.to_token_stream());
-        });
-        patch.into_iter().for_each(|(type_name, patch)| {
+        }
+        for (type_name, patch) in patch {
             settings.with_patch(type_name.to_token_stream().to_string(), &patch.into());
-        });
-        replace.into_iter().for_each(|(type_name, type_and_impls)| {
+        }
+        for (type_name, type_and_impls) in replace {
             let type_name = type_name.to_token_stream();
             let (replace_name, impls) = type_and_impls.into_inner().into_name_and_impls();
             settings.with_replacement(type_name, replace_name, impls);
-        });
-        convert.into_iter().for_each(|(schema, type_and_impls)| {
+        }
+        for (schema, type_and_impls) in convert {
             let (type_name, impls) = type_and_impls.into_inner().into_name_and_impls();
             settings.with_conversion(schema, type_name, impls);
-        });
+        }
         if let Some(timeout) = timeout {
             settings.with_timeout(timeout);
         }
@@ -421,18 +427,14 @@ fn do_generate_api(item: TokenStream) -> Result<TokenStream, syn::Error> {
     let path = base_dir.join(spec_path.value());
     let path_str = path.to_string_lossy();
 
-    let mut f = open_file(path.clone(), spec_path.span())?;
-    let oapi: OpenAPI = match serde_json::from_reader(f) {
-        Ok(json_value) => json_value,
-        _ => {
-            f = open_file(path.clone(), spec_path.span())?;
-            serde_yaml::from_reader(f).map_err(|e| {
-                syn::Error::new(
-                    spec_path.span(),
-                    format!("failed to parse {}: {}", path_str, e),
-                )
-            })?
-        }
+    let mut f = open_file(&path, spec_path.span())?;
+    let oapi: OpenAPI = if let Ok(json_value) = serde_json::from_reader(f) {
+        json_value
+    } else {
+        f = open_file(&path, spec_path.span())?;
+        serde_yaml::from_reader(f).map_err(|e| {
+            syn::Error::new(spec_path.span(), format!("failed to parse {path_str}: {e}"))
+        })?
     };
 
     let mut builder = Generator::new(&settings);

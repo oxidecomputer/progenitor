@@ -12,7 +12,7 @@ use openapiv3::OpenAPI;
 use progenitor::{GenerationSettings, Generator, InterfaceStyle, TagStyle};
 use progenitor_impl::space_out_items;
 
-fn is_non_release() -> bool {
+const fn is_non_release() -> bool {
     cfg!(debug_assertions)
 }
 
@@ -23,10 +23,10 @@ enum CargoCli {
     Progenitor(Args),
 }
 
-/// Generate a stand-alone crate from an OpenAPI document
+/// Generate a stand-alone crate from an `OpenAPI` document
 #[derive(Parser)]
 struct Args {
-    /// OpenAPI definition document (JSON or YAML)
+    /// `OpenAPI` definition document (JSON or YAML)
     #[clap(short = 'i', long)]
     input: String,
     /// Output directory for Rust crate
@@ -65,8 +65,8 @@ enum InterfaceArg {
 impl From<InterfaceArg> for InterfaceStyle {
     fn from(arg: InterfaceArg) -> Self {
         match arg {
-            InterfaceArg::Positional => InterfaceStyle::Positional,
-            InterfaceArg::Builder => InterfaceStyle::Builder,
+            InterfaceArg::Positional => Self::Positional,
+            InterfaceArg::Builder => Self::Builder,
         }
     }
 }
@@ -80,8 +80,8 @@ enum TagArg {
 impl From<TagArg> for TagStyle {
     fn from(arg: TagArg) -> Self {
         match arg {
-            TagArg::Merged => TagStyle::Merged,
-            TagArg::Separate => TagStyle::Separate,
+            TagArg::Merged => Self::Merged,
+            TagArg::Separate => Self::Separate,
         }
     }
 }
@@ -92,7 +92,7 @@ fn reformat_code(input: String) -> String {
         wrap_comments: Some(true),
         ..Default::default()
     };
-    space_out_items(rustfmt_wrapper::rustfmt_config(config, input).unwrap()).unwrap()
+    space_out_items(&rustfmt_wrapper::rustfmt_config(config, input).unwrap()).unwrap()
 }
 
 fn save<P>(p: P, data: &str) -> Result<()>
@@ -131,7 +131,7 @@ fn main() -> Result<()> {
             println!("-----------------------------------------------------");
             for (idx, type_entry) in type_space.iter_types().enumerate() {
                 let n = type_entry.describe();
-                println!("{:>4}  {}", idx, n);
+                println!("{idx:>4}  {n}");
             }
             println!("-----------------------------------------------------");
             println!();
@@ -153,10 +153,10 @@ fn main() -> Result<()> {
                 version = \"{}\"\n\
                 edition = \"2024\"\n\
                 license = \"{}\"\n",
-                name, version, &args.license_name,
+                name, version, args.license_name,
             );
             if let Some(registry_name) = args.registry_name {
-                tomlout.extend(format!("publish = [\"{}\"]\n", registry_name).chars());
+                tomlout.extend(format!("publish = [\"{registry_name}\"]\n").chars());
             }
             tomlout.extend(
                 format!(
@@ -164,7 +164,7 @@ fn main() -> Result<()> {
                 [dependencies]\n\
                 {}\n\
                 \n",
-                    dependencies(builder, args.include_client).join("\n"),
+                    dependencies(&builder, args.include_client).join("\n"),
                 )
                 .chars(),
             );
@@ -178,7 +178,7 @@ fn main() -> Result<()> {
 
             // Create the Rust source file containing the generated client:
             let lib_code = if args.include_client {
-                format!("mod progenitor_client;\n\n{}", api_code)
+                format!("mod progenitor_client;\n\n{api_code}")
             } else {
                 api_code.to_string()
             };
@@ -198,7 +198,7 @@ fn main() -> Result<()> {
         }
 
         Err(e) => {
-            println!("gen fail: {:?}", e);
+            println!("gen fail: {e:?}");
             bail!("generation experienced errors");
         }
     }
@@ -239,7 +239,8 @@ static DEPENDENCIES: Dependencies = Dependencies {
     uuid: "1.0",
 };
 
-pub fn dependencies(builder: Generator, include_client: bool) -> Vec<String> {
+#[must_use]
+pub fn dependencies(builder: &Generator, include_client: bool) -> Vec<String> {
     let mut deps = vec![
         format!("bytes = \"{}\"", DEPENDENCIES.bytes),
         format!("futures-core = \"{}\"", DEPENDENCIES.futures),
@@ -255,15 +256,13 @@ pub fn dependencies(builder: Generator, include_client: bool) -> Vec<String> {
     ];
 
     let type_space = builder.get_type_space();
-    let mut needs_serde_json = false;
-
-    if include_client {
+    let needs_serde_json = if include_client {
         // code included from progenitor-client needs extra dependencies
         deps.push(format!(
             "percent-encoding = \"{}\"",
             DEPENDENCIES.percent_encoding
         ));
-        needs_serde_json = true;
+        true
     } else {
         let crate_version =
             if let (false, Some(value)) = (is_non_release(), option_env!("CARGO_PKG_VERSION")) {
@@ -271,9 +270,10 @@ pub fn dependencies(builder: Generator, include_client: bool) -> Vec<String> {
             } else {
                 "*"
             };
-        let client_version_dep = format!("progenitor-client = \"{}\"", crate_version);
+        let client_version_dep = format!("progenitor-client = \"{crate_version}\"");
         deps.push(client_version_dep);
-    }
+        false
+    };
 
     if type_space.uses_regress() {
         deps.push(format!("regress = \"{}\"", DEPENDENCIES.regress));
@@ -309,12 +309,11 @@ where
     P: AsRef<Path> + std::clone::Clone + std::fmt::Debug,
 {
     let mut f = File::open(p.clone())?;
-    let api = match serde_json::from_reader(f) {
-        Ok(json_value) => json_value,
-        _ => {
-            f = File::open(p)?;
-            serde_yaml::from_reader(f)?
-        }
+    let api = if let Ok(json_value) = serde_json::from_reader(f) {
+        json_value
+    } else {
+        f = File::open(p)?;
+        serde_yaml::from_reader(f)?
     };
     Ok(api)
 }
