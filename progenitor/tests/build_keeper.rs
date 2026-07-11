@@ -5,8 +5,8 @@ mod positional {
 
     fn _ignore() {
         let body = types::EnrolBody {
-            host: "".to_string(),
-            key: "".to_string(),
+            host: String::new(),
+            key: String::new(),
         };
         let client = Client::new("");
         let _future = client.enrol("auth token", &body);
@@ -26,8 +26,8 @@ mod builder_untagged {
             .enrol()
             .authorization("")
             .body(types::EnrolBody {
-                host: "".to_string(),
-                key: "".to_string(),
+                host: String::new(),
+                key: String::new(),
             })
             .send();
     }
@@ -46,8 +46,8 @@ mod builder_tagged {
             .enrol()
             .authorization("")
             .body(types::EnrolBody {
-                host: "".to_string(),
-                key: "".to_string(),
+                host: String::new(),
+                key: String::new(),
             })
             .send();
     }

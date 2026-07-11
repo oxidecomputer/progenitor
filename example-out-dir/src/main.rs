@@ -12,8 +12,8 @@ generate_api!(
 fn main() {
     let client = Client::new("https://example.com");
     let body = types::EnrolBody {
-        host: "".to_string(),
-        key: "".to_string(),
+        host: String::new(),
+        key: String::new(),
     };
     let _future = client.enrol("auth-token", &body);
 }
