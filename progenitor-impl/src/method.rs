@@ -20,7 +20,7 @@ use crate::{
 use crate::{to_schema::ToSchema, util::ReferenceOrExt};
 
 /// The intermediate representation of an operation that will become a method.
-pub(crate) struct OperationMethod {
+pub struct OperationMethod {
     pub operation_id: String,
     pub tags: Vec<String>,
     pub method: HttpMethod,
@@ -170,7 +170,7 @@ impl std::fmt::Display for BodyContentType {
 }
 
 #[derive(Debug)]
-pub(crate) struct OperationResponse {
+pub struct OperationResponse {
     pub status_code: OperationResponseStatus,
     pub typ: OperationResponseKind,
     // TODO this isn't currently used because dropshot doesn't give us a
@@ -197,7 +197,7 @@ impl PartialOrd for OperationResponse {
 }
 
 #[derive(Debug, Clone, Eq, PartialEq)]
-pub(crate) enum OperationResponseStatus {
+pub enum OperationResponseStatus {
     Code(u16),
     Range(u16),
     Default,
@@ -254,7 +254,7 @@ impl PartialOrd for OperationResponseStatus {
 }
 
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone)]
-pub(crate) enum OperationResponseKind {
+pub enum OperationResponseKind {
     Type(TypeId),
     None,
     Raw,

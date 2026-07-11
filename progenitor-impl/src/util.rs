@@ -8,10 +8,10 @@ use unicode_ident::{is_xid_continue, is_xid_start};
 
 use crate::Result;
 
-pub(crate) trait ReferenceOrExt<T: ComponentLookup> {
+pub trait ReferenceOrExt<T: ComponentLookup> {
     fn item<'a>(&'a self, components: Option<&'a Components>) -> Result<&'a T>;
 }
-pub(crate) trait ComponentLookup: Sized {
+pub trait ComponentLookup: Sized {
     fn get_components(components: &Components) -> &IndexMap<String, ReferenceOr<Self>>;
 }
 
@@ -32,7 +32,7 @@ impl<T: ComponentLookup> ReferenceOrExt<T> for openapiv3::ReferenceOr<T> {
     }
 }
 
-pub(crate) fn items<'a, T>(
+pub fn items<'a, T>(
     refs: &'a [ReferenceOr<T>],
     components: Option<&'a Components>,
 ) -> impl Iterator<Item = Result<&'a T>>
@@ -42,7 +42,7 @@ where
     refs.iter().map(move |r| r.item(components))
 }
 
-pub(crate) fn parameter_map<'a>(
+pub fn parameter_map<'a>(
     refs: &'a [ReferenceOr<Parameter>],
     components: Option<&'a Components>,
 ) -> Result<BTreeMap<&'a String, &'a Parameter>> {
@@ -76,12 +76,12 @@ impl ComponentLookup for Schema {
 }
 
 #[derive(Clone, Copy)]
-pub(crate) enum Case {
+pub enum Case {
     Pascal,
     Snake,
 }
 
-pub(crate) fn sanitize(input: &str, case: Case) -> String {
+pub fn sanitize(input: &str, case: Case) -> String {
     use heck::{ToPascalCase, ToSnakeCase};
     let to_case = match case {
         Case::Pascal => str::to_pascal_case,
@@ -114,10 +114,7 @@ pub(crate) fn sanitize(input: &str, case: Case) -> String {
 
 /// Given a desired name and a slice of `proc_macro2::Ident`, generate a new
 /// Ident that is unique from the slice.
-pub(crate) fn unique_ident_from(
-    name: &str,
-    identities: &[proc_macro2::Ident],
-) -> proc_macro2::Ident {
+pub fn unique_ident_from(name: &str, identities: &[proc_macro2::Ident]) -> proc_macro2::Ident {
     let mut name = name.to_string();
 
     loop {

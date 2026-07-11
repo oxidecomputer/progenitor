@@ -630,7 +630,7 @@ where
     }
 }
 
-pub(crate) struct QuerySerializer<'a, S> {
+struct QuerySerializer<'a, S> {
     inner: S,
     name: &'a str,
 }
