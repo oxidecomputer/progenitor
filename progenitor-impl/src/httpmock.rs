@@ -144,7 +144,7 @@ impl Generator {
     }
 
     #[allow(clippy::too_many_lines, reason = "mirrors the generated mock method")]
-    fn httpmock_method(&mut self, method: &crate::method::OperationMethod) -> MockOp {
+    fn httpmock_method(&self, method: &crate::method::OperationMethod) -> MockOp {
         let when_name = sanitize(&format!("{}-when", method.operation_id), Case::Pascal);
         let when = format_ident!("{}", when_name).to_token_stream();
         let then_name = sanitize(&format!("{}-then", method.operation_id), Case::Pascal);

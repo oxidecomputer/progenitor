@@ -206,7 +206,7 @@ impl Generator {
         clippy::single_match_else,
         reason = "the match documents both request execution modes"
     )]
-    fn cli_method(&mut self, method: &crate::method::OperationMethod) -> CliOperation {
+    fn cli_method(&self, method: &crate::method::OperationMethod) -> CliOperation {
         let CliArg {
             parser: parser_args,
             consumer: consumer_args,
