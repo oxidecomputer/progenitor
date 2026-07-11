@@ -1892,11 +1892,10 @@ impl Generator {
         let struct_name = sanitize(&method.operation_id, Case::Pascal);
         let struct_ident = format_ident!("{}", struct_name);
 
-        let params = method
-            .params
-            .iter()
-            .map(|param| format!("\n    .{}({})", param.name, param.name))
-            .collect::<String>();
+        let mut params = String::new();
+        for param in &method.params {
+            write!(&mut params, "\n    .{}({})", param.name, param.name).unwrap();
+        }
 
         let eg = format!(
             "\
