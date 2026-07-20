@@ -76,6 +76,7 @@ impl Generator {
             .collect::<Vec<_>>();
 
         let crate_path = syn::TypePath {
+            attrs: Default::default(),
             qself: None,
             path: syn::parse_str(crate_name).unwrap(),
         };
