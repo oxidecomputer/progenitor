@@ -73,6 +73,7 @@ impl Generator {
         let then_impl = methods.iter().map(|op| &op.then_impl).collect::<Vec<_>>();
 
         let crate_path = syn::TypePath {
+            attrs: Default::default(),
             qself: None,
             path: syn::parse_str(crate_path)
                 .unwrap_or_else(|_| panic!("{} is not a valid identifier", crate_path)),
