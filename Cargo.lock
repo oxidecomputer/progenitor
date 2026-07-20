@@ -739,7 +739,7 @@ version = "0.1.0"
 dependencies = [
  "base64",
  "chrono",
- "prettyplease 0.2.37",
+ "prettyplease 0.3.0",
  "progenitor",
  "progenitor-client",
  "reqwest",
