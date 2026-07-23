@@ -67,9 +67,7 @@ impl<T: CliConfig> Cli<T> {
         self.config.execute_uno(matches, &mut request)?;
         let result = request.send().await;
         match result {
-            Ok(r) => {
-                todo!()
-            }
+            Ok(r) => todo!(),
             Err(r) => {
                 self.config.error(&r);
                 Err(anyhow::Error::new(r))
@@ -114,7 +112,7 @@ pub enum CliCommand {
 
 impl CliCommand {
     pub fn iter() -> impl Iterator<Item = CliCommand> {
-        vec![CliCommand::Uno].into_iter()
+        vec![CliCommand::Uno,].into_iter()
     }
 
     pub fn operation_id(&self) -> &'static str {

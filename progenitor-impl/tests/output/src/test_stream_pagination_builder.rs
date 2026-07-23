@@ -1,7 +1,7 @@
 #[allow(unused_imports)]
-use progenitor_client::{encode_path, ClientHooks, OperationInfo, RequestBuilderExt};
-#[allow(unused_imports)]
 pub use progenitor_client::{ByteStream, ClientInfo, Error, ResponseValue};
+#[allow(unused_imports)]
+use progenitor_client::{encode_path, ClientHooks, OperationInfo, RequestBuilderExt};
 /// Types used as operation parameters and responses.
 #[allow(clippy::all)]
 pub mod types {
@@ -11,13 +11,19 @@ pub mod types {
         pub struct ConversionError(::std::borrow::Cow<'static, str>);
         impl ::std::error::Error for ConversionError {}
         impl ::std::fmt::Display for ConversionError {
-            fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> Result<(), ::std::fmt::Error> {
+            fn fmt(
+                &self,
+                f: &mut ::std::fmt::Formatter<'_>,
+            ) -> Result<(), ::std::fmt::Error> {
                 ::std::fmt::Display::fmt(&self.0, f)
             }
         }
 
         impl ::std::fmt::Debug for ConversionError {
-            fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> Result<(), ::std::fmt::Error> {
+            fn fmt(
+                &self,
+                f: &mut ::std::fmt::Formatter<'_>,
+            ) -> Result<(), ::std::fmt::Error> {
                 ::std::fmt::Debug::fmt(&self.0, f)
             }
         }
@@ -61,7 +67,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct Error {
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         pub error_code: ::std::option::Option<::std::string::String>,
@@ -97,8 +103,7 @@ pub mod types {
     ///      }
     ///    },
     ///    "next_page": {
-    ///      "description": "token used to fetch the next page of results (if
-    /// any)",
+    ///      "description": "token used to fetch the next page of results (if any)",
     ///      "type": [
     ///        "string",
     ///        "null"
@@ -108,7 +113,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct Uint32ResultsPage {
         ///list of items on this page of results
         pub items: ::std::vec::Vec<u32>,
@@ -132,7 +137,10 @@ pub mod types {
                 ::std::string::String,
             >,
             message: ::std::result::Result<::std::string::String, ::std::string::String>,
-            request_id: ::std::result::Result<::std::string::String, ::std::string::String>,
+            request_id: ::std::result::Result<
+                ::std::string::String,
+                ::std::string::String,
+            >,
         }
 
         impl ::std::default::Default for Error {
@@ -153,7 +161,9 @@ pub mod types {
             {
                 self.error_code = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for error_code: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for error_code: {e}")
+                    });
                 self
             }
             pub fn message<T>(mut self, value: T) -> Self
@@ -163,7 +173,9 @@ pub mod types {
             {
                 self.message = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for message: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for message: {e}")
+                    });
                 self
             }
             pub fn request_id<T>(mut self, value: T) -> Self
@@ -173,7 +185,9 @@ pub mod types {
             {
                 self.request_id = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for request_id: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for request_id: {e}")
+                    });
                 self
             }
         }
@@ -227,7 +241,9 @@ pub mod types {
             {
                 self.items = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for items: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for items: {e}")
+                    });
                 self
             }
             pub fn next_page<T>(mut self, value: T) -> Self
@@ -237,7 +253,9 @@ pub mod types {
             {
                 self.next_page = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for next_page: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for next_page: {e}")
+                    });
                 self
             }
         }
@@ -284,9 +302,7 @@ impl Client {
         #[cfg(not(target_arch = "wasm32"))]
         let client = {
             let dur = ::std::time::Duration::from_secs(15u64);
-            reqwest::ClientBuilder::new()
-                .connect_timeout(dur)
-                .timeout(dur)
+            reqwest::ClientBuilder::new().connect_timeout(dur).timeout(dur)
         };
         #[cfg(target_arch = "wasm32")]
         let client = reqwest::ClientBuilder::new();
@@ -330,16 +346,15 @@ impl Client {
     ///Sends a `GET` request to `/`
     ///
     ///Arguments:
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `page_token`: Token returned by previous call to retrieve the
-    ///   subsequent page
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `page_token`: Token returned by previous call to retrieve the subsequent page
     ///```ignore
-    /// let response = client.paginated_u32s()
+    ///let response = client.paginated_u32s()
     ///    .limit(limit)
     ///    .page_token(page_token)
     ///    .send()
     ///    .await;
-    /// ```
+    ///```
     pub fn paginated_u32s(&self) -> builder::PaginatedU32s<'_> {
         builder::PaginatedU32s::new(self)
     }
@@ -351,8 +366,8 @@ pub mod builder {
     use super::types;
     #[allow(unused_imports)]
     use super::{
-        encode_path, ByteStream, ClientHooks, ClientInfo, Error, OperationInfo, RequestBuilderExt,
-        ResponseValue,
+        encode_path, ByteStream, ClientInfo, ClientHooks, Error, OperationInfo,
+        RequestBuilderExt, ResponseValue,
     };
     ///Builder for [`Client::paginated_u32s`]
     ///
@@ -377,9 +392,13 @@ pub mod builder {
         where
             V: std::convert::TryInto<::std::num::NonZeroU32>,
         {
-            self.limit = value.try_into().map(Some).map_err(|_| {
-                "conversion to `:: std :: num :: NonZeroU32` for limit failed".to_string()
-            });
+            self.limit = value
+                .try_into()
+                .map(Some)
+                .map_err(|_| {
+                    "conversion to `:: std :: num :: NonZeroU32` for limit failed"
+                        .to_string()
+                });
             self
         }
 
@@ -387,9 +406,13 @@ pub mod builder {
         where
             V: std::convert::TryInto<::std::string::String>,
         {
-            self.page_token = value.try_into().map(Some).map_err(|_| {
-                "conversion to `:: std :: string :: String` for page_token failed".to_string()
-            });
+            self.page_token = value
+                .try_into()
+                .map(Some)
+                .map_err(|_| {
+                    "conversion to `:: std :: string :: String` for page_token failed"
+                        .to_string()
+                });
             self
         }
 
@@ -397,19 +420,18 @@ pub mod builder {
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::Uint32ResultsPage>, Error<types::Error>> {
-            let Self {
-                client,
-                limit,
-                page_token,
-            } = self;
+            let Self { client, limit, page_token } = self;
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let url = format!("{}/", client.baseurl,);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-            header_map.append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
-            );
+            header_map
+                .append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(
+                        super::Client::api_version(),
+                    ),
+                );
             #[allow(unused_mut)]
             let mut request = client
                 .client
@@ -419,10 +441,7 @@ pub mod builder {
                     ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .query(&progenitor_client::QueryParam::new("limit", &limit))
-                .query(&progenitor_client::QueryParam::new(
-                    "page_token",
-                    &page_token,
-                ))
+                .query(&progenitor_client::QueryParam::new("page_token", &page_token))
                 .headers(header_map)
                 .build()?;
             let info = OperationInfo {
@@ -434,12 +453,20 @@ pub mod builder {
             let response = result?;
             match response.status().as_u16() {
                 200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
+                400u16..=499u16 => {
+                    Err(
+                        Error::ErrorResponse(
+                            ResponseValue::from_response(response).await?,
+                        ),
+                    )
+                }
+                500u16..=599u16 => {
+                    Err(
+                        Error::ErrorResponse(
+                            ResponseValue::from_response(response).await?,
+                        ),
+                    )
+                }
                 _ => Err(Error::UnexpectedResponse(response)),
             }
         }
@@ -460,28 +487,28 @@ pub mod builder {
                     let page = page.into_inner();
                     let first = futures::stream::iter(page.items).map(Ok);
                     let rest = futures::stream::try_unfold(
-                        (page.next_page, next),
-                        |(next_page, next)| async {
-                            if next_page.is_none() {
-                                Ok(None)
-                            } else {
-                                Self {
-                                    page_token: Ok(next_page),
-                                    ..next.clone()
+                            (page.next_page, next),
+                            |(next_page, next)| async {
+                                if next_page.is_none() {
+                                    Ok(None)
+                                } else {
+                                    Self {
+                                        page_token: Ok(next_page),
+                                        ..next.clone()
+                                    }
+                                        .send()
+                                        .map_ok(|page| {
+                                            let page = page.into_inner();
+                                            Some((
+                                                futures::stream::iter(page.items).map(Ok),
+                                                (page.next_page, next),
+                                            ))
+                                        })
+                                        .await
                                 }
-                                .send()
-                                .map_ok(|page| {
-                                    let page = page.into_inner();
-                                    Some((
-                                        futures::stream::iter(page.items).map(Ok),
-                                        (page.next_page, next),
-                                    ))
-                                })
-                                .await
-                            }
-                        },
-                    )
-                    .try_flatten();
+                            },
+                        )
+                        .try_flatten();
                     first.chain(rest)
                 })
                 .try_flatten_stream()

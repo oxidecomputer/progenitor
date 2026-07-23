@@ -19,12 +19,8 @@ use std::{
 
 fn generate_formatted(generator: &mut Generator, spec: &OpenAPI) -> String {
     let content = generator.generate_tokens(spec).unwrap();
-    let rustfmt_config = rustfmt_wrapper::config::Config {
-        normalize_doc_attributes: Some(true),
-        wrap_comments: Some(true),
-        ..Default::default()
-    };
-    space_out_items(rustfmt_wrapper::rustfmt_config(rustfmt_config, content).unwrap()).unwrap()
+    let syntax_tree = syn::parse2::<syn::File>(content).unwrap();
+    space_out_items(prettyplease::unparse(&syntax_tree)).unwrap()
 }
 
 #[allow(dead_code)]

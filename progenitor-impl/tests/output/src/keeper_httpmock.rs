@@ -1,8 +1,8 @@
 pub mod operations {
-    #![doc = r" [`When`](::httpmock::When) and [`Then`](::httpmock::Then)"]
-    #![doc = r" wrappers for each operation. Each can be converted to"]
-    #![doc = r" its inner type with a call to `into_inner()`. This can"]
-    #![doc = r" be used to explicitly deviate from permitted values."]
+    //! [`When`](::httpmock::When) and [`Then`](::httpmock::Then)
+    //! wrappers for each operation. Each can be converted to
+    //! its inner type with a call to `into_inner()`. This can
+    //! be used to explicitly deviate from permitted values.
     use crate::keeper_builder::*;
     pub struct EnrolWhen(::httpmock::When);
     impl EnrolWhen {
@@ -73,7 +73,8 @@ pub mod operations {
 
         pub fn created(self, value: &types::GlobalJobsResult) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(201u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -112,7 +113,8 @@ pub mod operations {
 
         pub fn created(self, value: &types::PingResult) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(201u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -155,7 +157,8 @@ pub mod operations {
 
         pub fn created(self, value: &types::ReportResult) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(201u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -198,7 +201,8 @@ pub mod operations {
 
         pub fn created(self, value: &types::ReportResult) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(201u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -241,7 +245,8 @@ pub mod operations {
 
         pub fn created(self, value: &types::ReportResult) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(201u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -250,9 +255,9 @@ pub mod operations {
     }
 }
 
-#[doc = r" An extension trait for [`MockServer`](::httpmock::MockServer) that"]
-#[doc = r" adds a method for each operation. These are the equivalent of"]
-#[doc = r" type-checked [`mock()`](::httpmock::MockServer::mock) calls."]
+/// An extension trait for [`MockServer`](::httpmock::MockServer) that
+/// adds a method for each operation. These are the equivalent of
+/// type-checked [`mock()`](::httpmock::MockServer::mock) calls.
 pub trait MockServerExt {
     fn enrol<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
@@ -280,10 +285,7 @@ impl MockServerExt for ::httpmock::MockServer {
         F: FnOnce(operations::EnrolWhen, operations::EnrolThen),
     {
         self.mock(|when, then| {
-            config_fn(
-                operations::EnrolWhen::new(when),
-                operations::EnrolThen::new(then),
-            )
+            config_fn(operations::EnrolWhen::new(when), operations::EnrolThen::new(then))
         })
     }
 
@@ -304,10 +306,7 @@ impl MockServerExt for ::httpmock::MockServer {
         F: FnOnce(operations::PingWhen, operations::PingThen),
     {
         self.mock(|when, then| {
-            config_fn(
-                operations::PingWhen::new(when),
-                operations::PingThen::new(then),
-            )
+            config_fn(operations::PingWhen::new(when), operations::PingThen::new(then))
         })
     }
 

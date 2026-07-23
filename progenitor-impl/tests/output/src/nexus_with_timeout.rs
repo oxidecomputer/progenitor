@@ -1,7 +1,7 @@
 #[allow(unused_imports)]
-use progenitor_client::{encode_path, ClientHooks, OperationInfo, RequestBuilderExt};
-#[allow(unused_imports)]
 pub use progenitor_client::{ByteStream, ClientInfo, Error, ResponseValue};
+#[allow(unused_imports)]
+use progenitor_client::{encode_path, ClientHooks, OperationInfo, RequestBuilderExt};
 /// Types used as operation parameters and responses.
 #[allow(clippy::all)]
 pub mod types {
@@ -11,13 +11,19 @@ pub mod types {
         pub struct ConversionError(::std::borrow::Cow<'static, str>);
         impl ::std::error::Error for ConversionError {}
         impl ::std::fmt::Display for ConversionError {
-            fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> Result<(), ::std::fmt::Error> {
+            fn fmt(
+                &self,
+                f: &mut ::std::fmt::Formatter<'_>,
+            ) -> Result<(), ::std::fmt::Error> {
                 ::std::fmt::Display::fmt(&self.0, f)
             }
         }
 
         impl ::std::fmt::Debug for ConversionError {
-            fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> Result<(), ::std::fmt::Error> {
+            fn fmt(
+                &self,
+                f: &mut ::std::fmt::Formatter<'_>,
+            ) -> Result<(), ::std::fmt::Error> {
                 ::std::fmt::Debug::fmt(&self.0, f)
             }
         }
@@ -41,8 +47,7 @@ pub mod types {
     ///
     /// ```json
     ///{
-    ///  "description": "Describes properties that should uniquely identify a
-    /// Gimlet.",
+    ///  "description": "Describes properties that should uniquely identify a Gimlet.",
     ///  "type": "object",
     ///  "required": [
     ///    "part",
@@ -64,7 +69,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct Baseboard {
         pub part: ::std::string::String,
         pub revision: i64,
@@ -73,22 +78,16 @@ pub mod types {
 
     ///A type storing a range over `T`.
     ///
-    ///This type supports ranges similar to the `RangeTo`, `Range` and
-    /// `RangeFrom` types in the standard library. Those cover `(..end)`,
-    /// `(start..end)`, and `(start..)` respectively.
+    ///This type supports ranges similar to the `RangeTo`, `Range` and `RangeFrom` types in the standard library. Those cover `(..end)`, `(start..end)`, and `(start..)` respectively.
     ///
     /// <details><summary>JSON schema</summary>
     ///
     /// ```json
     ///{
-    ///  "description": "A type storing a range over `T`.\n\nThis type supports
-    /// ranges similar to the `RangeTo`, `Range` and `RangeFrom` types in the
-    /// standard library. Those cover `(..end)`, `(start..end)`, and `(start..)`
-    /// respectively.",
+    ///  "description": "A type storing a range over `T`.\n\nThis type supports ranges similar to the `RangeTo`, `Range` and `RangeFrom` types in the standard library. Those cover `(..end)`, `(start..end)`, and `(start..)` respectively.",
     ///  "oneOf": [
     ///    {
-    ///      "description": "A range unbounded below and exclusively above,
-    /// `..end`.",
+    ///      "description": "A range unbounded below and exclusively above, `..end`.",
     ///      "type": "object",
     ///      "required": [
     ///        "end",
@@ -108,8 +107,7 @@ pub mod types {
     ///      }
     ///    },
     ///    {
-    ///      "description": "A range bounded inclusively below and exclusively
-    /// above, `start..end`.",
+    ///      "description": "A range bounded inclusively below and exclusively above, `start..end`.",
     ///      "type": "object",
     ///      "required": [
     ///        "end",
@@ -134,8 +132,7 @@ pub mod types {
     ///      }
     ///    },
     ///    {
-    ///      "description": "A range bounded inclusively below and unbounded
-    /// above, `start..`.",
+    ///      "description": "A range bounded inclusively below and unbounded above, `start..`.",
     ///      "type": "object",
     ///      "required": [
     ///        "start",
@@ -158,14 +155,13 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     #[serde(tag = "type")]
     pub enum BinRangedouble {
         ///A range unbounded below and exclusively above, `..end`.
         #[serde(rename = "range_to")]
         RangeTo { end: f64 },
-        ///A range bounded inclusively below and exclusively above,
-        /// `start..end`.
+        ///A range bounded inclusively below and exclusively above, `start..end`.
         #[serde(rename = "range")]
         Range { end: f64, start: f64 },
         ///A range bounded inclusively below and unbounded above, `start..`.
@@ -175,22 +171,16 @@ pub mod types {
 
     ///A type storing a range over `T`.
     ///
-    ///This type supports ranges similar to the `RangeTo`, `Range` and
-    /// `RangeFrom` types in the standard library. Those cover `(..end)`,
-    /// `(start..end)`, and `(start..)` respectively.
+    ///This type supports ranges similar to the `RangeTo`, `Range` and `RangeFrom` types in the standard library. Those cover `(..end)`, `(start..end)`, and `(start..)` respectively.
     ///
     /// <details><summary>JSON schema</summary>
     ///
     /// ```json
     ///{
-    ///  "description": "A type storing a range over `T`.\n\nThis type supports
-    /// ranges similar to the `RangeTo`, `Range` and `RangeFrom` types in the
-    /// standard library. Those cover `(..end)`, `(start..end)`, and `(start..)`
-    /// respectively.",
+    ///  "description": "A type storing a range over `T`.\n\nThis type supports ranges similar to the `RangeTo`, `Range` and `RangeFrom` types in the standard library. Those cover `(..end)`, `(start..end)`, and `(start..)` respectively.",
     ///  "oneOf": [
     ///    {
-    ///      "description": "A range unbounded below and exclusively above,
-    /// `..end`.",
+    ///      "description": "A range unbounded below and exclusively above, `..end`.",
     ///      "type": "object",
     ///      "required": [
     ///        "end",
@@ -210,8 +200,7 @@ pub mod types {
     ///      }
     ///    },
     ///    {
-    ///      "description": "A range bounded inclusively below and exclusively
-    /// above, `start..end`.",
+    ///      "description": "A range bounded inclusively below and exclusively above, `start..end`.",
     ///      "type": "object",
     ///      "required": [
     ///        "end",
@@ -236,8 +225,7 @@ pub mod types {
     ///      }
     ///    },
     ///    {
-    ///      "description": "A range bounded inclusively below and unbounded
-    /// above, `start..`.",
+    ///      "description": "A range bounded inclusively below and unbounded above, `start..`.",
     ///      "type": "object",
     ///      "required": [
     ///        "start",
@@ -260,14 +248,13 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     #[serde(tag = "type")]
     pub enum BinRangeint64 {
         ///A range unbounded below and exclusively above, `..end`.
         #[serde(rename = "range_to")]
         RangeTo { end: i64 },
-        ///A range bounded inclusively below and exclusively above,
-        /// `start..end`.
+        ///A range bounded inclusively below and exclusively above, `start..end`.
         #[serde(rename = "range")]
         Range { end: i64, start: i64 },
         ///A range bounded inclusively below and unbounded above, `start..`.
@@ -281,8 +268,7 @@ pub mod types {
     ///
     /// ```json
     ///{
-    ///  "description": "Type storing bin edges and a count of samples within
-    /// it.",
+    ///  "description": "Type storing bin edges and a count of samples within it.",
     ///  "type": "object",
     ///  "required": [
     ///    "count",
@@ -307,7 +293,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct Bindouble {
         ///The total count of samples in this bin.
         pub count: u64,
@@ -321,8 +307,7 @@ pub mod types {
     ///
     /// ```json
     ///{
-    ///  "description": "Type storing bin edges and a count of samples within
-    /// it.",
+    ///  "description": "Type storing bin edges and a count of samples within it.",
     ///  "type": "object",
     ///  "required": [
     ///    "count",
@@ -347,7 +332,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct Binint64 {
         ///The total count of samples in this bin.
         pub count: u64,
@@ -371,7 +356,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Serialize, Clone, Debug)]
     #[serde(transparent)]
     pub struct BlockSize(i64);
     impl ::std::ops::Deref for BlockSize {
@@ -389,7 +374,9 @@ pub mod types {
 
     impl ::std::convert::TryFrom<i64> for BlockSize {
         type Error = self::error::ConversionError;
-        fn try_from(value: i64) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: i64,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             if ![512_i64, 2048_i64, 4096_i64].contains(&value) {
                 Err("invalid value".into())
             } else {
@@ -404,36 +391,26 @@ pub mod types {
             D: ::serde::Deserializer<'de>,
         {
             Self::try_from(<i64>::deserialize(deserializer)?)
-                .map_err(|e| <D::Error as ::serde::de::Error>::custom(e.to_string()))
+                .map_err(|e| { <D::Error as ::serde::de::Error>::custom(e.to_string()) })
         }
     }
 
     ///A count of bytes, typically used either for memory or storage capacity
     ///
-    ///The maximum supported byte count is [`i64::MAX`].  This makes it
-    /// somewhat inconvenient to define constructors: a u32 constructor can be
-    /// infallible, but an i64 constructor can fail (if the value is negative)
-    /// and a u64 constructor can fail (if the value is larger than i64::MAX).
-    /// We provide all of these for consumers' convenience.
+    ///The maximum supported byte count is [`i64::MAX`].  This makes it somewhat inconvenient to define constructors: a u32 constructor can be infallible, but an i64 constructor can fail (if the value is negative) and a u64 constructor can fail (if the value is larger than i64::MAX).  We provide all of these for consumers' convenience.
     ///
     /// <details><summary>JSON schema</summary>
     ///
     /// ```json
     ///{
-    ///  "description": "A count of bytes, typically used either for memory or
-    /// storage capacity\n\nThe maximum supported byte count is [`i64::MAX`].
-    /// This makes it somewhat inconvenient to define constructors: a u32
-    /// constructor can be infallible, but an i64 constructor can fail (if the
-    /// value is negative) and a u64 constructor can fail (if the value is
-    /// larger than i64::MAX).  We provide all of these for consumers'
-    /// convenience.",
+    ///  "description": "A count of bytes, typically used either for memory or storage capacity\n\nThe maximum supported byte count is [`i64::MAX`].  This makes it somewhat inconvenient to define constructors: a u32 constructor can be infallible, but an i64 constructor can fail (if the value is negative) and a u64 constructor can fail (if the value is larger than i64::MAX).  We provide all of these for consumers' convenience.",
     ///  "type": "integer",
     ///  "format": "uint64",
     ///  "minimum": 0.0
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     #[serde(transparent)]
     pub struct ByteCount(pub u64);
     impl ::std::ops::Deref for ByteCount {
@@ -504,14 +481,12 @@ pub mod types {
     ///      "type": "string"
     ///    },
     ///    "id": {
-    ///      "description": "unique, immutable, system-controlled identifier for
-    /// each resource",
+    ///      "description": "unique, immutable, system-controlled identifier for each resource",
     ///      "type": "string",
     ///      "format": "uuid"
     ///    },
     ///    "name": {
-    ///      "description": "unique, mutable, user-controlled identifier for
-    /// each resource",
+    ///      "description": "unique, mutable, user-controlled identifier for each resource",
     ///      "allOf": [
     ///        {
     ///          "$ref": "#/components/schemas/Name"
@@ -535,7 +510,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct Certificate {
         ///human-readable free-form text about a resource
         pub description: ::std::string::String,
@@ -550,15 +525,13 @@ pub mod types {
         pub time_modified: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
-    ///Create-time parameters for a
-    /// [`Certificate`](crate::external_api::views::Certificate)
+    ///Create-time parameters for a [`Certificate`](crate::external_api::views::Certificate)
     ///
     /// <details><summary>JSON schema</summary>
     ///
     /// ```json
     ///{
-    ///  "description": "Create-time parameters for a
-    /// [`Certificate`](crate::external_api::views::Certificate)",
+    ///  "description": "Create-time parameters for a [`Certificate`](crate::external_api::views::Certificate)",
     ///  "type": "object",
     ///  "required": [
     ///    "cert",
@@ -604,7 +577,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct CertificateCreate {
         ///PEM file containing public certificate chain
         pub cert: ::std::vec::Vec<u8>,
@@ -636,8 +609,7 @@ pub mod types {
     ///      }
     ///    },
     ///    "next_page": {
-    ///      "description": "token used to fetch the next page of results (if
-    /// any)",
+    ///      "description": "token used to fetch the next page of results (if any)",
     ///      "type": [
     ///        "string",
     ///        "null"
@@ -647,7 +619,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct CertificateResultsPage {
         ///list of items on this page of results
         pub items: ::std::vec::Vec<Certificate>,
@@ -656,15 +628,13 @@ pub mod types {
         pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    ///Identity-related metadata that's included in "asset" public API objects
-    /// (which generally have no name or description)
+    ///Identity-related metadata that's included in "asset" public API objects (which generally have no name or description)
     ///
     /// <details><summary>JSON schema</summary>
     ///
     /// ```json
     ///{
-    ///  "description": "Identity-related metadata that's included in \"asset\"
-    /// public API objects (which generally have no name or description)",
+    ///  "description": "Identity-related metadata that's included in \"asset\" public API objects (which generally have no name or description)",
     ///  "type": "object",
     ///  "required": [
     ///    "component_type",
@@ -678,8 +648,7 @@ pub mod types {
     ///      "$ref": "#/components/schemas/UpdateableComponentType"
     ///    },
     ///    "id": {
-    ///      "description": "unique, immutable, system-controlled identifier for
-    /// each resource",
+    ///      "description": "unique, immutable, system-controlled identifier for each resource",
     ///      "type": "string",
     ///      "format": "uuid"
     ///    },
@@ -700,7 +669,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct ComponentUpdate {
         pub component_type: UpdateableComponentType,
         ///unique, immutable, system-controlled identifier for each resource
@@ -732,8 +701,7 @@ pub mod types {
     ///      }
     ///    },
     ///    "next_page": {
-    ///      "description": "token used to fetch the next page of results (if
-    /// any)",
+    ///      "description": "token used to fetch the next page of results (if any)",
     ///      "type": [
     ///        "string",
     ///        "null"
@@ -743,7 +711,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct ComponentUpdateResultsPage {
         ///list of items on this page of results
         pub items: ::std::vec::Vec<ComponentUpdate>,
@@ -777,7 +745,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct Cumulativedouble {
         pub start_time: ::chrono::DateTime<::chrono::offset::Utc>,
         pub value: f64,
@@ -808,7 +776,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct Cumulativeint64 {
         pub start_time: ::chrono::DateTime<::chrono::offset::Utc>,
         pub value: i64,
@@ -820,8 +788,7 @@ pub mod types {
     ///
     /// ```json
     ///{
-    ///  "description": "A `Datum` is a single sampled data point from a
-    /// metric.",
+    ///  "description": "A `Datum` is a single sampled data point from a metric.",
     ///  "oneOf": [
     ///    {
     ///      "type": "object",
@@ -996,7 +963,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     #[serde(tag = "type", content = "datum")]
     pub enum Datum {
         #[serde(rename = "bool")]
@@ -1090,8 +1057,8 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
-        :: serde :: Deserialize,
-        :: serde :: Serialize,
+        ::serde::Deserialize,
+        ::serde::Serialize,
         Clone,
         Copy,
         Debug,
@@ -1099,7 +1066,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd,
+        PartialOrd
     )]
     pub enum DatumType {
         #[serde(rename = "bool")]
@@ -1140,7 +1107,9 @@ pub mod types {
 
     impl ::std::str::FromStr for DatumType {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "bool" => Ok(Self::Bool),
                 "i64" => Ok(Self::I64),
@@ -1158,7 +1127,9 @@ pub mod types {
 
     impl ::std::convert::TryFrom<&str> for DatumType {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -1194,20 +1165,18 @@ pub mod types {
     ///  ],
     ///  "properties": {
     ///    "private_key": {
-    ///      "description": "request signing private key (base64 encoded der
-    /// file)",
+    ///      "description": "request signing private key (base64 encoded der file)",
     ///      "type": "string"
     ///    },
     ///    "public_cert": {
-    ///      "description": "request signing public certificate (base64 encoded
-    /// der file)",
+    ///      "description": "request signing public certificate (base64 encoded der file)",
     ///      "type": "string"
     ///    }
     ///  }
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct DerEncodedKeyPair {
         ///request signing private key (base64 encoded der file)
         pub private_key: ::std::string::String,
@@ -1242,7 +1211,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct DeviceAccessTokenRequest {
         pub client_id: ::uuid::Uuid,
         pub device_code: ::std::string::String,
@@ -1268,7 +1237,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct DeviceAuthRequest {
         pub client_id: ::uuid::Uuid,
     }
@@ -1291,7 +1260,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct DeviceAuthVerify {
         pub user_code: ::std::string::String,
     }
@@ -1325,7 +1294,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     #[serde(tag = "type", content = "value")]
     pub enum Digest {
         #[serde(rename = "sha256")]
@@ -1364,8 +1333,7 @@ pub mod types {
     ///      "type": "string"
     ///    },
     ///    "id": {
-    ///      "description": "unique, immutable, system-controlled identifier for
-    /// each resource",
+    ///      "description": "unique, immutable, system-controlled identifier for each resource",
     ///      "type": "string",
     ///      "format": "uuid"
     ///    },
@@ -1377,8 +1345,7 @@ pub mod types {
     ///      "format": "uuid"
     ///    },
     ///    "name": {
-    ///      "description": "unique, mutable, user-controlled identifier for
-    /// each resource",
+    ///      "description": "unique, mutable, user-controlled identifier for each resource",
     ///      "allOf": [
     ///        {
     ///          "$ref": "#/components/schemas/Name"
@@ -1416,7 +1383,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct Disk {
         pub block_size: ByteCount,
         ///human-readable free-form text about a resource
@@ -1439,15 +1406,13 @@ pub mod types {
         pub time_modified: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
-    ///Create-time parameters for a
-    /// [`Disk`](omicron_common::api::external::Disk)
+    ///Create-time parameters for a [`Disk`](omicron_common::api::external::Disk)
     ///
     /// <details><summary>JSON schema</summary>
     ///
     /// ```json
     ///{
-    ///  "description": "Create-time parameters for a
-    /// [`Disk`](omicron_common::api::external::Disk)",
+    ///  "description": "Create-time parameters for a [`Disk`](omicron_common::api::external::Disk)",
     ///  "type": "object",
     ///  "required": [
     ///    "description",
@@ -1482,7 +1447,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct DiskCreate {
         pub description: ::std::string::String,
         ///initial source for this disk
@@ -1492,17 +1457,13 @@ pub mod types {
         pub size: ByteCount,
     }
 
-    ///TODO-v1: Delete this Parameters for the
-    /// [`Disk`](omicron_common::api::external::Disk) to be attached or detached
-    /// to an instance
+    ///TODO-v1: Delete this Parameters for the [`Disk`](omicron_common::api::external::Disk) to be attached or detached to an instance
     ///
     /// <details><summary>JSON schema</summary>
     ///
     /// ```json
     ///{
-    ///  "description": "TODO-v1: Delete this Parameters for the
-    /// [`Disk`](omicron_common::api::external::Disk) to be attached or detached
-    /// to an instance",
+    ///  "description": "TODO-v1: Delete this Parameters for the [`Disk`](omicron_common::api::external::Disk) to be attached or detached to an instance",
     ///  "type": "object",
     ///  "required": [
     ///    "name"
@@ -1515,7 +1476,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct DiskIdentifier {
         pub name: Name,
     }
@@ -1539,8 +1500,8 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
-        :: serde :: Deserialize,
-        :: serde :: Serialize,
+        ::serde::Deserialize,
+        ::serde::Serialize,
         Clone,
         Copy,
         Debug,
@@ -1548,7 +1509,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd,
+        PartialOrd
     )]
     pub enum DiskMetricName {
         #[serde(rename = "activated")]
@@ -1580,7 +1541,9 @@ pub mod types {
 
     impl ::std::str::FromStr for DiskMetricName {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "activated" => Ok(Self::Activated),
                 "flush" => Ok(Self::Flush),
@@ -1595,7 +1558,9 @@ pub mod types {
 
     impl ::std::convert::TryFrom<&str> for DiskMetricName {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -1636,7 +1601,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct DiskPath {
         pub disk: NameOrId,
     }
@@ -1661,8 +1626,7 @@ pub mod types {
     ///      }
     ///    },
     ///    "next_page": {
-    ///      "description": "token used to fetch the next page of results (if
-    /// any)",
+    ///      "description": "token used to fetch the next page of results (if any)",
     ///      "type": [
     ///        "string",
     ///        "null"
@@ -1672,7 +1636,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct DiskResultsPage {
         ///list of items on this page of results
         pub items: ::std::vec::Vec<Disk>,
@@ -1698,8 +1662,7 @@ pub mod types {
     ///      ],
     ///      "properties": {
     ///        "block_size": {
-    ///          "description": "size of blocks for this Disk. valid values are:
-    /// 512, 2048, or 4096",
+    ///          "description": "size of blocks for this Disk. valid values are: 512, 2048, or 4096",
     ///          "allOf": [
     ///            {
     ///              "$ref": "#/components/schemas/BlockSize"
@@ -1778,14 +1741,13 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     #[serde(tag = "type")]
     pub enum DiskSource {
         ///Create a blank disk
         #[serde(rename = "blank")]
         Blank {
-            ///size of blocks for this Disk. valid values are: 512, 2048, or
-            /// 4096
+            ///size of blocks for this Disk. valid values are: 512, 2048, or 4096
             block_size: BlockSize,
         },
         ///Create a disk from a disk snapshot
@@ -1931,7 +1893,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     #[serde(tag = "state", content = "instance")]
     pub enum DiskState {
         #[serde(rename = "creating")]
@@ -1967,8 +1929,7 @@ pub mod types {
     ///  ],
     ///  "properties": {
     ///    "name": {
-    ///      "description": "The name of the distribution (e.g. \"alpine\" or
-    /// \"ubuntu\")",
+    ///      "description": "The name of the distribution (e.g. \"alpine\" or \"ubuntu\")",
     ///      "allOf": [
     ///        {
     ///          "$ref": "#/components/schemas/Name"
@@ -1976,15 +1937,14 @@ pub mod types {
     ///      ]
     ///    },
     ///    "version": {
-    ///      "description": "The version of the distribution (e.g. \"3.10\" or
-    /// \"18.04\")",
+    ///      "description": "The version of the distribution (e.g. \"3.10\" or \"18.04\")",
     ///      "type": "string"
     ///    }
     ///  }
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct Distribution {
         ///The name of the distribution (e.g. "alpine" or "ubuntu")
         pub name: Name,
@@ -2018,7 +1978,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct Error {
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         pub error_code: ::std::option::Option<::std::string::String>,
@@ -2049,7 +2009,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct ExternalIp {
         pub ip: ::std::net::IpAddr,
         pub kind: IpKind,
@@ -2061,13 +2021,10 @@ pub mod types {
     ///
     /// ```json
     ///{
-    ///  "description": "Parameters for creating an external IP address for
-    /// instances.",
+    ///  "description": "Parameters for creating an external IP address for instances.",
     ///  "oneOf": [
     ///    {
-    ///      "description": "An IP address providing both inbound and outbound
-    /// access. The address is automatically-assigned from the provided IP Pool,
-    /// or all available pools if not specified.",
+    ///      "description": "An IP address providing both inbound and outbound access. The address is automatically-assigned from the provided IP Pool, or all available pools if not specified.",
     ///      "type": "object",
     ///      "required": [
     ///        "type"
@@ -2099,12 +2056,10 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     #[serde(tag = "type")]
     pub enum ExternalIpCreate {
-        ///An IP address providing both inbound and outbound access. The
-        /// address is automatically-assigned from the provided IP Pool, or all
-        /// available pools if not specified.
+        ///An IP address providing both inbound and outbound access. The address is automatically-assigned from the provided IP Pool, or all available pools if not specified.
         #[serde(rename = "ephemeral")]
         Ephemeral {
             #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
@@ -2132,8 +2087,7 @@ pub mod types {
     ///      }
     ///    },
     ///    "next_page": {
-    ///      "description": "token used to fetch the next page of results (if
-    /// any)",
+    ///      "description": "token used to fetch the next page of results (if any)",
     ///      "type": [
     ///        "string",
     ///        "null"
@@ -2143,7 +2097,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct ExternalIpResultsPage {
         ///list of items on this page of results
         pub items: ::std::vec::Vec<ExternalIp>,
@@ -2158,8 +2112,7 @@ pub mod types {
     ///
     /// ```json
     ///{
-    ///  "description": "The name and type information for a field of a
-    /// timeseries schema.",
+    ///  "description": "The name and type information for a field of a timeseries schema.",
     ///  "type": "object",
     ///  "required": [
     ///    "name",
@@ -2180,7 +2133,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct FieldSchema {
         pub name: ::std::string::String,
         pub source: FieldSource,
@@ -2193,8 +2146,7 @@ pub mod types {
     ///
     /// ```json
     ///{
-    ///  "description": "The source from which a field is derived, the target or
-    /// metric.",
+    ///  "description": "The source from which a field is derived, the target or metric.",
     ///  "type": "string",
     ///  "enum": [
     ///    "target",
@@ -2204,8 +2156,8 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
-        :: serde :: Deserialize,
-        :: serde :: Serialize,
+        ::serde::Deserialize,
+        ::serde::Serialize,
         Clone,
         Copy,
         Debug,
@@ -2213,7 +2165,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd,
+        PartialOrd
     )]
     pub enum FieldSource {
         #[serde(rename = "target")]
@@ -2233,7 +2185,9 @@ pub mod types {
 
     impl ::std::str::FromStr for FieldSource {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "target" => Ok(Self::Target),
                 "metric" => Ok(Self::Metric),
@@ -2244,7 +2198,9 @@ pub mod types {
 
     impl ::std::convert::TryFrom<&str> for FieldSource {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -2273,8 +2229,7 @@ pub mod types {
     ///
     /// ```json
     ///{
-    ///  "description": "The `FieldType` identifies the data type of a target or
-    /// metric field.",
+    ///  "description": "The `FieldType` identifies the data type of a target or metric field.",
     ///  "type": "string",
     ///  "enum": [
     ///    "string",
@@ -2287,8 +2242,8 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
-        :: serde :: Deserialize,
-        :: serde :: Serialize,
+        ::serde::Deserialize,
+        ::serde::Serialize,
         Clone,
         Copy,
         Debug,
@@ -2296,7 +2251,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd,
+        PartialOrd
     )]
     pub enum FieldType {
         #[serde(rename = "string")]
@@ -2325,7 +2280,9 @@ pub mod types {
 
     impl ::std::str::FromStr for FieldType {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "string" => Ok(Self::String),
                 "i64" => Ok(Self::I64),
@@ -2339,7 +2296,9 @@ pub mod types {
 
     impl ::std::convert::TryFrom<&str> for FieldType {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -2378,8 +2337,8 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
-        :: serde :: Deserialize,
-        :: serde :: Serialize,
+        ::serde::Deserialize,
+        ::serde::Serialize,
         Clone,
         Copy,
         Debug,
@@ -2387,7 +2346,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd,
+        PartialOrd
     )]
     pub enum FleetRole {
         #[serde(rename = "admin")]
@@ -2410,7 +2369,9 @@ pub mod types {
 
     impl ::std::str::FromStr for FleetRole {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "admin" => Ok(Self::Admin),
                 "collaborator" => Ok(Self::Collaborator),
@@ -2422,7 +2383,9 @@ pub mod types {
 
     impl ::std::convert::TryFrom<&str> for FleetRole {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -2445,21 +2408,15 @@ pub mod types {
         }
     }
 
-    ///Client view of a [`Policy`], which describes how this resource may be
-    /// accessed
+    ///Client view of a [`Policy`], which describes how this resource may be accessed
     ///
-    ///Note that the Policy only describes access granted explicitly for this
-    /// resource.  The policies of parent resources can also cause a user to
-    /// have access to this resource.
+    ///Note that the Policy only describes access granted explicitly for this resource.  The policies of parent resources can also cause a user to have access to this resource.
     ///
     /// <details><summary>JSON schema</summary>
     ///
     /// ```json
     ///{
-    ///  "description": "Client view of a [`Policy`], which describes how this
-    /// resource may be accessed\n\nNote that the Policy only describes access
-    /// granted explicitly for this resource.  The policies of parent resources
-    /// can also cause a user to have access to this resource.",
+    ///  "description": "Client view of a [`Policy`], which describes how this resource may be accessed\n\nNote that the Policy only describes access granted explicitly for this resource.  The policies of parent resources can also cause a user to have access to this resource.",
     ///  "type": "object",
     ///  "required": [
     ///    "role_assignments"
@@ -2476,28 +2433,21 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct FleetRolePolicy {
         ///Roles directly assigned on this resource
         pub role_assignments: ::std::vec::Vec<FleetRoleRoleAssignment>,
     }
 
-    ///Describes the assignment of a particular role on a particular resource
-    /// to a particular identity (user, group, etc.)
+    ///Describes the assignment of a particular role on a particular resource to a particular identity (user, group, etc.)
     ///
-    ///The resource is not part of this structure.  Rather, [`RoleAssignment`]s
-    /// are put into a [`Policy`] and that Policy is applied to a particular
-    /// resource.
+    ///The resource is not part of this structure.  Rather, [`RoleAssignment`]s are put into a [`Policy`] and that Policy is applied to a particular resource.
     ///
     /// <details><summary>JSON schema</summary>
     ///
     /// ```json
     ///{
-    ///  "description": "Describes the assignment of a particular role on a
-    /// particular resource to a particular identity (user, group, etc.)\n\nThe
-    /// resource is not part of this structure.  Rather, [`RoleAssignment`]s are
-    /// put into a [`Policy`] and that Policy is applied to a particular
-    /// resource.",
+    ///  "description": "Describes the assignment of a particular role on a particular resource to a particular identity (user, group, etc.)\n\nThe resource is not part of this structure.  Rather, [`RoleAssignment`]s are put into a [`Policy`] and that Policy is applied to a particular resource.",
     ///  "type": "object",
     ///  "required": [
     ///    "identity_id",
@@ -2519,7 +2469,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct FleetRoleRoleAssignment {
         pub identity_id: ::uuid::Uuid,
         pub identity_type: IdentityType,
@@ -2578,14 +2528,12 @@ pub mod types {
     ///      "type": "string"
     ///    },
     ///    "id": {
-    ///      "description": "unique, immutable, system-controlled identifier for
-    /// each resource",
+    ///      "description": "unique, immutable, system-controlled identifier for each resource",
     ///      "type": "string",
     ///      "format": "uuid"
     ///    },
     ///    "name": {
-    ///      "description": "unique, mutable, user-controlled identifier for
-    /// each resource",
+    ///      "description": "unique, mutable, user-controlled identifier for each resource",
     ///      "allOf": [
     ///        {
     ///          "$ref": "#/components/schemas/Name"
@@ -2625,7 +2573,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct GlobalImage {
         ///size of blocks in bytes
         pub block_size: ByteCount,
@@ -2653,15 +2601,13 @@ pub mod types {
         pub version: ::std::string::String,
     }
 
-    ///Create-time parameters for an
-    /// [`GlobalImage`](crate::external_api::views::GlobalImage)
+    ///Create-time parameters for an [`GlobalImage`](crate::external_api::views::GlobalImage)
     ///
     /// <details><summary>JSON schema</summary>
     ///
     /// ```json
     ///{
-    ///  "description": "Create-time parameters for an
-    /// [`GlobalImage`](crate::external_api::views::GlobalImage)",
+    ///  "description": "Create-time parameters for an [`GlobalImage`](crate::external_api::views::GlobalImage)",
     ///  "type": "object",
     ///  "required": [
     ///    "block_size",
@@ -2705,7 +2651,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct GlobalImageCreate {
         ///block size in bytes
         pub block_size: BlockSize,
@@ -2737,8 +2683,7 @@ pub mod types {
     ///      }
     ///    },
     ///    "next_page": {
-    ///      "description": "token used to fetch the next page of results (if
-    /// any)",
+    ///      "description": "token used to fetch the next page of results (if any)",
     ///      "type": [
     ///        "string",
     ///        "null"
@@ -2748,7 +2693,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct GlobalImageResultsPage {
         ///list of items on this page of results
         pub items: ::std::vec::Vec<GlobalImage>,
@@ -2788,7 +2733,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct Group {
         ///Human-readable name that can identify the group
         pub display_name: ::std::string::String,
@@ -2817,8 +2762,7 @@ pub mod types {
     ///      }
     ///    },
     ///    "next_page": {
-    ///      "description": "token used to fetch the next page of results (if
-    /// any)",
+    ///      "description": "token used to fetch the next page of results (if any)",
     ///      "type": [
     ///        "string",
     ///        "null"
@@ -2828,7 +2772,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct GroupResultsPage {
         ///list of items on this page of results
         pub items: ::std::vec::Vec<Group>,
@@ -2839,83 +2783,29 @@ pub mod types {
 
     ///A simple type for managing a histogram metric.
     ///
-    ///A histogram maintains the count of any number of samples, over a set of
-    /// bins. Bins are specified on construction via their _left_ edges,
-    /// inclusive. There can't be any "gaps" in the bins, and an additional bin
-    /// may be added to the left, right, or both so that the bins extend to the
-    /// entire range of the support.
+    ///A histogram maintains the count of any number of samples, over a set of bins. Bins are specified on construction via their _left_ edges, inclusive. There can't be any "gaps" in the bins, and an additional bin may be added to the left, right, or both so that the bins extend to the entire range of the support.
     ///
-    ///Note that any gaps, unsorted bins, or non-finite values will result in
-    /// an error.
+    ///Note that any gaps, unsorted bins, or non-finite values will result in an error.
     ///
     ///Example ------- ```rust use oximeter::histogram::{BinRange, Histogram};
     ///
-    ///let edges = [0i64, 10, 20]; let mut hist =
-    /// Histogram::new(&edges).unwrap(); assert_eq!(hist.n_bins(), 4); // One
-    /// additional bin for the range (20..) assert_eq!(hist.n_samples(), 0);
-    /// hist.sample(4); hist.sample(100); assert_eq!(hist.n_samples(), 2);
+    ///let edges = [0i64, 10, 20]; let mut hist = Histogram::new(&edges).unwrap(); assert_eq!(hist.n_bins(), 4); // One additional bin for the range (20..) assert_eq!(hist.n_samples(), 0); hist.sample(4); hist.sample(100); assert_eq!(hist.n_samples(), 2);
     ///
-    ///let data = hist.iter().collect::<Vec<_>>(); assert_eq!(data[0].range,
-    /// BinRange::range(i64::MIN, 0)); // An additional bin for `..0`
-    /// assert_eq!(data[0].count, 0); // Nothing is in this bin
+    ///let data = hist.iter().collect::<Vec<_>>(); assert_eq!(data[0].range, BinRange::range(i64::MIN, 0)); // An additional bin for `..0` assert_eq!(data[0].count, 0); // Nothing is in this bin
     ///
-    ///assert_eq!(data[1].range, BinRange::range(0, 10)); // The range `0..10`
-    /// assert_eq!(data[1].count, 1); // 4 is sampled into this bin ```
+    ///assert_eq!(data[1].range, BinRange::range(0, 10)); // The range `0..10` assert_eq!(data[1].count, 1); // 4 is sampled into this bin ```
     ///
     ///Notes -----
     ///
-    ///Histograms may be constructed either from their left bin edges, or from
-    /// a sequence of ranges. In either case, the left-most bin may be converted
-    /// upon construction. In particular, if the left-most value is not equal to
-    /// the minimum of the support, a new bin will be added from the minimum to
-    /// that provided value. If the left-most value _is_ the support's minimum,
-    /// because the provided bin was unbounded below, such as `(..0)`, then that
-    /// bin will be converted into one bounded below, `(MIN..0)` in this case.
+    ///Histograms may be constructed either from their left bin edges, or from a sequence of ranges. In either case, the left-most bin may be converted upon construction. In particular, if the left-most value is not equal to the minimum of the support, a new bin will be added from the minimum to that provided value. If the left-most value _is_ the support's minimum, because the provided bin was unbounded below, such as `(..0)`, then that bin will be converted into one bounded below, `(MIN..0)` in this case.
     ///
-    ///The short of this is that, most of the time, it shouldn't matter. If one
-    /// specifies the extremes of the support as their bins, be aware that the
-    /// left-most may be converted from a `BinRange::RangeTo` into a
-    /// `BinRange::Range`. In other words, the first bin of a histogram is
-    /// _always_ a `Bin::Range` or a `Bin::RangeFrom` after construction. In
-    /// fact, every bin is one of those variants, the `BinRange::RangeTo` is
-    /// only provided as a convenience during construction.
+    ///The short of this is that, most of the time, it shouldn't matter. If one specifies the extremes of the support as their bins, be aware that the left-most may be converted from a `BinRange::RangeTo` into a `BinRange::Range`. In other words, the first bin of a histogram is _always_ a `Bin::Range` or a `Bin::RangeFrom` after construction. In fact, every bin is one of those variants, the `BinRange::RangeTo` is only provided as a convenience during construction.
     ///
     /// <details><summary>JSON schema</summary>
     ///
     /// ```json
     ///{
-    ///  "description": "A simple type for managing a histogram metric.\n\nA
-    /// histogram maintains the count of any number of samples, over a set of
-    /// bins. Bins are specified on construction via their _left_ edges,
-    /// inclusive. There can't be any \"gaps\" in the bins, and an additional
-    /// bin may be added to the left, right, or both so that the bins extend to
-    /// the entire range of the support.\n\nNote that any gaps, unsorted bins,
-    /// or non-finite values will result in an error.\n\nExample ------- ```rust
-    /// use oximeter::histogram::{BinRange, Histogram};\n\nlet edges = [0i64,
-    /// 10, 20]; let mut hist = Histogram::new(&edges).unwrap();
-    /// assert_eq!(hist.n_bins(), 4); // One additional bin for the range (20..)
-    /// assert_eq!(hist.n_samples(), 0); hist.sample(4); hist.sample(100);
-    /// assert_eq!(hist.n_samples(), 2);\n\nlet data =
-    /// hist.iter().collect::<Vec<_>>(); assert_eq!(data[0].range,
-    /// BinRange::range(i64::MIN, 0)); // An additional bin for `..0`
-    /// assert_eq!(data[0].count, 0); // Nothing is in this
-    /// bin\n\nassert_eq!(data[1].range, BinRange::range(0, 10)); // The range
-    /// `0..10` assert_eq!(data[1].count, 1); // 4 is sampled into this bin
-    /// ```\n\nNotes -----\n\nHistograms may be constructed either from their
-    /// left bin edges, or from a sequence of ranges. In either case, the
-    /// left-most bin may be converted upon construction. In particular, if the
-    /// left-most value is not equal to the minimum of the support, a new bin
-    /// will be added from the minimum to that provided value. If the left-most
-    /// value _is_ the support's minimum, because the provided bin was unbounded
-    /// below, such as `(..0)`, then that bin will be converted into one bounded
-    /// below, `(MIN..0)` in this case.\n\nThe short of this is that, most of
-    /// the time, it shouldn't matter. If one specifies the extremes of the
-    /// support as their bins, be aware that the left-most may be converted from
-    /// a `BinRange::RangeTo` into a `BinRange::Range`. In other words, the
-    /// first bin of a histogram is _always_ a `Bin::Range` or a
-    /// `Bin::RangeFrom` after construction. In fact, every bin is one of those
-    /// variants, the `BinRange::RangeTo` is only provided as a convenience
-    /// during construction.",
+    ///  "description": "A simple type for managing a histogram metric.\n\nA histogram maintains the count of any number of samples, over a set of bins. Bins are specified on construction via their _left_ edges, inclusive. There can't be any \"gaps\" in the bins, and an additional bin may be added to the left, right, or both so that the bins extend to the entire range of the support.\n\nNote that any gaps, unsorted bins, or non-finite values will result in an error.\n\nExample ------- ```rust use oximeter::histogram::{BinRange, Histogram};\n\nlet edges = [0i64, 10, 20]; let mut hist = Histogram::new(&edges).unwrap(); assert_eq!(hist.n_bins(), 4); // One additional bin for the range (20..) assert_eq!(hist.n_samples(), 0); hist.sample(4); hist.sample(100); assert_eq!(hist.n_samples(), 2);\n\nlet data = hist.iter().collect::<Vec<_>>(); assert_eq!(data[0].range, BinRange::range(i64::MIN, 0)); // An additional bin for `..0` assert_eq!(data[0].count, 0); // Nothing is in this bin\n\nassert_eq!(data[1].range, BinRange::range(0, 10)); // The range `0..10` assert_eq!(data[1].count, 1); // 4 is sampled into this bin ```\n\nNotes -----\n\nHistograms may be constructed either from their left bin edges, or from a sequence of ranges. In either case, the left-most bin may be converted upon construction. In particular, if the left-most value is not equal to the minimum of the support, a new bin will be added from the minimum to that provided value. If the left-most value _is_ the support's minimum, because the provided bin was unbounded below, such as `(..0)`, then that bin will be converted into one bounded below, `(MIN..0)` in this case.\n\nThe short of this is that, most of the time, it shouldn't matter. If one specifies the extremes of the support as their bins, be aware that the left-most may be converted from a `BinRange::RangeTo` into a `BinRange::Range`. In other words, the first bin of a histogram is _always_ a `Bin::Range` or a `Bin::RangeFrom` after construction. In fact, every bin is one of those variants, the `BinRange::RangeTo` is only provided as a convenience during construction.",
     ///  "type": "object",
     ///  "required": [
     ///    "bins",
@@ -2942,7 +2832,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct Histogramdouble {
         pub bins: ::std::vec::Vec<Bindouble>,
         pub n_samples: u64,
@@ -2951,83 +2841,29 @@ pub mod types {
 
     ///A simple type for managing a histogram metric.
     ///
-    ///A histogram maintains the count of any number of samples, over a set of
-    /// bins. Bins are specified on construction via their _left_ edges,
-    /// inclusive. There can't be any "gaps" in the bins, and an additional bin
-    /// may be added to the left, right, or both so that the bins extend to the
-    /// entire range of the support.
+    ///A histogram maintains the count of any number of samples, over a set of bins. Bins are specified on construction via their _left_ edges, inclusive. There can't be any "gaps" in the bins, and an additional bin may be added to the left, right, or both so that the bins extend to the entire range of the support.
     ///
-    ///Note that any gaps, unsorted bins, or non-finite values will result in
-    /// an error.
+    ///Note that any gaps, unsorted bins, or non-finite values will result in an error.
     ///
     ///Example ------- ```rust use oximeter::histogram::{BinRange, Histogram};
     ///
-    ///let edges = [0i64, 10, 20]; let mut hist =
-    /// Histogram::new(&edges).unwrap(); assert_eq!(hist.n_bins(), 4); // One
-    /// additional bin for the range (20..) assert_eq!(hist.n_samples(), 0);
-    /// hist.sample(4); hist.sample(100); assert_eq!(hist.n_samples(), 2);
+    ///let edges = [0i64, 10, 20]; let mut hist = Histogram::new(&edges).unwrap(); assert_eq!(hist.n_bins(), 4); // One additional bin for the range (20..) assert_eq!(hist.n_samples(), 0); hist.sample(4); hist.sample(100); assert_eq!(hist.n_samples(), 2);
     ///
-    ///let data = hist.iter().collect::<Vec<_>>(); assert_eq!(data[0].range,
-    /// BinRange::range(i64::MIN, 0)); // An additional bin for `..0`
-    /// assert_eq!(data[0].count, 0); // Nothing is in this bin
+    ///let data = hist.iter().collect::<Vec<_>>(); assert_eq!(data[0].range, BinRange::range(i64::MIN, 0)); // An additional bin for `..0` assert_eq!(data[0].count, 0); // Nothing is in this bin
     ///
-    ///assert_eq!(data[1].range, BinRange::range(0, 10)); // The range `0..10`
-    /// assert_eq!(data[1].count, 1); // 4 is sampled into this bin ```
+    ///assert_eq!(data[1].range, BinRange::range(0, 10)); // The range `0..10` assert_eq!(data[1].count, 1); // 4 is sampled into this bin ```
     ///
     ///Notes -----
     ///
-    ///Histograms may be constructed either from their left bin edges, or from
-    /// a sequence of ranges. In either case, the left-most bin may be converted
-    /// upon construction. In particular, if the left-most value is not equal to
-    /// the minimum of the support, a new bin will be added from the minimum to
-    /// that provided value. If the left-most value _is_ the support's minimum,
-    /// because the provided bin was unbounded below, such as `(..0)`, then that
-    /// bin will be converted into one bounded below, `(MIN..0)` in this case.
+    ///Histograms may be constructed either from their left bin edges, or from a sequence of ranges. In either case, the left-most bin may be converted upon construction. In particular, if the left-most value is not equal to the minimum of the support, a new bin will be added from the minimum to that provided value. If the left-most value _is_ the support's minimum, because the provided bin was unbounded below, such as `(..0)`, then that bin will be converted into one bounded below, `(MIN..0)` in this case.
     ///
-    ///The short of this is that, most of the time, it shouldn't matter. If one
-    /// specifies the extremes of the support as their bins, be aware that the
-    /// left-most may be converted from a `BinRange::RangeTo` into a
-    /// `BinRange::Range`. In other words, the first bin of a histogram is
-    /// _always_ a `Bin::Range` or a `Bin::RangeFrom` after construction. In
-    /// fact, every bin is one of those variants, the `BinRange::RangeTo` is
-    /// only provided as a convenience during construction.
+    ///The short of this is that, most of the time, it shouldn't matter. If one specifies the extremes of the support as their bins, be aware that the left-most may be converted from a `BinRange::RangeTo` into a `BinRange::Range`. In other words, the first bin of a histogram is _always_ a `Bin::Range` or a `Bin::RangeFrom` after construction. In fact, every bin is one of those variants, the `BinRange::RangeTo` is only provided as a convenience during construction.
     ///
     /// <details><summary>JSON schema</summary>
     ///
     /// ```json
     ///{
-    ///  "description": "A simple type for managing a histogram metric.\n\nA
-    /// histogram maintains the count of any number of samples, over a set of
-    /// bins. Bins are specified on construction via their _left_ edges,
-    /// inclusive. There can't be any \"gaps\" in the bins, and an additional
-    /// bin may be added to the left, right, or both so that the bins extend to
-    /// the entire range of the support.\n\nNote that any gaps, unsorted bins,
-    /// or non-finite values will result in an error.\n\nExample ------- ```rust
-    /// use oximeter::histogram::{BinRange, Histogram};\n\nlet edges = [0i64,
-    /// 10, 20]; let mut hist = Histogram::new(&edges).unwrap();
-    /// assert_eq!(hist.n_bins(), 4); // One additional bin for the range (20..)
-    /// assert_eq!(hist.n_samples(), 0); hist.sample(4); hist.sample(100);
-    /// assert_eq!(hist.n_samples(), 2);\n\nlet data =
-    /// hist.iter().collect::<Vec<_>>(); assert_eq!(data[0].range,
-    /// BinRange::range(i64::MIN, 0)); // An additional bin for `..0`
-    /// assert_eq!(data[0].count, 0); // Nothing is in this
-    /// bin\n\nassert_eq!(data[1].range, BinRange::range(0, 10)); // The range
-    /// `0..10` assert_eq!(data[1].count, 1); // 4 is sampled into this bin
-    /// ```\n\nNotes -----\n\nHistograms may be constructed either from their
-    /// left bin edges, or from a sequence of ranges. In either case, the
-    /// left-most bin may be converted upon construction. In particular, if the
-    /// left-most value is not equal to the minimum of the support, a new bin
-    /// will be added from the minimum to that provided value. If the left-most
-    /// value _is_ the support's minimum, because the provided bin was unbounded
-    /// below, such as `(..0)`, then that bin will be converted into one bounded
-    /// below, `(MIN..0)` in this case.\n\nThe short of this is that, most of
-    /// the time, it shouldn't matter. If one specifies the extremes of the
-    /// support as their bins, be aware that the left-most may be converted from
-    /// a `BinRange::RangeTo` into a `BinRange::Range`. In other words, the
-    /// first bin of a histogram is _always_ a `Bin::Range` or a
-    /// `Bin::RangeFrom` after construction. In fact, every bin is one of those
-    /// variants, the `BinRange::RangeTo` is only provided as a convenience
-    /// during construction.",
+    ///  "description": "A simple type for managing a histogram metric.\n\nA histogram maintains the count of any number of samples, over a set of bins. Bins are specified on construction via their _left_ edges, inclusive. There can't be any \"gaps\" in the bins, and an additional bin may be added to the left, right, or both so that the bins extend to the entire range of the support.\n\nNote that any gaps, unsorted bins, or non-finite values will result in an error.\n\nExample ------- ```rust use oximeter::histogram::{BinRange, Histogram};\n\nlet edges = [0i64, 10, 20]; let mut hist = Histogram::new(&edges).unwrap(); assert_eq!(hist.n_bins(), 4); // One additional bin for the range (20..) assert_eq!(hist.n_samples(), 0); hist.sample(4); hist.sample(100); assert_eq!(hist.n_samples(), 2);\n\nlet data = hist.iter().collect::<Vec<_>>(); assert_eq!(data[0].range, BinRange::range(i64::MIN, 0)); // An additional bin for `..0` assert_eq!(data[0].count, 0); // Nothing is in this bin\n\nassert_eq!(data[1].range, BinRange::range(0, 10)); // The range `0..10` assert_eq!(data[1].count, 1); // 4 is sampled into this bin ```\n\nNotes -----\n\nHistograms may be constructed either from their left bin edges, or from a sequence of ranges. In either case, the left-most bin may be converted upon construction. In particular, if the left-most value is not equal to the minimum of the support, a new bin will be added from the minimum to that provided value. If the left-most value _is_ the support's minimum, because the provided bin was unbounded below, such as `(..0)`, then that bin will be converted into one bounded below, `(MIN..0)` in this case.\n\nThe short of this is that, most of the time, it shouldn't matter. If one specifies the extremes of the support as their bins, be aware that the left-most may be converted from a `BinRange::RangeTo` into a `BinRange::Range`. In other words, the first bin of a histogram is _always_ a `Bin::Range` or a `Bin::RangeFrom` after construction. In fact, every bin is one of those variants, the `BinRange::RangeTo` is only provided as a convenience during construction.",
     ///  "type": "object",
     ///  "required": [
     ///    "bins",
@@ -3054,7 +2890,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct Histogramint64 {
         pub bins: ::std::vec::Vec<Binint64>,
         pub n_samples: u64,
@@ -3069,8 +2905,7 @@ pub mod types {
     ///
     /// ```json
     ///{
-    ///  "description": "Supported set of sort modes for scanning by id
-    /// only.\n\nCurrently, we only support scanning in ascending order.",
+    ///  "description": "Supported set of sort modes for scanning by id only.\n\nCurrently, we only support scanning in ascending order.",
     ///  "oneOf": [
     ///    {
     ///      "description": "sort in increasing order of \"id\"",
@@ -3084,8 +2919,8 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
-        :: serde :: Deserialize,
-        :: serde :: Serialize,
+        ::serde::Deserialize,
+        ::serde::Serialize,
         Clone,
         Copy,
         Debug,
@@ -3093,7 +2928,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd,
+        PartialOrd
     )]
     pub enum IdSortMode {
         ///sort in increasing order of "id"
@@ -3111,7 +2946,9 @@ pub mod types {
 
     impl ::std::str::FromStr for IdSortMode {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "id_ascending" => Ok(Self::IdAscending),
                 _ => Err("invalid value".into()),
@@ -3121,7 +2958,9 @@ pub mod types {
 
     impl ::std::convert::TryFrom<&str> for IdSortMode {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -3166,14 +3005,12 @@ pub mod types {
     ///      "type": "string"
     ///    },
     ///    "id": {
-    ///      "description": "unique, immutable, system-controlled identifier for
-    /// each resource",
+    ///      "description": "unique, immutable, system-controlled identifier for each resource",
     ///      "type": "string",
     ///      "format": "uuid"
     ///    },
     ///    "name": {
-    ///      "description": "unique, mutable, user-controlled identifier for
-    /// each resource",
+    ///      "description": "unique, mutable, user-controlled identifier for each resource",
     ///      "allOf": [
     ///        {
     ///          "$ref": "#/components/schemas/Name"
@@ -3202,7 +3039,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct IdentityProvider {
         ///human-readable free-form text about a resource
         pub description: ::std::string::String,
@@ -3238,8 +3075,7 @@ pub mod types {
     ///      }
     ///    },
     ///    "next_page": {
-    ///      "description": "token used to fetch the next page of results (if
-    /// any)",
+    ///      "description": "token used to fetch the next page of results (if any)",
     ///      "type": [
     ///        "string",
     ///        "null"
@@ -3249,7 +3085,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct IdentityProviderResultsPage {
         ///list of items on this page of results
         pub items: ::std::vec::Vec<IdentityProvider>,
@@ -3277,8 +3113,8 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
-        :: serde :: Deserialize,
-        :: serde :: Serialize,
+        ::serde::Deserialize,
+        ::serde::Serialize,
         Clone,
         Copy,
         Debug,
@@ -3286,7 +3122,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd,
+        PartialOrd
     )]
     pub enum IdentityProviderType {
         ///SAML identity provider
@@ -3304,7 +3140,9 @@ pub mod types {
 
     impl ::std::str::FromStr for IdentityProviderType {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "saml" => Ok(Self::Saml),
                 _ => Err("invalid value".into()),
@@ -3314,7 +3152,9 @@ pub mod types {
 
     impl ::std::convert::TryFrom<&str> for IdentityProviderType {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -3353,8 +3193,8 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
-        :: serde :: Deserialize,
-        :: serde :: Serialize,
+        ::serde::Deserialize,
+        ::serde::Serialize,
         Clone,
         Copy,
         Debug,
@@ -3362,7 +3202,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd,
+        PartialOrd
     )]
     pub enum IdentityType {
         #[serde(rename = "silo_user")]
@@ -3382,7 +3222,9 @@ pub mod types {
 
     impl ::std::str::FromStr for IdentityType {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "silo_user" => Ok(Self::SiloUser),
                 "silo_group" => Ok(Self::SiloGroup),
@@ -3393,7 +3235,9 @@ pub mod types {
 
     impl ::std::convert::TryFrom<&str> for IdentityType {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -3463,7 +3307,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     #[serde(tag = "type")]
     pub enum IdpMetadataSource {
         #[serde(rename = "url")]
@@ -3519,14 +3363,12 @@ pub mod types {
     ///      ]
     ///    },
     ///    "id": {
-    ///      "description": "unique, immutable, system-controlled identifier for
-    /// each resource",
+    ///      "description": "unique, immutable, system-controlled identifier for each resource",
     ///      "type": "string",
     ///      "format": "uuid"
     ///    },
     ///    "name": {
-    ///      "description": "unique, mutable, user-controlled identifier for
-    /// each resource",
+    ///      "description": "unique, mutable, user-controlled identifier for each resource",
     ///      "allOf": [
     ///        {
     ///          "$ref": "#/components/schemas/Name"
@@ -3574,7 +3416,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct Image {
         ///size of blocks in bytes
         pub block_size: ByteCount,
@@ -3603,15 +3445,13 @@ pub mod types {
         pub version: ::std::option::Option<::std::string::String>,
     }
 
-    ///Create-time parameters for an
-    /// [`Image`](crate::external_api::views::Image)
+    ///Create-time parameters for an [`Image`](crate::external_api::views::Image)
     ///
     /// <details><summary>JSON schema</summary>
     ///
     /// ```json
     ///{
-    ///  "description": "Create-time parameters for an
-    /// [`Image`](crate::external_api::views::Image)",
+    ///  "description": "Create-time parameters for an [`Image`](crate::external_api::views::Image)",
     ///  "type": "object",
     ///  "required": [
     ///    "block_size",
@@ -3646,7 +3486,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct ImageCreate {
         ///block size in bytes
         pub block_size: BlockSize,
@@ -3676,8 +3516,7 @@ pub mod types {
     ///      }
     ///    },
     ///    "next_page": {
-    ///      "description": "token used to fetch the next page of results (if
-    /// any)",
+    ///      "description": "token used to fetch the next page of results (if any)",
     ///      "type": [
     ///        "string",
     ///        "null"
@@ -3687,7 +3526,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct ImageResultsPage {
         ///list of items on this page of results
         pub items: ::std::vec::Vec<Image>,
@@ -3742,8 +3581,7 @@ pub mod types {
     ///      }
     ///    },
     ///    {
-    ///      "description": "Boot the Alpine ISO that ships with the Propolis
-    /// zone. Intended for development purposes only.",
+    ///      "description": "Boot the Alpine ISO that ships with the Propolis zone. Intended for development purposes only.",
     ///      "type": "object",
     ///      "required": [
     ///        "type"
@@ -3761,7 +3599,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     #[serde(tag = "type")]
     pub enum ImageSource {
         #[serde(rename = "url")]
@@ -3803,8 +3641,7 @@ pub mod types {
     ///      "type": "string"
     ///    },
     ///    "id": {
-    ///      "description": "unique, immutable, system-controlled identifier for
-    /// each resource",
+    ///      "description": "unique, immutable, system-controlled identifier for each resource",
     ///      "type": "string",
     ///      "format": "uuid"
     ///    },
@@ -3817,8 +3654,7 @@ pub mod types {
     ///      ]
     ///    },
     ///    "name": {
-    ///      "description": "unique, mutable, user-controlled identifier for
-    /// each resource",
+    ///      "description": "unique, mutable, user-controlled identifier for each resource",
     ///      "allOf": [
     ///        {
     ///          "$ref": "#/components/schemas/Name"
@@ -3859,7 +3695,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct Instance {
         ///human-readable free-form text about a resource
         pub description: ::std::string::String,
@@ -3896,7 +3732,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     #[serde(transparent)]
     pub struct InstanceCpuCount(pub u16);
     impl ::std::ops::Deref for InstanceCpuCount {
@@ -3945,15 +3781,13 @@ pub mod types {
         }
     }
 
-    ///Create-time parameters for an
-    /// [`Instance`](omicron_common::api::external::Instance)
+    ///Create-time parameters for an [`Instance`](omicron_common::api::external::Instance)
     ///
     /// <details><summary>JSON schema</summary>
     ///
     /// ```json
     ///{
-    ///  "description": "Create-time parameters for an
-    /// [`Instance`](omicron_common::api::external::Instance)",
+    ///  "description": "Create-time parameters for an [`Instance`](omicron_common::api::external::Instance)",
     ///  "type": "object",
     ///  "required": [
     ///    "description",
@@ -3967,8 +3801,7 @@ pub mod types {
     ///      "type": "string"
     ///    },
     ///    "disks": {
-    ///      "description": "The disks to be created or attached for this
-    /// instance.",
+    ///      "description": "The disks to be created or attached for this instance.",
     ///      "default": [],
     ///      "type": "array",
     ///      "items": {
@@ -3976,11 +3809,7 @@ pub mod types {
     ///      }
     ///    },
     ///    "external_ips": {
-    ///      "description": "The external IP addresses provided to this
-    /// instance.\n\nBy default, all instances have outbound connectivity, but
-    /// no inbound connectivity. These external addresses can be used to provide
-    /// a fixed, known IP address for making inbound connections to the
-    /// instance.",
+    ///      "description": "The external IP addresses provided to this instance.\n\nBy default, all instances have outbound connectivity, but no inbound connectivity. These external addresses can be used to provide a fixed, known IP address for making inbound connections to the instance.",
     ///      "default": [],
     ///      "type": "array",
     ///      "items": {
@@ -4000,29 +3829,23 @@ pub mod types {
     ///      "$ref": "#/components/schemas/InstanceCpuCount"
     ///    },
     ///    "network_interfaces": {
-    ///      "description": "The network interfaces to be created for this
-    /// instance.",
+    ///      "description": "The network interfaces to be created for this instance.",
     ///      "default": {
     ///        "type": "default"
     ///      },
     ///      "allOf": [
     ///        {
-    ///          "$ref":
-    /// "#/components/schemas/InstanceNetworkInterfaceAttachment"
+    ///          "$ref": "#/components/schemas/InstanceNetworkInterfaceAttachment"
     ///        }
     ///      ]
     ///    },
     ///    "start": {
-    ///      "description": "Should this instance be started upon creation; true
-    /// by default.",
+    ///      "description": "Should this instance be started upon creation; true by default.",
     ///      "default": true,
     ///      "type": "boolean"
     ///    },
     ///    "user_data": {
-    ///      "description": "User data for instance initialization systems (such
-    /// as cloud-init). Must be a Base64-encoded string, as specified in RFC
-    /// 4648 § 4 (+ and / characters with padding). Maximum 32 KiB unencoded
-    /// data.",
+    ///      "description": "User data for instance initialization systems (such as cloud-init). Must be a Base64-encoded string, as specified in RFC 4648 § 4 (+ and / characters with padding). Maximum 32 KiB unencoded data.",
     ///      "default": "",
     ///      "type": "string",
     ///      "format": "byte"
@@ -4031,7 +3854,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct InstanceCreate {
         pub description: ::std::string::String,
         ///The disks to be created or attached for this instance.
@@ -4039,10 +3862,7 @@ pub mod types {
         pub disks: ::std::vec::Vec<InstanceDiskAttachment>,
         ///The external IP addresses provided to this instance.
         ///
-        ///By default, all instances have outbound connectivity, but no inbound
-        /// connectivity. These external addresses can be used to provide a
-        /// fixed, known IP address for making inbound connections to the
-        /// instance.
+        ///By default, all instances have outbound connectivity, but no inbound connectivity. These external addresses can be used to provide a fixed, known IP address for making inbound connections to the instance.
         #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
         pub external_ips: ::std::vec::Vec<ExternalIpCreate>,
         pub hostname: ::std::string::String,
@@ -4055,9 +3875,7 @@ pub mod types {
         ///Should this instance be started upon creation; true by default.
         #[serde(default = "defaults::default_bool::<true>")]
         pub start: bool,
-        ///User data for instance initialization systems (such as cloud-init).
-        /// Must be a Base64-encoded string, as specified in RFC 4648 § 4 (+ and
-        /// / characters with padding). Maximum 32 KiB unencoded data.
+        ///User data for instance initialization systems (such as cloud-init). Must be a Base64-encoded string, as specified in RFC 4648 § 4 (+ and / characters with padding). Maximum 32 KiB unencoded data.
         #[serde(default)]
         pub user_data: ::std::string::String,
     }
@@ -4139,7 +3957,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     #[serde(tag = "type")]
     pub enum InstanceDiskAttachment {
         ///During instance creation, create and attach disks
@@ -4160,15 +3978,13 @@ pub mod types {
         },
     }
 
-    ///Migration parameters for an
-    /// [`Instance`](omicron_common::api::external::Instance)
+    ///Migration parameters for an [`Instance`](omicron_common::api::external::Instance)
     ///
     /// <details><summary>JSON schema</summary>
     ///
     /// ```json
     ///{
-    ///  "description": "Migration parameters for an
-    /// [`Instance`](omicron_common::api::external::Instance)",
+    ///  "description": "Migration parameters for an [`Instance`](omicron_common::api::external::Instance)",
     ///  "type": "object",
     ///  "required": [
     ///    "dst_sled_id"
@@ -4182,25 +3998,21 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct InstanceMigrate {
         pub dst_sled_id: ::uuid::Uuid,
     }
 
-    ///Describes an attachment of a `NetworkInterface` to an `Instance`, at the
-    /// time the instance is created.
+    ///Describes an attachment of a `NetworkInterface` to an `Instance`, at the time the instance is created.
     ///
     /// <details><summary>JSON schema</summary>
     ///
     /// ```json
     ///{
-    ///  "description": "Describes an attachment of a `NetworkInterface` to an
-    /// `Instance`, at the time the instance is created.",
+    ///  "description": "Describes an attachment of a `NetworkInterface` to an `Instance`, at the time the instance is created.",
     ///  "oneOf": [
     ///    {
-    ///      "description": "Create one or more `NetworkInterface`s for the
-    /// `Instance`.\n\nIf more than one interface is provided, then the first
-    /// will be designated the primary interface for the instance.",
+    ///      "description": "Create one or more `NetworkInterface`s for the `Instance`.\n\nIf more than one interface is provided, then the first will be designated the primary interface for the instance.",
     ///      "type": "object",
     ///      "required": [
     ///        "params",
@@ -4222,10 +4034,7 @@ pub mod types {
     ///      }
     ///    },
     ///    {
-    ///      "description": "The default networking configuration for an
-    /// instance is to create a single primary interface with an
-    /// automatically-assigned IP address. The IP will be pulled from the
-    /// Project's default VPC / VPC Subnet.",
+    ///      "description": "The default networking configuration for an instance is to create a single primary interface with an automatically-assigned IP address. The IP will be pulled from the Project's default VPC / VPC Subnet.",
     ///      "type": "object",
     ///      "required": [
     ///        "type"
@@ -4240,8 +4049,7 @@ pub mod types {
     ///      }
     ///    },
     ///    {
-    ///      "description": "No network interfaces at all will be created for
-    /// the instance.",
+    ///      "description": "No network interfaces at all will be created for the instance.",
     ///      "type": "object",
     ///      "required": [
     ///        "type"
@@ -4259,13 +4067,12 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     #[serde(tag = "type", content = "params")]
     pub enum InstanceNetworkInterfaceAttachment {
         ///Create one or more `NetworkInterface`s for the `Instance`.
         ///
-        ///If more than one interface is provided, then the first will be
-        /// designated the primary interface for the instance.
+        ///If more than one interface is provided, then the first will be designated the primary interface for the instance.
         #[serde(rename = "create")]
         Create(::std::vec::Vec<NetworkInterfaceCreate>),
         #[serde(rename = "default")]
@@ -4275,8 +4082,7 @@ pub mod types {
     }
 
     impl ::std::convert::From<::std::vec::Vec<NetworkInterfaceCreate>>
-        for InstanceNetworkInterfaceAttachment
-    {
+    for InstanceNetworkInterfaceAttachment {
         fn from(value: ::std::vec::Vec<NetworkInterfaceCreate>) -> Self {
             Self::Create(value)
         }
@@ -4302,8 +4108,7 @@ pub mod types {
     ///      }
     ///    },
     ///    "next_page": {
-    ///      "description": "token used to fetch the next page of results (if
-    /// any)",
+    ///      "description": "token used to fetch the next page of results (if any)",
     ///      "type": [
     ///        "string",
     ///        "null"
@@ -4313,7 +4118,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct InstanceResultsPage {
         ///list of items on this page of results
         pub items: ::std::vec::Vec<Instance>,
@@ -4336,9 +4141,7 @@ pub mod types {
     ///  ],
     ///  "properties": {
     ///    "data": {
-    ///      "description": "The bytes starting from the requested offset up to
-    /// either the end of the buffer or the request's `max_bytes`. Provided as a
-    /// u8 array rather than a string, as it may not be UTF-8.",
+    ///      "description": "The bytes starting from the requested offset up to either the end of the buffer or the request's `max_bytes`. Provided as a u8 array rather than a string, as it may not be UTF-8.",
     ///      "type": "array",
     ///      "items": {
     ///        "type": "integer",
@@ -4347,9 +4150,7 @@ pub mod types {
     ///      }
     ///    },
     ///    "last_byte_offset": {
-    ///      "description": "The absolute offset since boot (suitable for use as
-    /// `byte_offset` in a subsequent request) of the last byte returned in
-    /// `data`.",
+    ///      "description": "The absolute offset since boot (suitable for use as `byte_offset` in a subsequent request) of the last byte returned in `data`.",
     ///      "type": "integer",
     ///      "format": "uint64",
     ///      "minimum": 0.0
@@ -4358,30 +4159,23 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct InstanceSerialConsoleData {
-        ///The bytes starting from the requested offset up to either the end of
-        /// the buffer or the request's `max_bytes`. Provided as a u8 array
-        /// rather than a string, as it may not be UTF-8.
+        ///The bytes starting from the requested offset up to either the end of the buffer or the request's `max_bytes`. Provided as a u8 array rather than a string, as it may not be UTF-8.
         pub data: ::std::vec::Vec<u8>,
-        ///The absolute offset since boot (suitable for use as `byte_offset` in
-        /// a subsequent request) of the last byte returned in `data`.
+        ///The absolute offset since boot (suitable for use as `byte_offset` in a subsequent request) of the last byte returned in `data`.
         pub last_byte_offset: u64,
     }
 
     ///Running state of an Instance (primarily: booted or stopped)
     ///
-    ///This typically reflects whether it's starting, running, stopping, or
-    /// stopped, but also includes states related to the Instance's lifecycle
+    ///This typically reflects whether it's starting, running, stopping, or stopped, but also includes states related to the Instance's lifecycle
     ///
     /// <details><summary>JSON schema</summary>
     ///
     /// ```json
     ///{
-    ///  "description": "Running state of an Instance (primarily: booted or
-    /// stopped)\n\nThis typically reflects whether it's starting, running,
-    /// stopping, or stopped, but also includes states related to the Instance's
-    /// lifecycle",
+    ///  "description": "Running state of an Instance (primarily: booted or stopped)\n\nThis typically reflects whether it's starting, running, stopping, or stopped, but also includes states related to the Instance's lifecycle",
     ///  "oneOf": [
     ///    {
     ///      "description": "The instance is being created.",
@@ -4405,8 +4199,7 @@ pub mod types {
     ///      ]
     ///    },
     ///    {
-    ///      "description": "The instance has been requested to stop and a
-    /// transition to \"Stopped\" is imminent.",
+    ///      "description": "The instance has been requested to stop and a transition to \"Stopped\" is imminent.",
     ///      "type": "string",
     ///      "enum": [
     ///        "stopping"
@@ -4420,9 +4213,7 @@ pub mod types {
     ///      ]
     ///    },
     ///    {
-    ///      "description": "The instance is in the process of rebooting - it
-    /// will remain in the \"rebooting\" state until the VM is starting once
-    /// more.",
+    ///      "description": "The instance is in the process of rebooting - it will remain in the \"rebooting\" state until the VM is starting once more.",
     ///      "type": "string",
     ///      "enum": [
     ///        "rebooting"
@@ -4436,8 +4227,7 @@ pub mod types {
     ///      ]
     ///    },
     ///    {
-    ///      "description": "The instance is attempting to recover from a
-    /// failure.",
+    ///      "description": "The instance is attempting to recover from a failure.",
     ///      "type": "string",
     ///      "enum": [
     ///        "repairing"
@@ -4462,8 +4252,8 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
-        :: serde :: Deserialize,
-        :: serde :: Serialize,
+        ::serde::Deserialize,
+        ::serde::Serialize,
         Clone,
         Copy,
         Debug,
@@ -4471,7 +4261,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd,
+        PartialOrd
     )]
     pub enum InstanceState {
         ///The instance is being created.
@@ -4483,20 +4273,16 @@ pub mod types {
         ///The instance is currently running.
         #[serde(rename = "running")]
         Running,
-        ///The instance has been requested to stop and a transition to
-        /// "Stopped" is imminent.
+        ///The instance has been requested to stop and a transition to "Stopped" is imminent.
         #[serde(rename = "stopping")]
         Stopping,
         ///The instance is currently stopped.
         #[serde(rename = "stopped")]
         Stopped,
-        ///The instance is in the process of rebooting - it will remain in the
-        /// "rebooting" state until the VM is starting once more.
+        ///The instance is in the process of rebooting - it will remain in the "rebooting" state until the VM is starting once more.
         #[serde(rename = "rebooting")]
         Rebooting,
-        ///The instance is in the process of migrating - it will remain in the
-        /// "migrating" state until the migration process is complete and the
-        /// destination propolis is ready to continue execution.
+        ///The instance is in the process of migrating - it will remain in the "migrating" state until the migration process is complete and the destination propolis is ready to continue execution.
         #[serde(rename = "migrating")]
         Migrating,
         ///The instance is attempting to recover from a failure.
@@ -4529,7 +4315,9 @@ pub mod types {
 
     impl ::std::str::FromStr for InstanceState {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "creating" => Ok(Self::Creating),
                 "starting" => Ok(Self::Starting),
@@ -4548,7 +4336,9 @@ pub mod types {
 
     impl ::std::convert::TryFrom<&str> for InstanceState {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -4587,8 +4377,8 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
-        :: serde :: Deserialize,
-        :: serde :: Serialize,
+        ::serde::Deserialize,
+        ::serde::Serialize,
         Clone,
         Copy,
         Debug,
@@ -4596,7 +4386,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd,
+        PartialOrd
     )]
     pub enum IpKind {
         #[serde(rename = "ephemeral")]
@@ -4616,7 +4406,9 @@ pub mod types {
 
     impl ::std::str::FromStr for IpKind {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "ephemeral" => Ok(Self::Ephemeral),
                 "floating" => Ok(Self::Floating),
@@ -4627,7 +4419,9 @@ pub mod types {
 
     impl ::std::convert::TryFrom<&str> for IpKind {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -4677,7 +4471,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     #[serde(untagged)]
     pub enum IpNet {
         V4(Ipv4Net),
@@ -4686,7 +4480,9 @@ pub mod types {
 
     impl ::std::str::FromStr for IpNet {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             if let Ok(v) = value.parse() {
                 Ok(Self::V4(v))
             } else if let Ok(v) = value.parse() {
@@ -4699,7 +4495,9 @@ pub mod types {
 
     impl ::std::convert::TryFrom<&str> for IpNet {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -4743,15 +4541,13 @@ pub mod types {
         }
     }
 
-    ///Identity-related metadata that's included in nearly all public API
-    /// objects
+    ///Identity-related metadata that's included in nearly all public API objects
     ///
     /// <details><summary>JSON schema</summary>
     ///
     /// ```json
     ///{
-    ///  "description": "Identity-related metadata that's included in nearly all
-    /// public API objects",
+    ///  "description": "Identity-related metadata that's included in nearly all public API objects",
     ///  "type": "object",
     ///  "required": [
     ///    "description",
@@ -4766,14 +4562,12 @@ pub mod types {
     ///      "type": "string"
     ///    },
     ///    "id": {
-    ///      "description": "unique, immutable, system-controlled identifier for
-    /// each resource",
+    ///      "description": "unique, immutable, system-controlled identifier for each resource",
     ///      "type": "string",
     ///      "format": "uuid"
     ///    },
     ///    "name": {
-    ///      "description": "unique, mutable, user-controlled identifier for
-    /// each resource",
+    ///      "description": "unique, mutable, user-controlled identifier for each resource",
     ///      "allOf": [
     ///        {
     ///          "$ref": "#/components/schemas/Name"
@@ -4794,7 +4588,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct IpPool {
         ///human-readable free-form text about a resource
         pub description: ::std::string::String,
@@ -4816,8 +4610,7 @@ pub mod types {
     ///
     /// ```json
     ///{
-    ///  "description": "Create-time parameters for an IP Pool.\n\nSee
-    /// [`IpPool`](crate::external_api::views::IpPool)",
+    ///  "description": "Create-time parameters for an IP Pool.\n\nSee [`IpPool`](crate::external_api::views::IpPool)",
     ///  "type": "object",
     ///  "required": [
     ///    "description",
@@ -4834,7 +4627,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct IpPoolCreate {
         pub description: ::std::string::String,
         pub name: Name,
@@ -4868,7 +4661,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct IpPoolRange {
         pub id: ::uuid::Uuid,
         pub range: IpRange,
@@ -4895,8 +4688,7 @@ pub mod types {
     ///      }
     ///    },
     ///    "next_page": {
-    ///      "description": "token used to fetch the next page of results (if
-    /// any)",
+    ///      "description": "token used to fetch the next page of results (if any)",
     ///      "type": [
     ///        "string",
     ///        "null"
@@ -4906,7 +4698,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct IpPoolRangeResultsPage {
         ///list of items on this page of results
         pub items: ::std::vec::Vec<IpPoolRange>,
@@ -4935,8 +4727,7 @@ pub mod types {
     ///      }
     ///    },
     ///    "next_page": {
-    ///      "description": "token used to fetch the next page of results (if
-    /// any)",
+    ///      "description": "token used to fetch the next page of results (if any)",
     ///      "type": [
     ///        "string",
     ///        "null"
@@ -4946,7 +4737,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct IpPoolResultsPage {
         ///list of items on this page of results
         pub items: ::std::vec::Vec<IpPool>,
@@ -4988,7 +4779,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct IpPoolUpdate {
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         pub description: ::std::option::Option<::std::string::String>,
@@ -5032,7 +4823,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     #[serde(untagged)]
     pub enum IpRange {
         V4(Ipv4Range),
@@ -5063,14 +4854,11 @@ pub mod types {
     ///    "192.168.1.0/24"
     ///  ],
     ///  "type": "string",
-    ///  "pattern":
-    /// "^(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\\.
-    /// ){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])/
-    /// ([8-9]|1[0-9]|2[0-9]|3[0-2])$"
+    ///  "pattern": "^(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])/([8-9]|1[0-9]|2[0-9]|3[0-2])$"
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+    #[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
     #[serde(transparent)]
     pub struct Ipv4Net(::std::string::String);
     impl ::std::ops::Deref for Ipv4Net {
@@ -5088,22 +4876,21 @@ pub mod types {
 
     impl ::std::str::FromStr for Ipv4Net {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
-            static PATTERN: ::std::sync::LazyLock<::regress::Regex> =
-                ::std::sync::LazyLock::new(|| {
-                    ::regress::Regex::new(
-                        "^(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\\.\
-                         ){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])/\
-                         ([8-9]|1[0-9]|2[0-9]|3[0-2])$",
+        fn from_str(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+            static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+            {
+                ::regress::Regex::new(
+                        "^(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])/([8-9]|1[0-9]|2[0-9]|3[0-2])$",
                     )
                     .unwrap()
-                });
+            });
             if PATTERN.find(value).is_none() {
-                return Err("doesn't match pattern \
-                            \"^(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\\.\
-                            ){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])/\
-                            ([8-9]|1[0-9]|2[0-9]|3[0-2])$\""
-                    .into());
+                return Err(
+                    "doesn't match pattern \"^(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])/([8-9]|1[0-9]|2[0-9]|3[0-2])$\""
+                        .into(),
+                );
             }
             Ok(Self(value.to_string()))
         }
@@ -5111,7 +4898,9 @@ pub mod types {
 
     impl ::std::convert::TryFrom<&str> for Ipv4Net {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -5155,9 +4944,7 @@ pub mod types {
     ///
     /// ```json
     ///{
-    ///  "description": "A non-decreasing IPv4 address range, inclusive of both
-    /// ends.\n\nThe first address must be less than or equal to the last
-    /// address.",
+    ///  "description": "A non-decreasing IPv4 address range, inclusive of both ends.\n\nThe first address must be less than or equal to the last address.",
     ///  "type": "object",
     ///  "required": [
     ///    "first",
@@ -5176,7 +4963,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct Ipv4Range {
         pub first: ::std::net::Ipv4Addr,
         pub last: ::std::net::Ipv4Addr,
@@ -5194,13 +4981,11 @@ pub mod types {
     ///    "fd12:3456::/64"
     ///  ],
     ///  "type": "string",
-    ///  "pattern":
-    /// "^([fF][dD])[0-9a-fA-F]{2}:(([0-9a-fA-F]{1,4}:){6}[0-9a-fA-F]{1,
-    /// 4}|([0-9a-fA-F]{1,4}:){1,6}:)\\/([1-9]|[1-9][0-9]|1[0-1][0-9]|12[0-8])$"
+    ///  "pattern": "^([fF][dD])[0-9a-fA-F]{2}:(([0-9a-fA-F]{1,4}:){6}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,6}:)\\/([1-9]|[1-9][0-9]|1[0-1][0-9]|12[0-8])$"
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+    #[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
     #[serde(transparent)]
     pub struct Ipv6Net(::std::string::String);
     impl ::std::ops::Deref for Ipv6Net {
@@ -5218,21 +5003,21 @@ pub mod types {
 
     impl ::std::str::FromStr for Ipv6Net {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
-            static PATTERN: ::std::sync::LazyLock<::regress::Regex> =
-                ::std::sync::LazyLock::new(|| {
-                    ::regress::Regex::new(
-                        "^([fF][dD])[0-9a-fA-F]{2}:(([0-9a-fA-F]{1,4}:){6}[0-9a-fA-F]{1,\
-                         4}|([0-9a-fA-F]{1,4}:){1,6}:)\\/([1-9]|[1-9][0-9]|1[0-1][0-9]|12[0-8])$",
+        fn from_str(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+            static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+            {
+                ::regress::Regex::new(
+                        "^([fF][dD])[0-9a-fA-F]{2}:(([0-9a-fA-F]{1,4}:){6}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,6}:)\\/([1-9]|[1-9][0-9]|1[0-1][0-9]|12[0-8])$",
                     )
                     .unwrap()
-                });
+            });
             if PATTERN.find(value).is_none() {
-                return Err("doesn't match pattern \
-                            \"^([fF][dD])[0-9a-fA-F]{2}:(([0-9a-fA-F]{1,4}:){6}[0-9a-fA-F]{1,\
-                            4}|([0-9a-fA-F]{1,4}:){1,6}:)\\/\
-                            ([1-9]|[1-9][0-9]|1[0-1][0-9]|12[0-8])$\""
-                    .into());
+                return Err(
+                    "doesn't match pattern \"^([fF][dD])[0-9a-fA-F]{2}:(([0-9a-fA-F]{1,4}:){6}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,6}:)\\/([1-9]|[1-9][0-9]|1[0-1][0-9]|12[0-8])$\""
+                        .into(),
+                );
             }
             Ok(Self(value.to_string()))
         }
@@ -5240,7 +5025,9 @@ pub mod types {
 
     impl ::std::convert::TryFrom<&str> for Ipv6Net {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -5284,9 +5071,7 @@ pub mod types {
     ///
     /// ```json
     ///{
-    ///  "description": "A non-decreasing IPv6 address range, inclusive of both
-    /// ends.\n\nThe first address must be less than or equal to the last
-    /// address.",
+    ///  "description": "A non-decreasing IPv6 address range, inclusive of both ends.\n\nThe first address must be less than or equal to the last address.",
     ///  "type": "object",
     ///  "required": [
     ///    "first",
@@ -5305,22 +5090,20 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct Ipv6Range {
         pub first: ::std::net::Ipv6Addr,
         pub last: ::std::net::Ipv6Addr,
     }
 
-    ///An inclusive-inclusive range of IP ports. The second port may be omitted
-    /// to represent a single port
+    ///An inclusive-inclusive range of IP ports. The second port may be omitted to represent a single port
     ///
     /// <details><summary>JSON schema</summary>
     ///
     /// ```json
     ///{
     ///  "title": "A range of IP ports",
-    ///  "description": "An inclusive-inclusive range of IP ports. The second
-    /// port may be omitted to represent a single port",
+    ///  "description": "An inclusive-inclusive range of IP ports. The second port may be omitted to represent a single port",
     ///  "examples": [
     ///    "22"
     ///  ],
@@ -5331,7 +5114,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+    #[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
     #[serde(transparent)]
     pub struct L4PortRange(::std::string::String);
     impl ::std::ops::Deref for L4PortRange {
@@ -5349,19 +5132,21 @@ pub mod types {
 
     impl ::std::str::FromStr for L4PortRange {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             if value.chars().count() > 11usize {
                 return Err("longer than 11 characters".into());
             }
             if value.chars().count() < 1usize {
                 return Err("shorter than 1 characters".into());
             }
-            static PATTERN: ::std::sync::LazyLock<::regress::Regex> =
-                ::std::sync::LazyLock::new(|| {
-                    ::regress::Regex::new("^[0-9]{1,5}(-[0-9]{1,5})?$").unwrap()
-                });
+            static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+            { ::regress::Regex::new("^[0-9]{1,5}(-[0-9]{1,5})?$").unwrap() });
             if PATTERN.find(value).is_none() {
-                return Err("doesn't match pattern \"^[0-9]{1,5}(-[0-9]{1,5})?$\"".into());
+                return Err(
+                    "doesn't match pattern \"^[0-9]{1,5}(-[0-9]{1,5})?$\"".into(),
+                );
             }
             Ok(Self(value.to_string()))
         }
@@ -5369,7 +5154,9 @@ pub mod types {
 
     impl ::std::convert::TryFrom<&str> for L4PortRange {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -5423,7 +5210,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+    #[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
     #[serde(transparent)]
     pub struct MacAddr(::std::string::String);
     impl ::std::ops::Deref for MacAddr {
@@ -5441,20 +5228,21 @@ pub mod types {
 
     impl ::std::str::FromStr for MacAddr {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             if value.chars().count() > 17usize {
                 return Err("longer than 17 characters".into());
             }
             if value.chars().count() < 17usize {
                 return Err("shorter than 17 characters".into());
             }
-            static PATTERN: ::std::sync::LazyLock<::regress::Regex> =
-                ::std::sync::LazyLock::new(|| {
-                    ::regress::Regex::new("^([0-9a-fA-F]{2}:){5}[0-9a-fA-F]{2}$").unwrap()
-                });
+            static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+            { ::regress::Regex::new("^([0-9a-fA-F]{2}:){5}[0-9a-fA-F]{2}$").unwrap() });
             if PATTERN.find(value).is_none() {
                 return Err(
-                    "doesn't match pattern \"^([0-9a-fA-F]{2}:){5}[0-9a-fA-F]{2}$\"".into(),
+                    "doesn't match pattern \"^([0-9a-fA-F]{2}:){5}[0-9a-fA-F]{2}$\""
+                        .into(),
                 );
             }
             Ok(Self(value.to_string()))
@@ -5463,7 +5251,9 @@ pub mod types {
 
     impl ::std::convert::TryFrom<&str> for MacAddr {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -5505,8 +5295,7 @@ pub mod types {
     ///
     /// ```json
     ///{
-    ///  "description": "A `Measurement` is a timestamped datum from a single
-    /// metric",
+    ///  "description": "A `Measurement` is a timestamped datum from a single metric",
     ///  "type": "object",
     ///  "required": [
     ///    "datum",
@@ -5524,7 +5313,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct Measurement {
         pub datum: Datum,
         pub timestamp: ::chrono::DateTime<::chrono::offset::Utc>,
@@ -5550,8 +5339,7 @@ pub mod types {
     ///      }
     ///    },
     ///    "next_page": {
-    ///      "description": "token used to fetch the next page of results (if
-    /// any)",
+    ///      "description": "token used to fetch the next page of results (if any)",
     ///      "type": [
     ///        "string",
     ///        "null"
@@ -5561,7 +5349,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct MeasurementResultsPage {
         ///list of items on this page of results
         pub items: ::std::vec::Vec<Measurement>,
@@ -5570,28 +5358,21 @@ pub mod types {
         pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    ///Names must begin with a lower case ASCII letter, be composed exclusively
-    /// of lowercase ASCII, uppercase ASCII, numbers, and '-', and may not end
-    /// with a '-'. Names cannot be a UUID though they may contain a UUID.
+    ///Names must begin with a lower case ASCII letter, be composed exclusively of lowercase ASCII, uppercase ASCII, numbers, and '-', and may not end with a '-'. Names cannot be a UUID though they may contain a UUID.
     ///
     /// <details><summary>JSON schema</summary>
     ///
     /// ```json
     ///{
     ///  "title": "A name unique within the parent collection",
-    ///  "description": "Names must begin with a lower case ASCII letter, be
-    /// composed exclusively of lowercase ASCII, uppercase ASCII, numbers, and
-    /// '-', and may not end with a '-'. Names cannot be a UUID though they may
-    /// contain a UUID.",
+    ///  "description": "Names must begin with a lower case ASCII letter, be composed exclusively of lowercase ASCII, uppercase ASCII, numbers, and '-', and may not end with a '-'. Names cannot be a UUID though they may contain a UUID.",
     ///  "type": "string",
     ///  "maxLength": 63,
-    ///  "pattern":
-    /// "^(?![0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$)^[a-z][a-z0-9-]*
-    /// [a-zA-Z0-9]$"
+    ///  "pattern": "^(?![0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$)^[a-z][a-z0-9-]*[a-zA-Z0-9]$"
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+    #[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
     #[serde(transparent)]
     pub struct Name(::std::string::String);
     impl ::std::ops::Deref for Name {
@@ -5609,17 +5390,24 @@ pub mod types {
 
     impl ::std::str::FromStr for Name {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             if value.chars().count() > 63usize {
                 return Err("longer than 63 characters".into());
             }
-            static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(
-                || {
-                    :: regress :: Regex :: new ("^(?![0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$)^[a-z][a-z0-9-]*[a-zA-Z0-9]$") . unwrap ()
-                },
-            );
+            static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+            {
+                ::regress::Regex::new(
+                        "^(?![0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$)^[a-z][a-z0-9-]*[a-zA-Z0-9]$",
+                    )
+                    .unwrap()
+            });
             if PATTERN.find(value).is_none() {
-                return Err ("doesn't match pattern \"^(?![0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$)^[a-z][a-z0-9-]*[a-zA-Z0-9]$\"" . into ()) ;
+                return Err(
+                    "doesn't match pattern \"^(?![0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$)^[a-z][a-z0-9-]*[a-zA-Z0-9]$\""
+                        .into(),
+                );
             }
             Ok(Self(value.to_string()))
         }
@@ -5627,7 +5415,9 @@ pub mod types {
 
     impl ::std::convert::TryFrom<&str> for Name {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -5691,7 +5481,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     #[serde(untagged)]
     pub enum NameOrId {
         Id(::uuid::Uuid),
@@ -5700,7 +5490,9 @@ pub mod types {
 
     impl ::std::str::FromStr for NameOrId {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             if let Ok(v) = value.parse() {
                 Ok(Self::Id(v))
             } else if let Ok(v) = value.parse() {
@@ -5713,7 +5505,9 @@ pub mod types {
 
     impl ::std::convert::TryFrom<&str> for NameOrId {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -5763,8 +5557,7 @@ pub mod types {
     ///
     /// ```json
     ///{
-    ///  "description": "Supported set of sort modes for scanning by name or
-    /// id",
+    ///  "description": "Supported set of sort modes for scanning by name or id",
     ///  "oneOf": [
     ///    {
     ///      "description": "sort in increasing order of \"name\"",
@@ -5792,8 +5585,8 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
-        :: serde :: Deserialize,
-        :: serde :: Serialize,
+        ::serde::Deserialize,
+        ::serde::Serialize,
         Clone,
         Copy,
         Debug,
@@ -5801,7 +5594,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd,
+        PartialOrd
     )]
     pub enum NameOrIdSortMode {
         ///sort in increasing order of "name"
@@ -5827,7 +5620,9 @@ pub mod types {
 
     impl ::std::str::FromStr for NameOrIdSortMode {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "name_ascending" => Ok(Self::NameAscending),
                 "name_descending" => Ok(Self::NameDescending),
@@ -5839,7 +5634,9 @@ pub mod types {
 
     impl ::std::convert::TryFrom<&str> for NameOrIdSortMode {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -5870,8 +5667,7 @@ pub mod types {
     ///
     /// ```json
     ///{
-    ///  "description": "Supported set of sort modes for scanning by name
-    /// only\n\nCurrently, we only support scanning in ascending order.",
+    ///  "description": "Supported set of sort modes for scanning by name only\n\nCurrently, we only support scanning in ascending order.",
     ///  "oneOf": [
     ///    {
     ///      "description": "sort in increasing order of \"name\"",
@@ -5885,8 +5681,8 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
-        :: serde :: Deserialize,
-        :: serde :: Serialize,
+        ::serde::Deserialize,
+        ::serde::Serialize,
         Clone,
         Copy,
         Debug,
@@ -5894,7 +5690,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd,
+        PartialOrd
     )]
     pub enum NameSortMode {
         ///sort in increasing order of "name"
@@ -5912,7 +5708,9 @@ pub mod types {
 
     impl ::std::str::FromStr for NameSortMode {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "name_ascending" => Ok(Self::NameAscending),
                 _ => Err("invalid value".into()),
@@ -5922,7 +5720,9 @@ pub mod types {
 
     impl ::std::convert::TryFrom<&str> for NameSortMode {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -5951,8 +5751,7 @@ pub mod types {
     ///
     /// ```json
     ///{
-    ///  "description": "A `NetworkInterface` represents a virtual network
-    /// interface device.",
+    ///  "description": "A `NetworkInterface` represents a virtual network interface device.",
     ///  "type": "object",
     ///  "required": [
     ///    "description",
@@ -5973,8 +5772,7 @@ pub mod types {
     ///      "type": "string"
     ///    },
     ///    "id": {
-    ///      "description": "unique, immutable, system-controlled identifier for
-    /// each resource",
+    ///      "description": "unique, immutable, system-controlled identifier for each resource",
     ///      "type": "string",
     ///      "format": "uuid"
     ///    },
@@ -5997,8 +5795,7 @@ pub mod types {
     ///      ]
     ///    },
     ///    "name": {
-    ///      "description": "unique, mutable, user-controlled identifier for
-    /// each resource",
+    ///      "description": "unique, mutable, user-controlled identifier for each resource",
     ///      "allOf": [
     ///        {
     ///          "$ref": "#/components/schemas/Name"
@@ -6006,8 +5803,7 @@ pub mod types {
     ///      ]
     ///    },
     ///    "primary": {
-    ///      "description": "True if this interface is the primary for the
-    /// instance to which it's attached.",
+    ///      "description": "True if this interface is the primary for the instance to which it's attached.",
     ///      "type": "boolean"
     ///    },
     ///    "subnet_id": {
@@ -6034,7 +5830,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct NetworkInterface {
         ///human-readable free-form text about a resource
         pub description: ::std::string::String,
@@ -6048,8 +5844,7 @@ pub mod types {
         pub mac: MacAddr,
         ///unique, mutable, user-controlled identifier for each resource
         pub name: Name,
-        ///True if this interface is the primary for the instance to which it's
-        /// attached.
+        ///True if this interface is the primary for the instance to which it's attached.
         pub primary: bool,
         ///The subnet to which the interface belongs.
         pub subnet_id: ::uuid::Uuid,
@@ -6061,8 +5856,7 @@ pub mod types {
         pub vpc_id: ::uuid::Uuid,
     }
 
-    ///Create-time parameters for a
-    /// [`NetworkInterface`](omicron_common::api::external::NetworkInterface)
+    ///Create-time parameters for a [`NetworkInterface`](omicron_common::api::external::NetworkInterface)
     ///
     /// <details><summary>JSON schema</summary>
     ///
@@ -6081,8 +5875,7 @@ pub mod types {
     ///      "type": "string"
     ///    },
     ///    "ip": {
-    ///      "description": "The IP address for the interface. One will be
-    /// auto-assigned if not provided.",
+    ///      "description": "The IP address for the interface. One will be auto-assigned if not provided.",
     ///      "type": [
     ///        "string",
     ///        "null"
@@ -6112,11 +5905,10 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct NetworkInterfaceCreate {
         pub description: ::std::string::String,
-        ///The IP address for the interface. One will be auto-assigned if not
-        /// provided.
+        ///The IP address for the interface. One will be auto-assigned if not provided.
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         pub ip: ::std::option::Option<::std::net::IpAddr>,
         pub name: Name,
@@ -6146,8 +5938,7 @@ pub mod types {
     ///      }
     ///    },
     ///    "next_page": {
-    ///      "description": "token used to fetch the next page of results (if
-    /// any)",
+    ///      "description": "token used to fetch the next page of results (if any)",
     ///      "type": [
     ///        "string",
     ///        "null"
@@ -6157,7 +5948,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct NetworkInterfaceResultsPage {
         ///list of items on this page of results
         pub items: ::std::vec::Vec<NetworkInterface>,
@@ -6166,20 +5957,15 @@ pub mod types {
         pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    ///Parameters for updating a
-    /// [`NetworkInterface`](omicron_common::api::external::NetworkInterface).
+    ///Parameters for updating a [`NetworkInterface`](omicron_common::api::external::NetworkInterface).
     ///
-    ///Note that modifying IP addresses for an interface is not yet supported,
-    /// a new interface must be created instead.
+    ///Note that modifying IP addresses for an interface is not yet supported, a new interface must be created instead.
     ///
     /// <details><summary>JSON schema</summary>
     ///
     /// ```json
     ///{
-    ///  "description": "Parameters for updating a
-    /// [`NetworkInterface`](omicron_common::api::external::NetworkInterface).\
-    /// n\nNote that modifying IP addresses for an interface is not yet
-    /// supported, a new interface must be created instead.",
+    ///  "description": "Parameters for updating a [`NetworkInterface`](omicron_common::api::external::NetworkInterface).\n\nNote that modifying IP addresses for an interface is not yet supported, a new interface must be created instead.",
     ///  "type": "object",
     ///  "properties": {
     ///    "description": {
@@ -6203,14 +5989,7 @@ pub mod types {
     ///      ]
     ///    },
     ///    "primary": {
-    ///      "description": "Make a secondary interface the instance's primary
-    /// interface.\n\nIf applied to a secondary interface, that interface will
-    /// become the primary on the next reboot of the instance. Note that this
-    /// may have implications for routing between instances, as the new primary
-    /// interface will be on a distinct subnet from the previous primary
-    /// interface.\n\nNote that this can only be used to select a new primary
-    /// interface for an instance. Requests to change the primary interface into
-    /// a secondary will return an error.",
+    ///      "description": "Make a secondary interface the instance's primary interface.\n\nIf applied to a secondary interface, that interface will become the primary on the next reboot of the instance. Note that this may have implications for routing between instances, as the new primary interface will be on a distinct subnet from the previous primary interface.\n\nNote that this can only be used to select a new primary interface for an instance. Requests to change the primary interface into a secondary will return an error.",
     ///      "default": false,
     ///      "type": "boolean"
     ///    }
@@ -6218,7 +5997,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct NetworkInterfaceUpdate {
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         pub description: ::std::option::Option<::std::string::String>,
@@ -6226,15 +6005,9 @@ pub mod types {
         pub name: ::std::option::Option<Name>,
         ///Make a secondary interface the instance's primary interface.
         ///
-        ///If applied to a secondary interface, that interface will become the
-        /// primary on the next reboot of the instance. Note that this may have
-        /// implications for routing between instances, as the new primary
-        /// interface will be on a distinct subnet from the previous primary
-        /// interface.
+        ///If applied to a secondary interface, that interface will become the primary on the next reboot of the instance. Note that this may have implications for routing between instances, as the new primary interface will be on a distinct subnet from the previous primary interface.
         ///
-        ///Note that this can only be used to select a new primary interface
-        /// for an instance. Requests to change the primary interface into a
-        /// secondary will return an error.
+        ///Note that this can only be used to select a new primary interface for an instance. Requests to change the primary interface into a secondary will return an error.
         #[serde(default)]
         pub primary: bool,
     }
@@ -6251,33 +6024,27 @@ pub mod types {
 
     ///Unique name for a saga [`Node`]
     ///
-    ///Each node requires a string name that's unique within its DAG.  The name
-    /// is used to identify its output.  Nodes that depend on a given node
-    /// (either directly or indirectly) can access the node's output using its
-    /// name.
+    ///Each node requires a string name that's unique within its DAG.  The name is used to identify its output.  Nodes that depend on a given node (either directly or indirectly) can access the node's output using its name.
     ///
     /// <details><summary>JSON schema</summary>
     ///
     /// ```json
     ///{
-    ///  "description": "Unique name for a saga [`Node`]\n\nEach node requires a
-    /// string name that's unique within its DAG.  The name is used to identify
-    /// its output.  Nodes that depend on a given node (either directly or
-    /// indirectly) can access the node's output using its name.",
+    ///  "description": "Unique name for a saga [`Node`]\n\nEach node requires a string name that's unique within its DAG.  The name is used to identify its output.  Nodes that depend on a given node (either directly or indirectly) can access the node's output using its name.",
     ///  "type": "string"
     ///}
     /// ```
     /// </details>
     #[derive(
-        :: serde :: Deserialize,
-        :: serde :: Serialize,
+        ::serde::Deserialize,
+        ::serde::Serialize,
         Clone,
         Debug,
         Eq,
         Hash,
         Ord,
         PartialEq,
-        PartialOrd,
+        PartialOrd
     )]
     #[serde(transparent)]
     pub struct NodeName(pub ::std::string::String);
@@ -6334,14 +6101,12 @@ pub mod types {
     ///      "type": "string"
     ///    },
     ///    "id": {
-    ///      "description": "unique, immutable, system-controlled identifier for
-    /// each resource",
+    ///      "description": "unique, immutable, system-controlled identifier for each resource",
     ///      "type": "string",
     ///      "format": "uuid"
     ///    },
     ///    "name": {
-    ///      "description": "unique, mutable, user-controlled identifier for
-    /// each resource",
+    ///      "description": "unique, mutable, user-controlled identifier for each resource",
     ///      "allOf": [
     ///        {
     ///          "$ref": "#/components/schemas/Name"
@@ -6362,7 +6127,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct Organization {
         ///human-readable free-form text about a resource
         pub description: ::std::string::String,
@@ -6376,15 +6141,13 @@ pub mod types {
         pub time_modified: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
-    ///Create-time parameters for an
-    /// [`Organization`](crate::external_api::views::Organization)
+    ///Create-time parameters for an [`Organization`](crate::external_api::views::Organization)
     ///
     /// <details><summary>JSON schema</summary>
     ///
     /// ```json
     ///{
-    ///  "description": "Create-time parameters for an
-    /// [`Organization`](crate::external_api::views::Organization)",
+    ///  "description": "Create-time parameters for an [`Organization`](crate::external_api::views::Organization)",
     ///  "type": "object",
     ///  "required": [
     ///    "description",
@@ -6401,7 +6164,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct OrganizationCreate {
         pub description: ::std::string::String,
         pub name: Name,
@@ -6427,8 +6190,7 @@ pub mod types {
     ///      }
     ///    },
     ///    "next_page": {
-    ///      "description": "token used to fetch the next page of results (if
-    /// any)",
+    ///      "description": "token used to fetch the next page of results (if any)",
     ///      "type": [
     ///        "string",
     ///        "null"
@@ -6438,7 +6200,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct OrganizationResultsPage {
         ///list of items on this page of results
         pub items: ::std::vec::Vec<Organization>,
@@ -6463,8 +6225,8 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
-        :: serde :: Deserialize,
-        :: serde :: Serialize,
+        ::serde::Deserialize,
+        ::serde::Serialize,
         Clone,
         Copy,
         Debug,
@@ -6472,7 +6234,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd,
+        PartialOrd
     )]
     pub enum OrganizationRole {
         #[serde(rename = "admin")]
@@ -6495,7 +6257,9 @@ pub mod types {
 
     impl ::std::str::FromStr for OrganizationRole {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "admin" => Ok(Self::Admin),
                 "collaborator" => Ok(Self::Collaborator),
@@ -6507,7 +6271,9 @@ pub mod types {
 
     impl ::std::convert::TryFrom<&str> for OrganizationRole {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -6530,21 +6296,15 @@ pub mod types {
         }
     }
 
-    ///Client view of a [`Policy`], which describes how this resource may be
-    /// accessed
+    ///Client view of a [`Policy`], which describes how this resource may be accessed
     ///
-    ///Note that the Policy only describes access granted explicitly for this
-    /// resource.  The policies of parent resources can also cause a user to
-    /// have access to this resource.
+    ///Note that the Policy only describes access granted explicitly for this resource.  The policies of parent resources can also cause a user to have access to this resource.
     ///
     /// <details><summary>JSON schema</summary>
     ///
     /// ```json
     ///{
-    ///  "description": "Client view of a [`Policy`], which describes how this
-    /// resource may be accessed\n\nNote that the Policy only describes access
-    /// granted explicitly for this resource.  The policies of parent resources
-    /// can also cause a user to have access to this resource.",
+    ///  "description": "Client view of a [`Policy`], which describes how this resource may be accessed\n\nNote that the Policy only describes access granted explicitly for this resource.  The policies of parent resources can also cause a user to have access to this resource.",
     ///  "type": "object",
     ///  "required": [
     ///    "role_assignments"
@@ -6561,28 +6321,21 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct OrganizationRolePolicy {
         ///Roles directly assigned on this resource
         pub role_assignments: ::std::vec::Vec<OrganizationRoleRoleAssignment>,
     }
 
-    ///Describes the assignment of a particular role on a particular resource
-    /// to a particular identity (user, group, etc.)
+    ///Describes the assignment of a particular role on a particular resource to a particular identity (user, group, etc.)
     ///
-    ///The resource is not part of this structure.  Rather, [`RoleAssignment`]s
-    /// are put into a [`Policy`] and that Policy is applied to a particular
-    /// resource.
+    ///The resource is not part of this structure.  Rather, [`RoleAssignment`]s are put into a [`Policy`] and that Policy is applied to a particular resource.
     ///
     /// <details><summary>JSON schema</summary>
     ///
     /// ```json
     ///{
-    ///  "description": "Describes the assignment of a particular role on a
-    /// particular resource to a particular identity (user, group, etc.)\n\nThe
-    /// resource is not part of this structure.  Rather, [`RoleAssignment`]s are
-    /// put into a [`Policy`] and that Policy is applied to a particular
-    /// resource.",
+    ///  "description": "Describes the assignment of a particular role on a particular resource to a particular identity (user, group, etc.)\n\nThe resource is not part of this structure.  Rather, [`RoleAssignment`]s are put into a [`Policy`] and that Policy is applied to a particular resource.",
     ///  "type": "object",
     ///  "required": [
     ///    "identity_id",
@@ -6604,22 +6357,20 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct OrganizationRoleRoleAssignment {
         pub identity_id: ::uuid::Uuid,
         pub identity_type: IdentityType,
         pub role_name: OrganizationRole,
     }
 
-    ///Updateable properties of an
-    /// [`Organization`](crate::external_api::views::Organization)
+    ///Updateable properties of an [`Organization`](crate::external_api::views::Organization)
     ///
     /// <details><summary>JSON schema</summary>
     ///
     /// ```json
     ///{
-    ///  "description": "Updateable properties of an
-    /// [`Organization`](crate::external_api::views::Organization)",
+    ///  "description": "Updateable properties of an [`Organization`](crate::external_api::views::Organization)",
     ///  "type": "object",
     ///  "properties": {
     ///    "description": {
@@ -6646,7 +6397,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct OrganizationUpdate {
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         pub description: ::std::option::Option<::std::string::String>,
@@ -6676,7 +6427,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+    #[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
     #[serde(transparent)]
     pub struct Password(::std::string::String);
     impl ::std::ops::Deref for Password {
@@ -6694,7 +6445,9 @@ pub mod types {
 
     impl ::std::str::FromStr for Password {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             if value.chars().count() > 512usize {
                 return Err("longer than 512 characters".into());
             }
@@ -6704,7 +6457,9 @@ pub mod types {
 
     impl ::std::convert::TryFrom<&str> for Password {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -6762,8 +6517,7 @@ pub mod types {
     ///      "$ref": "#/components/schemas/PhysicalDiskType"
     ///    },
     ///    "id": {
-    ///      "description": "unique, immutable, system-controlled identifier for
-    /// each resource",
+    ///      "description": "unique, immutable, system-controlled identifier for each resource",
     ///      "type": "string",
     ///      "format": "uuid"
     ///    },
@@ -6798,7 +6552,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct PhysicalDisk {
         pub disk_type: PhysicalDiskType,
         ///unique, immutable, system-controlled identifier for each resource
@@ -6835,8 +6589,7 @@ pub mod types {
     ///      }
     ///    },
     ///    "next_page": {
-    ///      "description": "token used to fetch the next page of results (if
-    /// any)",
+    ///      "description": "token used to fetch the next page of results (if any)",
     ///      "type": [
     ///        "string",
     ///        "null"
@@ -6846,7 +6599,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct PhysicalDiskResultsPage {
         ///list of items on this page of results
         pub items: ::std::vec::Vec<PhysicalDisk>,
@@ -6870,8 +6623,8 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
-        :: serde :: Deserialize,
-        :: serde :: Serialize,
+        ::serde::Deserialize,
+        ::serde::Serialize,
         Clone,
         Copy,
         Debug,
@@ -6879,7 +6632,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd,
+        PartialOrd
     )]
     pub enum PhysicalDiskType {
         #[serde(rename = "internal")]
@@ -6899,7 +6652,9 @@ pub mod types {
 
     impl ::std::str::FromStr for PhysicalDiskType {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "internal" => Ok(Self::Internal),
                 "external" => Ok(Self::External),
@@ -6910,7 +6665,9 @@ pub mod types {
 
     impl ::std::convert::TryFrom<&str> for PhysicalDiskType {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -6955,14 +6712,12 @@ pub mod types {
     ///      "type": "string"
     ///    },
     ///    "id": {
-    ///      "description": "unique, immutable, system-controlled identifier for
-    /// each resource",
+    ///      "description": "unique, immutable, system-controlled identifier for each resource",
     ///      "type": "string",
     ///      "format": "uuid"
     ///    },
     ///    "name": {
-    ///      "description": "unique, mutable, user-controlled identifier for
-    /// each resource",
+    ///      "description": "unique, mutable, user-controlled identifier for each resource",
     ///      "allOf": [
     ///        {
     ///          "$ref": "#/components/schemas/Name"
@@ -6987,7 +6742,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct Project {
         ///human-readable free-form text about a resource
         pub description: ::std::string::String,
@@ -7002,15 +6757,13 @@ pub mod types {
         pub time_modified: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
-    ///Create-time parameters for a
-    /// [`Project`](crate::external_api::views::Project)
+    ///Create-time parameters for a [`Project`](crate::external_api::views::Project)
     ///
     /// <details><summary>JSON schema</summary>
     ///
     /// ```json
     ///{
-    ///  "description": "Create-time parameters for a
-    /// [`Project`](crate::external_api::views::Project)",
+    ///  "description": "Create-time parameters for a [`Project`](crate::external_api::views::Project)",
     ///  "type": "object",
     ///  "required": [
     ///    "description",
@@ -7027,7 +6780,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct ProjectCreate {
         pub description: ::std::string::String,
         pub name: Name,
@@ -7053,8 +6806,7 @@ pub mod types {
     ///      }
     ///    },
     ///    "next_page": {
-    ///      "description": "token used to fetch the next page of results (if
-    /// any)",
+    ///      "description": "token used to fetch the next page of results (if any)",
     ///      "type": [
     ///        "string",
     ///        "null"
@@ -7064,7 +6816,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct ProjectResultsPage {
         ///list of items on this page of results
         pub items: ::std::vec::Vec<Project>,
@@ -7089,8 +6841,8 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
-        :: serde :: Deserialize,
-        :: serde :: Serialize,
+        ::serde::Deserialize,
+        ::serde::Serialize,
         Clone,
         Copy,
         Debug,
@@ -7098,7 +6850,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd,
+        PartialOrd
     )]
     pub enum ProjectRole {
         #[serde(rename = "admin")]
@@ -7121,7 +6873,9 @@ pub mod types {
 
     impl ::std::str::FromStr for ProjectRole {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "admin" => Ok(Self::Admin),
                 "collaborator" => Ok(Self::Collaborator),
@@ -7133,7 +6887,9 @@ pub mod types {
 
     impl ::std::convert::TryFrom<&str> for ProjectRole {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -7156,21 +6912,15 @@ pub mod types {
         }
     }
 
-    ///Client view of a [`Policy`], which describes how this resource may be
-    /// accessed
+    ///Client view of a [`Policy`], which describes how this resource may be accessed
     ///
-    ///Note that the Policy only describes access granted explicitly for this
-    /// resource.  The policies of parent resources can also cause a user to
-    /// have access to this resource.
+    ///Note that the Policy only describes access granted explicitly for this resource.  The policies of parent resources can also cause a user to have access to this resource.
     ///
     /// <details><summary>JSON schema</summary>
     ///
     /// ```json
     ///{
-    ///  "description": "Client view of a [`Policy`], which describes how this
-    /// resource may be accessed\n\nNote that the Policy only describes access
-    /// granted explicitly for this resource.  The policies of parent resources
-    /// can also cause a user to have access to this resource.",
+    ///  "description": "Client view of a [`Policy`], which describes how this resource may be accessed\n\nNote that the Policy only describes access granted explicitly for this resource.  The policies of parent resources can also cause a user to have access to this resource.",
     ///  "type": "object",
     ///  "required": [
     ///    "role_assignments"
@@ -7187,28 +6937,21 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct ProjectRolePolicy {
         ///Roles directly assigned on this resource
         pub role_assignments: ::std::vec::Vec<ProjectRoleRoleAssignment>,
     }
 
-    ///Describes the assignment of a particular role on a particular resource
-    /// to a particular identity (user, group, etc.)
+    ///Describes the assignment of a particular role on a particular resource to a particular identity (user, group, etc.)
     ///
-    ///The resource is not part of this structure.  Rather, [`RoleAssignment`]s
-    /// are put into a [`Policy`] and that Policy is applied to a particular
-    /// resource.
+    ///The resource is not part of this structure.  Rather, [`RoleAssignment`]s are put into a [`Policy`] and that Policy is applied to a particular resource.
     ///
     /// <details><summary>JSON schema</summary>
     ///
     /// ```json
     ///{
-    ///  "description": "Describes the assignment of a particular role on a
-    /// particular resource to a particular identity (user, group, etc.)\n\nThe
-    /// resource is not part of this structure.  Rather, [`RoleAssignment`]s are
-    /// put into a [`Policy`] and that Policy is applied to a particular
-    /// resource.",
+    ///  "description": "Describes the assignment of a particular role on a particular resource to a particular identity (user, group, etc.)\n\nThe resource is not part of this structure.  Rather, [`RoleAssignment`]s are put into a [`Policy`] and that Policy is applied to a particular resource.",
     ///  "type": "object",
     ///  "required": [
     ///    "identity_id",
@@ -7230,22 +6973,20 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct ProjectRoleRoleAssignment {
         pub identity_id: ::uuid::Uuid,
         pub identity_type: IdentityType,
         pub role_name: ProjectRole,
     }
 
-    ///Updateable properties of a
-    /// [`Project`](crate::external_api::views::Project)
+    ///Updateable properties of a [`Project`](crate::external_api::views::Project)
     ///
     /// <details><summary>JSON schema</summary>
     ///
     /// ```json
     ///{
-    ///  "description": "Updateable properties of a
-    /// [`Project`](crate::external_api::views::Project)",
+    ///  "description": "Updateable properties of a [`Project`](crate::external_api::views::Project)",
     ///  "type": "object",
     ///  "properties": {
     ///    "description": {
@@ -7272,7 +7013,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct ProjectUpdate {
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         pub description: ::std::option::Option<::std::string::String>,
@@ -7304,8 +7045,7 @@ pub mod types {
     ///  ],
     ///  "properties": {
     ///    "id": {
-    ///      "description": "unique, immutable, system-controlled identifier for
-    /// each resource",
+    ///      "description": "unique, immutable, system-controlled identifier for each resource",
     ///      "type": "string",
     ///      "format": "uuid"
     ///    },
@@ -7323,7 +7063,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct Rack {
         ///unique, immutable, system-controlled identifier for each resource
         pub id: ::uuid::Uuid,
@@ -7353,8 +7093,7 @@ pub mod types {
     ///      }
     ///    },
     ///    "next_page": {
-    ///      "description": "token used to fetch the next page of results (if
-    /// any)",
+    ///      "description": "token used to fetch the next page of results (if any)",
     ///      "type": [
     ///        "string",
     ///        "null"
@@ -7364,7 +7103,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct RackResultsPage {
         ///list of items on this page of results
         pub items: ::std::vec::Vec<Rack>,
@@ -7396,7 +7135,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct Role {
         pub description: ::std::string::String,
         pub name: RoleName,
@@ -7409,15 +7148,14 @@ pub mod types {
     /// ```json
     ///{
     ///  "title": "A name for a built-in role",
-    ///  "description": "Role names consist of two string components separated
-    /// by dot (\".\").",
+    ///  "description": "Role names consist of two string components separated by dot (\".\").",
     ///  "type": "string",
     ///  "maxLength": 63,
     ///  "pattern": "[a-z-]+\\.[a-z-]+"
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+    #[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
     #[serde(transparent)]
     pub struct RoleName(::std::string::String);
     impl ::std::ops::Deref for RoleName {
@@ -7435,12 +7173,14 @@ pub mod types {
 
     impl ::std::str::FromStr for RoleName {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             if value.chars().count() > 63usize {
                 return Err("longer than 63 characters".into());
             }
-            static PATTERN: ::std::sync::LazyLock<::regress::Regex> =
-                ::std::sync::LazyLock::new(|| ::regress::Regex::new("[a-z-]+\\.[a-z-]+").unwrap());
+            static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+            { ::regress::Regex::new("[a-z-]+\\.[a-z-]+").unwrap() });
             if PATTERN.find(value).is_none() {
                 return Err("doesn't match pattern \"[a-z-]+\\.[a-z-]+\"".into());
             }
@@ -7450,7 +7190,9 @@ pub mod types {
 
     impl ::std::convert::TryFrom<&str> for RoleName {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -7506,8 +7248,7 @@ pub mod types {
     ///      }
     ///    },
     ///    "next_page": {
-    ///      "description": "token used to fetch the next page of results (if
-    /// any)",
+    ///      "description": "token used to fetch the next page of results (if any)",
     ///      "type": [
     ///        "string",
     ///        "null"
@@ -7517,7 +7258,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct RoleResultsPage {
         ///list of items on this page of results
         pub items: ::std::vec::Vec<Role>,
@@ -7526,26 +7267,18 @@ pub mod types {
         pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    ///A `RouteDestination` is used to match traffic with a routing rule, on
-    /// the destination of that traffic.
+    ///A `RouteDestination` is used to match traffic with a routing rule, on the destination of that traffic.
     ///
-    ///When traffic is to be sent to a destination that is within a given
-    /// `RouteDestination`, the corresponding [`RouterRoute`] applies, and
-    /// traffic will be forward to the [`RouteTarget`] for that rule.
+    ///When traffic is to be sent to a destination that is within a given `RouteDestination`, the corresponding [`RouterRoute`] applies, and traffic will be forward to the [`RouteTarget`] for that rule.
     ///
     /// <details><summary>JSON schema</summary>
     ///
     /// ```json
     ///{
-    ///  "description": "A `RouteDestination` is used to match traffic with a
-    /// routing rule, on the destination of that traffic.\n\nWhen traffic is to
-    /// be sent to a destination that is within a given `RouteDestination`, the
-    /// corresponding [`RouterRoute`] applies, and traffic will be forward to
-    /// the [`RouteTarget`] for that rule.",
+    ///  "description": "A `RouteDestination` is used to match traffic with a routing rule, on the destination of that traffic.\n\nWhen traffic is to be sent to a destination that is within a given `RouteDestination`, the corresponding [`RouterRoute`] applies, and traffic will be forward to the [`RouteTarget`] for that rule.",
     ///  "oneOf": [
     ///    {
-    ///      "description": "Route applies to traffic destined for a specific IP
-    /// address",
+    ///      "description": "Route applies to traffic destined for a specific IP address",
     ///      "type": "object",
     ///      "required": [
     ///        "type",
@@ -7565,8 +7298,7 @@ pub mod types {
     ///      }
     ///    },
     ///    {
-    ///      "description": "Route applies to traffic destined for a specific IP
-    /// subnet",
+    ///      "description": "Route applies to traffic destined for a specific IP subnet",
     ///      "type": "object",
     ///      "required": [
     ///        "type",
@@ -7585,8 +7317,7 @@ pub mod types {
     ///      }
     ///    },
     ///    {
-    ///      "description": "Route applies to traffic destined for the given
-    /// VPC.",
+    ///      "description": "Route applies to traffic destined for the given VPC.",
     ///      "type": "object",
     ///      "required": [
     ///        "type",
@@ -7627,7 +7358,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     #[serde(tag = "type", content = "value")]
     pub enum RouteDestination {
         ///Route applies to traffic destined for a specific IP address
@@ -7656,15 +7387,13 @@ pub mod types {
         }
     }
 
-    ///A `RouteTarget` describes the possible locations that traffic matching a
-    /// route destination can be sent.
+    ///A `RouteTarget` describes the possible locations that traffic matching a route destination can be sent.
     ///
     /// <details><summary>JSON schema</summary>
     ///
     /// ```json
     ///{
-    ///  "description": "A `RouteTarget` describes the possible locations that
-    /// traffic matching a route destination can be sent.",
+    ///  "description": "A `RouteTarget` describes the possible locations that traffic matching a route destination can be sent.",
     ///  "oneOf": [
     ///    {
     ///      "description": "Forward traffic to a particular IP address.",
@@ -7766,7 +7495,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     #[serde(tag = "type", content = "value")]
     pub enum RouteTarget {
         ///Forward traffic to a particular IP address.
@@ -7792,15 +7521,13 @@ pub mod types {
         }
     }
 
-    ///A route defines a rule that governs where traffic should be sent based
-    /// on its destination.
+    ///A route defines a rule that governs where traffic should be sent based on its destination.
     ///
     /// <details><summary>JSON schema</summary>
     ///
     /// ```json
     ///{
-    ///  "description": "A route defines a rule that governs where traffic
-    /// should be sent based on its destination.",
+    ///  "description": "A route defines a rule that governs where traffic should be sent based on its destination.",
     ///  "type": "object",
     ///  "required": [
     ///    "description",
@@ -7822,14 +7549,12 @@ pub mod types {
     ///      "$ref": "#/components/schemas/RouteDestination"
     ///    },
     ///    "id": {
-    ///      "description": "unique, immutable, system-controlled identifier for
-    /// each resource",
+    ///      "description": "unique, immutable, system-controlled identifier for each resource",
     ///      "type": "string",
     ///      "format": "uuid"
     ///    },
     ///    "kind": {
-    ///      "description": "Describes the kind of router. Set at creation.
-    /// `read-only`",
+    ///      "description": "Describes the kind of router. Set at creation. `read-only`",
     ///      "allOf": [
     ///        {
     ///          "$ref": "#/components/schemas/RouterRouteKind"
@@ -7837,8 +7562,7 @@ pub mod types {
     ///      ]
     ///    },
     ///    "name": {
-    ///      "description": "unique, mutable, user-controlled identifier for
-    /// each resource",
+    ///      "description": "unique, mutable, user-controlled identifier for each resource",
     ///      "allOf": [
     ///        {
     ///          "$ref": "#/components/schemas/Name"
@@ -7867,7 +7591,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct RouterRoute {
         ///human-readable free-form text about a resource
         pub description: ::std::string::String,
@@ -7918,7 +7642,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct RouterRouteCreateParams {
         pub description: ::std::string::String,
         pub destination: RouteDestination,
@@ -7926,9 +7650,7 @@ pub mod types {
         pub target: RouteTarget,
     }
 
-    ///The classification of a [`RouterRoute`] as defined by the system. The
-    /// kind determines certain attributes such as if the route is modifiable
-    /// and describes how or where the route was created.
+    ///The classification of a [`RouterRoute`] as defined by the system. The kind determines certain attributes such as if the route is modifiable and describes how or where the route was created.
     ///
     ///See [RFD-21](https://rfd.shared.oxide.computer/rfd/0021#concept-router) for more context
     ///
@@ -7939,33 +7661,28 @@ pub mod types {
     ///  "description": "The classification of a [`RouterRoute`] as defined by the system. The kind determines certain attributes such as if the route is modifiable and describes how or where the route was created.\n\nSee [RFD-21](https://rfd.shared.oxide.computer/rfd/0021#concept-router) for more context",
     ///  "oneOf": [
     ///    {
-    ///      "description": "Determines the default destination of traffic, such
-    /// as whether it goes to the internet or not.\n\n`Destination: An Internet
-    /// Gateway` `Modifiable: true`",
+    ///      "description": "Determines the default destination of traffic, such as whether it goes to the internet or not.\n\n`Destination: An Internet Gateway` `Modifiable: true`",
     ///      "type": "string",
     ///      "enum": [
     ///        "default"
     ///      ]
     ///    },
     ///    {
-    ///      "description": "Automatically added for each VPC Subnet in the
-    /// VPC\n\n`Destination: A VPC Subnet` `Modifiable: false`",
+    ///      "description": "Automatically added for each VPC Subnet in the VPC\n\n`Destination: A VPC Subnet` `Modifiable: false`",
     ///      "type": "string",
     ///      "enum": [
     ///        "vpc_subnet"
     ///      ]
     ///    },
     ///    {
-    ///      "description": "Automatically added when VPC peering is
-    /// established\n\n`Destination: A different VPC` `Modifiable: false`",
+    ///      "description": "Automatically added when VPC peering is established\n\n`Destination: A different VPC` `Modifiable: false`",
     ///      "type": "string",
     ///      "enum": [
     ///        "vpc_peering"
     ///      ]
     ///    },
     ///    {
-    ///      "description": "Created by a user See
-    /// [`RouteTarget`]\n\n`Destination: User defined` `Modifiable: true`",
+    ///      "description": "Created by a user See [`RouteTarget`]\n\n`Destination: User defined` `Modifiable: true`",
     ///      "type": "string",
     ///      "enum": [
     ///        "custom"
@@ -7976,8 +7693,8 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
-        :: serde :: Deserialize,
-        :: serde :: Serialize,
+        ::serde::Deserialize,
+        ::serde::Serialize,
         Clone,
         Copy,
         Debug,
@@ -7985,11 +7702,10 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd,
+        PartialOrd
     )]
     pub enum RouterRouteKind {
-        ///Determines the default destination of traffic, such as whether it
-        /// goes to the internet or not.
+        ///Determines the default destination of traffic, such as whether it goes to the internet or not.
         ///
         ///`Destination: An Internet Gateway` `Modifiable: true`
         #[serde(rename = "default")]
@@ -8024,7 +7740,9 @@ pub mod types {
 
     impl ::std::str::FromStr for RouterRouteKind {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "default" => Ok(Self::Default),
                 "vpc_subnet" => Ok(Self::VpcSubnet),
@@ -8037,7 +7755,9 @@ pub mod types {
 
     impl ::std::convert::TryFrom<&str> for RouterRouteKind {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -8080,8 +7800,7 @@ pub mod types {
     ///      }
     ///    },
     ///    "next_page": {
-    ///      "description": "token used to fetch the next page of results (if
-    /// any)",
+    ///      "description": "token used to fetch the next page of results (if any)",
     ///      "type": [
     ///        "string",
     ///        "null"
@@ -8091,7 +7810,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct RouterRouteResultsPage {
         ///list of items on this page of results
         pub items: ::std::vec::Vec<RouterRoute>,
@@ -8143,7 +7862,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct RouterRouteUpdateParams {
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         pub description: ::std::option::Option<::std::string::String>,
@@ -8176,7 +7895,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct Saga {
         pub id: ::uuid::Uuid,
         pub state: SagaState,
@@ -8277,7 +7996,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     #[serde(tag = "error")]
     pub enum SagaErrorInfo {
         #[serde(rename = "action_failed")]
@@ -8312,8 +8031,7 @@ pub mod types {
     ///      }
     ///    },
     ///    "next_page": {
-    ///      "description": "token used to fetch the next page of results (if
-    /// any)",
+    ///      "description": "token used to fetch the next page of results (if any)",
     ///      "type": [
     ///        "string",
     ///        "null"
@@ -8323,7 +8041,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct SagaResultsPage {
         ///list of items on this page of results
         pub items: ::std::vec::Vec<Saga>,
@@ -8393,7 +8111,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     #[serde(tag = "state")]
     pub enum SagaState {
         #[serde(rename = "running")]
@@ -8401,21 +8119,16 @@ pub mod types {
         #[serde(rename = "succeeded")]
         Succeeded,
         #[serde(rename = "failed")]
-        Failed {
-            error_info: SagaErrorInfo,
-            error_node_name: NodeName,
-        },
+        Failed { error_info: SagaErrorInfo, error_node_name: NodeName },
     }
 
-    ///Identity-related metadata that's included in nearly all public API
-    /// objects
+    ///Identity-related metadata that's included in nearly all public API objects
     ///
     /// <details><summary>JSON schema</summary>
     ///
     /// ```json
     ///{
-    ///  "description": "Identity-related metadata that's included in nearly all
-    /// public API objects",
+    ///  "description": "Identity-related metadata that's included in nearly all public API objects",
     ///  "type": "object",
     ///  "required": [
     ///    "acs_url",
@@ -8431,8 +8144,7 @@ pub mod types {
     ///  ],
     ///  "properties": {
     ///    "acs_url": {
-    ///      "description": "service provider endpoint where the response will
-    /// be sent",
+    ///      "description": "service provider endpoint where the response will be sent",
     ///      "type": "string"
     ///    },
     ///    "description": {
@@ -8440,8 +8152,7 @@ pub mod types {
     ///      "type": "string"
     ///    },
     ///    "id": {
-    ///      "description": "unique, immutable, system-controlled identifier for
-    /// each resource",
+    ///      "description": "unique, immutable, system-controlled identifier for each resource",
     ///      "type": "string",
     ///      "format": "uuid"
     ///    },
@@ -8450,8 +8161,7 @@ pub mod types {
     ///      "type": "string"
     ///    },
     ///    "name": {
-    ///      "description": "unique, mutable, user-controlled identifier for
-    /// each resource",
+    ///      "description": "unique, mutable, user-controlled identifier for each resource",
     ///      "allOf": [
     ///        {
     ///          "$ref": "#/components/schemas/Name"
@@ -8459,16 +8169,14 @@ pub mod types {
     ///      ]
     ///    },
     ///    "public_cert": {
-    ///      "description": "optional request signing public certificate (base64
-    /// encoded der file)",
+    ///      "description": "optional request signing public certificate (base64 encoded der file)",
     ///      "type": [
     ///        "string",
     ///        "null"
     ///      ]
     ///    },
     ///    "slo_url": {
-    ///      "description": "service provider endpoint where the idp should send
-    /// log out requests",
+    ///      "description": "service provider endpoint where the idp should send log out requests",
     ///      "type": "string"
     ///    },
     ///    "sp_client_id": {
@@ -8476,8 +8184,7 @@ pub mod types {
     ///      "type": "string"
     ///    },
     ///    "technical_contact_email": {
-    ///      "description": "customer's technical contact for saml
-    /// configuration",
+    ///      "description": "customer's technical contact for saml configuration",
     ///      "type": "string"
     ///    },
     ///    "time_created": {
@@ -8494,7 +8201,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct SamlIdentityProvider {
         ///service provider endpoint where the response will be sent
         pub acs_url: ::std::string::String,
@@ -8506,8 +8213,7 @@ pub mod types {
         pub idp_entity_id: ::std::string::String,
         ///unique, mutable, user-controlled identifier for each resource
         pub name: Name,
-        ///optional request signing public certificate (base64 encoded der
-        /// file)
+        ///optional request signing public certificate (base64 encoded der file)
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         pub public_cert: ::std::option::Option<::std::string::String>,
         ///service provider endpoint where the idp should send log out requests
@@ -8542,17 +8248,14 @@ pub mod types {
     ///  ],
     ///  "properties": {
     ///    "acs_url": {
-    ///      "description": "service provider endpoint where the response will
-    /// be sent",
+    ///      "description": "service provider endpoint where the response will be sent",
     ///      "type": "string"
     ///    },
     ///    "description": {
     ///      "type": "string"
     ///    },
     ///    "group_attribute_name": {
-    ///      "description": "If set, SAML attributes with this name will be
-    /// considered to denote a user's group membership, where the attribute
-    /// value(s) should be a comma-separated list of group names.",
+    ///      "description": "If set, SAML attributes with this name will be considered to denote a user's group membership, where the attribute value(s) should be a comma-separated list of group names.",
     ///      "type": [
     ///        "string",
     ///        "null"
@@ -8563,8 +8266,7 @@ pub mod types {
     ///      "type": "string"
     ///    },
     ///    "idp_metadata_source": {
-    ///      "description": "the source of an identity provider metadata
-    /// descriptor",
+    ///      "description": "the source of an identity provider metadata descriptor",
     ///      "allOf": [
     ///        {
     ///          "$ref": "#/components/schemas/IdpMetadataSource"
@@ -8590,8 +8292,7 @@ pub mod types {
     ///      ]
     ///    },
     ///    "slo_url": {
-    ///      "description": "service provider endpoint where the idp should send
-    /// log out requests",
+    ///      "description": "service provider endpoint where the idp should send log out requests",
     ///      "type": "string"
     ///    },
     ///    "sp_client_id": {
@@ -8599,22 +8300,19 @@ pub mod types {
     ///      "type": "string"
     ///    },
     ///    "technical_contact_email": {
-    ///      "description": "customer's technical contact for saml
-    /// configuration",
+    ///      "description": "customer's technical contact for saml configuration",
     ///      "type": "string"
     ///    }
     ///  }
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct SamlIdentityProviderCreate {
         ///service provider endpoint where the response will be sent
         pub acs_url: ::std::string::String,
         pub description: ::std::string::String,
-        ///If set, SAML attributes with this name will be considered to denote
-        /// a user's group membership, where the attribute value(s) should be a
-        /// comma-separated list of group names.
+        ///If set, SAML attributes with this name will be considered to denote a user's group membership, where the attribute value(s) should be a comma-separated list of group names.
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         pub group_attribute_name: ::std::option::Option<::std::string::String>,
         ///idp's entity id
@@ -8644,7 +8342,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+    #[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
     #[serde(transparent)]
     pub struct SemverVersion(::std::string::String);
     impl ::std::ops::Deref for SemverVersion {
@@ -8662,13 +8360,15 @@ pub mod types {
 
     impl ::std::str::FromStr for SemverVersion {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
-            static PATTERN: ::std::sync::LazyLock<::regress::Regex> =
-                ::std::sync::LazyLock::new(|| {
-                    ::regress::Regex::new("^\\d+\\.\\d+\\.\\d+([\\-\\+].+)?$").unwrap()
-                });
+        fn from_str(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+            static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+            { ::regress::Regex::new("^\\d+\\.\\d+\\.\\d+([\\-\\+].+)?$").unwrap() });
             if PATTERN.find(value).is_none() {
-                return Err("doesn't match pattern \"^\\d+\\.\\d+\\.\\d+([\\-\\+].+)?$\"".into());
+                return Err(
+                    "doesn't match pattern \"^\\d+\\.\\d+\\.\\d+([\\-\\+].+)?$\"".into(),
+                );
             }
             Ok(Self(value.to_string()))
         }
@@ -8676,7 +8376,9 @@ pub mod types {
 
     impl ::std::convert::TryFrom<&str> for SemverVersion {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -8721,8 +8423,7 @@ pub mod types {
     ///  "description": "The service intended to use this certificate.",
     ///  "oneOf": [
     ///    {
-    ///      "description": "This certificate is intended for access to the
-    /// external API.",
+    ///      "description": "This certificate is intended for access to the external API.",
     ///      "type": "string",
     ///      "enum": [
     ///        "external_api"
@@ -8733,8 +8434,8 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
-        :: serde :: Deserialize,
-        :: serde :: Serialize,
+        ::serde::Deserialize,
+        ::serde::Serialize,
         Clone,
         Copy,
         Debug,
@@ -8742,7 +8443,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd,
+        PartialOrd
     )]
     pub enum ServiceUsingCertificate {
         ///This certificate is intended for access to the external API.
@@ -8760,7 +8461,9 @@ pub mod types {
 
     impl ::std::str::FromStr for ServiceUsingCertificate {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "external_api" => Ok(Self::ExternalApi),
                 _ => Err("invalid value".into()),
@@ -8770,7 +8473,9 @@ pub mod types {
 
     impl ::std::convert::TryFrom<&str> for ServiceUsingCertificate {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -8820,8 +8525,7 @@ pub mod types {
     ///      "type": "boolean"
     ///    },
     ///    "id": {
-    ///      "description": "unique, immutable, system-controlled identifier for
-    /// each resource",
+    ///      "description": "unique, immutable, system-controlled identifier for each resource",
     ///      "type": "string",
     ///      "format": "uuid"
     ///    },
@@ -8834,8 +8538,7 @@ pub mod types {
     ///      ]
     ///    },
     ///    "name": {
-    ///      "description": "unique, mutable, user-controlled identifier for
-    /// each resource",
+    ///      "description": "unique, mutable, user-controlled identifier for each resource",
     ///      "allOf": [
     ///        {
     ///          "$ref": "#/components/schemas/Name"
@@ -8856,12 +8559,11 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct Silo {
         ///human-readable free-form text about a resource
         pub description: ::std::string::String,
-        ///A silo where discoverable is false can be retrieved only by its id -
-        /// it will not be part of the "list all silos" output.
+        ///A silo where discoverable is false can be retrieved only by its id - it will not be part of the "list all silos" output.
         pub discoverable: bool,
         ///unique, immutable, system-controlled identifier for each resource
         pub id: ::uuid::Uuid,
@@ -8881,8 +8583,7 @@ pub mod types {
     ///
     /// ```json
     ///{
-    ///  "description": "Create-time parameters for a
-    /// [`Silo`](crate::external_api::views::Silo)",
+    ///  "description": "Create-time parameters for a [`Silo`](crate::external_api::views::Silo)",
     ///  "type": "object",
     ///  "required": [
     ///    "description",
@@ -8892,13 +8593,7 @@ pub mod types {
     ///  ],
     ///  "properties": {
     ///    "admin_group_name": {
-    ///      "description": "If set, this group will be created during Silo
-    /// creation and granted the \"Silo Admin\" role. Identity providers can
-    /// assert that users belong to this group and those users can log in and
-    /// further initialize the Silo.\n\nNote that if configuring a SAML based
-    /// identity provider, group_attribute_name must be set for users to be
-    /// considered part of a group. See [`SamlIdentityProviderCreate`] for more
-    /// information.",
+    ///      "description": "If set, this group will be created during Silo creation and granted the \"Silo Admin\" role. Identity providers can assert that users belong to this group and those users can log in and further initialize the Silo.\n\nNote that if configuring a SAML based identity provider, group_attribute_name must be set for users to be considered part of a group. See [`SamlIdentityProviderCreate`] for more information.",
     ///      "type": [
     ///        "string",
     ///        "null"
@@ -8920,16 +8615,11 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct SiloCreate {
-        ///If set, this group will be created during Silo creation and granted
-        /// the "Silo Admin" role. Identity providers can assert that users
-        /// belong to this group and those users can log in and further
-        /// initialize the Silo.
+        ///If set, this group will be created during Silo creation and granted the "Silo Admin" role. Identity providers can assert that users belong to this group and those users can log in and further initialize the Silo.
         ///
-        ///Note that if configuring a SAML based identity provider,
-        /// group_attribute_name must be set for users to be considered part of
-        /// a group. See [`SamlIdentityProviderCreate`] for more information.
+        ///Note that if configuring a SAML based identity provider, group_attribute_name must be set for users to be considered part of a group. See [`SamlIdentityProviderCreate`] for more information.
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         pub admin_group_name: ::std::option::Option<::std::string::String>,
         pub description: ::std::string::String,
@@ -8938,30 +8628,23 @@ pub mod types {
         pub name: Name,
     }
 
-    ///Describes how identities are managed and users are authenticated in this
-    /// Silo
+    ///Describes how identities are managed and users are authenticated in this Silo
     ///
     /// <details><summary>JSON schema</summary>
     ///
     /// ```json
     ///{
-    ///  "description": "Describes how identities are managed and users are
-    /// authenticated in this Silo",
+    ///  "description": "Describes how identities are managed and users are authenticated in this Silo",
     ///  "oneOf": [
     ///    {
-    ///      "description": "Users are authenticated with SAML using an external
-    /// authentication provider.  The system updates information about users and
-    /// groups only during successful authentication (i.e,. \"JIT provisioning\"
-    /// of users and groups).",
+    ///      "description": "Users are authenticated with SAML using an external authentication provider.  The system updates information about users and groups only during successful authentication (i.e,. \"JIT provisioning\" of users and groups).",
     ///      "type": "string",
     ///      "enum": [
     ///        "saml_jit"
     ///      ]
     ///    },
     ///    {
-    ///      "description": "The system is the source of truth about users.
-    /// There is no linkage to an external authentication provider or identity
-    /// provider.",
+    ///      "description": "The system is the source of truth about users.  There is no linkage to an external authentication provider or identity provider.",
     ///      "type": "string",
     ///      "enum": [
     ///        "local_only"
@@ -8972,8 +8655,8 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
-        :: serde :: Deserialize,
-        :: serde :: Serialize,
+        ::serde::Deserialize,
+        ::serde::Serialize,
         Clone,
         Copy,
         Debug,
@@ -8981,17 +8664,13 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd,
+        PartialOrd
     )]
     pub enum SiloIdentityMode {
-        ///Users are authenticated with SAML using an external authentication
-        /// provider.  The system updates information about users and groups
-        /// only during successful authentication (i.e,. "JIT provisioning" of
-        /// users and groups).
+        ///Users are authenticated with SAML using an external authentication provider.  The system updates information about users and groups only during successful authentication (i.e,. "JIT provisioning" of users and groups).
         #[serde(rename = "saml_jit")]
         SamlJit,
-        ///The system is the source of truth about users.  There is no linkage
-        /// to an external authentication provider or identity provider.
+        ///The system is the source of truth about users.  There is no linkage to an external authentication provider or identity provider.
         #[serde(rename = "local_only")]
         LocalOnly,
     }
@@ -9007,7 +8686,9 @@ pub mod types {
 
     impl ::std::str::FromStr for SiloIdentityMode {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "saml_jit" => Ok(Self::SamlJit),
                 "local_only" => Ok(Self::LocalOnly),
@@ -9018,7 +8699,9 @@ pub mod types {
 
     impl ::std::convert::TryFrom<&str> for SiloIdentityMode {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -9061,8 +8744,7 @@ pub mod types {
     ///      }
     ///    },
     ///    "next_page": {
-    ///      "description": "token used to fetch the next page of results (if
-    /// any)",
+    ///      "description": "token used to fetch the next page of results (if any)",
     ///      "type": [
     ///        "string",
     ///        "null"
@@ -9072,7 +8754,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct SiloResultsPage {
         ///list of items on this page of results
         pub items: ::std::vec::Vec<Silo>,
@@ -9097,8 +8779,8 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
-        :: serde :: Deserialize,
-        :: serde :: Serialize,
+        ::serde::Deserialize,
+        ::serde::Serialize,
         Clone,
         Copy,
         Debug,
@@ -9106,7 +8788,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd,
+        PartialOrd
     )]
     pub enum SiloRole {
         #[serde(rename = "admin")]
@@ -9129,7 +8811,9 @@ pub mod types {
 
     impl ::std::str::FromStr for SiloRole {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "admin" => Ok(Self::Admin),
                 "collaborator" => Ok(Self::Collaborator),
@@ -9141,7 +8825,9 @@ pub mod types {
 
     impl ::std::convert::TryFrom<&str> for SiloRole {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -9164,21 +8850,15 @@ pub mod types {
         }
     }
 
-    ///Client view of a [`Policy`], which describes how this resource may be
-    /// accessed
+    ///Client view of a [`Policy`], which describes how this resource may be accessed
     ///
-    ///Note that the Policy only describes access granted explicitly for this
-    /// resource.  The policies of parent resources can also cause a user to
-    /// have access to this resource.
+    ///Note that the Policy only describes access granted explicitly for this resource.  The policies of parent resources can also cause a user to have access to this resource.
     ///
     /// <details><summary>JSON schema</summary>
     ///
     /// ```json
     ///{
-    ///  "description": "Client view of a [`Policy`], which describes how this
-    /// resource may be accessed\n\nNote that the Policy only describes access
-    /// granted explicitly for this resource.  The policies of parent resources
-    /// can also cause a user to have access to this resource.",
+    ///  "description": "Client view of a [`Policy`], which describes how this resource may be accessed\n\nNote that the Policy only describes access granted explicitly for this resource.  The policies of parent resources can also cause a user to have access to this resource.",
     ///  "type": "object",
     ///  "required": [
     ///    "role_assignments"
@@ -9195,28 +8875,21 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct SiloRolePolicy {
         ///Roles directly assigned on this resource
         pub role_assignments: ::std::vec::Vec<SiloRoleRoleAssignment>,
     }
 
-    ///Describes the assignment of a particular role on a particular resource
-    /// to a particular identity (user, group, etc.)
+    ///Describes the assignment of a particular role on a particular resource to a particular identity (user, group, etc.)
     ///
-    ///The resource is not part of this structure.  Rather, [`RoleAssignment`]s
-    /// are put into a [`Policy`] and that Policy is applied to a particular
-    /// resource.
+    ///The resource is not part of this structure.  Rather, [`RoleAssignment`]s are put into a [`Policy`] and that Policy is applied to a particular resource.
     ///
     /// <details><summary>JSON schema</summary>
     ///
     /// ```json
     ///{
-    ///  "description": "Describes the assignment of a particular role on a
-    /// particular resource to a particular identity (user, group, etc.)\n\nThe
-    /// resource is not part of this structure.  Rather, [`RoleAssignment`]s are
-    /// put into a [`Policy`] and that Policy is applied to a particular
-    /// resource.",
+    ///  "description": "Describes the assignment of a particular role on a particular resource to a particular identity (user, group, etc.)\n\nThe resource is not part of this structure.  Rather, [`RoleAssignment`]s are put into a [`Policy`] and that Policy is applied to a particular resource.",
     ///  "type": "object",
     ///  "required": [
     ///    "identity_id",
@@ -9238,7 +8911,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct SiloRoleRoleAssignment {
         pub identity_id: ::uuid::Uuid,
         pub identity_type: IdentityType,
@@ -9265,8 +8938,7 @@ pub mod types {
     ///      "$ref": "#/components/schemas/Baseboard"
     ///    },
     ///    "id": {
-    ///      "description": "unique, immutable, system-controlled identifier for
-    /// each resource",
+    ///      "description": "unique, immutable, system-controlled identifier for each resource",
     ///      "type": "string",
     ///      "format": "uuid"
     ///    },
@@ -9287,7 +8959,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct Sled {
         pub baseboard: Baseboard,
         ///unique, immutable, system-controlled identifier for each resource
@@ -9319,8 +8991,7 @@ pub mod types {
     ///      }
     ///    },
     ///    "next_page": {
-    ///      "description": "token used to fetch the next page of results (if
-    /// any)",
+    ///      "description": "token used to fetch the next page of results (if any)",
     ///      "type": [
     ///        "string",
     ///        "null"
@@ -9330,7 +9001,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct SledResultsPage {
         ///list of items on this page of results
         pub items: ::std::vec::Vec<Sled>,
@@ -9368,14 +9039,12 @@ pub mod types {
     ///      "format": "uuid"
     ///    },
     ///    "id": {
-    ///      "description": "unique, immutable, system-controlled identifier for
-    /// each resource",
+    ///      "description": "unique, immutable, system-controlled identifier for each resource",
     ///      "type": "string",
     ///      "format": "uuid"
     ///    },
     ///    "name": {
-    ///      "description": "unique, mutable, user-controlled identifier for
-    /// each resource",
+    ///      "description": "unique, mutable, user-controlled identifier for each resource",
     ///      "allOf": [
     ///        {
     ///          "$ref": "#/components/schemas/Name"
@@ -9406,7 +9075,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct Snapshot {
         ///human-readable free-form text about a resource
         pub description: ::std::string::String,
@@ -9424,15 +9093,13 @@ pub mod types {
         pub time_modified: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
-    ///Create-time parameters for a
-    /// [`Snapshot`](crate::external_api::views::Snapshot)
+    ///Create-time parameters for a [`Snapshot`](crate::external_api::views::Snapshot)
     ///
     /// <details><summary>JSON schema</summary>
     ///
     /// ```json
     ///{
-    ///  "description": "Create-time parameters for a
-    /// [`Snapshot`](crate::external_api::views::Snapshot)",
+    ///  "description": "Create-time parameters for a [`Snapshot`](crate::external_api::views::Snapshot)",
     ///  "type": "object",
     ///  "required": [
     ///    "description",
@@ -9458,7 +9125,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct SnapshotCreate {
         pub description: ::std::string::String,
         ///The name of the disk to be snapshotted
@@ -9486,8 +9153,7 @@ pub mod types {
     ///      }
     ///    },
     ///    "next_page": {
-    ///      "description": "token used to fetch the next page of results (if
-    /// any)",
+    ///      "description": "token used to fetch the next page of results (if any)",
     ///      "type": [
     ///        "string",
     ///        "null"
@@ -9497,7 +9163,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct SnapshotResultsPage {
         ///list of items on this page of results
         pub items: ::std::vec::Vec<Snapshot>,
@@ -9523,8 +9189,8 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
-        :: serde :: Deserialize,
-        :: serde :: Serialize,
+        ::serde::Deserialize,
+        ::serde::Serialize,
         Clone,
         Copy,
         Debug,
@@ -9532,7 +9198,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd,
+        PartialOrd
     )]
     pub enum SnapshotState {
         #[serde(rename = "creating")]
@@ -9558,7 +9224,9 @@ pub mod types {
 
     impl ::std::str::FromStr for SnapshotState {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "creating" => Ok(Self::Creating),
                 "ready" => Ok(Self::Ready),
@@ -9571,7 +9239,9 @@ pub mod types {
 
     impl ::std::convert::TryFrom<&str> for SnapshotState {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -9612,7 +9282,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct SpoofLoginBody {
         pub username: ::std::string::String,
     }
@@ -9640,14 +9310,12 @@ pub mod types {
     ///      "type": "string"
     ///    },
     ///    "id": {
-    ///      "description": "unique, immutable, system-controlled identifier for
-    /// each resource",
+    ///      "description": "unique, immutable, system-controlled identifier for each resource",
     ///      "type": "string",
     ///      "format": "uuid"
     ///    },
     ///    "name": {
-    ///      "description": "unique, mutable, user-controlled identifier for
-    /// each resource",
+    ///      "description": "unique, mutable, user-controlled identifier for each resource",
     ///      "allOf": [
     ///        {
     ///          "$ref": "#/components/schemas/Name"
@@ -9655,8 +9323,7 @@ pub mod types {
     ///      ]
     ///    },
     ///    "public_key": {
-    ///      "description": "SSH public key, e.g., `\"ssh-ed25519
-    /// AAAAC3NzaC...\"`",
+    ///      "description": "SSH public key, e.g., `\"ssh-ed25519 AAAAC3NzaC...\"`",
     ///      "type": "string"
     ///    },
     ///    "silo_user_id": {
@@ -9678,7 +9345,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct SshKey {
         ///human-readable free-form text about a resource
         pub description: ::std::string::String,
@@ -9696,15 +9363,13 @@ pub mod types {
         pub time_modified: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
-    ///Create-time parameters for an
-    /// [`SshKey`](crate::external_api::views::SshKey)
+    ///Create-time parameters for an [`SshKey`](crate::external_api::views::SshKey)
     ///
     /// <details><summary>JSON schema</summary>
     ///
     /// ```json
     ///{
-    ///  "description": "Create-time parameters for an
-    /// [`SshKey`](crate::external_api::views::SshKey)",
+    ///  "description": "Create-time parameters for an [`SshKey`](crate::external_api::views::SshKey)",
     ///  "type": "object",
     ///  "required": [
     ///    "description",
@@ -9719,15 +9384,14 @@ pub mod types {
     ///      "$ref": "#/components/schemas/Name"
     ///    },
     ///    "public_key": {
-    ///      "description": "SSH public key, e.g., `\"ssh-ed25519
-    /// AAAAC3NzaC...\"`",
+    ///      "description": "SSH public key, e.g., `\"ssh-ed25519 AAAAC3NzaC...\"`",
     ///      "type": "string"
     ///    }
     ///  }
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct SshKeyCreate {
         pub description: ::std::string::String,
         pub name: Name,
@@ -9755,8 +9419,7 @@ pub mod types {
     ///      }
     ///    },
     ///    "next_page": {
-    ///      "description": "token used to fetch the next page of results (if
-    /// any)",
+    ///      "description": "token used to fetch the next page of results (if any)",
     ///      "type": [
     ///        "string",
     ///        "null"
@@ -9766,7 +9429,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct SshKeyResultsPage {
         ///list of items on this page of results
         pub items: ::std::vec::Vec<SshKey>,
@@ -9791,8 +9454,8 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
-        :: serde :: Deserialize,
-        :: serde :: Serialize,
+        ::serde::Deserialize,
+        ::serde::Serialize,
         Clone,
         Copy,
         Debug,
@@ -9800,7 +9463,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd,
+        PartialOrd
     )]
     pub enum SystemMetricName {
         #[serde(rename = "virtual_disk_space_provisioned")]
@@ -9814,7 +9477,9 @@ pub mod types {
     impl ::std::fmt::Display for SystemMetricName {
         fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
             match *self {
-                Self::VirtualDiskSpaceProvisioned => f.write_str("virtual_disk_space_provisioned"),
+                Self::VirtualDiskSpaceProvisioned => {
+                    f.write_str("virtual_disk_space_provisioned")
+                }
                 Self::CpusProvisioned => f.write_str("cpus_provisioned"),
                 Self::RamProvisioned => f.write_str("ram_provisioned"),
             }
@@ -9823,7 +9488,9 @@ pub mod types {
 
     impl ::std::str::FromStr for SystemMetricName {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "virtual_disk_space_provisioned" => Ok(Self::VirtualDiskSpaceProvisioned),
                 "cpus_provisioned" => Ok(Self::CpusProvisioned),
@@ -9835,7 +9502,9 @@ pub mod types {
 
     impl ::std::convert::TryFrom<&str> for SystemMetricName {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -9858,15 +9527,13 @@ pub mod types {
         }
     }
 
-    ///Identity-related metadata that's included in "asset" public API objects
-    /// (which generally have no name or description)
+    ///Identity-related metadata that's included in "asset" public API objects (which generally have no name or description)
     ///
     /// <details><summary>JSON schema</summary>
     ///
     /// ```json
     ///{
-    ///  "description": "Identity-related metadata that's included in \"asset\"
-    /// public API objects (which generally have no name or description)",
+    ///  "description": "Identity-related metadata that's included in \"asset\" public API objects (which generally have no name or description)",
     ///  "type": "object",
     ///  "required": [
     ///    "id",
@@ -9876,8 +9543,7 @@ pub mod types {
     ///  ],
     ///  "properties": {
     ///    "id": {
-    ///      "description": "unique, immutable, system-controlled identifier for
-    /// each resource",
+    ///      "description": "unique, immutable, system-controlled identifier for each resource",
     ///      "type": "string",
     ///      "format": "uuid"
     ///    },
@@ -9898,7 +9564,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct SystemUpdate {
         ///unique, immutable, system-controlled identifier for each resource
         pub id: ::uuid::Uuid,
@@ -9929,8 +9595,7 @@ pub mod types {
     ///      }
     ///    },
     ///    "next_page": {
-    ///      "description": "token used to fetch the next page of results (if
-    /// any)",
+    ///      "description": "token used to fetch the next page of results (if any)",
     ///      "type": [
     ///        "string",
     ///        "null"
@@ -9940,7 +9605,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct SystemUpdateResultsPage {
         ///list of items on this page of results
         pub items: ::std::vec::Vec<SystemUpdate>,
@@ -9967,7 +9632,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct SystemUpdateStart {
         pub version: SemverVersion,
     }
@@ -9994,31 +9659,26 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct SystemVersion {
         pub status: UpdateStatus,
         pub version_range: VersionRange,
     }
 
-    ///Names are constructed by concatenating the target and metric names with
-    /// ':'. Target and metric names must be lowercase alphanumeric characters
-    /// with '_' separating words.
+    ///Names are constructed by concatenating the target and metric names with ':'. Target and metric names must be lowercase alphanumeric characters with '_' separating words.
     ///
     /// <details><summary>JSON schema</summary>
     ///
     /// ```json
     ///{
     ///  "title": "The name of a timeseries",
-    ///  "description": "Names are constructed by concatenating the target and
-    /// metric names with ':'. Target and metric names must be lowercase
-    /// alphanumeric characters with '_' separating words.",
+    ///  "description": "Names are constructed by concatenating the target and metric names with ':'. Target and metric names must be lowercase alphanumeric characters with '_' separating words.",
     ///  "type": "string",
-    ///  "pattern":
-    /// "(([a-z]+[a-z0-9]*)(_([a-z0-9]+))*):(([a-z]+[a-z0-9]*)(_([a-z0-9]+))*)"
+    ///  "pattern": "(([a-z]+[a-z0-9]*)(_([a-z0-9]+))*):(([a-z]+[a-z0-9]*)(_([a-z0-9]+))*)"
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+    #[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
     #[serde(transparent)]
     pub struct TimeseriesName(::std::string::String);
     impl ::std::ops::Deref for TimeseriesName {
@@ -10036,19 +9696,21 @@ pub mod types {
 
     impl ::std::str::FromStr for TimeseriesName {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
-            static PATTERN: ::std::sync::LazyLock<::regress::Regex> =
-                ::std::sync::LazyLock::new(|| {
-                    ::regress::Regex::new(
+        fn from_str(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+            static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+            {
+                ::regress::Regex::new(
                         "(([a-z]+[a-z0-9]*)(_([a-z0-9]+))*):(([a-z]+[a-z0-9]*)(_([a-z0-9]+))*)",
                     )
                     .unwrap()
-                });
+            });
             if PATTERN.find(value).is_none() {
-                return Err("doesn't match pattern \
-                            \"(([a-z]+[a-z0-9]*)(_([a-z0-9]+))*):(([a-z]+[a-z0-9]*\
-                            )(_([a-z0-9]+))*)\""
-                    .into());
+                return Err(
+                    "doesn't match pattern \"(([a-z]+[a-z0-9]*)(_([a-z0-9]+))*):(([a-z]+[a-z0-9]*)(_([a-z0-9]+))*)\""
+                        .into(),
+                );
             }
             Ok(Self(value.to_string()))
         }
@@ -10056,7 +9718,9 @@ pub mod types {
 
     impl ::std::convert::TryFrom<&str> for TimeseriesName {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -10094,16 +9758,13 @@ pub mod types {
 
     ///The schema for a timeseries.
     ///
-    ///This includes the name of the timeseries, as well as the datum type of
-    /// its metric and the schema for each field.
+    ///This includes the name of the timeseries, as well as the datum type of its metric and the schema for each field.
     ///
     /// <details><summary>JSON schema</summary>
     ///
     /// ```json
     ///{
-    ///  "description": "The schema for a timeseries.\n\nThis includes the name
-    /// of the timeseries, as well as the datum type of its metric and the
-    /// schema for each field.",
+    ///  "description": "The schema for a timeseries.\n\nThis includes the name of the timeseries, as well as the datum type of its metric and the schema for each field.",
     ///  "type": "object",
     ///  "required": [
     ///    "created",
@@ -10132,7 +9793,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct TimeseriesSchema {
         pub created: ::chrono::DateTime<::chrono::offset::Utc>,
         pub datum_type: DatumType,
@@ -10160,8 +9821,7 @@ pub mod types {
     ///      }
     ///    },
     ///    "next_page": {
-    ///      "description": "token used to fetch the next page of results (if
-    /// any)",
+    ///      "description": "token used to fetch the next page of results (if any)",
     ///      "type": [
     ///        "string",
     ///        "null"
@@ -10171,7 +9831,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct TimeseriesSchemaResultsPage {
         ///list of items on this page of results
         pub items: ::std::vec::Vec<TimeseriesSchema>,
@@ -10180,15 +9840,13 @@ pub mod types {
         pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    ///Identity-related metadata that's included in "asset" public API objects
-    /// (which generally have no name or description)
+    ///Identity-related metadata that's included in "asset" public API objects (which generally have no name or description)
     ///
     /// <details><summary>JSON schema</summary>
     ///
     /// ```json
     ///{
-    ///  "description": "Identity-related metadata that's included in \"asset\"
-    /// public API objects (which generally have no name or description)",
+    ///  "description": "Identity-related metadata that's included in \"asset\" public API objects (which generally have no name or description)",
     ///  "type": "object",
     ///  "required": [
     ///    "id",
@@ -10199,8 +9857,7 @@ pub mod types {
     ///  ],
     ///  "properties": {
     ///    "id": {
-    ///      "description": "unique, immutable, system-controlled identifier for
-    /// each resource",
+    ///      "description": "unique, immutable, system-controlled identifier for each resource",
     ///      "type": "string",
     ///      "format": "uuid"
     ///    },
@@ -10224,7 +9881,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct UpdateDeployment {
         ///unique, immutable, system-controlled identifier for each resource
         pub id: ::uuid::Uuid,
@@ -10256,8 +9913,7 @@ pub mod types {
     ///      }
     ///    },
     ///    "next_page": {
-    ///      "description": "token used to fetch the next page of results (if
-    /// any)",
+    ///      "description": "token used to fetch the next page of results (if any)",
     ///      "type": [
     ///        "string",
     ///        "null"
@@ -10267,7 +9923,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct UpdateDeploymentResultsPage {
         ///list of items on this page of results
         pub items: ::std::vec::Vec<UpdateDeployment>,
@@ -10316,8 +9972,8 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
-        :: serde :: Deserialize,
-        :: serde :: Serialize,
+        ::serde::Deserialize,
+        ::serde::Serialize,
         Clone,
         Copy,
         Debug,
@@ -10325,7 +9981,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd,
+        PartialOrd
     )]
     #[serde(tag = "status")]
     pub enum UpdateStatus {
@@ -10346,7 +10002,9 @@ pub mod types {
 
     impl ::std::str::FromStr for UpdateStatus {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "updating" => Ok(Self::Updating),
                 "steady" => Ok(Self::Steady),
@@ -10357,7 +10015,9 @@ pub mod types {
 
     impl ::std::convert::TryFrom<&str> for UpdateStatus {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -10380,15 +10040,13 @@ pub mod types {
         }
     }
 
-    ///Identity-related metadata that's included in "asset" public API objects
-    /// (which generally have no name or description)
+    ///Identity-related metadata that's included in "asset" public API objects (which generally have no name or description)
     ///
     /// <details><summary>JSON schema</summary>
     ///
     /// ```json
     ///{
-    ///  "description": "Identity-related metadata that's included in \"asset\"
-    /// public API objects (which generally have no name or description)",
+    ///  "description": "Identity-related metadata that's included in \"asset\" public API objects (which generally have no name or description)",
     ///  "type": "object",
     ///  "required": [
     ///    "component_type",
@@ -10408,8 +10066,7 @@ pub mod types {
     ///      "type": "string"
     ///    },
     ///    "id": {
-    ///      "description": "unique, immutable, system-controlled identifier for
-    /// each resource",
+    ///      "description": "unique, immutable, system-controlled identifier for each resource",
     ///      "type": "string",
     ///      "format": "uuid"
     ///    },
@@ -10436,7 +10093,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct UpdateableComponent {
         pub component_type: UpdateableComponentType,
         pub device_id: ::std::string::String,
@@ -10471,8 +10128,7 @@ pub mod types {
     ///      }
     ///    },
     ///    "next_page": {
-    ///      "description": "token used to fetch the next page of results (if
-    /// any)",
+    ///      "description": "token used to fetch the next page of results (if any)",
     ///      "type": [
     ///        "string",
     ///        "null"
@@ -10482,7 +10138,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct UpdateableComponentResultsPage {
         ///list of items on this page of results
         pub items: ::std::vec::Vec<UpdateableComponent>,
@@ -10516,8 +10172,8 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
-        :: serde :: Deserialize,
-        :: serde :: Serialize,
+        ::serde::Deserialize,
+        ::serde::Serialize,
         Clone,
         Copy,
         Debug,
@@ -10525,7 +10181,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd,
+        PartialOrd
     )]
     pub enum UpdateableComponentType {
         #[serde(rename = "bootloader_for_rot")]
@@ -10575,7 +10231,9 @@ pub mod types {
 
     impl ::std::str::FromStr for UpdateableComponentType {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "bootloader_for_rot" => Ok(Self::BootloaderForRot),
                 "bootloader_for_sp" => Ok(Self::BootloaderForSp),
@@ -10596,7 +10254,9 @@ pub mod types {
 
     impl ::std::convert::TryFrom<&str> for UpdateableComponentType {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -10650,7 +10310,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct User {
         ///Human-readable name that can identify the user
         pub display_name: ::std::string::String,
@@ -10680,14 +10340,12 @@ pub mod types {
     ///      "type": "string"
     ///    },
     ///    "id": {
-    ///      "description": "unique, immutable, system-controlled identifier for
-    /// each resource",
+    ///      "description": "unique, immutable, system-controlled identifier for each resource",
     ///      "type": "string",
     ///      "format": "uuid"
     ///    },
     ///    "name": {
-    ///      "description": "unique, mutable, user-controlled identifier for
-    /// each resource",
+    ///      "description": "unique, mutable, user-controlled identifier for each resource",
     ///      "allOf": [
     ///        {
     ///          "$ref": "#/components/schemas/Name"
@@ -10708,7 +10366,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct UserBuiltin {
         ///human-readable free-form text about a resource
         pub description: ::std::string::String,
@@ -10742,8 +10400,7 @@ pub mod types {
     ///      }
     ///    },
     ///    "next_page": {
-    ///      "description": "token used to fetch the next page of results (if
-    /// any)",
+    ///      "description": "token used to fetch the next page of results (if any)",
     ///      "type": [
     ///        "string",
     ///        "null"
@@ -10753,7 +10410,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct UserBuiltinResultsPage {
         ///list of items on this page of results
         pub items: ::std::vec::Vec<UserBuiltin>,
@@ -10768,8 +10425,7 @@ pub mod types {
     ///
     /// ```json
     ///{
-    ///  "description": "Create-time parameters for a
-    /// [`User`](crate::external_api::views::User)",
+    ///  "description": "Create-time parameters for a [`User`](crate::external_api::views::User)",
     ///  "type": "object",
     ///  "required": [
     ///    "external_id",
@@ -10796,7 +10452,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct UserCreate {
         ///username used to log in
         pub external_id: UserId,
@@ -10804,28 +10460,21 @@ pub mod types {
         pub password: UserPassword,
     }
 
-    ///Names must begin with a lower case ASCII letter, be composed exclusively
-    /// of lowercase ASCII, uppercase ASCII, numbers, and '-', and may not end
-    /// with a '-'. Names cannot be a UUID though they may contain a UUID.
+    ///Names must begin with a lower case ASCII letter, be composed exclusively of lowercase ASCII, uppercase ASCII, numbers, and '-', and may not end with a '-'. Names cannot be a UUID though they may contain a UUID.
     ///
     /// <details><summary>JSON schema</summary>
     ///
     /// ```json
     ///{
     ///  "title": "A name unique within the parent collection",
-    ///  "description": "Names must begin with a lower case ASCII letter, be
-    /// composed exclusively of lowercase ASCII, uppercase ASCII, numbers, and
-    /// '-', and may not end with a '-'. Names cannot be a UUID though they may
-    /// contain a UUID.",
+    ///  "description": "Names must begin with a lower case ASCII letter, be composed exclusively of lowercase ASCII, uppercase ASCII, numbers, and '-', and may not end with a '-'. Names cannot be a UUID though they may contain a UUID.",
     ///  "type": "string",
     ///  "maxLength": 63,
-    ///  "pattern":
-    /// "^(?![0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$)^[a-z][a-z0-9-]*
-    /// [a-zA-Z0-9]$"
+    ///  "pattern": "^(?![0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$)^[a-z][a-z0-9-]*[a-zA-Z0-9]$"
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+    #[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
     #[serde(transparent)]
     pub struct UserId(::std::string::String);
     impl ::std::ops::Deref for UserId {
@@ -10843,17 +10492,24 @@ pub mod types {
 
     impl ::std::str::FromStr for UserId {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             if value.chars().count() > 63usize {
                 return Err("longer than 63 characters".into());
             }
-            static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(
-                || {
-                    :: regress :: Regex :: new ("^(?![0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$)^[a-z][a-z0-9-]*[a-zA-Z0-9]$") . unwrap ()
-                },
-            );
+            static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+            {
+                ::regress::Regex::new(
+                        "^(?![0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$)^[a-z][a-z0-9-]*[a-zA-Z0-9]$",
+                    )
+                    .unwrap()
+            });
             if PATTERN.find(value).is_none() {
-                return Err ("doesn't match pattern \"^(?![0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$)^[a-z][a-z0-9-]*[a-zA-Z0-9]$\"" . into ()) ;
+                return Err(
+                    "doesn't match pattern \"^(?![0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$)^[a-z][a-z0-9-]*[a-zA-Z0-9]$\""
+                        .into(),
+                );
             }
             Ok(Self(value.to_string()))
         }
@@ -10861,7 +10517,9 @@ pub mod types {
 
     impl ::std::convert::TryFrom<&str> for UserId {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -10925,8 +10583,7 @@ pub mod types {
     ///      }
     ///    },
     ///    {
-    ///      "description": "Invalidates any current password (disabling
-    /// password authentication)",
+    ///      "description": "Invalidates any current password (disabling password authentication)",
     ///      "type": "object",
     ///      "required": [
     ///        "user_password_value"
@@ -10944,7 +10601,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     #[serde(tag = "user_password_value", content = "details")]
     pub enum UserPassword {
         ///Sets the user's password to the provided value
@@ -10980,8 +10637,7 @@ pub mod types {
     ///      }
     ///    },
     ///    "next_page": {
-    ///      "description": "token used to fetch the next page of results (if
-    /// any)",
+    ///      "description": "token used to fetch the next page of results (if any)",
     ///      "type": [
     ///        "string",
     ///        "null"
@@ -10991,7 +10647,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct UserResultsPage {
         ///list of items on this page of results
         pub items: ::std::vec::Vec<User>,
@@ -11023,7 +10679,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct UsernamePasswordCredentials {
         pub password: Password,
         pub username: UserId,
@@ -11051,7 +10707,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct VersionRange {
         pub high: SemverVersion,
         pub low: SemverVersion,
@@ -11090,14 +10746,12 @@ pub mod types {
     ///      ]
     ///    },
     ///    "id": {
-    ///      "description": "unique, immutable, system-controlled identifier for
-    /// each resource",
+    ///      "description": "unique, immutable, system-controlled identifier for each resource",
     ///      "type": "string",
     ///      "format": "uuid"
     ///    },
     ///    "ipv6_prefix": {
-    ///      "description": "The unique local IPv6 address range for subnets in
-    /// this VPC",
+    ///      "description": "The unique local IPv6 address range for subnets in this VPC",
     ///      "allOf": [
     ///        {
     ///          "$ref": "#/components/schemas/Ipv6Net"
@@ -11105,8 +10759,7 @@ pub mod types {
     ///      ]
     ///    },
     ///    "name": {
-    ///      "description": "unique, mutable, user-controlled identifier for
-    /// each resource",
+    ///      "description": "unique, mutable, user-controlled identifier for each resource",
     ///      "allOf": [
     ///        {
     ///          "$ref": "#/components/schemas/Name"
@@ -11119,8 +10772,7 @@ pub mod types {
     ///      "format": "uuid"
     ///    },
     ///    "system_router_id": {
-    ///      "description": "id for the system router where subnet default
-    /// routes are registered",
+    ///      "description": "id for the system router where subnet default routes are registered",
     ///      "type": "string",
     ///      "format": "uuid"
     ///    },
@@ -11138,7 +10790,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct Vpc {
         ///human-readable free-form text about a resource
         pub description: ::std::string::String,
@@ -11166,8 +10818,7 @@ pub mod types {
     ///
     /// ```json
     ///{
-    ///  "description": "Create-time parameters for a
-    /// [`Vpc`](crate::external_api::views::Vpc)",
+    ///  "description": "Create-time parameters for a [`Vpc`](crate::external_api::views::Vpc)",
     ///  "type": "object",
     ///  "required": [
     ///    "description",
@@ -11182,10 +10833,7 @@ pub mod types {
     ///      "$ref": "#/components/schemas/Name"
     ///    },
     ///    "ipv6_prefix": {
-    ///      "description": "The IPv6 prefix for this VPC.\n\nAll IPv6 subnets
-    /// created from this VPC must be taken from this range, which sould be a
-    /// Unique Local Address in the range `fd00::/48`. The default VPC Subnet
-    /// will have the first `/64` range from this prefix.",
+    ///      "description": "The IPv6 prefix for this VPC.\n\nAll IPv6 subnets created from this VPC must be taken from this range, which sould be a Unique Local Address in the range `fd00::/48`. The default VPC Subnet will have the first `/64` range from this prefix.",
     ///      "oneOf": [
     ///        {
     ///          "type": "null"
@@ -11206,16 +10854,13 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct VpcCreate {
         pub description: ::std::string::String,
         pub dns_name: Name,
         ///The IPv6 prefix for this VPC.
         ///
-        ///All IPv6 subnets created from this VPC must be taken from this
-        /// range, which sould be a Unique Local Address in the range
-        /// `fd00::/48`. The default VPC Subnet will have the first `/64` range
-        /// from this prefix.
+        ///All IPv6 subnets created from this VPC must be taken from this range, which sould be a Unique Local Address in the range `fd00::/48`. The default VPC Subnet will have the first `/64` range from this prefix.
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         pub ipv6_prefix: ::std::option::Option<Ipv6Net>,
         pub name: Name,
@@ -11245,8 +10890,7 @@ pub mod types {
     ///  ],
     ///  "properties": {
     ///    "action": {
-    ///      "description": "whether traffic matching the rule should be allowed
-    /// or dropped",
+    ///      "description": "whether traffic matching the rule should be allowed or dropped",
     ///      "allOf": [
     ///        {
     ///          "$ref": "#/components/schemas/VpcFirewallRuleAction"
@@ -11258,8 +10902,7 @@ pub mod types {
     ///      "type": "string"
     ///    },
     ///    "direction": {
-    ///      "description": "whether this rule is for incoming or outgoing
-    /// traffic",
+    ///      "description": "whether this rule is for incoming or outgoing traffic",
     ///      "allOf": [
     ///        {
     ///          "$ref": "#/components/schemas/VpcFirewallRuleDirection"
@@ -11275,14 +10918,12 @@ pub mod types {
     ///      ]
     ///    },
     ///    "id": {
-    ///      "description": "unique, immutable, system-controlled identifier for
-    /// each resource",
+    ///      "description": "unique, immutable, system-controlled identifier for each resource",
     ///      "type": "string",
     ///      "format": "uuid"
     ///    },
     ///    "name": {
-    ///      "description": "unique, mutable, user-controlled identifier for
-    /// each resource",
+    ///      "description": "unique, mutable, user-controlled identifier for each resource",
     ///      "allOf": [
     ///        {
     ///          "$ref": "#/components/schemas/Name"
@@ -11304,8 +10945,7 @@ pub mod types {
     ///      ]
     ///    },
     ///    "targets": {
-    ///      "description": "list of sets of instances that the rule applies
-    /// to",
+    ///      "description": "list of sets of instances that the rule applies to",
     ///      "type": "array",
     ///      "items": {
     ///        "$ref": "#/components/schemas/VpcFirewallRuleTarget"
@@ -11330,7 +10970,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct VpcFirewallRule {
         ///whether traffic matching the rule should be allowed or dropped
         pub action: VpcFirewallRuleAction,
@@ -11373,8 +11013,8 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
-        :: serde :: Deserialize,
-        :: serde :: Serialize,
+        ::serde::Deserialize,
+        ::serde::Serialize,
         Clone,
         Copy,
         Debug,
@@ -11382,7 +11022,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd,
+        PartialOrd
     )]
     pub enum VpcFirewallRuleAction {
         #[serde(rename = "allow")]
@@ -11402,7 +11042,9 @@ pub mod types {
 
     impl ::std::str::FromStr for VpcFirewallRuleAction {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "allow" => Ok(Self::Allow),
                 "deny" => Ok(Self::Deny),
@@ -11413,7 +11055,9 @@ pub mod types {
 
     impl ::std::convert::TryFrom<&str> for VpcFirewallRuleAction {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -11451,8 +11095,8 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
-        :: serde :: Deserialize,
-        :: serde :: Serialize,
+        ::serde::Deserialize,
+        ::serde::Serialize,
         Clone,
         Copy,
         Debug,
@@ -11460,7 +11104,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd,
+        PartialOrd
     )]
     pub enum VpcFirewallRuleDirection {
         #[serde(rename = "inbound")]
@@ -11480,7 +11124,9 @@ pub mod types {
 
     impl ::std::str::FromStr for VpcFirewallRuleDirection {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "inbound" => Ok(Self::Inbound),
                 "outbound" => Ok(Self::Outbound),
@@ -11491,7 +11137,9 @@ pub mod types {
 
     impl ::std::convert::TryFrom<&str> for VpcFirewallRuleDirection {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -11514,22 +11162,17 @@ pub mod types {
         }
     }
 
-    ///Filter for a firewall rule. A given packet must match every field that
-    /// is present for the rule to apply to it. A packet matches a field if any
-    /// entry in that field matches the packet.
+    ///Filter for a firewall rule. A given packet must match every field that is present for the rule to apply to it. A packet matches a field if any entry in that field matches the packet.
     ///
     /// <details><summary>JSON schema</summary>
     ///
     /// ```json
     ///{
-    ///  "description": "Filter for a firewall rule. A given packet must match
-    /// every field that is present for the rule to apply to it. A packet
-    /// matches a field if any entry in that field matches the packet.",
+    ///  "description": "Filter for a firewall rule. A given packet must match every field that is present for the rule to apply to it. A packet matches a field if any entry in that field matches the packet.",
     ///  "type": "object",
     ///  "properties": {
     ///    "hosts": {
-    ///      "description": "If present, the sources (if incoming) or
-    /// destinations (if outgoing) this rule applies to.",
+    ///      "description": "If present, the sources (if incoming) or destinations (if outgoing) this rule applies to.",
     ///      "type": [
     ///        "array",
     ///        "null"
@@ -11539,8 +11182,7 @@ pub mod types {
     ///      }
     ///    },
     ///    "ports": {
-    ///      "description": "If present, the destination ports this rule applies
-    /// to.",
+    ///      "description": "If present, the destination ports this rule applies to.",
     ///      "type": [
     ///        "array",
     ///        "null"
@@ -11550,8 +11192,7 @@ pub mod types {
     ///      }
     ///    },
     ///    "protocols": {
-    ///      "description": "If present, the networking protocols this rule
-    /// applies to.",
+    ///      "description": "If present, the networking protocols this rule applies to.",
     ///      "type": [
     ///        "array",
     ///        "null"
@@ -11564,10 +11205,9 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct VpcFirewallRuleFilter {
-        ///If present, the sources (if incoming) or destinations (if outgoing)
-        /// this rule applies to.
+        ///If present, the sources (if incoming) or destinations (if outgoing) this rule applies to.
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         pub hosts: ::std::option::Option<::std::vec::Vec<VpcFirewallRuleHostFilter>>,
         ///If present, the destination ports this rule applies to.
@@ -11588,19 +11228,16 @@ pub mod types {
         }
     }
 
-    ///The `VpcFirewallRuleHostFilter` is used to filter traffic on the basis
-    /// of its source or destination host.
+    ///The `VpcFirewallRuleHostFilter` is used to filter traffic on the basis of its source or destination host.
     ///
     /// <details><summary>JSON schema</summary>
     ///
     /// ```json
     ///{
-    ///  "description": "The `VpcFirewallRuleHostFilter` is used to filter
-    /// traffic on the basis of its source or destination host.",
+    ///  "description": "The `VpcFirewallRuleHostFilter` is used to filter traffic on the basis of its source or destination host.",
     ///  "oneOf": [
     ///    {
-    ///      "description": "The rule applies to traffic from/to all instances
-    /// in the VPC",
+    ///      "description": "The rule applies to traffic from/to all instances in the VPC",
     ///      "type": "object",
     ///      "required": [
     ///        "type",
@@ -11619,8 +11256,7 @@ pub mod types {
     ///      }
     ///    },
     ///    {
-    ///      "description": "The rule applies to traffic from/to all instances
-    /// in the VPC Subnet",
+    ///      "description": "The rule applies to traffic from/to all instances in the VPC Subnet",
     ///      "type": "object",
     ///      "required": [
     ///        "type",
@@ -11639,8 +11275,7 @@ pub mod types {
     ///      }
     ///    },
     ///    {
-    ///      "description": "The rule applies to traffic from/to this specific
-    /// instance",
+    ///      "description": "The rule applies to traffic from/to this specific instance",
     ///      "type": "object",
     ///      "required": [
     ///        "type",
@@ -11659,8 +11294,7 @@ pub mod types {
     ///      }
     ///    },
     ///    {
-    ///      "description": "The rule applies to traffic from/to a specific IP
-    /// address",
+    ///      "description": "The rule applies to traffic from/to a specific IP address",
     ///      "type": "object",
     ///      "required": [
     ///        "type",
@@ -11680,8 +11314,7 @@ pub mod types {
     ///      }
     ///    },
     ///    {
-    ///      "description": "The rule applies to traffic from/to a specific IP
-    /// subnet",
+    ///      "description": "The rule applies to traffic from/to a specific IP subnet",
     ///      "type": "object",
     ///      "required": [
     ///        "type",
@@ -11703,7 +11336,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     #[serde(tag = "type", content = "value")]
     pub enum VpcFirewallRuleHostFilter {
         ///The rule applies to traffic from/to all instances in the VPC
@@ -11741,8 +11374,7 @@ pub mod types {
     ///
     /// ```json
     ///{
-    ///  "description": "The protocols that may be specified in a firewall
-    /// rule's filter",
+    ///  "description": "The protocols that may be specified in a firewall rule's filter",
     ///  "type": "string",
     ///  "enum": [
     ///    "TCP",
@@ -11753,8 +11385,8 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
-        :: serde :: Deserialize,
-        :: serde :: Serialize,
+        ::serde::Deserialize,
+        ::serde::Serialize,
         Clone,
         Copy,
         Debug,
@@ -11762,7 +11394,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd,
+        PartialOrd
     )]
     pub enum VpcFirewallRuleProtocol {
         #[serde(rename = "TCP")]
@@ -11785,7 +11417,9 @@ pub mod types {
 
     impl ::std::str::FromStr for VpcFirewallRuleProtocol {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "TCP" => Ok(Self::Tcp),
                 "UDP" => Ok(Self::Udp),
@@ -11797,7 +11431,9 @@ pub mod types {
 
     impl ::std::convert::TryFrom<&str> for VpcFirewallRuleProtocol {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -11835,8 +11471,8 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
-        :: serde :: Deserialize,
-        :: serde :: Serialize,
+        ::serde::Deserialize,
+        ::serde::Serialize,
         Clone,
         Copy,
         Debug,
@@ -11844,7 +11480,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd,
+        PartialOrd
     )]
     pub enum VpcFirewallRuleStatus {
         #[serde(rename = "disabled")]
@@ -11864,7 +11500,9 @@ pub mod types {
 
     impl ::std::str::FromStr for VpcFirewallRuleStatus {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "disabled" => Ok(Self::Disabled),
                 "enabled" => Ok(Self::Enabled),
@@ -11875,7 +11513,9 @@ pub mod types {
 
     impl ::std::convert::TryFrom<&str> for VpcFirewallRuleStatus {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -11898,15 +11538,13 @@ pub mod types {
         }
     }
 
-    ///A `VpcFirewallRuleTarget` is used to specify the set of [`Instance`]s to
-    /// which a firewall rule applies.
+    ///A `VpcFirewallRuleTarget` is used to specify the set of [`Instance`]s to which a firewall rule applies.
     ///
     /// <details><summary>JSON schema</summary>
     ///
     /// ```json
     ///{
-    ///  "description": "A `VpcFirewallRuleTarget` is used to specify the set of
-    /// [`Instance`]s to which a firewall rule applies.",
+    ///  "description": "A `VpcFirewallRuleTarget` is used to specify the set of [`Instance`]s to which a firewall rule applies.",
     ///  "oneOf": [
     ///    {
     ///      "description": "The rule applies to all instances in the VPC",
@@ -11928,8 +11566,7 @@ pub mod types {
     ///      }
     ///    },
     ///    {
-    ///      "description": "The rule applies to all instances in the VPC
-    /// Subnet",
+    ///      "description": "The rule applies to all instances in the VPC Subnet",
     ///      "type": "object",
     ///      "required": [
     ///        "type",
@@ -12009,7 +11646,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     #[serde(tag = "type", content = "value")]
     pub enum VpcFirewallRuleTarget {
         ///The rule applies to all instances in the VPC
@@ -12061,8 +11698,7 @@ pub mod types {
     ///  ],
     ///  "properties": {
     ///    "action": {
-    ///      "description": "whether traffic matching the rule should be allowed
-    /// or dropped",
+    ///      "description": "whether traffic matching the rule should be allowed or dropped",
     ///      "allOf": [
     ///        {
     ///          "$ref": "#/components/schemas/VpcFirewallRuleAction"
@@ -12074,8 +11710,7 @@ pub mod types {
     ///      "type": "string"
     ///    },
     ///    "direction": {
-    ///      "description": "whether this rule is for incoming or outgoing
-    /// traffic",
+    ///      "description": "whether this rule is for incoming or outgoing traffic",
     ///      "allOf": [
     ///        {
     ///          "$ref": "#/components/schemas/VpcFirewallRuleDirection"
@@ -12113,8 +11748,7 @@ pub mod types {
     ///      ]
     ///    },
     ///    "targets": {
-    ///      "description": "list of sets of instances that the rule applies
-    /// to",
+    ///      "description": "list of sets of instances that the rule applies to",
     ///      "type": "array",
     ///      "items": {
     ///        "$ref": "#/components/schemas/VpcFirewallRuleTarget"
@@ -12124,7 +11758,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct VpcFirewallRuleUpdate {
         ///whether traffic matching the rule should be allowed or dropped
         pub action: VpcFirewallRuleAction,
@@ -12144,17 +11778,13 @@ pub mod types {
         pub targets: ::std::vec::Vec<VpcFirewallRuleTarget>,
     }
 
-    ///Updateable properties of a `Vpc`'s firewall Note that VpcFirewallRules
-    /// are implicitly created along with a Vpc, so there is no explicit
-    /// creation.
+    ///Updateable properties of a `Vpc`'s firewall Note that VpcFirewallRules are implicitly created along with a Vpc, so there is no explicit creation.
     ///
     /// <details><summary>JSON schema</summary>
     ///
     /// ```json
     ///{
-    ///  "description": "Updateable properties of a `Vpc`'s firewall Note that
-    /// VpcFirewallRules are implicitly created along with a Vpc, so there is no
-    /// explicit creation.",
+    ///  "description": "Updateable properties of a `Vpc`'s firewall Note that VpcFirewallRules are implicitly created along with a Vpc, so there is no explicit creation.",
     ///  "type": "object",
     ///  "required": [
     ///    "rules"
@@ -12170,7 +11800,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct VpcFirewallRuleUpdateParams {
         pub rules: ::std::vec::Vec<VpcFirewallRuleUpdate>,
     }
@@ -12197,7 +11827,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct VpcFirewallRules {
         pub rules: ::std::vec::Vec<VpcFirewallRule>,
     }
@@ -12222,8 +11852,7 @@ pub mod types {
     ///      }
     ///    },
     ///    "next_page": {
-    ///      "description": "token used to fetch the next page of results (if
-    /// any)",
+    ///      "description": "token used to fetch the next page of results (if any)",
     ///      "type": [
     ///        "string",
     ///        "null"
@@ -12233,7 +11862,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct VpcResultsPage {
         ///list of items on this page of results
         pub items: ::std::vec::Vec<Vpc>,
@@ -12242,15 +11871,13 @@ pub mod types {
         pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    ///A VPC router defines a series of rules that indicate where traffic
-    /// should be sent depending on its destination.
+    ///A VPC router defines a series of rules that indicate where traffic should be sent depending on its destination.
     ///
     /// <details><summary>JSON schema</summary>
     ///
     /// ```json
     ///{
-    ///  "description": "A VPC router defines a series of rules that indicate
-    /// where traffic should be sent depending on its destination.",
+    ///  "description": "A VPC router defines a series of rules that indicate where traffic should be sent depending on its destination.",
     ///  "type": "object",
     ///  "required": [
     ///    "description",
@@ -12267,8 +11894,7 @@ pub mod types {
     ///      "type": "string"
     ///    },
     ///    "id": {
-    ///      "description": "unique, immutable, system-controlled identifier for
-    /// each resource",
+    ///      "description": "unique, immutable, system-controlled identifier for each resource",
     ///      "type": "string",
     ///      "format": "uuid"
     ///    },
@@ -12276,8 +11902,7 @@ pub mod types {
     ///      "$ref": "#/components/schemas/VpcRouterKind"
     ///    },
     ///    "name": {
-    ///      "description": "unique, mutable, user-controlled identifier for
-    /// each resource",
+    ///      "description": "unique, mutable, user-controlled identifier for each resource",
     ///      "allOf": [
     ///        {
     ///          "$ref": "#/components/schemas/Name"
@@ -12303,7 +11928,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct VpcRouter {
         ///human-readable free-form text about a resource
         pub description: ::std::string::String,
@@ -12320,15 +11945,13 @@ pub mod types {
         pub vpc_id: ::uuid::Uuid,
     }
 
-    ///Create-time parameters for a
-    /// [`VpcRouter`](crate::external_api::views::VpcRouter)
+    ///Create-time parameters for a [`VpcRouter`](crate::external_api::views::VpcRouter)
     ///
     /// <details><summary>JSON schema</summary>
     ///
     /// ```json
     ///{
-    ///  "description": "Create-time parameters for a
-    /// [`VpcRouter`](crate::external_api::views::VpcRouter)",
+    ///  "description": "Create-time parameters for a [`VpcRouter`](crate::external_api::views::VpcRouter)",
     ///  "type": "object",
     ///  "required": [
     ///    "description",
@@ -12345,7 +11968,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct VpcRouterCreate {
         pub description: ::std::string::String,
         pub name: Name,
@@ -12366,8 +11989,8 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
-        :: serde :: Deserialize,
-        :: serde :: Serialize,
+        ::serde::Deserialize,
+        ::serde::Serialize,
         Clone,
         Copy,
         Debug,
@@ -12375,7 +11998,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd,
+        PartialOrd
     )]
     pub enum VpcRouterKind {
         #[serde(rename = "system")]
@@ -12395,7 +12018,9 @@ pub mod types {
 
     impl ::std::str::FromStr for VpcRouterKind {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "system" => Ok(Self::System),
                 "custom" => Ok(Self::Custom),
@@ -12406,7 +12031,9 @@ pub mod types {
 
     impl ::std::convert::TryFrom<&str> for VpcRouterKind {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -12449,8 +12076,7 @@ pub mod types {
     ///      }
     ///    },
     ///    "next_page": {
-    ///      "description": "token used to fetch the next page of results (if
-    /// any)",
+    ///      "description": "token used to fetch the next page of results (if any)",
     ///      "type": [
     ///        "string",
     ///        "null"
@@ -12460,7 +12086,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct VpcRouterResultsPage {
         ///list of items on this page of results
         pub items: ::std::vec::Vec<VpcRouter>,
@@ -12469,15 +12095,13 @@ pub mod types {
         pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    ///Updateable properties of a
-    /// [`VpcRouter`](crate::external_api::views::VpcRouter)
+    ///Updateable properties of a [`VpcRouter`](crate::external_api::views::VpcRouter)
     ///
     /// <details><summary>JSON schema</summary>
     ///
     /// ```json
     ///{
-    ///  "description": "Updateable properties of a
-    /// [`VpcRouter`](crate::external_api::views::VpcRouter)",
+    ///  "description": "Updateable properties of a [`VpcRouter`](crate::external_api::views::VpcRouter)",
     ///  "type": "object",
     ///  "properties": {
     ///    "description": {
@@ -12504,7 +12128,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct VpcRouterUpdate {
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         pub description: ::std::option::Option<::std::string::String>,
@@ -12521,17 +12145,13 @@ pub mod types {
         }
     }
 
-    ///A VPC subnet represents a logical grouping for instances that allows
-    /// network traffic between them, within a IPv4 subnetwork or optionall an
-    /// IPv6 subnetwork.
+    ///A VPC subnet represents a logical grouping for instances that allows network traffic between them, within a IPv4 subnetwork or optionall an IPv6 subnetwork.
     ///
     /// <details><summary>JSON schema</summary>
     ///
     /// ```json
     ///{
-    ///  "description": "A VPC subnet represents a logical grouping for
-    /// instances that allows network traffic between them, within a IPv4
-    /// subnetwork or optionall an IPv6 subnetwork.",
+    ///  "description": "A VPC subnet represents a logical grouping for instances that allows network traffic between them, within a IPv4 subnetwork or optionall an IPv6 subnetwork.",
     ///  "type": "object",
     ///  "required": [
     ///    "description",
@@ -12549,8 +12169,7 @@ pub mod types {
     ///      "type": "string"
     ///    },
     ///    "id": {
-    ///      "description": "unique, immutable, system-controlled identifier for
-    /// each resource",
+    ///      "description": "unique, immutable, system-controlled identifier for each resource",
     ///      "type": "string",
     ///      "format": "uuid"
     ///    },
@@ -12571,8 +12190,7 @@ pub mod types {
     ///      ]
     ///    },
     ///    "name": {
-    ///      "description": "unique, mutable, user-controlled identifier for
-    /// each resource",
+    ///      "description": "unique, mutable, user-controlled identifier for each resource",
     ///      "allOf": [
     ///        {
     ///          "$ref": "#/components/schemas/Name"
@@ -12598,7 +12216,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct VpcSubnet {
         ///human-readable free-form text about a resource
         pub description: ::std::string::String,
@@ -12618,15 +12236,13 @@ pub mod types {
         pub vpc_id: ::uuid::Uuid,
     }
 
-    ///Create-time parameters for a
-    /// [`VpcSubnet`](crate::external_api::views::VpcSubnet)
+    ///Create-time parameters for a [`VpcSubnet`](crate::external_api::views::VpcSubnet)
     ///
     /// <details><summary>JSON schema</summary>
     ///
     /// ```json
     ///{
-    ///  "description": "Create-time parameters for a
-    /// [`VpcSubnet`](crate::external_api::views::VpcSubnet)",
+    ///  "description": "Create-time parameters for a [`VpcSubnet`](crate::external_api::views::VpcSubnet)",
     ///  "type": "object",
     ///  "required": [
     ///    "description",
@@ -12638,9 +12254,7 @@ pub mod types {
     ///      "type": "string"
     ///    },
     ///    "ipv4_block": {
-    ///      "description": "The IPv4 address range for this subnet.\n\nIt must
-    /// be allocated from an RFC 1918 private address range, and must not
-    /// overlap with any other existing subnet in the VPC.",
+    ///      "description": "The IPv4 address range for this subnet.\n\nIt must be allocated from an RFC 1918 private address range, and must not overlap with any other existing subnet in the VPC.",
     ///      "allOf": [
     ///        {
     ///          "$ref": "#/components/schemas/Ipv4Net"
@@ -12648,11 +12262,7 @@ pub mod types {
     ///      ]
     ///    },
     ///    "ipv6_block": {
-    ///      "description": "The IPv6 address range for this subnet.\n\nIt must
-    /// be allocated from the RFC 4193 Unique Local Address range, with the
-    /// prefix equal to the parent VPC's prefix. A random `/64` block will be
-    /// assigned if one is not provided. It must not overlap with any existing
-    /// subnet in the VPC.",
+    ///      "description": "The IPv6 address range for this subnet.\n\nIt must be allocated from the RFC 4193 Unique Local Address range, with the prefix equal to the parent VPC's prefix. A random `/64` block will be assigned if one is not provided. It must not overlap with any existing subnet in the VPC.",
     ///      "oneOf": [
     ///        {
     ///          "type": "null"
@@ -12673,20 +12283,16 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct VpcSubnetCreate {
         pub description: ::std::string::String,
         ///The IPv4 address range for this subnet.
         ///
-        ///It must be allocated from an RFC 1918 private address range, and
-        /// must not overlap with any other existing subnet in the VPC.
+        ///It must be allocated from an RFC 1918 private address range, and must not overlap with any other existing subnet in the VPC.
         pub ipv4_block: Ipv4Net,
         ///The IPv6 address range for this subnet.
         ///
-        ///It must be allocated from the RFC 4193 Unique Local Address range,
-        /// with the prefix equal to the parent VPC's prefix. A random `/64`
-        /// block will be assigned if one is not provided. It must not overlap
-        /// with any existing subnet in the VPC.
+        ///It must be allocated from the RFC 4193 Unique Local Address range, with the prefix equal to the parent VPC's prefix. A random `/64` block will be assigned if one is not provided. It must not overlap with any existing subnet in the VPC.
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         pub ipv6_block: ::std::option::Option<Ipv6Net>,
         pub name: Name,
@@ -12712,8 +12318,7 @@ pub mod types {
     ///      }
     ///    },
     ///    "next_page": {
-    ///      "description": "token used to fetch the next page of results (if
-    /// any)",
+    ///      "description": "token used to fetch the next page of results (if any)",
     ///      "type": [
     ///        "string",
     ///        "null"
@@ -12723,7 +12328,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct VpcSubnetResultsPage {
         ///list of items on this page of results
         pub items: ::std::vec::Vec<VpcSubnet>,
@@ -12732,15 +12337,13 @@ pub mod types {
         pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    ///Updateable properties of a
-    /// [`VpcSubnet`](crate::external_api::views::VpcSubnet)
+    ///Updateable properties of a [`VpcSubnet`](crate::external_api::views::VpcSubnet)
     ///
     /// <details><summary>JSON schema</summary>
     ///
     /// ```json
     ///{
-    ///  "description": "Updateable properties of a
-    /// [`VpcSubnet`](crate::external_api::views::VpcSubnet)",
+    ///  "description": "Updateable properties of a [`VpcSubnet`](crate::external_api::views::VpcSubnet)",
     ///  "type": "object",
     ///  "properties": {
     ///    "description": {
@@ -12767,7 +12370,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct VpcSubnetUpdate {
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         pub description: ::std::option::Option<::std::string::String>,
@@ -12790,8 +12393,7 @@ pub mod types {
     ///
     /// ```json
     ///{
-    ///  "description": "Updateable properties of a
-    /// [`Vpc`](crate::external_api::views::Vpc)",
+    ///  "description": "Updateable properties of a [`Vpc`](crate::external_api::views::Vpc)",
     ///  "type": "object",
     ///  "properties": {
     ///    "description": {
@@ -12832,7 +12434,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct VpcUpdate {
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         pub description: ::std::option::Option<::std::string::String>,
@@ -12858,8 +12460,7 @@ pub mod types {
             V
         }
 
-        pub(super) fn instance_create_network_interfaces(
-        ) -> super::InstanceNetworkInterfaceAttachment {
+        pub(super) fn instance_create_network_interfaces() -> super::InstanceNetworkInterfaceAttachment {
             super::InstanceNetworkInterfaceAttachment::Default
         }
     }
@@ -12886,9 +12487,7 @@ impl Client {
         #[cfg(not(target_arch = "wasm32"))]
         let client = {
             let dur = ::std::time::Duration::from_secs(75u64);
-            reqwest::ClientBuilder::new()
-                .connect_timeout(dur)
-                .timeout(dur)
+            reqwest::ClientBuilder::new().connect_timeout(dur).timeout(dur)
         };
         #[cfg(target_arch = "wasm32")]
         let client = reqwest::ClientBuilder::new();
@@ -12935,20 +12534,21 @@ impl Client {
     ///Use `GET /v1/disks/{disk}` instead
     ///
     ///Sends a `GET` request to `/by-id/disks/{id}`
+    ///
+    ///
     pub async fn disk_view_by_id<'a>(
         &'a self,
         id: &'a ::uuid::Uuid,
     ) -> Result<ResponseValue<types::Disk>, Error<types::Error>> {
         let url = format!(
-            "{}/by-id/disks/{}",
-            self.baseurl,
-            encode_path(&id.to_string()),
+            "{}/by-id/disks/{}", self.baseurl, encode_path(& id.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -12968,12 +12568,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -12981,20 +12581,21 @@ impl Client {
     ///Fetch an image by id
     ///
     ///Sends a `GET` request to `/by-id/images/{id}`
+    ///
+    ///
     pub async fn image_view_by_id<'a>(
         &'a self,
         id: &'a ::uuid::Uuid,
     ) -> Result<ResponseValue<types::Image>, Error<types::Error>> {
         let url = format!(
-            "{}/by-id/images/{}",
-            self.baseurl,
-            encode_path(&id.to_string()),
+            "{}/by-id/images/{}", self.baseurl, encode_path(& id.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -13014,12 +12615,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -13027,20 +12628,21 @@ impl Client {
     ///Fetch an instance by id
     ///
     ///Sends a `GET` request to `/by-id/instances/{id}`
+    ///
+    ///
     pub async fn instance_view_by_id<'a>(
         &'a self,
         id: &'a ::uuid::Uuid,
     ) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
         let url = format!(
-            "{}/by-id/instances/{}",
-            self.baseurl,
-            encode_path(&id.to_string()),
+            "{}/by-id/instances/{}", self.baseurl, encode_path(& id.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -13060,12 +12662,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -13073,20 +12675,22 @@ impl Client {
     ///Fetch a network interface by id
     ///
     ///Sends a `GET` request to `/by-id/network-interfaces/{id}`
+    ///
+    ///
     pub async fn instance_network_interface_view_by_id<'a>(
         &'a self,
         id: &'a ::uuid::Uuid,
     ) -> Result<ResponseValue<types::NetworkInterface>, Error<types::Error>> {
         let url = format!(
-            "{}/by-id/network-interfaces/{}",
-            self.baseurl,
-            encode_path(&id.to_string()),
+            "{}/by-id/network-interfaces/{}", self.baseurl, encode_path(& id
+            .to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -13106,12 +12710,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -13121,20 +12725,21 @@ impl Client {
     ///Use `GET /v1/organizations/{organization}` instead
     ///
     ///Sends a `GET` request to `/by-id/organizations/{id}`
+    ///
+    ///
     pub async fn organization_view_by_id<'a>(
         &'a self,
         id: &'a ::uuid::Uuid,
     ) -> Result<ResponseValue<types::Organization>, Error<types::Error>> {
         let url = format!(
-            "{}/by-id/organizations/{}",
-            self.baseurl,
-            encode_path(&id.to_string()),
+            "{}/by-id/organizations/{}", self.baseurl, encode_path(& id.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -13154,12 +12759,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -13169,20 +12774,21 @@ impl Client {
     ///Use `GET /v1/projects/{project}` instead
     ///
     ///Sends a `GET` request to `/by-id/projects/{id}`
+    ///
+    ///
     pub async fn project_view_by_id<'a>(
         &'a self,
         id: &'a ::uuid::Uuid,
     ) -> Result<ResponseValue<types::Project>, Error<types::Error>> {
         let url = format!(
-            "{}/by-id/projects/{}",
-            self.baseurl,
-            encode_path(&id.to_string()),
+            "{}/by-id/projects/{}", self.baseurl, encode_path(& id.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -13202,12 +12808,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -13215,20 +12821,21 @@ impl Client {
     ///Fetch a snapshot by id
     ///
     ///Sends a `GET` request to `/by-id/snapshots/{id}`
+    ///
+    ///
     pub async fn snapshot_view_by_id<'a>(
         &'a self,
         id: &'a ::uuid::Uuid,
     ) -> Result<ResponseValue<types::Snapshot>, Error<types::Error>> {
         let url = format!(
-            "{}/by-id/snapshots/{}",
-            self.baseurl,
-            encode_path(&id.to_string()),
+            "{}/by-id/snapshots/{}", self.baseurl, encode_path(& id.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -13248,12 +12855,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -13261,20 +12868,21 @@ impl Client {
     ///Fetch a route by id
     ///
     ///Sends a `GET` request to `/by-id/vpc-router-routes/{id}`
+    ///
+    ///
     pub async fn vpc_router_route_view_by_id<'a>(
         &'a self,
         id: &'a ::uuid::Uuid,
     ) -> Result<ResponseValue<types::RouterRoute>, Error<types::Error>> {
         let url = format!(
-            "{}/by-id/vpc-router-routes/{}",
-            self.baseurl,
-            encode_path(&id.to_string()),
+            "{}/by-id/vpc-router-routes/{}", self.baseurl, encode_path(& id.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -13294,12 +12902,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -13307,20 +12915,21 @@ impl Client {
     ///Get a router by id
     ///
     ///Sends a `GET` request to `/by-id/vpc-routers/{id}`
+    ///
+    ///
     pub async fn vpc_router_view_by_id<'a>(
         &'a self,
         id: &'a ::uuid::Uuid,
     ) -> Result<ResponseValue<types::VpcRouter>, Error<types::Error>> {
         let url = format!(
-            "{}/by-id/vpc-routers/{}",
-            self.baseurl,
-            encode_path(&id.to_string()),
+            "{}/by-id/vpc-routers/{}", self.baseurl, encode_path(& id.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -13340,12 +12949,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -13353,20 +12962,21 @@ impl Client {
     ///Fetch a subnet by id
     ///
     ///Sends a `GET` request to `/by-id/vpc-subnets/{id}`
+    ///
+    ///
     pub async fn vpc_subnet_view_by_id<'a>(
         &'a self,
         id: &'a ::uuid::Uuid,
     ) -> Result<ResponseValue<types::VpcSubnet>, Error<types::Error>> {
         let url = format!(
-            "{}/by-id/vpc-subnets/{}",
-            self.baseurl,
-            encode_path(&id.to_string()),
+            "{}/by-id/vpc-subnets/{}", self.baseurl, encode_path(& id.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -13386,12 +12996,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -13399,20 +13009,21 @@ impl Client {
     ///Fetch a VPC
     ///
     ///Sends a `GET` request to `/by-id/vpcs/{id}`
+    ///
+    ///
     pub async fn vpc_view_by_id<'a>(
         &'a self,
         id: &'a ::uuid::Uuid,
     ) -> Result<ResponseValue<types::Vpc>, Error<types::Error>> {
         let url = format!(
-            "{}/by-id/vpcs/{}",
-            self.baseurl,
-            encode_path(&id.to_string()),
+            "{}/by-id/vpcs/{}", self.baseurl, encode_path(& id.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -13432,33 +13043,34 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///Start an OAuth 2.0 Device Authorization Grant
     ///
-    ///This endpoint is designed to be accessed from an *unauthenticated* API
-    /// client. It generates and records a `device_code` and `user_code` which
-    /// must be verified and confirmed prior to a token being granted.
+    ///This endpoint is designed to be accessed from an *unauthenticated* API client. It generates and records a `device_code` and `user_code` which must be verified and confirmed prior to a token being granted.
     ///
     ///Sends a `POST` request to `/device/auth`
+    ///
+    ///
     pub async fn device_auth_request<'a>(
         &'a self,
         body: &'a types::DeviceAuthRequest,
     ) -> Result<ResponseValue<ByteStream>, Error<ByteStream>> {
         let url = format!("{}/device/auth", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -13481,22 +13093,22 @@ impl Client {
 
     ///Confirm an OAuth 2.0 Device Authorization Grant
     ///
-    ///This endpoint is designed to be accessed by the user agent (browser),
-    /// not the client requesting the token. So we do not actually return the
-    /// token here; it will be returned in response to the poll on
-    /// `/device/token`.
+    ///This endpoint is designed to be accessed by the user agent (browser), not the client requesting the token. So we do not actually return the token here; it will be returned in response to the poll on `/device/token`.
     ///
     ///Sends a `POST` request to `/device/confirm`
+    ///
+    ///
     pub async fn device_auth_confirm<'a>(
         &'a self,
         body: &'a types::DeviceAuthVerify,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!("{}/device/confirm", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -13517,32 +13129,34 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             204u16 => Ok(ResponseValue::empty(response)),
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///Request a device access token
     ///
-    ///This endpoint should be polled by the client until the user code is
-    /// verified and the grant is confirmed.
+    ///This endpoint should be polled by the client until the user code is verified and the grant is confirmed.
     ///
     ///Sends a `POST` request to `/device/token`
+    ///
+    ///
     pub async fn device_access_token<'a>(
         &'a self,
         body: &'a types::DeviceAccessTokenRequest,
     ) -> Result<ResponseValue<ByteStream>, Error<ByteStream>> {
         let url = format!("{}/device/token", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -13568,10 +13182,10 @@ impl Client {
     ///Sends a `GET` request to `/groups`
     ///
     ///Arguments:
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `page_token`: Token returned by previous call to retrieve the
-    ///   subsequent page
-    /// - `sort_by`
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `page_token`: Token returned by previous call to retrieve the subsequent page
+    ///- `sort_by`
+    ///
     pub async fn group_list<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
@@ -13580,10 +13194,11 @@ impl Client {
     ) -> Result<ResponseValue<types::GroupResultsPage>, Error<types::Error>> {
         let url = format!("{}/groups", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -13593,10 +13208,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
+            .query(&progenitor_client::QueryParam::new("page_token", &page_token))
             .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
             .headers(header_map)
             .build()?;
@@ -13609,29 +13221,31 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///List groups as a Stream
     ///
-    ///Sends repeated `GET` requests to `/groups` until there are no more
-    /// results.
+    ///Sends repeated `GET` requests to `/groups` until there are no more results.
     ///
     ///Arguments:
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `sort_by`
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `sort_by`
+    ///
     pub fn group_list_stream<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::IdSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::Group, Error<types::Error>>> + Unpin + 'a {
+    ) -> impl futures::Stream<
+        Item = Result<types::Group, Error<types::Error>>,
+    > + Unpin + 'a {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
@@ -13639,19 +13253,25 @@ impl Client {
             .map_ok(move |page| {
                 let page = page.into_inner();
                 let first = futures::stream::iter(page.items).map(Ok);
-                let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
-                    if state.is_none() {
-                        Ok(None)
-                    } else {
-                        self.group_list(limit, state.as_deref(), None)
-                            .map_ok(|page| {
-                                let page = page.into_inner();
-                                Some((futures::stream::iter(page.items).map(Ok), page.next_page))
-                            })
-                            .await
-                    }
-                })
-                .try_flatten();
+                let rest = futures::stream::try_unfold(
+                        page.next_page,
+                        move |state| async move {
+                            if state.is_none() {
+                                Ok(None)
+                            } else {
+                                self.group_list(limit, state.as_deref(), None)
+                                    .map_ok(|page| {
+                                        let page = page.into_inner();
+                                        Some((
+                                            futures::stream::iter(page.items).map(Ok),
+                                            page.next_page,
+                                        ))
+                                    })
+                                    .await
+                            }
+                        },
+                    )
+                    .try_flatten();
                 first.chain(rest)
             })
             .try_flatten_stream()
@@ -13659,16 +13279,19 @@ impl Client {
     }
 
     ///Sends a `POST` request to `/login`
+    ///
+    ///
     pub async fn login_spoof<'a>(
         &'a self,
         body: &'a types::SpoofLoginBody,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!("{}/login", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -13689,12 +13312,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             204u16 => Ok(ResponseValue::empty(response)),
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -13702,28 +13325,24 @@ impl Client {
     ///Authenticate a user (i.e., log in) via username and password
     ///
     ///Sends a `POST` request to `/login/{silo_name}/local`
+    ///
+    ///
     pub async fn login_local<'a>(
         &'a self,
         silo_name: &'a types::Name,
         body: &'a types::UsernamePasswordCredentials,
     ) -> Result<ResponseValue<ByteStream>, Error<types::Error>> {
         let url = format!(
-            "{}/login/{}/local",
-            self.baseurl,
-            encode_path(&silo_name.to_string()),
+            "{}/login/{}/local", self.baseurl, encode_path(& silo_name.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .post(url)
-            .json(&body)
-            .headers(header_map)
-            .build()?;
+        let mut request = self.client.post(url).json(&body).headers(header_map).build()?;
         let info = OperationInfo {
             operation_id: "login_local",
         };
@@ -13733,38 +13352,38 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200..=299 => Ok(ResponseValue::stream(response)),
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///Prompt user login
     ///
-    ///Either display a page asking a user for their credentials, or redirect
-    /// them to their identity provider.
+    ///Either display a page asking a user for their credentials, or redirect them to their identity provider.
     ///
     ///Sends a `GET` request to `/login/{silo_name}/saml/{provider_name}`
+    ///
+    ///
     pub async fn login_saml_begin<'a>(
         &'a self,
         silo_name: &'a types::Name,
         provider_name: &'a types::Name,
     ) -> Result<ResponseValue<ByteStream>, Error<types::Error>> {
         let url = format!(
-            "{}/login/{}/saml/{}",
-            self.baseurl,
-            encode_path(&silo_name.to_string()),
-            encode_path(&provider_name.to_string()),
+            "{}/login/{}/saml/{}", self.baseurl, encode_path(& silo_name.to_string()),
+            encode_path(& provider_name.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self.client.get(url).headers(header_map).build()?;
         let info = OperationInfo {
@@ -13776,12 +13395,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200..=299 => Ok(ResponseValue::stream(response)),
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -13789,6 +13408,8 @@ impl Client {
     ///Authenticate a user (i.e., log in) via SAML
     ///
     ///Sends a `POST` request to `/login/{silo_name}/saml/{provider_name}`
+    ///
+    ///
     pub async fn login_saml<'a, B: Into<reqwest::Body>>(
         &'a self,
         silo_name: &'a types::Name,
@@ -13796,16 +13417,15 @@ impl Client {
         body: B,
     ) -> Result<ResponseValue<ByteStream>, Error<types::Error>> {
         let url = format!(
-            "{}/login/{}/saml/{}",
-            self.baseurl,
-            encode_path(&silo_name.to_string()),
-            encode_path(&provider_name.to_string()),
+            "{}/login/{}/saml/{}", self.baseurl, encode_path(& silo_name.to_string()),
+            encode_path(& provider_name.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -13826,24 +13446,27 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200..=299 => Ok(ResponseValue::stream(response)),
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///Sends a `POST` request to `/logout`
+    ///
+    ///
     pub async fn logout<'a>(&'a self) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!("{}/logout", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -13863,12 +13486,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             204u16 => Ok(ResponseValue::empty(response)),
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -13880,10 +13503,10 @@ impl Client {
     ///Sends a `GET` request to `/organizations`
     ///
     ///Arguments:
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `page_token`: Token returned by previous call to retrieve the
-    ///   subsequent page
-    /// - `sort_by`
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `page_token`: Token returned by previous call to retrieve the subsequent page
+    ///- `sort_by`
+    ///
     pub async fn organization_list<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
@@ -13892,10 +13515,11 @@ impl Client {
     ) -> Result<ResponseValue<types::OrganizationResultsPage>, Error<types::Error>> {
         let url = format!("{}/organizations", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -13905,10 +13529,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
+            .query(&progenitor_client::QueryParam::new("page_token", &page_token))
             .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
             .headers(header_map)
             .build()?;
@@ -13921,12 +13542,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -13935,18 +13556,19 @@ impl Client {
     ///
     ///Use `GET /v1/organizations` instead
     ///
-    ///Sends repeated `GET` requests to `/organizations` until there are no
-    /// more results.
+    ///Sends repeated `GET` requests to `/organizations` until there are no more results.
     ///
     ///Arguments:
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `sort_by`
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `sort_by`
+    ///
     pub fn organization_list_stream<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::NameOrIdSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::Organization, Error<types::Error>>> + Unpin + 'a
-    {
+    ) -> impl futures::Stream<
+        Item = Result<types::Organization, Error<types::Error>>,
+    > + Unpin + 'a {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
@@ -13954,19 +13576,25 @@ impl Client {
             .map_ok(move |page| {
                 let page = page.into_inner();
                 let first = futures::stream::iter(page.items).map(Ok);
-                let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
-                    if state.is_none() {
-                        Ok(None)
-                    } else {
-                        self.organization_list(limit, state.as_deref(), None)
-                            .map_ok(|page| {
-                                let page = page.into_inner();
-                                Some((futures::stream::iter(page.items).map(Ok), page.next_page))
-                            })
-                            .await
-                    }
-                })
-                .try_flatten();
+                let rest = futures::stream::try_unfold(
+                        page.next_page,
+                        move |state| async move {
+                            if state.is_none() {
+                                Ok(None)
+                            } else {
+                                self.organization_list(limit, state.as_deref(), None)
+                                    .map_ok(|page| {
+                                        let page = page.into_inner();
+                                        Some((
+                                            futures::stream::iter(page.items).map(Ok),
+                                            page.next_page,
+                                        ))
+                                    })
+                                    .await
+                            }
+                        },
+                    )
+                    .try_flatten();
                 first.chain(rest)
             })
             .try_flatten_stream()
@@ -13978,16 +13606,19 @@ impl Client {
     ///Use `POST /v1/organizations` instead
     ///
     ///Sends a `POST` request to `/organizations`
+    ///
+    ///
     pub async fn organization_create<'a>(
         &'a self,
         body: &'a types::OrganizationCreate,
     ) -> Result<ResponseValue<types::Organization>, Error<types::Error>> {
         let url = format!("{}/organizations", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -14008,12 +13639,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             201u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -14025,21 +13656,22 @@ impl Client {
     ///Sends a `GET` request to `/organizations/{organization_name}`
     ///
     ///Arguments:
-    /// - `organization_name`: The organization's unique name.
+    ///- `organization_name`: The organization's unique name.
+    ///
     pub async fn organization_view<'a>(
         &'a self,
         organization_name: &'a types::Name,
     ) -> Result<ResponseValue<types::Organization>, Error<types::Error>> {
         let url = format!(
-            "{}/organizations/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
+            "{}/organizations/{}", self.baseurl, encode_path(& organization_name
+            .to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -14059,12 +13691,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -14076,23 +13708,24 @@ impl Client {
     ///Sends a `PUT` request to `/organizations/{organization_name}`
     ///
     ///Arguments:
-    /// - `organization_name`: The organization's unique name.
-    /// - `body`
+    ///- `organization_name`: The organization's unique name.
+    ///- `body`
+    ///
     pub async fn organization_update<'a>(
         &'a self,
         organization_name: &'a types::Name,
         body: &'a types::OrganizationUpdate,
     ) -> Result<ResponseValue<types::Organization>, Error<types::Error>> {
         let url = format!(
-            "{}/organizations/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
+            "{}/organizations/{}", self.baseurl, encode_path(& organization_name
+            .to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -14113,12 +13746,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -14130,21 +13763,22 @@ impl Client {
     ///Sends a `DELETE` request to `/organizations/{organization_name}`
     ///
     ///Arguments:
-    /// - `organization_name`: The organization's unique name.
+    ///- `organization_name`: The organization's unique name.
+    ///
     pub async fn organization_delete<'a>(
         &'a self,
         organization_name: &'a types::Name,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!(
-            "{}/organizations/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
+            "{}/organizations/{}", self.baseurl, encode_path(& organization_name
+            .to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -14164,12 +13798,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             204u16 => Ok(ResponseValue::empty(response)),
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -14181,21 +13815,22 @@ impl Client {
     ///Sends a `GET` request to `/organizations/{organization_name}/policy`
     ///
     ///Arguments:
-    /// - `organization_name`: The organization's unique name.
+    ///- `organization_name`: The organization's unique name.
+    ///
     pub async fn organization_policy_view<'a>(
         &'a self,
         organization_name: &'a types::Name,
     ) -> Result<ResponseValue<types::OrganizationRolePolicy>, Error<types::Error>> {
         let url = format!(
-            "{}/organizations/{}/policy",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
+            "{}/organizations/{}/policy", self.baseurl, encode_path(& organization_name
+            .to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -14215,12 +13850,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -14232,23 +13867,24 @@ impl Client {
     ///Sends a `PUT` request to `/organizations/{organization_name}/policy`
     ///
     ///Arguments:
-    /// - `organization_name`: The organization's unique name.
-    /// - `body`
+    ///- `organization_name`: The organization's unique name.
+    ///- `body`
+    ///
     pub async fn organization_policy_update<'a>(
         &'a self,
         organization_name: &'a types::Name,
         body: &'a types::OrganizationRolePolicy,
     ) -> Result<ResponseValue<types::OrganizationRolePolicy>, Error<types::Error>> {
         let url = format!(
-            "{}/organizations/{}/policy",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
+            "{}/organizations/{}/policy", self.baseurl, encode_path(& organization_name
+            .to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -14269,12 +13905,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -14286,11 +13922,11 @@ impl Client {
     ///Sends a `GET` request to `/organizations/{organization_name}/projects`
     ///
     ///Arguments:
-    /// - `organization_name`: The organization's unique name.
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `page_token`: Token returned by previous call to retrieve the
-    ///   subsequent page
-    /// - `sort_by`
+    ///- `organization_name`: The organization's unique name.
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `page_token`: Token returned by previous call to retrieve the subsequent page
+    ///- `sort_by`
+    ///
     pub async fn project_list<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -14299,15 +13935,15 @@ impl Client {
         sort_by: Option<types::NameOrIdSortMode>,
     ) -> Result<ResponseValue<types::ProjectResultsPage>, Error<types::Error>> {
         let url = format!(
-            "{}/organizations/{}/projects",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
+            "{}/organizations/{}/projects", self.baseurl, encode_path(& organization_name
+            .to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -14317,10 +13953,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
+            .query(&progenitor_client::QueryParam::new("page_token", &page_token))
             .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
             .headers(header_map)
             .build()?;
@@ -14333,12 +13966,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -14347,20 +13980,21 @@ impl Client {
     ///
     ///Use `GET /v1/projects` instead
     ///
-    ///Sends repeated `GET` requests to
-    /// `/organizations/{organization_name}/projects` until there are no more
-    /// results.
+    ///Sends repeated `GET` requests to `/organizations/{organization_name}/projects` until there are no more results.
     ///
     ///Arguments:
-    /// - `organization_name`: The organization's unique name.
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `sort_by`
+    ///- `organization_name`: The organization's unique name.
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `sort_by`
+    ///
     pub fn project_list_stream<'a>(
         &'a self,
         organization_name: &'a types::Name,
         limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::NameOrIdSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::Project, Error<types::Error>>> + Unpin + 'a {
+    ) -> impl futures::Stream<
+        Item = Result<types::Project, Error<types::Error>>,
+    > + Unpin + 'a {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
@@ -14368,19 +14002,30 @@ impl Client {
             .map_ok(move |page| {
                 let page = page.into_inner();
                 let first = futures::stream::iter(page.items).map(Ok);
-                let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
-                    if state.is_none() {
-                        Ok(None)
-                    } else {
-                        self.project_list(organization_name, limit, state.as_deref(), None)
-                            .map_ok(|page| {
-                                let page = page.into_inner();
-                                Some((futures::stream::iter(page.items).map(Ok), page.next_page))
-                            })
-                            .await
-                    }
-                })
-                .try_flatten();
+                let rest = futures::stream::try_unfold(
+                        page.next_page,
+                        move |state| async move {
+                            if state.is_none() {
+                                Ok(None)
+                            } else {
+                                self.project_list(
+                                        organization_name,
+                                        limit,
+                                        state.as_deref(),
+                                        None,
+                                    )
+                                    .map_ok(|page| {
+                                        let page = page.into_inner();
+                                        Some((
+                                            futures::stream::iter(page.items).map(Ok),
+                                            page.next_page,
+                                        ))
+                                    })
+                                    .await
+                            }
+                        },
+                    )
+                    .try_flatten();
                 first.chain(rest)
             })
             .try_flatten_stream()
@@ -14394,23 +14039,24 @@ impl Client {
     ///Sends a `POST` request to `/organizations/{organization_name}/projects`
     ///
     ///Arguments:
-    /// - `organization_name`: The organization's unique name.
-    /// - `body`
+    ///- `organization_name`: The organization's unique name.
+    ///- `body`
+    ///
     pub async fn project_create<'a>(
         &'a self,
         organization_name: &'a types::Name,
         body: &'a types::ProjectCreate,
     ) -> Result<ResponseValue<types::Project>, Error<types::Error>> {
         let url = format!(
-            "{}/organizations/{}/projects",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
+            "{}/organizations/{}/projects", self.baseurl, encode_path(& organization_name
+            .to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -14431,12 +14077,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             201u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -14445,28 +14091,27 @@ impl Client {
     ///
     ///Use `GET /v1/projects/{project}` instead
     ///
-    ///Sends a `GET` request to
-    /// `/organizations/{organization_name}/projects/{project_name}`
+    ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}`
     ///
     ///Arguments:
-    /// - `organization_name`: The organization's unique name.
-    /// - `project_name`: The project's unique name within the organization.
+    ///- `organization_name`: The organization's unique name.
+    ///- `project_name`: The project's unique name within the organization.
+    ///
     pub async fn project_view<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
     ) -> Result<ResponseValue<types::Project>, Error<types::Error>> {
         let url = format!(
-            "{}/organizations/{}/projects/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
+            "{}/organizations/{}/projects/{}", self.baseurl, encode_path(&
+            organization_name.to_string()), encode_path(& project_name.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -14486,12 +14131,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -14500,13 +14145,13 @@ impl Client {
     ///
     ///Use `PUT /v1/projects/{project}` instead
     ///
-    ///Sends a `PUT` request to
-    /// `/organizations/{organization_name}/projects/{project_name}`
+    ///Sends a `PUT` request to `/organizations/{organization_name}/projects/{project_name}`
     ///
     ///Arguments:
-    /// - `organization_name`: The organization's unique name.
-    /// - `project_name`: The project's unique name within the organization.
-    /// - `body`
+    ///- `organization_name`: The organization's unique name.
+    ///- `project_name`: The project's unique name within the organization.
+    ///- `body`
+    ///
     pub async fn project_update<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -14514,16 +14159,15 @@ impl Client {
         body: &'a types::ProjectUpdate,
     ) -> Result<ResponseValue<types::Project>, Error<types::Error>> {
         let url = format!(
-            "{}/organizations/{}/projects/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
+            "{}/organizations/{}/projects/{}", self.baseurl, encode_path(&
+            organization_name.to_string()), encode_path(& project_name.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -14544,12 +14188,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -14558,28 +14202,27 @@ impl Client {
     ///
     ///Use `DELETE /v1/projects/{project}` instead
     ///
-    ///Sends a `DELETE` request to
-    /// `/organizations/{organization_name}/projects/{project_name}`
+    ///Sends a `DELETE` request to `/organizations/{organization_name}/projects/{project_name}`
     ///
     ///Arguments:
-    /// - `organization_name`: The organization's unique name.
-    /// - `project_name`: The project's unique name within the organization.
+    ///- `organization_name`: The organization's unique name.
+    ///- `project_name`: The project's unique name within the organization.
+    ///
     pub async fn project_delete<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!(
-            "{}/organizations/{}/projects/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
+            "{}/organizations/{}/projects/{}", self.baseurl, encode_path(&
+            organization_name.to_string()), encode_path(& project_name.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -14599,12 +14242,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             204u16 => Ok(ResponseValue::empty(response)),
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -14613,16 +14256,15 @@ impl Client {
     ///
     ///Use `GET /v1/disks` instead
     ///
-    ///Sends a `GET` request to
-    /// `/organizations/{organization_name}/projects/{project_name}/disks`
+    ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/disks`
     ///
     ///Arguments:
-    /// - `organization_name`: The organization's unique name.
-    /// - `project_name`: The project's unique name within the organization.
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `page_token`: Token returned by previous call to retrieve the
-    ///   subsequent page
-    /// - `sort_by`
+    ///- `organization_name`: The organization's unique name.
+    ///- `project_name`: The project's unique name within the organization.
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `page_token`: Token returned by previous call to retrieve the subsequent page
+    ///- `sort_by`
+    ///
     pub async fn disk_list<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -14632,16 +14274,15 @@ impl Client {
         sort_by: Option<types::NameSortMode>,
     ) -> Result<ResponseValue<types::DiskResultsPage>, Error<types::Error>> {
         let url = format!(
-            "{}/organizations/{}/projects/{}/disks",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
+            "{}/organizations/{}/projects/{}/disks", self.baseurl, encode_path(&
+            organization_name.to_string()), encode_path(& project_name.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -14651,10 +14292,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
+            .query(&progenitor_client::QueryParam::new("page_token", &page_token))
             .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
             .headers(header_map)
             .build()?;
@@ -14667,12 +14305,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -14681,22 +14319,23 @@ impl Client {
     ///
     ///Use `GET /v1/disks` instead
     ///
-    ///Sends repeated `GET` requests to
-    /// `/organizations/{organization_name}/projects/{project_name}/disks` until
-    /// there are no more results.
+    ///Sends repeated `GET` requests to `/organizations/{organization_name}/projects/{project_name}/disks` until there are no more results.
     ///
     ///Arguments:
-    /// - `organization_name`: The organization's unique name.
-    /// - `project_name`: The project's unique name within the organization.
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `sort_by`
+    ///- `organization_name`: The organization's unique name.
+    ///- `project_name`: The project's unique name within the organization.
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `sort_by`
+    ///
     pub fn disk_list_stream<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
         limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::NameSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::Disk, Error<types::Error>>> + Unpin + 'a {
+    ) -> impl futures::Stream<
+        Item = Result<types::Disk, Error<types::Error>>,
+    > + Unpin + 'a {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
@@ -14704,25 +14343,31 @@ impl Client {
             .map_ok(move |page| {
                 let page = page.into_inner();
                 let first = futures::stream::iter(page.items).map(Ok);
-                let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
-                    if state.is_none() {
-                        Ok(None)
-                    } else {
-                        self.disk_list(
-                            organization_name,
-                            project_name,
-                            limit,
-                            state.as_deref(),
-                            None,
-                        )
-                        .map_ok(|page| {
-                            let page = page.into_inner();
-                            Some((futures::stream::iter(page.items).map(Ok), page.next_page))
-                        })
-                        .await
-                    }
-                })
-                .try_flatten();
+                let rest = futures::stream::try_unfold(
+                        page.next_page,
+                        move |state| async move {
+                            if state.is_none() {
+                                Ok(None)
+                            } else {
+                                self.disk_list(
+                                        organization_name,
+                                        project_name,
+                                        limit,
+                                        state.as_deref(),
+                                        None,
+                                    )
+                                    .map_ok(|page| {
+                                        let page = page.into_inner();
+                                        Some((
+                                            futures::stream::iter(page.items).map(Ok),
+                                            page.next_page,
+                                        ))
+                                    })
+                                    .await
+                            }
+                        },
+                    )
+                    .try_flatten();
                 first.chain(rest)
             })
             .try_flatten_stream()
@@ -14731,13 +14376,13 @@ impl Client {
 
     ///Use `POST /v1/disks` instead
     ///
-    ///Sends a `POST` request to
-    /// `/organizations/{organization_name}/projects/{project_name}/disks`
+    ///Sends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/disks`
     ///
     ///Arguments:
-    /// - `organization_name`: The organization's unique name.
-    /// - `project_name`: The project's unique name within the organization.
-    /// - `body`
+    ///- `organization_name`: The organization's unique name.
+    ///- `project_name`: The project's unique name within the organization.
+    ///- `body`
+    ///
     pub async fn disk_create<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -14745,16 +14390,15 @@ impl Client {
         body: &'a types::DiskCreate,
     ) -> Result<ResponseValue<types::Disk>, Error<types::Error>> {
         let url = format!(
-            "{}/organizations/{}/projects/{}/disks",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
+            "{}/organizations/{}/projects/{}/disks", self.baseurl, encode_path(&
+            organization_name.to_string()), encode_path(& project_name.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -14775,12 +14419,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             201u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -14789,9 +14433,9 @@ impl Client {
     ///
     ///Use `GET /v1/disks/{disk}` instead
     ///
-    ///Sends a `GET` request to
-    /// `/organizations/{organization_name}/projects/{project_name}/disks/
-    /// {disk_name}`
+    ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/disks/{disk_name}`
+    ///
+    ///
     pub async fn disk_view<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -14799,17 +14443,16 @@ impl Client {
         disk_name: &'a types::Name,
     ) -> Result<ResponseValue<types::Disk>, Error<types::Error>> {
         let url = format!(
-            "{}/organizations/{}/projects/{}/disks/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&disk_name.to_string()),
+            "{}/organizations/{}/projects/{}/disks/{}", self.baseurl, encode_path(&
+            organization_name.to_string()), encode_path(& project_name.to_string()),
+            encode_path(& disk_name.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -14829,21 +14472,21 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///Use `DELETE /v1/disks/{disk}` instead
     ///
-    ///Sends a `DELETE` request to
-    /// `/organizations/{organization_name}/projects/{project_name}/disks/
-    /// {disk_name}`
+    ///Sends a `DELETE` request to `/organizations/{organization_name}/projects/{project_name}/disks/{disk_name}`
+    ///
+    ///
     pub async fn disk_delete<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -14851,17 +14494,16 @@ impl Client {
         disk_name: &'a types::Name,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!(
-            "{}/organizations/{}/projects/{}/disks/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&disk_name.to_string()),
+            "{}/organizations/{}/projects/{}/disks/{}", self.baseurl, encode_path(&
+            organization_name.to_string()), encode_path(& project_name.to_string()),
+            encode_path(& disk_name.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -14881,32 +14523,30 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             204u16 => Ok(ResponseValue::empty(response)),
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///Fetch disk metrics
     ///
-    ///Sends a `GET` request to
-    /// `/organizations/{organization_name}/projects/{project_name}/disks/
-    /// {disk_name}/metrics/{metric_name}`
+    ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/disks/{disk_name}/metrics/{metric_name}`
     ///
     ///Arguments:
-    /// - `organization_name`
-    /// - `project_name`
-    /// - `disk_name`
-    /// - `metric_name`
-    /// - `end_time`: An exclusive end time of metrics.
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `page_token`: Token returned by previous call to retrieve the
-    ///   subsequent page
-    /// - `start_time`: An inclusive start time of metrics.
+    ///- `organization_name`
+    ///- `project_name`
+    ///- `disk_name`
+    ///- `metric_name`
+    ///- `end_time`: An exclusive end time of metrics.
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `page_token`: Token returned by previous call to retrieve the subsequent page
+    ///- `start_time`: An inclusive start time of metrics.
+    ///
     pub async fn disk_metrics_list<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -14919,18 +14559,17 @@ impl Client {
         start_time: Option<&'a ::chrono::DateTime<::chrono::offset::Utc>>,
     ) -> Result<ResponseValue<types::MeasurementResultsPage>, Error<types::Error>> {
         let url = format!(
-            "{}/organizations/{}/projects/{}/disks/{}/metrics/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&disk_name.to_string()),
-            encode_path(&metric_name.to_string()),
+            "{}/organizations/{}/projects/{}/disks/{}/metrics/{}", self.baseurl,
+            encode_path(& organization_name.to_string()), encode_path(& project_name
+            .to_string()), encode_path(& disk_name.to_string()), encode_path(&
+            metric_name.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -14941,14 +14580,8 @@ impl Client {
             )
             .query(&progenitor_client::QueryParam::new("end_time", &end_time))
             .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
-            .query(&progenitor_client::QueryParam::new(
-                "start_time",
-                &start_time,
-            ))
+            .query(&progenitor_client::QueryParam::new("page_token", &page_token))
+            .query(&progenitor_client::QueryParam::new("start_time", &start_time))
             .headers(header_map)
             .build()?;
         let info = OperationInfo {
@@ -14960,30 +14593,29 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///Fetch disk metrics as a Stream
     ///
-    ///Sends repeated `GET` requests to
-    /// `/organizations/{organization_name}/projects/{project_name}/disks/
-    /// {disk_name}/metrics/{metric_name}` until there are no more results.
+    ///Sends repeated `GET` requests to `/organizations/{organization_name}/projects/{project_name}/disks/{disk_name}/metrics/{metric_name}` until there are no more results.
     ///
     ///Arguments:
-    /// - `organization_name`
-    /// - `project_name`
-    /// - `disk_name`
-    /// - `metric_name`
-    /// - `end_time`: An exclusive end time of metrics.
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `start_time`: An inclusive start time of metrics.
+    ///- `organization_name`
+    ///- `project_name`
+    ///- `disk_name`
+    ///- `metric_name`
+    ///- `end_time`: An exclusive end time of metrics.
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `start_time`: An inclusive start time of metrics.
+    ///
     pub fn disk_metrics_list_stream<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -14993,67 +14625,72 @@ impl Client {
         end_time: Option<&'a ::chrono::DateTime<::chrono::offset::Utc>>,
         limit: Option<::std::num::NonZeroU32>,
         start_time: Option<&'a ::chrono::DateTime<::chrono::offset::Utc>>,
-    ) -> impl futures::Stream<Item = Result<types::Measurement, Error<types::Error>>> + Unpin + 'a
-    {
+    ) -> impl futures::Stream<
+        Item = Result<types::Measurement, Error<types::Error>>,
+    > + Unpin + 'a {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
         self.disk_metrics_list(
-            organization_name,
-            project_name,
-            disk_name,
-            metric_name,
-            end_time,
-            limit,
-            None,
-            start_time,
-        )
-        .map_ok(move |page| {
-            let page = page.into_inner();
-            let first = futures::stream::iter(page.items).map(Ok);
-            let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
-                if state.is_none() {
-                    Ok(None)
-                } else {
-                    self.disk_metrics_list(
-                        organization_name,
-                        project_name,
-                        disk_name,
-                        metric_name,
-                        None,
-                        limit,
-                        state.as_deref(),
-                        None,
+                organization_name,
+                project_name,
+                disk_name,
+                metric_name,
+                end_time,
+                limit,
+                None,
+                start_time,
+            )
+            .map_ok(move |page| {
+                let page = page.into_inner();
+                let first = futures::stream::iter(page.items).map(Ok);
+                let rest = futures::stream::try_unfold(
+                        page.next_page,
+                        move |state| async move {
+                            if state.is_none() {
+                                Ok(None)
+                            } else {
+                                self.disk_metrics_list(
+                                        organization_name,
+                                        project_name,
+                                        disk_name,
+                                        metric_name,
+                                        None,
+                                        limit,
+                                        state.as_deref(),
+                                        None,
+                                    )
+                                    .map_ok(|page| {
+                                        let page = page.into_inner();
+                                        Some((
+                                            futures::stream::iter(page.items).map(Ok),
+                                            page.next_page,
+                                        ))
+                                    })
+                                    .await
+                            }
+                        },
                     )
-                    .map_ok(|page| {
-                        let page = page.into_inner();
-                        Some((futures::stream::iter(page.items).map(Ok), page.next_page))
-                    })
-                    .await
-                }
+                    .try_flatten();
+                first.chain(rest)
             })
-            .try_flatten();
-            first.chain(rest)
-        })
-        .try_flatten_stream()
-        .boxed()
+            .try_flatten_stream()
+            .boxed()
     }
 
     ///List images
     ///
-    ///List images in a project. The images are returned sorted by creation
-    /// date, with the most recent images appearing first.
+    ///List images in a project. The images are returned sorted by creation date, with the most recent images appearing first.
     ///
-    ///Sends a `GET` request to
-    /// `/organizations/{organization_name}/projects/{project_name}/images`
+    ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/images`
     ///
     ///Arguments:
-    /// - `organization_name`: The organization's unique name.
-    /// - `project_name`: The project's unique name within the organization.
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `page_token`: Token returned by previous call to retrieve the
-    ///   subsequent page
-    /// - `sort_by`
+    ///- `organization_name`: The organization's unique name.
+    ///- `project_name`: The project's unique name within the organization.
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `page_token`: Token returned by previous call to retrieve the subsequent page
+    ///- `sort_by`
+    ///
     pub async fn image_list<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -15063,16 +14700,15 @@ impl Client {
         sort_by: Option<types::NameSortMode>,
     ) -> Result<ResponseValue<types::ImageResultsPage>, Error<types::Error>> {
         let url = format!(
-            "{}/organizations/{}/projects/{}/images",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
+            "{}/organizations/{}/projects/{}/images", self.baseurl, encode_path(&
+            organization_name.to_string()), encode_path(& project_name.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -15082,10 +14718,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
+            .query(&progenitor_client::QueryParam::new("page_token", &page_token))
             .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
             .headers(header_map)
             .build()?;
@@ -15098,37 +14731,37 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///List images as a Stream
     ///
-    ///List images in a project. The images are returned sorted by creation
-    /// date, with the most recent images appearing first.
+    ///List images in a project. The images are returned sorted by creation date, with the most recent images appearing first.
     ///
-    ///Sends repeated `GET` requests to
-    /// `/organizations/{organization_name}/projects/{project_name}/images`
-    /// until there are no more results.
+    ///Sends repeated `GET` requests to `/organizations/{organization_name}/projects/{project_name}/images` until there are no more results.
     ///
     ///Arguments:
-    /// - `organization_name`: The organization's unique name.
-    /// - `project_name`: The project's unique name within the organization.
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `sort_by`
+    ///- `organization_name`: The organization's unique name.
+    ///- `project_name`: The project's unique name within the organization.
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `sort_by`
+    ///
     pub fn image_list_stream<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
         limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::NameSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::Image, Error<types::Error>>> + Unpin + 'a {
+    ) -> impl futures::Stream<
+        Item = Result<types::Image, Error<types::Error>>,
+    > + Unpin + 'a {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
@@ -15136,25 +14769,31 @@ impl Client {
             .map_ok(move |page| {
                 let page = page.into_inner();
                 let first = futures::stream::iter(page.items).map(Ok);
-                let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
-                    if state.is_none() {
-                        Ok(None)
-                    } else {
-                        self.image_list(
-                            organization_name,
-                            project_name,
-                            limit,
-                            state.as_deref(),
-                            None,
-                        )
-                        .map_ok(|page| {
-                            let page = page.into_inner();
-                            Some((futures::stream::iter(page.items).map(Ok), page.next_page))
-                        })
-                        .await
-                    }
-                })
-                .try_flatten();
+                let rest = futures::stream::try_unfold(
+                        page.next_page,
+                        move |state| async move {
+                            if state.is_none() {
+                                Ok(None)
+                            } else {
+                                self.image_list(
+                                        organization_name,
+                                        project_name,
+                                        limit,
+                                        state.as_deref(),
+                                        None,
+                                    )
+                                    .map_ok(|page| {
+                                        let page = page.into_inner();
+                                        Some((
+                                            futures::stream::iter(page.items).map(Ok),
+                                            page.next_page,
+                                        ))
+                                    })
+                                    .await
+                            }
+                        },
+                    )
+                    .try_flatten();
                 first.chain(rest)
             })
             .try_flatten_stream()
@@ -15165,13 +14804,13 @@ impl Client {
     ///
     ///Create a new image in a project.
     ///
-    ///Sends a `POST` request to
-    /// `/organizations/{organization_name}/projects/{project_name}/images`
+    ///Sends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/images`
     ///
     ///Arguments:
-    /// - `organization_name`: The organization's unique name.
-    /// - `project_name`: The project's unique name within the organization.
-    /// - `body`
+    ///- `organization_name`: The organization's unique name.
+    ///- `project_name`: The project's unique name within the organization.
+    ///- `body`
+    ///
     pub async fn image_create<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -15179,16 +14818,15 @@ impl Client {
         body: &'a types::ImageCreate,
     ) -> Result<ResponseValue<types::Image>, Error<types::Error>> {
         let url = format!(
-            "{}/organizations/{}/projects/{}/images",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
+            "{}/organizations/{}/projects/{}/images", self.baseurl, encode_path(&
+            organization_name.to_string()), encode_path(& project_name.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -15209,12 +14847,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             201u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -15223,9 +14861,9 @@ impl Client {
     ///
     ///Fetch the details for a specific image in a project.
     ///
-    ///Sends a `GET` request to
-    /// `/organizations/{organization_name}/projects/{project_name}/images/
-    /// {image_name}`
+    ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/images/{image_name}`
+    ///
+    ///
     pub async fn image_view<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -15233,17 +14871,16 @@ impl Client {
         image_name: &'a types::Name,
     ) -> Result<ResponseValue<types::Image>, Error<types::Error>> {
         let url = format!(
-            "{}/organizations/{}/projects/{}/images/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&image_name.to_string()),
+            "{}/organizations/{}/projects/{}/images/{}", self.baseurl, encode_path(&
+            organization_name.to_string()), encode_path(& project_name.to_string()),
+            encode_path(& image_name.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -15263,25 +14900,23 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///Delete an image
     ///
-    ///Permanently delete an image from a project. This operation cannot be
-    /// undone. Any instances in the project using the image will continue to
-    /// run, however new instances can not be created with this image.
+    ///Permanently delete an image from a project. This operation cannot be undone. Any instances in the project using the image will continue to run, however new instances can not be created with this image.
     ///
-    ///Sends a `DELETE` request to
-    /// `/organizations/{organization_name}/projects/{project_name}/images/
-    /// {image_name}`
+    ///Sends a `DELETE` request to `/organizations/{organization_name}/projects/{project_name}/images/{image_name}`
+    ///
+    ///
     pub async fn image_delete<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -15289,17 +14924,16 @@ impl Client {
         image_name: &'a types::Name,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!(
-            "{}/organizations/{}/projects/{}/images/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&image_name.to_string()),
+            "{}/organizations/{}/projects/{}/images/{}", self.baseurl, encode_path(&
+            organization_name.to_string()), encode_path(& project_name.to_string()),
+            encode_path(& image_name.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -15319,28 +14953,27 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             204u16 => Ok(ResponseValue::empty(response)),
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///List instances
     ///
-    ///Sends a `GET` request to
-    /// `/organizations/{organization_name}/projects/{project_name}/instances`
+    ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/instances`
     ///
     ///Arguments:
-    /// - `organization_name`: The organization's unique name.
-    /// - `project_name`: The project's unique name within the organization.
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `page_token`: Token returned by previous call to retrieve the
-    ///   subsequent page
-    /// - `sort_by`
+    ///- `organization_name`: The organization's unique name.
+    ///- `project_name`: The project's unique name within the organization.
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `page_token`: Token returned by previous call to retrieve the subsequent page
+    ///- `sort_by`
+    ///
     pub async fn instance_list<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -15350,16 +14983,15 @@ impl Client {
         sort_by: Option<types::NameSortMode>,
     ) -> Result<ResponseValue<types::InstanceResultsPage>, Error<types::Error>> {
         let url = format!(
-            "{}/organizations/{}/projects/{}/instances",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
+            "{}/organizations/{}/projects/{}/instances", self.baseurl, encode_path(&
+            organization_name.to_string()), encode_path(& project_name.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -15369,10 +15001,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
+            .query(&progenitor_client::QueryParam::new("page_token", &page_token))
             .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
             .headers(header_map)
             .build()?;
@@ -15385,35 +15014,35 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///List instances as a Stream
     ///
-    ///Sends repeated `GET` requests to
-    /// `/organizations/{organization_name}/projects/{project_name}/instances`
-    /// until there are no more results.
+    ///Sends repeated `GET` requests to `/organizations/{organization_name}/projects/{project_name}/instances` until there are no more results.
     ///
     ///Arguments:
-    /// - `organization_name`: The organization's unique name.
-    /// - `project_name`: The project's unique name within the organization.
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `sort_by`
+    ///- `organization_name`: The organization's unique name.
+    ///- `project_name`: The project's unique name within the organization.
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `sort_by`
+    ///
     pub fn instance_list_stream<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
         limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::NameSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::Instance, Error<types::Error>>> + Unpin + 'a
-    {
+    ) -> impl futures::Stream<
+        Item = Result<types::Instance, Error<types::Error>>,
+    > + Unpin + 'a {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
@@ -15421,25 +15050,31 @@ impl Client {
             .map_ok(move |page| {
                 let page = page.into_inner();
                 let first = futures::stream::iter(page.items).map(Ok);
-                let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
-                    if state.is_none() {
-                        Ok(None)
-                    } else {
-                        self.instance_list(
-                            organization_name,
-                            project_name,
-                            limit,
-                            state.as_deref(),
-                            None,
-                        )
-                        .map_ok(|page| {
-                            let page = page.into_inner();
-                            Some((futures::stream::iter(page.items).map(Ok), page.next_page))
-                        })
-                        .await
-                    }
-                })
-                .try_flatten();
+                let rest = futures::stream::try_unfold(
+                        page.next_page,
+                        move |state| async move {
+                            if state.is_none() {
+                                Ok(None)
+                            } else {
+                                self.instance_list(
+                                        organization_name,
+                                        project_name,
+                                        limit,
+                                        state.as_deref(),
+                                        None,
+                                    )
+                                    .map_ok(|page| {
+                                        let page = page.into_inner();
+                                        Some((
+                                            futures::stream::iter(page.items).map(Ok),
+                                            page.next_page,
+                                        ))
+                                    })
+                                    .await
+                            }
+                        },
+                    )
+                    .try_flatten();
                 first.chain(rest)
             })
             .try_flatten_stream()
@@ -15450,13 +15085,13 @@ impl Client {
     ///
     ///Use `POST /v1/instances` instead
     ///
-    ///Sends a `POST` request to
-    /// `/organizations/{organization_name}/projects/{project_name}/instances`
+    ///Sends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/instances`
     ///
     ///Arguments:
-    /// - `organization_name`: The organization's unique name.
-    /// - `project_name`: The project's unique name within the organization.
-    /// - `body`
+    ///- `organization_name`: The organization's unique name.
+    ///- `project_name`: The project's unique name within the organization.
+    ///- `body`
+    ///
     pub async fn instance_create<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -15464,16 +15099,15 @@ impl Client {
         body: &'a types::InstanceCreate,
     ) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
         let url = format!(
-            "{}/organizations/{}/projects/{}/instances",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
+            "{}/organizations/{}/projects/{}/instances", self.baseurl, encode_path(&
+            organization_name.to_string()), encode_path(& project_name.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -15494,12 +15128,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             201u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -15508,9 +15142,9 @@ impl Client {
     ///
     ///Use `GET /v1/instances/{instance}` instead
     ///
-    ///Sends a `GET` request to
-    /// `/organizations/{organization_name}/projects/{project_name}/instances/
-    /// {instance_name}`
+    ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}`
+    ///
+    ///
     pub async fn instance_view<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -15518,17 +15152,16 @@ impl Client {
         instance_name: &'a types::Name,
     ) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
         let url = format!(
-            "{}/organizations/{}/projects/{}/instances/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&instance_name.to_string()),
+            "{}/organizations/{}/projects/{}/instances/{}", self.baseurl, encode_path(&
+            organization_name.to_string()), encode_path(& project_name.to_string()),
+            encode_path(& instance_name.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -15548,21 +15181,21 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///Delete an instance
     ///
-    ///Sends a `DELETE` request to
-    /// `/organizations/{organization_name}/projects/{project_name}/instances/
-    /// {instance_name}`
+    ///Sends a `DELETE` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}`
+    ///
+    ///
     pub async fn instance_delete<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -15570,17 +15203,16 @@ impl Client {
         instance_name: &'a types::Name,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!(
-            "{}/organizations/{}/projects/{}/instances/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&instance_name.to_string()),
+            "{}/organizations/{}/projects/{}/instances/{}", self.baseurl, encode_path(&
+            organization_name.to_string()), encode_path(& project_name.to_string()),
+            encode_path(& instance_name.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -15600,12 +15232,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             204u16 => Ok(ResponseValue::empty(response)),
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -15614,18 +15246,16 @@ impl Client {
     ///
     ///Use `GET /v1/instances/{instance}/disks` instead
     ///
-    ///Sends a `GET` request to
-    /// `/organizations/{organization_name}/projects/{project_name}/instances/
-    /// {instance_name}/disks`
+    ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/disks`
     ///
     ///Arguments:
-    /// - `organization_name`
-    /// - `project_name`
-    /// - `instance_name`
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `page_token`: Token returned by previous call to retrieve the
-    ///   subsequent page
-    /// - `sort_by`
+    ///- `organization_name`
+    ///- `project_name`
+    ///- `instance_name`
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `page_token`: Token returned by previous call to retrieve the subsequent page
+    ///- `sort_by`
+    ///
     pub async fn instance_disk_list<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -15636,17 +15266,16 @@ impl Client {
         sort_by: Option<types::NameSortMode>,
     ) -> Result<ResponseValue<types::DiskResultsPage>, Error<types::Error>> {
         let url = format!(
-            "{}/organizations/{}/projects/{}/instances/{}/disks",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&instance_name.to_string()),
+            "{}/organizations/{}/projects/{}/instances/{}/disks", self.baseurl,
+            encode_path(& organization_name.to_string()), encode_path(& project_name
+            .to_string()), encode_path(& instance_name.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -15656,10 +15285,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
+            .query(&progenitor_client::QueryParam::new("page_token", &page_token))
             .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
             .headers(header_map)
             .build()?;
@@ -15672,12 +15298,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -15686,16 +15312,15 @@ impl Client {
     ///
     ///Use `GET /v1/instances/{instance}/disks` instead
     ///
-    ///Sends repeated `GET` requests to
-    /// `/organizations/{organization_name}/projects/{project_name}/instances/
-    /// {instance_name}/disks` until there are no more results.
+    ///Sends repeated `GET` requests to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/disks` until there are no more results.
     ///
     ///Arguments:
-    /// - `organization_name`
-    /// - `project_name`
-    /// - `instance_name`
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `sort_by`
+    ///- `organization_name`
+    ///- `project_name`
+    ///- `instance_name`
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `sort_by`
+    ///
     pub fn instance_disk_list_stream<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -15703,54 +15328,62 @@ impl Client {
         instance_name: &'a types::Name,
         limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::NameSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::Disk, Error<types::Error>>> + Unpin + 'a {
+    ) -> impl futures::Stream<
+        Item = Result<types::Disk, Error<types::Error>>,
+    > + Unpin + 'a {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
         self.instance_disk_list(
-            organization_name,
-            project_name,
-            instance_name,
-            limit,
-            None,
-            sort_by,
-        )
-        .map_ok(move |page| {
-            let page = page.into_inner();
-            let first = futures::stream::iter(page.items).map(Ok);
-            let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
-                if state.is_none() {
-                    Ok(None)
-                } else {
-                    self.instance_disk_list(
-                        organization_name,
-                        project_name,
-                        instance_name,
-                        limit,
-                        state.as_deref(),
-                        None,
+                organization_name,
+                project_name,
+                instance_name,
+                limit,
+                None,
+                sort_by,
+            )
+            .map_ok(move |page| {
+                let page = page.into_inner();
+                let first = futures::stream::iter(page.items).map(Ok);
+                let rest = futures::stream::try_unfold(
+                        page.next_page,
+                        move |state| async move {
+                            if state.is_none() {
+                                Ok(None)
+                            } else {
+                                self.instance_disk_list(
+                                        organization_name,
+                                        project_name,
+                                        instance_name,
+                                        limit,
+                                        state.as_deref(),
+                                        None,
+                                    )
+                                    .map_ok(|page| {
+                                        let page = page.into_inner();
+                                        Some((
+                                            futures::stream::iter(page.items).map(Ok),
+                                            page.next_page,
+                                        ))
+                                    })
+                                    .await
+                            }
+                        },
                     )
-                    .map_ok(|page| {
-                        let page = page.into_inner();
-                        Some((futures::stream::iter(page.items).map(Ok), page.next_page))
-                    })
-                    .await
-                }
+                    .try_flatten();
+                first.chain(rest)
             })
-            .try_flatten();
-            first.chain(rest)
-        })
-        .try_flatten_stream()
-        .boxed()
+            .try_flatten_stream()
+            .boxed()
     }
 
     ///Attach a disk to an instance
     ///
     ///Use `POST /v1/instances/{instance}/disks/attach` instead
     ///
-    ///Sends a `POST` request to
-    /// `/organizations/{organization_name}/projects/{project_name}/instances/
-    /// {instance_name}/disks/attach`
+    ///Sends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/disks/attach`
+    ///
+    ///
     pub async fn instance_disk_attach<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -15759,17 +15392,16 @@ impl Client {
         body: &'a types::DiskIdentifier,
     ) -> Result<ResponseValue<types::Disk>, Error<types::Error>> {
         let url = format!(
-            "{}/organizations/{}/projects/{}/instances/{}/disks/attach",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&instance_name.to_string()),
+            "{}/organizations/{}/projects/{}/instances/{}/disks/attach", self.baseurl,
+            encode_path(& organization_name.to_string()), encode_path(& project_name
+            .to_string()), encode_path(& instance_name.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -15790,12 +15422,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             202u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -15804,9 +15436,9 @@ impl Client {
     ///
     ///Use `POST /v1/disks/{disk}/detach` instead
     ///
-    ///Sends a `POST` request to
-    /// `/organizations/{organization_name}/projects/{project_name}/instances/
-    /// {instance_name}/disks/detach`
+    ///Sends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/disks/detach`
+    ///
+    ///
     pub async fn instance_disk_detach<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -15815,17 +15447,16 @@ impl Client {
         body: &'a types::DiskIdentifier,
     ) -> Result<ResponseValue<types::Disk>, Error<types::Error>> {
         let url = format!(
-            "{}/organizations/{}/projects/{}/instances/{}/disks/detach",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&instance_name.to_string()),
+            "{}/organizations/{}/projects/{}/instances/{}/disks/detach", self.baseurl,
+            encode_path(& organization_name.to_string()), encode_path(& project_name
+            .to_string()), encode_path(& instance_name.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -15846,21 +15477,21 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             202u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///List external IP addresses
     ///
-    ///Sends a `GET` request to
-    /// `/organizations/{organization_name}/projects/{project_name}/instances/
-    /// {instance_name}/external-ips`
+    ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/external-ips`
+    ///
+    ///
     pub async fn instance_external_ip_list<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -15868,17 +15499,16 @@ impl Client {
         instance_name: &'a types::Name,
     ) -> Result<ResponseValue<types::ExternalIpResultsPage>, Error<types::Error>> {
         let url = format!(
-            "{}/organizations/{}/projects/{}/instances/{}/external-ips",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&instance_name.to_string()),
+            "{}/organizations/{}/projects/{}/instances/{}/external-ips", self.baseurl,
+            encode_path(& organization_name.to_string()), encode_path(& project_name
+            .to_string()), encode_path(& instance_name.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -15898,12 +15528,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -15912,9 +15542,9 @@ impl Client {
     ///
     ///Use `POST /v1/instances/{instance}/migrate` instead
     ///
-    ///Sends a `POST` request to
-    /// `/organizations/{organization_name}/projects/{project_name}/instances/
-    /// {instance_name}/migrate`
+    ///Sends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/migrate`
+    ///
+    ///
     pub async fn instance_migrate<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -15923,17 +15553,16 @@ impl Client {
         body: &'a types::InstanceMigrate,
     ) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
         let url = format!(
-            "{}/organizations/{}/projects/{}/instances/{}/migrate",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&instance_name.to_string()),
+            "{}/organizations/{}/projects/{}/instances/{}/migrate", self.baseurl,
+            encode_path(& organization_name.to_string()), encode_path(& project_name
+            .to_string()), encode_path(& instance_name.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -15954,30 +15583,28 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///List network interfaces
     ///
-    ///Sends a `GET` request to
-    /// `/organizations/{organization_name}/projects/{project_name}/instances/
-    /// {instance_name}/network-interfaces`
+    ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/network-interfaces`
     ///
     ///Arguments:
-    /// - `organization_name`
-    /// - `project_name`
-    /// - `instance_name`
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `page_token`: Token returned by previous call to retrieve the
-    ///   subsequent page
-    /// - `sort_by`
+    ///- `organization_name`
+    ///- `project_name`
+    ///- `instance_name`
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `page_token`: Token returned by previous call to retrieve the subsequent page
+    ///- `sort_by`
+    ///
     pub async fn instance_network_interface_list<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -15988,17 +15615,16 @@ impl Client {
         sort_by: Option<types::NameSortMode>,
     ) -> Result<ResponseValue<types::NetworkInterfaceResultsPage>, Error<types::Error>> {
         let url = format!(
-            "{}/organizations/{}/projects/{}/instances/{}/network-interfaces",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&instance_name.to_string()),
+            "{}/organizations/{}/projects/{}/instances/{}/network-interfaces", self
+            .baseurl, encode_path(& organization_name.to_string()), encode_path(&
+            project_name.to_string()), encode_path(& instance_name.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -16008,10 +15634,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
+            .query(&progenitor_client::QueryParam::new("page_token", &page_token))
             .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
             .headers(header_map)
             .build()?;
@@ -16024,28 +15647,27 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///List network interfaces as a Stream
     ///
-    ///Sends repeated `GET` requests to
-    /// `/organizations/{organization_name}/projects/{project_name}/instances/
-    /// {instance_name}/network-interfaces` until there are no more results.
+    ///Sends repeated `GET` requests to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/network-interfaces` until there are no more results.
     ///
     ///Arguments:
-    /// - `organization_name`
-    /// - `project_name`
-    /// - `instance_name`
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `sort_by`
+    ///- `organization_name`
+    ///- `project_name`
+    ///- `instance_name`
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `sort_by`
+    ///
     pub fn instance_network_interface_list_stream<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -16053,53 +15675,60 @@ impl Client {
         instance_name: &'a types::Name,
         limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::NameSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::NetworkInterface, Error<types::Error>>> + Unpin + 'a
-    {
+    ) -> impl futures::Stream<
+        Item = Result<types::NetworkInterface, Error<types::Error>>,
+    > + Unpin + 'a {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
         self.instance_network_interface_list(
-            organization_name,
-            project_name,
-            instance_name,
-            limit,
-            None,
-            sort_by,
-        )
-        .map_ok(move |page| {
-            let page = page.into_inner();
-            let first = futures::stream::iter(page.items).map(Ok);
-            let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
-                if state.is_none() {
-                    Ok(None)
-                } else {
-                    self.instance_network_interface_list(
-                        organization_name,
-                        project_name,
-                        instance_name,
-                        limit,
-                        state.as_deref(),
-                        None,
+                organization_name,
+                project_name,
+                instance_name,
+                limit,
+                None,
+                sort_by,
+            )
+            .map_ok(move |page| {
+                let page = page.into_inner();
+                let first = futures::stream::iter(page.items).map(Ok);
+                let rest = futures::stream::try_unfold(
+                        page.next_page,
+                        move |state| async move {
+                            if state.is_none() {
+                                Ok(None)
+                            } else {
+                                self.instance_network_interface_list(
+                                        organization_name,
+                                        project_name,
+                                        instance_name,
+                                        limit,
+                                        state.as_deref(),
+                                        None,
+                                    )
+                                    .map_ok(|page| {
+                                        let page = page.into_inner();
+                                        Some((
+                                            futures::stream::iter(page.items).map(Ok),
+                                            page.next_page,
+                                        ))
+                                    })
+                                    .await
+                            }
+                        },
                     )
-                    .map_ok(|page| {
-                        let page = page.into_inner();
-                        Some((futures::stream::iter(page.items).map(Ok), page.next_page))
-                    })
-                    .await
-                }
+                    .try_flatten();
+                first.chain(rest)
             })
-            .try_flatten();
-            first.chain(rest)
-        })
-        .try_flatten_stream()
-        .boxed()
+            .try_flatten_stream()
+            .boxed()
     }
 
     ///Create a network interface
     ///
-    ///Sends a `POST` request to
-    /// `/organizations/{organization_name}/projects/{project_name}/instances/
-    /// {instance_name}/network-interfaces`
+    ///Sends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/network-interfaces`
+    ///
+    ///
     pub async fn instance_network_interface_create<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -16108,17 +15737,16 @@ impl Client {
         body: &'a types::NetworkInterfaceCreate,
     ) -> Result<ResponseValue<types::NetworkInterface>, Error<types::Error>> {
         let url = format!(
-            "{}/organizations/{}/projects/{}/instances/{}/network-interfaces",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&instance_name.to_string()),
+            "{}/organizations/{}/projects/{}/instances/{}/network-interfaces", self
+            .baseurl, encode_path(& organization_name.to_string()), encode_path(&
+            project_name.to_string()), encode_path(& instance_name.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -16139,21 +15767,21 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             201u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///Fetch a network interface
     ///
-    ///Sends a `GET` request to
-    /// `/organizations/{organization_name}/projects/{project_name}/instances/
-    /// {instance_name}/network-interfaces/{interface_name}`
+    ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/network-interfaces/{interface_name}`
+    ///
+    ///
     pub async fn instance_network_interface_view<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -16162,18 +15790,17 @@ impl Client {
         interface_name: &'a types::Name,
     ) -> Result<ResponseValue<types::NetworkInterface>, Error<types::Error>> {
         let url = format!(
-            "{}/organizations/{}/projects/{}/instances/{}/network-interfaces/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&instance_name.to_string()),
-            encode_path(&interface_name.to_string()),
+            "{}/organizations/{}/projects/{}/instances/{}/network-interfaces/{}", self
+            .baseurl, encode_path(& organization_name.to_string()), encode_path(&
+            project_name.to_string()), encode_path(& instance_name.to_string()),
+            encode_path(& interface_name.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -16193,21 +15820,21 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///Update a network interface
     ///
-    ///Sends a `PUT` request to
-    /// `/organizations/{organization_name}/projects/{project_name}/instances/
-    /// {instance_name}/network-interfaces/{interface_name}`
+    ///Sends a `PUT` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/network-interfaces/{interface_name}`
+    ///
+    ///
     pub async fn instance_network_interface_update<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -16217,18 +15844,17 @@ impl Client {
         body: &'a types::NetworkInterfaceUpdate,
     ) -> Result<ResponseValue<types::NetworkInterface>, Error<types::Error>> {
         let url = format!(
-            "{}/organizations/{}/projects/{}/instances/{}/network-interfaces/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&instance_name.to_string()),
-            encode_path(&interface_name.to_string()),
+            "{}/organizations/{}/projects/{}/instances/{}/network-interfaces/{}", self
+            .baseurl, encode_path(& organization_name.to_string()), encode_path(&
+            project_name.to_string()), encode_path(& instance_name.to_string()),
+            encode_path(& interface_name.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -16249,26 +15875,23 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///Delete a network interface
     ///
-    ///Note that the primary interface for an instance cannot be deleted if
-    /// there are any secondary interfaces. A new primary interface must be
-    /// designated first. The primary interface can be deleted if there are no
-    /// secondary interfaces.
+    ///Note that the primary interface for an instance cannot be deleted if there are any secondary interfaces. A new primary interface must be designated first. The primary interface can be deleted if there are no secondary interfaces.
     ///
-    ///Sends a `DELETE` request to
-    /// `/organizations/{organization_name}/projects/{project_name}/instances/
-    /// {instance_name}/network-interfaces/{interface_name}`
+    ///Sends a `DELETE` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/network-interfaces/{interface_name}`
+    ///
+    ///
     pub async fn instance_network_interface_delete<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -16277,18 +15900,17 @@ impl Client {
         interface_name: &'a types::Name,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!(
-            "{}/organizations/{}/projects/{}/instances/{}/network-interfaces/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&instance_name.to_string()),
-            encode_path(&interface_name.to_string()),
+            "{}/organizations/{}/projects/{}/instances/{}/network-interfaces/{}", self
+            .baseurl, encode_path(& organization_name.to_string()), encode_path(&
+            project_name.to_string()), encode_path(& instance_name.to_string()),
+            encode_path(& interface_name.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -16308,12 +15930,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             204u16 => Ok(ResponseValue::empty(response)),
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -16322,9 +15944,9 @@ impl Client {
     ///
     ///Use `POST /v1/instances/{instance}/reboot` instead
     ///
-    ///Sends a `POST` request to
-    /// `/organizations/{organization_name}/projects/{project_name}/instances/
-    /// {instance_name}/reboot`
+    ///Sends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/reboot`
+    ///
+    ///
     pub async fn instance_reboot<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -16332,17 +15954,16 @@ impl Client {
         instance_name: &'a types::Name,
     ) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
         let url = format!(
-            "{}/organizations/{}/projects/{}/instances/{}/reboot",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&instance_name.to_string()),
+            "{}/organizations/{}/projects/{}/instances/{}/reboot", self.baseurl,
+            encode_path(& organization_name.to_string()), encode_path(& project_name
+            .to_string()), encode_path(& instance_name.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -16362,12 +15983,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             202u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -16376,25 +15997,16 @@ impl Client {
     ///
     ///Use `GET /v1/instances/{instance}/serial-console` instead
     ///
-    ///Sends a `GET` request to
-    /// `/organizations/{organization_name}/projects/{project_name}/instances/
-    /// {instance_name}/serial-console`
+    ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/serial-console`
     ///
     ///Arguments:
-    /// - `organization_name`
-    /// - `project_name`
-    /// - `instance_name`
-    /// - `from_start`: Character index in the serial buffer from which to read,
-    ///   counting the bytes output since instance start. If this is not
-    ///   provided, `most_recent` must be provided, and if this *is* provided,
-    ///   `most_recent` must *not* be provided.
-    /// - `max_bytes`: Maximum number of bytes of buffered serial console
-    ///   contents to return. If the requested range runs to the end of the
-    ///   available buffer, the data returned will be shorter than `max_bytes`.
-    /// - `most_recent`: Character index in the serial buffer from which to
-    ///   read, counting *backward* from the most recently buffered data
-    ///   retrieved from the instance. (See note on `from_start` about mutual
-    ///   exclusivity)
+    ///- `organization_name`
+    ///- `project_name`
+    ///- `instance_name`
+    ///- `from_start`: Character index in the serial buffer from which to read, counting the bytes output since instance start. If this is not provided, `most_recent` must be provided, and if this *is* provided, `most_recent` must *not* be provided.
+    ///- `max_bytes`: Maximum number of bytes of buffered serial console contents to return. If the requested range runs to the end of the available buffer, the data returned will be shorter than `max_bytes`.
+    ///- `most_recent`: Character index in the serial buffer from which to read, counting *backward* from the most recently buffered data retrieved from the instance. (See note on `from_start` about mutual exclusivity)
+    ///
     pub async fn instance_serial_console<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -16405,17 +16017,16 @@ impl Client {
         most_recent: Option<u64>,
     ) -> Result<ResponseValue<types::InstanceSerialConsoleData>, Error<types::Error>> {
         let url = format!(
-            "{}/organizations/{}/projects/{}/instances/{}/serial-console",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&instance_name.to_string()),
+            "{}/organizations/{}/projects/{}/instances/{}/serial-console", self.baseurl,
+            encode_path(& organization_name.to_string()), encode_path(& project_name
+            .to_string()), encode_path(& instance_name.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -16424,15 +16035,9 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
-            .query(&progenitor_client::QueryParam::new(
-                "from_start",
-                &from_start,
-            ))
+            .query(&progenitor_client::QueryParam::new("from_start", &from_start))
             .query(&progenitor_client::QueryParam::new("max_bytes", &max_bytes))
-            .query(&progenitor_client::QueryParam::new(
-                "most_recent",
-                &most_recent,
-            ))
+            .query(&progenitor_client::QueryParam::new("most_recent", &most_recent))
             .headers(header_map)
             .build()?;
         let info = OperationInfo {
@@ -16444,12 +16049,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -16458,9 +16063,9 @@ impl Client {
     ///
     ///Use `GET /v1/instances/{instance}/serial-console/stream` instead
     ///
-    ///Sends a `GET` request to
-    /// `/organizations/{organization_name}/projects/{project_name}/instances/
-    /// {instance_name}/serial-console/stream`
+    ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/serial-console/stream`
+    ///
+    ///
     pub async fn instance_serial_console_stream<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -16468,17 +16073,16 @@ impl Client {
         instance_name: &'a types::Name,
     ) -> Result<ResponseValue<reqwest::Upgraded>, Error<()>> {
         let url = format!(
-            "{}/organizations/{}/projects/{}/instances/{}/serial-console/stream",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&instance_name.to_string()),
+            "{}/organizations/{}/projects/{}/instances/{}/serial-console/stream", self
+            .baseurl, encode_path(& organization_name.to_string()), encode_path(&
+            project_name.to_string()), encode_path(& instance_name.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -16512,9 +16116,9 @@ impl Client {
     ///
     ///Use `GET /v1/instances/{instance}/serial-console/stream` instead
     ///
-    ///Sends a `GET` request to
-    /// `/organizations/{organization_name}/projects/{project_name}/instances/
-    /// {instance_name}/serial-console/stream_v2`
+    ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/serial-console/stream_v2`
+    ///
+    ///
     pub async fn instance_serial_console_stream_v2<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -16522,17 +16126,16 @@ impl Client {
         instance_name: &'a types::Name,
     ) -> Result<ResponseValue<reqwest::Upgraded>, Error<types::Error>> {
         let url = format!(
-            "{}/organizations/{}/projects/{}/instances/{}/serial-console/stream_v2",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&instance_name.to_string()),
+            "{}/organizations/{}/projects/{}/instances/{}/serial-console/stream_v2", self
+            .baseurl, encode_path(& organization_name.to_string()), encode_path(&
+            project_name.to_string()), encode_path(& instance_name.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -16558,12 +16161,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             101u16 => ResponseValue::upgrade(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -16572,9 +16175,9 @@ impl Client {
     ///
     ///Use `POST /v1/instances/{instance}/start` instead
     ///
-    ///Sends a `POST` request to
-    /// `/organizations/{organization_name}/projects/{project_name}/instances/
-    /// {instance_name}/start`
+    ///Sends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/start`
+    ///
+    ///
     pub async fn instance_start<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -16582,17 +16185,16 @@ impl Client {
         instance_name: &'a types::Name,
     ) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
         let url = format!(
-            "{}/organizations/{}/projects/{}/instances/{}/start",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&instance_name.to_string()),
+            "{}/organizations/{}/projects/{}/instances/{}/start", self.baseurl,
+            encode_path(& organization_name.to_string()), encode_path(& project_name
+            .to_string()), encode_path(& instance_name.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -16612,12 +16214,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             202u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -16626,9 +16228,9 @@ impl Client {
     ///
     ///Use `POST /v1/instances/{instance}/stop` instead
     ///
-    ///Sends a `POST` request to
-    /// `/organizations/{organization_name}/projects/{project_name}/instances/
-    /// {instance_name}/stop`
+    ///Sends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/instances/{instance_name}/stop`
+    ///
+    ///
     pub async fn instance_stop<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -16636,17 +16238,16 @@ impl Client {
         instance_name: &'a types::Name,
     ) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
         let url = format!(
-            "{}/organizations/{}/projects/{}/instances/{}/stop",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&instance_name.to_string()),
+            "{}/organizations/{}/projects/{}/instances/{}/stop", self.baseurl,
+            encode_path(& organization_name.to_string()), encode_path(& project_name
+            .to_string()), encode_path(& instance_name.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -16666,12 +16267,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             202u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -16680,28 +16281,27 @@ impl Client {
     ///
     ///Use `GET /v1/projects/{project}/policy` instead
     ///
-    ///Sends a `GET` request to
-    /// `/organizations/{organization_name}/projects/{project_name}/policy`
+    ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/policy`
     ///
     ///Arguments:
-    /// - `organization_name`: The organization's unique name.
-    /// - `project_name`: The project's unique name within the organization.
+    ///- `organization_name`: The organization's unique name.
+    ///- `project_name`: The project's unique name within the organization.
+    ///
     pub async fn project_policy_view<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
     ) -> Result<ResponseValue<types::ProjectRolePolicy>, Error<types::Error>> {
         let url = format!(
-            "{}/organizations/{}/projects/{}/policy",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
+            "{}/organizations/{}/projects/{}/policy", self.baseurl, encode_path(&
+            organization_name.to_string()), encode_path(& project_name.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -16721,25 +16321,25 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///Update a project's IAM policy
     ///
-    ///Sends a `PUT` request to
-    /// `/organizations/{organization_name}/projects/{project_name}/policy`
+    ///Sends a `PUT` request to `/organizations/{organization_name}/projects/{project_name}/policy`
     ///
     ///Arguments:
-    /// - `organization_name`: The organization's unique name.
-    /// - `project_name`: The project's unique name within the organization.
-    /// - `body`
+    ///- `organization_name`: The organization's unique name.
+    ///- `project_name`: The project's unique name within the organization.
+    ///- `body`
+    ///
     pub async fn project_policy_update<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -16747,16 +16347,15 @@ impl Client {
         body: &'a types::ProjectRolePolicy,
     ) -> Result<ResponseValue<types::ProjectRolePolicy>, Error<types::Error>> {
         let url = format!(
-            "{}/organizations/{}/projects/{}/policy",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
+            "{}/organizations/{}/projects/{}/policy", self.baseurl, encode_path(&
+            organization_name.to_string()), encode_path(& project_name.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -16777,28 +16376,27 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///List snapshots
     ///
-    ///Sends a `GET` request to
-    /// `/organizations/{organization_name}/projects/{project_name}/snapshots`
+    ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/snapshots`
     ///
     ///Arguments:
-    /// - `organization_name`: The organization's unique name.
-    /// - `project_name`: The project's unique name within the organization.
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `page_token`: Token returned by previous call to retrieve the
-    ///   subsequent page
-    /// - `sort_by`
+    ///- `organization_name`: The organization's unique name.
+    ///- `project_name`: The project's unique name within the organization.
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `page_token`: Token returned by previous call to retrieve the subsequent page
+    ///- `sort_by`
+    ///
     pub async fn snapshot_list<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -16808,16 +16406,15 @@ impl Client {
         sort_by: Option<types::NameSortMode>,
     ) -> Result<ResponseValue<types::SnapshotResultsPage>, Error<types::Error>> {
         let url = format!(
-            "{}/organizations/{}/projects/{}/snapshots",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
+            "{}/organizations/{}/projects/{}/snapshots", self.baseurl, encode_path(&
+            organization_name.to_string()), encode_path(& project_name.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -16827,10 +16424,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
+            .query(&progenitor_client::QueryParam::new("page_token", &page_token))
             .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
             .headers(header_map)
             .build()?;
@@ -16843,35 +16437,35 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///List snapshots as a Stream
     ///
-    ///Sends repeated `GET` requests to
-    /// `/organizations/{organization_name}/projects/{project_name}/snapshots`
-    /// until there are no more results.
+    ///Sends repeated `GET` requests to `/organizations/{organization_name}/projects/{project_name}/snapshots` until there are no more results.
     ///
     ///Arguments:
-    /// - `organization_name`: The organization's unique name.
-    /// - `project_name`: The project's unique name within the organization.
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `sort_by`
+    ///- `organization_name`: The organization's unique name.
+    ///- `project_name`: The project's unique name within the organization.
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `sort_by`
+    ///
     pub fn snapshot_list_stream<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
         limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::NameSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::Snapshot, Error<types::Error>>> + Unpin + 'a
-    {
+    ) -> impl futures::Stream<
+        Item = Result<types::Snapshot, Error<types::Error>>,
+    > + Unpin + 'a {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
@@ -16879,25 +16473,31 @@ impl Client {
             .map_ok(move |page| {
                 let page = page.into_inner();
                 let first = futures::stream::iter(page.items).map(Ok);
-                let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
-                    if state.is_none() {
-                        Ok(None)
-                    } else {
-                        self.snapshot_list(
-                            organization_name,
-                            project_name,
-                            limit,
-                            state.as_deref(),
-                            None,
-                        )
-                        .map_ok(|page| {
-                            let page = page.into_inner();
-                            Some((futures::stream::iter(page.items).map(Ok), page.next_page))
-                        })
-                        .await
-                    }
-                })
-                .try_flatten();
+                let rest = futures::stream::try_unfold(
+                        page.next_page,
+                        move |state| async move {
+                            if state.is_none() {
+                                Ok(None)
+                            } else {
+                                self.snapshot_list(
+                                        organization_name,
+                                        project_name,
+                                        limit,
+                                        state.as_deref(),
+                                        None,
+                                    )
+                                    .map_ok(|page| {
+                                        let page = page.into_inner();
+                                        Some((
+                                            futures::stream::iter(page.items).map(Ok),
+                                            page.next_page,
+                                        ))
+                                    })
+                                    .await
+                            }
+                        },
+                    )
+                    .try_flatten();
                 first.chain(rest)
             })
             .try_flatten_stream()
@@ -16908,13 +16508,13 @@ impl Client {
     ///
     ///Creates a point-in-time snapshot from a disk.
     ///
-    ///Sends a `POST` request to
-    /// `/organizations/{organization_name}/projects/{project_name}/snapshots`
+    ///Sends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/snapshots`
     ///
     ///Arguments:
-    /// - `organization_name`: The organization's unique name.
-    /// - `project_name`: The project's unique name within the organization.
-    /// - `body`
+    ///- `organization_name`: The organization's unique name.
+    ///- `project_name`: The project's unique name within the organization.
+    ///- `body`
+    ///
     pub async fn snapshot_create<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -16922,16 +16522,15 @@ impl Client {
         body: &'a types::SnapshotCreate,
     ) -> Result<ResponseValue<types::Snapshot>, Error<types::Error>> {
         let url = format!(
-            "{}/organizations/{}/projects/{}/snapshots",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
+            "{}/organizations/{}/projects/{}/snapshots", self.baseurl, encode_path(&
+            organization_name.to_string()), encode_path(& project_name.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -16952,21 +16551,21 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             201u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///Fetch a snapshot
     ///
-    ///Sends a `GET` request to
-    /// `/organizations/{organization_name}/projects/{project_name}/snapshots/
-    /// {snapshot_name}`
+    ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/snapshots/{snapshot_name}`
+    ///
+    ///
     pub async fn snapshot_view<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -16974,17 +16573,16 @@ impl Client {
         snapshot_name: &'a types::Name,
     ) -> Result<ResponseValue<types::Snapshot>, Error<types::Error>> {
         let url = format!(
-            "{}/organizations/{}/projects/{}/snapshots/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&snapshot_name.to_string()),
+            "{}/organizations/{}/projects/{}/snapshots/{}", self.baseurl, encode_path(&
+            organization_name.to_string()), encode_path(& project_name.to_string()),
+            encode_path(& snapshot_name.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -17004,21 +16602,21 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///Delete a snapshot
     ///
-    ///Sends a `DELETE` request to
-    /// `/organizations/{organization_name}/projects/{project_name}/snapshots/
-    /// {snapshot_name}`
+    ///Sends a `DELETE` request to `/organizations/{organization_name}/projects/{project_name}/snapshots/{snapshot_name}`
+    ///
+    ///
     pub async fn snapshot_delete<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -17026,17 +16624,16 @@ impl Client {
         snapshot_name: &'a types::Name,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!(
-            "{}/organizations/{}/projects/{}/snapshots/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&snapshot_name.to_string()),
+            "{}/organizations/{}/projects/{}/snapshots/{}", self.baseurl, encode_path(&
+            organization_name.to_string()), encode_path(& project_name.to_string()),
+            encode_path(& snapshot_name.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -17056,28 +16653,27 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             204u16 => Ok(ResponseValue::empty(response)),
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///List VPCs
     ///
-    ///Sends a `GET` request to
-    /// `/organizations/{organization_name}/projects/{project_name}/vpcs`
+    ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/vpcs`
     ///
     ///Arguments:
-    /// - `organization_name`: The organization's unique name.
-    /// - `project_name`: The project's unique name within the organization.
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `page_token`: Token returned by previous call to retrieve the
-    ///   subsequent page
-    /// - `sort_by`
+    ///- `organization_name`: The organization's unique name.
+    ///- `project_name`: The project's unique name within the organization.
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `page_token`: Token returned by previous call to retrieve the subsequent page
+    ///- `sort_by`
+    ///
     pub async fn vpc_list<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -17087,16 +16683,15 @@ impl Client {
         sort_by: Option<types::NameSortMode>,
     ) -> Result<ResponseValue<types::VpcResultsPage>, Error<types::Error>> {
         let url = format!(
-            "{}/organizations/{}/projects/{}/vpcs",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
+            "{}/organizations/{}/projects/{}/vpcs", self.baseurl, encode_path(&
+            organization_name.to_string()), encode_path(& project_name.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -17106,10 +16701,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
+            .query(&progenitor_client::QueryParam::new("page_token", &page_token))
             .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
             .headers(header_map)
             .build()?;
@@ -17122,34 +16714,35 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///List VPCs as a Stream
     ///
-    ///Sends repeated `GET` requests to
-    /// `/organizations/{organization_name}/projects/{project_name}/vpcs` until
-    /// there are no more results.
+    ///Sends repeated `GET` requests to `/organizations/{organization_name}/projects/{project_name}/vpcs` until there are no more results.
     ///
     ///Arguments:
-    /// - `organization_name`: The organization's unique name.
-    /// - `project_name`: The project's unique name within the organization.
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `sort_by`
+    ///- `organization_name`: The organization's unique name.
+    ///- `project_name`: The project's unique name within the organization.
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `sort_by`
+    ///
     pub fn vpc_list_stream<'a>(
         &'a self,
         organization_name: &'a types::Name,
         project_name: &'a types::Name,
         limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::NameSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::Vpc, Error<types::Error>>> + Unpin + 'a {
+    ) -> impl futures::Stream<
+        Item = Result<types::Vpc, Error<types::Error>>,
+    > + Unpin + 'a {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
@@ -17157,25 +16750,31 @@ impl Client {
             .map_ok(move |page| {
                 let page = page.into_inner();
                 let first = futures::stream::iter(page.items).map(Ok);
-                let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
-                    if state.is_none() {
-                        Ok(None)
-                    } else {
-                        self.vpc_list(
-                            organization_name,
-                            project_name,
-                            limit,
-                            state.as_deref(),
-                            None,
-                        )
-                        .map_ok(|page| {
-                            let page = page.into_inner();
-                            Some((futures::stream::iter(page.items).map(Ok), page.next_page))
-                        })
-                        .await
-                    }
-                })
-                .try_flatten();
+                let rest = futures::stream::try_unfold(
+                        page.next_page,
+                        move |state| async move {
+                            if state.is_none() {
+                                Ok(None)
+                            } else {
+                                self.vpc_list(
+                                        organization_name,
+                                        project_name,
+                                        limit,
+                                        state.as_deref(),
+                                        None,
+                                    )
+                                    .map_ok(|page| {
+                                        let page = page.into_inner();
+                                        Some((
+                                            futures::stream::iter(page.items).map(Ok),
+                                            page.next_page,
+                                        ))
+                                    })
+                                    .await
+                            }
+                        },
+                    )
+                    .try_flatten();
                 first.chain(rest)
             })
             .try_flatten_stream()
@@ -17184,13 +16783,13 @@ impl Client {
 
     ///Create a VPC
     ///
-    ///Sends a `POST` request to
-    /// `/organizations/{organization_name}/projects/{project_name}/vpcs`
+    ///Sends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/vpcs`
     ///
     ///Arguments:
-    /// - `organization_name`: The organization's unique name.
-    /// - `project_name`: The project's unique name within the organization.
-    /// - `body`
+    ///- `organization_name`: The organization's unique name.
+    ///- `project_name`: The project's unique name within the organization.
+    ///- `body`
+    ///
     pub async fn vpc_create<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -17198,16 +16797,15 @@ impl Client {
         body: &'a types::VpcCreate,
     ) -> Result<ResponseValue<types::Vpc>, Error<types::Error>> {
         let url = format!(
-            "{}/organizations/{}/projects/{}/vpcs",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
+            "{}/organizations/{}/projects/{}/vpcs", self.baseurl, encode_path(&
+            organization_name.to_string()), encode_path(& project_name.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -17228,21 +16826,21 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             201u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///Fetch a VPC
     ///
-    ///Sends a `GET` request to
-    /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
-    /// {vpc_name}`
+    ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}`
+    ///
+    ///
     pub async fn vpc_view<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -17250,17 +16848,16 @@ impl Client {
         vpc_name: &'a types::Name,
     ) -> Result<ResponseValue<types::Vpc>, Error<types::Error>> {
         let url = format!(
-            "{}/organizations/{}/projects/{}/vpcs/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&vpc_name.to_string()),
+            "{}/organizations/{}/projects/{}/vpcs/{}", self.baseurl, encode_path(&
+            organization_name.to_string()), encode_path(& project_name.to_string()),
+            encode_path(& vpc_name.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -17280,21 +16877,21 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///Update a VPC
     ///
-    ///Sends a `PUT` request to
-    /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
-    /// {vpc_name}`
+    ///Sends a `PUT` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}`
+    ///
+    ///
     pub async fn vpc_update<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -17303,17 +16900,16 @@ impl Client {
         body: &'a types::VpcUpdate,
     ) -> Result<ResponseValue<types::Vpc>, Error<types::Error>> {
         let url = format!(
-            "{}/organizations/{}/projects/{}/vpcs/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&vpc_name.to_string()),
+            "{}/organizations/{}/projects/{}/vpcs/{}", self.baseurl, encode_path(&
+            organization_name.to_string()), encode_path(& project_name.to_string()),
+            encode_path(& vpc_name.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -17334,21 +16930,21 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///Delete a VPC
     ///
-    ///Sends a `DELETE` request to
-    /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
-    /// {vpc_name}`
+    ///Sends a `DELETE` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}`
+    ///
+    ///
     pub async fn vpc_delete<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -17356,17 +16952,16 @@ impl Client {
         vpc_name: &'a types::Name,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!(
-            "{}/organizations/{}/projects/{}/vpcs/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&vpc_name.to_string()),
+            "{}/organizations/{}/projects/{}/vpcs/{}", self.baseurl, encode_path(&
+            organization_name.to_string()), encode_path(& project_name.to_string()),
+            encode_path(& vpc_name.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -17386,21 +16981,21 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             204u16 => Ok(ResponseValue::empty(response)),
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///List firewall rules
     ///
-    ///Sends a `GET` request to
-    /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
-    /// {vpc_name}/firewall/rules`
+    ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/firewall/rules`
+    ///
+    ///
     pub async fn vpc_firewall_rules_view<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -17408,17 +17003,16 @@ impl Client {
         vpc_name: &'a types::Name,
     ) -> Result<ResponseValue<types::VpcFirewallRules>, Error<types::Error>> {
         let url = format!(
-            "{}/organizations/{}/projects/{}/vpcs/{}/firewall/rules",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&vpc_name.to_string()),
+            "{}/organizations/{}/projects/{}/vpcs/{}/firewall/rules", self.baseurl,
+            encode_path(& organization_name.to_string()), encode_path(& project_name
+            .to_string()), encode_path(& vpc_name.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -17438,21 +17032,21 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///Replace firewall rules
     ///
-    ///Sends a `PUT` request to
-    /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
-    /// {vpc_name}/firewall/rules`
+    ///Sends a `PUT` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/firewall/rules`
+    ///
+    ///
     pub async fn vpc_firewall_rules_update<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -17461,17 +17055,16 @@ impl Client {
         body: &'a types::VpcFirewallRuleUpdateParams,
     ) -> Result<ResponseValue<types::VpcFirewallRules>, Error<types::Error>> {
         let url = format!(
-            "{}/organizations/{}/projects/{}/vpcs/{}/firewall/rules",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&vpc_name.to_string()),
+            "{}/organizations/{}/projects/{}/vpcs/{}/firewall/rules", self.baseurl,
+            encode_path(& organization_name.to_string()), encode_path(& project_name
+            .to_string()), encode_path(& vpc_name.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -17492,30 +17085,28 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///List routers
     ///
-    ///Sends a `GET` request to
-    /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
-    /// {vpc_name}/routers`
+    ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers`
     ///
     ///Arguments:
-    /// - `organization_name`
-    /// - `project_name`
-    /// - `vpc_name`
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `page_token`: Token returned by previous call to retrieve the
-    ///   subsequent page
-    /// - `sort_by`
+    ///- `organization_name`
+    ///- `project_name`
+    ///- `vpc_name`
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `page_token`: Token returned by previous call to retrieve the subsequent page
+    ///- `sort_by`
+    ///
     pub async fn vpc_router_list<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -17526,17 +17117,16 @@ impl Client {
         sort_by: Option<types::NameSortMode>,
     ) -> Result<ResponseValue<types::VpcRouterResultsPage>, Error<types::Error>> {
         let url = format!(
-            "{}/organizations/{}/projects/{}/vpcs/{}/routers",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&vpc_name.to_string()),
+            "{}/organizations/{}/projects/{}/vpcs/{}/routers", self.baseurl,
+            encode_path(& organization_name.to_string()), encode_path(& project_name
+            .to_string()), encode_path(& vpc_name.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -17546,10 +17136,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
+            .query(&progenitor_client::QueryParam::new("page_token", &page_token))
             .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
             .headers(header_map)
             .build()?;
@@ -17562,28 +17149,27 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///List routers as a Stream
     ///
-    ///Sends repeated `GET` requests to
-    /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
-    /// {vpc_name}/routers` until there are no more results.
+    ///Sends repeated `GET` requests to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers` until there are no more results.
     ///
     ///Arguments:
-    /// - `organization_name`
-    /// - `project_name`
-    /// - `vpc_name`
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `sort_by`
+    ///- `organization_name`
+    ///- `project_name`
+    ///- `vpc_name`
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `sort_by`
+    ///
     pub fn vpc_router_list_stream<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -17591,53 +17177,60 @@ impl Client {
         vpc_name: &'a types::Name,
         limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::NameSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::VpcRouter, Error<types::Error>>> + Unpin + 'a
-    {
+    ) -> impl futures::Stream<
+        Item = Result<types::VpcRouter, Error<types::Error>>,
+    > + Unpin + 'a {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
         self.vpc_router_list(
-            organization_name,
-            project_name,
-            vpc_name,
-            limit,
-            None,
-            sort_by,
-        )
-        .map_ok(move |page| {
-            let page = page.into_inner();
-            let first = futures::stream::iter(page.items).map(Ok);
-            let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
-                if state.is_none() {
-                    Ok(None)
-                } else {
-                    self.vpc_router_list(
-                        organization_name,
-                        project_name,
-                        vpc_name,
-                        limit,
-                        state.as_deref(),
-                        None,
+                organization_name,
+                project_name,
+                vpc_name,
+                limit,
+                None,
+                sort_by,
+            )
+            .map_ok(move |page| {
+                let page = page.into_inner();
+                let first = futures::stream::iter(page.items).map(Ok);
+                let rest = futures::stream::try_unfold(
+                        page.next_page,
+                        move |state| async move {
+                            if state.is_none() {
+                                Ok(None)
+                            } else {
+                                self.vpc_router_list(
+                                        organization_name,
+                                        project_name,
+                                        vpc_name,
+                                        limit,
+                                        state.as_deref(),
+                                        None,
+                                    )
+                                    .map_ok(|page| {
+                                        let page = page.into_inner();
+                                        Some((
+                                            futures::stream::iter(page.items).map(Ok),
+                                            page.next_page,
+                                        ))
+                                    })
+                                    .await
+                            }
+                        },
                     )
-                    .map_ok(|page| {
-                        let page = page.into_inner();
-                        Some((futures::stream::iter(page.items).map(Ok), page.next_page))
-                    })
-                    .await
-                }
+                    .try_flatten();
+                first.chain(rest)
             })
-            .try_flatten();
-            first.chain(rest)
-        })
-        .try_flatten_stream()
-        .boxed()
+            .try_flatten_stream()
+            .boxed()
     }
 
     ///Create a router
     ///
-    ///Sends a `POST` request to
-    /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
-    /// {vpc_name}/routers`
+    ///Sends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers`
+    ///
+    ///
     pub async fn vpc_router_create<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -17646,17 +17239,16 @@ impl Client {
         body: &'a types::VpcRouterCreate,
     ) -> Result<ResponseValue<types::VpcRouter>, Error<types::Error>> {
         let url = format!(
-            "{}/organizations/{}/projects/{}/vpcs/{}/routers",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&vpc_name.to_string()),
+            "{}/organizations/{}/projects/{}/vpcs/{}/routers", self.baseurl,
+            encode_path(& organization_name.to_string()), encode_path(& project_name
+            .to_string()), encode_path(& vpc_name.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -17677,21 +17269,21 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             201u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///Get a router
     ///
-    ///Sends a `GET` request to
-    /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
-    /// {vpc_name}/routers/{router_name}`
+    ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}`
+    ///
+    ///
     pub async fn vpc_router_view<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -17700,18 +17292,17 @@ impl Client {
         router_name: &'a types::Name,
     ) -> Result<ResponseValue<types::VpcRouter>, Error<types::Error>> {
         let url = format!(
-            "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&vpc_name.to_string()),
-            encode_path(&router_name.to_string()),
+            "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}", self.baseurl,
+            encode_path(& organization_name.to_string()), encode_path(& project_name
+            .to_string()), encode_path(& vpc_name.to_string()), encode_path(& router_name
+            .to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -17731,21 +17322,21 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///Update a router
     ///
-    ///Sends a `PUT` request to
-    /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
-    /// {vpc_name}/routers/{router_name}`
+    ///Sends a `PUT` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}`
+    ///
+    ///
     pub async fn vpc_router_update<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -17755,18 +17346,17 @@ impl Client {
         body: &'a types::VpcRouterUpdate,
     ) -> Result<ResponseValue<types::VpcRouter>, Error<types::Error>> {
         let url = format!(
-            "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&vpc_name.to_string()),
-            encode_path(&router_name.to_string()),
+            "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}", self.baseurl,
+            encode_path(& organization_name.to_string()), encode_path(& project_name
+            .to_string()), encode_path(& vpc_name.to_string()), encode_path(& router_name
+            .to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -17787,21 +17377,21 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///Delete a router
     ///
-    ///Sends a `DELETE` request to
-    /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
-    /// {vpc_name}/routers/{router_name}`
+    ///Sends a `DELETE` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}`
+    ///
+    ///
     pub async fn vpc_router_delete<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -17810,18 +17400,17 @@ impl Client {
         router_name: &'a types::Name,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!(
-            "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&vpc_name.to_string()),
-            encode_path(&router_name.to_string()),
+            "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}", self.baseurl,
+            encode_path(& organization_name.to_string()), encode_path(& project_name
+            .to_string()), encode_path(& vpc_name.to_string()), encode_path(& router_name
+            .to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -17841,12 +17430,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             204u16 => Ok(ResponseValue::empty(response)),
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -17855,19 +17444,17 @@ impl Client {
     ///
     ///List the routes associated with a router in a particular VPC.
     ///
-    ///Sends a `GET` request to
-    /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
-    /// {vpc_name}/routers/{router_name}/routes`
+    ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}/routes`
     ///
     ///Arguments:
-    /// - `organization_name`
-    /// - `project_name`
-    /// - `vpc_name`
-    /// - `router_name`
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `page_token`: Token returned by previous call to retrieve the
-    ///   subsequent page
-    /// - `sort_by`
+    ///- `organization_name`
+    ///- `project_name`
+    ///- `vpc_name`
+    ///- `router_name`
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `page_token`: Token returned by previous call to retrieve the subsequent page
+    ///- `sort_by`
+    ///
     pub async fn vpc_router_route_list<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -17879,18 +17466,17 @@ impl Client {
         sort_by: Option<types::NameSortMode>,
     ) -> Result<ResponseValue<types::RouterRouteResultsPage>, Error<types::Error>> {
         let url = format!(
-            "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}/routes",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&vpc_name.to_string()),
-            encode_path(&router_name.to_string()),
+            "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}/routes", self.baseurl,
+            encode_path(& organization_name.to_string()), encode_path(& project_name
+            .to_string()), encode_path(& vpc_name.to_string()), encode_path(& router_name
+            .to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -17900,10 +17486,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
+            .query(&progenitor_client::QueryParam::new("page_token", &page_token))
             .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
             .headers(header_map)
             .build()?;
@@ -17916,12 +17499,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -17930,18 +17513,16 @@ impl Client {
     ///
     ///List the routes associated with a router in a particular VPC.
     ///
-    ///Sends repeated `GET` requests to
-    /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
-    /// {vpc_name}/routers/{router_name}/routes` until there are no more
-    /// results.
+    ///Sends repeated `GET` requests to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}/routes` until there are no more results.
     ///
     ///Arguments:
-    /// - `organization_name`
-    /// - `project_name`
-    /// - `vpc_name`
-    /// - `router_name`
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `sort_by`
+    ///- `organization_name`
+    ///- `project_name`
+    ///- `vpc_name`
+    ///- `router_name`
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `sort_by`
+    ///
     pub fn vpc_router_route_list_stream<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -17950,55 +17531,62 @@ impl Client {
         router_name: &'a types::Name,
         limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::NameSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::RouterRoute, Error<types::Error>>> + Unpin + 'a
-    {
+    ) -> impl futures::Stream<
+        Item = Result<types::RouterRoute, Error<types::Error>>,
+    > + Unpin + 'a {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
         self.vpc_router_route_list(
-            organization_name,
-            project_name,
-            vpc_name,
-            router_name,
-            limit,
-            None,
-            sort_by,
-        )
-        .map_ok(move |page| {
-            let page = page.into_inner();
-            let first = futures::stream::iter(page.items).map(Ok);
-            let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
-                if state.is_none() {
-                    Ok(None)
-                } else {
-                    self.vpc_router_route_list(
-                        organization_name,
-                        project_name,
-                        vpc_name,
-                        router_name,
-                        limit,
-                        state.as_deref(),
-                        None,
+                organization_name,
+                project_name,
+                vpc_name,
+                router_name,
+                limit,
+                None,
+                sort_by,
+            )
+            .map_ok(move |page| {
+                let page = page.into_inner();
+                let first = futures::stream::iter(page.items).map(Ok);
+                let rest = futures::stream::try_unfold(
+                        page.next_page,
+                        move |state| async move {
+                            if state.is_none() {
+                                Ok(None)
+                            } else {
+                                self.vpc_router_route_list(
+                                        organization_name,
+                                        project_name,
+                                        vpc_name,
+                                        router_name,
+                                        limit,
+                                        state.as_deref(),
+                                        None,
+                                    )
+                                    .map_ok(|page| {
+                                        let page = page.into_inner();
+                                        Some((
+                                            futures::stream::iter(page.items).map(Ok),
+                                            page.next_page,
+                                        ))
+                                    })
+                                    .await
+                            }
+                        },
                     )
-                    .map_ok(|page| {
-                        let page = page.into_inner();
-                        Some((futures::stream::iter(page.items).map(Ok), page.next_page))
-                    })
-                    .await
-                }
+                    .try_flatten();
+                first.chain(rest)
             })
-            .try_flatten();
-            first.chain(rest)
-        })
-        .try_flatten_stream()
-        .boxed()
+            .try_flatten_stream()
+            .boxed()
     }
 
     ///Create a router
     ///
-    ///Sends a `POST` request to
-    /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
-    /// {vpc_name}/routers/{router_name}/routes`
+    ///Sends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}/routes`
+    ///
+    ///
     pub async fn vpc_router_route_create<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -18008,18 +17596,17 @@ impl Client {
         body: &'a types::RouterRouteCreateParams,
     ) -> Result<ResponseValue<types::RouterRoute>, Error<types::Error>> {
         let url = format!(
-            "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}/routes",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&vpc_name.to_string()),
-            encode_path(&router_name.to_string()),
+            "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}/routes", self.baseurl,
+            encode_path(& organization_name.to_string()), encode_path(& project_name
+            .to_string()), encode_path(& vpc_name.to_string()), encode_path(& router_name
+            .to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -18040,21 +17627,21 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             201u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///Fetch a route
     ///
-    ///Sends a `GET` request to
-    /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
-    /// {vpc_name}/routers/{router_name}/routes/{route_name}`
+    ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}/routes/{route_name}`
+    ///
+    ///
     pub async fn vpc_router_route_view<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -18064,19 +17651,17 @@ impl Client {
         route_name: &'a types::Name,
     ) -> Result<ResponseValue<types::RouterRoute>, Error<types::Error>> {
         let url = format!(
-            "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}/routes/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&vpc_name.to_string()),
-            encode_path(&router_name.to_string()),
-            encode_path(&route_name.to_string()),
+            "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}/routes/{}", self.baseurl,
+            encode_path(& organization_name.to_string()), encode_path(& project_name
+            .to_string()), encode_path(& vpc_name.to_string()), encode_path(& router_name
+            .to_string()), encode_path(& route_name.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -18096,21 +17681,21 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///Update a route
     ///
-    ///Sends a `PUT` request to
-    /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
-    /// {vpc_name}/routers/{router_name}/routes/{route_name}`
+    ///Sends a `PUT` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}/routes/{route_name}`
+    ///
+    ///
     pub async fn vpc_router_route_update<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -18121,19 +17706,17 @@ impl Client {
         body: &'a types::RouterRouteUpdateParams,
     ) -> Result<ResponseValue<types::RouterRoute>, Error<types::Error>> {
         let url = format!(
-            "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}/routes/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&vpc_name.to_string()),
-            encode_path(&router_name.to_string()),
-            encode_path(&route_name.to_string()),
+            "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}/routes/{}", self.baseurl,
+            encode_path(& organization_name.to_string()), encode_path(& project_name
+            .to_string()), encode_path(& vpc_name.to_string()), encode_path(& router_name
+            .to_string()), encode_path(& route_name.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -18154,21 +17737,21 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///Delete a route
     ///
-    ///Sends a `DELETE` request to
-    /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
-    /// {vpc_name}/routers/{router_name}/routes/{route_name}`
+    ///Sends a `DELETE` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/routers/{router_name}/routes/{route_name}`
+    ///
+    ///
     pub async fn vpc_router_route_delete<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -18178,19 +17761,17 @@ impl Client {
         route_name: &'a types::Name,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!(
-            "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}/routes/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&vpc_name.to_string()),
-            encode_path(&router_name.to_string()),
-            encode_path(&route_name.to_string()),
+            "{}/organizations/{}/projects/{}/vpcs/{}/routers/{}/routes/{}", self.baseurl,
+            encode_path(& organization_name.to_string()), encode_path(& project_name
+            .to_string()), encode_path(& vpc_name.to_string()), encode_path(& router_name
+            .to_string()), encode_path(& route_name.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -18210,30 +17791,28 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             204u16 => Ok(ResponseValue::empty(response)),
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///List subnets
     ///
-    ///Sends a `GET` request to
-    /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
-    /// {vpc_name}/subnets`
+    ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets`
     ///
     ///Arguments:
-    /// - `organization_name`
-    /// - `project_name`
-    /// - `vpc_name`
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `page_token`: Token returned by previous call to retrieve the
-    ///   subsequent page
-    /// - `sort_by`
+    ///- `organization_name`
+    ///- `project_name`
+    ///- `vpc_name`
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `page_token`: Token returned by previous call to retrieve the subsequent page
+    ///- `sort_by`
+    ///
     pub async fn vpc_subnet_list<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -18244,17 +17823,16 @@ impl Client {
         sort_by: Option<types::NameSortMode>,
     ) -> Result<ResponseValue<types::VpcSubnetResultsPage>, Error<types::Error>> {
         let url = format!(
-            "{}/organizations/{}/projects/{}/vpcs/{}/subnets",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&vpc_name.to_string()),
+            "{}/organizations/{}/projects/{}/vpcs/{}/subnets", self.baseurl,
+            encode_path(& organization_name.to_string()), encode_path(& project_name
+            .to_string()), encode_path(& vpc_name.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -18264,10 +17842,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
+            .query(&progenitor_client::QueryParam::new("page_token", &page_token))
             .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
             .headers(header_map)
             .build()?;
@@ -18280,28 +17855,27 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///List subnets as a Stream
     ///
-    ///Sends repeated `GET` requests to
-    /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
-    /// {vpc_name}/subnets` until there are no more results.
+    ///Sends repeated `GET` requests to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets` until there are no more results.
     ///
     ///Arguments:
-    /// - `organization_name`
-    /// - `project_name`
-    /// - `vpc_name`
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `sort_by`
+    ///- `organization_name`
+    ///- `project_name`
+    ///- `vpc_name`
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `sort_by`
+    ///
     pub fn vpc_subnet_list_stream<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -18309,53 +17883,60 @@ impl Client {
         vpc_name: &'a types::Name,
         limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::NameSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::VpcSubnet, Error<types::Error>>> + Unpin + 'a
-    {
+    ) -> impl futures::Stream<
+        Item = Result<types::VpcSubnet, Error<types::Error>>,
+    > + Unpin + 'a {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
         self.vpc_subnet_list(
-            organization_name,
-            project_name,
-            vpc_name,
-            limit,
-            None,
-            sort_by,
-        )
-        .map_ok(move |page| {
-            let page = page.into_inner();
-            let first = futures::stream::iter(page.items).map(Ok);
-            let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
-                if state.is_none() {
-                    Ok(None)
-                } else {
-                    self.vpc_subnet_list(
-                        organization_name,
-                        project_name,
-                        vpc_name,
-                        limit,
-                        state.as_deref(),
-                        None,
+                organization_name,
+                project_name,
+                vpc_name,
+                limit,
+                None,
+                sort_by,
+            )
+            .map_ok(move |page| {
+                let page = page.into_inner();
+                let first = futures::stream::iter(page.items).map(Ok);
+                let rest = futures::stream::try_unfold(
+                        page.next_page,
+                        move |state| async move {
+                            if state.is_none() {
+                                Ok(None)
+                            } else {
+                                self.vpc_subnet_list(
+                                        organization_name,
+                                        project_name,
+                                        vpc_name,
+                                        limit,
+                                        state.as_deref(),
+                                        None,
+                                    )
+                                    .map_ok(|page| {
+                                        let page = page.into_inner();
+                                        Some((
+                                            futures::stream::iter(page.items).map(Ok),
+                                            page.next_page,
+                                        ))
+                                    })
+                                    .await
+                            }
+                        },
                     )
-                    .map_ok(|page| {
-                        let page = page.into_inner();
-                        Some((futures::stream::iter(page.items).map(Ok), page.next_page))
-                    })
-                    .await
-                }
+                    .try_flatten();
+                first.chain(rest)
             })
-            .try_flatten();
-            first.chain(rest)
-        })
-        .try_flatten_stream()
-        .boxed()
+            .try_flatten_stream()
+            .boxed()
     }
 
     ///Create a subnet
     ///
-    ///Sends a `POST` request to
-    /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
-    /// {vpc_name}/subnets`
+    ///Sends a `POST` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets`
+    ///
+    ///
     pub async fn vpc_subnet_create<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -18364,17 +17945,16 @@ impl Client {
         body: &'a types::VpcSubnetCreate,
     ) -> Result<ResponseValue<types::VpcSubnet>, Error<types::Error>> {
         let url = format!(
-            "{}/organizations/{}/projects/{}/vpcs/{}/subnets",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&vpc_name.to_string()),
+            "{}/organizations/{}/projects/{}/vpcs/{}/subnets", self.baseurl,
+            encode_path(& organization_name.to_string()), encode_path(& project_name
+            .to_string()), encode_path(& vpc_name.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -18395,21 +17975,21 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             201u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///Fetch a subnet
     ///
-    ///Sends a `GET` request to
-    /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
-    /// {vpc_name}/subnets/{subnet_name}`
+    ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets/{subnet_name}`
+    ///
+    ///
     pub async fn vpc_subnet_view<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -18418,18 +17998,17 @@ impl Client {
         subnet_name: &'a types::Name,
     ) -> Result<ResponseValue<types::VpcSubnet>, Error<types::Error>> {
         let url = format!(
-            "{}/organizations/{}/projects/{}/vpcs/{}/subnets/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&vpc_name.to_string()),
-            encode_path(&subnet_name.to_string()),
+            "{}/organizations/{}/projects/{}/vpcs/{}/subnets/{}", self.baseurl,
+            encode_path(& organization_name.to_string()), encode_path(& project_name
+            .to_string()), encode_path(& vpc_name.to_string()), encode_path(& subnet_name
+            .to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -18449,21 +18028,21 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///Update a subnet
     ///
-    ///Sends a `PUT` request to
-    /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
-    /// {vpc_name}/subnets/{subnet_name}`
+    ///Sends a `PUT` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets/{subnet_name}`
+    ///
+    ///
     pub async fn vpc_subnet_update<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -18473,18 +18052,17 @@ impl Client {
         body: &'a types::VpcSubnetUpdate,
     ) -> Result<ResponseValue<types::VpcSubnet>, Error<types::Error>> {
         let url = format!(
-            "{}/organizations/{}/projects/{}/vpcs/{}/subnets/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&vpc_name.to_string()),
-            encode_path(&subnet_name.to_string()),
+            "{}/organizations/{}/projects/{}/vpcs/{}/subnets/{}", self.baseurl,
+            encode_path(& organization_name.to_string()), encode_path(& project_name
+            .to_string()), encode_path(& vpc_name.to_string()), encode_path(& subnet_name
+            .to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -18505,21 +18083,21 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///Delete a subnet
     ///
-    ///Sends a `DELETE` request to
-    /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
-    /// {vpc_name}/subnets/{subnet_name}`
+    ///Sends a `DELETE` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets/{subnet_name}`
+    ///
+    ///
     pub async fn vpc_subnet_delete<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -18528,18 +18106,17 @@ impl Client {
         subnet_name: &'a types::Name,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!(
-            "{}/organizations/{}/projects/{}/vpcs/{}/subnets/{}",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&vpc_name.to_string()),
-            encode_path(&subnet_name.to_string()),
+            "{}/organizations/{}/projects/{}/vpcs/{}/subnets/{}", self.baseurl,
+            encode_path(& organization_name.to_string()), encode_path(& project_name
+            .to_string()), encode_path(& vpc_name.to_string()), encode_path(& subnet_name
+            .to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -18559,31 +18136,29 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             204u16 => Ok(ResponseValue::empty(response)),
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///List network interfaces
     ///
-    ///Sends a `GET` request to
-    /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
-    /// {vpc_name}/subnets/{subnet_name}/network-interfaces`
+    ///Sends a `GET` request to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets/{subnet_name}/network-interfaces`
     ///
     ///Arguments:
-    /// - `organization_name`
-    /// - `project_name`
-    /// - `vpc_name`
-    /// - `subnet_name`
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `page_token`: Token returned by previous call to retrieve the
-    ///   subsequent page
-    /// - `sort_by`
+    ///- `organization_name`
+    ///- `project_name`
+    ///- `vpc_name`
+    ///- `subnet_name`
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `page_token`: Token returned by previous call to retrieve the subsequent page
+    ///- `sort_by`
+    ///
     pub async fn vpc_subnet_list_network_interfaces<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -18595,18 +18170,17 @@ impl Client {
         sort_by: Option<types::NameSortMode>,
     ) -> Result<ResponseValue<types::NetworkInterfaceResultsPage>, Error<types::Error>> {
         let url = format!(
-            "{}/organizations/{}/projects/{}/vpcs/{}/subnets/{}/network-interfaces",
-            self.baseurl,
-            encode_path(&organization_name.to_string()),
-            encode_path(&project_name.to_string()),
-            encode_path(&vpc_name.to_string()),
-            encode_path(&subnet_name.to_string()),
+            "{}/organizations/{}/projects/{}/vpcs/{}/subnets/{}/network-interfaces", self
+            .baseurl, encode_path(& organization_name.to_string()), encode_path(&
+            project_name.to_string()), encode_path(& vpc_name.to_string()), encode_path(&
+            subnet_name.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -18616,10 +18190,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
+            .query(&progenitor_client::QueryParam::new("page_token", &page_token))
             .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
             .headers(header_map)
             .build()?;
@@ -18632,30 +18203,28 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///List network interfaces as a Stream
     ///
-    ///Sends repeated `GET` requests to
-    /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
-    /// {vpc_name}/subnets/{subnet_name}/network-interfaces` until there are no
-    /// more results.
+    ///Sends repeated `GET` requests to `/organizations/{organization_name}/projects/{project_name}/vpcs/{vpc_name}/subnets/{subnet_name}/network-interfaces` until there are no more results.
     ///
     ///Arguments:
-    /// - `organization_name`
-    /// - `project_name`
-    /// - `vpc_name`
-    /// - `subnet_name`
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `sort_by`
+    ///- `organization_name`
+    ///- `project_name`
+    ///- `vpc_name`
+    ///- `subnet_name`
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `sort_by`
+    ///
     pub fn vpc_subnet_list_network_interfaces_stream<'a>(
         &'a self,
         organization_name: &'a types::Name,
@@ -18664,62 +18233,72 @@ impl Client {
         subnet_name: &'a types::Name,
         limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::NameSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::NetworkInterface, Error<types::Error>>> + Unpin + 'a
-    {
+    ) -> impl futures::Stream<
+        Item = Result<types::NetworkInterface, Error<types::Error>>,
+    > + Unpin + 'a {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
         self.vpc_subnet_list_network_interfaces(
-            organization_name,
-            project_name,
-            vpc_name,
-            subnet_name,
-            limit,
-            None,
-            sort_by,
-        )
-        .map_ok(move |page| {
-            let page = page.into_inner();
-            let first = futures::stream::iter(page.items).map(Ok);
-            let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
-                if state.is_none() {
-                    Ok(None)
-                } else {
-                    self.vpc_subnet_list_network_interfaces(
-                        organization_name,
-                        project_name,
-                        vpc_name,
-                        subnet_name,
-                        limit,
-                        state.as_deref(),
-                        None,
+                organization_name,
+                project_name,
+                vpc_name,
+                subnet_name,
+                limit,
+                None,
+                sort_by,
+            )
+            .map_ok(move |page| {
+                let page = page.into_inner();
+                let first = futures::stream::iter(page.items).map(Ok);
+                let rest = futures::stream::try_unfold(
+                        page.next_page,
+                        move |state| async move {
+                            if state.is_none() {
+                                Ok(None)
+                            } else {
+                                self.vpc_subnet_list_network_interfaces(
+                                        organization_name,
+                                        project_name,
+                                        vpc_name,
+                                        subnet_name,
+                                        limit,
+                                        state.as_deref(),
+                                        None,
+                                    )
+                                    .map_ok(|page| {
+                                        let page = page.into_inner();
+                                        Some((
+                                            futures::stream::iter(page.items).map(Ok),
+                                            page.next_page,
+                                        ))
+                                    })
+                                    .await
+                            }
+                        },
                     )
-                    .map_ok(|page| {
-                        let page = page.into_inner();
-                        Some((futures::stream::iter(page.items).map(Ok), page.next_page))
-                    })
-                    .await
-                }
+                    .try_flatten();
+                first.chain(rest)
             })
-            .try_flatten();
-            first.chain(rest)
-        })
-        .try_flatten_stream()
-        .boxed()
+            .try_flatten_stream()
+            .boxed()
     }
 
     ///Fetch the current silo's IAM policy
     ///
     ///Sends a `GET` request to `/policy`
+    ///
+    ///
     pub async fn policy_view<'a>(
         &'a self,
     ) -> Result<ResponseValue<types::SiloRolePolicy>, Error<types::Error>> {
         let url = format!("{}/policy", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -18739,12 +18318,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -18752,16 +18331,19 @@ impl Client {
     ///Update the current silo's IAM policy
     ///
     ///Sends a `PUT` request to `/policy`
+    ///
+    ///
     pub async fn policy_update<'a>(
         &'a self,
         body: &'a types::SiloRolePolicy,
     ) -> Result<ResponseValue<types::SiloRolePolicy>, Error<types::Error>> {
         let url = format!("{}/policy", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -18782,12 +18364,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -18797,9 +18379,9 @@ impl Client {
     ///Sends a `GET` request to `/roles`
     ///
     ///Arguments:
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `page_token`: Token returned by previous call to retrieve the
-    ///   subsequent page
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `page_token`: Token returned by previous call to retrieve the subsequent page
+    ///
     pub async fn role_list<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
@@ -18807,10 +18389,11 @@ impl Client {
     ) -> Result<ResponseValue<types::RoleResultsPage>, Error<types::Error>> {
         let url = format!("{}/roles", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -18820,10 +18403,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
+            .query(&progenitor_client::QueryParam::new("page_token", &page_token))
             .headers(header_map)
             .build()?;
         let info = OperationInfo {
@@ -18835,27 +18415,29 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///List built-in roles as a Stream
     ///
-    ///Sends repeated `GET` requests to `/roles` until there are no more
-    /// results.
+    ///Sends repeated `GET` requests to `/roles` until there are no more results.
     ///
     ///Arguments:
-    /// - `limit`: Maximum number of items returned by a single call
+    ///- `limit`: Maximum number of items returned by a single call
+    ///
     pub fn role_list_stream<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
-    ) -> impl futures::Stream<Item = Result<types::Role, Error<types::Error>>> + Unpin + 'a {
+    ) -> impl futures::Stream<
+        Item = Result<types::Role, Error<types::Error>>,
+    > + Unpin + 'a {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
@@ -18863,19 +18445,25 @@ impl Client {
             .map_ok(move |page| {
                 let page = page.into_inner();
                 let first = futures::stream::iter(page.items).map(Ok);
-                let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
-                    if state.is_none() {
-                        Ok(None)
-                    } else {
-                        self.role_list(limit, state.as_deref())
-                            .map_ok(|page| {
-                                let page = page.into_inner();
-                                Some((futures::stream::iter(page.items).map(Ok), page.next_page))
-                            })
-                            .await
-                    }
-                })
-                .try_flatten();
+                let rest = futures::stream::try_unfold(
+                        page.next_page,
+                        move |state| async move {
+                            if state.is_none() {
+                                Ok(None)
+                            } else {
+                                self.role_list(limit, state.as_deref())
+                                    .map_ok(|page| {
+                                        let page = page.into_inner();
+                                        Some((
+                                            futures::stream::iter(page.items).map(Ok),
+                                            page.next_page,
+                                        ))
+                                    })
+                                    .await
+                            }
+                        },
+                    )
+                    .try_flatten();
                 first.chain(rest)
             })
             .try_flatten_stream()
@@ -18887,21 +18475,21 @@ impl Client {
     ///Sends a `GET` request to `/roles/{role_name}`
     ///
     ///Arguments:
-    /// - `role_name`: The built-in role's unique name.
+    ///- `role_name`: The built-in role's unique name.
+    ///
     pub async fn role_view<'a>(
         &'a self,
         role_name: &'a str,
     ) -> Result<ResponseValue<types::Role>, Error<types::Error>> {
         let url = format!(
-            "{}/roles/{}",
-            self.baseurl,
-            encode_path(&role_name.to_string()),
+            "{}/roles/{}", self.baseurl, encode_path(& role_name.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -18921,12 +18509,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -18934,15 +18522,18 @@ impl Client {
     ///Fetch the user associated with the current session
     ///
     ///Sends a `GET` request to `/session/me`
+    ///
+    ///
     pub async fn session_me<'a>(
         &'a self,
     ) -> Result<ResponseValue<types::User>, Error<types::Error>> {
         let url = format!("{}/session/me", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -18962,12 +18553,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -18977,10 +18568,10 @@ impl Client {
     ///Sends a `GET` request to `/session/me/groups`
     ///
     ///Arguments:
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `page_token`: Token returned by previous call to retrieve the
-    ///   subsequent page
-    /// - `sort_by`
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `page_token`: Token returned by previous call to retrieve the subsequent page
+    ///- `sort_by`
+    ///
     pub async fn session_me_groups<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
@@ -18989,10 +18580,11 @@ impl Client {
     ) -> Result<ResponseValue<types::GroupResultsPage>, Error<types::Error>> {
         let url = format!("{}/session/me/groups", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -19002,10 +18594,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
+            .query(&progenitor_client::QueryParam::new("page_token", &page_token))
             .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
             .headers(header_map)
             .build()?;
@@ -19018,29 +18607,31 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///Fetch the silo groups the current user belongs to as a Stream
     ///
-    ///Sends repeated `GET` requests to `/session/me/groups` until there are no
-    /// more results.
+    ///Sends repeated `GET` requests to `/session/me/groups` until there are no more results.
     ///
     ///Arguments:
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `sort_by`
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `sort_by`
+    ///
     pub fn session_me_groups_stream<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::IdSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::Group, Error<types::Error>>> + Unpin + 'a {
+    ) -> impl futures::Stream<
+        Item = Result<types::Group, Error<types::Error>>,
+    > + Unpin + 'a {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
@@ -19048,19 +18639,25 @@ impl Client {
             .map_ok(move |page| {
                 let page = page.into_inner();
                 let first = futures::stream::iter(page.items).map(Ok);
-                let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
-                    if state.is_none() {
-                        Ok(None)
-                    } else {
-                        self.session_me_groups(limit, state.as_deref(), None)
-                            .map_ok(|page| {
-                                let page = page.into_inner();
-                                Some((futures::stream::iter(page.items).map(Ok), page.next_page))
-                            })
-                            .await
-                    }
-                })
-                .try_flatten();
+                let rest = futures::stream::try_unfold(
+                        page.next_page,
+                        move |state| async move {
+                            if state.is_none() {
+                                Ok(None)
+                            } else {
+                                self.session_me_groups(limit, state.as_deref(), None)
+                                    .map_ok(|page| {
+                                        let page = page.into_inner();
+                                        Some((
+                                            futures::stream::iter(page.items).map(Ok),
+                                            page.next_page,
+                                        ))
+                                    })
+                                    .await
+                            }
+                        },
+                    )
+                    .try_flatten();
                 first.chain(rest)
             })
             .try_flatten_stream()
@@ -19074,10 +18671,10 @@ impl Client {
     ///Sends a `GET` request to `/session/me/sshkeys`
     ///
     ///Arguments:
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `page_token`: Token returned by previous call to retrieve the
-    ///   subsequent page
-    /// - `sort_by`
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `page_token`: Token returned by previous call to retrieve the subsequent page
+    ///- `sort_by`
+    ///
     pub async fn session_sshkey_list<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
@@ -19086,10 +18683,11 @@ impl Client {
     ) -> Result<ResponseValue<types::SshKeyResultsPage>, Error<types::Error>> {
         let url = format!("{}/session/me/sshkeys", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -19099,10 +18697,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
+            .query(&progenitor_client::QueryParam::new("page_token", &page_token))
             .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
             .headers(header_map)
             .build()?;
@@ -19115,12 +18710,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -19129,17 +18724,19 @@ impl Client {
     ///
     ///Lists SSH public keys for the currently authenticated user.
     ///
-    ///Sends repeated `GET` requests to `/session/me/sshkeys` until there are
-    /// no more results.
+    ///Sends repeated `GET` requests to `/session/me/sshkeys` until there are no more results.
     ///
     ///Arguments:
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `sort_by`
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `sort_by`
+    ///
     pub fn session_sshkey_list_stream<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::NameSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::SshKey, Error<types::Error>>> + Unpin + 'a {
+    ) -> impl futures::Stream<
+        Item = Result<types::SshKey, Error<types::Error>>,
+    > + Unpin + 'a {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
@@ -19147,19 +18744,25 @@ impl Client {
             .map_ok(move |page| {
                 let page = page.into_inner();
                 let first = futures::stream::iter(page.items).map(Ok);
-                let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
-                    if state.is_none() {
-                        Ok(None)
-                    } else {
-                        self.session_sshkey_list(limit, state.as_deref(), None)
-                            .map_ok(|page| {
-                                let page = page.into_inner();
-                                Some((futures::stream::iter(page.items).map(Ok), page.next_page))
-                            })
-                            .await
-                    }
-                })
-                .try_flatten();
+                let rest = futures::stream::try_unfold(
+                        page.next_page,
+                        move |state| async move {
+                            if state.is_none() {
+                                Ok(None)
+                            } else {
+                                self.session_sshkey_list(limit, state.as_deref(), None)
+                                    .map_ok(|page| {
+                                        let page = page.into_inner();
+                                        Some((
+                                            futures::stream::iter(page.items).map(Ok),
+                                            page.next_page,
+                                        ))
+                                    })
+                                    .await
+                            }
+                        },
+                    )
+                    .try_flatten();
                 first.chain(rest)
             })
             .try_flatten_stream()
@@ -19171,16 +18774,19 @@ impl Client {
     ///Create an SSH public key for the currently authenticated user.
     ///
     ///Sends a `POST` request to `/session/me/sshkeys`
+    ///
+    ///
     pub async fn session_sshkey_create<'a>(
         &'a self,
         body: &'a types::SshKeyCreate,
     ) -> Result<ResponseValue<types::SshKey>, Error<types::Error>> {
         let url = format!("{}/session/me/sshkeys", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -19201,36 +18807,37 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             201u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///Fetch an SSH public key
     ///
-    ///Fetch an SSH public key associated with the currently authenticated
-    /// user.
+    ///Fetch an SSH public key associated with the currently authenticated user.
     ///
     ///Sends a `GET` request to `/session/me/sshkeys/{ssh_key_name}`
+    ///
+    ///
     pub async fn session_sshkey_view<'a>(
         &'a self,
         ssh_key_name: &'a types::Name,
     ) -> Result<ResponseValue<types::SshKey>, Error<types::Error>> {
         let url = format!(
-            "{}/session/me/sshkeys/{}",
-            self.baseurl,
-            encode_path(&ssh_key_name.to_string()),
+            "{}/session/me/sshkeys/{}", self.baseurl, encode_path(& ssh_key_name
+            .to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -19250,36 +18857,37 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///Delete an SSH public key
     ///
-    ///Delete an SSH public key associated with the currently authenticated
-    /// user.
+    ///Delete an SSH public key associated with the currently authenticated user.
     ///
     ///Sends a `DELETE` request to `/session/me/sshkeys/{ssh_key_name}`
+    ///
+    ///
     pub async fn session_sshkey_delete<'a>(
         &'a self,
         ssh_key_name: &'a types::Name,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!(
-            "{}/session/me/sshkeys/{}",
-            self.baseurl,
-            encode_path(&ssh_key_name.to_string()),
+            "{}/session/me/sshkeys/{}", self.baseurl, encode_path(& ssh_key_name
+            .to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -19299,12 +18907,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             204u16 => Ok(ResponseValue::empty(response)),
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -19312,20 +18920,21 @@ impl Client {
     ///Fetch a system-wide image by id
     ///
     ///Sends a `GET` request to `/system/by-id/images/{id}`
+    ///
+    ///
     pub async fn system_image_view_by_id<'a>(
         &'a self,
         id: &'a ::uuid::Uuid,
     ) -> Result<ResponseValue<types::GlobalImage>, Error<types::Error>> {
         let url = format!(
-            "{}/system/by-id/images/{}",
-            self.baseurl,
-            encode_path(&id.to_string()),
+            "{}/system/by-id/images/{}", self.baseurl, encode_path(& id.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -19345,12 +18954,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -19358,20 +18967,21 @@ impl Client {
     ///Fetch an IP pool by id
     ///
     ///Sends a `GET` request to `/system/by-id/ip-pools/{id}`
+    ///
+    ///
     pub async fn ip_pool_view_by_id<'a>(
         &'a self,
         id: &'a ::uuid::Uuid,
     ) -> Result<ResponseValue<types::IpPool>, Error<types::Error>> {
         let url = format!(
-            "{}/system/by-id/ip-pools/{}",
-            self.baseurl,
-            encode_path(&id.to_string()),
+            "{}/system/by-id/ip-pools/{}", self.baseurl, encode_path(& id.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -19391,12 +19001,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -19404,20 +19014,21 @@ impl Client {
     ///Fetch a silo by id
     ///
     ///Sends a `GET` request to `/system/by-id/silos/{id}`
+    ///
+    ///
     pub async fn silo_view_by_id<'a>(
         &'a self,
         id: &'a ::uuid::Uuid,
     ) -> Result<ResponseValue<types::Silo>, Error<types::Error>> {
         let url = format!(
-            "{}/system/by-id/silos/{}",
-            self.baseurl,
-            encode_path(&id.to_string()),
+            "{}/system/by-id/silos/{}", self.baseurl, encode_path(& id.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -19437,29 +19048,27 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///List system-wide certificates
     ///
-    ///Returns a list of all the system-wide certificates. System-wide
-    /// certificates are returned sorted by creation date, with the most recent
-    /// certificates appearing first.
+    ///Returns a list of all the system-wide certificates. System-wide certificates are returned sorted by creation date, with the most recent certificates appearing first.
     ///
     ///Sends a `GET` request to `/system/certificates`
     ///
     ///Arguments:
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `page_token`: Token returned by previous call to retrieve the
-    ///   subsequent page
-    /// - `sort_by`
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `page_token`: Token returned by previous call to retrieve the subsequent page
+    ///- `sort_by`
+    ///
     pub async fn certificate_list<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
@@ -19468,10 +19077,11 @@ impl Client {
     ) -> Result<ResponseValue<types::CertificateResultsPage>, Error<types::Error>> {
         let url = format!("{}/system/certificates", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -19481,10 +19091,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
+            .query(&progenitor_client::QueryParam::new("page_token", &page_token))
             .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
             .headers(header_map)
             .build()?;
@@ -19497,34 +19104,33 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///List system-wide certificates as a Stream
     ///
-    ///Returns a list of all the system-wide certificates. System-wide
-    /// certificates are returned sorted by creation date, with the most recent
-    /// certificates appearing first.
+    ///Returns a list of all the system-wide certificates. System-wide certificates are returned sorted by creation date, with the most recent certificates appearing first.
     ///
-    ///Sends repeated `GET` requests to `/system/certificates` until there are
-    /// no more results.
+    ///Sends repeated `GET` requests to `/system/certificates` until there are no more results.
     ///
     ///Arguments:
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `sort_by`
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `sort_by`
+    ///
     pub fn certificate_list_stream<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::NameSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::Certificate, Error<types::Error>>> + Unpin + 'a
-    {
+    ) -> impl futures::Stream<
+        Item = Result<types::Certificate, Error<types::Error>>,
+    > + Unpin + 'a {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
@@ -19532,19 +19138,25 @@ impl Client {
             .map_ok(move |page| {
                 let page = page.into_inner();
                 let first = futures::stream::iter(page.items).map(Ok);
-                let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
-                    if state.is_none() {
-                        Ok(None)
-                    } else {
-                        self.certificate_list(limit, state.as_deref(), None)
-                            .map_ok(|page| {
-                                let page = page.into_inner();
-                                Some((futures::stream::iter(page.items).map(Ok), page.next_page))
-                            })
-                            .await
-                    }
-                })
-                .try_flatten();
+                let rest = futures::stream::try_unfold(
+                        page.next_page,
+                        move |state| async move {
+                            if state.is_none() {
+                                Ok(None)
+                            } else {
+                                self.certificate_list(limit, state.as_deref(), None)
+                                    .map_ok(|page| {
+                                        let page = page.into_inner();
+                                        Some((
+                                            futures::stream::iter(page.items).map(Ok),
+                                            page.next_page,
+                                        ))
+                                    })
+                                    .await
+                            }
+                        },
+                    )
+                    .try_flatten();
                 first.chain(rest)
             })
             .try_flatten_stream()
@@ -19553,20 +19165,22 @@ impl Client {
 
     ///Create a new system-wide x.509 certificate
     ///
-    ///This certificate is automatically used by the Oxide Control plane to
-    /// serve external connections.
+    ///This certificate is automatically used by the Oxide Control plane to serve external connections.
     ///
     ///Sends a `POST` request to `/system/certificates`
+    ///
+    ///
     pub async fn certificate_create<'a>(
         &'a self,
         body: &'a types::CertificateCreate,
     ) -> Result<ResponseValue<types::Certificate>, Error<types::Error>> {
         let url = format!("{}/system/certificates", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -19587,12 +19201,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             201u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -19602,20 +19216,22 @@ impl Client {
     ///Returns the details of a specific certificate
     ///
     ///Sends a `GET` request to `/system/certificates/{certificate}`
+    ///
+    ///
     pub async fn certificate_view<'a>(
         &'a self,
         certificate: &'a types::NameOrId,
     ) -> Result<ResponseValue<types::Certificate>, Error<types::Error>> {
         let url = format!(
-            "{}/system/certificates/{}",
-            self.baseurl,
-            encode_path(&certificate.to_string()),
+            "{}/system/certificates/{}", self.baseurl, encode_path(& certificate
+            .to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -19635,12 +19251,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -19650,20 +19266,22 @@ impl Client {
     ///Permanently delete a certificate. This operation cannot be undone.
     ///
     ///Sends a `DELETE` request to `/system/certificates/{certificate}`
+    ///
+    ///
     pub async fn certificate_delete<'a>(
         &'a self,
         certificate: &'a types::NameOrId,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!(
-            "{}/system/certificates/{}",
-            self.baseurl,
-            encode_path(&certificate.to_string()),
+            "{}/system/certificates/{}", self.baseurl, encode_path(& certificate
+            .to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -19683,12 +19301,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             204u16 => Ok(ResponseValue::empty(response)),
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -19698,10 +19316,10 @@ impl Client {
     ///Sends a `GET` request to `/system/hardware/disks`
     ///
     ///Arguments:
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `page_token`: Token returned by previous call to retrieve the
-    ///   subsequent page
-    /// - `sort_by`
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `page_token`: Token returned by previous call to retrieve the subsequent page
+    ///- `sort_by`
+    ///
     pub async fn physical_disk_list<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
@@ -19710,10 +19328,11 @@ impl Client {
     ) -> Result<ResponseValue<types::PhysicalDiskResultsPage>, Error<types::Error>> {
         let url = format!("{}/system/hardware/disks", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -19723,10 +19342,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
+            .query(&progenitor_client::QueryParam::new("page_token", &page_token))
             .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
             .headers(header_map)
             .build()?;
@@ -19739,30 +19355,31 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///List physical disks as a Stream
     ///
-    ///Sends repeated `GET` requests to `/system/hardware/disks` until there
-    /// are no more results.
+    ///Sends repeated `GET` requests to `/system/hardware/disks` until there are no more results.
     ///
     ///Arguments:
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `sort_by`
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `sort_by`
+    ///
     pub fn physical_disk_list_stream<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::IdSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::PhysicalDisk, Error<types::Error>>> + Unpin + 'a
-    {
+    ) -> impl futures::Stream<
+        Item = Result<types::PhysicalDisk, Error<types::Error>>,
+    > + Unpin + 'a {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
@@ -19770,19 +19387,25 @@ impl Client {
             .map_ok(move |page| {
                 let page = page.into_inner();
                 let first = futures::stream::iter(page.items).map(Ok);
-                let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
-                    if state.is_none() {
-                        Ok(None)
-                    } else {
-                        self.physical_disk_list(limit, state.as_deref(), None)
-                            .map_ok(|page| {
-                                let page = page.into_inner();
-                                Some((futures::stream::iter(page.items).map(Ok), page.next_page))
-                            })
-                            .await
-                    }
-                })
-                .try_flatten();
+                let rest = futures::stream::try_unfold(
+                        page.next_page,
+                        move |state| async move {
+                            if state.is_none() {
+                                Ok(None)
+                            } else {
+                                self.physical_disk_list(limit, state.as_deref(), None)
+                                    .map_ok(|page| {
+                                        let page = page.into_inner();
+                                        Some((
+                                            futures::stream::iter(page.items).map(Ok),
+                                            page.next_page,
+                                        ))
+                                    })
+                                    .await
+                            }
+                        },
+                    )
+                    .try_flatten();
                 first.chain(rest)
             })
             .try_flatten_stream()
@@ -19794,10 +19417,10 @@ impl Client {
     ///Sends a `GET` request to `/system/hardware/racks`
     ///
     ///Arguments:
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `page_token`: Token returned by previous call to retrieve the
-    ///   subsequent page
-    /// - `sort_by`
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `page_token`: Token returned by previous call to retrieve the subsequent page
+    ///- `sort_by`
+    ///
     pub async fn rack_list<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
@@ -19806,10 +19429,11 @@ impl Client {
     ) -> Result<ResponseValue<types::RackResultsPage>, Error<types::Error>> {
         let url = format!("{}/system/hardware/racks", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -19819,10 +19443,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
+            .query(&progenitor_client::QueryParam::new("page_token", &page_token))
             .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
             .headers(header_map)
             .build()?;
@@ -19835,29 +19456,31 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///List racks as a Stream
     ///
-    ///Sends repeated `GET` requests to `/system/hardware/racks` until there
-    /// are no more results.
+    ///Sends repeated `GET` requests to `/system/hardware/racks` until there are no more results.
     ///
     ///Arguments:
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `sort_by`
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `sort_by`
+    ///
     pub fn rack_list_stream<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::IdSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::Rack, Error<types::Error>>> + Unpin + 'a {
+    ) -> impl futures::Stream<
+        Item = Result<types::Rack, Error<types::Error>>,
+    > + Unpin + 'a {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
@@ -19865,19 +19488,25 @@ impl Client {
             .map_ok(move |page| {
                 let page = page.into_inner();
                 let first = futures::stream::iter(page.items).map(Ok);
-                let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
-                    if state.is_none() {
-                        Ok(None)
-                    } else {
-                        self.rack_list(limit, state.as_deref(), None)
-                            .map_ok(|page| {
-                                let page = page.into_inner();
-                                Some((futures::stream::iter(page.items).map(Ok), page.next_page))
-                            })
-                            .await
-                    }
-                })
-                .try_flatten();
+                let rest = futures::stream::try_unfold(
+                        page.next_page,
+                        move |state| async move {
+                            if state.is_none() {
+                                Ok(None)
+                            } else {
+                                self.rack_list(limit, state.as_deref(), None)
+                                    .map_ok(|page| {
+                                        let page = page.into_inner();
+                                        Some((
+                                            futures::stream::iter(page.items).map(Ok),
+                                            page.next_page,
+                                        ))
+                                    })
+                                    .await
+                            }
+                        },
+                    )
+                    .try_flatten();
                 first.chain(rest)
             })
             .try_flatten_stream()
@@ -19889,21 +19518,22 @@ impl Client {
     ///Sends a `GET` request to `/system/hardware/racks/{rack_id}`
     ///
     ///Arguments:
-    /// - `rack_id`: The rack's unique ID.
+    ///- `rack_id`: The rack's unique ID.
+    ///
     pub async fn rack_view<'a>(
         &'a self,
         rack_id: &'a ::uuid::Uuid,
     ) -> Result<ResponseValue<types::Rack>, Error<types::Error>> {
         let url = format!(
-            "{}/system/hardware/racks/{}",
-            self.baseurl,
-            encode_path(&rack_id.to_string()),
+            "{}/system/hardware/racks/{}", self.baseurl, encode_path(& rack_id
+            .to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -19923,12 +19553,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -19938,10 +19568,10 @@ impl Client {
     ///Sends a `GET` request to `/system/hardware/sleds`
     ///
     ///Arguments:
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `page_token`: Token returned by previous call to retrieve the
-    ///   subsequent page
-    /// - `sort_by`
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `page_token`: Token returned by previous call to retrieve the subsequent page
+    ///- `sort_by`
+    ///
     pub async fn sled_list<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
@@ -19950,10 +19580,11 @@ impl Client {
     ) -> Result<ResponseValue<types::SledResultsPage>, Error<types::Error>> {
         let url = format!("{}/system/hardware/sleds", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -19963,10 +19594,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
+            .query(&progenitor_client::QueryParam::new("page_token", &page_token))
             .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
             .headers(header_map)
             .build()?;
@@ -19979,29 +19607,31 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///List sleds as a Stream
     ///
-    ///Sends repeated `GET` requests to `/system/hardware/sleds` until there
-    /// are no more results.
+    ///Sends repeated `GET` requests to `/system/hardware/sleds` until there are no more results.
     ///
     ///Arguments:
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `sort_by`
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `sort_by`
+    ///
     pub fn sled_list_stream<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::IdSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::Sled, Error<types::Error>>> + Unpin + 'a {
+    ) -> impl futures::Stream<
+        Item = Result<types::Sled, Error<types::Error>>,
+    > + Unpin + 'a {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
@@ -20009,19 +19639,25 @@ impl Client {
             .map_ok(move |page| {
                 let page = page.into_inner();
                 let first = futures::stream::iter(page.items).map(Ok);
-                let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
-                    if state.is_none() {
-                        Ok(None)
-                    } else {
-                        self.sled_list(limit, state.as_deref(), None)
-                            .map_ok(|page| {
-                                let page = page.into_inner();
-                                Some((futures::stream::iter(page.items).map(Ok), page.next_page))
-                            })
-                            .await
-                    }
-                })
-                .try_flatten();
+                let rest = futures::stream::try_unfold(
+                        page.next_page,
+                        move |state| async move {
+                            if state.is_none() {
+                                Ok(None)
+                            } else {
+                                self.sled_list(limit, state.as_deref(), None)
+                                    .map_ok(|page| {
+                                        let page = page.into_inner();
+                                        Some((
+                                            futures::stream::iter(page.items).map(Ok),
+                                            page.next_page,
+                                        ))
+                                    })
+                                    .await
+                            }
+                        },
+                    )
+                    .try_flatten();
                 first.chain(rest)
             })
             .try_flatten_stream()
@@ -20033,21 +19669,22 @@ impl Client {
     ///Sends a `GET` request to `/system/hardware/sleds/{sled_id}`
     ///
     ///Arguments:
-    /// - `sled_id`: The sled's unique ID.
+    ///- `sled_id`: The sled's unique ID.
+    ///
     pub async fn sled_view<'a>(
         &'a self,
         sled_id: &'a ::uuid::Uuid,
     ) -> Result<ResponseValue<types::Sled>, Error<types::Error>> {
         let url = format!(
-            "{}/system/hardware/sleds/{}",
-            self.baseurl,
-            encode_path(&sled_id.to_string()),
+            "{}/system/hardware/sleds/{}", self.baseurl, encode_path(& sled_id
+            .to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -20067,12 +19704,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -20082,11 +19719,11 @@ impl Client {
     ///Sends a `GET` request to `/system/hardware/sleds/{sled_id}/disks`
     ///
     ///Arguments:
-    /// - `sled_id`: The sled's unique ID.
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `page_token`: Token returned by previous call to retrieve the
-    ///   subsequent page
-    /// - `sort_by`
+    ///- `sled_id`: The sled's unique ID.
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `page_token`: Token returned by previous call to retrieve the subsequent page
+    ///- `sort_by`
+    ///
     pub async fn sled_physical_disk_list<'a>(
         &'a self,
         sled_id: &'a ::uuid::Uuid,
@@ -20095,15 +19732,15 @@ impl Client {
         sort_by: Option<types::IdSortMode>,
     ) -> Result<ResponseValue<types::PhysicalDiskResultsPage>, Error<types::Error>> {
         let url = format!(
-            "{}/system/hardware/sleds/{}/disks",
-            self.baseurl,
-            encode_path(&sled_id.to_string()),
+            "{}/system/hardware/sleds/{}/disks", self.baseurl, encode_path(& sled_id
+            .to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -20113,10 +19750,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
+            .query(&progenitor_client::QueryParam::new("page_token", &page_token))
             .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
             .headers(header_map)
             .build()?;
@@ -20129,33 +19763,33 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///List physical disks attached to sleds as a Stream
     ///
-    ///Sends repeated `GET` requests to
-    /// `/system/hardware/sleds/{sled_id}/disks` until there are no more
-    /// results.
+    ///Sends repeated `GET` requests to `/system/hardware/sleds/{sled_id}/disks` until there are no more results.
     ///
     ///Arguments:
-    /// - `sled_id`: The sled's unique ID.
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `sort_by`
+    ///- `sled_id`: The sled's unique ID.
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `sort_by`
+    ///
     pub fn sled_physical_disk_list_stream<'a>(
         &'a self,
         sled_id: &'a ::uuid::Uuid,
         limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::IdSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::PhysicalDisk, Error<types::Error>>> + Unpin + 'a
-    {
+    ) -> impl futures::Stream<
+        Item = Result<types::PhysicalDisk, Error<types::Error>>,
+    > + Unpin + 'a {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
@@ -20163,19 +19797,30 @@ impl Client {
             .map_ok(move |page| {
                 let page = page.into_inner();
                 let first = futures::stream::iter(page.items).map(Ok);
-                let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
-                    if state.is_none() {
-                        Ok(None)
-                    } else {
-                        self.sled_physical_disk_list(sled_id, limit, state.as_deref(), None)
-                            .map_ok(|page| {
-                                let page = page.into_inner();
-                                Some((futures::stream::iter(page.items).map(Ok), page.next_page))
-                            })
-                            .await
-                    }
-                })
-                .try_flatten();
+                let rest = futures::stream::try_unfold(
+                        page.next_page,
+                        move |state| async move {
+                            if state.is_none() {
+                                Ok(None)
+                            } else {
+                                self.sled_physical_disk_list(
+                                        sled_id,
+                                        limit,
+                                        state.as_deref(),
+                                        None,
+                                    )
+                                    .map_ok(|page| {
+                                        let page = page.into_inner();
+                                        Some((
+                                            futures::stream::iter(page.items).map(Ok),
+                                            page.next_page,
+                                        ))
+                                    })
+                                    .await
+                            }
+                        },
+                    )
+                    .try_flatten();
                 first.chain(rest)
             })
             .try_flatten_stream()
@@ -20184,17 +19829,15 @@ impl Client {
 
     ///List system-wide images
     ///
-    ///Returns a list of all the system-wide images. System-wide images are
-    /// returned sorted by creation date, with the most recent images appearing
-    /// first.
+    ///Returns a list of all the system-wide images. System-wide images are returned sorted by creation date, with the most recent images appearing first.
     ///
     ///Sends a `GET` request to `/system/images`
     ///
     ///Arguments:
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `page_token`: Token returned by previous call to retrieve the
-    ///   subsequent page
-    /// - `sort_by`
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `page_token`: Token returned by previous call to retrieve the subsequent page
+    ///- `sort_by`
+    ///
     pub async fn system_image_list<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
@@ -20203,10 +19846,11 @@ impl Client {
     ) -> Result<ResponseValue<types::GlobalImageResultsPage>, Error<types::Error>> {
         let url = format!("{}/system/images", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -20216,10 +19860,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
+            .query(&progenitor_client::QueryParam::new("page_token", &page_token))
             .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
             .headers(header_map)
             .build()?;
@@ -20232,34 +19873,33 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///List system-wide images as a Stream
     ///
-    ///Returns a list of all the system-wide images. System-wide images are
-    /// returned sorted by creation date, with the most recent images appearing
-    /// first.
+    ///Returns a list of all the system-wide images. System-wide images are returned sorted by creation date, with the most recent images appearing first.
     ///
-    ///Sends repeated `GET` requests to `/system/images` until there are no
-    /// more results.
+    ///Sends repeated `GET` requests to `/system/images` until there are no more results.
     ///
     ///Arguments:
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `sort_by`
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `sort_by`
+    ///
     pub fn system_image_list_stream<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::NameSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::GlobalImage, Error<types::Error>>> + Unpin + 'a
-    {
+    ) -> impl futures::Stream<
+        Item = Result<types::GlobalImage, Error<types::Error>>,
+    > + Unpin + 'a {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
@@ -20267,19 +19907,25 @@ impl Client {
             .map_ok(move |page| {
                 let page = page.into_inner();
                 let first = futures::stream::iter(page.items).map(Ok);
-                let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
-                    if state.is_none() {
-                        Ok(None)
-                    } else {
-                        self.system_image_list(limit, state.as_deref(), None)
-                            .map_ok(|page| {
-                                let page = page.into_inner();
-                                Some((futures::stream::iter(page.items).map(Ok), page.next_page))
-                            })
-                            .await
-                    }
-                })
-                .try_flatten();
+                let rest = futures::stream::try_unfold(
+                        page.next_page,
+                        move |state| async move {
+                            if state.is_none() {
+                                Ok(None)
+                            } else {
+                                self.system_image_list(limit, state.as_deref(), None)
+                                    .map_ok(|page| {
+                                        let page = page.into_inner();
+                                        Some((
+                                            futures::stream::iter(page.items).map(Ok),
+                                            page.next_page,
+                                        ))
+                                    })
+                                    .await
+                            }
+                        },
+                    )
+                    .try_flatten();
                 first.chain(rest)
             })
             .try_flatten_stream()
@@ -20288,20 +19934,22 @@ impl Client {
 
     ///Create a system-wide image
     ///
-    ///Create a new system-wide image. This image can then be used by any user
-    /// in any silo as a base for instances.
+    ///Create a new system-wide image. This image can then be used by any user in any silo as a base for instances.
     ///
     ///Sends a `POST` request to `/system/images`
+    ///
+    ///
     pub async fn system_image_create<'a>(
         &'a self,
         body: &'a types::GlobalImageCreate,
     ) -> Result<ResponseValue<types::GlobalImage>, Error<types::Error>> {
         let url = format!("{}/system/images", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -20322,12 +19970,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             201u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -20337,20 +19985,21 @@ impl Client {
     ///Returns the details of a specific system-wide image.
     ///
     ///Sends a `GET` request to `/system/images/{image_name}`
+    ///
+    ///
     pub async fn system_image_view<'a>(
         &'a self,
         image_name: &'a types::Name,
     ) -> Result<ResponseValue<types::GlobalImage>, Error<types::Error>> {
         let url = format!(
-            "{}/system/images/{}",
-            self.baseurl,
-            encode_path(&image_name.to_string()),
+            "{}/system/images/{}", self.baseurl, encode_path(& image_name.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -20370,37 +20019,36 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///Delete a system-wide image
     ///
-    ///Permanently delete a system-wide image. This operation cannot be undone.
-    /// Any instances using the system-wide image will continue to run, however
-    /// new instances can not be created with this image.
+    ///Permanently delete a system-wide image. This operation cannot be undone. Any instances using the system-wide image will continue to run, however new instances can not be created with this image.
     ///
     ///Sends a `DELETE` request to `/system/images/{image_name}`
+    ///
+    ///
     pub async fn system_image_delete<'a>(
         &'a self,
         image_name: &'a types::Name,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!(
-            "{}/system/images/{}",
-            self.baseurl,
-            encode_path(&image_name.to_string()),
+            "{}/system/images/{}", self.baseurl, encode_path(& image_name.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -20420,12 +20068,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             204u16 => Ok(ResponseValue::empty(response)),
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -20435,10 +20083,10 @@ impl Client {
     ///Sends a `GET` request to `/system/ip-pools`
     ///
     ///Arguments:
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `page_token`: Token returned by previous call to retrieve the
-    ///   subsequent page
-    /// - `sort_by`
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `page_token`: Token returned by previous call to retrieve the subsequent page
+    ///- `sort_by`
+    ///
     pub async fn ip_pool_list<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
@@ -20447,10 +20095,11 @@ impl Client {
     ) -> Result<ResponseValue<types::IpPoolResultsPage>, Error<types::Error>> {
         let url = format!("{}/system/ip-pools", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -20460,10 +20109,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
+            .query(&progenitor_client::QueryParam::new("page_token", &page_token))
             .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
             .headers(header_map)
             .build()?;
@@ -20476,29 +20122,31 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///List IP pools as a Stream
     ///
-    ///Sends repeated `GET` requests to `/system/ip-pools` until there are no
-    /// more results.
+    ///Sends repeated `GET` requests to `/system/ip-pools` until there are no more results.
     ///
     ///Arguments:
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `sort_by`
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `sort_by`
+    ///
     pub fn ip_pool_list_stream<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::NameOrIdSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::IpPool, Error<types::Error>>> + Unpin + 'a {
+    ) -> impl futures::Stream<
+        Item = Result<types::IpPool, Error<types::Error>>,
+    > + Unpin + 'a {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
@@ -20506,19 +20154,25 @@ impl Client {
             .map_ok(move |page| {
                 let page = page.into_inner();
                 let first = futures::stream::iter(page.items).map(Ok);
-                let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
-                    if state.is_none() {
-                        Ok(None)
-                    } else {
-                        self.ip_pool_list(limit, state.as_deref(), None)
-                            .map_ok(|page| {
-                                let page = page.into_inner();
-                                Some((futures::stream::iter(page.items).map(Ok), page.next_page))
-                            })
-                            .await
-                    }
-                })
-                .try_flatten();
+                let rest = futures::stream::try_unfold(
+                        page.next_page,
+                        move |state| async move {
+                            if state.is_none() {
+                                Ok(None)
+                            } else {
+                                self.ip_pool_list(limit, state.as_deref(), None)
+                                    .map_ok(|page| {
+                                        let page = page.into_inner();
+                                        Some((
+                                            futures::stream::iter(page.items).map(Ok),
+                                            page.next_page,
+                                        ))
+                                    })
+                                    .await
+                            }
+                        },
+                    )
+                    .try_flatten();
                 first.chain(rest)
             })
             .try_flatten_stream()
@@ -20528,16 +20182,19 @@ impl Client {
     ///Create an IP pool
     ///
     ///Sends a `POST` request to `/system/ip-pools`
+    ///
+    ///
     pub async fn ip_pool_create<'a>(
         &'a self,
         body: &'a types::IpPoolCreate,
     ) -> Result<ResponseValue<types::IpPool>, Error<types::Error>> {
         let url = format!("{}/system/ip-pools", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -20558,12 +20215,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             201u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -20571,20 +20228,21 @@ impl Client {
     ///Fetch an IP pool
     ///
     ///Sends a `GET` request to `/system/ip-pools/{pool_name}`
+    ///
+    ///
     pub async fn ip_pool_view<'a>(
         &'a self,
         pool_name: &'a types::Name,
     ) -> Result<ResponseValue<types::IpPool>, Error<types::Error>> {
         let url = format!(
-            "{}/system/ip-pools/{}",
-            self.baseurl,
-            encode_path(&pool_name.to_string()),
+            "{}/system/ip-pools/{}", self.baseurl, encode_path(& pool_name.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -20604,12 +20262,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -20617,21 +20275,22 @@ impl Client {
     ///Update an IP Pool
     ///
     ///Sends a `PUT` request to `/system/ip-pools/{pool_name}`
+    ///
+    ///
     pub async fn ip_pool_update<'a>(
         &'a self,
         pool_name: &'a types::Name,
         body: &'a types::IpPoolUpdate,
     ) -> Result<ResponseValue<types::IpPool>, Error<types::Error>> {
         let url = format!(
-            "{}/system/ip-pools/{}",
-            self.baseurl,
-            encode_path(&pool_name.to_string()),
+            "{}/system/ip-pools/{}", self.baseurl, encode_path(& pool_name.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -20652,12 +20311,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -20665,20 +20324,21 @@ impl Client {
     ///Delete an IP Pool
     ///
     ///Sends a `DELETE` request to `/system/ip-pools/{pool_name}`
+    ///
+    ///
     pub async fn ip_pool_delete<'a>(
         &'a self,
         pool_name: &'a types::Name,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!(
-            "{}/system/ip-pools/{}",
-            self.baseurl,
-            encode_path(&pool_name.to_string()),
+            "{}/system/ip-pools/{}", self.baseurl, encode_path(& pool_name.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -20698,12 +20358,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             204u16 => Ok(ResponseValue::empty(response)),
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -20715,10 +20375,10 @@ impl Client {
     ///Sends a `GET` request to `/system/ip-pools/{pool_name}/ranges`
     ///
     ///Arguments:
-    /// - `pool_name`
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `page_token`: Token returned by previous call to retrieve the
-    ///   subsequent page
+    ///- `pool_name`
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `page_token`: Token returned by previous call to retrieve the subsequent page
+    ///
     pub async fn ip_pool_range_list<'a>(
         &'a self,
         pool_name: &'a types::Name,
@@ -20726,15 +20386,15 @@ impl Client {
         page_token: Option<&'a str>,
     ) -> Result<ResponseValue<types::IpPoolRangeResultsPage>, Error<types::Error>> {
         let url = format!(
-            "{}/system/ip-pools/{}/ranges",
-            self.baseurl,
-            encode_path(&pool_name.to_string()),
+            "{}/system/ip-pools/{}/ranges", self.baseurl, encode_path(& pool_name
+            .to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -20744,10 +20404,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
+            .query(&progenitor_client::QueryParam::new("page_token", &page_token))
             .headers(header_map)
             .build()?;
         let info = OperationInfo {
@@ -20759,12 +20416,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -20773,18 +20430,19 @@ impl Client {
     ///
     ///Ranges are ordered by their first address.
     ///
-    ///Sends repeated `GET` requests to `/system/ip-pools/{pool_name}/ranges`
-    /// until there are no more results.
+    ///Sends repeated `GET` requests to `/system/ip-pools/{pool_name}/ranges` until there are no more results.
     ///
     ///Arguments:
-    /// - `pool_name`
-    /// - `limit`: Maximum number of items returned by a single call
+    ///- `pool_name`
+    ///- `limit`: Maximum number of items returned by a single call
+    ///
     pub fn ip_pool_range_list_stream<'a>(
         &'a self,
         pool_name: &'a types::Name,
         limit: Option<::std::num::NonZeroU32>,
-    ) -> impl futures::Stream<Item = Result<types::IpPoolRange, Error<types::Error>>> + Unpin + 'a
-    {
+    ) -> impl futures::Stream<
+        Item = Result<types::IpPoolRange, Error<types::Error>>,
+    > + Unpin + 'a {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
@@ -20792,19 +20450,25 @@ impl Client {
             .map_ok(move |page| {
                 let page = page.into_inner();
                 let first = futures::stream::iter(page.items).map(Ok);
-                let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
-                    if state.is_none() {
-                        Ok(None)
-                    } else {
-                        self.ip_pool_range_list(pool_name, limit, state.as_deref())
-                            .map_ok(|page| {
-                                let page = page.into_inner();
-                                Some((futures::stream::iter(page.items).map(Ok), page.next_page))
-                            })
-                            .await
-                    }
-                })
-                .try_flatten();
+                let rest = futures::stream::try_unfold(
+                        page.next_page,
+                        move |state| async move {
+                            if state.is_none() {
+                                Ok(None)
+                            } else {
+                                self.ip_pool_range_list(pool_name, limit, state.as_deref())
+                                    .map_ok(|page| {
+                                        let page = page.into_inner();
+                                        Some((
+                                            futures::stream::iter(page.items).map(Ok),
+                                            page.next_page,
+                                        ))
+                                    })
+                                    .await
+                            }
+                        },
+                    )
+                    .try_flatten();
                 first.chain(rest)
             })
             .try_flatten_stream()
@@ -20814,21 +20478,23 @@ impl Client {
     ///Add a range to an IP pool
     ///
     ///Sends a `POST` request to `/system/ip-pools/{pool_name}/ranges/add`
+    ///
+    ///
     pub async fn ip_pool_range_add<'a>(
         &'a self,
         pool_name: &'a types::Name,
         body: &'a types::IpRange,
     ) -> Result<ResponseValue<types::IpPoolRange>, Error<types::Error>> {
         let url = format!(
-            "{}/system/ip-pools/{}/ranges/add",
-            self.baseurl,
-            encode_path(&pool_name.to_string()),
+            "{}/system/ip-pools/{}/ranges/add", self.baseurl, encode_path(& pool_name
+            .to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -20849,12 +20515,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             201u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -20862,21 +20528,23 @@ impl Client {
     ///Remove a range from an IP pool
     ///
     ///Sends a `POST` request to `/system/ip-pools/{pool_name}/ranges/remove`
+    ///
+    ///
     pub async fn ip_pool_range_remove<'a>(
         &'a self,
         pool_name: &'a types::Name,
         body: &'a types::IpRange,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!(
-            "{}/system/ip-pools/{}/ranges/remove",
-            self.baseurl,
-            encode_path(&pool_name.to_string()),
+            "{}/system/ip-pools/{}/ranges/remove", self.baseurl, encode_path(& pool_name
+            .to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -20897,12 +20565,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             204u16 => Ok(ResponseValue::empty(response)),
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -20910,15 +20578,18 @@ impl Client {
     ///Fetch the IP pool used for Oxide services
     ///
     ///Sends a `GET` request to `/system/ip-pools-service`
+    ///
+    ///
     pub async fn ip_pool_service_view<'a>(
         &'a self,
     ) -> Result<ResponseValue<types::IpPool>, Error<types::Error>> {
         let url = format!("{}/system/ip-pools-service", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -20938,12 +20609,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -20955,9 +20626,9 @@ impl Client {
     ///Sends a `GET` request to `/system/ip-pools-service/ranges`
     ///
     ///Arguments:
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `page_token`: Token returned by previous call to retrieve the
-    ///   subsequent page
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `page_token`: Token returned by previous call to retrieve the subsequent page
+    ///
     pub async fn ip_pool_service_range_list<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
@@ -20965,10 +20636,11 @@ impl Client {
     ) -> Result<ResponseValue<types::IpPoolRangeResultsPage>, Error<types::Error>> {
         let url = format!("{}/system/ip-pools-service/ranges", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -20978,10 +20650,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
+            .query(&progenitor_client::QueryParam::new("page_token", &page_token))
             .headers(header_map)
             .build()?;
         let info = OperationInfo {
@@ -20993,12 +20662,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -21007,16 +20676,17 @@ impl Client {
     ///
     ///Ranges are ordered by their first address.
     ///
-    ///Sends repeated `GET` requests to `/system/ip-pools-service/ranges` until
-    /// there are no more results.
+    ///Sends repeated `GET` requests to `/system/ip-pools-service/ranges` until there are no more results.
     ///
     ///Arguments:
-    /// - `limit`: Maximum number of items returned by a single call
+    ///- `limit`: Maximum number of items returned by a single call
+    ///
     pub fn ip_pool_service_range_list_stream<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
-    ) -> impl futures::Stream<Item = Result<types::IpPoolRange, Error<types::Error>>> + Unpin + 'a
-    {
+    ) -> impl futures::Stream<
+        Item = Result<types::IpPoolRange, Error<types::Error>>,
+    > + Unpin + 'a {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
@@ -21024,19 +20694,25 @@ impl Client {
             .map_ok(move |page| {
                 let page = page.into_inner();
                 let first = futures::stream::iter(page.items).map(Ok);
-                let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
-                    if state.is_none() {
-                        Ok(None)
-                    } else {
-                        self.ip_pool_service_range_list(limit, state.as_deref())
-                            .map_ok(|page| {
-                                let page = page.into_inner();
-                                Some((futures::stream::iter(page.items).map(Ok), page.next_page))
-                            })
-                            .await
-                    }
-                })
-                .try_flatten();
+                let rest = futures::stream::try_unfold(
+                        page.next_page,
+                        move |state| async move {
+                            if state.is_none() {
+                                Ok(None)
+                            } else {
+                                self.ip_pool_service_range_list(limit, state.as_deref())
+                                    .map_ok(|page| {
+                                        let page = page.into_inner();
+                                        Some((
+                                            futures::stream::iter(page.items).map(Ok),
+                                            page.next_page,
+                                        ))
+                                    })
+                                    .await
+                            }
+                        },
+                    )
+                    .try_flatten();
                 first.chain(rest)
             })
             .try_flatten_stream()
@@ -21046,16 +20722,19 @@ impl Client {
     ///Add a range to an IP pool used for Oxide services
     ///
     ///Sends a `POST` request to `/system/ip-pools-service/ranges/add`
+    ///
+    ///
     pub async fn ip_pool_service_range_add<'a>(
         &'a self,
         body: &'a types::IpRange,
     ) -> Result<ResponseValue<types::IpPoolRange>, Error<types::Error>> {
         let url = format!("{}/system/ip-pools-service/ranges/add", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -21076,12 +20755,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             201u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -21089,16 +20768,19 @@ impl Client {
     ///Remove a range from an IP pool used for Oxide services
     ///
     ///Sends a `POST` request to `/system/ip-pools-service/ranges/remove`
+    ///
+    ///
     pub async fn ip_pool_service_range_remove<'a>(
         &'a self,
         body: &'a types::IpRange,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!("{}/system/ip-pools-service/ranges/remove", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -21119,12 +20801,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             204u16 => Ok(ResponseValue::empty(response)),
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -21134,13 +20816,13 @@ impl Client {
     ///Sends a `GET` request to `/system/metrics/{metric_name}`
     ///
     ///Arguments:
-    /// - `metric_name`
-    /// - `end_time`: An exclusive end time of metrics.
-    /// - `id`: The UUID of the container being queried
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `page_token`: Token returned by previous call to retrieve the
-    ///   subsequent page
-    /// - `start_time`: An inclusive start time of metrics.
+    ///- `metric_name`
+    ///- `end_time`: An exclusive end time of metrics.
+    ///- `id`: The UUID of the container being queried
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `page_token`: Token returned by previous call to retrieve the subsequent page
+    ///- `start_time`: An inclusive start time of metrics.
+    ///
     pub async fn system_metric<'a>(
         &'a self,
         metric_name: types::SystemMetricName,
@@ -21151,15 +20833,14 @@ impl Client {
         start_time: Option<&'a ::chrono::DateTime<::chrono::offset::Utc>>,
     ) -> Result<ResponseValue<types::MeasurementResultsPage>, Error<types::Error>> {
         let url = format!(
-            "{}/system/metrics/{}",
-            self.baseurl,
-            encode_path(&metric_name.to_string()),
+            "{}/system/metrics/{}", self.baseurl, encode_path(& metric_name.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -21171,14 +20852,8 @@ impl Client {
             .query(&progenitor_client::QueryParam::new("end_time", &end_time))
             .query(&progenitor_client::QueryParam::new("id", &id))
             .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
-            .query(&progenitor_client::QueryParam::new(
-                "start_time",
-                &start_time,
-            ))
+            .query(&progenitor_client::QueryParam::new("page_token", &page_token))
+            .query(&progenitor_client::QueryParam::new("start_time", &start_time))
             .headers(header_map)
             .build()?;
         let info = OperationInfo {
@@ -21190,12 +20865,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -21203,15 +20878,18 @@ impl Client {
     ///Fetch the top-level IAM policy
     ///
     ///Sends a `GET` request to `/system/policy`
+    ///
+    ///
     pub async fn system_policy_view<'a>(
         &'a self,
     ) -> Result<ResponseValue<types::FleetRolePolicy>, Error<types::Error>> {
         let url = format!("{}/system/policy", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -21231,12 +20909,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -21244,16 +20922,19 @@ impl Client {
     ///Update the top-level IAM policy
     ///
     ///Sends a `PUT` request to `/system/policy`
+    ///
+    ///
     pub async fn system_policy_update<'a>(
         &'a self,
         body: &'a types::FleetRolePolicy,
     ) -> Result<ResponseValue<types::FleetRolePolicy>, Error<types::Error>> {
         let url = format!("{}/system/policy", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -21274,12 +20955,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -21289,10 +20970,10 @@ impl Client {
     ///Sends a `GET` request to `/system/sagas`
     ///
     ///Arguments:
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `page_token`: Token returned by previous call to retrieve the
-    ///   subsequent page
-    /// - `sort_by`
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `page_token`: Token returned by previous call to retrieve the subsequent page
+    ///- `sort_by`
+    ///
     pub async fn saga_list<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
@@ -21301,10 +20982,11 @@ impl Client {
     ) -> Result<ResponseValue<types::SagaResultsPage>, Error<types::Error>> {
         let url = format!("{}/system/sagas", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -21314,10 +20996,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
+            .query(&progenitor_client::QueryParam::new("page_token", &page_token))
             .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
             .headers(header_map)
             .build()?;
@@ -21330,29 +21009,31 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///List sagas as a Stream
     ///
-    ///Sends repeated `GET` requests to `/system/sagas` until there are no more
-    /// results.
+    ///Sends repeated `GET` requests to `/system/sagas` until there are no more results.
     ///
     ///Arguments:
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `sort_by`
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `sort_by`
+    ///
     pub fn saga_list_stream<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::IdSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::Saga, Error<types::Error>>> + Unpin + 'a {
+    ) -> impl futures::Stream<
+        Item = Result<types::Saga, Error<types::Error>>,
+    > + Unpin + 'a {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
@@ -21360,19 +21041,25 @@ impl Client {
             .map_ok(move |page| {
                 let page = page.into_inner();
                 let first = futures::stream::iter(page.items).map(Ok);
-                let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
-                    if state.is_none() {
-                        Ok(None)
-                    } else {
-                        self.saga_list(limit, state.as_deref(), None)
-                            .map_ok(|page| {
-                                let page = page.into_inner();
-                                Some((futures::stream::iter(page.items).map(Ok), page.next_page))
-                            })
-                            .await
-                    }
-                })
-                .try_flatten();
+                let rest = futures::stream::try_unfold(
+                        page.next_page,
+                        move |state| async move {
+                            if state.is_none() {
+                                Ok(None)
+                            } else {
+                                self.saga_list(limit, state.as_deref(), None)
+                                    .map_ok(|page| {
+                                        let page = page.into_inner();
+                                        Some((
+                                            futures::stream::iter(page.items).map(Ok),
+                                            page.next_page,
+                                        ))
+                                    })
+                                    .await
+                            }
+                        },
+                    )
+                    .try_flatten();
                 first.chain(rest)
             })
             .try_flatten_stream()
@@ -21382,20 +21069,21 @@ impl Client {
     ///Fetch a saga
     ///
     ///Sends a `GET` request to `/system/sagas/{saga_id}`
+    ///
+    ///
     pub async fn saga_view<'a>(
         &'a self,
         saga_id: &'a ::uuid::Uuid,
     ) -> Result<ResponseValue<types::Saga>, Error<types::Error>> {
         let url = format!(
-            "{}/system/sagas/{}",
-            self.baseurl,
-            encode_path(&saga_id.to_string()),
+            "{}/system/sagas/{}", self.baseurl, encode_path(& saga_id.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -21415,12 +21103,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -21432,10 +21120,10 @@ impl Client {
     ///Sends a `GET` request to `/system/silos`
     ///
     ///Arguments:
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `page_token`: Token returned by previous call to retrieve the
-    ///   subsequent page
-    /// - `sort_by`
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `page_token`: Token returned by previous call to retrieve the subsequent page
+    ///- `sort_by`
+    ///
     pub async fn silo_list<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
@@ -21444,10 +21132,11 @@ impl Client {
     ) -> Result<ResponseValue<types::SiloResultsPage>, Error<types::Error>> {
         let url = format!("{}/system/silos", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -21457,10 +21146,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
+            .query(&progenitor_client::QueryParam::new("page_token", &page_token))
             .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
             .headers(header_map)
             .build()?;
@@ -21473,12 +21159,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -21487,17 +21173,19 @@ impl Client {
     ///
     ///Lists silos that are discoverable based on the current permissions.
     ///
-    ///Sends repeated `GET` requests to `/system/silos` until there are no more
-    /// results.
+    ///Sends repeated `GET` requests to `/system/silos` until there are no more results.
     ///
     ///Arguments:
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `sort_by`
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `sort_by`
+    ///
     pub fn silo_list_stream<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::NameOrIdSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::Silo, Error<types::Error>>> + Unpin + 'a {
+    ) -> impl futures::Stream<
+        Item = Result<types::Silo, Error<types::Error>>,
+    > + Unpin + 'a {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
@@ -21505,19 +21193,25 @@ impl Client {
             .map_ok(move |page| {
                 let page = page.into_inner();
                 let first = futures::stream::iter(page.items).map(Ok);
-                let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
-                    if state.is_none() {
-                        Ok(None)
-                    } else {
-                        self.silo_list(limit, state.as_deref(), None)
-                            .map_ok(|page| {
-                                let page = page.into_inner();
-                                Some((futures::stream::iter(page.items).map(Ok), page.next_page))
-                            })
-                            .await
-                    }
-                })
-                .try_flatten();
+                let rest = futures::stream::try_unfold(
+                        page.next_page,
+                        move |state| async move {
+                            if state.is_none() {
+                                Ok(None)
+                            } else {
+                                self.silo_list(limit, state.as_deref(), None)
+                                    .map_ok(|page| {
+                                        let page = page.into_inner();
+                                        Some((
+                                            futures::stream::iter(page.items).map(Ok),
+                                            page.next_page,
+                                        ))
+                                    })
+                                    .await
+                            }
+                        },
+                    )
+                    .try_flatten();
                 first.chain(rest)
             })
             .try_flatten_stream()
@@ -21527,16 +21221,19 @@ impl Client {
     ///Create a silo
     ///
     ///Sends a `POST` request to `/system/silos`
+    ///
+    ///
     pub async fn silo_create<'a>(
         &'a self,
         body: &'a types::SiloCreate,
     ) -> Result<ResponseValue<types::Silo>, Error<types::Error>> {
         let url = format!("{}/system/silos", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -21557,12 +21254,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             201u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -21574,21 +21271,21 @@ impl Client {
     ///Sends a `GET` request to `/system/silos/{silo_name}`
     ///
     ///Arguments:
-    /// - `silo_name`: The silo's unique name.
+    ///- `silo_name`: The silo's unique name.
+    ///
     pub async fn silo_view<'a>(
         &'a self,
         silo_name: &'a types::Name,
     ) -> Result<ResponseValue<types::Silo>, Error<types::Error>> {
         let url = format!(
-            "{}/system/silos/{}",
-            self.baseurl,
-            encode_path(&silo_name.to_string()),
+            "{}/system/silos/{}", self.baseurl, encode_path(& silo_name.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -21608,12 +21305,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -21625,21 +21322,21 @@ impl Client {
     ///Sends a `DELETE` request to `/system/silos/{silo_name}`
     ///
     ///Arguments:
-    /// - `silo_name`: The silo's unique name.
+    ///- `silo_name`: The silo's unique name.
+    ///
     pub async fn silo_delete<'a>(
         &'a self,
         silo_name: &'a types::Name,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!(
-            "{}/system/silos/{}",
-            self.baseurl,
-            encode_path(&silo_name.to_string()),
+            "{}/system/silos/{}", self.baseurl, encode_path(& silo_name.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -21659,12 +21356,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             204u16 => Ok(ResponseValue::empty(response)),
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -21674,11 +21371,11 @@ impl Client {
     ///Sends a `GET` request to `/system/silos/{silo_name}/identity-providers`
     ///
     ///Arguments:
-    /// - `silo_name`: The silo's unique name.
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `page_token`: Token returned by previous call to retrieve the
-    ///   subsequent page
-    /// - `sort_by`
+    ///- `silo_name`: The silo's unique name.
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `page_token`: Token returned by previous call to retrieve the subsequent page
+    ///- `sort_by`
+    ///
     pub async fn silo_identity_provider_list<'a>(
         &'a self,
         silo_name: &'a types::Name,
@@ -21687,15 +21384,15 @@ impl Client {
         sort_by: Option<types::NameSortMode>,
     ) -> Result<ResponseValue<types::IdentityProviderResultsPage>, Error<types::Error>> {
         let url = format!(
-            "{}/system/silos/{}/identity-providers",
-            self.baseurl,
-            encode_path(&silo_name.to_string()),
+            "{}/system/silos/{}/identity-providers", self.baseurl, encode_path(&
+            silo_name.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -21705,10 +21402,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
+            .query(&progenitor_client::QueryParam::new("page_token", &page_token))
             .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
             .headers(header_map)
             .build()?;
@@ -21721,33 +21415,33 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///List a silo's IDPs as a Stream
     ///
-    ///Sends repeated `GET` requests to
-    /// `/system/silos/{silo_name}/identity-providers` until there are no more
-    /// results.
+    ///Sends repeated `GET` requests to `/system/silos/{silo_name}/identity-providers` until there are no more results.
     ///
     ///Arguments:
-    /// - `silo_name`: The silo's unique name.
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `sort_by`
+    ///- `silo_name`: The silo's unique name.
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `sort_by`
+    ///
     pub fn silo_identity_provider_list_stream<'a>(
         &'a self,
         silo_name: &'a types::Name,
         limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::NameSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::IdentityProvider, Error<types::Error>>> + Unpin + 'a
-    {
+    ) -> impl futures::Stream<
+        Item = Result<types::IdentityProvider, Error<types::Error>>,
+    > + Unpin + 'a {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
@@ -21755,19 +21449,30 @@ impl Client {
             .map_ok(move |page| {
                 let page = page.into_inner();
                 let first = futures::stream::iter(page.items).map(Ok);
-                let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
-                    if state.is_none() {
-                        Ok(None)
-                    } else {
-                        self.silo_identity_provider_list(silo_name, limit, state.as_deref(), None)
-                            .map_ok(|page| {
-                                let page = page.into_inner();
-                                Some((futures::stream::iter(page.items).map(Ok), page.next_page))
-                            })
-                            .await
-                    }
-                })
-                .try_flatten();
+                let rest = futures::stream::try_unfold(
+                        page.next_page,
+                        move |state| async move {
+                            if state.is_none() {
+                                Ok(None)
+                            } else {
+                                self.silo_identity_provider_list(
+                                        silo_name,
+                                        limit,
+                                        state.as_deref(),
+                                        None,
+                                    )
+                                    .map_ok(|page| {
+                                        let page = page.into_inner();
+                                        Some((
+                                            futures::stream::iter(page.items).map(Ok),
+                                            page.next_page,
+                                        ))
+                                    })
+                                    .await
+                            }
+                        },
+                    )
+                    .try_flatten();
                 first.chain(rest)
             })
             .try_flatten_stream()
@@ -21776,31 +21481,29 @@ impl Client {
 
     ///Create a user
     ///
-    ///Users can only be created in Silos with `provision_type` == `Fixed`.
-    /// Otherwise, Silo users are just-in-time (JIT) provisioned when a user
-    /// first logs in using an external Identity Provider.
+    ///Users can only be created in Silos with `provision_type` == `Fixed`. Otherwise, Silo users are just-in-time (JIT) provisioned when a user first logs in using an external Identity Provider.
     ///
-    ///Sends a `POST` request to
-    /// `/system/silos/{silo_name}/identity-providers/local/users`
+    ///Sends a `POST` request to `/system/silos/{silo_name}/identity-providers/local/users`
     ///
     ///Arguments:
-    /// - `silo_name`: The silo's unique name.
-    /// - `body`
+    ///- `silo_name`: The silo's unique name.
+    ///- `body`
+    ///
     pub async fn local_idp_user_create<'a>(
         &'a self,
         silo_name: &'a types::Name,
         body: &'a types::UserCreate,
     ) -> Result<ResponseValue<types::User>, Error<types::Error>> {
         let url = format!(
-            "{}/system/silos/{}/identity-providers/local/users",
-            self.baseurl,
-            encode_path(&silo_name.to_string()),
+            "{}/system/silos/{}/identity-providers/local/users", self.baseurl,
+            encode_path(& silo_name.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -21821,40 +21524,39 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             201u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///Delete a user
     ///
-    ///Sends a `DELETE` request to
-    /// `/system/silos/{silo_name}/identity-providers/local/users/{user_id}`
+    ///Sends a `DELETE` request to `/system/silos/{silo_name}/identity-providers/local/users/{user_id}`
     ///
     ///Arguments:
-    /// - `silo_name`: The silo's unique name.
-    /// - `user_id`: The user's internal id
+    ///- `silo_name`: The silo's unique name.
+    ///- `user_id`: The user's internal id
+    ///
     pub async fn local_idp_user_delete<'a>(
         &'a self,
         silo_name: &'a types::Name,
         user_id: &'a ::uuid::Uuid,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!(
-            "{}/system/silos/{}/identity-providers/local/users/{}",
-            self.baseurl,
-            encode_path(&silo_name.to_string()),
-            encode_path(&user_id.to_string()),
+            "{}/system/silos/{}/identity-providers/local/users/{}", self.baseurl,
+            encode_path(& silo_name.to_string()), encode_path(& user_id.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -21874,29 +21576,27 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             204u16 => Ok(ResponseValue::empty(response)),
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///Set or invalidate a user's password
     ///
-    ///Passwords can only be updated for users in Silos with identity mode
-    /// `LocalOnly`.
+    ///Passwords can only be updated for users in Silos with identity mode `LocalOnly`.
     ///
-    ///Sends a `POST` request to
-    /// `/system/silos/{silo_name}/identity-providers/local/users/{user_id}/
-    /// set-password`
+    ///Sends a `POST` request to `/system/silos/{silo_name}/identity-providers/local/users/{user_id}/set-password`
     ///
     ///Arguments:
-    /// - `silo_name`: The silo's unique name.
-    /// - `user_id`: The user's internal id
-    /// - `body`
+    ///- `silo_name`: The silo's unique name.
+    ///- `user_id`: The user's internal id
+    ///- `body`
+    ///
     pub async fn local_idp_user_set_password<'a>(
         &'a self,
         silo_name: &'a types::Name,
@@ -21904,16 +21604,16 @@ impl Client {
         body: &'a types::UserPassword,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!(
-            "{}/system/silos/{}/identity-providers/local/users/{}/set-password",
-            self.baseurl,
-            encode_path(&silo_name.to_string()),
-            encode_path(&user_id.to_string()),
+            "{}/system/silos/{}/identity-providers/local/users/{}/set-password", self
+            .baseurl, encode_path(& silo_name.to_string()), encode_path(& user_id
+            .to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -21934,39 +21634,39 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             204u16 => Ok(ResponseValue::empty(response)),
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///Create a SAML IDP
     ///
-    ///Sends a `POST` request to
-    /// `/system/silos/{silo_name}/identity-providers/saml`
+    ///Sends a `POST` request to `/system/silos/{silo_name}/identity-providers/saml`
     ///
     ///Arguments:
-    /// - `silo_name`: The silo's unique name.
-    /// - `body`
+    ///- `silo_name`: The silo's unique name.
+    ///- `body`
+    ///
     pub async fn saml_identity_provider_create<'a>(
         &'a self,
         silo_name: &'a types::Name,
         body: &'a types::SamlIdentityProviderCreate,
     ) -> Result<ResponseValue<types::SamlIdentityProvider>, Error<types::Error>> {
         let url = format!(
-            "{}/system/silos/{}/identity-providers/saml",
-            self.baseurl,
-            encode_path(&silo_name.to_string()),
+            "{}/system/silos/{}/identity-providers/saml", self.baseurl, encode_path(&
+            silo_name.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -21987,40 +21687,39 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             201u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///Fetch a SAML IDP
     ///
-    ///Sends a `GET` request to
-    /// `/system/silos/{silo_name}/identity-providers/saml/{provider_name}`
+    ///Sends a `GET` request to `/system/silos/{silo_name}/identity-providers/saml/{provider_name}`
     ///
     ///Arguments:
-    /// - `silo_name`: The silo's unique name.
-    /// - `provider_name`: The SAML identity provider's name
+    ///- `silo_name`: The silo's unique name.
+    ///- `provider_name`: The SAML identity provider's name
+    ///
     pub async fn saml_identity_provider_view<'a>(
         &'a self,
         silo_name: &'a types::Name,
         provider_name: &'a types::Name,
     ) -> Result<ResponseValue<types::SamlIdentityProvider>, Error<types::Error>> {
         let url = format!(
-            "{}/system/silos/{}/identity-providers/saml/{}",
-            self.baseurl,
-            encode_path(&silo_name.to_string()),
-            encode_path(&provider_name.to_string()),
+            "{}/system/silos/{}/identity-providers/saml/{}", self.baseurl, encode_path(&
+            silo_name.to_string()), encode_path(& provider_name.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -22040,12 +21739,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -22055,21 +21754,22 @@ impl Client {
     ///Sends a `GET` request to `/system/silos/{silo_name}/policy`
     ///
     ///Arguments:
-    /// - `silo_name`: The silo's unique name.
+    ///- `silo_name`: The silo's unique name.
+    ///
     pub async fn silo_policy_view<'a>(
         &'a self,
         silo_name: &'a types::Name,
     ) -> Result<ResponseValue<types::SiloRolePolicy>, Error<types::Error>> {
         let url = format!(
-            "{}/system/silos/{}/policy",
-            self.baseurl,
-            encode_path(&silo_name.to_string()),
+            "{}/system/silos/{}/policy", self.baseurl, encode_path(& silo_name
+            .to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -22089,12 +21789,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -22104,23 +21804,24 @@ impl Client {
     ///Sends a `PUT` request to `/system/silos/{silo_name}/policy`
     ///
     ///Arguments:
-    /// - `silo_name`: The silo's unique name.
-    /// - `body`
+    ///- `silo_name`: The silo's unique name.
+    ///- `body`
+    ///
     pub async fn silo_policy_update<'a>(
         &'a self,
         silo_name: &'a types::Name,
         body: &'a types::SiloRolePolicy,
     ) -> Result<ResponseValue<types::SiloRolePolicy>, Error<types::Error>> {
         let url = format!(
-            "{}/system/silos/{}/policy",
-            self.baseurl,
-            encode_path(&silo_name.to_string()),
+            "{}/system/silos/{}/policy", self.baseurl, encode_path(& silo_name
+            .to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -22141,12 +21842,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -22156,11 +21857,11 @@ impl Client {
     ///Sends a `GET` request to `/system/silos/{silo_name}/users/all`
     ///
     ///Arguments:
-    /// - `silo_name`: The silo's unique name.
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `page_token`: Token returned by previous call to retrieve the
-    ///   subsequent page
-    /// - `sort_by`
+    ///- `silo_name`: The silo's unique name.
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `page_token`: Token returned by previous call to retrieve the subsequent page
+    ///- `sort_by`
+    ///
     pub async fn silo_users_list<'a>(
         &'a self,
         silo_name: &'a types::Name,
@@ -22169,15 +21870,15 @@ impl Client {
         sort_by: Option<types::IdSortMode>,
     ) -> Result<ResponseValue<types::UserResultsPage>, Error<types::Error>> {
         let url = format!(
-            "{}/system/silos/{}/users/all",
-            self.baseurl,
-            encode_path(&silo_name.to_string()),
+            "{}/system/silos/{}/users/all", self.baseurl, encode_path(& silo_name
+            .to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -22187,10 +21888,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
+            .query(&progenitor_client::QueryParam::new("page_token", &page_token))
             .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
             .headers(header_map)
             .build()?;
@@ -22203,31 +21901,33 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///List users in a silo as a Stream
     ///
-    ///Sends repeated `GET` requests to `/system/silos/{silo_name}/users/all`
-    /// until there are no more results.
+    ///Sends repeated `GET` requests to `/system/silos/{silo_name}/users/all` until there are no more results.
     ///
     ///Arguments:
-    /// - `silo_name`: The silo's unique name.
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `sort_by`
+    ///- `silo_name`: The silo's unique name.
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `sort_by`
+    ///
     pub fn silo_users_list_stream<'a>(
         &'a self,
         silo_name: &'a types::Name,
         limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::IdSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::User, Error<types::Error>>> + Unpin + 'a {
+    ) -> impl futures::Stream<
+        Item = Result<types::User, Error<types::Error>>,
+    > + Unpin + 'a {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
@@ -22235,19 +21935,30 @@ impl Client {
             .map_ok(move |page| {
                 let page = page.into_inner();
                 let first = futures::stream::iter(page.items).map(Ok);
-                let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
-                    if state.is_none() {
-                        Ok(None)
-                    } else {
-                        self.silo_users_list(silo_name, limit, state.as_deref(), None)
-                            .map_ok(|page| {
-                                let page = page.into_inner();
-                                Some((futures::stream::iter(page.items).map(Ok), page.next_page))
-                            })
-                            .await
-                    }
-                })
-                .try_flatten();
+                let rest = futures::stream::try_unfold(
+                        page.next_page,
+                        move |state| async move {
+                            if state.is_none() {
+                                Ok(None)
+                            } else {
+                                self.silo_users_list(
+                                        silo_name,
+                                        limit,
+                                        state.as_deref(),
+                                        None,
+                                    )
+                                    .map_ok(|page| {
+                                        let page = page.into_inner();
+                                        Some((
+                                            futures::stream::iter(page.items).map(Ok),
+                                            page.next_page,
+                                        ))
+                                    })
+                                    .await
+                            }
+                        },
+                    )
+                    .try_flatten();
                 first.chain(rest)
             })
             .try_flatten_stream()
@@ -22259,24 +21970,24 @@ impl Client {
     ///Sends a `GET` request to `/system/silos/{silo_name}/users/id/{user_id}`
     ///
     ///Arguments:
-    /// - `silo_name`: The silo's unique name.
-    /// - `user_id`: The user's internal id
+    ///- `silo_name`: The silo's unique name.
+    ///- `user_id`: The user's internal id
+    ///
     pub async fn silo_user_view<'a>(
         &'a self,
         silo_name: &'a types::Name,
         user_id: &'a ::uuid::Uuid,
     ) -> Result<ResponseValue<types::User>, Error<types::Error>> {
         let url = format!(
-            "{}/system/silos/{}/users/id/{}",
-            self.baseurl,
-            encode_path(&silo_name.to_string()),
-            encode_path(&user_id.to_string()),
+            "{}/system/silos/{}/users/id/{}", self.baseurl, encode_path(& silo_name
+            .to_string()), encode_path(& user_id.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -22296,12 +22007,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -22311,10 +22022,10 @@ impl Client {
     ///Sends a `GET` request to `/system/user`
     ///
     ///Arguments:
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `page_token`: Token returned by previous call to retrieve the
-    ///   subsequent page
-    /// - `sort_by`
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `page_token`: Token returned by previous call to retrieve the subsequent page
+    ///- `sort_by`
+    ///
     pub async fn system_user_list<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
@@ -22323,10 +22034,11 @@ impl Client {
     ) -> Result<ResponseValue<types::UserBuiltinResultsPage>, Error<types::Error>> {
         let url = format!("{}/system/user", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -22336,10 +22048,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
+            .query(&progenitor_client::QueryParam::new("page_token", &page_token))
             .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
             .headers(header_map)
             .build()?;
@@ -22352,30 +22061,31 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///List built-in users as a Stream
     ///
-    ///Sends repeated `GET` requests to `/system/user` until there are no more
-    /// results.
+    ///Sends repeated `GET` requests to `/system/user` until there are no more results.
     ///
     ///Arguments:
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `sort_by`
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `sort_by`
+    ///
     pub fn system_user_list_stream<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::NameSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::UserBuiltin, Error<types::Error>>> + Unpin + 'a
-    {
+    ) -> impl futures::Stream<
+        Item = Result<types::UserBuiltin, Error<types::Error>>,
+    > + Unpin + 'a {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
@@ -22383,19 +22093,25 @@ impl Client {
             .map_ok(move |page| {
                 let page = page.into_inner();
                 let first = futures::stream::iter(page.items).map(Ok);
-                let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
-                    if state.is_none() {
-                        Ok(None)
-                    } else {
-                        self.system_user_list(limit, state.as_deref(), None)
-                            .map_ok(|page| {
-                                let page = page.into_inner();
-                                Some((futures::stream::iter(page.items).map(Ok), page.next_page))
-                            })
-                            .await
-                    }
-                })
-                .try_flatten();
+                let rest = futures::stream::try_unfold(
+                        page.next_page,
+                        move |state| async move {
+                            if state.is_none() {
+                                Ok(None)
+                            } else {
+                                self.system_user_list(limit, state.as_deref(), None)
+                                    .map_ok(|page| {
+                                        let page = page.into_inner();
+                                        Some((
+                                            futures::stream::iter(page.items).map(Ok),
+                                            page.next_page,
+                                        ))
+                                    })
+                                    .await
+                            }
+                        },
+                    )
+                    .try_flatten();
                 first.chain(rest)
             })
             .try_flatten_stream()
@@ -22407,21 +22123,21 @@ impl Client {
     ///Sends a `GET` request to `/system/user/{user_name}`
     ///
     ///Arguments:
-    /// - `user_name`: The built-in user's unique name.
+    ///- `user_name`: The built-in user's unique name.
+    ///
     pub async fn system_user_view<'a>(
         &'a self,
         user_name: &'a types::Name,
     ) -> Result<ResponseValue<types::UserBuiltin>, Error<types::Error>> {
         let url = format!(
-            "{}/system/user/{}",
-            self.baseurl,
-            encode_path(&user_name.to_string()),
+            "{}/system/user/{}", self.baseurl, encode_path(& user_name.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -22441,12 +22157,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -22456,9 +22172,9 @@ impl Client {
     ///Sends a `GET` request to `/timeseries/schema`
     ///
     ///Arguments:
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `page_token`: Token returned by previous call to retrieve the
-    ///   subsequent page
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `page_token`: Token returned by previous call to retrieve the subsequent page
+    ///
     pub async fn timeseries_schema_get<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
@@ -22466,10 +22182,11 @@ impl Client {
     ) -> Result<ResponseValue<types::TimeseriesSchemaResultsPage>, Error<types::Error>> {
         let url = format!("{}/timeseries/schema", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -22479,10 +22196,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
+            .query(&progenitor_client::QueryParam::new("page_token", &page_token))
             .headers(header_map)
             .build()?;
         let info = OperationInfo {
@@ -22494,28 +22208,29 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///List timeseries schema as a Stream
     ///
-    ///Sends repeated `GET` requests to `/timeseries/schema` until there are no
-    /// more results.
+    ///Sends repeated `GET` requests to `/timeseries/schema` until there are no more results.
     ///
     ///Arguments:
-    /// - `limit`: Maximum number of items returned by a single call
+    ///- `limit`: Maximum number of items returned by a single call
+    ///
     pub fn timeseries_schema_get_stream<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
-    ) -> impl futures::Stream<Item = Result<types::TimeseriesSchema, Error<types::Error>>> + Unpin + 'a
-    {
+    ) -> impl futures::Stream<
+        Item = Result<types::TimeseriesSchema, Error<types::Error>>,
+    > + Unpin + 'a {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
@@ -22523,19 +22238,25 @@ impl Client {
             .map_ok(move |page| {
                 let page = page.into_inner();
                 let first = futures::stream::iter(page.items).map(Ok);
-                let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
-                    if state.is_none() {
-                        Ok(None)
-                    } else {
-                        self.timeseries_schema_get(limit, state.as_deref())
-                            .map_ok(|page| {
-                                let page = page.into_inner();
-                                Some((futures::stream::iter(page.items).map(Ok), page.next_page))
-                            })
-                            .await
-                    }
-                })
-                .try_flatten();
+                let rest = futures::stream::try_unfold(
+                        page.next_page,
+                        move |state| async move {
+                            if state.is_none() {
+                                Ok(None)
+                            } else {
+                                self.timeseries_schema_get(limit, state.as_deref())
+                                    .map_ok(|page| {
+                                        let page = page.into_inner();
+                                        Some((
+                                            futures::stream::iter(page.items).map(Ok),
+                                            page.next_page,
+                                        ))
+                                    })
+                                    .await
+                            }
+                        },
+                    )
+                    .try_flatten();
                 first.chain(rest)
             })
             .try_flatten_stream()
@@ -22547,10 +22268,10 @@ impl Client {
     ///Sends a `GET` request to `/users`
     ///
     ///Arguments:
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `page_token`: Token returned by previous call to retrieve the
-    ///   subsequent page
-    /// - `sort_by`
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `page_token`: Token returned by previous call to retrieve the subsequent page
+    ///- `sort_by`
+    ///
     pub async fn user_list<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
@@ -22559,10 +22280,11 @@ impl Client {
     ) -> Result<ResponseValue<types::UserResultsPage>, Error<types::Error>> {
         let url = format!("{}/users", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -22572,10 +22294,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
+            .query(&progenitor_client::QueryParam::new("page_token", &page_token))
             .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
             .headers(header_map)
             .build()?;
@@ -22588,29 +22307,31 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///List users as a Stream
     ///
-    ///Sends repeated `GET` requests to `/users` until there are no more
-    /// results.
+    ///Sends repeated `GET` requests to `/users` until there are no more results.
     ///
     ///Arguments:
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `sort_by`
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `sort_by`
+    ///
     pub fn user_list_stream<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::IdSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::User, Error<types::Error>>> + Unpin + 'a {
+    ) -> impl futures::Stream<
+        Item = Result<types::User, Error<types::Error>>,
+    > + Unpin + 'a {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
@@ -22618,19 +22339,25 @@ impl Client {
             .map_ok(move |page| {
                 let page = page.into_inner();
                 let first = futures::stream::iter(page.items).map(Ok);
-                let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
-                    if state.is_none() {
-                        Ok(None)
-                    } else {
-                        self.user_list(limit, state.as_deref(), None)
-                            .map_ok(|page| {
-                                let page = page.into_inner();
-                                Some((futures::stream::iter(page.items).map(Ok), page.next_page))
-                            })
-                            .await
-                    }
-                })
-                .try_flatten();
+                let rest = futures::stream::try_unfold(
+                        page.next_page,
+                        move |state| async move {
+                            if state.is_none() {
+                                Ok(None)
+                            } else {
+                                self.user_list(limit, state.as_deref(), None)
+                                    .map_ok(|page| {
+                                        let page = page.into_inner();
+                                        Some((
+                                            futures::stream::iter(page.items).map(Ok),
+                                            page.next_page,
+                                        ))
+                                    })
+                                    .await
+                            }
+                        },
+                    )
+                    .try_flatten();
                 first.chain(rest)
             })
             .try_flatten_stream()
@@ -22642,12 +22369,12 @@ impl Client {
     ///Sends a `GET` request to `/v1/disks`
     ///
     ///Arguments:
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `organization`
-    /// - `page_token`: Token returned by previous call to retrieve the
-    ///   subsequent page
-    /// - `project`
-    /// - `sort_by`
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `organization`
+    ///- `page_token`: Token returned by previous call to retrieve the subsequent page
+    ///- `project`
+    ///- `sort_by`
+    ///
     pub async fn disk_list_v1<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
@@ -22658,10 +22385,11 @@ impl Client {
     ) -> Result<ResponseValue<types::DiskResultsPage>, Error<types::Error>> {
         let url = format!("{}/v1/disks", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -22671,14 +22399,8 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "organization",
-                &organization,
-            ))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
+            .query(&progenitor_client::QueryParam::new("organization", &organization))
+            .query(&progenitor_client::QueryParam::new("page_token", &page_token))
             .query(&progenitor_client::QueryParam::new("project", &project))
             .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
             .headers(header_map)
@@ -22692,33 +22414,35 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///List disks as a Stream
     ///
-    ///Sends repeated `GET` requests to `/v1/disks` until there are no more
-    /// results.
+    ///Sends repeated `GET` requests to `/v1/disks` until there are no more results.
     ///
     ///Arguments:
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `organization`
-    /// - `project`
-    /// - `sort_by`
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `organization`
+    ///- `project`
+    ///- `sort_by`
+    ///
     pub fn disk_list_v1_stream<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
         organization: Option<&'a types::NameOrId>,
         project: Option<&'a types::NameOrId>,
         sort_by: Option<types::NameOrIdSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::Disk, Error<types::Error>>> + Unpin + 'a {
+    ) -> impl futures::Stream<
+        Item = Result<types::Disk, Error<types::Error>>,
+    > + Unpin + 'a {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
@@ -22726,19 +22450,25 @@ impl Client {
             .map_ok(move |page| {
                 let page = page.into_inner();
                 let first = futures::stream::iter(page.items).map(Ok);
-                let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
-                    if state.is_none() {
-                        Ok(None)
-                    } else {
-                        self.disk_list_v1(limit, None, state.as_deref(), None, None)
-                            .map_ok(|page| {
-                                let page = page.into_inner();
-                                Some((futures::stream::iter(page.items).map(Ok), page.next_page))
-                            })
-                            .await
-                    }
-                })
-                .try_flatten();
+                let rest = futures::stream::try_unfold(
+                        page.next_page,
+                        move |state| async move {
+                            if state.is_none() {
+                                Ok(None)
+                            } else {
+                                self.disk_list_v1(limit, None, state.as_deref(), None, None)
+                                    .map_ok(|page| {
+                                        let page = page.into_inner();
+                                        Some((
+                                            futures::stream::iter(page.items).map(Ok),
+                                            page.next_page,
+                                        ))
+                                    })
+                                    .await
+                            }
+                        },
+                    )
+                    .try_flatten();
                 first.chain(rest)
             })
             .try_flatten_stream()
@@ -22748,6 +22478,8 @@ impl Client {
     ///Create a disk
     ///
     ///Sends a `POST` request to `/v1/disks`
+    ///
+    ///
     pub async fn disk_create_v1<'a>(
         &'a self,
         organization: Option<&'a types::NameOrId>,
@@ -22756,10 +22488,11 @@ impl Client {
     ) -> Result<ResponseValue<types::Disk>, Error<types::Error>> {
         let url = format!("{}/v1/disks", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -22769,10 +22502,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
-            .query(&progenitor_client::QueryParam::new(
-                "organization",
-                &organization,
-            ))
+            .query(&progenitor_client::QueryParam::new("organization", &organization))
             .query(&progenitor_client::QueryParam::new("project", &project))
             .headers(header_map)
             .build()?;
@@ -22785,12 +22515,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             201u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -22798,6 +22528,8 @@ impl Client {
     ///Fetch a disk
     ///
     ///Sends a `GET` request to `/v1/disks/{disk}`
+    ///
+    ///
     pub async fn disk_view_v1<'a>(
         &'a self,
         disk: &'a types::NameOrId,
@@ -22805,15 +22537,14 @@ impl Client {
         project: Option<&'a types::NameOrId>,
     ) -> Result<ResponseValue<types::Disk>, Error<types::Error>> {
         let url = format!(
-            "{}/v1/disks/{}",
-            self.baseurl,
-            encode_path(&disk.to_string()),
+            "{}/v1/disks/{}", self.baseurl, encode_path(& disk.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -22822,10 +22553,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
-            .query(&progenitor_client::QueryParam::new(
-                "organization",
-                &organization,
-            ))
+            .query(&progenitor_client::QueryParam::new("organization", &organization))
             .query(&progenitor_client::QueryParam::new("project", &project))
             .headers(header_map)
             .build()?;
@@ -22838,12 +22566,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -22851,6 +22579,8 @@ impl Client {
     ///Delete a disk
     ///
     ///Sends a `DELETE` request to `/v1/disks/{disk}`
+    ///
+    ///
     pub async fn disk_delete_v1<'a>(
         &'a self,
         disk: &'a types::NameOrId,
@@ -22858,15 +22588,14 @@ impl Client {
         project: Option<&'a types::NameOrId>,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!(
-            "{}/v1/disks/{}",
-            self.baseurl,
-            encode_path(&disk.to_string()),
+            "{}/v1/disks/{}", self.baseurl, encode_path(& disk.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -22875,10 +22604,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
-            .query(&progenitor_client::QueryParam::new(
-                "organization",
-                &organization,
-            ))
+            .query(&progenitor_client::QueryParam::new("organization", &organization))
             .query(&progenitor_client::QueryParam::new("project", &project))
             .headers(header_map)
             .build()?;
@@ -22891,12 +22617,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             204u16 => Ok(ResponseValue::empty(response)),
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -22906,12 +22632,12 @@ impl Client {
     ///Sends a `GET` request to `/v1/instances`
     ///
     ///Arguments:
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `organization`
-    /// - `page_token`: Token returned by previous call to retrieve the
-    ///   subsequent page
-    /// - `project`
-    /// - `sort_by`
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `organization`
+    ///- `page_token`: Token returned by previous call to retrieve the subsequent page
+    ///- `project`
+    ///- `sort_by`
+    ///
     pub async fn instance_list_v1<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
@@ -22922,10 +22648,11 @@ impl Client {
     ) -> Result<ResponseValue<types::InstanceResultsPage>, Error<types::Error>> {
         let url = format!("{}/v1/instances", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -22935,14 +22662,8 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "organization",
-                &organization,
-            ))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
+            .query(&progenitor_client::QueryParam::new("organization", &organization))
+            .query(&progenitor_client::QueryParam::new("page_token", &page_token))
             .query(&progenitor_client::QueryParam::new("project", &project))
             .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
             .headers(header_map)
@@ -22956,34 +22677,35 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///List instances as a Stream
     ///
-    ///Sends repeated `GET` requests to `/v1/instances` until there are no more
-    /// results.
+    ///Sends repeated `GET` requests to `/v1/instances` until there are no more results.
     ///
     ///Arguments:
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `organization`
-    /// - `project`
-    /// - `sort_by`
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `organization`
+    ///- `project`
+    ///- `sort_by`
+    ///
     pub fn instance_list_v1_stream<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
         organization: Option<&'a types::NameOrId>,
         project: Option<&'a types::NameOrId>,
         sort_by: Option<types::NameOrIdSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::Instance, Error<types::Error>>> + Unpin + 'a
-    {
+    ) -> impl futures::Stream<
+        Item = Result<types::Instance, Error<types::Error>>,
+    > + Unpin + 'a {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
@@ -22991,19 +22713,31 @@ impl Client {
             .map_ok(move |page| {
                 let page = page.into_inner();
                 let first = futures::stream::iter(page.items).map(Ok);
-                let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
-                    if state.is_none() {
-                        Ok(None)
-                    } else {
-                        self.instance_list_v1(limit, None, state.as_deref(), None, None)
-                            .map_ok(|page| {
-                                let page = page.into_inner();
-                                Some((futures::stream::iter(page.items).map(Ok), page.next_page))
-                            })
-                            .await
-                    }
-                })
-                .try_flatten();
+                let rest = futures::stream::try_unfold(
+                        page.next_page,
+                        move |state| async move {
+                            if state.is_none() {
+                                Ok(None)
+                            } else {
+                                self.instance_list_v1(
+                                        limit,
+                                        None,
+                                        state.as_deref(),
+                                        None,
+                                        None,
+                                    )
+                                    .map_ok(|page| {
+                                        let page = page.into_inner();
+                                        Some((
+                                            futures::stream::iter(page.items).map(Ok),
+                                            page.next_page,
+                                        ))
+                                    })
+                                    .await
+                            }
+                        },
+                    )
+                    .try_flatten();
                 first.chain(rest)
             })
             .try_flatten_stream()
@@ -23013,6 +22747,8 @@ impl Client {
     ///Create an instance
     ///
     ///Sends a `POST` request to `/v1/instances`
+    ///
+    ///
     pub async fn instance_create_v1<'a>(
         &'a self,
         organization: Option<&'a types::NameOrId>,
@@ -23021,10 +22757,11 @@ impl Client {
     ) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
         let url = format!("{}/v1/instances", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -23034,10 +22771,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
-            .query(&progenitor_client::QueryParam::new(
-                "organization",
-                &organization,
-            ))
+            .query(&progenitor_client::QueryParam::new("organization", &organization))
             .query(&progenitor_client::QueryParam::new("project", &project))
             .headers(header_map)
             .build()?;
@@ -23050,12 +22784,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             201u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -23063,6 +22797,8 @@ impl Client {
     ///Fetch an instance
     ///
     ///Sends a `GET` request to `/v1/instances/{instance}`
+    ///
+    ///
     pub async fn instance_view_v1<'a>(
         &'a self,
         instance: &'a types::NameOrId,
@@ -23070,15 +22806,14 @@ impl Client {
         project: Option<&'a types::NameOrId>,
     ) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
         let url = format!(
-            "{}/v1/instances/{}",
-            self.baseurl,
-            encode_path(&instance.to_string()),
+            "{}/v1/instances/{}", self.baseurl, encode_path(& instance.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -23087,10 +22822,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
-            .query(&progenitor_client::QueryParam::new(
-                "organization",
-                &organization,
-            ))
+            .query(&progenitor_client::QueryParam::new("organization", &organization))
             .query(&progenitor_client::QueryParam::new("project", &project))
             .headers(header_map)
             .build()?;
@@ -23103,12 +22835,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -23116,6 +22848,8 @@ impl Client {
     ///Delete an instance
     ///
     ///Sends a `DELETE` request to `/v1/instances/{instance}`
+    ///
+    ///
     pub async fn instance_delete_v1<'a>(
         &'a self,
         instance: &'a types::NameOrId,
@@ -23123,15 +22857,14 @@ impl Client {
         project: Option<&'a types::NameOrId>,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!(
-            "{}/v1/instances/{}",
-            self.baseurl,
-            encode_path(&instance.to_string()),
+            "{}/v1/instances/{}", self.baseurl, encode_path(& instance.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -23140,10 +22873,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
-            .query(&progenitor_client::QueryParam::new(
-                "organization",
-                &organization,
-            ))
+            .query(&progenitor_client::QueryParam::new("organization", &organization))
             .query(&progenitor_client::QueryParam::new("project", &project))
             .headers(header_map)
             .build()?;
@@ -23156,12 +22886,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             204u16 => Ok(ResponseValue::empty(response)),
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -23171,13 +22901,13 @@ impl Client {
     ///Sends a `GET` request to `/v1/instances/{instance}/disks`
     ///
     ///Arguments:
-    /// - `instance`
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `organization`
-    /// - `page_token`: Token returned by previous call to retrieve the
-    ///   subsequent page
-    /// - `project`
-    /// - `sort_by`
+    ///- `instance`
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `organization`
+    ///- `page_token`: Token returned by previous call to retrieve the subsequent page
+    ///- `project`
+    ///- `sort_by`
+    ///
     pub async fn instance_disk_list_v1<'a>(
         &'a self,
         instance: &'a types::NameOrId,
@@ -23188,15 +22918,15 @@ impl Client {
         sort_by: Option<types::NameOrIdSortMode>,
     ) -> Result<ResponseValue<types::DiskResultsPage>, Error<types::Error>> {
         let url = format!(
-            "{}/v1/instances/{}/disks",
-            self.baseurl,
-            encode_path(&instance.to_string()),
+            "{}/v1/instances/{}/disks", self.baseurl, encode_path(& instance
+            .to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -23206,14 +22936,8 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "organization",
-                &organization,
-            ))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
+            .query(&progenitor_client::QueryParam::new("organization", &organization))
+            .query(&progenitor_client::QueryParam::new("page_token", &page_token))
             .query(&progenitor_client::QueryParam::new("project", &project))
             .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
             .headers(header_map)
@@ -23227,27 +22951,27 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///List an instance's disks as a Stream
     ///
-    ///Sends repeated `GET` requests to `/v1/instances/{instance}/disks` until
-    /// there are no more results.
+    ///Sends repeated `GET` requests to `/v1/instances/{instance}/disks` until there are no more results.
     ///
     ///Arguments:
-    /// - `instance`
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `organization`
-    /// - `project`
-    /// - `sort_by`
+    ///- `instance`
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `organization`
+    ///- `project`
+    ///- `sort_by`
+    ///
     pub fn instance_disk_list_v1_stream<'a>(
         &'a self,
         instance: &'a types::NameOrId,
@@ -23255,7 +22979,9 @@ impl Client {
         organization: Option<&'a types::NameOrId>,
         project: Option<&'a types::NameOrId>,
         sort_by: Option<types::NameOrIdSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::Disk, Error<types::Error>>> + Unpin + 'a {
+    ) -> impl futures::Stream<
+        Item = Result<types::Disk, Error<types::Error>>,
+    > + Unpin + 'a {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
@@ -23263,26 +22989,32 @@ impl Client {
             .map_ok(move |page| {
                 let page = page.into_inner();
                 let first = futures::stream::iter(page.items).map(Ok);
-                let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
-                    if state.is_none() {
-                        Ok(None)
-                    } else {
-                        self.instance_disk_list_v1(
-                            instance,
-                            limit,
-                            None,
-                            state.as_deref(),
-                            None,
-                            None,
-                        )
-                        .map_ok(|page| {
-                            let page = page.into_inner();
-                            Some((futures::stream::iter(page.items).map(Ok), page.next_page))
-                        })
-                        .await
-                    }
-                })
-                .try_flatten();
+                let rest = futures::stream::try_unfold(
+                        page.next_page,
+                        move |state| async move {
+                            if state.is_none() {
+                                Ok(None)
+                            } else {
+                                self.instance_disk_list_v1(
+                                        instance,
+                                        limit,
+                                        None,
+                                        state.as_deref(),
+                                        None,
+                                        None,
+                                    )
+                                    .map_ok(|page| {
+                                        let page = page.into_inner();
+                                        Some((
+                                            futures::stream::iter(page.items).map(Ok),
+                                            page.next_page,
+                                        ))
+                                    })
+                                    .await
+                            }
+                        },
+                    )
+                    .try_flatten();
                 first.chain(rest)
             })
             .try_flatten_stream()
@@ -23292,6 +23024,8 @@ impl Client {
     ///Attach a disk to an instance
     ///
     ///Sends a `POST` request to `/v1/instances/{instance}/disks/attach`
+    ///
+    ///
     pub async fn instance_disk_attach_v1<'a>(
         &'a self,
         instance: &'a types::NameOrId,
@@ -23300,15 +23034,15 @@ impl Client {
         body: &'a types::DiskPath,
     ) -> Result<ResponseValue<types::Disk>, Error<types::Error>> {
         let url = format!(
-            "{}/v1/instances/{}/disks/attach",
-            self.baseurl,
-            encode_path(&instance.to_string()),
+            "{}/v1/instances/{}/disks/attach", self.baseurl, encode_path(& instance
+            .to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -23318,10 +23052,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
-            .query(&progenitor_client::QueryParam::new(
-                "organization",
-                &organization,
-            ))
+            .query(&progenitor_client::QueryParam::new("organization", &organization))
             .query(&progenitor_client::QueryParam::new("project", &project))
             .headers(header_map)
             .build()?;
@@ -23334,12 +23065,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             202u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -23347,6 +23078,8 @@ impl Client {
     ///Detach a disk from an instance
     ///
     ///Sends a `POST` request to `/v1/instances/{instance}/disks/detach`
+    ///
+    ///
     pub async fn instance_disk_detach_v1<'a>(
         &'a self,
         instance: &'a types::NameOrId,
@@ -23355,15 +23088,15 @@ impl Client {
         body: &'a types::DiskPath,
     ) -> Result<ResponseValue<types::Disk>, Error<types::Error>> {
         let url = format!(
-            "{}/v1/instances/{}/disks/detach",
-            self.baseurl,
-            encode_path(&instance.to_string()),
+            "{}/v1/instances/{}/disks/detach", self.baseurl, encode_path(& instance
+            .to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -23373,10 +23106,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
-            .query(&progenitor_client::QueryParam::new(
-                "organization",
-                &organization,
-            ))
+            .query(&progenitor_client::QueryParam::new("organization", &organization))
             .query(&progenitor_client::QueryParam::new("project", &project))
             .headers(header_map)
             .build()?;
@@ -23389,12 +23119,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             202u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -23402,6 +23132,8 @@ impl Client {
     ///Migrate an instance
     ///
     ///Sends a `POST` request to `/v1/instances/{instance}/migrate`
+    ///
+    ///
     pub async fn instance_migrate_v1<'a>(
         &'a self,
         instance: &'a types::NameOrId,
@@ -23410,15 +23142,15 @@ impl Client {
         body: &'a types::InstanceMigrate,
     ) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
         let url = format!(
-            "{}/v1/instances/{}/migrate",
-            self.baseurl,
-            encode_path(&instance.to_string()),
+            "{}/v1/instances/{}/migrate", self.baseurl, encode_path(& instance
+            .to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -23428,10 +23160,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
-            .query(&progenitor_client::QueryParam::new(
-                "organization",
-                &organization,
-            ))
+            .query(&progenitor_client::QueryParam::new("organization", &organization))
             .query(&progenitor_client::QueryParam::new("project", &project))
             .headers(header_map)
             .build()?;
@@ -23444,12 +23173,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -23457,6 +23186,8 @@ impl Client {
     ///Reboot an instance
     ///
     ///Sends a `POST` request to `/v1/instances/{instance}/reboot`
+    ///
+    ///
     pub async fn instance_reboot_v1<'a>(
         &'a self,
         instance: &'a types::NameOrId,
@@ -23464,15 +23195,15 @@ impl Client {
         project: Option<&'a types::NameOrId>,
     ) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
         let url = format!(
-            "{}/v1/instances/{}/reboot",
-            self.baseurl,
-            encode_path(&instance.to_string()),
+            "{}/v1/instances/{}/reboot", self.baseurl, encode_path(& instance
+            .to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -23481,10 +23212,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
-            .query(&progenitor_client::QueryParam::new(
-                "organization",
-                &organization,
-            ))
+            .query(&progenitor_client::QueryParam::new("organization", &organization))
             .query(&progenitor_client::QueryParam::new("project", &project))
             .headers(header_map)
             .build()?;
@@ -23497,12 +23225,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             202u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -23512,20 +23240,13 @@ impl Client {
     ///Sends a `GET` request to `/v1/instances/{instance}/serial-console`
     ///
     ///Arguments:
-    /// - `instance`
-    /// - `from_start`: Character index in the serial buffer from which to read,
-    ///   counting the bytes output since instance start. If this is not
-    ///   provided, `most_recent` must be provided, and if this *is* provided,
-    ///   `most_recent` must *not* be provided.
-    /// - `max_bytes`: Maximum number of bytes of buffered serial console
-    ///   contents to return. If the requested range runs to the end of the
-    ///   available buffer, the data returned will be shorter than `max_bytes`.
-    /// - `most_recent`: Character index in the serial buffer from which to
-    ///   read, counting *backward* from the most recently buffered data
-    ///   retrieved from the instance. (See note on `from_start` about mutual
-    ///   exclusivity)
-    /// - `organization`
-    /// - `project`
+    ///- `instance`
+    ///- `from_start`: Character index in the serial buffer from which to read, counting the bytes output since instance start. If this is not provided, `most_recent` must be provided, and if this *is* provided, `most_recent` must *not* be provided.
+    ///- `max_bytes`: Maximum number of bytes of buffered serial console contents to return. If the requested range runs to the end of the available buffer, the data returned will be shorter than `max_bytes`.
+    ///- `most_recent`: Character index in the serial buffer from which to read, counting *backward* from the most recently buffered data retrieved from the instance. (See note on `from_start` about mutual exclusivity)
+    ///- `organization`
+    ///- `project`
+    ///
     pub async fn instance_serial_console_v1<'a>(
         &'a self,
         instance: &'a types::NameOrId,
@@ -23536,15 +23257,15 @@ impl Client {
         project: Option<&'a types::NameOrId>,
     ) -> Result<ResponseValue<types::InstanceSerialConsoleData>, Error<types::Error>> {
         let url = format!(
-            "{}/v1/instances/{}/serial-console",
-            self.baseurl,
-            encode_path(&instance.to_string()),
+            "{}/v1/instances/{}/serial-console", self.baseurl, encode_path(& instance
+            .to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -23553,19 +23274,10 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
-            .query(&progenitor_client::QueryParam::new(
-                "from_start",
-                &from_start,
-            ))
+            .query(&progenitor_client::QueryParam::new("from_start", &from_start))
             .query(&progenitor_client::QueryParam::new("max_bytes", &max_bytes))
-            .query(&progenitor_client::QueryParam::new(
-                "most_recent",
-                &most_recent,
-            ))
-            .query(&progenitor_client::QueryParam::new(
-                "organization",
-                &organization,
-            ))
+            .query(&progenitor_client::QueryParam::new("most_recent", &most_recent))
+            .query(&progenitor_client::QueryParam::new("organization", &organization))
             .query(&progenitor_client::QueryParam::new("project", &project))
             .headers(header_map)
             .build()?;
@@ -23578,20 +23290,21 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///Stream an instance's serial console
     ///
-    ///Sends a `GET` request to
-    /// `/v1/instances/{instance}/serial-console/stream`
+    ///Sends a `GET` request to `/v1/instances/{instance}/serial-console/stream`
+    ///
+    ///
     pub async fn instance_serial_console_stream_v1<'a>(
         &'a self,
         instance: &'a types::NameOrId,
@@ -23599,23 +23312,20 @@ impl Client {
         project: Option<&'a types::NameOrId>,
     ) -> Result<ResponseValue<reqwest::Upgraded>, Error<types::Error>> {
         let url = format!(
-            "{}/v1/instances/{}/serial-console/stream",
-            self.baseurl,
-            encode_path(&instance.to_string()),
+            "{}/v1/instances/{}/serial-console/stream", self.baseurl, encode_path(&
+            instance.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
             .get(url)
-            .query(&progenitor_client::QueryParam::new(
-                "organization",
-                &organization,
-            ))
+            .query(&progenitor_client::QueryParam::new("organization", &organization))
             .query(&progenitor_client::QueryParam::new("project", &project))
             .headers(header_map)
             .header(::reqwest::header::CONNECTION, "Upgrade")
@@ -23638,12 +23348,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             101u16 => ResponseValue::upgrade(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -23651,6 +23361,8 @@ impl Client {
     ///Boot an instance
     ///
     ///Sends a `POST` request to `/v1/instances/{instance}/start`
+    ///
+    ///
     pub async fn instance_start_v1<'a>(
         &'a self,
         instance: &'a types::NameOrId,
@@ -23658,15 +23370,15 @@ impl Client {
         project: Option<&'a types::NameOrId>,
     ) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
         let url = format!(
-            "{}/v1/instances/{}/start",
-            self.baseurl,
-            encode_path(&instance.to_string()),
+            "{}/v1/instances/{}/start", self.baseurl, encode_path(& instance
+            .to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -23675,10 +23387,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
-            .query(&progenitor_client::QueryParam::new(
-                "organization",
-                &organization,
-            ))
+            .query(&progenitor_client::QueryParam::new("organization", &organization))
             .query(&progenitor_client::QueryParam::new("project", &project))
             .headers(header_map)
             .build()?;
@@ -23691,12 +23400,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             202u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -23704,6 +23413,8 @@ impl Client {
     ///Stop an instance
     ///
     ///Sends a `POST` request to `/v1/instances/{instance}/stop`
+    ///
+    ///
     pub async fn instance_stop_v1<'a>(
         &'a self,
         instance: &'a types::NameOrId,
@@ -23711,15 +23422,14 @@ impl Client {
         project: Option<&'a types::NameOrId>,
     ) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
         let url = format!(
-            "{}/v1/instances/{}/stop",
-            self.baseurl,
-            encode_path(&instance.to_string()),
+            "{}/v1/instances/{}/stop", self.baseurl, encode_path(& instance.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -23728,10 +23438,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
-            .query(&progenitor_client::QueryParam::new(
-                "organization",
-                &organization,
-            ))
+            .query(&progenitor_client::QueryParam::new("organization", &organization))
             .query(&progenitor_client::QueryParam::new("project", &project))
             .headers(header_map)
             .build()?;
@@ -23744,12 +23451,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             202u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -23759,10 +23466,10 @@ impl Client {
     ///Sends a `GET` request to `/v1/organizations`
     ///
     ///Arguments:
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `page_token`: Token returned by previous call to retrieve the
-    ///   subsequent page
-    /// - `sort_by`
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `page_token`: Token returned by previous call to retrieve the subsequent page
+    ///- `sort_by`
+    ///
     pub async fn organization_list_v1<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
@@ -23771,10 +23478,11 @@ impl Client {
     ) -> Result<ResponseValue<types::OrganizationResultsPage>, Error<types::Error>> {
         let url = format!("{}/v1/organizations", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -23784,10 +23492,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
+            .query(&progenitor_client::QueryParam::new("page_token", &page_token))
             .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
             .headers(header_map)
             .build()?;
@@ -23800,30 +23505,31 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///List organizations as a Stream
     ///
-    ///Sends repeated `GET` requests to `/v1/organizations` until there are no
-    /// more results.
+    ///Sends repeated `GET` requests to `/v1/organizations` until there are no more results.
     ///
     ///Arguments:
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `sort_by`
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `sort_by`
+    ///
     pub fn organization_list_v1_stream<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::NameOrIdSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::Organization, Error<types::Error>>> + Unpin + 'a
-    {
+    ) -> impl futures::Stream<
+        Item = Result<types::Organization, Error<types::Error>>,
+    > + Unpin + 'a {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
@@ -23831,19 +23537,25 @@ impl Client {
             .map_ok(move |page| {
                 let page = page.into_inner();
                 let first = futures::stream::iter(page.items).map(Ok);
-                let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
-                    if state.is_none() {
-                        Ok(None)
-                    } else {
-                        self.organization_list_v1(limit, state.as_deref(), None)
-                            .map_ok(|page| {
-                                let page = page.into_inner();
-                                Some((futures::stream::iter(page.items).map(Ok), page.next_page))
-                            })
-                            .await
-                    }
-                })
-                .try_flatten();
+                let rest = futures::stream::try_unfold(
+                        page.next_page,
+                        move |state| async move {
+                            if state.is_none() {
+                                Ok(None)
+                            } else {
+                                self.organization_list_v1(limit, state.as_deref(), None)
+                                    .map_ok(|page| {
+                                        let page = page.into_inner();
+                                        Some((
+                                            futures::stream::iter(page.items).map(Ok),
+                                            page.next_page,
+                                        ))
+                                    })
+                                    .await
+                            }
+                        },
+                    )
+                    .try_flatten();
                 first.chain(rest)
             })
             .try_flatten_stream()
@@ -23853,16 +23565,19 @@ impl Client {
     ///Create an organization
     ///
     ///Sends a `POST` request to `/v1/organizations`
+    ///
+    ///
     pub async fn organization_create_v1<'a>(
         &'a self,
         body: &'a types::OrganizationCreate,
     ) -> Result<ResponseValue<types::Organization>, Error<types::Error>> {
         let url = format!("{}/v1/organizations", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -23883,12 +23598,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             201u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -23896,20 +23611,22 @@ impl Client {
     ///Fetch an organization
     ///
     ///Sends a `GET` request to `/v1/organizations/{organization}`
+    ///
+    ///
     pub async fn organization_view_v1<'a>(
         &'a self,
         organization: &'a types::NameOrId,
     ) -> Result<ResponseValue<types::Organization>, Error<types::Error>> {
         let url = format!(
-            "{}/v1/organizations/{}",
-            self.baseurl,
-            encode_path(&organization.to_string()),
+            "{}/v1/organizations/{}", self.baseurl, encode_path(& organization
+            .to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -23929,12 +23646,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -23942,21 +23659,23 @@ impl Client {
     ///Update an organization
     ///
     ///Sends a `PUT` request to `/v1/organizations/{organization}`
+    ///
+    ///
     pub async fn organization_update_v1<'a>(
         &'a self,
         organization: &'a types::NameOrId,
         body: &'a types::OrganizationUpdate,
     ) -> Result<ResponseValue<types::Organization>, Error<types::Error>> {
         let url = format!(
-            "{}/v1/organizations/{}",
-            self.baseurl,
-            encode_path(&organization.to_string()),
+            "{}/v1/organizations/{}", self.baseurl, encode_path(& organization
+            .to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -23977,12 +23696,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -23990,20 +23709,22 @@ impl Client {
     ///Delete an organization
     ///
     ///Sends a `DELETE` request to `/v1/organizations/{organization}`
+    ///
+    ///
     pub async fn organization_delete_v1<'a>(
         &'a self,
         organization: &'a types::NameOrId,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!(
-            "{}/v1/organizations/{}",
-            self.baseurl,
-            encode_path(&organization.to_string()),
+            "{}/v1/organizations/{}", self.baseurl, encode_path(& organization
+            .to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -24023,12 +23744,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             204u16 => Ok(ResponseValue::empty(response)),
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -24036,20 +23757,22 @@ impl Client {
     ///Fetch an organization's IAM policy
     ///
     ///Sends a `GET` request to `/v1/organizations/{organization}/policy`
+    ///
+    ///
     pub async fn organization_policy_view_v1<'a>(
         &'a self,
         organization: &'a types::NameOrId,
     ) -> Result<ResponseValue<types::OrganizationRolePolicy>, Error<types::Error>> {
         let url = format!(
-            "{}/v1/organizations/{}/policy",
-            self.baseurl,
-            encode_path(&organization.to_string()),
+            "{}/v1/organizations/{}/policy", self.baseurl, encode_path(& organization
+            .to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -24069,12 +23792,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -24082,21 +23805,23 @@ impl Client {
     ///Update an organization's IAM policy
     ///
     ///Sends a `PUT` request to `/v1/organizations/{organization}/policy`
+    ///
+    ///
     pub async fn organization_policy_update_v1<'a>(
         &'a self,
         organization: &'a types::NameOrId,
         body: &'a types::OrganizationRolePolicy,
     ) -> Result<ResponseValue<types::OrganizationRolePolicy>, Error<types::Error>> {
         let url = format!(
-            "{}/v1/organizations/{}/policy",
-            self.baseurl,
-            encode_path(&organization.to_string()),
+            "{}/v1/organizations/{}/policy", self.baseurl, encode_path(& organization
+            .to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -24117,12 +23842,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -24132,11 +23857,11 @@ impl Client {
     ///Sends a `GET` request to `/v1/projects`
     ///
     ///Arguments:
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `organization`
-    /// - `page_token`: Token returned by previous call to retrieve the
-    ///   subsequent page
-    /// - `sort_by`
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `organization`
+    ///- `page_token`: Token returned by previous call to retrieve the subsequent page
+    ///- `sort_by`
+    ///
     pub async fn project_list_v1<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
@@ -24146,10 +23871,11 @@ impl Client {
     ) -> Result<ResponseValue<types::ProjectResultsPage>, Error<types::Error>> {
         let url = format!("{}/v1/projects", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -24159,14 +23885,8 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "organization",
-                &organization,
-            ))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
+            .query(&progenitor_client::QueryParam::new("organization", &organization))
+            .query(&progenitor_client::QueryParam::new("page_token", &page_token))
             .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
             .headers(header_map)
             .build()?;
@@ -24179,31 +23899,33 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///List projects as a Stream
     ///
-    ///Sends repeated `GET` requests to `/v1/projects` until there are no more
-    /// results.
+    ///Sends repeated `GET` requests to `/v1/projects` until there are no more results.
     ///
     ///Arguments:
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `organization`
-    /// - `sort_by`
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `organization`
+    ///- `sort_by`
+    ///
     pub fn project_list_v1_stream<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
         organization: Option<&'a types::NameOrId>,
         sort_by: Option<types::NameOrIdSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::Project, Error<types::Error>>> + Unpin + 'a {
+    ) -> impl futures::Stream<
+        Item = Result<types::Project, Error<types::Error>>,
+    > + Unpin + 'a {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
@@ -24211,19 +23933,25 @@ impl Client {
             .map_ok(move |page| {
                 let page = page.into_inner();
                 let first = futures::stream::iter(page.items).map(Ok);
-                let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
-                    if state.is_none() {
-                        Ok(None)
-                    } else {
-                        self.project_list_v1(limit, None, state.as_deref(), None)
-                            .map_ok(|page| {
-                                let page = page.into_inner();
-                                Some((futures::stream::iter(page.items).map(Ok), page.next_page))
-                            })
-                            .await
-                    }
-                })
-                .try_flatten();
+                let rest = futures::stream::try_unfold(
+                        page.next_page,
+                        move |state| async move {
+                            if state.is_none() {
+                                Ok(None)
+                            } else {
+                                self.project_list_v1(limit, None, state.as_deref(), None)
+                                    .map_ok(|page| {
+                                        let page = page.into_inner();
+                                        Some((
+                                            futures::stream::iter(page.items).map(Ok),
+                                            page.next_page,
+                                        ))
+                                    })
+                                    .await
+                            }
+                        },
+                    )
+                    .try_flatten();
                 first.chain(rest)
             })
             .try_flatten_stream()
@@ -24233,6 +23961,8 @@ impl Client {
     ///Create a project
     ///
     ///Sends a `POST` request to `/v1/projects`
+    ///
+    ///
     pub async fn project_create_v1<'a>(
         &'a self,
         organization: &'a types::NameOrId,
@@ -24240,10 +23970,11 @@ impl Client {
     ) -> Result<ResponseValue<types::Project>, Error<types::Error>> {
         let url = format!("{}/v1/projects", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -24253,10 +23984,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
-            .query(&progenitor_client::QueryParam::new(
-                "organization",
-                &organization,
-            ))
+            .query(&progenitor_client::QueryParam::new("organization", &organization))
             .headers(header_map)
             .build()?;
         let info = OperationInfo {
@@ -24268,12 +23996,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             201u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -24281,21 +24009,22 @@ impl Client {
     ///Fetch a project
     ///
     ///Sends a `GET` request to `/v1/projects/{project}`
+    ///
+    ///
     pub async fn project_view_v1<'a>(
         &'a self,
         project: &'a types::NameOrId,
         organization: Option<&'a types::NameOrId>,
     ) -> Result<ResponseValue<types::Project>, Error<types::Error>> {
         let url = format!(
-            "{}/v1/projects/{}",
-            self.baseurl,
-            encode_path(&project.to_string()),
+            "{}/v1/projects/{}", self.baseurl, encode_path(& project.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -24304,10 +24033,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
-            .query(&progenitor_client::QueryParam::new(
-                "organization",
-                &organization,
-            ))
+            .query(&progenitor_client::QueryParam::new("organization", &organization))
             .headers(header_map)
             .build()?;
         let info = OperationInfo {
@@ -24319,12 +24045,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -24332,6 +24058,8 @@ impl Client {
     ///Update a project
     ///
     ///Sends a `PUT` request to `/v1/projects/{project}`
+    ///
+    ///
     pub async fn project_update_v1<'a>(
         &'a self,
         project: &'a types::NameOrId,
@@ -24339,15 +24067,14 @@ impl Client {
         body: &'a types::ProjectUpdate,
     ) -> Result<ResponseValue<types::Project>, Error<types::Error>> {
         let url = format!(
-            "{}/v1/projects/{}",
-            self.baseurl,
-            encode_path(&project.to_string()),
+            "{}/v1/projects/{}", self.baseurl, encode_path(& project.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -24357,10 +24084,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
-            .query(&progenitor_client::QueryParam::new(
-                "organization",
-                &organization,
-            ))
+            .query(&progenitor_client::QueryParam::new("organization", &organization))
             .headers(header_map)
             .build()?;
         let info = OperationInfo {
@@ -24372,12 +24096,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -24385,21 +24109,22 @@ impl Client {
     ///Delete a project
     ///
     ///Sends a `DELETE` request to `/v1/projects/{project}`
+    ///
+    ///
     pub async fn project_delete_v1<'a>(
         &'a self,
         project: &'a types::NameOrId,
         organization: Option<&'a types::NameOrId>,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!(
-            "{}/v1/projects/{}",
-            self.baseurl,
-            encode_path(&project.to_string()),
+            "{}/v1/projects/{}", self.baseurl, encode_path(& project.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -24408,10 +24133,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
-            .query(&progenitor_client::QueryParam::new(
-                "organization",
-                &organization,
-            ))
+            .query(&progenitor_client::QueryParam::new("organization", &organization))
             .headers(header_map)
             .build()?;
         let info = OperationInfo {
@@ -24423,12 +24145,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             204u16 => Ok(ResponseValue::empty(response)),
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -24436,21 +24158,22 @@ impl Client {
     ///Fetch a project's IAM policy
     ///
     ///Sends a `GET` request to `/v1/projects/{project}/policy`
+    ///
+    ///
     pub async fn project_policy_view_v1<'a>(
         &'a self,
         project: &'a types::NameOrId,
         organization: Option<&'a types::NameOrId>,
     ) -> Result<ResponseValue<types::ProjectRolePolicy>, Error<types::Error>> {
         let url = format!(
-            "{}/v1/projects/{}/policy",
-            self.baseurl,
-            encode_path(&project.to_string()),
+            "{}/v1/projects/{}/policy", self.baseurl, encode_path(& project.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -24459,10 +24182,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
-            .query(&progenitor_client::QueryParam::new(
-                "organization",
-                &organization,
-            ))
+            .query(&progenitor_client::QueryParam::new("organization", &organization))
             .headers(header_map)
             .build()?;
         let info = OperationInfo {
@@ -24474,12 +24194,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -24487,6 +24207,8 @@ impl Client {
     ///Update a project's IAM policy
     ///
     ///Sends a `PUT` request to `/v1/projects/{project}/policy`
+    ///
+    ///
     pub async fn project_policy_update_v1<'a>(
         &'a self,
         project: &'a types::NameOrId,
@@ -24494,15 +24216,14 @@ impl Client {
         body: &'a types::ProjectRolePolicy,
     ) -> Result<ResponseValue<types::ProjectRolePolicy>, Error<types::Error>> {
         let url = format!(
-            "{}/v1/projects/{}/policy",
-            self.baseurl,
-            encode_path(&project.to_string()),
+            "{}/v1/projects/{}/policy", self.baseurl, encode_path(& project.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -24512,10 +24233,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .json(&body)
-            .query(&progenitor_client::QueryParam::new(
-                "organization",
-                &organization,
-            ))
+            .query(&progenitor_client::QueryParam::new("organization", &organization))
             .headers(header_map)
             .build()?;
         let info = OperationInfo {
@@ -24527,12 +24245,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -24542,22 +24260,26 @@ impl Client {
     ///Sends a `GET` request to `/v1/system/update/components`
     ///
     ///Arguments:
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `page_token`: Token returned by previous call to retrieve the
-    ///   subsequent page
-    /// - `sort_by`
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `page_token`: Token returned by previous call to retrieve the subsequent page
+    ///- `sort_by`
+    ///
     pub async fn system_component_version_list<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
         page_token: Option<&'a str>,
         sort_by: Option<types::IdSortMode>,
-    ) -> Result<ResponseValue<types::UpdateableComponentResultsPage>, Error<types::Error>> {
+    ) -> Result<
+        ResponseValue<types::UpdateableComponentResultsPage>,
+        Error<types::Error>,
+    > {
         let url = format!("{}/v1/system/update/components", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -24567,10 +24289,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
+            .query(&progenitor_client::QueryParam::new("page_token", &page_token))
             .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
             .headers(header_map)
             .build()?;
@@ -24583,30 +24302,31 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///View version and update status of component tree as a Stream
     ///
-    ///Sends repeated `GET` requests to `/v1/system/update/components` until
-    /// there are no more results.
+    ///Sends repeated `GET` requests to `/v1/system/update/components` until there are no more results.
     ///
     ///Arguments:
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `sort_by`
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `sort_by`
+    ///
     pub fn system_component_version_list_stream<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::IdSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::UpdateableComponent, Error<types::Error>>> + Unpin + 'a
-    {
+    ) -> impl futures::Stream<
+        Item = Result<types::UpdateableComponent, Error<types::Error>>,
+    > + Unpin + 'a {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
@@ -24614,19 +24334,29 @@ impl Client {
             .map_ok(move |page| {
                 let page = page.into_inner();
                 let first = futures::stream::iter(page.items).map(Ok);
-                let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
-                    if state.is_none() {
-                        Ok(None)
-                    } else {
-                        self.system_component_version_list(limit, state.as_deref(), None)
-                            .map_ok(|page| {
-                                let page = page.into_inner();
-                                Some((futures::stream::iter(page.items).map(Ok), page.next_page))
-                            })
-                            .await
-                    }
-                })
-                .try_flatten();
+                let rest = futures::stream::try_unfold(
+                        page.next_page,
+                        move |state| async move {
+                            if state.is_none() {
+                                Ok(None)
+                            } else {
+                                self.system_component_version_list(
+                                        limit,
+                                        state.as_deref(),
+                                        None,
+                                    )
+                                    .map_ok(|page| {
+                                        let page = page.into_inner();
+                                        Some((
+                                            futures::stream::iter(page.items).map(Ok),
+                                            page.next_page,
+                                        ))
+                                    })
+                                    .await
+                            }
+                        },
+                    )
+                    .try_flatten();
                 first.chain(rest)
             })
             .try_flatten_stream()
@@ -24638,10 +24368,10 @@ impl Client {
     ///Sends a `GET` request to `/v1/system/update/deployments`
     ///
     ///Arguments:
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `page_token`: Token returned by previous call to retrieve the
-    ///   subsequent page
-    /// - `sort_by`
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `page_token`: Token returned by previous call to retrieve the subsequent page
+    ///- `sort_by`
+    ///
     pub async fn update_deployments_list<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
@@ -24650,10 +24380,11 @@ impl Client {
     ) -> Result<ResponseValue<types::UpdateDeploymentResultsPage>, Error<types::Error>> {
         let url = format!("{}/v1/system/update/deployments", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -24663,10 +24394,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
+            .query(&progenitor_client::QueryParam::new("page_token", &page_token))
             .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
             .headers(header_map)
             .build()?;
@@ -24679,30 +24407,31 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///List all update deployments as a Stream
     ///
-    ///Sends repeated `GET` requests to `/v1/system/update/deployments` until
-    /// there are no more results.
+    ///Sends repeated `GET` requests to `/v1/system/update/deployments` until there are no more results.
     ///
     ///Arguments:
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `sort_by`
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `sort_by`
+    ///
     pub fn update_deployments_list_stream<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::IdSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::UpdateDeployment, Error<types::Error>>> + Unpin + 'a
-    {
+    ) -> impl futures::Stream<
+        Item = Result<types::UpdateDeployment, Error<types::Error>>,
+    > + Unpin + 'a {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
@@ -24710,19 +24439,25 @@ impl Client {
             .map_ok(move |page| {
                 let page = page.into_inner();
                 let first = futures::stream::iter(page.items).map(Ok);
-                let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
-                    if state.is_none() {
-                        Ok(None)
-                    } else {
-                        self.update_deployments_list(limit, state.as_deref(), None)
-                            .map_ok(|page| {
-                                let page = page.into_inner();
-                                Some((futures::stream::iter(page.items).map(Ok), page.next_page))
-                            })
-                            .await
-                    }
-                })
-                .try_flatten();
+                let rest = futures::stream::try_unfold(
+                        page.next_page,
+                        move |state| async move {
+                            if state.is_none() {
+                                Ok(None)
+                            } else {
+                                self.update_deployments_list(limit, state.as_deref(), None)
+                                    .map_ok(|page| {
+                                        let page = page.into_inner();
+                                        Some((
+                                            futures::stream::iter(page.items).map(Ok),
+                                            page.next_page,
+                                        ))
+                                    })
+                                    .await
+                            }
+                        },
+                    )
+                    .try_flatten();
                 first.chain(rest)
             })
             .try_flatten_stream()
@@ -24732,20 +24467,22 @@ impl Client {
     ///Fetch a system update deployment
     ///
     ///Sends a `GET` request to `/v1/system/update/deployments/{id}`
+    ///
+    ///
     pub async fn update_deployment_view<'a>(
         &'a self,
         id: &'a ::uuid::Uuid,
     ) -> Result<ResponseValue<types::UpdateDeployment>, Error<types::Error>> {
         let url = format!(
-            "{}/v1/system/update/deployments/{}",
-            self.baseurl,
-            encode_path(&id.to_string()),
+            "{}/v1/system/update/deployments/{}", self.baseurl, encode_path(& id
+            .to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -24765,12 +24502,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -24778,15 +24515,18 @@ impl Client {
     ///Refresh update data
     ///
     ///Sends a `POST` request to `/v1/system/update/refresh`
+    ///
+    ///
     pub async fn system_update_refresh<'a>(
         &'a self,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!("{}/v1/system/update/refresh", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -24806,12 +24546,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             204u16 => Ok(ResponseValue::empty(response)),
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -24819,16 +24559,19 @@ impl Client {
     ///Start system update
     ///
     ///Sends a `POST` request to `/v1/system/update/start`
+    ///
+    ///
     pub async fn system_update_start<'a>(
         &'a self,
         body: &'a types::SystemUpdateStart,
     ) -> Result<ResponseValue<types::UpdateDeployment>, Error<types::Error>> {
         let url = format!("{}/v1/system/update/start", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -24849,12 +24592,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             202u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -24864,15 +24607,18 @@ impl Client {
     ///If there is no update in progress, do nothing.
     ///
     ///Sends a `POST` request to `/v1/system/update/stop`
+    ///
+    ///
     pub async fn system_update_stop<'a>(
         &'a self,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!("{}/v1/system/update/stop", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -24892,12 +24638,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             204u16 => Ok(ResponseValue::empty(response)),
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -24907,10 +24653,10 @@ impl Client {
     ///Sends a `GET` request to `/v1/system/update/updates`
     ///
     ///Arguments:
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `page_token`: Token returned by previous call to retrieve the
-    ///   subsequent page
-    /// - `sort_by`
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `page_token`: Token returned by previous call to retrieve the subsequent page
+    ///- `sort_by`
+    ///
     pub async fn system_update_list<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
@@ -24919,10 +24665,11 @@ impl Client {
     ) -> Result<ResponseValue<types::SystemUpdateResultsPage>, Error<types::Error>> {
         let url = format!("{}/v1/system/update/updates", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -24932,10 +24679,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&progenitor_client::QueryParam::new("limit", &limit))
-            .query(&progenitor_client::QueryParam::new(
-                "page_token",
-                &page_token,
-            ))
+            .query(&progenitor_client::QueryParam::new("page_token", &page_token))
             .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
             .headers(header_map)
             .build()?;
@@ -24948,30 +24692,31 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///List all updates as a Stream
     ///
-    ///Sends repeated `GET` requests to `/v1/system/update/updates` until there
-    /// are no more results.
+    ///Sends repeated `GET` requests to `/v1/system/update/updates` until there are no more results.
     ///
     ///Arguments:
-    /// - `limit`: Maximum number of items returned by a single call
-    /// - `sort_by`
+    ///- `limit`: Maximum number of items returned by a single call
+    ///- `sort_by`
+    ///
     pub fn system_update_list_stream<'a>(
         &'a self,
         limit: Option<::std::num::NonZeroU32>,
         sort_by: Option<types::IdSortMode>,
-    ) -> impl futures::Stream<Item = Result<types::SystemUpdate, Error<types::Error>>> + Unpin + 'a
-    {
+    ) -> impl futures::Stream<
+        Item = Result<types::SystemUpdate, Error<types::Error>>,
+    > + Unpin + 'a {
         use futures::StreamExt;
         use futures::TryFutureExt;
         use futures::TryStreamExt;
@@ -24979,19 +24724,25 @@ impl Client {
             .map_ok(move |page| {
                 let page = page.into_inner();
                 let first = futures::stream::iter(page.items).map(Ok);
-                let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
-                    if state.is_none() {
-                        Ok(None)
-                    } else {
-                        self.system_update_list(limit, state.as_deref(), None)
-                            .map_ok(|page| {
-                                let page = page.into_inner();
-                                Some((futures::stream::iter(page.items).map(Ok), page.next_page))
-                            })
-                            .await
-                    }
-                })
-                .try_flatten();
+                let rest = futures::stream::try_unfold(
+                        page.next_page,
+                        move |state| async move {
+                            if state.is_none() {
+                                Ok(None)
+                            } else {
+                                self.system_update_list(limit, state.as_deref(), None)
+                                    .map_ok(|page| {
+                                        let page = page.into_inner();
+                                        Some((
+                                            futures::stream::iter(page.items).map(Ok),
+                                            page.next_page,
+                                        ))
+                                    })
+                                    .await
+                            }
+                        },
+                    )
+                    .try_flatten();
                 first.chain(rest)
             })
             .try_flatten_stream()
@@ -25001,20 +24752,22 @@ impl Client {
     ///View system update
     ///
     ///Sends a `GET` request to `/v1/system/update/updates/{version}`
+    ///
+    ///
     pub async fn system_update_view<'a>(
         &'a self,
         version: &'a types::SemverVersion,
     ) -> Result<ResponseValue<types::SystemUpdate>, Error<types::Error>> {
         let url = format!(
-            "{}/v1/system/update/updates/{}",
-            self.baseurl,
-            encode_path(&version.to_string()),
+            "{}/v1/system/update/updates/{}", self.baseurl, encode_path(& version
+            .to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -25034,34 +24787,35 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///View system update component tree
     ///
-    ///Sends a `GET` request to
-    /// `/v1/system/update/updates/{version}/components`
+    ///Sends a `GET` request to `/v1/system/update/updates/{version}/components`
+    ///
+    ///
     pub async fn system_update_components_list<'a>(
         &'a self,
         version: &'a types::SemverVersion,
     ) -> Result<ResponseValue<types::ComponentUpdateResultsPage>, Error<types::Error>> {
         let url = format!(
-            "{}/v1/system/update/updates/{}/components",
-            self.baseurl,
-            encode_path(&version.to_string()),
+            "{}/v1/system/update/updates/{}/components", self.baseurl, encode_path(&
+            version.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -25081,12 +24835,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -25094,15 +24848,18 @@ impl Client {
     ///View system version and update status
     ///
     ///Sends a `GET` request to `/v1/system/update/version`
+    ///
+    ///
     pub async fn system_version<'a>(
         &'a self,
     ) -> Result<ResponseValue<types::SystemVersion>, Error<types::Error>> {
         let url = format!("{}/v1/system/update/version", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -25122,12 +24879,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }

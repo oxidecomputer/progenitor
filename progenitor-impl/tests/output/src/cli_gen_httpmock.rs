@@ -1,8 +1,8 @@
 pub mod operations {
-    #![doc = r" [`When`](::httpmock::When) and [`Then`](::httpmock::Then)"]
-    #![doc = r" wrappers for each operation. Each can be converted to"]
-    #![doc = r" its inner type with a call to `into_inner()`. This can"]
-    #![doc = r" be used to explicitly deviate from permitted values."]
+    //! [`When`](::httpmock::When) and [`Then`](::httpmock::Then)
+    //! wrappers for each operation. Each can be converted to
+    //! its inner type with a call to `into_inner()`. This can
+    //! be used to explicitly deviate from permitted values.
     use crate::cli_gen_builder::*;
     pub struct UnoWhen(::httpmock::When);
     impl UnoWhen {
@@ -40,7 +40,8 @@ pub mod operations {
         pub fn success(self, status: u16, value: ::serde_json::Value) -> Self {
             assert_eq!(status / 100u16, 2u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body(value),
@@ -49,9 +50,9 @@ pub mod operations {
     }
 }
 
-#[doc = r" An extension trait for [`MockServer`](::httpmock::MockServer) that"]
-#[doc = r" adds a method for each operation. These are the equivalent of"]
-#[doc = r" type-checked [`mock()`](::httpmock::MockServer::mock) calls."]
+/// An extension trait for [`MockServer`](::httpmock::MockServer) that
+/// adds a method for each operation. These are the equivalent of
+/// type-checked [`mock()`](::httpmock::MockServer::mock) calls.
 pub trait MockServerExt {
     fn uno<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
@@ -64,10 +65,7 @@ impl MockServerExt for ::httpmock::MockServer {
         F: FnOnce(operations::UnoWhen, operations::UnoThen),
     {
         self.mock(|when, then| {
-            config_fn(
-                operations::UnoWhen::new(when),
-                operations::UnoThen::new(then),
-            )
+            config_fn(operations::UnoWhen::new(when), operations::UnoThen::new(then))
         })
     }
 }

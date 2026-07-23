@@ -11,6 +11,7 @@ use typify::{Type, TypeEnumVariant, TypeSpaceImpl, TypeStructPropInfo};
 use crate::{
     Generator, Result,
     method::{OperationParameterKind, OperationParameterType, OperationResponseStatus},
+    split_multiline_doc_attributes,
     to_schema::ToSchema,
     util::{Case, sanitize},
     validate_openapi,
@@ -182,7 +183,7 @@ impl Generator {
 
         };
 
-        Ok(code)
+        Ok(split_multiline_doc_attributes(code))
     }
 
     fn cli_method(&mut self, method: &crate::method::OperationMethod) -> CliOperation {

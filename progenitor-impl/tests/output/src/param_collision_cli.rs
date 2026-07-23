@@ -73,7 +73,10 @@ impl<T: CliConfig> Cli<T> {
         }
     }
 
-    pub async fn execute_key_get(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
+    pub async fn execute_key_get(
+        &self,
+        matches: &::clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.key_get();
         if let Some(value) = matches.get_one::<bool>("client") {
             request = request.client(value.clone());
@@ -150,7 +153,7 @@ pub enum CliCommand {
 
 impl CliCommand {
     pub fn iter() -> impl Iterator<Item = CliCommand> {
-        vec![CliCommand::KeyGet].into_iter()
+        vec![CliCommand::KeyGet,].into_iter()
     }
 
     pub fn operation_id(&self) -> &'static str {

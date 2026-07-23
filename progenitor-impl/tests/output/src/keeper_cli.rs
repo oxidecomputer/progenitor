@@ -59,23 +59,25 @@ impl<T: CliConfig> Cli<T> {
     }
 
     pub fn cli_global_jobs() -> ::clap::Command {
-        ::clap::Command::new("").arg(
-            ::clap::Arg::new("authorization")
-                .long("authorization")
-                .value_parser(::clap::value_parser!(::std::string::String))
-                .required(true)
-                .help("Authorization header (bearer token)"),
-        )
+        ::clap::Command::new("")
+            .arg(
+                ::clap::Arg::new("authorization")
+                    .long("authorization")
+                    .value_parser(::clap::value_parser!(::std::string::String))
+                    .required(true)
+                    .help("Authorization header (bearer token)"),
+            )
     }
 
     pub fn cli_ping() -> ::clap::Command {
-        ::clap::Command::new("").arg(
-            ::clap::Arg::new("authorization")
-                .long("authorization")
-                .value_parser(::clap::value_parser!(::std::string::String))
-                .required(true)
-                .help("Authorization header (bearer token)"),
-        )
+        ::clap::Command::new("")
+            .arg(
+                ::clap::Arg::new("authorization")
+                    .long("authorization")
+                    .value_parser(::clap::value_parser!(::std::string::String))
+                    .required(true)
+                    .help("Authorization header (bearer token)"),
+            )
     }
 
     pub fn cli_report_finish() -> ::clap::Command {
@@ -96,9 +98,11 @@ impl<T: CliConfig> Cli<T> {
             .arg(
                 ::clap::Arg::new("end-time")
                     .long("end-time")
-                    .value_parser(::clap::value_parser!(
-                        ::chrono::DateTime<::chrono::offset::Utc>
-                    ))
+                    .value_parser(
+                        ::clap::value_parser!(
+                            ::chrono::DateTime < ::chrono::offset::Utc >
+                        ),
+                    )
                     .required_unless_present("json-body"),
             )
             .arg(
@@ -166,9 +170,11 @@ impl<T: CliConfig> Cli<T> {
             .arg(
                 ::clap::Arg::new("start-time")
                     .long("start-time")
-                    .value_parser(::clap::value_parser!(
-                        ::chrono::DateTime<::chrono::offset::Utc>
-                    ))
+                    .value_parser(
+                        ::clap::value_parser!(
+                            ::chrono::DateTime < ::chrono::offset::Utc >
+                        ),
+                    )
                     .required_unless_present("json-body"),
             )
             .arg(
@@ -202,18 +208,21 @@ impl<T: CliConfig> Cli<T> {
         }
     }
 
-    pub async fn execute_enrol(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
+    pub async fn execute_enrol(
+        &self,
+        matches: &::clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.enrol();
         if let Some(value) = matches.get_one::<::std::string::String>("authorization") {
             request = request.authorization(value.clone());
         }
 
         if let Some(value) = matches.get_one::<::std::string::String>("host") {
-            request = request.body_map(|body| body.host(value.clone()))
+            request = request.body_map(|body| { body.host(value.clone()) });
         }
 
         if let Some(value) = matches.get_one::<::std::string::String>("key") {
-            request = request.body_map(|body| body.key(value.clone()))
+            request = request.body_map(|body| { body.key(value.clone()) });
         }
 
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
@@ -238,7 +247,10 @@ impl<T: CliConfig> Cli<T> {
         }
     }
 
-    pub async fn execute_global_jobs(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
+    pub async fn execute_global_jobs(
+        &self,
+        matches: &::clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.global_jobs();
         if let Some(value) = matches.get_one::<::std::string::String>("authorization") {
             request = request.authorization(value.clone());
@@ -258,7 +270,10 @@ impl<T: CliConfig> Cli<T> {
         }
     }
 
-    pub async fn execute_ping(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
+    pub async fn execute_ping(
+        &self,
+        matches: &::clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.ping();
         if let Some(value) = matches.get_one::<::std::string::String>("authorization") {
             request = request.authorization(value.clone());
@@ -278,24 +293,27 @@ impl<T: CliConfig> Cli<T> {
         }
     }
 
-    pub async fn execute_report_finish(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
+    pub async fn execute_report_finish(
+        &self,
+        matches: &::clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.report_finish();
         if let Some(value) = matches.get_one::<::std::string::String>("authorization") {
             request = request.authorization(value.clone());
         }
 
         if let Some(value) = matches.get_one::<i32>("duration-millis") {
-            request = request.body_map(|body| body.duration_millis(value.clone()))
+            request = request.body_map(|body| { body.duration_millis(value.clone()) });
         }
 
-        if let Some(value) =
-            matches.get_one::<::chrono::DateTime<::chrono::offset::Utc>>("end-time")
+        if let Some(value) = matches
+            .get_one::<::chrono::DateTime<::chrono::offset::Utc>>("end-time")
         {
-            request = request.body_map(|body| body.end_time(value.clone()))
+            request = request.body_map(|body| { body.end_time(value.clone()) });
         }
 
         if let Some(value) = matches.get_one::<i32>("exit-status") {
-            request = request.body_map(|body| body.exit_status(value.clone()))
+            request = request.body_map(|body| { body.exit_status(value.clone()) });
         }
 
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
@@ -320,7 +338,10 @@ impl<T: CliConfig> Cli<T> {
         }
     }
 
-    pub async fn execute_report_output(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
+    pub async fn execute_report_output(
+        &self,
+        matches: &::clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.report_output();
         if let Some(value) = matches.get_one::<::std::string::String>("authorization") {
             request = request.authorization(value.clone());
@@ -348,20 +369,23 @@ impl<T: CliConfig> Cli<T> {
         }
     }
 
-    pub async fn execute_report_start(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
+    pub async fn execute_report_start(
+        &self,
+        matches: &::clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.report_start();
         if let Some(value) = matches.get_one::<::std::string::String>("authorization") {
             request = request.authorization(value.clone());
         }
 
         if let Some(value) = matches.get_one::<::std::string::String>("script") {
-            request = request.body_map(|body| body.script(value.clone()))
+            request = request.body_map(|body| { body.script(value.clone()) });
         }
 
-        if let Some(value) =
-            matches.get_one::<::chrono::DateTime<::chrono::offset::Utc>>("start-time")
+        if let Some(value) = matches
+            .get_one::<::chrono::DateTime<::chrono::offset::Utc>>("start-time")
         {
-            request = request.body_map(|body| body.start_time(value.clone()))
+            request = request.body_map(|body| { body.start_time(value.clone()) });
         }
 
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
@@ -469,14 +493,10 @@ pub enum CliCommand {
 impl CliCommand {
     pub fn iter() -> impl Iterator<Item = CliCommand> {
         vec![
-            CliCommand::Enrol,
-            CliCommand::GlobalJobs,
-            CliCommand::Ping,
-            CliCommand::ReportFinish,
-            CliCommand::ReportOutput,
-            CliCommand::ReportStart,
+            CliCommand::Enrol, CliCommand::GlobalJobs, CliCommand::Ping,
+            CliCommand::ReportFinish, CliCommand::ReportOutput, CliCommand::ReportStart,
         ]
-        .into_iter()
+            .into_iter()
     }
 
     pub fn operation_id(&self) -> &'static str {

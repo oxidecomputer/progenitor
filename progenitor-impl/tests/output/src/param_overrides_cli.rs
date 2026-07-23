@@ -23,7 +23,9 @@ impl<T: CliConfig> Cli<T> {
                     .long("key")
                     .value_parser(::clap::value_parser!(bool))
                     .required(false)
-                    .help("The same key parameter that overlaps with the path level parameter"),
+                    .help(
+                        "The same key parameter that overlaps with the path level parameter",
+                    ),
             )
             .arg(
                 ::clap::Arg::new("unique-key")
@@ -45,7 +47,10 @@ impl<T: CliConfig> Cli<T> {
         }
     }
 
-    pub async fn execute_key_get(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
+    pub async fn execute_key_get(
+        &self,
+        matches: &::clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.key_get();
         if let Some(value) = matches.get_one::<bool>("key") {
             request = request.key(value.clone());
@@ -106,7 +111,7 @@ pub enum CliCommand {
 
 impl CliCommand {
     pub fn iter() -> impl Iterator<Item = CliCommand> {
-        vec![CliCommand::KeyGet].into_iter()
+        vec![CliCommand::KeyGet,].into_iter()
     }
 
     pub fn operation_id(&self) -> &'static str {

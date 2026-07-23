@@ -1,7 +1,7 @@
 #[allow(unused_imports)]
-use progenitor_client::{encode_path, ClientHooks, OperationInfo, RequestBuilderExt};
-#[allow(unused_imports)]
 pub use progenitor_client::{ByteStream, ClientInfo, Error, ResponseValue};
+#[allow(unused_imports)]
+use progenitor_client::{encode_path, ClientHooks, OperationInfo, RequestBuilderExt};
 /// Types used as operation parameters and responses.
 #[allow(clippy::all)]
 pub mod types {
@@ -11,13 +11,19 @@ pub mod types {
         pub struct ConversionError(::std::borrow::Cow<'static, str>);
         impl ::std::error::Error for ConversionError {}
         impl ::std::fmt::Display for ConversionError {
-            fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> Result<(), ::std::fmt::Error> {
+            fn fmt(
+                &self,
+                f: &mut ::std::fmt::Formatter<'_>,
+            ) -> Result<(), ::std::fmt::Error> {
                 ::std::fmt::Display::fmt(&self.0, f)
             }
         }
 
         impl ::std::fmt::Debug for ConversionError {
-            fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> Result<(), ::std::fmt::Error> {
+            fn fmt(
+                &self,
+                f: &mut ::std::fmt::Formatter<'_>,
+            ) -> Result<(), ::std::fmt::Error> {
                 ::std::fmt::Debug::fmt(&self.0, f)
             }
         }
@@ -57,9 +63,7 @@ impl Client {
         #[cfg(not(target_arch = "wasm32"))]
         let client = {
             let dur = ::std::time::Duration::from_secs(15u64);
-            reqwest::ClientBuilder::new()
-                .connect_timeout(dur)
-                .timeout(dur)
+            reqwest::ClientBuilder::new().connect_timeout(dur).timeout(dur)
         };
         #[cfg(target_arch = "wasm32")]
         let client = reqwest::ClientBuilder::new();
@@ -105,17 +109,15 @@ impl Client {
     ///Sends a `GET` request to `/key`
     ///
     ///Arguments:
-    /// - `key`: The same key parameter that overlaps with the path level
-    ///   parameter
-    /// - `unique_key`: A key parameter that will not be overridden by the path
-    ///   spec
+    ///- `key`: The same key parameter that overlaps with the path level parameter
+    ///- `unique_key`: A key parameter that will not be overridden by the path spec
     ///```ignore
-    /// let response = client.key_get()
+    ///let response = client.key_get()
     ///    .key(key)
     ///    .unique_key(unique_key)
     ///    .send()
     ///    .await;
-    /// ```
+    ///```
     pub fn key_get(&self) -> builder::KeyGet<'_> {
         builder::KeyGet::new(self)
     }
@@ -127,8 +129,8 @@ pub mod builder {
     use super::types;
     #[allow(unused_imports)]
     use super::{
-        encode_path, ByteStream, ClientHooks, ClientInfo, Error, OperationInfo, RequestBuilderExt,
-        ResponseValue,
+        encode_path, ByteStream, ClientInfo, ClientHooks, Error, OperationInfo,
+        RequestBuilderExt, ResponseValue,
     };
     ///Builder for [`Client::key_get`]
     ///
@@ -164,36 +166,36 @@ pub mod builder {
         where
             V: std::convert::TryInto<::std::string::String>,
         {
-            self.unique_key = value.try_into().map(Some).map_err(|_| {
-                "conversion to `:: std :: string :: String` for unique_key failed".to_string()
-            });
+            self.unique_key = value
+                .try_into()
+                .map(Some)
+                .map_err(|_| {
+                    "conversion to `:: std :: string :: String` for unique_key failed"
+                        .to_string()
+                });
             self
         }
 
         ///Sends a `GET` request to `/key`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
-            let Self {
-                client,
-                key,
-                unique_key,
-            } = self;
+            let Self { client, key, unique_key } = self;
             let key = key.map_err(Error::InvalidRequest)?;
             let unique_key = unique_key.map_err(Error::InvalidRequest)?;
             let url = format!("{}/key", client.baseurl,);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-            header_map.append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
-            );
+            header_map
+                .append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(
+                        super::Client::api_version(),
+                    ),
+                );
             #[allow(unused_mut)]
             let mut request = client
                 .client
                 .get(url)
                 .query(&progenitor_client::QueryParam::new("key", &key))
-                .query(&progenitor_client::QueryParam::new(
-                    "uniqueKey",
-                    &unique_key,
-                ))
+                .query(&progenitor_client::QueryParam::new("uniqueKey", &unique_key))
                 .headers(header_map)
                 .build()?;
             let info = OperationInfo {

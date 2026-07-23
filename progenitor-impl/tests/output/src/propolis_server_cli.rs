@@ -148,19 +148,25 @@ impl<T: CliConfig> Cli<T> {
             CliCommand::InstanceGet => self.execute_instance_get(matches).await,
             CliCommand::InstanceEnsure => self.execute_instance_ensure(matches).await,
             CliCommand::InstanceIssueCrucibleSnapshotRequest => {
-                self.execute_instance_issue_crucible_snapshot_request(matches)
-                    .await
+                self.execute_instance_issue_crucible_snapshot_request(matches).await
             }
             CliCommand::InstanceMigrateStatus => {
                 self.execute_instance_migrate_status(matches).await
             }
             CliCommand::InstanceSerial => self.execute_instance_serial(matches).await,
-            CliCommand::InstanceStatePut => self.execute_instance_state_put(matches).await,
-            CliCommand::InstanceStateMonitor => self.execute_instance_state_monitor(matches).await,
+            CliCommand::InstanceStatePut => {
+                self.execute_instance_state_put(matches).await
+            }
+            CliCommand::InstanceStateMonitor => {
+                self.execute_instance_state_monitor(matches).await
+            }
         }
     }
 
-    pub async fn execute_instance_get(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
+    pub async fn execute_instance_get(
+        &self,
+        matches: &::clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.instance_get();
         self.config.execute_instance_get(matches, &mut request)?;
         let result = request.send().await;
@@ -181,14 +187,17 @@ impl<T: CliConfig> Cli<T> {
         matches: &::clap::ArgMatches,
     ) -> anyhow::Result<()> {
         let mut request = self.client.instance_ensure();
-        if let Some(value) = matches.get_one::<::std::string::String>("cloud-init-bytes") {
-            request = request.body_map(|body| body.cloud_init_bytes(value.clone()))
+        if let Some(value) = matches.get_one::<::std::string::String>("cloud-init-bytes")
+        {
+            request = request.body_map(|body| { body.cloud_init_bytes(value.clone()) });
         }
 
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
-            let body_value = serde_json::from_str::<types::InstanceEnsureRequest>(&body_txt)
+            let body_value = serde_json::from_str::<
+                types::InstanceEnsureRequest,
+            >(&body_txt)
                 .with_context(|| format!("failed to parse {}", value.display()))?;
             request = request.body(body_value);
         }
@@ -241,19 +250,20 @@ impl<T: CliConfig> Cli<T> {
     ) -> anyhow::Result<()> {
         let mut request = self.client.instance_migrate_status();
         if let Some(value) = matches.get_one::<::uuid::Uuid>("migration-id") {
-            request = request.body_map(|body| body.migration_id(value.clone()))
+            request = request.body_map(|body| { body.migration_id(value.clone()) });
         }
 
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
-            let body_value = serde_json::from_str::<types::InstanceMigrateStatusRequest>(&body_txt)
+            let body_value = serde_json::from_str::<
+                types::InstanceMigrateStatusRequest,
+            >(&body_txt)
                 .with_context(|| format!("failed to parse {}", value.display()))?;
             request = request.body(body_value);
         }
 
-        self.config
-            .execute_instance_migrate_status(matches, &mut request)?;
+        self.config.execute_instance_migrate_status(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
@@ -275,9 +285,7 @@ impl<T: CliConfig> Cli<T> {
         self.config.execute_instance_serial(matches, &mut request)?;
         let result = request.send().await;
         match result {
-            Ok(r) => {
-                todo!()
-            }
+            Ok(r) => todo!(),
             Err(r) => {
                 self.config.error(&r);
                 Err(anyhow::Error::new(r))
@@ -293,13 +301,14 @@ impl<T: CliConfig> Cli<T> {
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
-            let body_value = serde_json::from_str::<types::InstanceStateRequested>(&body_txt)
+            let body_value = serde_json::from_str::<
+                types::InstanceStateRequested,
+            >(&body_txt)
                 .with_context(|| format!("failed to parse {}", value.display()))?;
             request = request.body(body_value);
         }
 
-        self.config
-            .execute_instance_state_put(matches, &mut request)?;
+        self.config.execute_instance_state_put(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
@@ -319,19 +328,20 @@ impl<T: CliConfig> Cli<T> {
     ) -> anyhow::Result<()> {
         let mut request = self.client.instance_state_monitor();
         if let Some(value) = matches.get_one::<u64>("gen") {
-            request = request.body_map(|body| body.gen_(value.clone()))
+            request = request.body_map(|body| { body.gen_(value.clone()) });
         }
 
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
             let body_txt = std::fs::read_to_string(value)
                 .with_context(|| format!("failed to read {}", value.display()))?;
-            let body_value = serde_json::from_str::<types::InstanceStateMonitorRequest>(&body_txt)
+            let body_value = serde_json::from_str::<
+                types::InstanceStateMonitorRequest,
+            >(&body_txt)
                 .with_context(|| format!("failed to parse {}", value.display()))?;
             request = request.body(body_value);
         }
 
-        self.config
-            .execute_instance_state_monitor(matches, &mut request)?;
+        self.config.execute_instance_state_monitor(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
@@ -437,15 +447,12 @@ pub enum CliCommand {
 impl CliCommand {
     pub fn iter() -> impl Iterator<Item = CliCommand> {
         vec![
-            CliCommand::InstanceGet,
-            CliCommand::InstanceEnsure,
+            CliCommand::InstanceGet, CliCommand::InstanceEnsure,
             CliCommand::InstanceIssueCrucibleSnapshotRequest,
-            CliCommand::InstanceMigrateStatus,
-            CliCommand::InstanceSerial,
-            CliCommand::InstanceStatePut,
-            CliCommand::InstanceStateMonitor,
+            CliCommand::InstanceMigrateStatus, CliCommand::InstanceSerial,
+            CliCommand::InstanceStatePut, CliCommand::InstanceStateMonitor,
         ]
-        .into_iter()
+            .into_iter()
     }
 
     pub fn operation_id(&self) -> &'static str {

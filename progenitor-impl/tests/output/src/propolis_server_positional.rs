@@ -1,7 +1,7 @@
 #[allow(unused_imports)]
-use progenitor_client::{encode_path, ClientHooks, OperationInfo, RequestBuilderExt};
-#[allow(unused_imports)]
 pub use progenitor_client::{ByteStream, ClientInfo, Error, ResponseValue};
+#[allow(unused_imports)]
+use progenitor_client::{encode_path, ClientHooks, OperationInfo, RequestBuilderExt};
 /// Types used as operation parameters and responses.
 #[allow(clippy::all)]
 pub mod types {
@@ -11,13 +11,19 @@ pub mod types {
         pub struct ConversionError(::std::borrow::Cow<'static, str>);
         impl ::std::error::Error for ConversionError {}
         impl ::std::fmt::Display for ConversionError {
-            fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> Result<(), ::std::fmt::Error> {
+            fn fmt(
+                &self,
+                f: &mut ::std::fmt::Formatter<'_>,
+            ) -> Result<(), ::std::fmt::Error> {
                 ::std::fmt::Display::fmt(&self.0, f)
             }
         }
 
         impl ::std::fmt::Debug for ConversionError {
-            fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> Result<(), ::std::fmt::Error> {
+            fn fmt(
+                &self,
+                f: &mut ::std::fmt::Formatter<'_>,
+            ) -> Result<(), ::std::fmt::Error> {
                 ::std::fmt::Debug::fmt(&self.0, f)
             }
         }
@@ -107,7 +113,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct CrucibleOpts {
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         pub cert_pem: ::std::option::Option<::std::string::String>,
@@ -156,7 +162,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct DiskAttachment {
         pub disk_id: ::uuid::Uuid,
         pub generation_id: u64,
@@ -195,7 +201,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub enum DiskAttachmentState {
         Detached,
         Destroyed,
@@ -249,7 +255,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct DiskRequest {
         pub device: ::std::string::String,
         #[serde(rename = "gen")]
@@ -286,7 +292,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct Error {
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         pub error_code: ::std::option::Option<::std::string::String>,
@@ -330,7 +336,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct Instance {
         pub disks: ::std::vec::Vec<DiskAttachment>,
         pub nics: ::std::vec::Vec<NetworkInterface>,
@@ -370,8 +376,7 @@ pub mod types {
     ///        {
     ///          "allOf": [
     ///            {
-    ///              "$ref":
-    /// "#/components/schemas/InstanceMigrateInitiateRequest"
+    ///              "$ref": "#/components/schemas/InstanceMigrateInitiateRequest"
     ///            }
     ///          ]
     ///        }
@@ -391,7 +396,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct InstanceEnsureRequest {
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         pub cloud_init_bytes: ::std::option::Option<::std::string::String>,
@@ -420,8 +425,7 @@ pub mod types {
     ///        {
     ///          "allOf": [
     ///            {
-    ///              "$ref":
-    /// "#/components/schemas/InstanceMigrateInitiateResponse"
+    ///              "$ref": "#/components/schemas/InstanceMigrateInitiateResponse"
     ///            }
     ///          ]
     ///        }
@@ -431,7 +435,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct InstanceEnsureResponse {
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         pub migrate: ::std::option::Option<InstanceMigrateInitiateResponse>,
@@ -463,7 +467,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct InstanceGetResponse {
         pub instance: Instance,
     }
@@ -496,7 +500,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct InstanceMigrateInitiateRequest {
         pub migration_id: ::uuid::Uuid,
         pub src_addr: ::std::string::String,
@@ -522,7 +526,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct InstanceMigrateInitiateResponse {
         pub migration_id: ::uuid::Uuid,
     }
@@ -546,7 +550,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct InstanceMigrateStatusRequest {
         pub migration_id: ::uuid::Uuid,
     }
@@ -569,7 +573,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct InstanceMigrateStatusResponse {
         pub state: MigrationState,
     }
@@ -592,8 +596,7 @@ pub mod types {
     ///  ],
     ///  "properties": {
     ///    "bootrom_id": {
-    ///      "description": "ID of the bootrom used to initialize this
-    /// Instance.",
+    ///      "description": "ID of the bootrom used to initialize this Instance.",
     ///      "type": "string",
     ///      "format": "uuid"
     ///    },
@@ -631,7 +634,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct InstanceProperties {
         ///ID of the bootrom used to initialize this Instance.
         pub bootrom_id: ::uuid::Uuid,
@@ -673,8 +676,8 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
-        :: serde :: Deserialize,
-        :: serde :: Serialize,
+        ::serde::Deserialize,
+        ::serde::Serialize,
         Clone,
         Copy,
         Debug,
@@ -682,7 +685,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd,
+        PartialOrd
     )]
     pub enum InstanceState {
         Creating,
@@ -716,7 +719,9 @@ pub mod types {
 
     impl ::std::str::FromStr for InstanceState {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "Creating" => Ok(Self::Creating),
                 "Starting" => Ok(Self::Starting),
@@ -735,7 +740,9 @@ pub mod types {
 
     impl ::std::convert::TryFrom<&str> for InstanceState {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -778,7 +785,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct InstanceStateMonitorRequest {
         #[serde(rename = "gen")]
         pub gen_: u64,
@@ -808,7 +815,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct InstanceStateMonitorResponse {
         #[serde(rename = "gen")]
         pub gen_: u64,
@@ -832,8 +839,8 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
-        :: serde :: Deserialize,
-        :: serde :: Serialize,
+        ::serde::Deserialize,
+        ::serde::Serialize,
         Clone,
         Copy,
         Debug,
@@ -841,7 +848,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd,
+        PartialOrd
     )]
     pub enum InstanceStateRequested {
         Run,
@@ -863,7 +870,9 @@ pub mod types {
 
     impl ::std::str::FromStr for InstanceStateRequested {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "Run" => Ok(Self::Run),
                 "Stop" => Ok(Self::Stop),
@@ -876,7 +885,9 @@ pub mod types {
 
     impl ::std::convert::TryFrom<&str> for InstanceStateRequested {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -922,8 +933,8 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
-        :: serde :: Deserialize,
-        :: serde :: Serialize,
+        ::serde::Deserialize,
+        ::serde::Serialize,
         Clone,
         Copy,
         Debug,
@@ -931,7 +942,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd,
+        PartialOrd
     )]
     pub enum MigrationState {
         Sync,
@@ -965,7 +976,9 @@ pub mod types {
 
     impl ::std::str::FromStr for MigrationState {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "Sync" => Ok(Self::Sync),
                 "RamPush" => Ok(Self::RamPush),
@@ -984,7 +997,9 @@ pub mod types {
 
     impl ::std::convert::TryFrom<&str> for MigrationState {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -1029,7 +1044,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct NetworkInterface {
         pub attachment: NetworkInterfaceAttachmentState,
         pub name: ::std::string::String,
@@ -1065,7 +1080,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub enum NetworkInterfaceAttachmentState {
         Detached,
         Faulted,
@@ -1100,28 +1115,26 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct NetworkInterfaceRequest {
         pub name: ::std::string::String,
         pub slot: Slot,
     }
 
-    ///A stable index which is translated by Propolis into a PCI BDF, visible
-    /// to the guest.
+    ///A stable index which is translated by Propolis into a PCI BDF, visible to the guest.
     ///
     /// <details><summary>JSON schema</summary>
     ///
     /// ```json
     ///{
-    ///  "description": "A stable index which is translated by Propolis into a
-    /// PCI BDF, visible to the guest.",
+    ///  "description": "A stable index which is translated by Propolis into a PCI BDF, visible to the guest.",
     ///  "type": "integer",
     ///  "format": "uint8",
     ///  "minimum": 0.0
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     #[serde(transparent)]
     pub struct Slot(pub u8);
     impl ::std::ops::Deref for Slot {
@@ -1203,8 +1216,7 @@ pub mod types {
     ///            {
     ///              "allOf": [
     ///                {
-    ///                  "$ref":
-    /// "#/components/schemas/VolumeConstructionRequest"
+    ///                  "$ref": "#/components/schemas/VolumeConstructionRequest"
     ///                }
     ///              ]
     ///            }
@@ -1316,7 +1328,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     #[serde(tag = "type")]
     pub enum VolumeConstructionRequest {
         #[serde(rename = "volume")]
@@ -1324,15 +1336,13 @@ pub mod types {
             block_size: u64,
             id: ::uuid::Uuid,
             #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-            read_only_parent: ::std::option::Option<::std::boxed::Box<VolumeConstructionRequest>>,
+            read_only_parent: ::std::option::Option<
+                ::std::boxed::Box<VolumeConstructionRequest>,
+            >,
             sub_volumes: ::std::vec::Vec<VolumeConstructionRequest>,
         },
         #[serde(rename = "url")]
-        Url {
-            block_size: u64,
-            id: ::uuid::Uuid,
-            url: ::std::string::String,
-        },
+        Url { block_size: u64, id: ::uuid::Uuid, url: ::std::string::String },
         #[serde(rename = "region")]
         Region {
             block_size: u64,
@@ -1341,11 +1351,7 @@ pub mod types {
             opts: CrucibleOpts,
         },
         #[serde(rename = "file")]
-        File {
-            block_size: u64,
-            id: ::uuid::Uuid,
-            path: ::std::string::String,
-        },
+        File { block_size: u64, id: ::uuid::Uuid, path: ::std::string::String },
     }
 }
 
@@ -1370,9 +1376,7 @@ impl Client {
         #[cfg(not(target_arch = "wasm32"))]
         let client = {
             let dur = ::std::time::Duration::from_secs(15u64);
-            reqwest::ClientBuilder::new()
-                .connect_timeout(dur)
-                .timeout(dur)
+            reqwest::ClientBuilder::new().connect_timeout(dur).timeout(dur)
         };
         #[cfg(target_arch = "wasm32")]
         let client = reqwest::ClientBuilder::new();
@@ -1415,15 +1419,18 @@ impl ClientHooks<()> for &Client {}
 #[allow(clippy::all)]
 impl Client {
     ///Sends a `GET` request to `/instance`
+    ///
+    ///
     pub async fn instance_get<'a>(
         &'a self,
     ) -> Result<ResponseValue<types::InstanceGetResponse>, Error<types::Error>> {
         let url = format!("{}/instance", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -1443,27 +1450,30 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///Sends a `PUT` request to `/instance`
+    ///
+    ///
     pub async fn instance_ensure<'a>(
         &'a self,
         body: &'a types::InstanceEnsureRequest,
     ) -> Result<ResponseValue<types::InstanceEnsureResponse>, Error<types::Error>> {
         let url = format!("{}/instance", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -1484,12 +1494,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             201u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
@@ -1497,22 +1507,23 @@ impl Client {
     ///Issue a snapshot request to a crucible backend
     ///
     ///Sends a `POST` request to `/instance/disk/{id}/snapshot/{snapshot_id}`
+    ///
+    ///
     pub async fn instance_issue_crucible_snapshot_request<'a>(
         &'a self,
         id: &'a ::uuid::Uuid,
         snapshot_id: &'a ::uuid::Uuid,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!(
-            "{}/instance/disk/{}/snapshot/{}",
-            self.baseurl,
-            encode_path(&id.to_string()),
-            encode_path(&snapshot_id.to_string()),
+            "{}/instance/disk/{}/snapshot/{}", self.baseurl, encode_path(& id
+            .to_string()), encode_path(& snapshot_id.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -1532,27 +1543,33 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///Sends a `GET` request to `/instance/migrate/status`
+    ///
+    ///
     pub async fn instance_migrate_status<'a>(
         &'a self,
         body: &'a types::InstanceMigrateStatusRequest,
-    ) -> Result<ResponseValue<types::InstanceMigrateStatusResponse>, Error<types::Error>> {
+    ) -> Result<
+        ResponseValue<types::InstanceMigrateStatusResponse>,
+        Error<types::Error>,
+    > {
         let url = format!("{}/instance/migrate/status", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -1573,26 +1590,29 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///Sends a `GET` request to `/instance/serial`
+    ///
+    ///
     pub async fn instance_serial<'a>(
         &'a self,
     ) -> Result<ResponseValue<reqwest::Upgraded>, Error<types::Error>> {
         let url = format!("{}/instance/serial", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -1618,27 +1638,30 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             101u16 => ResponseValue::upgrade(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///Sends a `PUT` request to `/instance/state`
+    ///
+    ///
     pub async fn instance_state_put<'a>(
         &'a self,
         body: types::InstanceStateRequested,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!("{}/instance/state", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -1659,27 +1682,33 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             204u16 => Ok(ResponseValue::empty(response)),
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///Sends a `GET` request to `/instance/state-monitor`
+    ///
+    ///
     pub async fn instance_state_monitor<'a>(
         &'a self,
         body: &'a types::InstanceStateMonitorRequest,
-    ) -> Result<ResponseValue<types::InstanceStateMonitorResponse>, Error<types::Error>> {
+    ) -> Result<
+        ResponseValue<types::InstanceStateMonitorResponse>,
+        Error<types::Error>,
+    > {
         let url = format!("{}/instance/state-monitor", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -1700,12 +1729,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             200u16 => ResponseValue::from_response(response).await,
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }

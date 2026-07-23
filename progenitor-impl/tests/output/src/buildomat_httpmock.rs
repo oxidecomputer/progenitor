@@ -1,8 +1,8 @@
 pub mod operations {
-    #![doc = r" [`When`](::httpmock::When) and [`Then`](::httpmock::Then)"]
-    #![doc = r" wrappers for each operation. Each can be converted to"]
-    #![doc = r" its inner type with a call to `into_inner()`. This can"]
-    #![doc = r" be used to explicitly deviate from permitted values."]
+    //! [`When`](::httpmock::When) and [`Then`](::httpmock::Then)
+    //! wrappers for each operation. Each can be converted to
+    //! its inner type with a call to `into_inner()`. This can
+    //! be used to explicitly deviate from permitted values.
     use crate::buildomat_builder::*;
     pub struct ControlHoldWhen(::httpmock::When);
     impl ControlHoldWhen {
@@ -31,7 +31,8 @@ pub mod operations {
 
         pub fn ok(self, value: ()) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -84,7 +85,8 @@ pub mod operations {
         }
 
         pub fn task(self, value: &str) -> Self {
-            let re = regex::Regex::new(&format!("^/v1/task/{}$", value.to_string())).unwrap();
+            let re = regex::Regex::new(&format!("^/v1/task/{}$", value.to_string()))
+                .unwrap();
             Self(self.0.path_matches(re))
         }
     }
@@ -101,7 +103,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::Task) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -136,7 +139,8 @@ pub mod operations {
 
         pub fn ok(self, value: &::std::vec::Vec<types::Task>) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -175,7 +179,8 @@ pub mod operations {
 
         pub fn created(self, value: &types::TaskSubmitResult) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(201u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -198,8 +203,10 @@ pub mod operations {
         }
 
         pub fn task(self, value: &str) -> Self {
-            let re =
-                regex::Regex::new(&format!("^/v1/tasks/{}/events$", value.to_string())).unwrap();
+            let re = regex::Regex::new(
+                    &format!("^/v1/tasks/{}/events$", value.to_string()),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
@@ -227,7 +234,8 @@ pub mod operations {
 
         pub fn ok(self, value: &::std::vec::Vec<types::TaskEvent>) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -241,7 +249,9 @@ pub mod operations {
             Self(
                 inner
                     .method(::httpmock::Method::GET)
-                    .path_matches(regex::Regex::new("^/v1/tasks/[^/]*/outputs$").unwrap()),
+                    .path_matches(
+                        regex::Regex::new("^/v1/tasks/[^/]*/outputs$").unwrap(),
+                    ),
             )
         }
 
@@ -250,8 +260,10 @@ pub mod operations {
         }
 
         pub fn task(self, value: &str) -> Self {
-            let re =
-                regex::Regex::new(&format!("^/v1/tasks/{}/outputs$", value.to_string())).unwrap();
+            let re = regex::Regex::new(
+                    &format!("^/v1/tasks/{}/outputs$", value.to_string()),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
     }
@@ -268,7 +280,8 @@ pub mod operations {
 
         pub fn ok(self, value: &::std::vec::Vec<types::TaskOutput>) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -282,7 +295,9 @@ pub mod operations {
             Self(
                 inner
                     .method(::httpmock::Method::GET)
-                    .path_matches(regex::Regex::new("^/v1/tasks/[^/]*/outputs/[^/]*$").unwrap()),
+                    .path_matches(
+                        regex::Regex::new("^/v1/tasks/[^/]*/outputs/[^/]*$").unwrap(),
+                    ),
             )
         }
 
@@ -291,13 +306,17 @@ pub mod operations {
         }
 
         pub fn task(self, value: &str) -> Self {
-            let re = regex::Regex::new(&format!("^/v1/tasks/{}/outputs/.*$", value.to_string()))
+            let re = regex::Regex::new(
+                    &format!("^/v1/tasks/{}/outputs/.*$", value.to_string()),
+                )
                 .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn output(self, value: &str) -> Self {
-            let re = regex::Regex::new(&format!("^/v1/tasks/.*/outputs/{}$", value.to_string()))
+            let re = regex::Regex::new(
+                    &format!("^/v1/tasks/.*/outputs/{}$", value.to_string()),
+                )
                 .unwrap();
             Self(self.0.path_matches(re))
         }
@@ -316,7 +335,8 @@ pub mod operations {
         pub fn success(self, status: u16, value: ::serde_json::Value) -> Self {
             assert_eq!(status / 100u16, 2u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body(value),
@@ -355,7 +375,8 @@ pub mod operations {
 
         pub fn created(self, value: &types::UserCreateResult) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(201u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -390,7 +411,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::WhoamiResult) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -463,7 +485,8 @@ pub mod operations {
 
         pub fn created(self, value: &types::WorkerBootstrapResult) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(201u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -498,7 +521,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::WorkerPingResult) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -512,7 +536,9 @@ pub mod operations {
             Self(
                 inner
                     .method(::httpmock::Method::POST)
-                    .path_matches(regex::Regex::new("^/v1/worker/task/[^/]*/append$").unwrap()),
+                    .path_matches(
+                        regex::Regex::new("^/v1/worker/task/[^/]*/append$").unwrap(),
+                    ),
             )
         }
 
@@ -521,7 +547,9 @@ pub mod operations {
         }
 
         pub fn task(self, value: &str) -> Self {
-            let re = regex::Regex::new(&format!("^/v1/worker/task/{}/append$", value.to_string()))
+            let re = regex::Regex::new(
+                    &format!("^/v1/worker/task/{}/append$", value.to_string()),
+                )
                 .unwrap();
             Self(self.0.path_matches(re))
         }
@@ -552,7 +580,9 @@ pub mod operations {
             Self(
                 inner
                     .method(::httpmock::Method::POST)
-                    .path_matches(regex::Regex::new("^/v1/worker/task/[^/]*/chunk$").unwrap()),
+                    .path_matches(
+                        regex::Regex::new("^/v1/worker/task/[^/]*/chunk$").unwrap(),
+                    ),
             )
         }
 
@@ -561,7 +591,9 @@ pub mod operations {
         }
 
         pub fn task(self, value: &str) -> Self {
-            let re = regex::Regex::new(&format!("^/v1/worker/task/{}/chunk$", value.to_string()))
+            let re = regex::Regex::new(
+                    &format!("^/v1/worker/task/{}/chunk$", value.to_string()),
+                )
                 .unwrap();
             Self(self.0.path_matches(re))
         }
@@ -583,7 +615,8 @@ pub mod operations {
 
         pub fn created(self, value: &types::UploadedChunk) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(201u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -597,7 +630,9 @@ pub mod operations {
             Self(
                 inner
                     .method(::httpmock::Method::POST)
-                    .path_matches(regex::Regex::new("^/v1/worker/task/[^/]*/complete$").unwrap()),
+                    .path_matches(
+                        regex::Regex::new("^/v1/worker/task/[^/]*/complete$").unwrap(),
+                    ),
             )
         }
 
@@ -606,9 +641,10 @@ pub mod operations {
         }
 
         pub fn task(self, value: &str) -> Self {
-            let re =
-                regex::Regex::new(&format!("^/v1/worker/task/{}/complete$", value.to_string()))
-                    .unwrap();
+            let re = regex::Regex::new(
+                    &format!("^/v1/worker/task/{}/complete$", value.to_string()),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
@@ -638,7 +674,9 @@ pub mod operations {
             Self(
                 inner
                     .method(::httpmock::Method::POST)
-                    .path_matches(regex::Regex::new("^/v1/worker/task/[^/]*/output$").unwrap()),
+                    .path_matches(
+                        regex::Regex::new("^/v1/worker/task/[^/]*/output$").unwrap(),
+                    ),
             )
         }
 
@@ -647,7 +685,9 @@ pub mod operations {
         }
 
         pub fn task(self, value: &str) -> Self {
-            let re = regex::Regex::new(&format!("^/v1/worker/task/{}/output$", value.to_string()))
+            let re = regex::Regex::new(
+                    &format!("^/v1/worker/task/{}/output$", value.to_string()),
+                )
                 .unwrap();
             Self(self.0.path_matches(re))
         }
@@ -699,7 +739,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::WorkersResult) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -775,7 +816,8 @@ pub mod operations {
 
         pub fn ok(self, value: &str) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -825,9 +867,9 @@ pub mod operations {
     }
 }
 
-#[doc = r" An extension trait for [`MockServer`](::httpmock::MockServer) that"]
-#[doc = r" adds a method for each operation. These are the equivalent of"]
-#[doc = r" type-checked [`mock()`](::httpmock::MockServer::mock) calls."]
+/// An extension trait for [`MockServer`](::httpmock::MockServer) that
+/// adds a method for each operation. These are the equivalent of
+/// type-checked [`mock()`](::httpmock::MockServer::mock) calls.
 pub trait MockServerExt {
     fn control_hold<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
@@ -852,7 +894,10 @@ pub trait MockServerExt {
         F: FnOnce(operations::TaskOutputsGetWhen, operations::TaskOutputsGetThen);
     fn task_output_download<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::TaskOutputDownloadWhen, operations::TaskOutputDownloadThen);
+        F: FnOnce(
+            operations::TaskOutputDownloadWhen,
+            operations::TaskOutputDownloadThen,
+        );
     fn user_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::UserCreateWhen, operations::UserCreateThen);
@@ -873,13 +918,22 @@ pub trait MockServerExt {
         F: FnOnce(operations::WorkerTaskAppendWhen, operations::WorkerTaskAppendThen);
     fn worker_task_upload_chunk<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::WorkerTaskUploadChunkWhen, operations::WorkerTaskUploadChunkThen);
+        F: FnOnce(
+            operations::WorkerTaskUploadChunkWhen,
+            operations::WorkerTaskUploadChunkThen,
+        );
     fn worker_task_complete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::WorkerTaskCompleteWhen, operations::WorkerTaskCompleteThen);
+        F: FnOnce(
+            operations::WorkerTaskCompleteWhen,
+            operations::WorkerTaskCompleteThen,
+        );
     fn worker_task_add_output<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::WorkerTaskAddOutputWhen, operations::WorkerTaskAddOutputThen);
+        F: FnOnce(
+            operations::WorkerTaskAddOutputWhen,
+            operations::WorkerTaskAddOutputThen,
+        );
     fn workers_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::WorkersListWhen, operations::WorkersListThen);
@@ -981,7 +1035,10 @@ impl MockServerExt for ::httpmock::MockServer {
 
     fn task_output_download<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::TaskOutputDownloadWhen, operations::TaskOutputDownloadThen),
+        F: FnOnce(
+            operations::TaskOutputDownloadWhen,
+            operations::TaskOutputDownloadThen,
+        ),
     {
         self.mock(|when, then| {
             config_fn(
@@ -1065,7 +1122,10 @@ impl MockServerExt for ::httpmock::MockServer {
 
     fn worker_task_upload_chunk<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::WorkerTaskUploadChunkWhen, operations::WorkerTaskUploadChunkThen),
+        F: FnOnce(
+            operations::WorkerTaskUploadChunkWhen,
+            operations::WorkerTaskUploadChunkThen,
+        ),
     {
         self.mock(|when, then| {
             config_fn(
@@ -1077,7 +1137,10 @@ impl MockServerExt for ::httpmock::MockServer {
 
     fn worker_task_complete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::WorkerTaskCompleteWhen, operations::WorkerTaskCompleteThen),
+        F: FnOnce(
+            operations::WorkerTaskCompleteWhen,
+            operations::WorkerTaskCompleteThen,
+        ),
     {
         self.mock(|when, then| {
             config_fn(
@@ -1089,7 +1152,10 @@ impl MockServerExt for ::httpmock::MockServer {
 
     fn worker_task_add_output<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::WorkerTaskAddOutputWhen, operations::WorkerTaskAddOutputThen),
+        F: FnOnce(
+            operations::WorkerTaskAddOutputWhen,
+            operations::WorkerTaskAddOutputThen,
+        ),
     {
         self.mock(|when, then| {
             config_fn(

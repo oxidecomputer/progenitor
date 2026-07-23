@@ -1,8 +1,8 @@
 pub mod operations {
-    #![doc = r" [`When`](::httpmock::When) and [`Then`](::httpmock::Then)"]
-    #![doc = r" wrappers for each operation. Each can be converted to"]
-    #![doc = r" its inner type with a call to `into_inner()`. This can"]
-    #![doc = r" be used to explicitly deviate from permitted values."]
+    //! [`When`](::httpmock::When) and [`Then`](::httpmock::Then)
+    //! wrappers for each operation. Each can be converted to
+    //! its inner type with a call to `into_inner()`. This can
+    //! be used to explicitly deviate from permitted values.
     use crate::propolis_server_builder::*;
     pub struct InstanceGetWhen(::httpmock::When);
     impl InstanceGetWhen {
@@ -31,7 +31,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::InstanceGetResponse) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -41,7 +42,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -51,7 +53,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -90,7 +93,8 @@ pub mod operations {
 
         pub fn created(self, value: &types::InstanceEnsureResponse) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(201u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -100,7 +104,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -110,7 +115,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -122,9 +128,12 @@ pub mod operations {
     impl InstanceIssueCrucibleSnapshotRequestWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(::httpmock::Method::POST).path_matches(
-                    regex::Regex::new("^/instance/disk/[^/]*/snapshot/[^/]*$").unwrap(),
-                ),
+                inner
+                    .method(::httpmock::Method::POST)
+                    .path_matches(
+                        regex::Regex::new("^/instance/disk/[^/]*/snapshot/[^/]*$")
+                            .unwrap(),
+                    ),
             )
         }
 
@@ -133,20 +142,18 @@ pub mod operations {
         }
 
         pub fn id(self, value: &::uuid::Uuid) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/instance/disk/{}/snapshot/.*$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!("^/instance/disk/{}/snapshot/.*$", value.to_string()),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn snapshot_id(self, value: &::uuid::Uuid) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/instance/disk/.*/snapshot/{}$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!("^/instance/disk/.*/snapshot/{}$", value.to_string()),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
     }
@@ -163,7 +170,8 @@ pub mod operations {
 
         pub fn ok(self, value: ()) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -173,7 +181,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -183,7 +192,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -197,7 +207,9 @@ pub mod operations {
             Self(
                 inner
                     .method(::httpmock::Method::GET)
-                    .path_matches(regex::Regex::new("^/instance/migrate/status$").unwrap()),
+                    .path_matches(
+                        regex::Regex::new("^/instance/migrate/status$").unwrap(),
+                    ),
             )
         }
 
@@ -222,7 +234,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::InstanceMigrateStatusResponse) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -232,7 +245,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -242,7 +256,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -282,7 +297,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -292,7 +308,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -336,7 +353,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -346,7 +364,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -360,7 +379,9 @@ pub mod operations {
             Self(
                 inner
                     .method(::httpmock::Method::GET)
-                    .path_matches(regex::Regex::new("^/instance/state-monitor$").unwrap()),
+                    .path_matches(
+                        regex::Regex::new("^/instance/state-monitor$").unwrap(),
+                    ),
             )
         }
 
@@ -385,7 +406,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::InstanceStateMonitorResponse) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -395,7 +417,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -405,7 +428,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -414,9 +438,9 @@ pub mod operations {
     }
 }
 
-#[doc = r" An extension trait for [`MockServer`](::httpmock::MockServer) that"]
-#[doc = r" adds a method for each operation. These are the equivalent of"]
-#[doc = r" type-checked [`mock()`](::httpmock::MockServer::mock) calls."]
+/// An extension trait for [`MockServer`](::httpmock::MockServer) that
+/// adds a method for each operation. These are the equivalent of
+/// type-checked [`mock()`](::httpmock::MockServer::mock) calls.
 pub trait MockServerExt {
     fn instance_get<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
@@ -424,7 +448,10 @@ pub trait MockServerExt {
     fn instance_ensure<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceEnsureWhen, operations::InstanceEnsureThen);
-    fn instance_issue_crucible_snapshot_request<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
+    fn instance_issue_crucible_snapshot_request<F>(
+        &self,
+        config_fn: F,
+    ) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::InstanceIssueCrucibleSnapshotRequestWhen,
@@ -432,7 +459,10 @@ pub trait MockServerExt {
         );
     fn instance_migrate_status<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::InstanceMigrateStatusWhen, operations::InstanceMigrateStatusThen);
+        F: FnOnce(
+            operations::InstanceMigrateStatusWhen,
+            operations::InstanceMigrateStatusThen,
+        );
     fn instance_serial<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceSerialWhen, operations::InstanceSerialThen);
@@ -441,7 +471,10 @@ pub trait MockServerExt {
         F: FnOnce(operations::InstanceStatePutWhen, operations::InstanceStatePutThen);
     fn instance_state_monitor<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::InstanceStateMonitorWhen, operations::InstanceStateMonitorThen);
+        F: FnOnce(
+            operations::InstanceStateMonitorWhen,
+            operations::InstanceStateMonitorThen,
+        );
 }
 
 impl MockServerExt for ::httpmock::MockServer {
@@ -469,7 +502,10 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn instance_issue_crucible_snapshot_request<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
+    fn instance_issue_crucible_snapshot_request<F>(
+        &self,
+        config_fn: F,
+    ) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::InstanceIssueCrucibleSnapshotRequestWhen,
@@ -486,7 +522,10 @@ impl MockServerExt for ::httpmock::MockServer {
 
     fn instance_migrate_status<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::InstanceMigrateStatusWhen, operations::InstanceMigrateStatusThen),
+        F: FnOnce(
+            operations::InstanceMigrateStatusWhen,
+            operations::InstanceMigrateStatusThen,
+        ),
     {
         self.mock(|when, then| {
             config_fn(
@@ -522,7 +561,10 @@ impl MockServerExt for ::httpmock::MockServer {
 
     fn instance_state_monitor<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::InstanceStateMonitorWhen, operations::InstanceStateMonitorThen),
+        F: FnOnce(
+            operations::InstanceStateMonitorWhen,
+            operations::InstanceStateMonitorThen,
+        ),
     {
         self.mock(|when, then| {
             config_fn(

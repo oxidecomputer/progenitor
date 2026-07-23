@@ -1,7 +1,7 @@
 #[allow(unused_imports)]
-use progenitor_client::{encode_path, ClientHooks, OperationInfo, RequestBuilderExt};
-#[allow(unused_imports)]
 pub use progenitor_client::{ByteStream, ClientInfo, Error, ResponseValue};
+#[allow(unused_imports)]
+use progenitor_client::{encode_path, ClientHooks, OperationInfo, RequestBuilderExt};
 /// Types used as operation parameters and responses.
 #[allow(clippy::all)]
 pub mod types {
@@ -11,13 +11,19 @@ pub mod types {
         pub struct ConversionError(::std::borrow::Cow<'static, str>);
         impl ::std::error::Error for ConversionError {}
         impl ::std::fmt::Display for ConversionError {
-            fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> Result<(), ::std::fmt::Error> {
+            fn fmt(
+                &self,
+                f: &mut ::std::fmt::Formatter<'_>,
+            ) -> Result<(), ::std::fmt::Error> {
                 ::std::fmt::Display::fmt(&self.0, f)
             }
         }
 
         impl ::std::fmt::Debug for ConversionError {
-            fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> Result<(), ::std::fmt::Error> {
+            fn fmt(
+                &self,
+                f: &mut ::std::fmt::Formatter<'_>,
+            ) -> Result<(), ::std::fmt::Error> {
                 ::std::fmt::Debug::fmt(&self.0, f)
             }
         }
@@ -58,7 +64,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct EnrolBody {
         pub host: ::std::string::String,
         pub key: ::std::string::String,
@@ -86,7 +92,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct GlobalJobsResult {
         pub summary: ::std::vec::Vec<ReportSummary>,
     }
@@ -118,7 +124,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct OutputRecord {
         pub msg: ::std::string::String,
         pub stream: ::std::string::String,
@@ -148,7 +154,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct PingResult {
         pub host: ::std::string::String,
         pub ok: bool,
@@ -188,7 +194,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct ReportFinishBody {
         pub duration_millis: i32,
         pub end_time: ::chrono::DateTime<::chrono::offset::Utc>,
@@ -233,7 +239,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct ReportId {
         pub host: ::std::string::String,
         pub job: ::std::string::String,
@@ -265,7 +271,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct ReportOutputBody {
         pub id: ReportId,
         pub record: OutputRecord,
@@ -290,7 +296,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct ReportResult {
         pub existed_already: bool,
     }
@@ -323,7 +329,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct ReportStartBody {
         pub id: ReportId,
         pub script: ::std::string::String,
@@ -372,7 +378,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct ReportSummary {
         pub age_seconds: i32,
         pub duration_seconds: i32,
@@ -404,9 +410,7 @@ impl Client {
         #[cfg(not(target_arch = "wasm32"))]
         let client = {
             let dur = ::std::time::Duration::from_secs(15u64);
-            reqwest::ClientBuilder::new()
-                .connect_timeout(dur)
-                .timeout(dur)
+            reqwest::ClientBuilder::new().connect_timeout(dur).timeout(dur)
         };
         #[cfg(target_arch = "wasm32")]
         let client = reqwest::ClientBuilder::new();
@@ -451,8 +455,9 @@ impl Client {
     ///Sends a `POST` request to `/enrol`
     ///
     ///Arguments:
-    /// - `authorization`: Authorization header (bearer token)
-    /// - `body`
+    ///- `authorization`: Authorization header (bearer token)
+    ///- `body`
+    ///
     pub async fn enrol<'a>(
         &'a self,
         authorization: &'a str,
@@ -460,18 +465,14 @@ impl Client {
     ) -> Result<ResponseValue<()>, Error<()>> {
         let url = format!("{}/enrol", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(2usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         header_map.append("Authorization", authorization.to_string().try_into()?);
         #[allow(unused_mut)]
-        let mut request = self
-            .client
-            .post(url)
-            .json(&body)
-            .headers(header_map)
-            .build()?;
+        let mut request = self.client.post(url).json(&body).headers(header_map).build()?;
         let info = OperationInfo {
             operation_id: "enrol",
         };
@@ -488,17 +489,19 @@ impl Client {
     ///Sends a `GET` request to `/global/jobs`
     ///
     ///Arguments:
-    /// - `authorization`: Authorization header (bearer token)
+    ///- `authorization`: Authorization header (bearer token)
+    ///
     pub async fn global_jobs<'a>(
         &'a self,
         authorization: &'a str,
     ) -> Result<ResponseValue<types::GlobalJobsResult>, Error<()>> {
         let url = format!("{}/global/jobs", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(2usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         header_map.append("Authorization", authorization.to_string().try_into()?);
         #[allow(unused_mut)]
         let mut request = self
@@ -526,17 +529,19 @@ impl Client {
     ///Sends a `GET` request to `/ping`
     ///
     ///Arguments:
-    /// - `authorization`: Authorization header (bearer token)
+    ///- `authorization`: Authorization header (bearer token)
+    ///
     pub async fn ping<'a>(
         &'a self,
         authorization: &'a str,
     ) -> Result<ResponseValue<types::PingResult>, Error<()>> {
         let url = format!("{}/ping", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(2usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         header_map.append("Authorization", authorization.to_string().try_into()?);
         #[allow(unused_mut)]
         let mut request = self
@@ -564,8 +569,9 @@ impl Client {
     ///Sends a `POST` request to `/report/finish`
     ///
     ///Arguments:
-    /// - `authorization`: Authorization header (bearer token)
-    /// - `body`
+    ///- `authorization`: Authorization header (bearer token)
+    ///- `body`
+    ///
     pub async fn report_finish<'a>(
         &'a self,
         authorization: &'a str,
@@ -573,10 +579,11 @@ impl Client {
     ) -> Result<ResponseValue<types::ReportResult>, Error<()>> {
         let url = format!("{}/report/finish", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(2usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         header_map.append("Authorization", authorization.to_string().try_into()?);
         #[allow(unused_mut)]
         let mut request = self
@@ -605,8 +612,9 @@ impl Client {
     ///Sends a `POST` request to `/report/output`
     ///
     ///Arguments:
-    /// - `authorization`: Authorization header (bearer token)
-    /// - `body`
+    ///- `authorization`: Authorization header (bearer token)
+    ///- `body`
+    ///
     pub async fn report_output<'a>(
         &'a self,
         authorization: &'a str,
@@ -614,10 +622,11 @@ impl Client {
     ) -> Result<ResponseValue<types::ReportResult>, Error<()>> {
         let url = format!("{}/report/output", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(2usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         header_map.append("Authorization", authorization.to_string().try_into()?);
         #[allow(unused_mut)]
         let mut request = self
@@ -646,8 +655,9 @@ impl Client {
     ///Sends a `POST` request to `/report/start`
     ///
     ///Arguments:
-    /// - `authorization`: Authorization header (bearer token)
-    /// - `body`
+    ///- `authorization`: Authorization header (bearer token)
+    ///- `body`
+    ///
     pub async fn report_start<'a>(
         &'a self,
         authorization: &'a str,
@@ -655,10 +665,11 @@ impl Client {
     ) -> Result<ResponseValue<types::ReportResult>, Error<()>> {
         let url = format!("{}/report/start", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(2usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         header_map.append("Authorization", authorization.to_string().try_into()?);
         #[allow(unused_mut)]
         let mut request = self

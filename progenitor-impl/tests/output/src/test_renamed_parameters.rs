@@ -1,7 +1,7 @@
 #[allow(unused_imports)]
-use progenitor_client::{encode_path, ClientHooks, OperationInfo, RequestBuilderExt};
-#[allow(unused_imports)]
 pub use progenitor_client::{ByteStream, ClientInfo, Error, ResponseValue};
+#[allow(unused_imports)]
+use progenitor_client::{encode_path, ClientHooks, OperationInfo, RequestBuilderExt};
 /// Types used as operation parameters and responses.
 #[allow(clippy::all)]
 pub mod types {
@@ -11,13 +11,19 @@ pub mod types {
         pub struct ConversionError(::std::borrow::Cow<'static, str>);
         impl ::std::error::Error for ConversionError {}
         impl ::std::fmt::Display for ConversionError {
-            fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> Result<(), ::std::fmt::Error> {
+            fn fmt(
+                &self,
+                f: &mut ::std::fmt::Formatter<'_>,
+            ) -> Result<(), ::std::fmt::Error> {
                 ::std::fmt::Display::fmt(&self.0, f)
             }
         }
 
         impl ::std::fmt::Debug for ConversionError {
-            fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> Result<(), ::std::fmt::Error> {
+            fn fmt(
+                &self,
+                f: &mut ::std::fmt::Formatter<'_>,
+            ) -> Result<(), ::std::fmt::Error> {
                 ::std::fmt::Debug::fmt(&self.0, f)
             }
         }
@@ -61,7 +67,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct Error {
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         pub error_code: ::std::option::Option<::std::string::String>,
@@ -89,9 +95,7 @@ impl Client {
         #[cfg(not(target_arch = "wasm32"))]
         let client = {
             let dur = ::std::time::Duration::from_secs(15u64);
-            reqwest::ClientBuilder::new()
-                .connect_timeout(dur)
-                .timeout(dur)
+            reqwest::ClientBuilder::new().connect_timeout(dur).timeout(dur)
         };
         #[cfg(target_arch = "wasm32")]
         let client = reqwest::ClientBuilder::new();
@@ -134,6 +138,8 @@ impl ClientHooks<()> for &Client {}
 #[allow(clippy::all)]
 impl Client {
     ///Sends a `GET` request to `/{ref}/{type}/{trait}`
+    ///
+    ///
     pub async fn renamed_parameters<'a>(
         &'a self,
         ref_: &'a str,
@@ -144,17 +150,15 @@ impl Client {
         use_: &'a str,
     ) -> Result<ResponseValue<()>, Error<types::Error>> {
         let url = format!(
-            "{}/{}/{}/{}",
-            self.baseurl,
-            encode_path(&ref_.to_string()),
-            encode_path(&type_.to_string()),
-            encode_path(&trait_.to_string()),
+            "{}/{}/{}/{}", self.baseurl, encode_path(& ref_.to_string()), encode_path(&
+            type_.to_string()), encode_path(& trait_.to_string()),
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-        header_map.append(
-            ::reqwest::header::HeaderName::from_static("api-version"),
-            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
-        );
+        header_map
+            .append(
+                ::reqwest::header::HeaderName::from_static("api-version"),
+                ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+            );
         #[allow(unused_mut)]
         let mut request = self
             .client
@@ -177,12 +181,12 @@ impl Client {
         let response = result?;
         match response.status().as_u16() {
             204u16 => Ok(ResponseValue::empty(response)),
-            400u16..=499u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
-            500u16..=599u16 => Err(Error::ErrorResponse(
-                ResponseValue::from_response(response).await?,
-            )),
+            400u16..=499u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
+            500u16..=599u16 => {
+                Err(Error::ErrorResponse(ResponseValue::from_response(response).await?))
+            }
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }

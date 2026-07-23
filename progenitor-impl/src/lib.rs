@@ -7,7 +7,7 @@
 use std::collections::{BTreeMap, HashMap, HashSet};
 
 use openapiv3::OpenAPI;
-use proc_macro2::TokenStream;
+use proc_macro2::{Delimiter, Group, TokenStream, TokenTree};
 use quote::quote;
 use serde::Deserialize;
 use thiserror::Error;
@@ -517,7 +517,7 @@ impl Generator {
             #operation_code
         };
 
-        Ok(file)
+        Ok(split_multiline_doc_attributes(file))
     }
 
     fn generate_tokens_positional_merged(
@@ -677,6 +677,76 @@ pub fn space_out_items(content: String) -> Result<String> {
     })
 }
 
+// Prettyplease renders a doc attribute containing newlines as a block comment.
+// Split those attributes so that it emits one line doc comment per line
+// and keep comment formatting the same as rustfmt.
+fn split_multiline_doc_attributes(tokens: TokenStream) -> TokenStream {
+    let mut output = TokenStream::new();
+    let mut tokens = tokens.into_iter().peekable();
+
+    while let Some(token) = tokens.next() {
+        match token {
+            TokenTree::Punct(punct) if punct.as_char() == '#' => {
+                let Some(TokenTree::Group(group)) = tokens.peek() else {
+                    output.extend([TokenTree::Punct(punct)]);
+                    continue;
+                };
+                let Some(doc) = multiline_doc_attribute(group) else {
+                    output.extend([TokenTree::Punct(punct)]);
+                    continue;
+                };
+
+                tokens.next();
+                output.extend(doc.split('\n').map(|line| quote! { #[doc = #line] }));
+            }
+            TokenTree::Group(group) => {
+                let mut normalized = Group::new(
+                    group.delimiter(),
+                    split_multiline_doc_attributes(group.stream()),
+                );
+                normalized.set_span(group.span());
+                output.extend([TokenTree::Group(normalized)]);
+            }
+            token => output.extend([token]),
+        }
+    }
+
+    output
+}
+
+fn multiline_doc_attribute(group: &Group) -> Option<String> {
+    if group.delimiter() != Delimiter::Bracket {
+        return None;
+    }
+
+    let mut tokens = group.stream().into_iter();
+    let TokenTree::Ident(name) = tokens.next()? else {
+        return None;
+    };
+    if name != "doc" {
+        return None;
+    }
+
+    let TokenTree::Punct(equals) = tokens.next()? else {
+        return None;
+    };
+    if equals.as_char() != '=' {
+        return None;
+    }
+
+    let TokenTree::Literal(literal) = tokens.next()? else {
+        return None;
+    };
+    if tokens.next().is_some() {
+        return None;
+    }
+
+    let doc = syn::parse_str::<syn::LitStr>(&literal.to_string())
+        .ok()?
+        .value();
+    doc.contains('\n').then_some(doc)
+}
+
 fn validate_openapi_spec_version(spec_version: &str) -> Result<()> {
     // progenitor currenlty only support OAS 3.0.x
     if spec_version.trim().starts_with("3.0.") {
@@ -727,9 +797,32 @@ pub fn validate_openapi(spec: &OpenAPI) -> Result<()> {
 
 #[cfg(test)]
 mod tests {
+    use quote::quote;
     use serde_json::json;
 
-    use crate::{Error, validate_openapi_spec_version};
+    use crate::{Error, split_multiline_doc_attributes, validate_openapi_spec_version};
+
+    #[test]
+    fn test_split_multiline_doc_attributes() {
+        let tokens = split_multiline_doc_attributes(quote! {
+            #[doc = "first line\n\nthird line"]
+            struct Outer {
+                #[doc = "field first line\nfield second line"]
+                field: String,
+            }
+
+            #[doc = "single line"]
+            #[doc(hidden)]
+            struct Unchanged;
+        });
+        let syntax_tree = syn::parse2(tokens).unwrap();
+        let output = prettyplease::unparse(&syntax_tree);
+
+        assert!(output.contains("///first line\n///\n///third line\nstruct Outer"));
+        assert!(output.contains("    ///field first line\n    ///field second line"));
+        assert!(output.contains("///single line\n#[doc(hidden)]"));
+        assert!(!output.contains("/**"));
+    }
 
     #[test]
     fn test_bad_value() {

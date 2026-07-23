@@ -1,7 +1,7 @@
 #[allow(unused_imports)]
-use progenitor_client::{encode_path, ClientHooks, OperationInfo, RequestBuilderExt};
-#[allow(unused_imports)]
 pub use progenitor_client::{ByteStream, ClientInfo, Error, ResponseValue};
+#[allow(unused_imports)]
+use progenitor_client::{encode_path, ClientHooks, OperationInfo, RequestBuilderExt};
 /// Types used as operation parameters and responses.
 #[allow(clippy::all)]
 pub mod types {
@@ -11,13 +11,19 @@ pub mod types {
         pub struct ConversionError(::std::borrow::Cow<'static, str>);
         impl ::std::error::Error for ConversionError {}
         impl ::std::fmt::Display for ConversionError {
-            fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> Result<(), ::std::fmt::Error> {
+            fn fmt(
+                &self,
+                f: &mut ::std::fmt::Formatter<'_>,
+            ) -> Result<(), ::std::fmt::Error> {
                 ::std::fmt::Display::fmt(&self.0, f)
             }
         }
 
         impl ::std::fmt::Debug for ConversionError {
-            fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> Result<(), ::std::fmt::Error> {
+            fn fmt(
+                &self,
+                f: &mut ::std::fmt::Formatter<'_>,
+            ) -> Result<(), ::std::fmt::Error> {
                 ::std::fmt::Debug::fmt(&self.0, f)
             }
         }
@@ -107,7 +113,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct CrucibleOpts {
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         pub cert_pem: ::std::option::Option<::std::string::String>,
@@ -162,7 +168,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct DiskAttachment {
         pub disk_id: ::uuid::Uuid,
         pub generation_id: u64,
@@ -207,7 +213,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub enum DiskAttachmentState {
         Detached,
         Destroyed,
@@ -261,7 +267,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct DiskRequest {
         pub device: ::std::string::String,
         #[serde(rename = "gen")]
@@ -304,7 +310,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct Error {
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         pub error_code: ::std::option::Option<::std::string::String>,
@@ -354,7 +360,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct Instance {
         pub disks: ::std::vec::Vec<DiskAttachment>,
         pub nics: ::std::vec::Vec<NetworkInterface>,
@@ -400,8 +406,7 @@ pub mod types {
     ///        {
     ///          "allOf": [
     ///            {
-    ///              "$ref":
-    /// "#/components/schemas/InstanceMigrateInitiateRequest"
+    ///              "$ref": "#/components/schemas/InstanceMigrateInitiateRequest"
     ///            }
     ///          ]
     ///        }
@@ -421,7 +426,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct InstanceEnsureRequest {
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         pub cloud_init_bytes: ::std::option::Option<::std::string::String>,
@@ -456,8 +461,7 @@ pub mod types {
     ///        {
     ///          "allOf": [
     ///            {
-    ///              "$ref":
-    /// "#/components/schemas/InstanceMigrateInitiateResponse"
+    ///              "$ref": "#/components/schemas/InstanceMigrateInitiateResponse"
     ///            }
     ///          ]
     ///        }
@@ -467,7 +471,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct InstanceEnsureResponse {
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         pub migrate: ::std::option::Option<InstanceMigrateInitiateResponse>,
@@ -505,7 +509,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct InstanceGetResponse {
         pub instance: Instance,
     }
@@ -544,7 +548,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct InstanceMigrateInitiateRequest {
         pub migration_id: ::uuid::Uuid,
         pub src_addr: ::std::string::String,
@@ -576,7 +580,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct InstanceMigrateInitiateResponse {
         pub migration_id: ::uuid::Uuid,
     }
@@ -606,7 +610,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct InstanceMigrateStatusRequest {
         pub migration_id: ::uuid::Uuid,
     }
@@ -635,7 +639,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct InstanceMigrateStatusResponse {
         pub state: MigrationState,
     }
@@ -664,8 +668,7 @@ pub mod types {
     ///  ],
     ///  "properties": {
     ///    "bootrom_id": {
-    ///      "description": "ID of the bootrom used to initialize this
-    /// Instance.",
+    ///      "description": "ID of the bootrom used to initialize this Instance.",
     ///      "type": "string",
     ///      "format": "uuid"
     ///    },
@@ -703,7 +706,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct InstanceProperties {
         ///ID of the bootrom used to initialize this Instance.
         pub bootrom_id: ::uuid::Uuid,
@@ -751,8 +754,8 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
-        :: serde :: Deserialize,
-        :: serde :: Serialize,
+        ::serde::Deserialize,
+        ::serde::Serialize,
         Clone,
         Copy,
         Debug,
@@ -760,7 +763,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd,
+        PartialOrd
     )]
     pub enum InstanceState {
         Creating,
@@ -794,7 +797,9 @@ pub mod types {
 
     impl ::std::str::FromStr for InstanceState {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "Creating" => Ok(Self::Creating),
                 "Starting" => Ok(Self::Starting),
@@ -813,7 +818,9 @@ pub mod types {
 
     impl ::std::convert::TryFrom<&str> for InstanceState {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -856,7 +863,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct InstanceStateMonitorRequest {
         #[serde(rename = "gen")]
         pub gen_: u64,
@@ -892,7 +899,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct InstanceStateMonitorResponse {
         #[serde(rename = "gen")]
         pub gen_: u64,
@@ -922,8 +929,8 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
-        :: serde :: Deserialize,
-        :: serde :: Serialize,
+        ::serde::Deserialize,
+        ::serde::Serialize,
         Clone,
         Copy,
         Debug,
@@ -931,7 +938,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd,
+        PartialOrd
     )]
     pub enum InstanceStateRequested {
         Run,
@@ -953,7 +960,9 @@ pub mod types {
 
     impl ::std::str::FromStr for InstanceStateRequested {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "Run" => Ok(Self::Run),
                 "Stop" => Ok(Self::Stop),
@@ -966,7 +975,9 @@ pub mod types {
 
     impl ::std::convert::TryFrom<&str> for InstanceStateRequested {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -1012,8 +1023,8 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
-        :: serde :: Deserialize,
-        :: serde :: Serialize,
+        ::serde::Deserialize,
+        ::serde::Serialize,
         Clone,
         Copy,
         Debug,
@@ -1021,7 +1032,7 @@ pub mod types {
         Hash,
         Ord,
         PartialEq,
-        PartialOrd,
+        PartialOrd
     )]
     pub enum MigrationState {
         Sync,
@@ -1055,7 +1066,9 @@ pub mod types {
 
     impl ::std::str::FromStr for MigrationState {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "Sync" => Ok(Self::Sync),
                 "RamPush" => Ok(Self::RamPush),
@@ -1074,7 +1087,9 @@ pub mod types {
 
     impl ::std::convert::TryFrom<&str> for MigrationState {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -1119,7 +1134,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct NetworkInterface {
         pub attachment: NetworkInterfaceAttachmentState,
         pub name: ::std::string::String,
@@ -1161,7 +1176,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub enum NetworkInterfaceAttachmentState {
         Detached,
         Faulted,
@@ -1196,7 +1211,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct NetworkInterfaceRequest {
         pub name: ::std::string::String,
         pub slot: Slot,
@@ -1208,22 +1223,20 @@ pub mod types {
         }
     }
 
-    ///A stable index which is translated by Propolis into a PCI BDF, visible
-    /// to the guest.
+    ///A stable index which is translated by Propolis into a PCI BDF, visible to the guest.
     ///
     /// <details><summary>JSON schema</summary>
     ///
     /// ```json
     ///{
-    ///  "description": "A stable index which is translated by Propolis into a
-    /// PCI BDF, visible to the guest.",
+    ///  "description": "A stable index which is translated by Propolis into a PCI BDF, visible to the guest.",
     ///  "type": "integer",
     ///  "format": "uint8",
     ///  "minimum": 0.0
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     #[serde(transparent)]
     pub struct Slot(pub u8);
     impl ::std::ops::Deref for Slot {
@@ -1305,8 +1318,7 @@ pub mod types {
     ///            {
     ///              "allOf": [
     ///                {
-    ///                  "$ref":
-    /// "#/components/schemas/VolumeConstructionRequest"
+    ///                  "$ref": "#/components/schemas/VolumeConstructionRequest"
     ///                }
     ///              ]
     ///            }
@@ -1418,7 +1430,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     #[serde(tag = "type")]
     pub enum VolumeConstructionRequest {
         #[serde(rename = "volume")]
@@ -1426,15 +1438,13 @@ pub mod types {
             block_size: u64,
             id: ::uuid::Uuid,
             #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-            read_only_parent: ::std::option::Option<::std::boxed::Box<VolumeConstructionRequest>>,
+            read_only_parent: ::std::option::Option<
+                ::std::boxed::Box<VolumeConstructionRequest>,
+            >,
             sub_volumes: ::std::vec::Vec<VolumeConstructionRequest>,
         },
         #[serde(rename = "url")]
-        Url {
-            block_size: u64,
-            id: ::uuid::Uuid,
-            url: ::std::string::String,
-        },
+        Url { block_size: u64, id: ::uuid::Uuid, url: ::std::string::String },
         #[serde(rename = "region")]
         Region {
             block_size: u64,
@@ -1443,11 +1453,7 @@ pub mod types {
             opts: CrucibleOpts,
         },
         #[serde(rename = "file")]
-        File {
-            block_size: u64,
-            id: ::uuid::Uuid,
-            path: ::std::string::String,
-        },
+        File { block_size: u64, id: ::uuid::Uuid, path: ::std::string::String },
     }
 
     /// Types for composing complex structures.
@@ -1462,7 +1468,10 @@ pub mod types {
                 ::std::option::Option<::std::string::String>,
                 ::std::string::String,
             >,
-            flush_timeout: ::std::result::Result<::std::option::Option<u32>, ::std::string::String>,
+            flush_timeout: ::std::result::Result<
+                ::std::option::Option<u32>,
+                ::std::string::String,
+            >,
             id: ::std::result::Result<::uuid::Uuid, ::std::string::String>,
             key: ::std::result::Result<
                 ::std::option::Option<::std::string::String>,
@@ -1509,7 +1518,9 @@ pub mod types {
             {
                 self.cert_pem = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for cert_pem: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for cert_pem: {e}")
+                    });
                 self
             }
             pub fn control<T>(mut self, value: T) -> Self
@@ -1519,7 +1530,9 @@ pub mod types {
             {
                 self.control = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for control: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for control: {e}")
+                    });
                 self
             }
             pub fn flush_timeout<T>(mut self, value: T) -> Self
@@ -1529,7 +1542,9 @@ pub mod types {
             {
                 self.flush_timeout = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for flush_timeout: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for flush_timeout: {e}")
+                    });
                 self
             }
             pub fn id<T>(mut self, value: T) -> Self
@@ -1549,7 +1564,9 @@ pub mod types {
             {
                 self.key = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for key: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for key: {e}")
+                    });
                 self
             }
             pub fn key_pem<T>(mut self, value: T) -> Self
@@ -1559,7 +1576,9 @@ pub mod types {
             {
                 self.key_pem = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for key_pem: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for key_pem: {e}")
+                    });
                 self
             }
             pub fn lossy<T>(mut self, value: T) -> Self
@@ -1569,7 +1588,9 @@ pub mod types {
             {
                 self.lossy = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for lossy: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for lossy: {e}")
+                    });
                 self
             }
             pub fn read_only<T>(mut self, value: T) -> Self
@@ -1579,7 +1600,9 @@ pub mod types {
             {
                 self.read_only = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for read_only: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for read_only: {e}")
+                    });
                 self
             }
             pub fn root_cert_pem<T>(mut self, value: T) -> Self
@@ -1589,7 +1612,9 @@ pub mod types {
             {
                 self.root_cert_pem = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for root_cert_pem: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for root_cert_pem: {e}")
+                    });
                 self
             }
             pub fn target<T>(mut self, value: T) -> Self
@@ -1599,7 +1624,9 @@ pub mod types {
             {
                 self.target = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for target: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for target: {e}")
+                    });
                 self
             }
         }
@@ -1645,14 +1672,19 @@ pub mod types {
         pub struct DiskAttachment {
             disk_id: ::std::result::Result<::uuid::Uuid, ::std::string::String>,
             generation_id: ::std::result::Result<u64, ::std::string::String>,
-            state: ::std::result::Result<super::DiskAttachmentState, ::std::string::String>,
+            state: ::std::result::Result<
+                super::DiskAttachmentState,
+                ::std::string::String,
+            >,
         }
 
         impl ::std::default::Default for DiskAttachment {
             fn default() -> Self {
                 Self {
                     disk_id: Err("no value supplied for disk_id".to_string()),
-                    generation_id: Err("no value supplied for generation_id".to_string()),
+                    generation_id: Err(
+                        "no value supplied for generation_id".to_string(),
+                    ),
                     state: Err("no value supplied for state".to_string()),
                 }
             }
@@ -1666,7 +1698,9 @@ pub mod types {
             {
                 self.disk_id = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for disk_id: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for disk_id: {e}")
+                    });
                 self
             }
             pub fn generation_id<T>(mut self, value: T) -> Self
@@ -1676,7 +1710,9 @@ pub mod types {
             {
                 self.generation_id = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for generation_id: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for generation_id: {e}")
+                    });
                 self
             }
             pub fn state<T>(mut self, value: T) -> Self
@@ -1686,7 +1722,9 @@ pub mod types {
             {
                 self.state = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for state: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for state: {e}")
+                    });
                 self
             }
         }
@@ -1721,8 +1759,10 @@ pub mod types {
             name: ::std::result::Result<::std::string::String, ::std::string::String>,
             read_only: ::std::result::Result<bool, ::std::string::String>,
             slot: ::std::result::Result<super::Slot, ::std::string::String>,
-            volume_construction_request:
-                ::std::result::Result<super::VolumeConstructionRequest, ::std::string::String>,
+            volume_construction_request: ::std::result::Result<
+                super::VolumeConstructionRequest,
+                ::std::string::String,
+            >,
         }
 
         impl ::std::default::Default for DiskRequest {
@@ -1733,9 +1773,9 @@ pub mod types {
                     name: Err("no value supplied for name".to_string()),
                     read_only: Err("no value supplied for read_only".to_string()),
                     slot: Err("no value supplied for slot".to_string()),
-                    volume_construction_request: Err("no value supplied for \
-                                                      volume_construction_request"
-                        .to_string()),
+                    volume_construction_request: Err(
+                        "no value supplied for volume_construction_request".to_string(),
+                    ),
                 }
             }
         }
@@ -1748,7 +1788,9 @@ pub mod types {
             {
                 self.device = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for device: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for device: {e}")
+                    });
                 self
             }
             pub fn gen_<T>(mut self, value: T) -> Self
@@ -1758,7 +1800,9 @@ pub mod types {
             {
                 self.gen_ = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for gen_: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for gen_: {e}")
+                    });
                 self
             }
             pub fn name<T>(mut self, value: T) -> Self
@@ -1768,7 +1812,9 @@ pub mod types {
             {
                 self.name = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for name: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for name: {e}")
+                    });
                 self
             }
             pub fn read_only<T>(mut self, value: T) -> Self
@@ -1778,7 +1824,9 @@ pub mod types {
             {
                 self.read_only = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for read_only: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for read_only: {e}")
+                    });
                 self
             }
             pub fn slot<T>(mut self, value: T) -> Self
@@ -1788,7 +1836,9 @@ pub mod types {
             {
                 self.slot = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for slot: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for slot: {e}")
+                    });
                 self
             }
             pub fn volume_construction_request<T>(mut self, value: T) -> Self
@@ -1796,9 +1846,13 @@ pub mod types {
                 T: ::std::convert::TryInto<super::VolumeConstructionRequest>,
                 T::Error: ::std::fmt::Display,
             {
-                self.volume_construction_request = value.try_into().map_err(|e| {
-                    format!("error converting supplied value for volume_construction_request: {e}")
-                });
+                self.volume_construction_request = value
+                    .try_into()
+                    .map_err(|e| {
+                        format!(
+                            "error converting supplied value for volume_construction_request: {e}"
+                        )
+                    });
                 self
             }
         }
@@ -1839,7 +1893,10 @@ pub mod types {
                 ::std::string::String,
             >,
             message: ::std::result::Result<::std::string::String, ::std::string::String>,
-            request_id: ::std::result::Result<::std::string::String, ::std::string::String>,
+            request_id: ::std::result::Result<
+                ::std::string::String,
+                ::std::string::String,
+            >,
         }
 
         impl ::std::default::Default for Error {
@@ -1860,7 +1917,9 @@ pub mod types {
             {
                 self.error_code = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for error_code: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for error_code: {e}")
+                    });
                 self
             }
             pub fn message<T>(mut self, value: T) -> Self
@@ -1870,7 +1929,9 @@ pub mod types {
             {
                 self.message = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for message: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for message: {e}")
+                    });
                 self
             }
             pub fn request_id<T>(mut self, value: T) -> Self
@@ -1880,7 +1941,9 @@ pub mod types {
             {
                 self.request_id = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for request_id: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for request_id: {e}")
+                    });
                 self
             }
         }
@@ -1918,7 +1981,10 @@ pub mod types {
                 ::std::vec::Vec<super::NetworkInterface>,
                 ::std::string::String,
             >,
-            properties: ::std::result::Result<super::InstanceProperties, ::std::string::String>,
+            properties: ::std::result::Result<
+                super::InstanceProperties,
+                ::std::string::String,
+            >,
             state: ::std::result::Result<super::InstanceState, ::std::string::String>,
         }
 
@@ -1941,7 +2007,9 @@ pub mod types {
             {
                 self.disks = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for disks: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for disks: {e}")
+                    });
                 self
             }
             pub fn nics<T>(mut self, value: T) -> Self
@@ -1951,7 +2019,9 @@ pub mod types {
             {
                 self.nics = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for nics: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for nics: {e}")
+                    });
                 self
             }
             pub fn properties<T>(mut self, value: T) -> Self
@@ -1961,7 +2031,9 @@ pub mod types {
             {
                 self.properties = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for properties: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for properties: {e}")
+                    });
                 self
             }
             pub fn state<T>(mut self, value: T) -> Self
@@ -1971,7 +2043,9 @@ pub mod types {
             {
                 self.state = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for state: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for state: {e}")
+                    });
                 self
             }
         }
@@ -2007,8 +2081,10 @@ pub mod types {
                 ::std::option::Option<::std::string::String>,
                 ::std::string::String,
             >,
-            disks:
-                ::std::result::Result<::std::vec::Vec<super::DiskRequest>, ::std::string::String>,
+            disks: ::std::result::Result<
+                ::std::vec::Vec<super::DiskRequest>,
+                ::std::string::String,
+            >,
             migrate: ::std::result::Result<
                 ::std::option::Option<super::InstanceMigrateInitiateRequest>,
                 ::std::string::String,
@@ -2017,7 +2093,10 @@ pub mod types {
                 ::std::vec::Vec<super::NetworkInterfaceRequest>,
                 ::std::string::String,
             >,
-            properties: ::std::result::Result<super::InstanceProperties, ::std::string::String>,
+            properties: ::std::result::Result<
+                super::InstanceProperties,
+                ::std::string::String,
+            >,
         }
 
         impl ::std::default::Default for InstanceEnsureRequest {
@@ -2038,9 +2117,13 @@ pub mod types {
                 T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
                 T::Error: ::std::fmt::Display,
             {
-                self.cloud_init_bytes = value.try_into().map_err(|e| {
-                    format!("error converting supplied value for cloud_init_bytes: {e}")
-                });
+                self.cloud_init_bytes = value
+                    .try_into()
+                    .map_err(|e| {
+                        format!(
+                            "error converting supplied value for cloud_init_bytes: {e}"
+                        )
+                    });
                 self
             }
             pub fn disks<T>(mut self, value: T) -> Self
@@ -2050,7 +2133,9 @@ pub mod types {
             {
                 self.disks = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for disks: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for disks: {e}")
+                    });
                 self
             }
             pub fn migrate<T>(mut self, value: T) -> Self
@@ -2062,17 +2147,23 @@ pub mod types {
             {
                 self.migrate = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for migrate: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for migrate: {e}")
+                    });
                 self
             }
             pub fn nics<T>(mut self, value: T) -> Self
             where
-                T: ::std::convert::TryInto<::std::vec::Vec<super::NetworkInterfaceRequest>>,
+                T: ::std::convert::TryInto<
+                    ::std::vec::Vec<super::NetworkInterfaceRequest>,
+                >,
                 T::Error: ::std::fmt::Display,
             {
                 self.nics = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for nics: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for nics: {e}")
+                    });
                 self
             }
             pub fn properties<T>(mut self, value: T) -> Self
@@ -2082,12 +2173,15 @@ pub mod types {
             {
                 self.properties = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for properties: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for properties: {e}")
+                    });
                 self
             }
         }
 
-        impl ::std::convert::TryFrom<InstanceEnsureRequest> for super::InstanceEnsureRequest {
+        impl ::std::convert::TryFrom<InstanceEnsureRequest>
+        for super::InstanceEnsureRequest {
             type Error = super::error::ConversionError;
             fn try_from(
                 value: InstanceEnsureRequest,
@@ -2102,7 +2196,8 @@ pub mod types {
             }
         }
 
-        impl ::std::convert::From<super::InstanceEnsureRequest> for InstanceEnsureRequest {
+        impl ::std::convert::From<super::InstanceEnsureRequest>
+        for InstanceEnsureRequest {
             fn from(value: super::InstanceEnsureRequest) -> Self {
                 Self {
                     cloud_init_bytes: Ok(value.cloud_init_bytes),
@@ -2140,27 +2235,27 @@ pub mod types {
             {
                 self.migrate = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for migrate: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for migrate: {e}")
+                    });
                 self
             }
         }
 
-        impl ::std::convert::TryFrom<InstanceEnsureResponse> for super::InstanceEnsureResponse {
+        impl ::std::convert::TryFrom<InstanceEnsureResponse>
+        for super::InstanceEnsureResponse {
             type Error = super::error::ConversionError;
             fn try_from(
                 value: InstanceEnsureResponse,
             ) -> ::std::result::Result<Self, super::error::ConversionError> {
-                Ok(Self {
-                    migrate: value.migrate?,
-                })
+                Ok(Self { migrate: value.migrate? })
             }
         }
 
-        impl ::std::convert::From<super::InstanceEnsureResponse> for InstanceEnsureResponse {
+        impl ::std::convert::From<super::InstanceEnsureResponse>
+        for InstanceEnsureResponse {
             fn from(value: super::InstanceEnsureResponse) -> Self {
-                Self {
-                    migrate: Ok(value.migrate),
-                }
+                Self { migrate: Ok(value.migrate) }
             }
         }
 
@@ -2185,19 +2280,20 @@ pub mod types {
             {
                 self.instance = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for instance: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for instance: {e}")
+                    });
                 self
             }
         }
 
-        impl ::std::convert::TryFrom<InstanceGetResponse> for super::InstanceGetResponse {
+        impl ::std::convert::TryFrom<InstanceGetResponse>
+        for super::InstanceGetResponse {
             type Error = super::error::ConversionError;
             fn try_from(
                 value: InstanceGetResponse,
             ) -> ::std::result::Result<Self, super::error::ConversionError> {
-                Ok(Self {
-                    instance: value.instance?,
-                })
+                Ok(Self { instance: value.instance? })
             }
         }
 
@@ -2212,7 +2308,10 @@ pub mod types {
         #[derive(Clone, Debug)]
         pub struct InstanceMigrateInitiateRequest {
             migration_id: ::std::result::Result<::uuid::Uuid, ::std::string::String>,
-            src_addr: ::std::result::Result<::std::string::String, ::std::string::String>,
+            src_addr: ::std::result::Result<
+                ::std::string::String,
+                ::std::string::String,
+            >,
             src_uuid: ::std::result::Result<::uuid::Uuid, ::std::string::String>,
         }
 
@@ -2234,7 +2333,9 @@ pub mod types {
             {
                 self.migration_id = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for migration_id: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for migration_id: {e}")
+                    });
                 self
             }
             pub fn src_addr<T>(mut self, value: T) -> Self
@@ -2244,7 +2345,9 @@ pub mod types {
             {
                 self.src_addr = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for src_addr: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for src_addr: {e}")
+                    });
                 self
             }
             pub fn src_uuid<T>(mut self, value: T) -> Self
@@ -2254,14 +2357,15 @@ pub mod types {
             {
                 self.src_uuid = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for src_uuid: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for src_uuid: {e}")
+                    });
                 self
             }
         }
 
         impl ::std::convert::TryFrom<InstanceMigrateInitiateRequest>
-            for super::InstanceMigrateInitiateRequest
-        {
+        for super::InstanceMigrateInitiateRequest {
             type Error = super::error::ConversionError;
             fn try_from(
                 value: InstanceMigrateInitiateRequest,
@@ -2275,8 +2379,7 @@ pub mod types {
         }
 
         impl ::std::convert::From<super::InstanceMigrateInitiateRequest>
-            for InstanceMigrateInitiateRequest
-        {
+        for InstanceMigrateInitiateRequest {
             fn from(value: super::InstanceMigrateInitiateRequest) -> Self {
                 Self {
                     migration_id: Ok(value.migration_id),
@@ -2307,14 +2410,15 @@ pub mod types {
             {
                 self.migration_id = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for migration_id: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for migration_id: {e}")
+                    });
                 self
             }
         }
 
         impl ::std::convert::TryFrom<InstanceMigrateInitiateResponse>
-            for super::InstanceMigrateInitiateResponse
-        {
+        for super::InstanceMigrateInitiateResponse {
             type Error = super::error::ConversionError;
             fn try_from(
                 value: InstanceMigrateInitiateResponse,
@@ -2326,8 +2430,7 @@ pub mod types {
         }
 
         impl ::std::convert::From<super::InstanceMigrateInitiateResponse>
-            for InstanceMigrateInitiateResponse
-        {
+        for InstanceMigrateInitiateResponse {
             fn from(value: super::InstanceMigrateInitiateResponse) -> Self {
                 Self {
                     migration_id: Ok(value.migration_id),
@@ -2356,12 +2459,15 @@ pub mod types {
             {
                 self.migration_id = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for migration_id: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for migration_id: {e}")
+                    });
                 self
             }
         }
 
-        impl ::std::convert::TryFrom<InstanceMigrateStatusRequest> for super::InstanceMigrateStatusRequest {
+        impl ::std::convert::TryFrom<InstanceMigrateStatusRequest>
+        for super::InstanceMigrateStatusRequest {
             type Error = super::error::ConversionError;
             fn try_from(
                 value: InstanceMigrateStatusRequest,
@@ -2372,7 +2478,8 @@ pub mod types {
             }
         }
 
-        impl ::std::convert::From<super::InstanceMigrateStatusRequest> for InstanceMigrateStatusRequest {
+        impl ::std::convert::From<super::InstanceMigrateStatusRequest>
+        for InstanceMigrateStatusRequest {
             fn from(value: super::InstanceMigrateStatusRequest) -> Self {
                 Self {
                     migration_id: Ok(value.migration_id),
@@ -2401,36 +2508,37 @@ pub mod types {
             {
                 self.state = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for state: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for state: {e}")
+                    });
                 self
             }
         }
 
         impl ::std::convert::TryFrom<InstanceMigrateStatusResponse>
-            for super::InstanceMigrateStatusResponse
-        {
+        for super::InstanceMigrateStatusResponse {
             type Error = super::error::ConversionError;
             fn try_from(
                 value: InstanceMigrateStatusResponse,
             ) -> ::std::result::Result<Self, super::error::ConversionError> {
-                Ok(Self {
-                    state: value.state?,
-                })
+                Ok(Self { state: value.state? })
             }
         }
 
-        impl ::std::convert::From<super::InstanceMigrateStatusResponse> for InstanceMigrateStatusResponse {
+        impl ::std::convert::From<super::InstanceMigrateStatusResponse>
+        for InstanceMigrateStatusResponse {
             fn from(value: super::InstanceMigrateStatusResponse) -> Self {
-                Self {
-                    state: Ok(value.state),
-                }
+                Self { state: Ok(value.state) }
             }
         }
 
         #[derive(Clone, Debug)]
         pub struct InstanceProperties {
             bootrom_id: ::std::result::Result<::uuid::Uuid, ::std::string::String>,
-            description: ::std::result::Result<::std::string::String, ::std::string::String>,
+            description: ::std::result::Result<
+                ::std::string::String,
+                ::std::string::String,
+            >,
             id: ::std::result::Result<::uuid::Uuid, ::std::string::String>,
             image_id: ::std::result::Result<::uuid::Uuid, ::std::string::String>,
             memory: ::std::result::Result<u64, ::std::string::String>,
@@ -2460,7 +2568,9 @@ pub mod types {
             {
                 self.bootrom_id = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for bootrom_id: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for bootrom_id: {e}")
+                    });
                 self
             }
             pub fn description<T>(mut self, value: T) -> Self
@@ -2470,7 +2580,9 @@ pub mod types {
             {
                 self.description = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for description: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for description: {e}")
+                    });
                 self
             }
             pub fn id<T>(mut self, value: T) -> Self
@@ -2490,7 +2602,9 @@ pub mod types {
             {
                 self.image_id = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for image_id: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for image_id: {e}")
+                    });
                 self
             }
             pub fn memory<T>(mut self, value: T) -> Self
@@ -2500,7 +2614,9 @@ pub mod types {
             {
                 self.memory = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for memory: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for memory: {e}")
+                    });
                 self
             }
             pub fn name<T>(mut self, value: T) -> Self
@@ -2510,7 +2626,9 @@ pub mod types {
             {
                 self.name = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for name: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for name: {e}")
+                    });
                 self
             }
             pub fn vcpus<T>(mut self, value: T) -> Self
@@ -2520,7 +2638,9 @@ pub mod types {
             {
                 self.vcpus = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for vcpus: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for vcpus: {e}")
+                    });
                 self
             }
         }
@@ -2577,12 +2697,15 @@ pub mod types {
             {
                 self.gen_ = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for gen_: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for gen_: {e}")
+                    });
                 self
             }
         }
 
-        impl ::std::convert::TryFrom<InstanceStateMonitorRequest> for super::InstanceStateMonitorRequest {
+        impl ::std::convert::TryFrom<InstanceStateMonitorRequest>
+        for super::InstanceStateMonitorRequest {
             type Error = super::error::ConversionError;
             fn try_from(
                 value: InstanceStateMonitorRequest,
@@ -2591,11 +2714,10 @@ pub mod types {
             }
         }
 
-        impl ::std::convert::From<super::InstanceStateMonitorRequest> for InstanceStateMonitorRequest {
+        impl ::std::convert::From<super::InstanceStateMonitorRequest>
+        for InstanceStateMonitorRequest {
             fn from(value: super::InstanceStateMonitorRequest) -> Self {
-                Self {
-                    gen_: Ok(value.gen_),
-                }
+                Self { gen_: Ok(value.gen_) }
             }
         }
 
@@ -2622,7 +2744,9 @@ pub mod types {
             {
                 self.gen_ = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for gen_: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for gen_: {e}")
+                    });
                 self
             }
             pub fn state<T>(mut self, value: T) -> Self
@@ -2632,12 +2756,15 @@ pub mod types {
             {
                 self.state = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for state: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for state: {e}")
+                    });
                 self
             }
         }
 
-        impl ::std::convert::TryFrom<InstanceStateMonitorResponse> for super::InstanceStateMonitorResponse {
+        impl ::std::convert::TryFrom<InstanceStateMonitorResponse>
+        for super::InstanceStateMonitorResponse {
             type Error = super::error::ConversionError;
             fn try_from(
                 value: InstanceStateMonitorResponse,
@@ -2649,7 +2776,8 @@ pub mod types {
             }
         }
 
-        impl ::std::convert::From<super::InstanceStateMonitorResponse> for InstanceStateMonitorResponse {
+        impl ::std::convert::From<super::InstanceStateMonitorResponse>
+        for InstanceStateMonitorResponse {
             fn from(value: super::InstanceStateMonitorResponse) -> Self {
                 Self {
                     gen_: Ok(value.gen_),
@@ -2684,7 +2812,9 @@ pub mod types {
             {
                 self.attachment = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for attachment: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for attachment: {e}")
+                    });
                 self
             }
             pub fn name<T>(mut self, value: T) -> Self
@@ -2694,7 +2824,9 @@ pub mod types {
             {
                 self.name = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for name: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for name: {e}")
+                    });
                 self
             }
         }
@@ -2743,7 +2875,9 @@ pub mod types {
             {
                 self.name = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for name: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for name: {e}")
+                    });
                 self
             }
             pub fn slot<T>(mut self, value: T) -> Self
@@ -2753,12 +2887,15 @@ pub mod types {
             {
                 self.slot = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for slot: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for slot: {e}")
+                    });
                 self
             }
         }
 
-        impl ::std::convert::TryFrom<NetworkInterfaceRequest> for super::NetworkInterfaceRequest {
+        impl ::std::convert::TryFrom<NetworkInterfaceRequest>
+        for super::NetworkInterfaceRequest {
             type Error = super::error::ConversionError;
             fn try_from(
                 value: NetworkInterfaceRequest,
@@ -2770,7 +2907,8 @@ pub mod types {
             }
         }
 
-        impl ::std::convert::From<super::NetworkInterfaceRequest> for NetworkInterfaceRequest {
+        impl ::std::convert::From<super::NetworkInterfaceRequest>
+        for NetworkInterfaceRequest {
             fn from(value: super::NetworkInterfaceRequest) -> Self {
                 Self {
                     name: Ok(value.name),
@@ -2802,9 +2940,7 @@ impl Client {
         #[cfg(not(target_arch = "wasm32"))]
         let client = {
             let dur = ::std::time::Duration::from_secs(15u64);
-            reqwest::ClientBuilder::new()
-                .connect_timeout(dur)
-                .timeout(dur)
+            reqwest::ClientBuilder::new().connect_timeout(dur).timeout(dur)
         };
         #[cfg(target_arch = "wasm32")]
         let client = reqwest::ClientBuilder::new();
@@ -2848,10 +2984,10 @@ impl Client {
     ///Sends a `GET` request to `/instance`
     ///
     ///```ignore
-    /// let response = client.instance_get()
+    ///let response = client.instance_get()
     ///    .send()
     ///    .await;
-    /// ```
+    ///```
     pub fn instance_get(&self) -> builder::InstanceGet<'_> {
         builder::InstanceGet::new(self)
     }
@@ -2859,11 +2995,11 @@ impl Client {
     ///Sends a `PUT` request to `/instance`
     ///
     ///```ignore
-    /// let response = client.instance_ensure()
+    ///let response = client.instance_ensure()
     ///    .body(body)
     ///    .send()
     ///    .await;
-    /// ```
+    ///```
     pub fn instance_ensure(&self) -> builder::InstanceEnsure<'_> {
         builder::InstanceEnsure::new(self)
     }
@@ -2873,12 +3009,12 @@ impl Client {
     ///Sends a `POST` request to `/instance/disk/{id}/snapshot/{snapshot_id}`
     ///
     ///```ignore
-    /// let response = client.instance_issue_crucible_snapshot_request()
+    ///let response = client.instance_issue_crucible_snapshot_request()
     ///    .id(id)
     ///    .snapshot_id(snapshot_id)
     ///    .send()
     ///    .await;
-    /// ```
+    ///```
     pub fn instance_issue_crucible_snapshot_request(
         &self,
     ) -> builder::InstanceIssueCrucibleSnapshotRequest<'_> {
@@ -2888,11 +3024,11 @@ impl Client {
     ///Sends a `GET` request to `/instance/migrate/status`
     ///
     ///```ignore
-    /// let response = client.instance_migrate_status()
+    ///let response = client.instance_migrate_status()
     ///    .body(body)
     ///    .send()
     ///    .await;
-    /// ```
+    ///```
     pub fn instance_migrate_status(&self) -> builder::InstanceMigrateStatus<'_> {
         builder::InstanceMigrateStatus::new(self)
     }
@@ -2900,10 +3036,10 @@ impl Client {
     ///Sends a `GET` request to `/instance/serial`
     ///
     ///```ignore
-    /// let response = client.instance_serial()
+    ///let response = client.instance_serial()
     ///    .send()
     ///    .await;
-    /// ```
+    ///```
     pub fn instance_serial(&self) -> builder::InstanceSerial<'_> {
         builder::InstanceSerial::new(self)
     }
@@ -2911,11 +3047,11 @@ impl Client {
     ///Sends a `PUT` request to `/instance/state`
     ///
     ///```ignore
-    /// let response = client.instance_state_put()
+    ///let response = client.instance_state_put()
     ///    .body(body)
     ///    .send()
     ///    .await;
-    /// ```
+    ///```
     pub fn instance_state_put(&self) -> builder::InstanceStatePut<'_> {
         builder::InstanceStatePut::new(self)
     }
@@ -2923,11 +3059,11 @@ impl Client {
     ///Sends a `GET` request to `/instance/state-monitor`
     ///
     ///```ignore
-    /// let response = client.instance_state_monitor()
+    ///let response = client.instance_state_monitor()
     ///    .body(body)
     ///    .send()
     ///    .await;
-    /// ```
+    ///```
     pub fn instance_state_monitor(&self) -> builder::InstanceStateMonitor<'_> {
         builder::InstanceStateMonitor::new(self)
     }
@@ -2939,8 +3075,8 @@ pub mod builder {
     use super::types;
     #[allow(unused_imports)]
     use super::{
-        encode_path, ByteStream, ClientHooks, ClientInfo, Error, OperationInfo, RequestBuilderExt,
-        ResponseValue,
+        encode_path, ByteStream, ClientInfo, ClientHooks, Error, OperationInfo,
+        RequestBuilderExt, ResponseValue,
     };
     ///Builder for [`Client::instance_get`]
     ///
@@ -2962,10 +3098,13 @@ pub mod builder {
             let Self { client } = self;
             let url = format!("{}/instance", client.baseurl,);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-            header_map.append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
-            );
+            header_map
+                .append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(
+                        super::Client::api_version(),
+                    ),
+                );
             #[allow(unused_mut)]
             let mut request = client
                 .client
@@ -2985,12 +3124,20 @@ pub mod builder {
             let response = result?;
             match response.status().as_u16() {
                 200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
+                400u16..=499u16 => {
+                    Err(
+                        Error::ErrorResponse(
+                            ResponseValue::from_response(response).await?,
+                        ),
+                    )
+                }
+                500u16..=599u16 => {
+                    Err(
+                        Error::ErrorResponse(
+                            ResponseValue::from_response(response).await?,
+                        ),
+                    )
+                }
                 _ => Err(Error::UnexpectedResponse(response)),
             }
         }
@@ -3016,14 +3163,18 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::InstanceEnsureRequest>,
-            <V as std::convert::TryInto<types::InstanceEnsureRequest>>::Error: std::fmt::Display,
+            <V as std::convert::TryInto<
+                types::InstanceEnsureRequest,
+            >>::Error: std::fmt::Display,
         {
-            self.body = value.try_into().map(From::from).map_err(|s| {
-                format!(
-                    "conversion to `InstanceEnsureRequest` for body failed: {}",
-                    s
-                )
-            });
+            self.body = value
+                .try_into()
+                .map(From::from)
+                .map_err(|s| {
+                    format!(
+                        "conversion to `InstanceEnsureRequest` for body failed: {}", s
+                    )
+                });
             self
         }
 
@@ -3043,14 +3194,19 @@ pub mod builder {
         ) -> Result<ResponseValue<types::InstanceEnsureResponse>, Error<types::Error>> {
             let Self { client, body } = self;
             let body = body
-                .and_then(|v| types::InstanceEnsureRequest::try_from(v).map_err(|e| e.to_string()))
+                .and_then(|v| {
+                    types::InstanceEnsureRequest::try_from(v).map_err(|e| e.to_string())
+                })
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/instance", client.baseurl,);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-            header_map.append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
-            );
+            header_map
+                .append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(
+                        super::Client::api_version(),
+                    ),
+                );
             #[allow(unused_mut)]
             let mut request = client
                 .client
@@ -3071,12 +3227,20 @@ pub mod builder {
             let response = result?;
             match response.status().as_u16() {
                 201u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
+                400u16..=499u16 => {
+                    Err(
+                        Error::ErrorResponse(
+                            ResponseValue::from_response(response).await?,
+                        ),
+                    )
+                }
+                500u16..=599u16 => {
+                    Err(
+                        Error::ErrorResponse(
+                            ResponseValue::from_response(response).await?,
+                        ),
+                    )
+                }
                 _ => Err(Error::UnexpectedResponse(response)),
             }
         }
@@ -3107,7 +3271,9 @@ pub mod builder {
         {
             self.id = value
                 .try_into()
-                .map_err(|_| "conversion to `:: uuid :: Uuid` for id failed".to_string());
+                .map_err(|_| {
+                    "conversion to `:: uuid :: Uuid` for id failed".to_string()
+                });
             self
         }
 
@@ -3117,31 +3283,29 @@ pub mod builder {
         {
             self.snapshot_id = value
                 .try_into()
-                .map_err(|_| "conversion to `:: uuid :: Uuid` for snapshot_id failed".to_string());
+                .map_err(|_| {
+                    "conversion to `:: uuid :: Uuid` for snapshot_id failed".to_string()
+                });
             self
         }
 
-        ///Sends a `POST` request to
-        /// `/instance/disk/{id}/snapshot/{snapshot_id}`
+        ///Sends a `POST` request to `/instance/disk/{id}/snapshot/{snapshot_id}`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
-            let Self {
-                client,
-                id,
-                snapshot_id,
-            } = self;
+            let Self { client, id, snapshot_id } = self;
             let id = id.map_err(Error::InvalidRequest)?;
             let snapshot_id = snapshot_id.map_err(Error::InvalidRequest)?;
             let url = format!(
-                "{}/instance/disk/{}/snapshot/{}",
-                client.baseurl,
-                encode_path(&id.to_string()),
-                encode_path(&snapshot_id.to_string()),
+                "{}/instance/disk/{}/snapshot/{}", client.baseurl, encode_path(& id
+                .to_string()), encode_path(& snapshot_id.to_string()),
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-            header_map.append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
-            );
+            header_map
+                .append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(
+                        super::Client::api_version(),
+                    ),
+                );
             #[allow(unused_mut)]
             let mut request = client
                 .client
@@ -3161,12 +3325,20 @@ pub mod builder {
             let response = result?;
             match response.status().as_u16() {
                 200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
+                400u16..=499u16 => {
+                    Err(
+                        Error::ErrorResponse(
+                            ResponseValue::from_response(response).await?,
+                        ),
+                    )
+                }
+                500u16..=599u16 => {
+                    Err(
+                        Error::ErrorResponse(
+                            ResponseValue::from_response(response).await?,
+                        ),
+                    )
+                }
                 _ => Err(Error::UnexpectedResponse(response)),
             }
         }
@@ -3192,15 +3364,19 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::InstanceMigrateStatusRequest>,
-            <V as std::convert::TryInto<types::InstanceMigrateStatusRequest>>::Error:
-                std::fmt::Display,
+            <V as std::convert::TryInto<
+                types::InstanceMigrateStatusRequest,
+            >>::Error: std::fmt::Display,
         {
-            self.body = value.try_into().map(From::from).map_err(|s| {
-                format!(
-                    "conversion to `InstanceMigrateStatusRequest` for body failed: {}",
-                    s
-                )
-            });
+            self.body = value
+                .try_into()
+                .map(From::from)
+                .map_err(|s| {
+                    format!(
+                        "conversion to `InstanceMigrateStatusRequest` for body failed: {}",
+                        s
+                    )
+                });
             self
         }
 
@@ -3217,20 +3393,26 @@ pub mod builder {
         ///Sends a `GET` request to `/instance/migrate/status`
         pub async fn send(
             self,
-        ) -> Result<ResponseValue<types::InstanceMigrateStatusResponse>, Error<types::Error>>
-        {
+        ) -> Result<
+            ResponseValue<types::InstanceMigrateStatusResponse>,
+            Error<types::Error>,
+        > {
             let Self { client, body } = self;
             let body = body
                 .and_then(|v| {
-                    types::InstanceMigrateStatusRequest::try_from(v).map_err(|e| e.to_string())
+                    types::InstanceMigrateStatusRequest::try_from(v)
+                        .map_err(|e| e.to_string())
                 })
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/instance/migrate/status", client.baseurl,);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-            header_map.append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
-            );
+            header_map
+                .append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(
+                        super::Client::api_version(),
+                    ),
+                );
             #[allow(unused_mut)]
             let mut request = client
                 .client
@@ -3251,12 +3433,20 @@ pub mod builder {
             let response = result?;
             match response.status().as_u16() {
                 200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
+                400u16..=499u16 => {
+                    Err(
+                        Error::ErrorResponse(
+                            ResponseValue::from_response(response).await?,
+                        ),
+                    )
+                }
+                500u16..=599u16 => {
+                    Err(
+                        Error::ErrorResponse(
+                            ResponseValue::from_response(response).await?,
+                        ),
+                    )
+                }
                 _ => Err(Error::UnexpectedResponse(response)),
             }
         }
@@ -3276,14 +3466,19 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/instance/serial`
-        pub async fn send(self) -> Result<ResponseValue<reqwest::Upgraded>, Error<types::Error>> {
+        pub async fn send(
+            self,
+        ) -> Result<ResponseValue<reqwest::Upgraded>, Error<types::Error>> {
             let Self { client } = self;
             let url = format!("{}/instance/serial", client.baseurl,);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-            header_map.append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
-            );
+            header_map
+                .append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(
+                        super::Client::api_version(),
+                    ),
+                );
             #[allow(unused_mut)]
             let mut request = client
                 .client
@@ -3309,12 +3504,20 @@ pub mod builder {
             let response = result?;
             match response.status().as_u16() {
                 101u16 => ResponseValue::upgrade(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
+                400u16..=499u16 => {
+                    Err(
+                        Error::ErrorResponse(
+                            ResponseValue::from_response(response).await?,
+                        ),
+                    )
+                }
+                500u16..=599u16 => {
+                    Err(
+                        Error::ErrorResponse(
+                            ResponseValue::from_response(response).await?,
+                        ),
+                    )
+                }
                 _ => Err(Error::UnexpectedResponse(response)),
             }
         }
@@ -3343,7 +3546,9 @@ pub mod builder {
         {
             self.body = value
                 .try_into()
-                .map_err(|_| "conversion to `InstanceStateRequested` for body failed".to_string());
+                .map_err(|_| {
+                    "conversion to `InstanceStateRequested` for body failed".to_string()
+                });
             self
         }
 
@@ -3353,10 +3558,13 @@ pub mod builder {
             let body = body.map_err(Error::InvalidRequest)?;
             let url = format!("{}/instance/state", client.baseurl,);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-            header_map.append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
-            );
+            header_map
+                .append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(
+                        super::Client::api_version(),
+                    ),
+                );
             #[allow(unused_mut)]
             let mut request = client
                 .client
@@ -3377,12 +3585,20 @@ pub mod builder {
             let response = result?;
             match response.status().as_u16() {
                 204u16 => Ok(ResponseValue::empty(response)),
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
+                400u16..=499u16 => {
+                    Err(
+                        Error::ErrorResponse(
+                            ResponseValue::from_response(response).await?,
+                        ),
+                    )
+                }
+                500u16..=599u16 => {
+                    Err(
+                        Error::ErrorResponse(
+                            ResponseValue::from_response(response).await?,
+                        ),
+                    )
+                }
                 _ => Err(Error::UnexpectedResponse(response)),
             }
         }
@@ -3408,15 +3624,19 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::InstanceStateMonitorRequest>,
-            <V as std::convert::TryInto<types::InstanceStateMonitorRequest>>::Error:
-                std::fmt::Display,
+            <V as std::convert::TryInto<
+                types::InstanceStateMonitorRequest,
+            >>::Error: std::fmt::Display,
         {
-            self.body = value.try_into().map(From::from).map_err(|s| {
-                format!(
-                    "conversion to `InstanceStateMonitorRequest` for body failed: {}",
-                    s
-                )
-            });
+            self.body = value
+                .try_into()
+                .map(From::from)
+                .map_err(|s| {
+                    format!(
+                        "conversion to `InstanceStateMonitorRequest` for body failed: {}",
+                        s
+                    )
+                });
             self
         }
 
@@ -3433,20 +3653,26 @@ pub mod builder {
         ///Sends a `GET` request to `/instance/state-monitor`
         pub async fn send(
             self,
-        ) -> Result<ResponseValue<types::InstanceStateMonitorResponse>, Error<types::Error>>
-        {
+        ) -> Result<
+            ResponseValue<types::InstanceStateMonitorResponse>,
+            Error<types::Error>,
+        > {
             let Self { client, body } = self;
             let body = body
                 .and_then(|v| {
-                    types::InstanceStateMonitorRequest::try_from(v).map_err(|e| e.to_string())
+                    types::InstanceStateMonitorRequest::try_from(v)
+                        .map_err(|e| e.to_string())
                 })
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/instance/state-monitor", client.baseurl,);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-            header_map.append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
-            );
+            header_map
+                .append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(
+                        super::Client::api_version(),
+                    ),
+                );
             #[allow(unused_mut)]
             let mut request = client
                 .client
@@ -3467,12 +3693,20 @@ pub mod builder {
             let response = result?;
             match response.status().as_u16() {
                 200u16 => ResponseValue::from_response(response).await,
-                400u16..=499u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
-                500u16..=599u16 => Err(Error::ErrorResponse(
-                    ResponseValue::from_response(response).await?,
-                )),
+                400u16..=499u16 => {
+                    Err(
+                        Error::ErrorResponse(
+                            ResponseValue::from_response(response).await?,
+                        ),
+                    )
+                }
+                500u16..=599u16 => {
+                    Err(
+                        Error::ErrorResponse(
+                            ResponseValue::from_response(response).await?,
+                        ),
+                    )
+                }
                 _ => Err(Error::UnexpectedResponse(response)),
             }
         }

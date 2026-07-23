@@ -1,7 +1,7 @@
 #[allow(unused_imports)]
-use progenitor_client::{encode_path, ClientHooks, OperationInfo, RequestBuilderExt};
-#[allow(unused_imports)]
 pub use progenitor_client::{ByteStream, ClientInfo, Error, ResponseValue};
+#[allow(unused_imports)]
+use progenitor_client::{encode_path, ClientHooks, OperationInfo, RequestBuilderExt};
 /// Types used as operation parameters and responses.
 #[allow(clippy::all)]
 pub mod types {
@@ -11,13 +11,19 @@ pub mod types {
         pub struct ConversionError(::std::borrow::Cow<'static, str>);
         impl ::std::error::Error for ConversionError {}
         impl ::std::fmt::Display for ConversionError {
-            fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> Result<(), ::std::fmt::Error> {
+            fn fmt(
+                &self,
+                f: &mut ::std::fmt::Formatter<'_>,
+            ) -> Result<(), ::std::fmt::Error> {
                 ::std::fmt::Display::fmt(&self.0, f)
             }
         }
 
         impl ::std::fmt::Debug for ConversionError {
-            fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> Result<(), ::std::fmt::Error> {
+            fn fmt(
+                &self,
+                f: &mut ::std::fmt::Formatter<'_>,
+            ) -> Result<(), ::std::fmt::Error> {
                 ::std::fmt::Debug::fmt(&self.0, f)
             }
         }
@@ -70,7 +76,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct BodyWithDefaults {
         #[serde(rename = "forty-two", default = "defaults::default_u64::<u32, 42>")]
         pub forty_two: u32,
@@ -93,7 +99,10 @@ pub mod types {
         pub struct BodyWithDefaults {
             forty_two: ::std::result::Result<u32, ::std::string::String>,
             s: ::std::result::Result<::std::string::String, ::std::string::String>,
-            something: ::std::result::Result<::std::option::Option<bool>, ::std::string::String>,
+            something: ::std::result::Result<
+                ::std::option::Option<bool>,
+                ::std::string::String,
+            >,
             yes: ::std::result::Result<bool, ::std::string::String>,
         }
 
@@ -116,7 +125,9 @@ pub mod types {
             {
                 self.forty_two = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for forty_two: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for forty_two: {e}")
+                    });
                 self
             }
             pub fn s<T>(mut self, value: T) -> Self
@@ -136,7 +147,9 @@ pub mod types {
             {
                 self.something = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for something: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for something: {e}")
+                    });
                 self
             }
             pub fn yes<T>(mut self, value: T) -> Self
@@ -146,7 +159,9 @@ pub mod types {
             {
                 self.yes = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for yes: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for yes: {e}")
+                    });
                 self
             }
         }
@@ -212,9 +227,7 @@ impl Client {
         #[cfg(not(target_arch = "wasm32"))]
         let client = {
             let dur = ::std::time::Duration::from_secs(15u64);
-            reqwest::ClientBuilder::new()
-                .connect_timeout(dur)
-                .timeout(dur)
+            reqwest::ClientBuilder::new().connect_timeout(dur).timeout(dur)
         };
         #[cfg(target_arch = "wasm32")]
         let client = reqwest::ClientBuilder::new();
@@ -258,11 +271,11 @@ impl Client {
     ///Sends a `POST` request to `/`
     ///
     ///```ignore
-    /// let response = client.default_params()
+    ///let response = client.default_params()
     ///    .body(body)
     ///    .send()
     ///    .await;
-    /// ```
+    ///```
     pub fn default_params(&self) -> builder::DefaultParams<'_> {
         builder::DefaultParams::new(self)
     }
@@ -274,8 +287,8 @@ pub mod builder {
     use super::types;
     #[allow(unused_imports)]
     use super::{
-        encode_path, ByteStream, ClientHooks, ClientInfo, Error, OperationInfo, RequestBuilderExt,
-        ResponseValue,
+        encode_path, ByteStream, ClientInfo, ClientHooks, Error, OperationInfo,
+        RequestBuilderExt, ResponseValue,
     };
     ///Builder for [`Client::default_params`]
     ///
@@ -297,12 +310,16 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::BodyWithDefaults>,
-            <V as std::convert::TryInto<types::BodyWithDefaults>>::Error: std::fmt::Display,
+            <V as std::convert::TryInto<
+                types::BodyWithDefaults,
+            >>::Error: std::fmt::Display,
         {
             self.body = value
                 .try_into()
                 .map(From::from)
-                .map_err(|s| format!("conversion to `BodyWithDefaults` for body failed: {}", s));
+                .map_err(|s| {
+                    format!("conversion to `BodyWithDefaults` for body failed: {}", s)
+                });
             self
         }
 
@@ -320,14 +337,19 @@ pub mod builder {
         pub async fn send(self) -> Result<ResponseValue<ByteStream>, Error<ByteStream>> {
             let Self { client, body } = self;
             let body = body
-                .and_then(|v| types::BodyWithDefaults::try_from(v).map_err(|e| e.to_string()))
+                .and_then(|v| {
+                    types::BodyWithDefaults::try_from(v).map_err(|e| e.to_string())
+                })
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/", client.baseurl,);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-            header_map.append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
-            );
+            header_map
+                .append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(
+                        super::Client::api_version(),
+                    ),
+                );
             #[allow(unused_mut)]
             let mut request = client
                 .client

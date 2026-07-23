@@ -32,13 +32,8 @@ fn generate_formatted(generator: &mut Generator, spec: &OpenAPI) -> String {
 }
 
 fn reformat_code(content: TokenStream) -> String {
-    let rustfmt_config = rustfmt_wrapper::config::Config {
-        format_strings: Some(true),
-        normalize_doc_attributes: Some(true),
-        wrap_comments: Some(true),
-        ..Default::default()
-    };
-    space_out_items(rustfmt_wrapper::rustfmt_config(rustfmt_config, content).unwrap()).unwrap()
+    let syntax_tree = syn::parse2::<syn::File>(content).unwrap();
+    space_out_items(prettyplease::unparse(&syntax_tree)).unwrap()
 }
 
 #[track_caller]
@@ -106,17 +101,7 @@ fn verify_apis(openapi_file: &str) {
         .httpmock(&spec, &format!("crate::{openapi_stem}_builder"))
         .unwrap();
 
-    // TODO pending #368
-    let output = rustfmt_wrapper::rustfmt_config(
-        rustfmt_wrapper::config::Config {
-            format_strings: Some(true),
-            ..Default::default()
-        },
-        code,
-    )
-    .unwrap();
-
-    let output = progenitor_impl::space_out_items(output).unwrap();
+    let output = reformat_code(code);
     expectorate::assert_contents(
         format!("tests/output/src/{}_httpmock.rs", openapi_stem),
         &output,

@@ -1,7 +1,7 @@
 #[allow(unused_imports)]
-use progenitor_client::{encode_path, ClientHooks, OperationInfo, RequestBuilderExt};
-#[allow(unused_imports)]
 pub use progenitor_client::{ByteStream, ClientInfo, Error, ResponseValue};
+#[allow(unused_imports)]
+use progenitor_client::{encode_path, ClientHooks, OperationInfo, RequestBuilderExt};
 /// Types used as operation parameters and responses.
 #[allow(clippy::all)]
 pub mod types {
@@ -11,13 +11,19 @@ pub mod types {
         pub struct ConversionError(::std::borrow::Cow<'static, str>);
         impl ::std::error::Error for ConversionError {}
         impl ::std::fmt::Display for ConversionError {
-            fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> Result<(), ::std::fmt::Error> {
+            fn fmt(
+                &self,
+                f: &mut ::std::fmt::Formatter<'_>,
+            ) -> Result<(), ::std::fmt::Error> {
                 ::std::fmt::Display::fmt(&self.0, f)
             }
         }
 
         impl ::std::fmt::Debug for ConversionError {
-            fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> Result<(), ::std::fmt::Error> {
+            fn fmt(
+                &self,
+                f: &mut ::std::fmt::Formatter<'_>,
+            ) -> Result<(), ::std::fmt::Error> {
                 ::std::fmt::Debug::fmt(&self.0, f)
             }
         }
@@ -53,7 +59,7 @@ pub mod types {
     ///}
     /// ```
     /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    #[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug)]
     pub struct UnoBody {
         #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
         pub gateway: ::std::option::Option<::std::string::String>,
@@ -94,7 +100,9 @@ pub mod types {
             {
                 self.gateway = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for gateway: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for gateway: {e}")
+                    });
                 self
             }
             pub fn required<T>(mut self, value: T) -> Self
@@ -104,7 +112,9 @@ pub mod types {
             {
                 self.required = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for required: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for required: {e}")
+                    });
                 self
             }
         }
@@ -153,9 +163,7 @@ impl Client {
         #[cfg(not(target_arch = "wasm32"))]
         let client = {
             let dur = ::std::time::Duration::from_secs(15u64);
-            reqwest::ClientBuilder::new()
-                .connect_timeout(dur)
-                .timeout(dur)
+            reqwest::ClientBuilder::new().connect_timeout(dur).timeout(dur)
         };
         #[cfg(target_arch = "wasm32")]
         let client = reqwest::ClientBuilder::new();
@@ -199,12 +207,12 @@ impl Client {
     ///Sends a `GET` request to `/uno`
     ///
     ///```ignore
-    /// let response = client.uno()
+    ///let response = client.uno()
     ///    .gateway(gateway)
     ///    .body(body)
     ///    .send()
     ///    .await;
-    /// ```
+    ///```
     pub fn uno(&self) -> builder::Uno<'_> {
         builder::Uno::new(self)
     }
@@ -216,8 +224,8 @@ pub mod builder {
     use super::types;
     #[allow(unused_imports)]
     use super::{
-        encode_path, ByteStream, ClientHooks, ClientInfo, Error, OperationInfo, RequestBuilderExt,
-        ResponseValue,
+        encode_path, ByteStream, ClientInfo, ClientHooks, Error, OperationInfo,
+        RequestBuilderExt, ResponseValue,
     };
     ///Builder for [`Client::uno`]
     ///
@@ -242,9 +250,12 @@ pub mod builder {
         where
             V: std::convert::TryInto<::std::string::String>,
         {
-            self.gateway = value.try_into().map_err(|_| {
-                "conversion to `:: std :: string :: String` for gateway failed".to_string()
-            });
+            self.gateway = value
+                .try_into()
+                .map_err(|_| {
+                    "conversion to `:: std :: string :: String` for gateway failed"
+                        .to_string()
+                });
             self
         }
 
@@ -270,21 +281,20 @@ pub mod builder {
 
         ///Sends a `GET` request to `/uno`
         pub async fn send(self) -> Result<ResponseValue<ByteStream>, Error<()>> {
-            let Self {
-                client,
-                gateway,
-                body,
-            } = self;
+            let Self { client, gateway, body } = self;
             let gateway = gateway.map_err(Error::InvalidRequest)?;
             let body = body
                 .and_then(|v| types::UnoBody::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/uno", client.baseurl,);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-            header_map.append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
-            );
+            header_map
+                .append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(
+                        super::Client::api_version(),
+                    ),
+                );
             #[allow(unused_mut)]
             let mut request = client
                 .client

@@ -1,7 +1,7 @@
 #[allow(unused_imports)]
-use progenitor_client::{encode_path, ClientHooks, OperationInfo, RequestBuilderExt};
-#[allow(unused_imports)]
 pub use progenitor_client::{ByteStream, ClientInfo, Error, ResponseValue};
+#[allow(unused_imports)]
+use progenitor_client::{encode_path, ClientHooks, OperationInfo, RequestBuilderExt};
 /// Types used as operation parameters and responses.
 #[allow(clippy::all)]
 pub mod types {
@@ -11,13 +11,19 @@ pub mod types {
         pub struct ConversionError(::std::borrow::Cow<'static, str>);
         impl ::std::error::Error for ConversionError {}
         impl ::std::fmt::Display for ConversionError {
-            fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> Result<(), ::std::fmt::Error> {
+            fn fmt(
+                &self,
+                f: &mut ::std::fmt::Formatter<'_>,
+            ) -> Result<(), ::std::fmt::Error> {
                 ::std::fmt::Display::fmt(&self.0, f)
             }
         }
 
         impl ::std::fmt::Debug for ConversionError {
-            fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> Result<(), ::std::fmt::Error> {
+            fn fmt(
+                &self,
+                f: &mut ::std::fmt::Formatter<'_>,
+            ) -> Result<(), ::std::fmt::Error> {
                 ::std::fmt::Debug::fmt(&self.0, f)
             }
         }
@@ -57,9 +63,7 @@ impl Client {
         #[cfg(not(target_arch = "wasm32"))]
         let client = {
             let dur = ::std::time::Duration::from_secs(15u64);
-            reqwest::ClientBuilder::new()
-                .connect_timeout(dur)
-                .timeout(dur)
+            reqwest::ClientBuilder::new().connect_timeout(dur).timeout(dur)
         };
         #[cfg(target_arch = "wasm32")]
         let client = reqwest::ClientBuilder::new();
@@ -105,14 +109,14 @@ impl Client {
     ///Sends a `GET` request to `/key/{query}`
     ///
     ///Arguments:
-    /// - `query`: Parameter name that was previously colliding
-    /// - `client`: Parameter name that was previously colliding
-    /// - `request`: Parameter name that was previously colliding
-    /// - `response`: Parameter name that was previously colliding
-    /// - `result`: Parameter name that was previously colliding
-    /// - `url`: Parameter name that was previously colliding
+    ///- `query`: Parameter name that was previously colliding
+    ///- `client`: Parameter name that was previously colliding
+    ///- `request`: Parameter name that was previously colliding
+    ///- `response`: Parameter name that was previously colliding
+    ///- `result`: Parameter name that was previously colliding
+    ///- `url`: Parameter name that was previously colliding
     ///```ignore
-    /// let response = client.key_get()
+    ///let response = client.key_get()
     ///    .query(query)
     ///    .client(client)
     ///    .request(request)
@@ -121,7 +125,7 @@ impl Client {
     ///    .url(url)
     ///    .send()
     ///    .await;
-    /// ```
+    ///```
     pub fn key_get(&self) -> builder::KeyGet<'_> {
         builder::KeyGet::new(self)
     }
@@ -133,8 +137,8 @@ pub mod builder {
     use super::types;
     #[allow(unused_imports)]
     use super::{
-        encode_path, ByteStream, ClientHooks, ClientInfo, Error, OperationInfo, RequestBuilderExt,
-        ResponseValue,
+        encode_path, ByteStream, ClientInfo, ClientHooks, Error, OperationInfo,
+        RequestBuilderExt, ResponseValue,
     };
     ///Builder for [`Client::key_get`]
     ///
@@ -225,15 +229,7 @@ pub mod builder {
 
         ///Sends a `GET` request to `/key/{query}`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
-            let Self {
-                _client,
-                query,
-                client,
-                request,
-                response,
-                result,
-                url,
-            } = self;
+            let Self { _client, query, client, request, response, result, url } = self;
             let query = query.map_err(Error::InvalidRequest)?;
             let client = client.map_err(Error::InvalidRequest)?;
             let request = request.map_err(Error::InvalidRequest)?;
@@ -241,15 +237,16 @@ pub mod builder {
             let result = result.map_err(Error::InvalidRequest)?;
             let url = url.map_err(Error::InvalidRequest)?;
             let _url = format!(
-                "{}/key/{}",
-                _client.baseurl,
-                encode_path(&query.to_string()),
+                "{}/key/{}", _client.baseurl, encode_path(& query.to_string()),
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-            header_map.append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
-            );
+            header_map
+                .append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(
+                        super::Client::api_version(),
+                    ),
+                );
             #[allow(unused_mut)]
             let mut _request = _client
                 .client

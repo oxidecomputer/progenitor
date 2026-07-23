@@ -24,6 +24,7 @@ clap-cargo = { workspace = true }
 env_logger = { workspace = true }
 expectorate = { workspace = true }
 openapiv3 = { workspace = true }
-rustfmt-wrapper = { workspace = true }
+prettyplease = { workspace = true }
 serde_json = { workspace = true }
 serde_yaml = { workspace = true }
+syn = { workspace = true }

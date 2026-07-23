@@ -6,7 +6,7 @@ use std::{
     path::{Path, PathBuf},
 };
 
-use anyhow::{Result, bail};
+use anyhow::{Context, Result, bail};
 use clap::{Parser, ValueEnum};
 use openapiv3::OpenAPI;
 use progenitor::{GenerationSettings, Generator, InterfaceStyle, TagStyle};
@@ -86,13 +86,11 @@ impl From<TagArg> for TagStyle {
     }
 }
 
-fn reformat_code(input: String) -> String {
-    let config = rustfmt_wrapper::config::Config {
-        normalize_doc_attributes: Some(true),
-        wrap_comments: Some(true),
-        ..Default::default()
-    };
-    space_out_items(rustfmt_wrapper::rustfmt_config(config, input).unwrap()).unwrap()
+fn reformat_code(input: String) -> Result<String> {
+    let syntax_tree =
+        syn::parse_file(&input).context("failed to parse generated Rust source code")?;
+    space_out_items(prettyplease::unparse(&syntax_tree))
+        .context("failed to add spacing to generated Rust source code")
 }
 
 fn save<P>(p: P, data: &str) -> Result<()>
@@ -182,7 +180,7 @@ fn main() -> Result<()> {
             } else {
                 api_code.to_string()
             };
-            let lib_code = reformat_code(lib_code);
+            let lib_code = reformat_code(lib_code)?;
 
             let mut librs = src.clone();
             librs.push("lib.rs");

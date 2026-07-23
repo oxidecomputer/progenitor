@@ -45,12 +45,13 @@ impl<T: CliConfig> Cli<T> {
     }
 
     pub fn cli_task_get() -> ::clap::Command {
-        ::clap::Command::new("").arg(
-            ::clap::Arg::new("task")
-                .long("task")
-                .value_parser(::clap::value_parser!(::std::string::String))
-                .required(true),
-        )
+        ::clap::Command::new("")
+            .arg(
+                ::clap::Arg::new("task")
+                    .long("task")
+                    .value_parser(::clap::value_parser!(::std::string::String))
+                    .required(true),
+            )
     }
 
     pub fn cli_tasks_get() -> ::clap::Command {
@@ -110,12 +111,13 @@ impl<T: CliConfig> Cli<T> {
     }
 
     pub fn cli_task_outputs_get() -> ::clap::Command {
-        ::clap::Command::new("").arg(
-            ::clap::Arg::new("task")
-                .long("task")
-                .value_parser(::clap::value_parser!(::std::string::String))
-                .required(true),
-        )
+        ::clap::Command::new("")
+            .arg(
+                ::clap::Arg::new("task")
+                    .long("task")
+                    .value_parser(::clap::value_parser!(::std::string::String))
+                    .required(true),
+            )
     }
 
     pub fn cli_task_output_download() -> ::clap::Command {
@@ -223,9 +225,11 @@ impl<T: CliConfig> Cli<T> {
             .arg(
                 ::clap::Arg::new("time")
                     .long("time")
-                    .value_parser(::clap::value_parser!(
-                        ::chrono::DateTime<::chrono::offset::Utc>
-                    ))
+                    .value_parser(
+                        ::clap::value_parser!(
+                            ::chrono::DateTime < ::chrono::offset::Utc >
+                        ),
+                    )
                     .required_unless_present("json-body"),
             )
             .arg(
@@ -245,12 +249,13 @@ impl<T: CliConfig> Cli<T> {
     }
 
     pub fn cli_worker_task_upload_chunk() -> ::clap::Command {
-        ::clap::Command::new("").arg(
-            ::clap::Arg::new("task")
-                .long("task")
-                .value_parser(::clap::value_parser!(::std::string::String))
-                .required(true),
-        )
+        ::clap::Command::new("")
+            .arg(
+                ::clap::Arg::new("task")
+                    .long("task")
+                    .value_parser(::clap::value_parser!(::std::string::String))
+                    .required(true),
+            )
     }
 
     pub fn cli_worker_task_complete() -> ::clap::Command {
@@ -328,27 +333,31 @@ impl<T: CliConfig> Cli<T> {
     }
 
     pub fn cli_get_thing_or_things() -> ::clap::Command {
-        ::clap::Command::new("").arg(
-            ::clap::Arg::new("id")
-                .long("id")
-                .value_parser(::clap::value_parser!(types::GetThingOrThingsId))
-                .required(false),
-        )
+        ::clap::Command::new("")
+            .arg(
+                ::clap::Arg::new("id")
+                    .long("id")
+                    .value_parser(::clap::value_parser!(types::GetThingOrThingsId))
+                    .required(false),
+            )
     }
 
     pub fn cli_header_arg() -> ::clap::Command {
-        ::clap::Command::new("").arg(
-            ::clap::Arg::new("accept-language")
-                .long("accept-language")
-                .value_parser(::clap::builder::TypedValueParser::map(
-                    ::clap::builder::PossibleValuesParser::new([
-                        types::HeaderArgAcceptLanguage::De.to_string(),
-                        types::HeaderArgAcceptLanguage::En.to_string(),
-                    ]),
-                    |s| types::HeaderArgAcceptLanguage::try_from(s).unwrap(),
-                ))
-                .required(false),
-        )
+        ::clap::Command::new("")
+            .arg(
+                ::clap::Arg::new("accept-language")
+                    .long("accept-language")
+                    .value_parser(
+                        ::clap::builder::TypedValueParser::map(
+                            ::clap::builder::PossibleValuesParser::new([
+                                types::HeaderArgAcceptLanguage::De.to_string(),
+                                types::HeaderArgAcceptLanguage::En.to_string(),
+                            ]),
+                            |s| types::HeaderArgAcceptLanguage::try_from(s).unwrap(),
+                        ),
+                    )
+                    .required(false),
+            )
     }
 
     pub async fn execute(
@@ -364,26 +373,39 @@ impl<T: CliConfig> Cli<T> {
             CliCommand::TaskSubmit => self.execute_task_submit(matches).await,
             CliCommand::TaskEventsGet => self.execute_task_events_get(matches).await,
             CliCommand::TaskOutputsGet => self.execute_task_outputs_get(matches).await,
-            CliCommand::TaskOutputDownload => self.execute_task_output_download(matches).await,
+            CliCommand::TaskOutputDownload => {
+                self.execute_task_output_download(matches).await
+            }
             CliCommand::UserCreate => self.execute_user_create(matches).await,
             CliCommand::Whoami => self.execute_whoami(matches).await,
             CliCommand::WhoamiPutName => self.execute_whoami_put_name(matches).await,
             CliCommand::WorkerBootstrap => self.execute_worker_bootstrap(matches).await,
             CliCommand::WorkerPing => self.execute_worker_ping(matches).await,
-            CliCommand::WorkerTaskAppend => self.execute_worker_task_append(matches).await,
+            CliCommand::WorkerTaskAppend => {
+                self.execute_worker_task_append(matches).await
+            }
             CliCommand::WorkerTaskUploadChunk => {
                 self.execute_worker_task_upload_chunk(matches).await
             }
-            CliCommand::WorkerTaskComplete => self.execute_worker_task_complete(matches).await,
-            CliCommand::WorkerTaskAddOutput => self.execute_worker_task_add_output(matches).await,
+            CliCommand::WorkerTaskComplete => {
+                self.execute_worker_task_complete(matches).await
+            }
+            CliCommand::WorkerTaskAddOutput => {
+                self.execute_worker_task_add_output(matches).await
+            }
             CliCommand::WorkersList => self.execute_workers_list(matches).await,
             CliCommand::WorkersRecycle => self.execute_workers_recycle(matches).await,
-            CliCommand::GetThingOrThings => self.execute_get_thing_or_things(matches).await,
+            CliCommand::GetThingOrThings => {
+                self.execute_get_thing_or_things(matches).await
+            }
             CliCommand::HeaderArg => self.execute_header_arg(matches).await,
         }
     }
 
-    pub async fn execute_control_hold(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
+    pub async fn execute_control_hold(
+        &self,
+        matches: &::clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.control_hold();
         self.config.execute_control_hold(matches, &mut request)?;
         let result = request.send().await;
@@ -399,7 +421,10 @@ impl<T: CliConfig> Cli<T> {
         }
     }
 
-    pub async fn execute_control_resume(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
+    pub async fn execute_control_resume(
+        &self,
+        matches: &::clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.control_resume();
         self.config.execute_control_resume(matches, &mut request)?;
         let result = request.send().await;
@@ -415,7 +440,10 @@ impl<T: CliConfig> Cli<T> {
         }
     }
 
-    pub async fn execute_task_get(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
+    pub async fn execute_task_get(
+        &self,
+        matches: &::clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.task_get();
         if let Some(value) = matches.get_one::<::std::string::String>("task") {
             request = request.task(value.clone());
@@ -435,7 +463,10 @@ impl<T: CliConfig> Cli<T> {
         }
     }
 
-    pub async fn execute_tasks_get(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
+    pub async fn execute_tasks_get(
+        &self,
+        matches: &::clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.tasks_get();
         self.config.execute_tasks_get(matches, &mut request)?;
         let result = request.send().await;
@@ -451,18 +482,21 @@ impl<T: CliConfig> Cli<T> {
         }
     }
 
-    pub async fn execute_task_submit(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
+    pub async fn execute_task_submit(
+        &self,
+        matches: &::clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.task_submit();
         if let Some(value) = matches.get_one::<bool>("default") {
-            request = request.body_map(|body| body.default(value.clone()))
+            request = request.body_map(|body| { body.default(value.clone()) });
         }
 
         if let Some(value) = matches.get_one::<::std::string::String>("name") {
-            request = request.body_map(|body| body.name(value.clone()))
+            request = request.body_map(|body| { body.name(value.clone()) });
         }
 
         if let Some(value) = matches.get_one::<::std::string::String>("script") {
-            request = request.body_map(|body| body.script(value.clone()))
+            request = request.body_map(|body| { body.script(value.clone()) });
         }
 
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
@@ -523,8 +557,7 @@ impl<T: CliConfig> Cli<T> {
             request = request.task(value.clone());
         }
 
-        self.config
-            .execute_task_outputs_get(matches, &mut request)?;
+        self.config.execute_task_outputs_get(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
@@ -551,13 +584,10 @@ impl<T: CliConfig> Cli<T> {
             request = request.task(value.clone());
         }
 
-        self.config
-            .execute_task_output_download(matches, &mut request)?;
+        self.config.execute_task_output_download(matches, &mut request)?;
         let result = request.send().await;
         match result {
-            Ok(r) => {
-                todo!()
-            }
+            Ok(r) => todo!(),
             Err(r) => {
                 self.config.error(&r);
                 Err(anyhow::Error::new(r))
@@ -565,10 +595,13 @@ impl<T: CliConfig> Cli<T> {
         }
     }
 
-    pub async fn execute_user_create(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
+    pub async fn execute_user_create(
+        &self,
+        matches: &::clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.user_create();
         if let Some(value) = matches.get_one::<::std::string::String>("name") {
-            request = request.body_map(|body| body.name(value.clone()))
+            request = request.body_map(|body| { body.name(value.clone()) });
         }
 
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
@@ -593,7 +626,10 @@ impl<T: CliConfig> Cli<T> {
         }
     }
 
-    pub async fn execute_whoami(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
+    pub async fn execute_whoami(
+        &self,
+        matches: &::clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.whoami();
         self.config.execute_whoami(matches, &mut request)?;
         let result = request.send().await;
@@ -634,11 +670,11 @@ impl<T: CliConfig> Cli<T> {
     ) -> anyhow::Result<()> {
         let mut request = self.client.worker_bootstrap();
         if let Some(value) = matches.get_one::<::std::string::String>("bootstrap") {
-            request = request.body_map(|body| body.bootstrap(value.clone()))
+            request = request.body_map(|body| { body.bootstrap(value.clone()) });
         }
 
         if let Some(value) = matches.get_one::<::std::string::String>("token") {
-            request = request.body_map(|body| body.token(value.clone()))
+            request = request.body_map(|body| { body.token(value.clone()) });
         }
 
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
@@ -649,8 +685,7 @@ impl<T: CliConfig> Cli<T> {
             request = request.body(body_value);
         }
 
-        self.config
-            .execute_worker_bootstrap(matches, &mut request)?;
+        self.config.execute_worker_bootstrap(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
@@ -664,7 +699,10 @@ impl<T: CliConfig> Cli<T> {
         }
     }
 
-    pub async fn execute_worker_ping(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
+    pub async fn execute_worker_ping(
+        &self,
+        matches: &::clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.worker_ping();
         self.config.execute_worker_ping(matches, &mut request)?;
         let result = request.send().await;
@@ -686,19 +724,21 @@ impl<T: CliConfig> Cli<T> {
     ) -> anyhow::Result<()> {
         let mut request = self.client.worker_task_append();
         if let Some(value) = matches.get_one::<::std::string::String>("payload") {
-            request = request.body_map(|body| body.payload(value.clone()))
+            request = request.body_map(|body| { body.payload(value.clone()) });
         }
 
         if let Some(value) = matches.get_one::<::std::string::String>("stream") {
-            request = request.body_map(|body| body.stream(value.clone()))
+            request = request.body_map(|body| { body.stream(value.clone()) });
         }
 
         if let Some(value) = matches.get_one::<::std::string::String>("task") {
             request = request.task(value.clone());
         }
 
-        if let Some(value) = matches.get_one::<::chrono::DateTime<::chrono::offset::Utc>>("time") {
-            request = request.body_map(|body| body.time(value.clone()))
+        if let Some(value) = matches
+            .get_one::<::chrono::DateTime<::chrono::offset::Utc>>("time")
+        {
+            request = request.body_map(|body| { body.time(value.clone()) });
         }
 
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
@@ -709,8 +749,7 @@ impl<T: CliConfig> Cli<T> {
             request = request.body(body_value);
         }
 
-        self.config
-            .execute_worker_task_append(matches, &mut request)?;
+        self.config.execute_worker_task_append(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
@@ -733,8 +772,7 @@ impl<T: CliConfig> Cli<T> {
             request = request.task(value.clone());
         }
 
-        self.config
-            .execute_worker_task_upload_chunk(matches, &mut request)?;
+        self.config.execute_worker_task_upload_chunk(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
@@ -754,7 +792,7 @@ impl<T: CliConfig> Cli<T> {
     ) -> anyhow::Result<()> {
         let mut request = self.client.worker_task_complete();
         if let Some(value) = matches.get_one::<bool>("failed") {
-            request = request.body_map(|body| body.failed(value.clone()))
+            request = request.body_map(|body| { body.failed(value.clone()) });
         }
 
         if let Some(value) = matches.get_one::<::std::string::String>("task") {
@@ -769,8 +807,7 @@ impl<T: CliConfig> Cli<T> {
             request = request.body(body_value);
         }
 
-        self.config
-            .execute_worker_task_complete(matches, &mut request)?;
+        self.config.execute_worker_task_complete(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
@@ -790,11 +827,11 @@ impl<T: CliConfig> Cli<T> {
     ) -> anyhow::Result<()> {
         let mut request = self.client.worker_task_add_output();
         if let Some(value) = matches.get_one::<::std::string::String>("path") {
-            request = request.body_map(|body| body.path(value.clone()))
+            request = request.body_map(|body| { body.path(value.clone()) });
         }
 
         if let Some(value) = matches.get_one::<i64>("size") {
-            request = request.body_map(|body| body.size(value.clone()))
+            request = request.body_map(|body| { body.size(value.clone()) });
         }
 
         if let Some(value) = matches.get_one::<::std::string::String>("task") {
@@ -809,8 +846,7 @@ impl<T: CliConfig> Cli<T> {
             request = request.body(body_value);
         }
 
-        self.config
-            .execute_worker_task_add_output(matches, &mut request)?;
+        self.config.execute_worker_task_add_output(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
@@ -824,7 +860,10 @@ impl<T: CliConfig> Cli<T> {
         }
     }
 
-    pub async fn execute_workers_list(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
+    pub async fn execute_workers_list(
+        &self,
+        matches: &::clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.workers_list();
         self.config.execute_workers_list(matches, &mut request)?;
         let result = request.send().await;
@@ -868,8 +907,7 @@ impl<T: CliConfig> Cli<T> {
             request = request.id(value.clone());
         }
 
-        self.config
-            .execute_get_thing_or_things(matches, &mut request)?;
+        self.config.execute_get_thing_or_things(matches, &mut request)?;
         let result = request.send().await;
         match result {
             Ok(r) => {
@@ -883,9 +921,14 @@ impl<T: CliConfig> Cli<T> {
         }
     }
 
-    pub async fn execute_header_arg(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
+    pub async fn execute_header_arg(
+        &self,
+        matches: &::clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         let mut request = self.client.header_arg();
-        if let Some(value) = matches.get_one::<types::HeaderArgAcceptLanguage>("accept-language") {
+        if let Some(value) = matches
+            .get_one::<types::HeaderArgAcceptLanguage>("accept-language")
+        {
             request = request.accept_language(value.clone());
         }
 
@@ -1121,29 +1164,17 @@ pub enum CliCommand {
 impl CliCommand {
     pub fn iter() -> impl Iterator<Item = CliCommand> {
         vec![
-            CliCommand::ControlHold,
-            CliCommand::ControlResume,
-            CliCommand::TaskGet,
-            CliCommand::TasksGet,
-            CliCommand::TaskSubmit,
-            CliCommand::TaskEventsGet,
-            CliCommand::TaskOutputsGet,
-            CliCommand::TaskOutputDownload,
-            CliCommand::UserCreate,
-            CliCommand::Whoami,
-            CliCommand::WhoamiPutName,
-            CliCommand::WorkerBootstrap,
-            CliCommand::WorkerPing,
-            CliCommand::WorkerTaskAppend,
-            CliCommand::WorkerTaskUploadChunk,
-            CliCommand::WorkerTaskComplete,
-            CliCommand::WorkerTaskAddOutput,
-            CliCommand::WorkersList,
-            CliCommand::WorkersRecycle,
-            CliCommand::GetThingOrThings,
-            CliCommand::HeaderArg,
+            CliCommand::ControlHold, CliCommand::ControlResume, CliCommand::TaskGet,
+            CliCommand::TasksGet, CliCommand::TaskSubmit, CliCommand::TaskEventsGet,
+            CliCommand::TaskOutputsGet, CliCommand::TaskOutputDownload,
+            CliCommand::UserCreate, CliCommand::Whoami, CliCommand::WhoamiPutName,
+            CliCommand::WorkerBootstrap, CliCommand::WorkerPing,
+            CliCommand::WorkerTaskAppend, CliCommand::WorkerTaskUploadChunk,
+            CliCommand::WorkerTaskComplete, CliCommand::WorkerTaskAddOutput,
+            CliCommand::WorkersList, CliCommand::WorkersRecycle,
+            CliCommand::GetThingOrThings, CliCommand::HeaderArg,
         ]
-        .into_iter()
+            .into_iter()
     }
 
     pub fn operation_id(&self) -> &'static str {

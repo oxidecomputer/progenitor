@@ -1,7 +1,7 @@
 #[allow(unused_imports)]
-use progenitor_client::{encode_path, ClientHooks, OperationInfo, RequestBuilderExt};
-#[allow(unused_imports)]
 pub use progenitor_client::{ByteStream, ClientInfo, Error, ResponseValue};
+#[allow(unused_imports)]
+use progenitor_client::{encode_path, ClientHooks, OperationInfo, RequestBuilderExt};
 /// Types used as operation parameters and responses.
 #[allow(clippy::all)]
 pub mod types {
@@ -11,13 +11,19 @@ pub mod types {
         pub struct ConversionError(::std::borrow::Cow<'static, str>);
         impl ::std::error::Error for ConversionError {}
         impl ::std::fmt::Display for ConversionError {
-            fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> Result<(), ::std::fmt::Error> {
+            fn fmt(
+                &self,
+                f: &mut ::std::fmt::Formatter<'_>,
+            ) -> Result<(), ::std::fmt::Error> {
                 ::std::fmt::Display::fmt(&self.0, f)
             }
         }
 
         impl ::std::fmt::Debug for ConversionError {
-            fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> Result<(), ::std::fmt::Error> {
+            fn fmt(
+                &self,
+                f: &mut ::std::fmt::Formatter<'_>,
+            ) -> Result<(), ::std::fmt::Error> {
                 ::std::fmt::Debug::fmt(&self.0, f)
             }
         }
@@ -56,7 +62,11 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
-        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+        ::serde::Deserialize,
+        ::serde::Serialize,
+        Clone,
+        Debug,
+        schemars::JsonSchema
     )]
     #[serde(untagged)]
     pub enum GetThingOrThingsId {
@@ -64,7 +74,8 @@ pub mod types {
         Array(::std::vec::Vec<::std::string::String>),
     }
 
-    impl ::std::convert::From<::std::vec::Vec<::std::string::String>> for GetThingOrThingsId {
+    impl ::std::convert::From<::std::vec::Vec<::std::string::String>>
+    for GetThingOrThingsId {
         fn from(value: ::std::vec::Vec<::std::string::String>) -> Self {
             Self::Array(value)
         }
@@ -86,8 +97,8 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
-        :: serde :: Deserialize,
-        :: serde :: Serialize,
+        ::serde::Deserialize,
+        ::serde::Serialize,
         Clone,
         Copy,
         Debug,
@@ -96,7 +107,7 @@ pub mod types {
         Ord,
         PartialEq,
         PartialOrd,
-        schemars :: JsonSchema,
+        schemars::JsonSchema
     )]
     pub enum HeaderArgAcceptLanguage {
         #[serde(rename = "de")]
@@ -116,7 +127,9 @@ pub mod types {
 
     impl ::std::str::FromStr for HeaderArgAcceptLanguage {
         type Err = self::error::ConversionError;
-        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn from_str(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             match value {
                 "de" => Ok(Self::De),
                 "en" => Ok(Self::En),
@@ -127,7 +140,9 @@ pub mod types {
 
     impl ::std::convert::TryFrom<&str> for HeaderArgAcceptLanguage {
         type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+        fn try_from(
+            value: &str,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
             value.parse()
         }
     }
@@ -210,7 +225,11 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
-        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+        ::serde::Deserialize,
+        ::serde::Serialize,
+        Clone,
+        Debug,
+        schemars::JsonSchema
     )]
     pub struct ObjWithOptionArray {
         #[serde(rename = "stranger-things")]
@@ -262,7 +281,11 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
-        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+        ::serde::Deserialize,
+        ::serde::Serialize,
+        Clone,
+        Debug,
+        schemars::JsonSchema
     )]
     pub struct Task {
         pub id: ::std::string::String,
@@ -312,7 +335,11 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
-        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+        ::serde::Deserialize,
+        ::serde::Serialize,
+        Clone,
+        Debug,
+        schemars::JsonSchema
     )]
     pub struct TaskEvent {
         pub payload: ::std::string::String,
@@ -356,7 +383,11 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
-        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+        ::serde::Deserialize,
+        ::serde::Serialize,
+        Clone,
+        Debug,
+        schemars::JsonSchema
     )]
     pub struct TaskOutput {
         pub id: ::std::string::String,
@@ -403,7 +434,11 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
-        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+        ::serde::Deserialize,
+        ::serde::Serialize,
+        Clone,
+        Debug,
+        schemars::JsonSchema
     )]
     pub struct TaskSubmit {
         pub default: bool,
@@ -438,7 +473,11 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
-        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+        ::serde::Deserialize,
+        ::serde::Serialize,
+        Clone,
+        Debug,
+        schemars::JsonSchema
     )]
     pub struct TaskSubmitResult {
         pub id: ::std::string::String,
@@ -469,7 +508,11 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
-        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+        ::serde::Deserialize,
+        ::serde::Serialize,
+        Clone,
+        Debug,
+        schemars::JsonSchema
     )]
     pub struct UploadedChunk {
         pub id: ::std::string::String,
@@ -500,7 +543,11 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
-        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+        ::serde::Deserialize,
+        ::serde::Serialize,
+        Clone,
+        Debug,
+        schemars::JsonSchema
     )]
     pub struct UserCreate {
         pub name: ::std::string::String,
@@ -539,7 +586,11 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
-        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+        ::serde::Deserialize,
+        ::serde::Serialize,
+        Clone,
+        Debug,
+        schemars::JsonSchema
     )]
     pub struct UserCreateResult {
         pub id: ::std::string::String,
@@ -576,7 +627,11 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
-        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+        ::serde::Deserialize,
+        ::serde::Serialize,
+        Clone,
+        Debug,
+        schemars::JsonSchema
     )]
     pub struct WhoamiResult {
         pub id: ::std::string::String,
@@ -630,7 +685,11 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
-        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+        ::serde::Deserialize,
+        ::serde::Serialize,
+        Clone,
+        Debug,
+        schemars::JsonSchema
     )]
     pub struct Worker {
         pub deleted: bool,
@@ -680,7 +739,11 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
-        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+        ::serde::Deserialize,
+        ::serde::Serialize,
+        Clone,
+        Debug,
+        schemars::JsonSchema
     )]
     pub struct WorkerAddOutput {
         pub chunks: ::std::vec::Vec<::std::string::String>,
@@ -722,7 +785,11 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
-        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+        ::serde::Deserialize,
+        ::serde::Serialize,
+        Clone,
+        Debug,
+        schemars::JsonSchema
     )]
     pub struct WorkerAppendTask {
         pub payload: ::std::string::String,
@@ -759,7 +826,11 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
-        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+        ::serde::Deserialize,
+        ::serde::Serialize,
+        Clone,
+        Debug,
+        schemars::JsonSchema
     )]
     pub struct WorkerBootstrap {
         pub bootstrap: ::std::string::String,
@@ -791,7 +862,11 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
-        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+        ::serde::Deserialize,
+        ::serde::Serialize,
+        Clone,
+        Debug,
+        schemars::JsonSchema
     )]
     pub struct WorkerBootstrapResult {
         pub id: ::std::string::String,
@@ -822,7 +897,11 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
-        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+        ::serde::Deserialize,
+        ::serde::Serialize,
+        Clone,
+        Debug,
+        schemars::JsonSchema
     )]
     pub struct WorkerCompleteTask {
         pub failed: bool,
@@ -856,7 +935,11 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
-        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+        ::serde::Deserialize,
+        ::serde::Serialize,
+        Clone,
+        Debug,
+        schemars::JsonSchema
     )]
     pub struct WorkerPingResult {
         pub poweroff: bool,
@@ -900,7 +983,11 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
-        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+        ::serde::Deserialize,
+        ::serde::Serialize,
+        Clone,
+        Debug,
+        schemars::JsonSchema
     )]
     pub struct WorkerPingTask {
         pub id: ::std::string::String,
@@ -941,7 +1028,11 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
-        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+        ::serde::Deserialize,
+        ::serde::Serialize,
+        Clone,
+        Debug,
+        schemars::JsonSchema
     )]
     pub struct WorkerTask {
         pub id: ::std::string::String,
@@ -977,7 +1068,11 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
-        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+        ::serde::Deserialize,
+        ::serde::Serialize,
+        Clone,
+        Debug,
+        schemars::JsonSchema
     )]
     pub struct WorkersResult {
         pub workers: ::std::vec::Vec<Worker>,
@@ -1006,7 +1101,9 @@ pub mod types {
         impl ::std::default::Default for ObjWithOptionArray {
             fn default() -> Self {
                 Self {
-                    stranger_things: Err("no value supplied for stranger_things".to_string()),
+                    stranger_things: Err(
+                        "no value supplied for stranger_things".to_string(),
+                    ),
                     things: Err("no value supplied for things".to_string()),
                 }
             }
@@ -1015,22 +1112,32 @@ pub mod types {
         impl ObjWithOptionArray {
             pub fn stranger_things<T>(mut self, value: T) -> Self
             where
-                T: ::std::convert::TryInto<::std::vec::Vec<::std::option::Option<super::Task>>>,
+                T: ::std::convert::TryInto<
+                    ::std::vec::Vec<::std::option::Option<super::Task>>,
+                >,
                 T::Error: ::std::fmt::Display,
             {
-                self.stranger_things = value.try_into().map_err(|e| {
-                    format!("error converting supplied value for stranger_things: {e}")
-                });
+                self.stranger_things = value
+                    .try_into()
+                    .map_err(|e| {
+                        format!(
+                            "error converting supplied value for stranger_things: {e}"
+                        )
+                    });
                 self
             }
             pub fn things<T>(mut self, value: T) -> Self
             where
-                T: ::std::convert::TryInto<::std::vec::Vec<::std::option::Option<super::Task>>>,
+                T: ::std::convert::TryInto<
+                    ::std::vec::Vec<::std::option::Option<super::Task>>,
+                >,
                 T::Error: ::std::fmt::Display,
             {
                 self.things = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for things: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for things: {e}")
+                    });
                 self
             }
         }
@@ -1098,7 +1205,9 @@ pub mod types {
             {
                 self.name = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for name: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for name: {e}")
+                    });
                 self
             }
             pub fn output_rules<T>(mut self, value: T) -> Self
@@ -1108,7 +1217,9 @@ pub mod types {
             {
                 self.output_rules = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for output_rules: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for output_rules: {e}")
+                    });
                 self
             }
             pub fn script<T>(mut self, value: T) -> Self
@@ -1118,7 +1229,9 @@ pub mod types {
             {
                 self.script = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for script: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for script: {e}")
+                    });
                 self
             }
             pub fn state<T>(mut self, value: T) -> Self
@@ -1128,14 +1241,18 @@ pub mod types {
             {
                 self.state = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for state: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for state: {e}")
+                    });
                 self
             }
         }
 
         impl ::std::convert::TryFrom<Task> for super::Task {
             type Error = super::error::ConversionError;
-            fn try_from(value: Task) -> ::std::result::Result<Self, super::error::ConversionError> {
+            fn try_from(
+                value: Task,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
                 Ok(Self {
                     id: value.id?,
                     name: value.name?,
@@ -1188,7 +1305,9 @@ pub mod types {
             {
                 self.payload = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for payload: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for payload: {e}")
+                    });
                 self
             }
             pub fn seq<T>(mut self, value: T) -> Self
@@ -1198,7 +1317,9 @@ pub mod types {
             {
                 self.seq = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for seq: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for seq: {e}")
+                    });
                 self
             }
             pub fn stream<T>(mut self, value: T) -> Self
@@ -1208,7 +1329,9 @@ pub mod types {
             {
                 self.stream = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for stream: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for stream: {e}")
+                    });
                 self
             }
             pub fn time<T>(mut self, value: T) -> Self
@@ -1218,7 +1341,9 @@ pub mod types {
             {
                 self.time = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for time: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for time: {e}")
+                    });
                 self
             }
         }
@@ -1283,7 +1408,9 @@ pub mod types {
             {
                 self.path = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for path: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for path: {e}")
+                    });
                 self
             }
             pub fn size<T>(mut self, value: T) -> Self
@@ -1293,7 +1420,9 @@ pub mod types {
             {
                 self.size = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for size: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for size: {e}")
+                    });
                 self
             }
         }
@@ -1351,7 +1480,9 @@ pub mod types {
             {
                 self.default = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for default: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for default: {e}")
+                    });
                 self
             }
             pub fn name<T>(mut self, value: T) -> Self
@@ -1361,7 +1492,9 @@ pub mod types {
             {
                 self.name = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for name: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for name: {e}")
+                    });
                 self
             }
             pub fn output_rules<T>(mut self, value: T) -> Self
@@ -1371,7 +1504,9 @@ pub mod types {
             {
                 self.output_rules = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for output_rules: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for output_rules: {e}")
+                    });
                 self
             }
             pub fn script<T>(mut self, value: T) -> Self
@@ -1381,7 +1516,9 @@ pub mod types {
             {
                 self.script = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for script: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for script: {e}")
+                    });
                 self
             }
         }
@@ -1514,7 +1651,9 @@ pub mod types {
             {
                 self.name = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for name: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for name: {e}")
+                    });
                 self
             }
         }
@@ -1530,9 +1669,7 @@ pub mod types {
 
         impl ::std::convert::From<super::UserCreate> for UserCreate {
             fn from(value: super::UserCreate) -> Self {
-                Self {
-                    name: Ok(value.name),
-                }
+                Self { name: Ok(value.name) }
             }
         }
 
@@ -1571,7 +1708,9 @@ pub mod types {
             {
                 self.name = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for name: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for name: {e}")
+                    });
                 self
             }
             pub fn token<T>(mut self, value: T) -> Self
@@ -1581,7 +1720,9 @@ pub mod types {
             {
                 self.token = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for token: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for token: {e}")
+                    });
                 self
             }
         }
@@ -1642,7 +1783,9 @@ pub mod types {
             {
                 self.name = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for name: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for name: {e}")
+                    });
                 self
             }
         }
@@ -1681,7 +1824,10 @@ pub mod types {
                 ::std::string::String,
             >,
             recycle: ::std::result::Result<bool, ::std::string::String>,
-            tasks: ::std::result::Result<::std::vec::Vec<super::WorkerTask>, ::std::string::String>,
+            tasks: ::std::result::Result<
+                ::std::vec::Vec<super::WorkerTask>,
+                ::std::string::String,
+            >,
         }
 
         impl ::std::default::Default for Worker {
@@ -1705,7 +1851,9 @@ pub mod types {
             {
                 self.deleted = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for deleted: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for deleted: {e}")
+                    });
                 self
             }
             pub fn id<T>(mut self, value: T) -> Self
@@ -1725,7 +1873,9 @@ pub mod types {
             {
                 self.instance_id = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for instance_id: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for instance_id: {e}")
+                    });
                 self
             }
             pub fn lastping<T>(mut self, value: T) -> Self
@@ -1737,7 +1887,9 @@ pub mod types {
             {
                 self.lastping = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for lastping: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for lastping: {e}")
+                    });
                 self
             }
             pub fn recycle<T>(mut self, value: T) -> Self
@@ -1747,7 +1899,9 @@ pub mod types {
             {
                 self.recycle = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for recycle: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for recycle: {e}")
+                    });
                 self
             }
             pub fn tasks<T>(mut self, value: T) -> Self
@@ -1757,7 +1911,9 @@ pub mod types {
             {
                 self.tasks = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for tasks: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for tasks: {e}")
+                    });
                 self
             }
         }
@@ -1819,7 +1975,9 @@ pub mod types {
             {
                 self.chunks = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for chunks: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for chunks: {e}")
+                    });
                 self
             }
             pub fn path<T>(mut self, value: T) -> Self
@@ -1829,7 +1987,9 @@ pub mod types {
             {
                 self.path = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for path: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for path: {e}")
+                    });
                 self
             }
             pub fn size<T>(mut self, value: T) -> Self
@@ -1839,7 +1999,9 @@ pub mod types {
             {
                 self.size = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for size: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for size: {e}")
+                    });
                 self
             }
         }
@@ -1895,7 +2057,9 @@ pub mod types {
             {
                 self.payload = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for payload: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for payload: {e}")
+                    });
                 self
             }
             pub fn stream<T>(mut self, value: T) -> Self
@@ -1905,7 +2069,9 @@ pub mod types {
             {
                 self.stream = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for stream: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for stream: {e}")
+                    });
                 self
             }
             pub fn time<T>(mut self, value: T) -> Self
@@ -1915,7 +2081,9 @@ pub mod types {
             {
                 self.time = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for time: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for time: {e}")
+                    });
                 self
             }
         }
@@ -1945,7 +2113,10 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct WorkerBootstrap {
-            bootstrap: ::std::result::Result<::std::string::String, ::std::string::String>,
+            bootstrap: ::std::result::Result<
+                ::std::string::String,
+                ::std::string::String,
+            >,
             token: ::std::result::Result<::std::string::String, ::std::string::String>,
         }
 
@@ -1966,7 +2137,9 @@ pub mod types {
             {
                 self.bootstrap = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for bootstrap: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for bootstrap: {e}")
+                    });
                 self
             }
             pub fn token<T>(mut self, value: T) -> Self
@@ -1976,7 +2149,9 @@ pub mod types {
             {
                 self.token = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for token: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for token: {e}")
+                    });
                 self
             }
         }
@@ -2028,7 +2203,8 @@ pub mod types {
             }
         }
 
-        impl ::std::convert::TryFrom<WorkerBootstrapResult> for super::WorkerBootstrapResult {
+        impl ::std::convert::TryFrom<WorkerBootstrapResult>
+        for super::WorkerBootstrapResult {
             type Error = super::error::ConversionError;
             fn try_from(
                 value: WorkerBootstrapResult,
@@ -2037,7 +2213,8 @@ pub mod types {
             }
         }
 
-        impl ::std::convert::From<super::WorkerBootstrapResult> for WorkerBootstrapResult {
+        impl ::std::convert::From<super::WorkerBootstrapResult>
+        for WorkerBootstrapResult {
             fn from(value: super::WorkerBootstrapResult) -> Self {
                 Self { id: Ok(value.id) }
             }
@@ -2064,7 +2241,9 @@ pub mod types {
             {
                 self.failed = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for failed: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for failed: {e}")
+                    });
                 self
             }
         }
@@ -2074,17 +2253,13 @@ pub mod types {
             fn try_from(
                 value: WorkerCompleteTask,
             ) -> ::std::result::Result<Self, super::error::ConversionError> {
-                Ok(Self {
-                    failed: value.failed?,
-                })
+                Ok(Self { failed: value.failed? })
             }
         }
 
         impl ::std::convert::From<super::WorkerCompleteTask> for WorkerCompleteTask {
             fn from(value: super::WorkerCompleteTask) -> Self {
-                Self {
-                    failed: Ok(value.failed),
-                }
+                Self { failed: Ok(value.failed) }
             }
         }
 
@@ -2114,7 +2289,9 @@ pub mod types {
             {
                 self.poweroff = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for poweroff: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for poweroff: {e}")
+                    });
                 self
             }
             pub fn task<T>(mut self, value: T) -> Self
@@ -2124,7 +2301,9 @@ pub mod types {
             {
                 self.task = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for task: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for task: {e}")
+                    });
                 self
             }
         }
@@ -2188,7 +2367,9 @@ pub mod types {
             {
                 self.output_rules = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for output_rules: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for output_rules: {e}")
+                    });
                 self
             }
             pub fn script<T>(mut self, value: T) -> Self
@@ -2198,7 +2379,9 @@ pub mod types {
             {
                 self.script = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for script: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for script: {e}")
+                    });
                 self
             }
         }
@@ -2261,7 +2444,9 @@ pub mod types {
             {
                 self.name = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for name: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for name: {e}")
+                    });
                 self
             }
             pub fn owner<T>(mut self, value: T) -> Self
@@ -2271,7 +2456,9 @@ pub mod types {
             {
                 self.owner = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for owner: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for owner: {e}")
+                    });
                 self
             }
         }
@@ -2301,7 +2488,10 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct WorkersResult {
-            workers: ::std::result::Result<::std::vec::Vec<super::Worker>, ::std::string::String>,
+            workers: ::std::result::Result<
+                ::std::vec::Vec<super::Worker>,
+                ::std::string::String,
+            >,
         }
 
         impl ::std::default::Default for WorkersResult {
@@ -2320,7 +2510,9 @@ pub mod types {
             {
                 self.workers = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for workers: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for workers: {e}")
+                    });
                 self
             }
         }
@@ -2330,17 +2522,13 @@ pub mod types {
             fn try_from(
                 value: WorkersResult,
             ) -> ::std::result::Result<Self, super::error::ConversionError> {
-                Ok(Self {
-                    workers: value.workers?,
-                })
+                Ok(Self { workers: value.workers? })
             }
         }
 
         impl ::std::convert::From<super::WorkersResult> for WorkersResult {
             fn from(value: super::WorkersResult) -> Self {
-                Self {
-                    workers: Ok(value.workers),
-                }
+                Self { workers: Ok(value.workers) }
             }
         }
     }
@@ -2365,9 +2553,7 @@ impl Client {
         #[cfg(not(target_arch = "wasm32"))]
         let client = {
             let dur = ::std::time::Duration::from_secs(15u64);
-            reqwest::ClientBuilder::new()
-                .connect_timeout(dur)
-                .timeout(dur)
+            reqwest::ClientBuilder::new().connect_timeout(dur).timeout(dur)
         };
         #[cfg(target_arch = "wasm32")]
         let client = reqwest::ClientBuilder::new();
@@ -2411,10 +2597,10 @@ impl Client {
     ///Sends a `POST` request to `/v1/control/hold`
     ///
     ///```ignore
-    /// let response = client.control_hold()
+    ///let response = client.control_hold()
     ///    .send()
     ///    .await;
-    /// ```
+    ///```
     pub fn control_hold(&self) -> builder::ControlHold<'_> {
         builder::ControlHold::new(self)
     }
@@ -2422,10 +2608,10 @@ impl Client {
     ///Sends a `POST` request to `/v1/control/resume`
     ///
     ///```ignore
-    /// let response = client.control_resume()
+    ///let response = client.control_resume()
     ///    .send()
     ///    .await;
-    /// ```
+    ///```
     pub fn control_resume(&self) -> builder::ControlResume<'_> {
         builder::ControlResume::new(self)
     }
@@ -2433,11 +2619,11 @@ impl Client {
     ///Sends a `GET` request to `/v1/task/{Task}`
     ///
     ///```ignore
-    /// let response = client.task_get()
+    ///let response = client.task_get()
     ///    .task(task)
     ///    .send()
     ///    .await;
-    /// ```
+    ///```
     pub fn task_get(&self) -> builder::TaskGet<'_> {
         builder::TaskGet::new(self)
     }
@@ -2445,10 +2631,10 @@ impl Client {
     ///Sends a `GET` request to `/v1/tasks`
     ///
     ///```ignore
-    /// let response = client.tasks_get()
+    ///let response = client.tasks_get()
     ///    .send()
     ///    .await;
-    /// ```
+    ///```
     pub fn tasks_get(&self) -> builder::TasksGet<'_> {
         builder::TasksGet::new(self)
     }
@@ -2456,11 +2642,11 @@ impl Client {
     ///Sends a `POST` request to `/v1/tasks`
     ///
     ///```ignore
-    /// let response = client.task_submit()
+    ///let response = client.task_submit()
     ///    .body(body)
     ///    .send()
     ///    .await;
-    /// ```
+    ///```
     pub fn task_submit(&self) -> builder::TaskSubmit<'_> {
         builder::TaskSubmit::new(self)
     }
@@ -2468,12 +2654,12 @@ impl Client {
     ///Sends a `GET` request to `/v1/tasks/{task}/events`
     ///
     ///```ignore
-    /// let response = client.task_events_get()
+    ///let response = client.task_events_get()
     ///    .task(task)
     ///    .minseq(minseq)
     ///    .send()
     ///    .await;
-    /// ```
+    ///```
     pub fn task_events_get(&self) -> builder::TaskEventsGet<'_> {
         builder::TaskEventsGet::new(self)
     }
@@ -2481,11 +2667,11 @@ impl Client {
     ///Sends a `GET` request to `/v1/tasks/{task}/outputs`
     ///
     ///```ignore
-    /// let response = client.task_outputs_get()
+    ///let response = client.task_outputs_get()
     ///    .task(task)
     ///    .send()
     ///    .await;
-    /// ```
+    ///```
     pub fn task_outputs_get(&self) -> builder::TaskOutputsGet<'_> {
         builder::TaskOutputsGet::new(self)
     }
@@ -2493,12 +2679,12 @@ impl Client {
     ///Sends a `GET` request to `/v1/tasks/{task}/outputs/{output}`
     ///
     ///```ignore
-    /// let response = client.task_output_download()
+    ///let response = client.task_output_download()
     ///    .task(task)
     ///    .output(output)
     ///    .send()
     ///    .await;
-    /// ```
+    ///```
     pub fn task_output_download(&self) -> builder::TaskOutputDownload<'_> {
         builder::TaskOutputDownload::new(self)
     }
@@ -2506,11 +2692,11 @@ impl Client {
     ///Sends a `POST` request to `/v1/users`
     ///
     ///```ignore
-    /// let response = client.user_create()
+    ///let response = client.user_create()
     ///    .body(body)
     ///    .send()
     ///    .await;
-    /// ```
+    ///```
     pub fn user_create(&self) -> builder::UserCreate<'_> {
         builder::UserCreate::new(self)
     }
@@ -2518,10 +2704,10 @@ impl Client {
     ///Sends a `GET` request to `/v1/whoami`
     ///
     ///```ignore
-    /// let response = client.whoami()
+    ///let response = client.whoami()
     ///    .send()
     ///    .await;
-    /// ```
+    ///```
     pub fn whoami(&self) -> builder::Whoami<'_> {
         builder::Whoami::new(self)
     }
@@ -2529,11 +2715,11 @@ impl Client {
     ///Sends a `PUT` request to `/v1/whoami/name`
     ///
     ///```ignore
-    /// let response = client.whoami_put_name()
+    ///let response = client.whoami_put_name()
     ///    .body(body)
     ///    .send()
     ///    .await;
-    /// ```
+    ///```
     pub fn whoami_put_name(&self) -> builder::WhoamiPutName<'_> {
         builder::WhoamiPutName::new(self)
     }
@@ -2541,11 +2727,11 @@ impl Client {
     ///Sends a `POST` request to `/v1/worker/bootstrap`
     ///
     ///```ignore
-    /// let response = client.worker_bootstrap()
+    ///let response = client.worker_bootstrap()
     ///    .body(body)
     ///    .send()
     ///    .await;
-    /// ```
+    ///```
     pub fn worker_bootstrap(&self) -> builder::WorkerBootstrap<'_> {
         builder::WorkerBootstrap::new(self)
     }
@@ -2553,10 +2739,10 @@ impl Client {
     ///Sends a `GET` request to `/v1/worker/ping`
     ///
     ///```ignore
-    /// let response = client.worker_ping()
+    ///let response = client.worker_ping()
     ///    .send()
     ///    .await;
-    /// ```
+    ///```
     pub fn worker_ping(&self) -> builder::WorkerPing<'_> {
         builder::WorkerPing::new(self)
     }
@@ -2564,12 +2750,12 @@ impl Client {
     ///Sends a `POST` request to `/v1/worker/task/{task}/append`
     ///
     ///```ignore
-    /// let response = client.worker_task_append()
+    ///let response = client.worker_task_append()
     ///    .task(task)
     ///    .body(body)
     ///    .send()
     ///    .await;
-    /// ```
+    ///```
     pub fn worker_task_append(&self) -> builder::WorkerTaskAppend<'_> {
         builder::WorkerTaskAppend::new(self)
     }
@@ -2577,12 +2763,12 @@ impl Client {
     ///Sends a `POST` request to `/v1/worker/task/{task}/chunk`
     ///
     ///```ignore
-    /// let response = client.worker_task_upload_chunk()
+    ///let response = client.worker_task_upload_chunk()
     ///    .task(task)
     ///    .body(body)
     ///    .send()
     ///    .await;
-    /// ```
+    ///```
     pub fn worker_task_upload_chunk(&self) -> builder::WorkerTaskUploadChunk<'_> {
         builder::WorkerTaskUploadChunk::new(self)
     }
@@ -2590,12 +2776,12 @@ impl Client {
     ///Sends a `POST` request to `/v1/worker/task/{task}/complete`
     ///
     ///```ignore
-    /// let response = client.worker_task_complete()
+    ///let response = client.worker_task_complete()
     ///    .task(task)
     ///    .body(body)
     ///    .send()
     ///    .await;
-    /// ```
+    ///```
     pub fn worker_task_complete(&self) -> builder::WorkerTaskComplete<'_> {
         builder::WorkerTaskComplete::new(self)
     }
@@ -2603,12 +2789,12 @@ impl Client {
     ///Sends a `POST` request to `/v1/worker/task/{task}/output`
     ///
     ///```ignore
-    /// let response = client.worker_task_add_output()
+    ///let response = client.worker_task_add_output()
     ///    .task(task)
     ///    .body(body)
     ///    .send()
     ///    .await;
-    /// ```
+    ///```
     pub fn worker_task_add_output(&self) -> builder::WorkerTaskAddOutput<'_> {
         builder::WorkerTaskAddOutput::new(self)
     }
@@ -2616,10 +2802,10 @@ impl Client {
     ///Sends a `GET` request to `/v1/workers`
     ///
     ///```ignore
-    /// let response = client.workers_list()
+    ///let response = client.workers_list()
     ///    .send()
     ///    .await;
-    /// ```
+    ///```
     pub fn workers_list(&self) -> builder::WorkersList<'_> {
         builder::WorkersList::new(self)
     }
@@ -2627,10 +2813,10 @@ impl Client {
     ///Sends a `POST` request to `/v1/workers/recycle`
     ///
     ///```ignore
-    /// let response = client.workers_recycle()
+    ///let response = client.workers_recycle()
     ///    .send()
     ///    .await;
-    /// ```
+    ///```
     pub fn workers_recycle(&self) -> builder::WorkersRecycle<'_> {
         builder::WorkersRecycle::new(self)
     }
@@ -2638,11 +2824,11 @@ impl Client {
     ///Sends a `GET` request to `/v1/things`
     ///
     ///```ignore
-    /// let response = client.get_thing_or_things()
+    ///let response = client.get_thing_or_things()
     ///    .id(id)
     ///    .send()
     ///    .await;
-    /// ```
+    ///```
     pub fn get_thing_or_things(&self) -> builder::GetThingOrThings<'_> {
         builder::GetThingOrThings::new(self)
     }
@@ -2650,11 +2836,11 @@ impl Client {
     ///Sends a `GET` request to `/v1/header-arg`
     ///
     ///```ignore
-    /// let response = client.header_arg()
+    ///let response = client.header_arg()
     ///    .accept_language(accept_language)
     ///    .send()
     ///    .await;
-    /// ```
+    ///```
     pub fn header_arg(&self) -> builder::HeaderArg<'_> {
         builder::HeaderArg::new(self)
     }
@@ -2666,8 +2852,8 @@ pub mod builder {
     use super::types;
     #[allow(unused_imports)]
     use super::{
-        encode_path, ByteStream, ClientHooks, ClientInfo, Error, OperationInfo, RequestBuilderExt,
-        ResponseValue,
+        encode_path, ByteStream, ClientInfo, ClientHooks, Error, OperationInfo,
+        RequestBuilderExt, ResponseValue,
     };
     ///Builder for [`Client::control_hold`]
     ///
@@ -2687,10 +2873,13 @@ pub mod builder {
             let Self { client } = self;
             let url = format!("{}/v1/control/hold", client.baseurl,);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-            header_map.append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
-            );
+            header_map
+                .append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(
+                        super::Client::api_version(),
+                    ),
+                );
             #[allow(unused_mut)]
             let mut request = client
                 .client
@@ -2733,10 +2922,13 @@ pub mod builder {
             let Self { client } = self;
             let url = format!("{}/v1/control/resume", client.baseurl,);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-            header_map.append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
-            );
+            header_map
+                .append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(
+                        super::Client::api_version(),
+                    ),
+                );
             #[allow(unused_mut)]
             let mut request = client.client.post(url).headers(header_map).build()?;
             let info = OperationInfo {
@@ -2774,9 +2966,12 @@ pub mod builder {
         where
             V: std::convert::TryInto<::std::string::String>,
         {
-            self.task = value.try_into().map_err(|_| {
-                "conversion to `:: std :: string :: String` for task failed".to_string()
-            });
+            self.task = value
+                .try_into()
+                .map_err(|_| {
+                    "conversion to `:: std :: string :: String` for task failed"
+                        .to_string()
+                });
             self
         }
 
@@ -2785,15 +2980,16 @@ pub mod builder {
             let Self { client, task } = self;
             let task = task.map_err(Error::InvalidRequest)?;
             let url = format!(
-                "{}/v1/task/{}",
-                client.baseurl,
-                encode_path(&task.to_string()),
+                "{}/v1/task/{}", client.baseurl, encode_path(& task.to_string()),
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-            header_map.append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
-            );
+            header_map
+                .append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(
+                        super::Client::api_version(),
+                    ),
+                );
             #[allow(unused_mut)]
             let mut request = client
                 .client
@@ -2832,14 +3028,19 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/v1/tasks`
-        pub async fn send(self) -> Result<ResponseValue<::std::vec::Vec<types::Task>>, Error<()>> {
+        pub async fn send(
+            self,
+        ) -> Result<ResponseValue<::std::vec::Vec<types::Task>>, Error<()>> {
             let Self { client } = self;
             let url = format!("{}/v1/tasks", client.baseurl,);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-            header_map.append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
-            );
+            header_map
+                .append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(
+                        super::Client::api_version(),
+                    ),
+                );
             #[allow(unused_mut)]
             let mut request = client
                 .client
@@ -2889,30 +3090,39 @@ pub mod builder {
             self.body = value
                 .try_into()
                 .map(From::from)
-                .map_err(|s| format!("conversion to `TaskSubmit` for body failed: {}", s));
+                .map_err(|s| {
+                    format!("conversion to `TaskSubmit` for body failed: {}", s)
+                });
             self
         }
 
         pub fn body_map<F>(mut self, f: F) -> Self
         where
-            F: std::ops::FnOnce(types::builder::TaskSubmit) -> types::builder::TaskSubmit,
+            F: std::ops::FnOnce(
+                types::builder::TaskSubmit,
+            ) -> types::builder::TaskSubmit,
         {
             self.body = self.body.map(f);
             self
         }
 
         ///Sends a `POST` request to `/v1/tasks`
-        pub async fn send(self) -> Result<ResponseValue<types::TaskSubmitResult>, Error<()>> {
+        pub async fn send(
+            self,
+        ) -> Result<ResponseValue<types::TaskSubmitResult>, Error<()>> {
             let Self { client, body } = self;
             let body = body
                 .and_then(|v| types::TaskSubmit::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/v1/tasks", client.baseurl,);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-            header_map.append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
-            );
+            header_map
+                .append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(
+                        super::Client::api_version(),
+                    ),
+                );
             #[allow(unused_mut)]
             let mut request = client
                 .client
@@ -2961,9 +3171,12 @@ pub mod builder {
         where
             V: std::convert::TryInto<::std::string::String>,
         {
-            self.task = value.try_into().map_err(|_| {
-                "conversion to `:: std :: string :: String` for task failed".to_string()
-            });
+            self.task = value
+                .try_into()
+                .map_err(|_| {
+                    "conversion to `:: std :: string :: String` for task failed"
+                        .to_string()
+                });
             self
         }
 
@@ -2982,23 +3195,20 @@ pub mod builder {
         pub async fn send(
             self,
         ) -> Result<ResponseValue<::std::vec::Vec<types::TaskEvent>>, Error<()>> {
-            let Self {
-                client,
-                task,
-                minseq,
-            } = self;
+            let Self { client, task, minseq } = self;
             let task = task.map_err(Error::InvalidRequest)?;
             let minseq = minseq.map_err(Error::InvalidRequest)?;
             let url = format!(
-                "{}/v1/tasks/{}/events",
-                client.baseurl,
-                encode_path(&task.to_string()),
+                "{}/v1/tasks/{}/events", client.baseurl, encode_path(& task.to_string()),
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-            header_map.append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
-            );
+            header_map
+                .append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(
+                        super::Client::api_version(),
+                    ),
+                );
             #[allow(unused_mut)]
             let mut request = client
                 .client
@@ -3045,9 +3255,12 @@ pub mod builder {
         where
             V: std::convert::TryInto<::std::string::String>,
         {
-            self.task = value.try_into().map_err(|_| {
-                "conversion to `:: std :: string :: String` for task failed".to_string()
-            });
+            self.task = value
+                .try_into()
+                .map_err(|_| {
+                    "conversion to `:: std :: string :: String` for task failed"
+                        .to_string()
+                });
             self
         }
 
@@ -3058,15 +3271,17 @@ pub mod builder {
             let Self { client, task } = self;
             let task = task.map_err(Error::InvalidRequest)?;
             let url = format!(
-                "{}/v1/tasks/{}/outputs",
-                client.baseurl,
-                encode_path(&task.to_string()),
+                "{}/v1/tasks/{}/outputs", client.baseurl, encode_path(& task
+                .to_string()),
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-            header_map.append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
-            );
+            header_map
+                .append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(
+                        super::Client::api_version(),
+                    ),
+                );
             #[allow(unused_mut)]
             let mut request = client
                 .client
@@ -3114,9 +3329,12 @@ pub mod builder {
         where
             V: std::convert::TryInto<::std::string::String>,
         {
-            self.task = value.try_into().map_err(|_| {
-                "conversion to `:: std :: string :: String` for task failed".to_string()
-            });
+            self.task = value
+                .try_into()
+                .map_err(|_| {
+                    "conversion to `:: std :: string :: String` for task failed"
+                        .to_string()
+                });
             self
         }
 
@@ -3124,32 +3342,32 @@ pub mod builder {
         where
             V: std::convert::TryInto<::std::string::String>,
         {
-            self.output = value.try_into().map_err(|_| {
-                "conversion to `:: std :: string :: String` for output failed".to_string()
-            });
+            self.output = value
+                .try_into()
+                .map_err(|_| {
+                    "conversion to `:: std :: string :: String` for output failed"
+                        .to_string()
+                });
             self
         }
 
         ///Sends a `GET` request to `/v1/tasks/{task}/outputs/{output}`
         pub async fn send(self) -> Result<ResponseValue<ByteStream>, Error<()>> {
-            let Self {
-                client,
-                task,
-                output,
-            } = self;
+            let Self { client, task, output } = self;
             let task = task.map_err(Error::InvalidRequest)?;
             let output = output.map_err(Error::InvalidRequest)?;
             let url = format!(
-                "{}/v1/tasks/{}/outputs/{}",
-                client.baseurl,
-                encode_path(&task.to_string()),
-                encode_path(&output.to_string()),
+                "{}/v1/tasks/{}/outputs/{}", client.baseurl, encode_path(& task
+                .to_string()), encode_path(& output.to_string()),
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-            header_map.append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
-            );
+            header_map
+                .append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(
+                        super::Client::api_version(),
+                    ),
+                );
             #[allow(unused_mut)]
             let mut request = client.client.get(url).headers(header_map).build()?;
             let info = OperationInfo {
@@ -3191,30 +3409,39 @@ pub mod builder {
             self.body = value
                 .try_into()
                 .map(From::from)
-                .map_err(|s| format!("conversion to `UserCreate` for body failed: {}", s));
+                .map_err(|s| {
+                    format!("conversion to `UserCreate` for body failed: {}", s)
+                });
             self
         }
 
         pub fn body_map<F>(mut self, f: F) -> Self
         where
-            F: std::ops::FnOnce(types::builder::UserCreate) -> types::builder::UserCreate,
+            F: std::ops::FnOnce(
+                types::builder::UserCreate,
+            ) -> types::builder::UserCreate,
         {
             self.body = self.body.map(f);
             self
         }
 
         ///Sends a `POST` request to `/v1/users`
-        pub async fn send(self) -> Result<ResponseValue<types::UserCreateResult>, Error<()>> {
+        pub async fn send(
+            self,
+        ) -> Result<ResponseValue<types::UserCreateResult>, Error<()>> {
             let Self { client, body } = self;
             let body = body
                 .and_then(|v| types::UserCreate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/v1/users", client.baseurl,);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-            header_map.append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
-            );
+            header_map
+                .append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(
+                        super::Client::api_version(),
+                    ),
+                );
             #[allow(unused_mut)]
             let mut request = client
                 .client
@@ -3254,14 +3481,19 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/v1/whoami`
-        pub async fn send(self) -> Result<ResponseValue<types::WhoamiResult>, Error<()>> {
+        pub async fn send(
+            self,
+        ) -> Result<ResponseValue<types::WhoamiResult>, Error<()>> {
             let Self { client } = self;
             let url = format!("{}/v1/whoami", client.baseurl,);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-            header_map.append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
-            );
+            header_map
+                .append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(
+                        super::Client::api_version(),
+                    ),
+                );
             #[allow(unused_mut)]
             let mut request = client
                 .client
@@ -3320,10 +3552,13 @@ pub mod builder {
             let body = body.map_err(Error::InvalidRequest)?;
             let url = format!("{}/v1/whoami/name", client.baseurl,);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-            header_map.append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
-            );
+            header_map
+                .append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(
+                        super::Client::api_version(),
+                    ),
+                );
             #[allow(unused_mut)]
             let mut request = client
                 .client
@@ -3369,35 +3604,48 @@ pub mod builder {
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::WorkerBootstrap>,
-            <V as std::convert::TryInto<types::WorkerBootstrap>>::Error: std::fmt::Display,
+            <V as std::convert::TryInto<
+                types::WorkerBootstrap,
+            >>::Error: std::fmt::Display,
         {
             self.body = value
                 .try_into()
                 .map(From::from)
-                .map_err(|s| format!("conversion to `WorkerBootstrap` for body failed: {}", s));
+                .map_err(|s| {
+                    format!("conversion to `WorkerBootstrap` for body failed: {}", s)
+                });
             self
         }
 
         pub fn body_map<F>(mut self, f: F) -> Self
         where
-            F: std::ops::FnOnce(types::builder::WorkerBootstrap) -> types::builder::WorkerBootstrap,
+            F: std::ops::FnOnce(
+                types::builder::WorkerBootstrap,
+            ) -> types::builder::WorkerBootstrap,
         {
             self.body = self.body.map(f);
             self
         }
 
         ///Sends a `POST` request to `/v1/worker/bootstrap`
-        pub async fn send(self) -> Result<ResponseValue<types::WorkerBootstrapResult>, Error<()>> {
+        pub async fn send(
+            self,
+        ) -> Result<ResponseValue<types::WorkerBootstrapResult>, Error<()>> {
             let Self { client, body } = self;
             let body = body
-                .and_then(|v| types::WorkerBootstrap::try_from(v).map_err(|e| e.to_string()))
+                .and_then(|v| {
+                    types::WorkerBootstrap::try_from(v).map_err(|e| e.to_string())
+                })
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/v1/worker/bootstrap", client.baseurl,);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-            header_map.append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
-            );
+            header_map
+                .append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(
+                        super::Client::api_version(),
+                    ),
+                );
             #[allow(unused_mut)]
             let mut request = client
                 .client
@@ -3437,14 +3685,19 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/v1/worker/ping`
-        pub async fn send(self) -> Result<ResponseValue<types::WorkerPingResult>, Error<()>> {
+        pub async fn send(
+            self,
+        ) -> Result<ResponseValue<types::WorkerPingResult>, Error<()>> {
             let Self { client } = self;
             let url = format!("{}/v1/worker/ping", client.baseurl,);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-            header_map.append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
-            );
+            header_map
+                .append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(
+                        super::Client::api_version(),
+                    ),
+                );
             #[allow(unused_mut)]
             let mut request = client
                 .client
@@ -3492,21 +3745,28 @@ pub mod builder {
         where
             V: std::convert::TryInto<::std::string::String>,
         {
-            self.task = value.try_into().map_err(|_| {
-                "conversion to `:: std :: string :: String` for task failed".to_string()
-            });
+            self.task = value
+                .try_into()
+                .map_err(|_| {
+                    "conversion to `:: std :: string :: String` for task failed"
+                        .to_string()
+                });
             self
         }
 
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::WorkerAppendTask>,
-            <V as std::convert::TryInto<types::WorkerAppendTask>>::Error: std::fmt::Display,
+            <V as std::convert::TryInto<
+                types::WorkerAppendTask,
+            >>::Error: std::fmt::Display,
         {
             self.body = value
                 .try_into()
                 .map(From::from)
-                .map_err(|s| format!("conversion to `WorkerAppendTask` for body failed: {}", s));
+                .map_err(|s| {
+                    format!("conversion to `WorkerAppendTask` for body failed: {}", s)
+                });
             self
         }
 
@@ -3525,18 +3785,22 @@ pub mod builder {
             let Self { client, task, body } = self;
             let task = task.map_err(Error::InvalidRequest)?;
             let body = body
-                .and_then(|v| types::WorkerAppendTask::try_from(v).map_err(|e| e.to_string()))
+                .and_then(|v| {
+                    types::WorkerAppendTask::try_from(v).map_err(|e| e.to_string())
+                })
                 .map_err(Error::InvalidRequest)?;
             let url = format!(
-                "{}/v1/worker/task/{}/append",
-                client.baseurl,
-                encode_path(&task.to_string()),
+                "{}/v1/worker/task/{}/append", client.baseurl, encode_path(& task
+                .to_string()),
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-            header_map.append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
-            );
+            header_map
+                .append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(
+                        super::Client::api_version(),
+                    ),
+                );
             #[allow(unused_mut)]
             let mut request = client
                 .client
@@ -3581,9 +3845,12 @@ pub mod builder {
         where
             V: std::convert::TryInto<::std::string::String>,
         {
-            self.task = value.try_into().map_err(|_| {
-                "conversion to `:: std :: string :: String` for task failed".to_string()
-            });
+            self.task = value
+                .try_into()
+                .map_err(|_| {
+                    "conversion to `:: std :: string :: String` for task failed"
+                        .to_string()
+                });
             self
         }
 
@@ -3593,25 +3860,31 @@ pub mod builder {
         {
             self.body = value
                 .try_into()
-                .map_err(|_| "conversion to `reqwest::Body` for body failed".to_string());
+                .map_err(|_| {
+                    "conversion to `reqwest::Body` for body failed".to_string()
+                });
             self
         }
 
         ///Sends a `POST` request to `/v1/worker/task/{task}/chunk`
-        pub async fn send(self) -> Result<ResponseValue<types::UploadedChunk>, Error<()>> {
+        pub async fn send(
+            self,
+        ) -> Result<ResponseValue<types::UploadedChunk>, Error<()>> {
             let Self { client, task, body } = self;
             let task = task.map_err(Error::InvalidRequest)?;
             let body = body.map_err(Error::InvalidRequest)?;
             let url = format!(
-                "{}/v1/worker/task/{}/chunk",
-                client.baseurl,
-                encode_path(&task.to_string()),
+                "{}/v1/worker/task/{}/chunk", client.baseurl, encode_path(& task
+                .to_string()),
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-            header_map.append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
-            );
+            header_map
+                .append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(
+                        super::Client::api_version(),
+                    ),
+                );
             #[allow(unused_mut)]
             let mut request = client
                 .client
@@ -3622,7 +3895,9 @@ pub mod builder {
                 )
                 .header(
                     ::reqwest::header::CONTENT_TYPE,
-                    ::reqwest::header::HeaderValue::from_static("application/octet-stream"),
+                    ::reqwest::header::HeaderValue::from_static(
+                        "application/octet-stream",
+                    ),
                 )
                 .body(body)
                 .headers(header_map)
@@ -3664,21 +3939,28 @@ pub mod builder {
         where
             V: std::convert::TryInto<::std::string::String>,
         {
-            self.task = value.try_into().map_err(|_| {
-                "conversion to `:: std :: string :: String` for task failed".to_string()
-            });
+            self.task = value
+                .try_into()
+                .map_err(|_| {
+                    "conversion to `:: std :: string :: String` for task failed"
+                        .to_string()
+                });
             self
         }
 
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::WorkerCompleteTask>,
-            <V as std::convert::TryInto<types::WorkerCompleteTask>>::Error: std::fmt::Display,
+            <V as std::convert::TryInto<
+                types::WorkerCompleteTask,
+            >>::Error: std::fmt::Display,
         {
             self.body = value
                 .try_into()
                 .map(From::from)
-                .map_err(|s| format!("conversion to `WorkerCompleteTask` for body failed: {}", s));
+                .map_err(|s| {
+                    format!("conversion to `WorkerCompleteTask` for body failed: {}", s)
+                });
             self
         }
 
@@ -3697,18 +3979,22 @@ pub mod builder {
             let Self { client, task, body } = self;
             let task = task.map_err(Error::InvalidRequest)?;
             let body = body
-                .and_then(|v| types::WorkerCompleteTask::try_from(v).map_err(|e| e.to_string()))
+                .and_then(|v| {
+                    types::WorkerCompleteTask::try_from(v).map_err(|e| e.to_string())
+                })
                 .map_err(Error::InvalidRequest)?;
             let url = format!(
-                "{}/v1/worker/task/{}/complete",
-                client.baseurl,
-                encode_path(&task.to_string()),
+                "{}/v1/worker/task/{}/complete", client.baseurl, encode_path(& task
+                .to_string()),
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-            header_map.append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
-            );
+            header_map
+                .append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(
+                        super::Client::api_version(),
+                    ),
+                );
             #[allow(unused_mut)]
             let mut request = client
                 .client
@@ -3753,27 +4039,36 @@ pub mod builder {
         where
             V: std::convert::TryInto<::std::string::String>,
         {
-            self.task = value.try_into().map_err(|_| {
-                "conversion to `:: std :: string :: String` for task failed".to_string()
-            });
+            self.task = value
+                .try_into()
+                .map_err(|_| {
+                    "conversion to `:: std :: string :: String` for task failed"
+                        .to_string()
+                });
             self
         }
 
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::WorkerAddOutput>,
-            <V as std::convert::TryInto<types::WorkerAddOutput>>::Error: std::fmt::Display,
+            <V as std::convert::TryInto<
+                types::WorkerAddOutput,
+            >>::Error: std::fmt::Display,
         {
             self.body = value
                 .try_into()
                 .map(From::from)
-                .map_err(|s| format!("conversion to `WorkerAddOutput` for body failed: {}", s));
+                .map_err(|s| {
+                    format!("conversion to `WorkerAddOutput` for body failed: {}", s)
+                });
             self
         }
 
         pub fn body_map<F>(mut self, f: F) -> Self
         where
-            F: std::ops::FnOnce(types::builder::WorkerAddOutput) -> types::builder::WorkerAddOutput,
+            F: std::ops::FnOnce(
+                types::builder::WorkerAddOutput,
+            ) -> types::builder::WorkerAddOutput,
         {
             self.body = self.body.map(f);
             self
@@ -3784,18 +4079,22 @@ pub mod builder {
             let Self { client, task, body } = self;
             let task = task.map_err(Error::InvalidRequest)?;
             let body = body
-                .and_then(|v| types::WorkerAddOutput::try_from(v).map_err(|e| e.to_string()))
+                .and_then(|v| {
+                    types::WorkerAddOutput::try_from(v).map_err(|e| e.to_string())
+                })
                 .map_err(Error::InvalidRequest)?;
             let url = format!(
-                "{}/v1/worker/task/{}/output",
-                client.baseurl,
-                encode_path(&task.to_string()),
+                "{}/v1/worker/task/{}/output", client.baseurl, encode_path(& task
+                .to_string()),
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-            header_map.append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
-            );
+            header_map
+                .append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(
+                        super::Client::api_version(),
+                    ),
+                );
             #[allow(unused_mut)]
             let mut request = client
                 .client
@@ -3831,14 +4130,19 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/v1/workers`
-        pub async fn send(self) -> Result<ResponseValue<types::WorkersResult>, Error<()>> {
+        pub async fn send(
+            self,
+        ) -> Result<ResponseValue<types::WorkersResult>, Error<()>> {
             let Self { client } = self;
             let url = format!("{}/v1/workers", client.baseurl,);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-            header_map.append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
-            );
+            header_map
+                .append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(
+                        super::Client::api_version(),
+                    ),
+                );
             #[allow(unused_mut)]
             let mut request = client
                 .client
@@ -3881,10 +4185,13 @@ pub mod builder {
             let Self { client } = self;
             let url = format!("{}/v1/workers/recycle", client.baseurl,);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-            header_map.append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
-            );
+            header_map
+                .append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(
+                        super::Client::api_version(),
+                    ),
+                );
             #[allow(unused_mut)]
             let mut request = client.client.post(url).headers(header_map).build()?;
             let info = OperationInfo {
@@ -3925,20 +4232,27 @@ pub mod builder {
             self.id = value
                 .try_into()
                 .map(Some)
-                .map_err(|_| "conversion to `GetThingOrThingsId` for id failed".to_string());
+                .map_err(|_| {
+                    "conversion to `GetThingOrThingsId` for id failed".to_string()
+                });
             self
         }
 
         ///Sends a `GET` request to `/v1/things`
-        pub async fn send(self) -> Result<ResponseValue<::std::string::String>, Error<()>> {
+        pub async fn send(
+            self,
+        ) -> Result<ResponseValue<::std::string::String>, Error<()>> {
             let Self { client, id } = self;
             let id = id.map_err(Error::InvalidRequest)?;
             let url = format!("{}/v1/things", client.baseurl,);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
-            header_map.append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
-            );
+            header_map
+                .append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(
+                        super::Client::api_version(),
+                    ),
+                );
             #[allow(unused_mut)]
             let mut request = client
                 .client
@@ -3985,25 +4299,29 @@ pub mod builder {
         where
             V: std::convert::TryInto<types::HeaderArgAcceptLanguage>,
         {
-            self.accept_language = value.try_into().map(Some).map_err(|_| {
-                "conversion to `HeaderArgAcceptLanguage` for accept_language failed".to_string()
-            });
+            self.accept_language = value
+                .try_into()
+                .map(Some)
+                .map_err(|_| {
+                    "conversion to `HeaderArgAcceptLanguage` for accept_language failed"
+                        .to_string()
+                });
             self
         }
 
         ///Sends a `GET` request to `/v1/header-arg`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
-            let Self {
-                client,
-                accept_language,
-            } = self;
+            let Self { client, accept_language } = self;
             let accept_language = accept_language.map_err(Error::InvalidRequest)?;
             let url = format!("{}/v1/header-arg", client.baseurl,);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(2usize);
-            header_map.append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
-            );
+            header_map
+                .append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(
+                        super::Client::api_version(),
+                    ),
+                );
             if let Some(value) = accept_language {
                 header_map.append("accept-language", value.to_string().try_into()?);
             }

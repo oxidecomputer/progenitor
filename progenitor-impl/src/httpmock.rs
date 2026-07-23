@@ -12,6 +12,7 @@ use crate::{
         BodyContentType, HttpMethod, OperationParameter, OperationParameterKind,
         OperationParameterType, OperationResponse, OperationResponseStatus,
     },
+    split_multiline_doc_attributes,
     to_schema::ToSchema,
     util::{Case, sanitize},
     validate_openapi,
@@ -125,7 +126,7 @@ impl Generator {
                 )*
             }
         };
-        Ok(code)
+        Ok(split_multiline_doc_attributes(code))
     }
 
     fn httpmock_method(&mut self, method: &crate::method::OperationMethod) -> MockOp {

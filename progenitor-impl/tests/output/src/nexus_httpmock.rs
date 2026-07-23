@@ -1,8 +1,8 @@
 pub mod operations {
-    #![doc = r" [`When`](::httpmock::When) and [`Then`](::httpmock::Then)"]
-    #![doc = r" wrappers for each operation. Each can be converted to"]
-    #![doc = r" its inner type with a call to `into_inner()`. This can"]
-    #![doc = r" be used to explicitly deviate from permitted values."]
+    //! [`When`](::httpmock::When) and [`Then`](::httpmock::Then)
+    //! wrappers for each operation. Each can be converted to
+    //! its inner type with a call to `into_inner()`. This can
+    //! be used to explicitly deviate from permitted values.
     use crate::nexus_builder::*;
     pub struct DiskViewByIdWhen(::httpmock::When);
     impl DiskViewByIdWhen {
@@ -19,7 +19,8 @@ pub mod operations {
         }
 
         pub fn id(self, value: &::uuid::Uuid) -> Self {
-            let re = regex::Regex::new(&format!("^/by-id/disks/{}$", value.to_string())).unwrap();
+            let re = regex::Regex::new(&format!("^/by-id/disks/{}$", value.to_string()))
+                .unwrap();
             Self(self.0.path_matches(re))
         }
     }
@@ -36,7 +37,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::Disk) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -46,7 +48,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -56,7 +59,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -79,7 +83,8 @@ pub mod operations {
         }
 
         pub fn id(self, value: &::uuid::Uuid) -> Self {
-            let re = regex::Regex::new(&format!("^/by-id/images/{}$", value.to_string())).unwrap();
+            let re = regex::Regex::new(&format!("^/by-id/images/{}$", value.to_string()))
+                .unwrap();
             Self(self.0.path_matches(re))
         }
     }
@@ -96,7 +101,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::Image) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -106,7 +112,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -116,7 +123,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -139,8 +147,10 @@ pub mod operations {
         }
 
         pub fn id(self, value: &::uuid::Uuid) -> Self {
-            let re =
-                regex::Regex::new(&format!("^/by-id/instances/{}$", value.to_string())).unwrap();
+            let re = regex::Regex::new(
+                    &format!("^/by-id/instances/{}$", value.to_string()),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
     }
@@ -157,7 +167,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::Instance) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -167,7 +178,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -177,7 +189,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -191,7 +204,9 @@ pub mod operations {
             Self(
                 inner
                     .method(::httpmock::Method::GET)
-                    .path_matches(regex::Regex::new("^/by-id/network-interfaces/[^/]*$").unwrap()),
+                    .path_matches(
+                        regex::Regex::new("^/by-id/network-interfaces/[^/]*$").unwrap(),
+                    ),
             )
         }
 
@@ -200,11 +215,10 @@ pub mod operations {
         }
 
         pub fn id(self, value: &::uuid::Uuid) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/by-id/network-interfaces/{}$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!("^/by-id/network-interfaces/{}$", value.to_string()),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
     }
@@ -221,7 +235,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::NetworkInterface) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -231,7 +246,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -241,7 +257,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -255,7 +272,9 @@ pub mod operations {
             Self(
                 inner
                     .method(::httpmock::Method::GET)
-                    .path_matches(regex::Regex::new("^/by-id/organizations/[^/]*$").unwrap()),
+                    .path_matches(
+                        regex::Regex::new("^/by-id/organizations/[^/]*$").unwrap(),
+                    ),
             )
         }
 
@@ -264,7 +283,9 @@ pub mod operations {
         }
 
         pub fn id(self, value: &::uuid::Uuid) -> Self {
-            let re = regex::Regex::new(&format!("^/by-id/organizations/{}$", value.to_string()))
+            let re = regex::Regex::new(
+                    &format!("^/by-id/organizations/{}$", value.to_string()),
+                )
                 .unwrap();
             Self(self.0.path_matches(re))
         }
@@ -282,7 +303,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::Organization) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -292,7 +314,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -302,7 +325,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -325,8 +349,10 @@ pub mod operations {
         }
 
         pub fn id(self, value: &::uuid::Uuid) -> Self {
-            let re =
-                regex::Regex::new(&format!("^/by-id/projects/{}$", value.to_string())).unwrap();
+            let re = regex::Regex::new(
+                    &format!("^/by-id/projects/{}$", value.to_string()),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
     }
@@ -343,7 +369,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::Project) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -353,7 +380,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -363,7 +391,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -386,8 +415,10 @@ pub mod operations {
         }
 
         pub fn id(self, value: &::uuid::Uuid) -> Self {
-            let re =
-                regex::Regex::new(&format!("^/by-id/snapshots/{}$", value.to_string())).unwrap();
+            let re = regex::Regex::new(
+                    &format!("^/by-id/snapshots/{}$", value.to_string()),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
     }
@@ -404,7 +435,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::Snapshot) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -414,7 +446,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -424,7 +457,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -438,7 +472,9 @@ pub mod operations {
             Self(
                 inner
                     .method(::httpmock::Method::GET)
-                    .path_matches(regex::Regex::new("^/by-id/vpc-router-routes/[^/]*$").unwrap()),
+                    .path_matches(
+                        regex::Regex::new("^/by-id/vpc-router-routes/[^/]*$").unwrap(),
+                    ),
             )
         }
 
@@ -447,9 +483,10 @@ pub mod operations {
         }
 
         pub fn id(self, value: &::uuid::Uuid) -> Self {
-            let re =
-                regex::Regex::new(&format!("^/by-id/vpc-router-routes/{}$", value.to_string()))
-                    .unwrap();
+            let re = regex::Regex::new(
+                    &format!("^/by-id/vpc-router-routes/{}$", value.to_string()),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
     }
@@ -466,7 +503,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::RouterRoute) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -476,7 +514,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -486,7 +525,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -500,7 +540,9 @@ pub mod operations {
             Self(
                 inner
                     .method(::httpmock::Method::GET)
-                    .path_matches(regex::Regex::new("^/by-id/vpc-routers/[^/]*$").unwrap()),
+                    .path_matches(
+                        regex::Regex::new("^/by-id/vpc-routers/[^/]*$").unwrap(),
+                    ),
             )
         }
 
@@ -509,8 +551,10 @@ pub mod operations {
         }
 
         pub fn id(self, value: &::uuid::Uuid) -> Self {
-            let re =
-                regex::Regex::new(&format!("^/by-id/vpc-routers/{}$", value.to_string())).unwrap();
+            let re = regex::Regex::new(
+                    &format!("^/by-id/vpc-routers/{}$", value.to_string()),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
     }
@@ -527,7 +571,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::VpcRouter) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -537,7 +582,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -547,7 +593,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -561,7 +608,9 @@ pub mod operations {
             Self(
                 inner
                     .method(::httpmock::Method::GET)
-                    .path_matches(regex::Regex::new("^/by-id/vpc-subnets/[^/]*$").unwrap()),
+                    .path_matches(
+                        regex::Regex::new("^/by-id/vpc-subnets/[^/]*$").unwrap(),
+                    ),
             )
         }
 
@@ -570,8 +619,10 @@ pub mod operations {
         }
 
         pub fn id(self, value: &::uuid::Uuid) -> Self {
-            let re =
-                regex::Regex::new(&format!("^/by-id/vpc-subnets/{}$", value.to_string())).unwrap();
+            let re = regex::Regex::new(
+                    &format!("^/by-id/vpc-subnets/{}$", value.to_string()),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
     }
@@ -588,7 +639,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::VpcSubnet) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -598,7 +650,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -608,7 +661,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -631,7 +685,8 @@ pub mod operations {
         }
 
         pub fn id(self, value: &::uuid::Uuid) -> Self {
-            let re = regex::Regex::new(&format!("^/by-id/vpcs/{}$", value.to_string())).unwrap();
+            let re = regex::Regex::new(&format!("^/by-id/vpcs/{}$", value.to_string()))
+                .unwrap();
             Self(self.0.path_matches(re))
         }
     }
@@ -648,7 +703,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::Vpc) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -658,7 +714,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -668,7 +725,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -707,7 +765,8 @@ pub mod operations {
 
         pub fn default_response(self, status: u16, value: ::serde_json::Value) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body(value),
@@ -751,7 +810,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -761,7 +821,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -800,7 +861,8 @@ pub mod operations {
 
         pub fn default_response(self, status: u16, value: ::serde_json::Value) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body(value),
@@ -868,7 +930,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::GroupResultsPage) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -878,7 +941,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -888,7 +952,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -932,7 +997,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -942,7 +1008,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -965,7 +1032,8 @@ pub mod operations {
         }
 
         pub fn silo_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!("^/login/{}/local$", value.to_string())).unwrap();
+            let re = regex::Regex::new(&format!("^/login/{}/local$", value.to_string()))
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
@@ -991,7 +1059,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -1001,7 +1070,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -1011,7 +1081,8 @@ pub mod operations {
         pub fn success(self, status: u16, value: ::serde_json::Value) -> Self {
             assert_eq!(status / 100u16, 2u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body(value),
@@ -1025,7 +1096,9 @@ pub mod operations {
             Self(
                 inner
                     .method(::httpmock::Method::GET)
-                    .path_matches(regex::Regex::new("^/login/[^/]*/saml/[^/]*$").unwrap()),
+                    .path_matches(
+                        regex::Regex::new("^/login/[^/]*/saml/[^/]*$").unwrap(),
+                    ),
             )
         }
 
@@ -1034,12 +1107,18 @@ pub mod operations {
         }
 
         pub fn silo_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!("^/login/{}/saml/.*$", value.to_string())).unwrap();
+            let re = regex::Regex::new(
+                    &format!("^/login/{}/saml/.*$", value.to_string()),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn provider_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!("^/login/.*/saml/{}$", value.to_string())).unwrap();
+            let re = regex::Regex::new(
+                    &format!("^/login/.*/saml/{}$", value.to_string()),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
     }
@@ -1061,7 +1140,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -1071,7 +1151,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -1081,7 +1162,8 @@ pub mod operations {
         pub fn success(self, status: u16, value: ::serde_json::Value) -> Self {
             assert_eq!(status / 100u16, 2u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body(value),
@@ -1095,7 +1177,9 @@ pub mod operations {
             Self(
                 inner
                     .method(::httpmock::Method::POST)
-                    .path_matches(regex::Regex::new("^/login/[^/]*/saml/[^/]*$").unwrap()),
+                    .path_matches(
+                        regex::Regex::new("^/login/[^/]*/saml/[^/]*$").unwrap(),
+                    ),
             )
         }
 
@@ -1104,12 +1188,18 @@ pub mod operations {
         }
 
         pub fn silo_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!("^/login/{}/saml/.*$", value.to_string())).unwrap();
+            let re = regex::Regex::new(
+                    &format!("^/login/{}/saml/.*$", value.to_string()),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn provider_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!("^/login/.*/saml/{}$", value.to_string())).unwrap();
+            let re = regex::Regex::new(
+                    &format!("^/login/.*/saml/{}$", value.to_string()),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
@@ -1135,7 +1225,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -1145,7 +1236,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -1155,7 +1247,8 @@ pub mod operations {
         pub fn success(self, status: u16, value: ::serde_json::Value) -> Self {
             assert_eq!(status / 100u16, 2u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body(value),
@@ -1195,7 +1288,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -1205,7 +1299,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -1273,7 +1368,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::OrganizationResultsPage) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -1283,7 +1379,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -1293,7 +1390,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -1332,7 +1430,8 @@ pub mod operations {
 
         pub fn created(self, value: &types::Organization) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(201u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -1342,7 +1441,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -1352,7 +1452,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -1375,7 +1476,10 @@ pub mod operations {
         }
 
         pub fn organization_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!("^/organizations/{}$", value.to_string())).unwrap();
+            let re = regex::Regex::new(
+                    &format!("^/organizations/{}$", value.to_string()),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
     }
@@ -1392,7 +1496,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::Organization) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -1402,7 +1507,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -1412,7 +1518,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -1435,7 +1542,10 @@ pub mod operations {
         }
 
         pub fn organization_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!("^/organizations/{}$", value.to_string())).unwrap();
+            let re = regex::Regex::new(
+                    &format!("^/organizations/{}$", value.to_string()),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
@@ -1456,7 +1566,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::Organization) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -1466,7 +1577,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -1476,7 +1588,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -1499,7 +1612,10 @@ pub mod operations {
         }
 
         pub fn organization_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!("^/organizations/{}$", value.to_string())).unwrap();
+            let re = regex::Regex::new(
+                    &format!("^/organizations/{}$", value.to_string()),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
     }
@@ -1521,7 +1637,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -1531,7 +1648,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -1545,7 +1663,9 @@ pub mod operations {
             Self(
                 inner
                     .method(::httpmock::Method::GET)
-                    .path_matches(regex::Regex::new("^/organizations/[^/]*/policy$").unwrap()),
+                    .path_matches(
+                        regex::Regex::new("^/organizations/[^/]*/policy$").unwrap(),
+                    ),
             )
         }
 
@@ -1554,7 +1674,9 @@ pub mod operations {
         }
 
         pub fn organization_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!("^/organizations/{}/policy$", value.to_string()))
+            let re = regex::Regex::new(
+                    &format!("^/organizations/{}/policy$", value.to_string()),
+                )
                 .unwrap();
             Self(self.0.path_matches(re))
         }
@@ -1572,7 +1694,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::OrganizationRolePolicy) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -1582,7 +1705,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -1592,7 +1716,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -1606,7 +1731,9 @@ pub mod operations {
             Self(
                 inner
                     .method(::httpmock::Method::PUT)
-                    .path_matches(regex::Regex::new("^/organizations/[^/]*/policy$").unwrap()),
+                    .path_matches(
+                        regex::Regex::new("^/organizations/[^/]*/policy$").unwrap(),
+                    ),
             )
         }
 
@@ -1615,7 +1742,9 @@ pub mod operations {
         }
 
         pub fn organization_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!("^/organizations/{}/policy$", value.to_string()))
+            let re = regex::Regex::new(
+                    &format!("^/organizations/{}/policy$", value.to_string()),
+                )
                 .unwrap();
             Self(self.0.path_matches(re))
         }
@@ -1637,7 +1766,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::OrganizationRolePolicy) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -1647,7 +1777,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -1657,7 +1788,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -1671,7 +1803,9 @@ pub mod operations {
             Self(
                 inner
                     .method(::httpmock::Method::GET)
-                    .path_matches(regex::Regex::new("^/organizations/[^/]*/projects$").unwrap()),
+                    .path_matches(
+                        regex::Regex::new("^/organizations/[^/]*/projects$").unwrap(),
+                    ),
             )
         }
 
@@ -1680,7 +1814,9 @@ pub mod operations {
         }
 
         pub fn organization_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!("^/organizations/{}/projects$", value.to_string()))
+            let re = regex::Regex::new(
+                    &format!("^/organizations/{}/projects$", value.to_string()),
+                )
                 .unwrap();
             Self(self.0.path_matches(re))
         }
@@ -1731,7 +1867,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::ProjectResultsPage) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -1741,7 +1878,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -1751,7 +1889,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -1765,7 +1904,9 @@ pub mod operations {
             Self(
                 inner
                     .method(::httpmock::Method::POST)
-                    .path_matches(regex::Regex::new("^/organizations/[^/]*/projects$").unwrap()),
+                    .path_matches(
+                        regex::Regex::new("^/organizations/[^/]*/projects$").unwrap(),
+                    ),
             )
         }
 
@@ -1774,7 +1915,9 @@ pub mod operations {
         }
 
         pub fn organization_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!("^/organizations/{}/projects$", value.to_string()))
+            let re = regex::Regex::new(
+                    &format!("^/organizations/{}/projects$", value.to_string()),
+                )
                 .unwrap();
             Self(self.0.path_matches(re))
         }
@@ -1796,7 +1939,8 @@ pub mod operations {
 
         pub fn created(self, value: &types::Project) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(201u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -1806,7 +1950,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -1816,7 +1961,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -1828,9 +1974,12 @@ pub mod operations {
     impl ProjectViewWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(::httpmock::Method::GET).path_matches(
-                    regex::Regex::new("^/organizations/[^/]*/projects/[^/]*$").unwrap(),
-                ),
+                inner
+                    .method(::httpmock::Method::GET)
+                    .path_matches(
+                        regex::Regex::new("^/organizations/[^/]*/projects/[^/]*$")
+                            .unwrap(),
+                    ),
             )
         }
 
@@ -1839,20 +1988,18 @@ pub mod operations {
         }
 
         pub fn organization_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/{}/projects/.*$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!("^/organizations/{}/projects/.*$", value.to_string()),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn project_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/{}$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!("^/organizations/.*/projects/{}$", value.to_string()),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
     }
@@ -1869,7 +2016,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::Project) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -1879,7 +2027,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -1889,7 +2038,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -1901,9 +2051,12 @@ pub mod operations {
     impl ProjectUpdateWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(::httpmock::Method::PUT).path_matches(
-                    regex::Regex::new("^/organizations/[^/]*/projects/[^/]*$").unwrap(),
-                ),
+                inner
+                    .method(::httpmock::Method::PUT)
+                    .path_matches(
+                        regex::Regex::new("^/organizations/[^/]*/projects/[^/]*$")
+                            .unwrap(),
+                    ),
             )
         }
 
@@ -1912,20 +2065,18 @@ pub mod operations {
         }
 
         pub fn organization_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/{}/projects/.*$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!("^/organizations/{}/projects/.*$", value.to_string()),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn project_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/{}$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!("^/organizations/.*/projects/{}$", value.to_string()),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
@@ -1946,7 +2097,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::Project) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -1956,7 +2108,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -1966,7 +2119,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -1978,9 +2132,12 @@ pub mod operations {
     impl ProjectDeleteWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(::httpmock::Method::DELETE).path_matches(
-                    regex::Regex::new("^/organizations/[^/]*/projects/[^/]*$").unwrap(),
-                ),
+                inner
+                    .method(::httpmock::Method::DELETE)
+                    .path_matches(
+                        regex::Regex::new("^/organizations/[^/]*/projects/[^/]*$")
+                            .unwrap(),
+                    ),
             )
         }
 
@@ -1989,20 +2146,18 @@ pub mod operations {
         }
 
         pub fn organization_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/{}/projects/.*$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!("^/organizations/{}/projects/.*$", value.to_string()),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn project_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/{}$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!("^/organizations/.*/projects/{}$", value.to_string()),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
     }
@@ -2024,7 +2179,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -2034,7 +2190,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -2045,9 +2202,14 @@ pub mod operations {
     pub struct DiskListWhen(::httpmock::When);
     impl DiskListWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
-            Self(inner.method(::httpmock::Method::GET).path_matches(
-                regex::Regex::new("^/organizations/[^/]*/projects/[^/]*/disks$").unwrap(),
-            ))
+            Self(
+                inner
+                    .method(::httpmock::Method::GET)
+                    .path_matches(
+                        regex::Regex::new("^/organizations/[^/]*/projects/[^/]*/disks$")
+                            .unwrap(),
+                    ),
+            )
         }
 
         pub fn into_inner(self) -> ::httpmock::When {
@@ -2055,20 +2217,18 @@ pub mod operations {
         }
 
         pub fn organization_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/{}/projects/.*/disks$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!("^/organizations/{}/projects/.*/disks$", value.to_string()),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn project_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/{}/disks$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!("^/organizations/.*/projects/{}/disks$", value.to_string()),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
@@ -2118,7 +2278,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::DiskResultsPage) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -2128,7 +2289,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -2138,7 +2300,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -2149,9 +2312,14 @@ pub mod operations {
     pub struct DiskCreateWhen(::httpmock::When);
     impl DiskCreateWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
-            Self(inner.method(::httpmock::Method::POST).path_matches(
-                regex::Regex::new("^/organizations/[^/]*/projects/[^/]*/disks$").unwrap(),
-            ))
+            Self(
+                inner
+                    .method(::httpmock::Method::POST)
+                    .path_matches(
+                        regex::Regex::new("^/organizations/[^/]*/projects/[^/]*/disks$")
+                            .unwrap(),
+                    ),
+            )
         }
 
         pub fn into_inner(self) -> ::httpmock::When {
@@ -2159,20 +2327,18 @@ pub mod operations {
         }
 
         pub fn organization_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/{}/projects/.*/disks$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!("^/organizations/{}/projects/.*/disks$", value.to_string()),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn project_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/{}/disks$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!("^/organizations/.*/projects/{}/disks$", value.to_string()),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
@@ -2193,7 +2359,8 @@ pub mod operations {
 
         pub fn created(self, value: &types::Disk) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(201u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -2203,7 +2370,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -2213,7 +2381,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -2224,9 +2393,16 @@ pub mod operations {
     pub struct DiskViewWhen(::httpmock::When);
     impl DiskViewWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
-            Self(inner.method(::httpmock::Method::GET).path_matches(
-                regex::Regex::new("^/organizations/[^/]*/projects/[^/]*/disks/[^/]*$").unwrap(),
-            ))
+            Self(
+                inner
+                    .method(::httpmock::Method::GET)
+                    .path_matches(
+                        regex::Regex::new(
+                                "^/organizations/[^/]*/projects/[^/]*/disks/[^/]*$",
+                            )
+                            .unwrap(),
+                    ),
+            )
         }
 
         pub fn into_inner(self) -> ::httpmock::When {
@@ -2234,29 +2410,32 @@ pub mod operations {
         }
 
         pub fn organization_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/{}/projects/.*/disks/.*$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/{}/projects/.*/disks/.*$", value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn project_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/{}/disks/.*$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/{}/disks/.*$", value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn disk_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/.*/disks/{}$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/.*/disks/{}$", value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
     }
@@ -2273,7 +2452,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::Disk) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -2283,7 +2463,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -2293,7 +2474,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -2304,9 +2486,16 @@ pub mod operations {
     pub struct DiskDeleteWhen(::httpmock::When);
     impl DiskDeleteWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
-            Self(inner.method(::httpmock::Method::DELETE).path_matches(
-                regex::Regex::new("^/organizations/[^/]*/projects/[^/]*/disks/[^/]*$").unwrap(),
-            ))
+            Self(
+                inner
+                    .method(::httpmock::Method::DELETE)
+                    .path_matches(
+                        regex::Regex::new(
+                                "^/organizations/[^/]*/projects/[^/]*/disks/[^/]*$",
+                            )
+                            .unwrap(),
+                    ),
+            )
         }
 
         pub fn into_inner(self) -> ::httpmock::When {
@@ -2314,29 +2503,32 @@ pub mod operations {
         }
 
         pub fn organization_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/{}/projects/.*/disks/.*$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/{}/projects/.*/disks/.*$", value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn project_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/{}/disks/.*$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/{}/disks/.*$", value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn disk_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/.*/disks/{}$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/.*/disks/{}$", value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
     }
@@ -2358,7 +2550,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -2368,7 +2561,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -2380,12 +2574,14 @@ pub mod operations {
     impl DiskMetricsListWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(::httpmock::Method::GET).path_matches(
-                    regex::Regex::new(
-                        "^/organizations/[^/]*/projects/[^/]*/disks/[^/]*/metrics/[^/]*$",
-                    )
-                    .unwrap(),
-                ),
+                inner
+                    .method(::httpmock::Method::GET)
+                    .path_matches(
+                        regex::Regex::new(
+                                "^/organizations/[^/]*/projects/[^/]*/disks/[^/]*/metrics/[^/]*$",
+                            )
+                            .unwrap(),
+                    ),
             )
         }
 
@@ -2394,38 +2590,46 @@ pub mod operations {
         }
 
         pub fn organization_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/{}/projects/.*/disks/.*/metrics/.*$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/{}/projects/.*/disks/.*/metrics/.*$", value
+                        .to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn project_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/{}/disks/.*/metrics/.*$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/{}/disks/.*/metrics/.*$", value
+                        .to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn disk_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/.*/disks/{}/metrics/.*$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/.*/disks/{}/metrics/.*$", value
+                        .to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn metric_name(self, value: types::DiskMetricName) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/.*/disks/.*/metrics/{}$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/.*/disks/.*/metrics/{}$", value
+                        .to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
@@ -2486,7 +2690,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::MeasurementResultsPage) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -2496,7 +2701,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -2506,7 +2712,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -2517,9 +2724,14 @@ pub mod operations {
     pub struct ImageListWhen(::httpmock::When);
     impl ImageListWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
-            Self(inner.method(::httpmock::Method::GET).path_matches(
-                regex::Regex::new("^/organizations/[^/]*/projects/[^/]*/images$").unwrap(),
-            ))
+            Self(
+                inner
+                    .method(::httpmock::Method::GET)
+                    .path_matches(
+                        regex::Regex::new("^/organizations/[^/]*/projects/[^/]*/images$")
+                            .unwrap(),
+                    ),
+            )
         }
 
         pub fn into_inner(self) -> ::httpmock::When {
@@ -2527,20 +2739,18 @@ pub mod operations {
         }
 
         pub fn organization_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/{}/projects/.*/images$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!("^/organizations/{}/projects/.*/images$", value.to_string()),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn project_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/{}/images$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!("^/organizations/.*/projects/{}/images$", value.to_string()),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
@@ -2590,7 +2800,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::ImageResultsPage) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -2600,7 +2811,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -2610,7 +2822,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -2621,9 +2834,14 @@ pub mod operations {
     pub struct ImageCreateWhen(::httpmock::When);
     impl ImageCreateWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
-            Self(inner.method(::httpmock::Method::POST).path_matches(
-                regex::Regex::new("^/organizations/[^/]*/projects/[^/]*/images$").unwrap(),
-            ))
+            Self(
+                inner
+                    .method(::httpmock::Method::POST)
+                    .path_matches(
+                        regex::Regex::new("^/organizations/[^/]*/projects/[^/]*/images$")
+                            .unwrap(),
+                    ),
+            )
         }
 
         pub fn into_inner(self) -> ::httpmock::When {
@@ -2631,20 +2849,18 @@ pub mod operations {
         }
 
         pub fn organization_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/{}/projects/.*/images$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!("^/organizations/{}/projects/.*/images$", value.to_string()),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn project_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/{}/images$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!("^/organizations/.*/projects/{}/images$", value.to_string()),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
@@ -2665,7 +2881,8 @@ pub mod operations {
 
         pub fn created(self, value: &types::Image) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(201u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -2675,7 +2892,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -2685,7 +2903,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -2696,9 +2915,16 @@ pub mod operations {
     pub struct ImageViewWhen(::httpmock::When);
     impl ImageViewWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
-            Self(inner.method(::httpmock::Method::GET).path_matches(
-                regex::Regex::new("^/organizations/[^/]*/projects/[^/]*/images/[^/]*$").unwrap(),
-            ))
+            Self(
+                inner
+                    .method(::httpmock::Method::GET)
+                    .path_matches(
+                        regex::Regex::new(
+                                "^/organizations/[^/]*/projects/[^/]*/images/[^/]*$",
+                            )
+                            .unwrap(),
+                    ),
+            )
         }
 
         pub fn into_inner(self) -> ::httpmock::When {
@@ -2706,29 +2932,32 @@ pub mod operations {
         }
 
         pub fn organization_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/{}/projects/.*/images/.*$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/{}/projects/.*/images/.*$", value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn project_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/{}/images/.*$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/{}/images/.*$", value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn image_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/.*/images/{}$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/.*/images/{}$", value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
     }
@@ -2745,7 +2974,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::Image) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -2755,7 +2985,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -2765,7 +2996,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -2776,9 +3008,16 @@ pub mod operations {
     pub struct ImageDeleteWhen(::httpmock::When);
     impl ImageDeleteWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
-            Self(inner.method(::httpmock::Method::DELETE).path_matches(
-                regex::Regex::new("^/organizations/[^/]*/projects/[^/]*/images/[^/]*$").unwrap(),
-            ))
+            Self(
+                inner
+                    .method(::httpmock::Method::DELETE)
+                    .path_matches(
+                        regex::Regex::new(
+                                "^/organizations/[^/]*/projects/[^/]*/images/[^/]*$",
+                            )
+                            .unwrap(),
+                    ),
+            )
         }
 
         pub fn into_inner(self) -> ::httpmock::When {
@@ -2786,29 +3025,32 @@ pub mod operations {
         }
 
         pub fn organization_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/{}/projects/.*/images/.*$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/{}/projects/.*/images/.*$", value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn project_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/{}/images/.*$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/{}/images/.*$", value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn image_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/.*/images/{}$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/.*/images/{}$", value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
     }
@@ -2830,7 +3072,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -2840,7 +3083,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -2851,9 +3095,16 @@ pub mod operations {
     pub struct InstanceListWhen(::httpmock::When);
     impl InstanceListWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
-            Self(inner.method(::httpmock::Method::GET).path_matches(
-                regex::Regex::new("^/organizations/[^/]*/projects/[^/]*/instances$").unwrap(),
-            ))
+            Self(
+                inner
+                    .method(::httpmock::Method::GET)
+                    .path_matches(
+                        regex::Regex::new(
+                                "^/organizations/[^/]*/projects/[^/]*/instances$",
+                            )
+                            .unwrap(),
+                    ),
+            )
         }
 
         pub fn into_inner(self) -> ::httpmock::When {
@@ -2861,20 +3112,22 @@ pub mod operations {
         }
 
         pub fn organization_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/{}/projects/.*/instances$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/{}/projects/.*/instances$", value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn project_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/{}/instances$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/{}/instances$", value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
@@ -2924,7 +3177,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::InstanceResultsPage) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -2934,7 +3188,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -2944,7 +3199,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -2955,9 +3211,16 @@ pub mod operations {
     pub struct InstanceCreateWhen(::httpmock::When);
     impl InstanceCreateWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
-            Self(inner.method(::httpmock::Method::POST).path_matches(
-                regex::Regex::new("^/organizations/[^/]*/projects/[^/]*/instances$").unwrap(),
-            ))
+            Self(
+                inner
+                    .method(::httpmock::Method::POST)
+                    .path_matches(
+                        regex::Regex::new(
+                                "^/organizations/[^/]*/projects/[^/]*/instances$",
+                            )
+                            .unwrap(),
+                    ),
+            )
         }
 
         pub fn into_inner(self) -> ::httpmock::When {
@@ -2965,20 +3228,22 @@ pub mod operations {
         }
 
         pub fn organization_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/{}/projects/.*/instances$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/{}/projects/.*/instances$", value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn project_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/{}/instances$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/{}/instances$", value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
@@ -2999,7 +3264,8 @@ pub mod operations {
 
         pub fn created(self, value: &types::Instance) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(201u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -3009,7 +3275,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -3019,7 +3286,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -3030,9 +3298,16 @@ pub mod operations {
     pub struct InstanceViewWhen(::httpmock::When);
     impl InstanceViewWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
-            Self(inner.method(::httpmock::Method::GET).path_matches(
-                regex::Regex::new("^/organizations/[^/]*/projects/[^/]*/instances/[^/]*$").unwrap(),
-            ))
+            Self(
+                inner
+                    .method(::httpmock::Method::GET)
+                    .path_matches(
+                        regex::Regex::new(
+                                "^/organizations/[^/]*/projects/[^/]*/instances/[^/]*$",
+                            )
+                            .unwrap(),
+                    ),
+            )
         }
 
         pub fn into_inner(self) -> ::httpmock::When {
@@ -3040,29 +3315,32 @@ pub mod operations {
         }
 
         pub fn organization_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/{}/projects/.*/instances/.*$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/{}/projects/.*/instances/.*$", value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn project_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/{}/instances/.*$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/{}/instances/.*$", value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn instance_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/.*/instances/{}$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/.*/instances/{}$", value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
     }
@@ -3079,7 +3357,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::Instance) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -3089,7 +3368,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -3099,7 +3379,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -3110,9 +3391,16 @@ pub mod operations {
     pub struct InstanceDeleteWhen(::httpmock::When);
     impl InstanceDeleteWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
-            Self(inner.method(::httpmock::Method::DELETE).path_matches(
-                regex::Regex::new("^/organizations/[^/]*/projects/[^/]*/instances/[^/]*$").unwrap(),
-            ))
+            Self(
+                inner
+                    .method(::httpmock::Method::DELETE)
+                    .path_matches(
+                        regex::Regex::new(
+                                "^/organizations/[^/]*/projects/[^/]*/instances/[^/]*$",
+                            )
+                            .unwrap(),
+                    ),
+            )
         }
 
         pub fn into_inner(self) -> ::httpmock::When {
@@ -3120,29 +3408,32 @@ pub mod operations {
         }
 
         pub fn organization_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/{}/projects/.*/instances/.*$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/{}/projects/.*/instances/.*$", value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn project_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/{}/instances/.*$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/{}/instances/.*$", value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn instance_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/.*/instances/{}$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/.*/instances/{}$", value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
     }
@@ -3164,7 +3455,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -3174,7 +3466,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -3186,12 +3479,14 @@ pub mod operations {
     impl InstanceDiskListWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(::httpmock::Method::GET).path_matches(
-                    regex::Regex::new(
-                        "^/organizations/[^/]*/projects/[^/]*/instances/[^/]*/disks$",
-                    )
-                    .unwrap(),
-                ),
+                inner
+                    .method(::httpmock::Method::GET)
+                    .path_matches(
+                        regex::Regex::new(
+                                "^/organizations/[^/]*/projects/[^/]*/instances/[^/]*/disks$",
+                            )
+                            .unwrap(),
+                    ),
             )
         }
 
@@ -3200,29 +3495,35 @@ pub mod operations {
         }
 
         pub fn organization_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/{}/projects/.*/instances/.*/disks$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/{}/projects/.*/instances/.*/disks$", value
+                        .to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn project_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/{}/instances/.*/disks$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/{}/instances/.*/disks$", value
+                        .to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn instance_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/.*/instances/{}/disks$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/.*/instances/{}/disks$", value
+                        .to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
@@ -3272,7 +3573,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::DiskResultsPage) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -3282,7 +3584,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -3292,7 +3595,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -3304,12 +3608,14 @@ pub mod operations {
     impl InstanceDiskAttachWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(::httpmock::Method::POST).path_matches(
-                    regex::Regex::new(
-                        "^/organizations/[^/]*/projects/[^/]*/instances/[^/]*/disks/attach$",
-                    )
-                    .unwrap(),
-                ),
+                inner
+                    .method(::httpmock::Method::POST)
+                    .path_matches(
+                        regex::Regex::new(
+                                "^/organizations/[^/]*/projects/[^/]*/instances/[^/]*/disks/attach$",
+                            )
+                            .unwrap(),
+                    ),
             )
         }
 
@@ -3318,29 +3624,35 @@ pub mod operations {
         }
 
         pub fn organization_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/{}/projects/.*/instances/.*/disks/attach$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/{}/projects/.*/instances/.*/disks/attach$",
+                        value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn project_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/{}/instances/.*/disks/attach$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/{}/instances/.*/disks/attach$",
+                        value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn instance_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/.*/instances/{}/disks/attach$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/.*/instances/{}/disks/attach$",
+                        value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
@@ -3361,7 +3673,8 @@ pub mod operations {
 
         pub fn accepted(self, value: &types::Disk) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(202u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -3371,7 +3684,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -3381,7 +3695,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -3393,12 +3708,14 @@ pub mod operations {
     impl InstanceDiskDetachWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(::httpmock::Method::POST).path_matches(
-                    regex::Regex::new(
-                        "^/organizations/[^/]*/projects/[^/]*/instances/[^/]*/disks/detach$",
-                    )
-                    .unwrap(),
-                ),
+                inner
+                    .method(::httpmock::Method::POST)
+                    .path_matches(
+                        regex::Regex::new(
+                                "^/organizations/[^/]*/projects/[^/]*/instances/[^/]*/disks/detach$",
+                            )
+                            .unwrap(),
+                    ),
             )
         }
 
@@ -3407,29 +3724,35 @@ pub mod operations {
         }
 
         pub fn organization_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/{}/projects/.*/instances/.*/disks/detach$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/{}/projects/.*/instances/.*/disks/detach$",
+                        value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn project_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/{}/instances/.*/disks/detach$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/{}/instances/.*/disks/detach$",
+                        value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn instance_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/.*/instances/{}/disks/detach$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/.*/instances/{}/disks/detach$",
+                        value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
@@ -3450,7 +3773,8 @@ pub mod operations {
 
         pub fn accepted(self, value: &types::Disk) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(202u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -3460,7 +3784,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -3470,7 +3795,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -3482,12 +3808,14 @@ pub mod operations {
     impl InstanceExternalIpListWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(::httpmock::Method::GET).path_matches(
-                    regex::Regex::new(
-                        "^/organizations/[^/]*/projects/[^/]*/instances/[^/]*/external-ips$",
-                    )
-                    .unwrap(),
-                ),
+                inner
+                    .method(::httpmock::Method::GET)
+                    .path_matches(
+                        regex::Regex::new(
+                                "^/organizations/[^/]*/projects/[^/]*/instances/[^/]*/external-ips$",
+                            )
+                            .unwrap(),
+                    ),
             )
         }
 
@@ -3496,29 +3824,35 @@ pub mod operations {
         }
 
         pub fn organization_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/{}/projects/.*/instances/.*/external-ips$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/{}/projects/.*/instances/.*/external-ips$",
+                        value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn project_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/{}/instances/.*/external-ips$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/{}/instances/.*/external-ips$",
+                        value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn instance_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/.*/instances/{}/external-ips$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/.*/instances/{}/external-ips$",
+                        value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
     }
@@ -3535,7 +3869,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::ExternalIpResultsPage) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -3545,7 +3880,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -3555,7 +3891,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -3567,12 +3904,14 @@ pub mod operations {
     impl InstanceMigrateWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(::httpmock::Method::POST).path_matches(
-                    regex::Regex::new(
-                        "^/organizations/[^/]*/projects/[^/]*/instances/[^/]*/migrate$",
-                    )
-                    .unwrap(),
-                ),
+                inner
+                    .method(::httpmock::Method::POST)
+                    .path_matches(
+                        regex::Regex::new(
+                                "^/organizations/[^/]*/projects/[^/]*/instances/[^/]*/migrate$",
+                            )
+                            .unwrap(),
+                    ),
             )
         }
 
@@ -3581,29 +3920,35 @@ pub mod operations {
         }
 
         pub fn organization_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/{}/projects/.*/instances/.*/migrate$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/{}/projects/.*/instances/.*/migrate$", value
+                        .to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn project_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/{}/instances/.*/migrate$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/{}/instances/.*/migrate$", value
+                        .to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn instance_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/.*/instances/{}/migrate$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/.*/instances/{}/migrate$", value
+                        .to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
@@ -3624,7 +3969,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::Instance) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -3634,7 +3980,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -3644,7 +3991,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -3656,12 +4004,14 @@ pub mod operations {
     impl InstanceNetworkInterfaceListWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(::httpmock::Method::GET).path_matches(
-                    regex::Regex::new(
-                        "^/organizations/[^/]*/projects/[^/]*/instances/[^/]*/network-interfaces$",
-                    )
-                    .unwrap(),
-                ),
+                inner
+                    .method(::httpmock::Method::GET)
+                    .path_matches(
+                        regex::Regex::new(
+                                "^/organizations/[^/]*/projects/[^/]*/instances/[^/]*/network-interfaces$",
+                            )
+                            .unwrap(),
+                    ),
             )
         }
 
@@ -3670,29 +4020,35 @@ pub mod operations {
         }
 
         pub fn organization_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/{}/projects/.*/instances/.*/network-interfaces$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/{}/projects/.*/instances/.*/network-interfaces$",
+                        value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn project_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/{}/instances/.*/network-interfaces$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/{}/instances/.*/network-interfaces$",
+                        value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn instance_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/.*/instances/{}/network-interfaces$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/.*/instances/{}/network-interfaces$",
+                        value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
@@ -3742,7 +4098,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::NetworkInterfaceResultsPage) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -3752,7 +4109,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -3762,7 +4120,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -3774,12 +4133,14 @@ pub mod operations {
     impl InstanceNetworkInterfaceCreateWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(::httpmock::Method::POST).path_matches(
-                    regex::Regex::new(
-                        "^/organizations/[^/]*/projects/[^/]*/instances/[^/]*/network-interfaces$",
-                    )
-                    .unwrap(),
-                ),
+                inner
+                    .method(::httpmock::Method::POST)
+                    .path_matches(
+                        regex::Regex::new(
+                                "^/organizations/[^/]*/projects/[^/]*/instances/[^/]*/network-interfaces$",
+                            )
+                            .unwrap(),
+                    ),
             )
         }
 
@@ -3788,29 +4149,35 @@ pub mod operations {
         }
 
         pub fn organization_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/{}/projects/.*/instances/.*/network-interfaces$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/{}/projects/.*/instances/.*/network-interfaces$",
+                        value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn project_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/{}/instances/.*/network-interfaces$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/{}/instances/.*/network-interfaces$",
+                        value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn instance_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/.*/instances/{}/network-interfaces$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/.*/instances/{}/network-interfaces$",
+                        value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
@@ -3831,7 +4198,8 @@ pub mod operations {
 
         pub fn created(self, value: &types::NetworkInterface) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(201u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -3841,7 +4209,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -3851,7 +4220,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -3863,13 +4233,14 @@ pub mod operations {
     impl InstanceNetworkInterfaceViewWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(::httpmock::Method::GET).path_matches(
-                    regex::Regex::new(
-                        "^/organizations/[^/]*/projects/[^/]*/instances/[^/]*/network-interfaces/\
-                         [^/]*$",
-                    )
-                    .unwrap(),
-                ),
+                inner
+                    .method(::httpmock::Method::GET)
+                    .path_matches(
+                        regex::Regex::new(
+                                "^/organizations/[^/]*/projects/[^/]*/instances/[^/]*/network-interfaces/[^/]*$",
+                            )
+                            .unwrap(),
+                    ),
             )
         }
 
@@ -3878,38 +4249,46 @@ pub mod operations {
         }
 
         pub fn organization_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/{}/projects/.*/instances/.*/network-interfaces/.*$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/{}/projects/.*/instances/.*/network-interfaces/.*$",
+                        value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn project_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/{}/instances/.*/network-interfaces/.*$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/{}/instances/.*/network-interfaces/.*$",
+                        value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn instance_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/.*/instances/{}/network-interfaces/.*$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/.*/instances/{}/network-interfaces/.*$",
+                        value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn interface_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/.*/instances/.*/network-interfaces/{}$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/.*/instances/.*/network-interfaces/{}$",
+                        value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
     }
@@ -3926,7 +4305,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::NetworkInterface) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -3936,7 +4316,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -3946,7 +4327,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -3958,13 +4340,14 @@ pub mod operations {
     impl InstanceNetworkInterfaceUpdateWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(::httpmock::Method::PUT).path_matches(
-                    regex::Regex::new(
-                        "^/organizations/[^/]*/projects/[^/]*/instances/[^/]*/network-interfaces/\
-                         [^/]*$",
-                    )
-                    .unwrap(),
-                ),
+                inner
+                    .method(::httpmock::Method::PUT)
+                    .path_matches(
+                        regex::Regex::new(
+                                "^/organizations/[^/]*/projects/[^/]*/instances/[^/]*/network-interfaces/[^/]*$",
+                            )
+                            .unwrap(),
+                    ),
             )
         }
 
@@ -3973,38 +4356,46 @@ pub mod operations {
         }
 
         pub fn organization_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/{}/projects/.*/instances/.*/network-interfaces/.*$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/{}/projects/.*/instances/.*/network-interfaces/.*$",
+                        value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn project_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/{}/instances/.*/network-interfaces/.*$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/{}/instances/.*/network-interfaces/.*$",
+                        value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn instance_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/.*/instances/{}/network-interfaces/.*$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/.*/instances/{}/network-interfaces/.*$",
+                        value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn interface_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/.*/instances/.*/network-interfaces/{}$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/.*/instances/.*/network-interfaces/{}$",
+                        value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
@@ -4025,7 +4416,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::NetworkInterface) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -4035,7 +4427,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -4045,7 +4438,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -4057,13 +4451,14 @@ pub mod operations {
     impl InstanceNetworkInterfaceDeleteWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(::httpmock::Method::DELETE).path_matches(
-                    regex::Regex::new(
-                        "^/organizations/[^/]*/projects/[^/]*/instances/[^/]*/network-interfaces/\
-                         [^/]*$",
-                    )
-                    .unwrap(),
-                ),
+                inner
+                    .method(::httpmock::Method::DELETE)
+                    .path_matches(
+                        regex::Regex::new(
+                                "^/organizations/[^/]*/projects/[^/]*/instances/[^/]*/network-interfaces/[^/]*$",
+                            )
+                            .unwrap(),
+                    ),
             )
         }
 
@@ -4072,38 +4467,46 @@ pub mod operations {
         }
 
         pub fn organization_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/{}/projects/.*/instances/.*/network-interfaces/.*$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/{}/projects/.*/instances/.*/network-interfaces/.*$",
+                        value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn project_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/{}/instances/.*/network-interfaces/.*$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/{}/instances/.*/network-interfaces/.*$",
+                        value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn instance_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/.*/instances/{}/network-interfaces/.*$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/.*/instances/{}/network-interfaces/.*$",
+                        value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn interface_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/.*/instances/.*/network-interfaces/{}$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/.*/instances/.*/network-interfaces/{}$",
+                        value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
     }
@@ -4125,7 +4528,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -4135,7 +4539,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -4147,12 +4552,14 @@ pub mod operations {
     impl InstanceRebootWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(::httpmock::Method::POST).path_matches(
-                    regex::Regex::new(
-                        "^/organizations/[^/]*/projects/[^/]*/instances/[^/]*/reboot$",
-                    )
-                    .unwrap(),
-                ),
+                inner
+                    .method(::httpmock::Method::POST)
+                    .path_matches(
+                        regex::Regex::new(
+                                "^/organizations/[^/]*/projects/[^/]*/instances/[^/]*/reboot$",
+                            )
+                            .unwrap(),
+                    ),
             )
         }
 
@@ -4161,29 +4568,35 @@ pub mod operations {
         }
 
         pub fn organization_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/{}/projects/.*/instances/.*/reboot$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/{}/projects/.*/instances/.*/reboot$", value
+                        .to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn project_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/{}/instances/.*/reboot$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/{}/instances/.*/reboot$", value
+                        .to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn instance_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/.*/instances/{}/reboot$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/.*/instances/{}/reboot$", value
+                        .to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
     }
@@ -4200,7 +4613,8 @@ pub mod operations {
 
         pub fn accepted(self, value: &types::Instance) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(202u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -4210,7 +4624,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -4220,7 +4635,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -4232,12 +4648,14 @@ pub mod operations {
     impl InstanceSerialConsoleWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(::httpmock::Method::GET).path_matches(
-                    regex::Regex::new(
-                        "^/organizations/[^/]*/projects/[^/]*/instances/[^/]*/serial-console$",
-                    )
-                    .unwrap(),
-                ),
+                inner
+                    .method(::httpmock::Method::GET)
+                    .path_matches(
+                        regex::Regex::new(
+                                "^/organizations/[^/]*/projects/[^/]*/instances/[^/]*/serial-console$",
+                            )
+                            .unwrap(),
+                    ),
             )
         }
 
@@ -4246,29 +4664,35 @@ pub mod operations {
         }
 
         pub fn organization_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/{}/projects/.*/instances/.*/serial-console$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/{}/projects/.*/instances/.*/serial-console$",
+                        value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn project_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/{}/instances/.*/serial-console$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/{}/instances/.*/serial-console$",
+                        value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn instance_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/.*/instances/{}/serial-console$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/.*/instances/{}/serial-console$",
+                        value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
@@ -4318,7 +4742,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::InstanceSerialConsoleData) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -4328,7 +4753,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -4338,7 +4764,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -4350,13 +4777,14 @@ pub mod operations {
     impl InstanceSerialConsoleStreamWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(::httpmock::Method::GET).path_matches(
-                    regex::Regex::new(
-                        "^/organizations/[^/]*/projects/[^/]*/instances/[^/]*/serial-console/\
-                         stream$",
-                    )
-                    .unwrap(),
-                ),
+                inner
+                    .method(::httpmock::Method::GET)
+                    .path_matches(
+                        regex::Regex::new(
+                                "^/organizations/[^/]*/projects/[^/]*/instances/[^/]*/serial-console/stream$",
+                            )
+                            .unwrap(),
+                    ),
             )
         }
 
@@ -4365,29 +4793,35 @@ pub mod operations {
         }
 
         pub fn organization_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/{}/projects/.*/instances/.*/serial-console/stream$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/{}/projects/.*/instances/.*/serial-console/stream$",
+                        value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn project_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/{}/instances/.*/serial-console/stream$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/{}/instances/.*/serial-console/stream$",
+                        value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn instance_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/.*/instances/{}/serial-console/stream$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/.*/instances/{}/serial-console/stream$",
+                        value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
     }
@@ -4411,13 +4845,14 @@ pub mod operations {
     impl InstanceSerialConsoleStreamV2When {
         pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(::httpmock::Method::GET).path_matches(
-                    regex::Regex::new(
-                        "^/organizations/[^/]*/projects/[^/]*/instances/[^/]*/serial-console/\
-                         stream_v2$",
-                    )
-                    .unwrap(),
-                ),
+                inner
+                    .method(::httpmock::Method::GET)
+                    .path_matches(
+                        regex::Regex::new(
+                                "^/organizations/[^/]*/projects/[^/]*/instances/[^/]*/serial-console/stream_v2$",
+                            )
+                            .unwrap(),
+                    ),
             )
         }
 
@@ -4426,29 +4861,35 @@ pub mod operations {
         }
 
         pub fn organization_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/{}/projects/.*/instances/.*/serial-console/stream_v2$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/{}/projects/.*/instances/.*/serial-console/stream_v2$",
+                        value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn project_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/{}/instances/.*/serial-console/stream_v2$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/{}/instances/.*/serial-console/stream_v2$",
+                        value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn instance_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/.*/instances/{}/serial-console/stream_v2$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/.*/instances/{}/serial-console/stream_v2$",
+                        value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
     }
@@ -4470,7 +4911,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -4480,7 +4922,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -4492,12 +4935,14 @@ pub mod operations {
     impl InstanceStartWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(::httpmock::Method::POST).path_matches(
-                    regex::Regex::new(
-                        "^/organizations/[^/]*/projects/[^/]*/instances/[^/]*/start$",
-                    )
-                    .unwrap(),
-                ),
+                inner
+                    .method(::httpmock::Method::POST)
+                    .path_matches(
+                        regex::Regex::new(
+                                "^/organizations/[^/]*/projects/[^/]*/instances/[^/]*/start$",
+                            )
+                            .unwrap(),
+                    ),
             )
         }
 
@@ -4506,29 +4951,35 @@ pub mod operations {
         }
 
         pub fn organization_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/{}/projects/.*/instances/.*/start$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/{}/projects/.*/instances/.*/start$", value
+                        .to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn project_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/{}/instances/.*/start$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/{}/instances/.*/start$", value
+                        .to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn instance_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/.*/instances/{}/start$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/.*/instances/{}/start$", value
+                        .to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
     }
@@ -4545,7 +4996,8 @@ pub mod operations {
 
         pub fn accepted(self, value: &types::Instance) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(202u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -4555,7 +5007,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -4565,7 +5018,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -4577,10 +5031,14 @@ pub mod operations {
     impl InstanceStopWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(::httpmock::Method::POST).path_matches(
-                    regex::Regex::new("^/organizations/[^/]*/projects/[^/]*/instances/[^/]*/stop$")
-                        .unwrap(),
-                ),
+                inner
+                    .method(::httpmock::Method::POST)
+                    .path_matches(
+                        regex::Regex::new(
+                                "^/organizations/[^/]*/projects/[^/]*/instances/[^/]*/stop$",
+                            )
+                            .unwrap(),
+                    ),
             )
         }
 
@@ -4589,29 +5047,35 @@ pub mod operations {
         }
 
         pub fn organization_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/{}/projects/.*/instances/.*/stop$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/{}/projects/.*/instances/.*/stop$", value
+                        .to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn project_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/{}/instances/.*/stop$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/{}/instances/.*/stop$", value
+                        .to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn instance_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/.*/instances/{}/stop$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/.*/instances/{}/stop$", value
+                        .to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
     }
@@ -4628,7 +5092,8 @@ pub mod operations {
 
         pub fn accepted(self, value: &types::Instance) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(202u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -4638,7 +5103,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -4648,7 +5114,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -4659,9 +5126,14 @@ pub mod operations {
     pub struct ProjectPolicyViewWhen(::httpmock::When);
     impl ProjectPolicyViewWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
-            Self(inner.method(::httpmock::Method::GET).path_matches(
-                regex::Regex::new("^/organizations/[^/]*/projects/[^/]*/policy$").unwrap(),
-            ))
+            Self(
+                inner
+                    .method(::httpmock::Method::GET)
+                    .path_matches(
+                        regex::Regex::new("^/organizations/[^/]*/projects/[^/]*/policy$")
+                            .unwrap(),
+                    ),
+            )
         }
 
         pub fn into_inner(self) -> ::httpmock::When {
@@ -4669,20 +5141,18 @@ pub mod operations {
         }
 
         pub fn organization_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/{}/projects/.*/policy$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!("^/organizations/{}/projects/.*/policy$", value.to_string()),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn project_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/{}/policy$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!("^/organizations/.*/projects/{}/policy$", value.to_string()),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
     }
@@ -4699,7 +5169,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::ProjectRolePolicy) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -4709,7 +5180,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -4719,7 +5191,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -4730,9 +5203,14 @@ pub mod operations {
     pub struct ProjectPolicyUpdateWhen(::httpmock::When);
     impl ProjectPolicyUpdateWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
-            Self(inner.method(::httpmock::Method::PUT).path_matches(
-                regex::Regex::new("^/organizations/[^/]*/projects/[^/]*/policy$").unwrap(),
-            ))
+            Self(
+                inner
+                    .method(::httpmock::Method::PUT)
+                    .path_matches(
+                        regex::Regex::new("^/organizations/[^/]*/projects/[^/]*/policy$")
+                            .unwrap(),
+                    ),
+            )
         }
 
         pub fn into_inner(self) -> ::httpmock::When {
@@ -4740,20 +5218,18 @@ pub mod operations {
         }
 
         pub fn organization_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/{}/projects/.*/policy$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!("^/organizations/{}/projects/.*/policy$", value.to_string()),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn project_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/{}/policy$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!("^/organizations/.*/projects/{}/policy$", value.to_string()),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
@@ -4774,7 +5250,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::ProjectRolePolicy) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -4784,7 +5261,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -4794,7 +5272,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -4805,9 +5284,16 @@ pub mod operations {
     pub struct SnapshotListWhen(::httpmock::When);
     impl SnapshotListWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
-            Self(inner.method(::httpmock::Method::GET).path_matches(
-                regex::Regex::new("^/organizations/[^/]*/projects/[^/]*/snapshots$").unwrap(),
-            ))
+            Self(
+                inner
+                    .method(::httpmock::Method::GET)
+                    .path_matches(
+                        regex::Regex::new(
+                                "^/organizations/[^/]*/projects/[^/]*/snapshots$",
+                            )
+                            .unwrap(),
+                    ),
+            )
         }
 
         pub fn into_inner(self) -> ::httpmock::When {
@@ -4815,20 +5301,22 @@ pub mod operations {
         }
 
         pub fn organization_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/{}/projects/.*/snapshots$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/{}/projects/.*/snapshots$", value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn project_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/{}/snapshots$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/{}/snapshots$", value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
@@ -4878,7 +5366,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::SnapshotResultsPage) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -4888,7 +5377,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -4898,7 +5388,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -4909,9 +5400,16 @@ pub mod operations {
     pub struct SnapshotCreateWhen(::httpmock::When);
     impl SnapshotCreateWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
-            Self(inner.method(::httpmock::Method::POST).path_matches(
-                regex::Regex::new("^/organizations/[^/]*/projects/[^/]*/snapshots$").unwrap(),
-            ))
+            Self(
+                inner
+                    .method(::httpmock::Method::POST)
+                    .path_matches(
+                        regex::Regex::new(
+                                "^/organizations/[^/]*/projects/[^/]*/snapshots$",
+                            )
+                            .unwrap(),
+                    ),
+            )
         }
 
         pub fn into_inner(self) -> ::httpmock::When {
@@ -4919,20 +5417,22 @@ pub mod operations {
         }
 
         pub fn organization_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/{}/projects/.*/snapshots$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/{}/projects/.*/snapshots$", value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn project_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/{}/snapshots$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/{}/snapshots$", value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
@@ -4953,7 +5453,8 @@ pub mod operations {
 
         pub fn created(self, value: &types::Snapshot) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(201u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -4963,7 +5464,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -4973,7 +5475,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -4984,9 +5487,16 @@ pub mod operations {
     pub struct SnapshotViewWhen(::httpmock::When);
     impl SnapshotViewWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
-            Self(inner.method(::httpmock::Method::GET).path_matches(
-                regex::Regex::new("^/organizations/[^/]*/projects/[^/]*/snapshots/[^/]*$").unwrap(),
-            ))
+            Self(
+                inner
+                    .method(::httpmock::Method::GET)
+                    .path_matches(
+                        regex::Regex::new(
+                                "^/organizations/[^/]*/projects/[^/]*/snapshots/[^/]*$",
+                            )
+                            .unwrap(),
+                    ),
+            )
         }
 
         pub fn into_inner(self) -> ::httpmock::When {
@@ -4994,29 +5504,32 @@ pub mod operations {
         }
 
         pub fn organization_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/{}/projects/.*/snapshots/.*$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/{}/projects/.*/snapshots/.*$", value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn project_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/{}/snapshots/.*$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/{}/snapshots/.*$", value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn snapshot_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/.*/snapshots/{}$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/.*/snapshots/{}$", value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
     }
@@ -5033,7 +5546,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::Snapshot) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -5043,7 +5557,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -5053,7 +5568,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -5064,9 +5580,16 @@ pub mod operations {
     pub struct SnapshotDeleteWhen(::httpmock::When);
     impl SnapshotDeleteWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
-            Self(inner.method(::httpmock::Method::DELETE).path_matches(
-                regex::Regex::new("^/organizations/[^/]*/projects/[^/]*/snapshots/[^/]*$").unwrap(),
-            ))
+            Self(
+                inner
+                    .method(::httpmock::Method::DELETE)
+                    .path_matches(
+                        regex::Regex::new(
+                                "^/organizations/[^/]*/projects/[^/]*/snapshots/[^/]*$",
+                            )
+                            .unwrap(),
+                    ),
+            )
         }
 
         pub fn into_inner(self) -> ::httpmock::When {
@@ -5074,29 +5597,32 @@ pub mod operations {
         }
 
         pub fn organization_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/{}/projects/.*/snapshots/.*$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/{}/projects/.*/snapshots/.*$", value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn project_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/{}/snapshots/.*$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/{}/snapshots/.*$", value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn snapshot_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/.*/snapshots/{}$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/.*/snapshots/{}$", value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
     }
@@ -5118,7 +5644,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -5128,7 +5655,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -5139,9 +5667,14 @@ pub mod operations {
     pub struct VpcListWhen(::httpmock::When);
     impl VpcListWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
-            Self(inner.method(::httpmock::Method::GET).path_matches(
-                regex::Regex::new("^/organizations/[^/]*/projects/[^/]*/vpcs$").unwrap(),
-            ))
+            Self(
+                inner
+                    .method(::httpmock::Method::GET)
+                    .path_matches(
+                        regex::Regex::new("^/organizations/[^/]*/projects/[^/]*/vpcs$")
+                            .unwrap(),
+                    ),
+            )
         }
 
         pub fn into_inner(self) -> ::httpmock::When {
@@ -5149,20 +5682,18 @@ pub mod operations {
         }
 
         pub fn organization_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/{}/projects/.*/vpcs$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!("^/organizations/{}/projects/.*/vpcs$", value.to_string()),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn project_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/{}/vpcs$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!("^/organizations/.*/projects/{}/vpcs$", value.to_string()),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
@@ -5212,7 +5743,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::VpcResultsPage) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -5222,7 +5754,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -5232,7 +5765,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -5243,9 +5777,14 @@ pub mod operations {
     pub struct VpcCreateWhen(::httpmock::When);
     impl VpcCreateWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
-            Self(inner.method(::httpmock::Method::POST).path_matches(
-                regex::Regex::new("^/organizations/[^/]*/projects/[^/]*/vpcs$").unwrap(),
-            ))
+            Self(
+                inner
+                    .method(::httpmock::Method::POST)
+                    .path_matches(
+                        regex::Regex::new("^/organizations/[^/]*/projects/[^/]*/vpcs$")
+                            .unwrap(),
+                    ),
+            )
         }
 
         pub fn into_inner(self) -> ::httpmock::When {
@@ -5253,20 +5792,18 @@ pub mod operations {
         }
 
         pub fn organization_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/{}/projects/.*/vpcs$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!("^/organizations/{}/projects/.*/vpcs$", value.to_string()),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn project_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/{}/vpcs$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!("^/organizations/.*/projects/{}/vpcs$", value.to_string()),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
@@ -5287,7 +5824,8 @@ pub mod operations {
 
         pub fn created(self, value: &types::Vpc) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(201u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -5297,7 +5835,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -5307,7 +5846,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -5318,9 +5858,16 @@ pub mod operations {
     pub struct VpcViewWhen(::httpmock::When);
     impl VpcViewWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
-            Self(inner.method(::httpmock::Method::GET).path_matches(
-                regex::Regex::new("^/organizations/[^/]*/projects/[^/]*/vpcs/[^/]*$").unwrap(),
-            ))
+            Self(
+                inner
+                    .method(::httpmock::Method::GET)
+                    .path_matches(
+                        regex::Regex::new(
+                                "^/organizations/[^/]*/projects/[^/]*/vpcs/[^/]*$",
+                            )
+                            .unwrap(),
+                    ),
+            )
         }
 
         pub fn into_inner(self) -> ::httpmock::When {
@@ -5328,29 +5875,32 @@ pub mod operations {
         }
 
         pub fn organization_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/{}/projects/.*/vpcs/.*$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/{}/projects/.*/vpcs/.*$", value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn project_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/{}/vpcs/.*$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/{}/vpcs/.*$", value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn vpc_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/.*/vpcs/{}$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/.*/vpcs/{}$", value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
     }
@@ -5367,7 +5917,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::Vpc) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -5377,7 +5928,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -5387,7 +5939,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -5398,9 +5951,16 @@ pub mod operations {
     pub struct VpcUpdateWhen(::httpmock::When);
     impl VpcUpdateWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
-            Self(inner.method(::httpmock::Method::PUT).path_matches(
-                regex::Regex::new("^/organizations/[^/]*/projects/[^/]*/vpcs/[^/]*$").unwrap(),
-            ))
+            Self(
+                inner
+                    .method(::httpmock::Method::PUT)
+                    .path_matches(
+                        regex::Regex::new(
+                                "^/organizations/[^/]*/projects/[^/]*/vpcs/[^/]*$",
+                            )
+                            .unwrap(),
+                    ),
+            )
         }
 
         pub fn into_inner(self) -> ::httpmock::When {
@@ -5408,29 +5968,32 @@ pub mod operations {
         }
 
         pub fn organization_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/{}/projects/.*/vpcs/.*$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/{}/projects/.*/vpcs/.*$", value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn project_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/{}/vpcs/.*$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/{}/vpcs/.*$", value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn vpc_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/.*/vpcs/{}$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/.*/vpcs/{}$", value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
@@ -5451,7 +6014,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::Vpc) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -5461,7 +6025,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -5471,7 +6036,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -5482,9 +6048,16 @@ pub mod operations {
     pub struct VpcDeleteWhen(::httpmock::When);
     impl VpcDeleteWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
-            Self(inner.method(::httpmock::Method::DELETE).path_matches(
-                regex::Regex::new("^/organizations/[^/]*/projects/[^/]*/vpcs/[^/]*$").unwrap(),
-            ))
+            Self(
+                inner
+                    .method(::httpmock::Method::DELETE)
+                    .path_matches(
+                        regex::Regex::new(
+                                "^/organizations/[^/]*/projects/[^/]*/vpcs/[^/]*$",
+                            )
+                            .unwrap(),
+                    ),
+            )
         }
 
         pub fn into_inner(self) -> ::httpmock::When {
@@ -5492,29 +6065,32 @@ pub mod operations {
         }
 
         pub fn organization_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/{}/projects/.*/vpcs/.*$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/{}/projects/.*/vpcs/.*$", value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn project_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/{}/vpcs/.*$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/{}/vpcs/.*$", value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn vpc_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/.*/vpcs/{}$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/.*/vpcs/{}$", value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
     }
@@ -5536,7 +6112,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -5546,7 +6123,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -5558,12 +6136,14 @@ pub mod operations {
     impl VpcFirewallRulesViewWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(::httpmock::Method::GET).path_matches(
-                    regex::Regex::new(
-                        "^/organizations/[^/]*/projects/[^/]*/vpcs/[^/]*/firewall/rules$",
-                    )
-                    .unwrap(),
-                ),
+                inner
+                    .method(::httpmock::Method::GET)
+                    .path_matches(
+                        regex::Regex::new(
+                                "^/organizations/[^/]*/projects/[^/]*/vpcs/[^/]*/firewall/rules$",
+                            )
+                            .unwrap(),
+                    ),
             )
         }
 
@@ -5572,29 +6152,35 @@ pub mod operations {
         }
 
         pub fn organization_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/{}/projects/.*/vpcs/.*/firewall/rules$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/{}/projects/.*/vpcs/.*/firewall/rules$", value
+                        .to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn project_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/{}/vpcs/.*/firewall/rules$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/{}/vpcs/.*/firewall/rules$", value
+                        .to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn vpc_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/.*/vpcs/{}/firewall/rules$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/.*/vpcs/{}/firewall/rules$", value
+                        .to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
     }
@@ -5611,7 +6197,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::VpcFirewallRules) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -5621,7 +6208,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -5631,7 +6219,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -5643,12 +6232,14 @@ pub mod operations {
     impl VpcFirewallRulesUpdateWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(::httpmock::Method::PUT).path_matches(
-                    regex::Regex::new(
-                        "^/organizations/[^/]*/projects/[^/]*/vpcs/[^/]*/firewall/rules$",
-                    )
-                    .unwrap(),
-                ),
+                inner
+                    .method(::httpmock::Method::PUT)
+                    .path_matches(
+                        regex::Regex::new(
+                                "^/organizations/[^/]*/projects/[^/]*/vpcs/[^/]*/firewall/rules$",
+                            )
+                            .unwrap(),
+                    ),
             )
         }
 
@@ -5657,29 +6248,35 @@ pub mod operations {
         }
 
         pub fn organization_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/{}/projects/.*/vpcs/.*/firewall/rules$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/{}/projects/.*/vpcs/.*/firewall/rules$", value
+                        .to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn project_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/{}/vpcs/.*/firewall/rules$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/{}/vpcs/.*/firewall/rules$", value
+                        .to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn vpc_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/.*/vpcs/{}/firewall/rules$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/.*/vpcs/{}/firewall/rules$", value
+                        .to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
@@ -5700,7 +6297,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::VpcFirewallRules) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -5710,7 +6308,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -5720,7 +6319,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -5732,10 +6332,14 @@ pub mod operations {
     impl VpcRouterListWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(::httpmock::Method::GET).path_matches(
-                    regex::Regex::new("^/organizations/[^/]*/projects/[^/]*/vpcs/[^/]*/routers$")
-                        .unwrap(),
-                ),
+                inner
+                    .method(::httpmock::Method::GET)
+                    .path_matches(
+                        regex::Regex::new(
+                                "^/organizations/[^/]*/projects/[^/]*/vpcs/[^/]*/routers$",
+                            )
+                            .unwrap(),
+                    ),
             )
         }
 
@@ -5744,29 +6348,35 @@ pub mod operations {
         }
 
         pub fn organization_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/{}/projects/.*/vpcs/.*/routers$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/{}/projects/.*/vpcs/.*/routers$", value
+                        .to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn project_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/{}/vpcs/.*/routers$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/{}/vpcs/.*/routers$", value
+                        .to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn vpc_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/.*/vpcs/{}/routers$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/.*/vpcs/{}/routers$", value
+                        .to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
@@ -5816,7 +6426,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::VpcRouterResultsPage) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -5826,7 +6437,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -5836,7 +6448,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -5848,10 +6461,14 @@ pub mod operations {
     impl VpcRouterCreateWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(::httpmock::Method::POST).path_matches(
-                    regex::Regex::new("^/organizations/[^/]*/projects/[^/]*/vpcs/[^/]*/routers$")
-                        .unwrap(),
-                ),
+                inner
+                    .method(::httpmock::Method::POST)
+                    .path_matches(
+                        regex::Regex::new(
+                                "^/organizations/[^/]*/projects/[^/]*/vpcs/[^/]*/routers$",
+                            )
+                            .unwrap(),
+                    ),
             )
         }
 
@@ -5860,29 +6477,35 @@ pub mod operations {
         }
 
         pub fn organization_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/{}/projects/.*/vpcs/.*/routers$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/{}/projects/.*/vpcs/.*/routers$", value
+                        .to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn project_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/{}/vpcs/.*/routers$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/{}/vpcs/.*/routers$", value
+                        .to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn vpc_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/.*/vpcs/{}/routers$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/.*/vpcs/{}/routers$", value
+                        .to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
@@ -5903,7 +6526,8 @@ pub mod operations {
 
         pub fn created(self, value: &types::VpcRouter) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(201u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -5913,7 +6537,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -5923,7 +6548,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -5935,12 +6561,14 @@ pub mod operations {
     impl VpcRouterViewWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(::httpmock::Method::GET).path_matches(
-                    regex::Regex::new(
-                        "^/organizations/[^/]*/projects/[^/]*/vpcs/[^/]*/routers/[^/]*$",
-                    )
-                    .unwrap(),
-                ),
+                inner
+                    .method(::httpmock::Method::GET)
+                    .path_matches(
+                        regex::Regex::new(
+                                "^/organizations/[^/]*/projects/[^/]*/vpcs/[^/]*/routers/[^/]*$",
+                            )
+                            .unwrap(),
+                    ),
             )
         }
 
@@ -5949,38 +6577,46 @@ pub mod operations {
         }
 
         pub fn organization_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/{}/projects/.*/vpcs/.*/routers/.*$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/{}/projects/.*/vpcs/.*/routers/.*$", value
+                        .to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn project_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/{}/vpcs/.*/routers/.*$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/{}/vpcs/.*/routers/.*$", value
+                        .to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn vpc_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/.*/vpcs/{}/routers/.*$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/.*/vpcs/{}/routers/.*$", value
+                        .to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn router_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/.*/vpcs/.*/routers/{}$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/.*/vpcs/.*/routers/{}$", value
+                        .to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
     }
@@ -5997,7 +6633,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::VpcRouter) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -6007,7 +6644,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -6017,7 +6655,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -6029,12 +6668,14 @@ pub mod operations {
     impl VpcRouterUpdateWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(::httpmock::Method::PUT).path_matches(
-                    regex::Regex::new(
-                        "^/organizations/[^/]*/projects/[^/]*/vpcs/[^/]*/routers/[^/]*$",
-                    )
-                    .unwrap(),
-                ),
+                inner
+                    .method(::httpmock::Method::PUT)
+                    .path_matches(
+                        regex::Regex::new(
+                                "^/organizations/[^/]*/projects/[^/]*/vpcs/[^/]*/routers/[^/]*$",
+                            )
+                            .unwrap(),
+                    ),
             )
         }
 
@@ -6043,38 +6684,46 @@ pub mod operations {
         }
 
         pub fn organization_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/{}/projects/.*/vpcs/.*/routers/.*$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/{}/projects/.*/vpcs/.*/routers/.*$", value
+                        .to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn project_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/{}/vpcs/.*/routers/.*$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/{}/vpcs/.*/routers/.*$", value
+                        .to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn vpc_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/.*/vpcs/{}/routers/.*$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/.*/vpcs/{}/routers/.*$", value
+                        .to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn router_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/.*/vpcs/.*/routers/{}$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/.*/vpcs/.*/routers/{}$", value
+                        .to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
@@ -6095,7 +6744,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::VpcRouter) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -6105,7 +6755,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -6115,7 +6766,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -6127,12 +6779,14 @@ pub mod operations {
     impl VpcRouterDeleteWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(::httpmock::Method::DELETE).path_matches(
-                    regex::Regex::new(
-                        "^/organizations/[^/]*/projects/[^/]*/vpcs/[^/]*/routers/[^/]*$",
-                    )
-                    .unwrap(),
-                ),
+                inner
+                    .method(::httpmock::Method::DELETE)
+                    .path_matches(
+                        regex::Regex::new(
+                                "^/organizations/[^/]*/projects/[^/]*/vpcs/[^/]*/routers/[^/]*$",
+                            )
+                            .unwrap(),
+                    ),
             )
         }
 
@@ -6141,38 +6795,46 @@ pub mod operations {
         }
 
         pub fn organization_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/{}/projects/.*/vpcs/.*/routers/.*$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/{}/projects/.*/vpcs/.*/routers/.*$", value
+                        .to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn project_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/{}/vpcs/.*/routers/.*$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/{}/vpcs/.*/routers/.*$", value
+                        .to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn vpc_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/.*/vpcs/{}/routers/.*$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/.*/vpcs/{}/routers/.*$", value
+                        .to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn router_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/.*/vpcs/.*/routers/{}$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/.*/vpcs/.*/routers/{}$", value
+                        .to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
     }
@@ -6194,7 +6856,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -6204,7 +6867,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -6216,12 +6880,14 @@ pub mod operations {
     impl VpcRouterRouteListWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(::httpmock::Method::GET).path_matches(
-                    regex::Regex::new(
-                        "^/organizations/[^/]*/projects/[^/]*/vpcs/[^/]*/routers/[^/]*/routes$",
-                    )
-                    .unwrap(),
-                ),
+                inner
+                    .method(::httpmock::Method::GET)
+                    .path_matches(
+                        regex::Regex::new(
+                                "^/organizations/[^/]*/projects/[^/]*/vpcs/[^/]*/routers/[^/]*/routes$",
+                            )
+                            .unwrap(),
+                    ),
             )
         }
 
@@ -6230,38 +6896,46 @@ pub mod operations {
         }
 
         pub fn organization_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/{}/projects/.*/vpcs/.*/routers/.*/routes$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/{}/projects/.*/vpcs/.*/routers/.*/routes$",
+                        value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn project_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/{}/vpcs/.*/routers/.*/routes$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/{}/vpcs/.*/routers/.*/routes$",
+                        value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn vpc_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/.*/vpcs/{}/routers/.*/routes$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/.*/vpcs/{}/routers/.*/routes$",
+                        value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn router_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/.*/vpcs/.*/routers/{}/routes$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/.*/vpcs/.*/routers/{}/routes$",
+                        value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
@@ -6311,7 +6985,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::RouterRouteResultsPage) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -6321,7 +6996,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -6331,7 +7007,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -6343,12 +7020,14 @@ pub mod operations {
     impl VpcRouterRouteCreateWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(::httpmock::Method::POST).path_matches(
-                    regex::Regex::new(
-                        "^/organizations/[^/]*/projects/[^/]*/vpcs/[^/]*/routers/[^/]*/routes$",
-                    )
-                    .unwrap(),
-                ),
+                inner
+                    .method(::httpmock::Method::POST)
+                    .path_matches(
+                        regex::Regex::new(
+                                "^/organizations/[^/]*/projects/[^/]*/vpcs/[^/]*/routers/[^/]*/routes$",
+                            )
+                            .unwrap(),
+                    ),
             )
         }
 
@@ -6357,38 +7036,46 @@ pub mod operations {
         }
 
         pub fn organization_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/{}/projects/.*/vpcs/.*/routers/.*/routes$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/{}/projects/.*/vpcs/.*/routers/.*/routes$",
+                        value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn project_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/{}/vpcs/.*/routers/.*/routes$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/{}/vpcs/.*/routers/.*/routes$",
+                        value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn vpc_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/.*/vpcs/{}/routers/.*/routes$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/.*/vpcs/{}/routers/.*/routes$",
+                        value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn router_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/.*/vpcs/.*/routers/{}/routes$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/.*/vpcs/.*/routers/{}/routes$",
+                        value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
@@ -6409,7 +7096,8 @@ pub mod operations {
 
         pub fn created(self, value: &types::RouterRoute) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(201u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -6419,7 +7107,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -6429,7 +7118,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -6441,13 +7131,14 @@ pub mod operations {
     impl VpcRouterRouteViewWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(::httpmock::Method::GET).path_matches(
-                    regex::Regex::new(
-                        "^/organizations/[^/]*/projects/[^/]*/vpcs/[^/]*/routers/[^/]*/routes/[^/\
-                         ]*$",
-                    )
-                    .unwrap(),
-                ),
+                inner
+                    .method(::httpmock::Method::GET)
+                    .path_matches(
+                        regex::Regex::new(
+                                "^/organizations/[^/]*/projects/[^/]*/vpcs/[^/]*/routers/[^/]*/routes/[^/]*$",
+                            )
+                            .unwrap(),
+                    ),
             )
         }
 
@@ -6456,47 +7147,57 @@ pub mod operations {
         }
 
         pub fn organization_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/{}/projects/.*/vpcs/.*/routers/.*/routes/.*$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/{}/projects/.*/vpcs/.*/routers/.*/routes/.*$",
+                        value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn project_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/{}/vpcs/.*/routers/.*/routes/.*$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/{}/vpcs/.*/routers/.*/routes/.*$",
+                        value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn vpc_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/.*/vpcs/{}/routers/.*/routes/.*$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/.*/vpcs/{}/routers/.*/routes/.*$",
+                        value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn router_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/.*/vpcs/.*/routers/{}/routes/.*$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/.*/vpcs/.*/routers/{}/routes/.*$",
+                        value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn route_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/.*/vpcs/.*/routers/.*/routes/{}$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/.*/vpcs/.*/routers/.*/routes/{}$",
+                        value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
     }
@@ -6513,7 +7214,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::RouterRoute) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -6523,7 +7225,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -6533,7 +7236,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -6545,13 +7249,14 @@ pub mod operations {
     impl VpcRouterRouteUpdateWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(::httpmock::Method::PUT).path_matches(
-                    regex::Regex::new(
-                        "^/organizations/[^/]*/projects/[^/]*/vpcs/[^/]*/routers/[^/]*/routes/[^/\
-                         ]*$",
-                    )
-                    .unwrap(),
-                ),
+                inner
+                    .method(::httpmock::Method::PUT)
+                    .path_matches(
+                        regex::Regex::new(
+                                "^/organizations/[^/]*/projects/[^/]*/vpcs/[^/]*/routers/[^/]*/routes/[^/]*$",
+                            )
+                            .unwrap(),
+                    ),
             )
         }
 
@@ -6560,47 +7265,57 @@ pub mod operations {
         }
 
         pub fn organization_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/{}/projects/.*/vpcs/.*/routers/.*/routes/.*$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/{}/projects/.*/vpcs/.*/routers/.*/routes/.*$",
+                        value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn project_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/{}/vpcs/.*/routers/.*/routes/.*$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/{}/vpcs/.*/routers/.*/routes/.*$",
+                        value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn vpc_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/.*/vpcs/{}/routers/.*/routes/.*$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/.*/vpcs/{}/routers/.*/routes/.*$",
+                        value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn router_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/.*/vpcs/.*/routers/{}/routes/.*$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/.*/vpcs/.*/routers/{}/routes/.*$",
+                        value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn route_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/.*/vpcs/.*/routers/.*/routes/{}$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/.*/vpcs/.*/routers/.*/routes/{}$",
+                        value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
@@ -6621,7 +7336,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::RouterRoute) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -6631,7 +7347,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -6641,7 +7358,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -6653,13 +7371,14 @@ pub mod operations {
     impl VpcRouterRouteDeleteWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(::httpmock::Method::DELETE).path_matches(
-                    regex::Regex::new(
-                        "^/organizations/[^/]*/projects/[^/]*/vpcs/[^/]*/routers/[^/]*/routes/[^/\
-                         ]*$",
-                    )
-                    .unwrap(),
-                ),
+                inner
+                    .method(::httpmock::Method::DELETE)
+                    .path_matches(
+                        regex::Regex::new(
+                                "^/organizations/[^/]*/projects/[^/]*/vpcs/[^/]*/routers/[^/]*/routes/[^/]*$",
+                            )
+                            .unwrap(),
+                    ),
             )
         }
 
@@ -6668,47 +7387,57 @@ pub mod operations {
         }
 
         pub fn organization_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/{}/projects/.*/vpcs/.*/routers/.*/routes/.*$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/{}/projects/.*/vpcs/.*/routers/.*/routes/.*$",
+                        value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn project_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/{}/vpcs/.*/routers/.*/routes/.*$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/{}/vpcs/.*/routers/.*/routes/.*$",
+                        value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn vpc_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/.*/vpcs/{}/routers/.*/routes/.*$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/.*/vpcs/{}/routers/.*/routes/.*$",
+                        value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn router_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/.*/vpcs/.*/routers/{}/routes/.*$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/.*/vpcs/.*/routers/{}/routes/.*$",
+                        value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn route_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/.*/vpcs/.*/routers/.*/routes/{}$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/.*/vpcs/.*/routers/.*/routes/{}$",
+                        value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
     }
@@ -6730,7 +7459,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -6740,7 +7470,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -6752,10 +7483,14 @@ pub mod operations {
     impl VpcSubnetListWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(::httpmock::Method::GET).path_matches(
-                    regex::Regex::new("^/organizations/[^/]*/projects/[^/]*/vpcs/[^/]*/subnets$")
-                        .unwrap(),
-                ),
+                inner
+                    .method(::httpmock::Method::GET)
+                    .path_matches(
+                        regex::Regex::new(
+                                "^/organizations/[^/]*/projects/[^/]*/vpcs/[^/]*/subnets$",
+                            )
+                            .unwrap(),
+                    ),
             )
         }
 
@@ -6764,29 +7499,35 @@ pub mod operations {
         }
 
         pub fn organization_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/{}/projects/.*/vpcs/.*/subnets$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/{}/projects/.*/vpcs/.*/subnets$", value
+                        .to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn project_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/{}/vpcs/.*/subnets$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/{}/vpcs/.*/subnets$", value
+                        .to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn vpc_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/.*/vpcs/{}/subnets$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/.*/vpcs/{}/subnets$", value
+                        .to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
@@ -6836,7 +7577,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::VpcSubnetResultsPage) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -6846,7 +7588,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -6856,7 +7599,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -6868,10 +7612,14 @@ pub mod operations {
     impl VpcSubnetCreateWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(::httpmock::Method::POST).path_matches(
-                    regex::Regex::new("^/organizations/[^/]*/projects/[^/]*/vpcs/[^/]*/subnets$")
-                        .unwrap(),
-                ),
+                inner
+                    .method(::httpmock::Method::POST)
+                    .path_matches(
+                        regex::Regex::new(
+                                "^/organizations/[^/]*/projects/[^/]*/vpcs/[^/]*/subnets$",
+                            )
+                            .unwrap(),
+                    ),
             )
         }
 
@@ -6880,29 +7628,35 @@ pub mod operations {
         }
 
         pub fn organization_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/{}/projects/.*/vpcs/.*/subnets$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/{}/projects/.*/vpcs/.*/subnets$", value
+                        .to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn project_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/{}/vpcs/.*/subnets$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/{}/vpcs/.*/subnets$", value
+                        .to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn vpc_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/.*/vpcs/{}/subnets$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/.*/vpcs/{}/subnets$", value
+                        .to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
@@ -6923,7 +7677,8 @@ pub mod operations {
 
         pub fn created(self, value: &types::VpcSubnet) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(201u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -6933,7 +7688,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -6943,7 +7699,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -6955,12 +7712,14 @@ pub mod operations {
     impl VpcSubnetViewWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(::httpmock::Method::GET).path_matches(
-                    regex::Regex::new(
-                        "^/organizations/[^/]*/projects/[^/]*/vpcs/[^/]*/subnets/[^/]*$",
-                    )
-                    .unwrap(),
-                ),
+                inner
+                    .method(::httpmock::Method::GET)
+                    .path_matches(
+                        regex::Regex::new(
+                                "^/organizations/[^/]*/projects/[^/]*/vpcs/[^/]*/subnets/[^/]*$",
+                            )
+                            .unwrap(),
+                    ),
             )
         }
 
@@ -6969,38 +7728,46 @@ pub mod operations {
         }
 
         pub fn organization_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/{}/projects/.*/vpcs/.*/subnets/.*$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/{}/projects/.*/vpcs/.*/subnets/.*$", value
+                        .to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn project_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/{}/vpcs/.*/subnets/.*$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/{}/vpcs/.*/subnets/.*$", value
+                        .to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn vpc_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/.*/vpcs/{}/subnets/.*$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/.*/vpcs/{}/subnets/.*$", value
+                        .to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn subnet_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/.*/vpcs/.*/subnets/{}$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/.*/vpcs/.*/subnets/{}$", value
+                        .to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
     }
@@ -7017,7 +7784,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::VpcSubnet) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -7027,7 +7795,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -7037,7 +7806,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -7049,12 +7819,14 @@ pub mod operations {
     impl VpcSubnetUpdateWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(::httpmock::Method::PUT).path_matches(
-                    regex::Regex::new(
-                        "^/organizations/[^/]*/projects/[^/]*/vpcs/[^/]*/subnets/[^/]*$",
-                    )
-                    .unwrap(),
-                ),
+                inner
+                    .method(::httpmock::Method::PUT)
+                    .path_matches(
+                        regex::Regex::new(
+                                "^/organizations/[^/]*/projects/[^/]*/vpcs/[^/]*/subnets/[^/]*$",
+                            )
+                            .unwrap(),
+                    ),
             )
         }
 
@@ -7063,38 +7835,46 @@ pub mod operations {
         }
 
         pub fn organization_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/{}/projects/.*/vpcs/.*/subnets/.*$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/{}/projects/.*/vpcs/.*/subnets/.*$", value
+                        .to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn project_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/{}/vpcs/.*/subnets/.*$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/{}/vpcs/.*/subnets/.*$", value
+                        .to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn vpc_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/.*/vpcs/{}/subnets/.*$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/.*/vpcs/{}/subnets/.*$", value
+                        .to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn subnet_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/.*/vpcs/.*/subnets/{}$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/.*/vpcs/.*/subnets/{}$", value
+                        .to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
@@ -7115,7 +7895,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::VpcSubnet) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -7125,7 +7906,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -7135,7 +7917,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -7147,12 +7930,14 @@ pub mod operations {
     impl VpcSubnetDeleteWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(::httpmock::Method::DELETE).path_matches(
-                    regex::Regex::new(
-                        "^/organizations/[^/]*/projects/[^/]*/vpcs/[^/]*/subnets/[^/]*$",
-                    )
-                    .unwrap(),
-                ),
+                inner
+                    .method(::httpmock::Method::DELETE)
+                    .path_matches(
+                        regex::Regex::new(
+                                "^/organizations/[^/]*/projects/[^/]*/vpcs/[^/]*/subnets/[^/]*$",
+                            )
+                            .unwrap(),
+                    ),
             )
         }
 
@@ -7161,38 +7946,46 @@ pub mod operations {
         }
 
         pub fn organization_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/{}/projects/.*/vpcs/.*/subnets/.*$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/{}/projects/.*/vpcs/.*/subnets/.*$", value
+                        .to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn project_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/{}/vpcs/.*/subnets/.*$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/{}/vpcs/.*/subnets/.*$", value
+                        .to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn vpc_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/.*/vpcs/{}/subnets/.*$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/.*/vpcs/{}/subnets/.*$", value
+                        .to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn subnet_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/.*/vpcs/.*/subnets/{}$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/.*/vpcs/.*/subnets/{}$", value
+                        .to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
     }
@@ -7214,7 +8007,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -7224,7 +8018,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -7236,13 +8031,14 @@ pub mod operations {
     impl VpcSubnetListNetworkInterfacesWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(::httpmock::Method::GET).path_matches(
-                    regex::Regex::new(
-                        "^/organizations/[^/]*/projects/[^/]*/vpcs/[^/]*/subnets/[^/]*/\
-                         network-interfaces$",
-                    )
-                    .unwrap(),
-                ),
+                inner
+                    .method(::httpmock::Method::GET)
+                    .path_matches(
+                        regex::Regex::new(
+                                "^/organizations/[^/]*/projects/[^/]*/vpcs/[^/]*/subnets/[^/]*/network-interfaces$",
+                            )
+                            .unwrap(),
+                    ),
             )
         }
 
@@ -7251,38 +8047,46 @@ pub mod operations {
         }
 
         pub fn organization_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/{}/projects/.*/vpcs/.*/subnets/.*/network-interfaces$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/{}/projects/.*/vpcs/.*/subnets/.*/network-interfaces$",
+                        value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn project_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/{}/vpcs/.*/subnets/.*/network-interfaces$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/{}/vpcs/.*/subnets/.*/network-interfaces$",
+                        value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn vpc_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/.*/vpcs/{}/subnets/.*/network-interfaces$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/.*/vpcs/{}/subnets/.*/network-interfaces$",
+                        value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn subnet_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/organizations/.*/projects/.*/vpcs/.*/subnets/{}/network-interfaces$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/organizations/.*/projects/.*/vpcs/.*/subnets/{}/network-interfaces$",
+                        value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
@@ -7332,7 +8136,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::NetworkInterfaceResultsPage) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -7342,7 +8147,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -7352,7 +8158,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -7387,7 +8194,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::SiloRolePolicy) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -7397,7 +8205,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -7407,7 +8216,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -7446,7 +8256,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::SiloRolePolicy) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -7456,7 +8267,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -7466,7 +8278,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -7523,7 +8336,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::RoleResultsPage) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -7533,7 +8347,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -7543,7 +8358,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -7566,7 +8382,8 @@ pub mod operations {
         }
 
         pub fn role_name(self, value: &str) -> Self {
-            let re = regex::Regex::new(&format!("^/roles/{}$", value.to_string())).unwrap();
+            let re = regex::Regex::new(&format!("^/roles/{}$", value.to_string()))
+                .unwrap();
             Self(self.0.path_matches(re))
         }
     }
@@ -7583,7 +8400,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::Role) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -7593,7 +8411,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -7603,7 +8422,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -7638,7 +8458,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::User) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -7648,7 +8469,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -7658,7 +8480,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -7726,7 +8549,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::GroupResultsPage) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -7736,7 +8560,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -7746,7 +8571,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -7814,7 +8640,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::SshKeyResultsPage) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -7824,7 +8651,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -7834,7 +8662,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -7873,7 +8702,8 @@ pub mod operations {
 
         pub fn created(self, value: &types::SshKey) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(201u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -7883,7 +8713,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -7893,7 +8724,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -7907,7 +8739,9 @@ pub mod operations {
             Self(
                 inner
                     .method(::httpmock::Method::GET)
-                    .path_matches(regex::Regex::new("^/session/me/sshkeys/[^/]*$").unwrap()),
+                    .path_matches(
+                        regex::Regex::new("^/session/me/sshkeys/[^/]*$").unwrap(),
+                    ),
             )
         }
 
@@ -7916,8 +8750,10 @@ pub mod operations {
         }
 
         pub fn ssh_key_name(self, value: &types::Name) -> Self {
-            let re =
-                regex::Regex::new(&format!("^/session/me/sshkeys/{}$", value.to_string())).unwrap();
+            let re = regex::Regex::new(
+                    &format!("^/session/me/sshkeys/{}$", value.to_string()),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
     }
@@ -7934,7 +8770,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::SshKey) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -7944,7 +8781,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -7954,7 +8792,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -7968,7 +8807,9 @@ pub mod operations {
             Self(
                 inner
                     .method(::httpmock::Method::DELETE)
-                    .path_matches(regex::Regex::new("^/session/me/sshkeys/[^/]*$").unwrap()),
+                    .path_matches(
+                        regex::Regex::new("^/session/me/sshkeys/[^/]*$").unwrap(),
+                    ),
             )
         }
 
@@ -7977,8 +8818,10 @@ pub mod operations {
         }
 
         pub fn ssh_key_name(self, value: &types::Name) -> Self {
-            let re =
-                regex::Regex::new(&format!("^/session/me/sshkeys/{}$", value.to_string())).unwrap();
+            let re = regex::Regex::new(
+                    &format!("^/session/me/sshkeys/{}$", value.to_string()),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
     }
@@ -8000,7 +8843,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -8010,7 +8854,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -8024,7 +8869,9 @@ pub mod operations {
             Self(
                 inner
                     .method(::httpmock::Method::GET)
-                    .path_matches(regex::Regex::new("^/system/by-id/images/[^/]*$").unwrap()),
+                    .path_matches(
+                        regex::Regex::new("^/system/by-id/images/[^/]*$").unwrap(),
+                    ),
             )
         }
 
@@ -8033,7 +8880,9 @@ pub mod operations {
         }
 
         pub fn id(self, value: &::uuid::Uuid) -> Self {
-            let re = regex::Regex::new(&format!("^/system/by-id/images/{}$", value.to_string()))
+            let re = regex::Regex::new(
+                    &format!("^/system/by-id/images/{}$", value.to_string()),
+                )
                 .unwrap();
             Self(self.0.path_matches(re))
         }
@@ -8051,7 +8900,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::GlobalImage) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -8061,7 +8911,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -8071,7 +8922,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -8085,7 +8937,9 @@ pub mod operations {
             Self(
                 inner
                     .method(::httpmock::Method::GET)
-                    .path_matches(regex::Regex::new("^/system/by-id/ip-pools/[^/]*$").unwrap()),
+                    .path_matches(
+                        regex::Regex::new("^/system/by-id/ip-pools/[^/]*$").unwrap(),
+                    ),
             )
         }
 
@@ -8094,7 +8948,9 @@ pub mod operations {
         }
 
         pub fn id(self, value: &::uuid::Uuid) -> Self {
-            let re = regex::Regex::new(&format!("^/system/by-id/ip-pools/{}$", value.to_string()))
+            let re = regex::Regex::new(
+                    &format!("^/system/by-id/ip-pools/{}$", value.to_string()),
+                )
                 .unwrap();
             Self(self.0.path_matches(re))
         }
@@ -8112,7 +8968,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::IpPool) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -8122,7 +8979,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -8132,7 +8990,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -8146,7 +9005,9 @@ pub mod operations {
             Self(
                 inner
                     .method(::httpmock::Method::GET)
-                    .path_matches(regex::Regex::new("^/system/by-id/silos/[^/]*$").unwrap()),
+                    .path_matches(
+                        regex::Regex::new("^/system/by-id/silos/[^/]*$").unwrap(),
+                    ),
             )
         }
 
@@ -8155,8 +9016,10 @@ pub mod operations {
         }
 
         pub fn id(self, value: &::uuid::Uuid) -> Self {
-            let re =
-                regex::Regex::new(&format!("^/system/by-id/silos/{}$", value.to_string())).unwrap();
+            let re = regex::Regex::new(
+                    &format!("^/system/by-id/silos/{}$", value.to_string()),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
     }
@@ -8173,7 +9036,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::Silo) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -8183,7 +9047,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -8193,7 +9058,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -8261,7 +9127,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::CertificateResultsPage) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -8271,7 +9138,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -8281,7 +9149,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -8320,7 +9189,8 @@ pub mod operations {
 
         pub fn created(self, value: &types::Certificate) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(201u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -8330,7 +9200,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -8340,7 +9211,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -8354,7 +9226,9 @@ pub mod operations {
             Self(
                 inner
                     .method(::httpmock::Method::GET)
-                    .path_matches(regex::Regex::new("^/system/certificates/[^/]*$").unwrap()),
+                    .path_matches(
+                        regex::Regex::new("^/system/certificates/[^/]*$").unwrap(),
+                    ),
             )
         }
 
@@ -8363,7 +9237,9 @@ pub mod operations {
         }
 
         pub fn certificate(self, value: &types::NameOrId) -> Self {
-            let re = regex::Regex::new(&format!("^/system/certificates/{}$", value.to_string()))
+            let re = regex::Regex::new(
+                    &format!("^/system/certificates/{}$", value.to_string()),
+                )
                 .unwrap();
             Self(self.0.path_matches(re))
         }
@@ -8381,7 +9257,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::Certificate) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -8391,7 +9268,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -8401,7 +9279,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -8415,7 +9294,9 @@ pub mod operations {
             Self(
                 inner
                     .method(::httpmock::Method::DELETE)
-                    .path_matches(regex::Regex::new("^/system/certificates/[^/]*$").unwrap()),
+                    .path_matches(
+                        regex::Regex::new("^/system/certificates/[^/]*$").unwrap(),
+                    ),
             )
         }
 
@@ -8424,7 +9305,9 @@ pub mod operations {
         }
 
         pub fn certificate(self, value: &types::NameOrId) -> Self {
-            let re = regex::Regex::new(&format!("^/system/certificates/{}$", value.to_string()))
+            let re = regex::Regex::new(
+                    &format!("^/system/certificates/{}$", value.to_string()),
+                )
                 .unwrap();
             Self(self.0.path_matches(re))
         }
@@ -8447,7 +9330,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -8457,7 +9341,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -8525,7 +9410,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::PhysicalDiskResultsPage) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -8535,7 +9421,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -8545,7 +9432,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -8613,7 +9501,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::RackResultsPage) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -8623,7 +9512,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -8633,7 +9523,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -8647,7 +9538,9 @@ pub mod operations {
             Self(
                 inner
                     .method(::httpmock::Method::GET)
-                    .path_matches(regex::Regex::new("^/system/hardware/racks/[^/]*$").unwrap()),
+                    .path_matches(
+                        regex::Regex::new("^/system/hardware/racks/[^/]*$").unwrap(),
+                    ),
             )
         }
 
@@ -8656,7 +9549,9 @@ pub mod operations {
         }
 
         pub fn rack_id(self, value: &::uuid::Uuid) -> Self {
-            let re = regex::Regex::new(&format!("^/system/hardware/racks/{}$", value.to_string()))
+            let re = regex::Regex::new(
+                    &format!("^/system/hardware/racks/{}$", value.to_string()),
+                )
                 .unwrap();
             Self(self.0.path_matches(re))
         }
@@ -8674,7 +9569,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::Rack) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -8684,7 +9580,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -8694,7 +9591,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -8762,7 +9660,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::SledResultsPage) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -8772,7 +9671,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -8782,7 +9682,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -8796,7 +9697,9 @@ pub mod operations {
             Self(
                 inner
                     .method(::httpmock::Method::GET)
-                    .path_matches(regex::Regex::new("^/system/hardware/sleds/[^/]*$").unwrap()),
+                    .path_matches(
+                        regex::Regex::new("^/system/hardware/sleds/[^/]*$").unwrap(),
+                    ),
             )
         }
 
@@ -8805,7 +9708,9 @@ pub mod operations {
         }
 
         pub fn sled_id(self, value: &::uuid::Uuid) -> Self {
-            let re = regex::Regex::new(&format!("^/system/hardware/sleds/{}$", value.to_string()))
+            let re = regex::Regex::new(
+                    &format!("^/system/hardware/sleds/{}$", value.to_string()),
+                )
                 .unwrap();
             Self(self.0.path_matches(re))
         }
@@ -8823,7 +9728,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::Sled) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -8833,7 +9739,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -8843,7 +9750,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -8855,9 +9763,12 @@ pub mod operations {
     impl SledPhysicalDiskListWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(::httpmock::Method::GET).path_matches(
-                    regex::Regex::new("^/system/hardware/sleds/[^/]*/disks$").unwrap(),
-                ),
+                inner
+                    .method(::httpmock::Method::GET)
+                    .path_matches(
+                        regex::Regex::new("^/system/hardware/sleds/[^/]*/disks$")
+                            .unwrap(),
+                    ),
             )
         }
 
@@ -8866,11 +9777,10 @@ pub mod operations {
         }
 
         pub fn sled_id(self, value: &::uuid::Uuid) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/system/hardware/sleds/{}/disks$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!("^/system/hardware/sleds/{}/disks$", value.to_string()),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
@@ -8920,7 +9830,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::PhysicalDiskResultsPage) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -8930,7 +9841,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -8940,7 +9852,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -9008,7 +9921,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::GlobalImageResultsPage) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -9018,7 +9932,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -9028,7 +9943,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -9067,7 +9983,8 @@ pub mod operations {
 
         pub fn created(self, value: &types::GlobalImage) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(201u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -9077,7 +9994,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -9087,7 +10005,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -9110,7 +10029,10 @@ pub mod operations {
         }
 
         pub fn image_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!("^/system/images/{}$", value.to_string())).unwrap();
+            let re = regex::Regex::new(
+                    &format!("^/system/images/{}$", value.to_string()),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
     }
@@ -9127,7 +10049,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::GlobalImage) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -9137,7 +10060,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -9147,7 +10071,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -9170,7 +10095,10 @@ pub mod operations {
         }
 
         pub fn image_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!("^/system/images/{}$", value.to_string())).unwrap();
+            let re = regex::Regex::new(
+                    &format!("^/system/images/{}$", value.to_string()),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
     }
@@ -9192,7 +10120,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -9202,7 +10131,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -9270,7 +10200,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::IpPoolResultsPage) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -9280,7 +10211,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -9290,7 +10222,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -9329,7 +10262,8 @@ pub mod operations {
 
         pub fn created(self, value: &types::IpPool) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(201u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -9339,7 +10273,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -9349,7 +10284,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -9372,8 +10308,10 @@ pub mod operations {
         }
 
         pub fn pool_name(self, value: &types::Name) -> Self {
-            let re =
-                regex::Regex::new(&format!("^/system/ip-pools/{}$", value.to_string())).unwrap();
+            let re = regex::Regex::new(
+                    &format!("^/system/ip-pools/{}$", value.to_string()),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
     }
@@ -9390,7 +10328,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::IpPool) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -9400,7 +10339,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -9410,7 +10350,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -9433,8 +10374,10 @@ pub mod operations {
         }
 
         pub fn pool_name(self, value: &types::Name) -> Self {
-            let re =
-                regex::Regex::new(&format!("^/system/ip-pools/{}$", value.to_string())).unwrap();
+            let re = regex::Regex::new(
+                    &format!("^/system/ip-pools/{}$", value.to_string()),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
@@ -9455,7 +10398,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::IpPool) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -9465,7 +10409,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -9475,7 +10420,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -9498,8 +10444,10 @@ pub mod operations {
         }
 
         pub fn pool_name(self, value: &types::Name) -> Self {
-            let re =
-                regex::Regex::new(&format!("^/system/ip-pools/{}$", value.to_string())).unwrap();
+            let re = regex::Regex::new(
+                    &format!("^/system/ip-pools/{}$", value.to_string()),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
     }
@@ -9521,7 +10469,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -9531,7 +10480,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -9545,7 +10495,9 @@ pub mod operations {
             Self(
                 inner
                     .method(::httpmock::Method::GET)
-                    .path_matches(regex::Regex::new("^/system/ip-pools/[^/]*/ranges$").unwrap()),
+                    .path_matches(
+                        regex::Regex::new("^/system/ip-pools/[^/]*/ranges$").unwrap(),
+                    ),
             )
         }
 
@@ -9554,7 +10506,9 @@ pub mod operations {
         }
 
         pub fn pool_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!("^/system/ip-pools/{}/ranges$", value.to_string()))
+            let re = regex::Regex::new(
+                    &format!("^/system/ip-pools/{}/ranges$", value.to_string()),
+                )
                 .unwrap();
             Self(self.0.path_matches(re))
         }
@@ -9594,7 +10548,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::IpPoolRangeResultsPage) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -9604,7 +10559,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -9614,7 +10570,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -9626,9 +10583,11 @@ pub mod operations {
     impl IpPoolRangeAddWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(::httpmock::Method::POST).path_matches(
-                    regex::Regex::new("^/system/ip-pools/[^/]*/ranges/add$").unwrap(),
-                ),
+                inner
+                    .method(::httpmock::Method::POST)
+                    .path_matches(
+                        regex::Regex::new("^/system/ip-pools/[^/]*/ranges/add$").unwrap(),
+                    ),
             )
         }
 
@@ -9637,11 +10596,10 @@ pub mod operations {
         }
 
         pub fn pool_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/system/ip-pools/{}/ranges/add$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!("^/system/ip-pools/{}/ranges/add$", value.to_string()),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
@@ -9662,7 +10620,8 @@ pub mod operations {
 
         pub fn created(self, value: &types::IpPoolRange) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(201u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -9672,7 +10631,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -9682,7 +10642,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -9694,9 +10655,12 @@ pub mod operations {
     impl IpPoolRangeRemoveWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(::httpmock::Method::POST).path_matches(
-                    regex::Regex::new("^/system/ip-pools/[^/]*/ranges/remove$").unwrap(),
-                ),
+                inner
+                    .method(::httpmock::Method::POST)
+                    .path_matches(
+                        regex::Regex::new("^/system/ip-pools/[^/]*/ranges/remove$")
+                            .unwrap(),
+                    ),
             )
         }
 
@@ -9705,11 +10669,10 @@ pub mod operations {
         }
 
         pub fn pool_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/system/ip-pools/{}/ranges/remove$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!("^/system/ip-pools/{}/ranges/remove$", value.to_string()),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
@@ -9735,7 +10698,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -9745,7 +10709,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -9759,7 +10724,9 @@ pub mod operations {
             Self(
                 inner
                     .method(::httpmock::Method::GET)
-                    .path_matches(regex::Regex::new("^/system/ip-pools-service$").unwrap()),
+                    .path_matches(
+                        regex::Regex::new("^/system/ip-pools-service$").unwrap(),
+                    ),
             )
         }
 
@@ -9780,7 +10747,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::IpPool) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -9790,7 +10758,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -9800,7 +10769,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -9814,7 +10784,9 @@ pub mod operations {
             Self(
                 inner
                     .method(::httpmock::Method::GET)
-                    .path_matches(regex::Regex::new("^/system/ip-pools-service/ranges$").unwrap()),
+                    .path_matches(
+                        regex::Regex::new("^/system/ip-pools-service/ranges$").unwrap(),
+                    ),
             )
         }
 
@@ -9857,7 +10829,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::IpPoolRangeResultsPage) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -9867,7 +10840,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -9877,7 +10851,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -9889,9 +10864,12 @@ pub mod operations {
     impl IpPoolServiceRangeAddWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(::httpmock::Method::POST).path_matches(
-                    regex::Regex::new("^/system/ip-pools-service/ranges/add$").unwrap(),
-                ),
+                inner
+                    .method(::httpmock::Method::POST)
+                    .path_matches(
+                        regex::Regex::new("^/system/ip-pools-service/ranges/add$")
+                            .unwrap(),
+                    ),
             )
         }
 
@@ -9916,7 +10894,8 @@ pub mod operations {
 
         pub fn created(self, value: &types::IpPoolRange) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(201u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -9926,7 +10905,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -9936,7 +10916,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -9947,9 +10928,14 @@ pub mod operations {
     pub struct IpPoolServiceRangeRemoveWhen(::httpmock::When);
     impl IpPoolServiceRangeRemoveWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
-            Self(inner.method(::httpmock::Method::POST).path_matches(
-                regex::Regex::new("^/system/ip-pools-service/ranges/remove$").unwrap(),
-            ))
+            Self(
+                inner
+                    .method(::httpmock::Method::POST)
+                    .path_matches(
+                        regex::Regex::new("^/system/ip-pools-service/ranges/remove$")
+                            .unwrap(),
+                    ),
+            )
         }
 
         pub fn into_inner(self) -> ::httpmock::When {
@@ -9978,7 +10964,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -9988,7 +10975,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -10011,8 +10999,10 @@ pub mod operations {
         }
 
         pub fn metric_name(self, value: types::SystemMetricName) -> Self {
-            let re =
-                regex::Regex::new(&format!("^/system/metrics/{}$", value.to_string())).unwrap();
+            let re = regex::Regex::new(
+                    &format!("^/system/metrics/{}$", value.to_string()),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
@@ -10077,7 +11067,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::MeasurementResultsPage) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -10087,7 +11078,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -10097,7 +11089,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -10132,7 +11125,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::FleetRolePolicy) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -10142,7 +11136,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -10152,7 +11147,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -10191,7 +11187,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::FleetRolePolicy) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -10201,7 +11198,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -10211,7 +11209,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -10279,7 +11278,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::SagaResultsPage) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -10289,7 +11289,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -10299,7 +11300,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -10322,7 +11324,8 @@ pub mod operations {
         }
 
         pub fn saga_id(self, value: &::uuid::Uuid) -> Self {
-            let re = regex::Regex::new(&format!("^/system/sagas/{}$", value.to_string())).unwrap();
+            let re = regex::Regex::new(&format!("^/system/sagas/{}$", value.to_string()))
+                .unwrap();
             Self(self.0.path_matches(re))
         }
     }
@@ -10339,7 +11342,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::Saga) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -10349,7 +11353,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -10359,7 +11364,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -10427,7 +11433,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::SiloResultsPage) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -10437,7 +11444,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -10447,7 +11455,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -10486,7 +11495,8 @@ pub mod operations {
 
         pub fn created(self, value: &types::Silo) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(201u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -10496,7 +11506,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -10506,7 +11517,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -10529,7 +11541,8 @@ pub mod operations {
         }
 
         pub fn silo_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!("^/system/silos/{}$", value.to_string())).unwrap();
+            let re = regex::Regex::new(&format!("^/system/silos/{}$", value.to_string()))
+                .unwrap();
             Self(self.0.path_matches(re))
         }
     }
@@ -10546,7 +11559,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::Silo) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -10556,7 +11570,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -10566,7 +11581,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -10589,7 +11605,8 @@ pub mod operations {
         }
 
         pub fn silo_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!("^/system/silos/{}$", value.to_string())).unwrap();
+            let re = regex::Regex::new(&format!("^/system/silos/{}$", value.to_string()))
+                .unwrap();
             Self(self.0.path_matches(re))
         }
     }
@@ -10611,7 +11628,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -10621,7 +11639,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -10632,9 +11651,14 @@ pub mod operations {
     pub struct SiloIdentityProviderListWhen(::httpmock::When);
     impl SiloIdentityProviderListWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
-            Self(inner.method(::httpmock::Method::GET).path_matches(
-                regex::Regex::new("^/system/silos/[^/]*/identity-providers$").unwrap(),
-            ))
+            Self(
+                inner
+                    .method(::httpmock::Method::GET)
+                    .path_matches(
+                        regex::Regex::new("^/system/silos/[^/]*/identity-providers$")
+                            .unwrap(),
+                    ),
+            )
         }
 
         pub fn into_inner(self) -> ::httpmock::When {
@@ -10642,11 +11666,10 @@ pub mod operations {
         }
 
         pub fn silo_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/system/silos/{}/identity-providers$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!("^/system/silos/{}/identity-providers$", value.to_string()),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
@@ -10696,7 +11719,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::IdentityProviderResultsPage) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -10706,7 +11730,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -10716,7 +11741,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -10727,9 +11753,16 @@ pub mod operations {
     pub struct LocalIdpUserCreateWhen(::httpmock::When);
     impl LocalIdpUserCreateWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
-            Self(inner.method(::httpmock::Method::POST).path_matches(
-                regex::Regex::new("^/system/silos/[^/]*/identity-providers/local/users$").unwrap(),
-            ))
+            Self(
+                inner
+                    .method(::httpmock::Method::POST)
+                    .path_matches(
+                        regex::Regex::new(
+                                "^/system/silos/[^/]*/identity-providers/local/users$",
+                            )
+                            .unwrap(),
+                    ),
+            )
         }
 
         pub fn into_inner(self) -> ::httpmock::When {
@@ -10737,11 +11770,13 @@ pub mod operations {
         }
 
         pub fn silo_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/system/silos/{}/identity-providers/local/users$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/system/silos/{}/identity-providers/local/users$", value
+                        .to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
@@ -10762,7 +11797,8 @@ pub mod operations {
 
         pub fn created(self, value: &types::User) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(201u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -10772,7 +11808,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -10782,7 +11819,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -10794,10 +11832,14 @@ pub mod operations {
     impl LocalIdpUserDeleteWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(::httpmock::Method::DELETE).path_matches(
-                    regex::Regex::new("^/system/silos/[^/]*/identity-providers/local/users/[^/]*$")
-                        .unwrap(),
-                ),
+                inner
+                    .method(::httpmock::Method::DELETE)
+                    .path_matches(
+                        regex::Regex::new(
+                                "^/system/silos/[^/]*/identity-providers/local/users/[^/]*$",
+                            )
+                            .unwrap(),
+                    ),
             )
         }
 
@@ -10806,20 +11848,24 @@ pub mod operations {
         }
 
         pub fn silo_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/system/silos/{}/identity-providers/local/users/.*$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/system/silos/{}/identity-providers/local/users/.*$", value
+                        .to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn user_id(self, value: &::uuid::Uuid) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/system/silos/.*/identity-providers/local/users/{}$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/system/silos/.*/identity-providers/local/users/{}$", value
+                        .to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
     }
@@ -10841,7 +11887,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -10851,7 +11898,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -10863,12 +11911,14 @@ pub mod operations {
     impl LocalIdpUserSetPasswordWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(::httpmock::Method::POST).path_matches(
-                    regex::Regex::new(
-                        "^/system/silos/[^/]*/identity-providers/local/users/[^/]*/set-password$",
-                    )
-                    .unwrap(),
-                ),
+                inner
+                    .method(::httpmock::Method::POST)
+                    .path_matches(
+                        regex::Regex::new(
+                                "^/system/silos/[^/]*/identity-providers/local/users/[^/]*/set-password$",
+                            )
+                            .unwrap(),
+                    ),
             )
         }
 
@@ -10877,20 +11927,24 @@ pub mod operations {
         }
 
         pub fn silo_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/system/silos/{}/identity-providers/local/users/.*/set-password$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/system/silos/{}/identity-providers/local/users/.*/set-password$",
+                        value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn user_id(self, value: &::uuid::Uuid) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/system/silos/.*/identity-providers/local/users/{}/set-password$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/system/silos/.*/identity-providers/local/users/{}/set-password$",
+                        value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
@@ -10916,7 +11970,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -10926,7 +11981,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -10937,9 +11993,16 @@ pub mod operations {
     pub struct SamlIdentityProviderCreateWhen(::httpmock::When);
     impl SamlIdentityProviderCreateWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
-            Self(inner.method(::httpmock::Method::POST).path_matches(
-                regex::Regex::new("^/system/silos/[^/]*/identity-providers/saml$").unwrap(),
-            ))
+            Self(
+                inner
+                    .method(::httpmock::Method::POST)
+                    .path_matches(
+                        regex::Regex::new(
+                                "^/system/silos/[^/]*/identity-providers/saml$",
+                            )
+                            .unwrap(),
+                    ),
+            )
         }
 
         pub fn into_inner(self) -> ::httpmock::When {
@@ -10947,11 +12010,12 @@ pub mod operations {
         }
 
         pub fn silo_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/system/silos/{}/identity-providers/saml$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/system/silos/{}/identity-providers/saml$", value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
@@ -10972,7 +12036,8 @@ pub mod operations {
 
         pub fn created(self, value: &types::SamlIdentityProvider) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(201u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -10982,7 +12047,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -10992,7 +12058,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -11003,9 +12070,16 @@ pub mod operations {
     pub struct SamlIdentityProviderViewWhen(::httpmock::When);
     impl SamlIdentityProviderViewWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
-            Self(inner.method(::httpmock::Method::GET).path_matches(
-                regex::Regex::new("^/system/silos/[^/]*/identity-providers/saml/[^/]*$").unwrap(),
-            ))
+            Self(
+                inner
+                    .method(::httpmock::Method::GET)
+                    .path_matches(
+                        regex::Regex::new(
+                                "^/system/silos/[^/]*/identity-providers/saml/[^/]*$",
+                            )
+                            .unwrap(),
+                    ),
+            )
         }
 
         pub fn into_inner(self) -> ::httpmock::When {
@@ -11013,20 +12087,24 @@ pub mod operations {
         }
 
         pub fn silo_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/system/silos/{}/identity-providers/saml/.*$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/system/silos/{}/identity-providers/saml/.*$", value
+                        .to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn provider_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/system/silos/.*/identity-providers/saml/{}$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/system/silos/.*/identity-providers/saml/{}$", value
+                        .to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
     }
@@ -11043,7 +12121,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::SamlIdentityProvider) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -11053,7 +12132,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -11063,7 +12143,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -11077,7 +12158,9 @@ pub mod operations {
             Self(
                 inner
                     .method(::httpmock::Method::GET)
-                    .path_matches(regex::Regex::new("^/system/silos/[^/]*/policy$").unwrap()),
+                    .path_matches(
+                        regex::Regex::new("^/system/silos/[^/]*/policy$").unwrap(),
+                    ),
             )
         }
 
@@ -11086,7 +12169,9 @@ pub mod operations {
         }
 
         pub fn silo_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!("^/system/silos/{}/policy$", value.to_string()))
+            let re = regex::Regex::new(
+                    &format!("^/system/silos/{}/policy$", value.to_string()),
+                )
                 .unwrap();
             Self(self.0.path_matches(re))
         }
@@ -11104,7 +12189,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::SiloRolePolicy) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -11114,7 +12200,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -11124,7 +12211,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -11138,7 +12226,9 @@ pub mod operations {
             Self(
                 inner
                     .method(::httpmock::Method::PUT)
-                    .path_matches(regex::Regex::new("^/system/silos/[^/]*/policy$").unwrap()),
+                    .path_matches(
+                        regex::Regex::new("^/system/silos/[^/]*/policy$").unwrap(),
+                    ),
             )
         }
 
@@ -11147,7 +12237,9 @@ pub mod operations {
         }
 
         pub fn silo_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!("^/system/silos/{}/policy$", value.to_string()))
+            let re = regex::Regex::new(
+                    &format!("^/system/silos/{}/policy$", value.to_string()),
+                )
                 .unwrap();
             Self(self.0.path_matches(re))
         }
@@ -11169,7 +12261,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::SiloRolePolicy) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -11179,7 +12272,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -11189,7 +12283,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -11203,7 +12298,9 @@ pub mod operations {
             Self(
                 inner
                     .method(::httpmock::Method::GET)
-                    .path_matches(regex::Regex::new("^/system/silos/[^/]*/users/all$").unwrap()),
+                    .path_matches(
+                        regex::Regex::new("^/system/silos/[^/]*/users/all$").unwrap(),
+                    ),
             )
         }
 
@@ -11212,7 +12309,9 @@ pub mod operations {
         }
 
         pub fn silo_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!("^/system/silos/{}/users/all$", value.to_string()))
+            let re = regex::Regex::new(
+                    &format!("^/system/silos/{}/users/all$", value.to_string()),
+                )
                 .unwrap();
             Self(self.0.path_matches(re))
         }
@@ -11263,7 +12362,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::UserResultsPage) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -11273,7 +12373,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -11283,7 +12384,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -11295,9 +12397,12 @@ pub mod operations {
     impl SiloUserViewWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(::httpmock::Method::GET).path_matches(
-                    regex::Regex::new("^/system/silos/[^/]*/users/id/[^/]*$").unwrap(),
-                ),
+                inner
+                    .method(::httpmock::Method::GET)
+                    .path_matches(
+                        regex::Regex::new("^/system/silos/[^/]*/users/id/[^/]*$")
+                            .unwrap(),
+                    ),
             )
         }
 
@@ -11306,20 +12411,18 @@ pub mod operations {
         }
 
         pub fn silo_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/system/silos/{}/users/id/.*$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!("^/system/silos/{}/users/id/.*$", value.to_string()),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
         pub fn user_id(self, value: &::uuid::Uuid) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/system/silos/.*/users/id/{}$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!("^/system/silos/.*/users/id/{}$", value.to_string()),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
     }
@@ -11336,7 +12439,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::User) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -11346,7 +12450,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -11356,7 +12461,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -11424,7 +12530,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::UserBuiltinResultsPage) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -11434,7 +12541,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -11444,7 +12552,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -11467,7 +12576,8 @@ pub mod operations {
         }
 
         pub fn user_name(self, value: &types::Name) -> Self {
-            let re = regex::Regex::new(&format!("^/system/user/{}$", value.to_string())).unwrap();
+            let re = regex::Regex::new(&format!("^/system/user/{}$", value.to_string()))
+                .unwrap();
             Self(self.0.path_matches(re))
         }
     }
@@ -11484,7 +12594,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::UserBuiltin) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -11494,7 +12605,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -11504,7 +12616,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -11561,7 +12674,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::TimeseriesSchemaResultsPage) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -11571,7 +12685,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -11581,7 +12696,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -11649,7 +12765,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::UserResultsPage) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -11659,7 +12776,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -11669,7 +12787,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -11759,7 +12878,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::DiskResultsPage) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -11769,7 +12889,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -11779,7 +12900,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -11833,7 +12955,8 @@ pub mod operations {
 
         pub fn created(self, value: &types::Disk) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(201u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -11843,7 +12966,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -11853,7 +12977,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -11876,7 +13001,8 @@ pub mod operations {
         }
 
         pub fn disk(self, value: &types::NameOrId) -> Self {
-            let re = regex::Regex::new(&format!("^/v1/disks/{}$", value.to_string())).unwrap();
+            let re = regex::Regex::new(&format!("^/v1/disks/{}$", value.to_string()))
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
@@ -11915,7 +13041,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::Disk) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -11925,7 +13052,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -11935,7 +13063,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -11958,7 +13087,8 @@ pub mod operations {
         }
 
         pub fn disk(self, value: &types::NameOrId) -> Self {
-            let re = regex::Regex::new(&format!("^/v1/disks/{}$", value.to_string())).unwrap();
+            let re = regex::Regex::new(&format!("^/v1/disks/{}$", value.to_string()))
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
@@ -12002,7 +13132,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -12012,7 +13143,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -12102,7 +13234,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::InstanceResultsPage) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -12112,7 +13245,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -12122,7 +13256,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -12176,7 +13311,8 @@ pub mod operations {
 
         pub fn created(self, value: &types::Instance) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(201u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -12186,7 +13322,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -12196,7 +13333,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -12219,7 +13357,8 @@ pub mod operations {
         }
 
         pub fn instance(self, value: &types::NameOrId) -> Self {
-            let re = regex::Regex::new(&format!("^/v1/instances/{}$", value.to_string())).unwrap();
+            let re = regex::Regex::new(&format!("^/v1/instances/{}$", value.to_string()))
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
@@ -12258,7 +13397,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::Instance) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -12268,7 +13408,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -12278,7 +13419,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -12301,7 +13443,8 @@ pub mod operations {
         }
 
         pub fn instance(self, value: &types::NameOrId) -> Self {
-            let re = regex::Regex::new(&format!("^/v1/instances/{}$", value.to_string())).unwrap();
+            let re = regex::Regex::new(&format!("^/v1/instances/{}$", value.to_string()))
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
@@ -12345,7 +13488,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -12355,7 +13499,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -12369,7 +13514,9 @@ pub mod operations {
             Self(
                 inner
                     .method(::httpmock::Method::GET)
-                    .path_matches(regex::Regex::new("^/v1/instances/[^/]*/disks$").unwrap()),
+                    .path_matches(
+                        regex::Regex::new("^/v1/instances/[^/]*/disks$").unwrap(),
+                    ),
             )
         }
 
@@ -12378,8 +13525,10 @@ pub mod operations {
         }
 
         pub fn instance(self, value: &types::NameOrId) -> Self {
-            let re =
-                regex::Regex::new(&format!("^/v1/instances/{}/disks$", value.to_string())).unwrap();
+            let re = regex::Regex::new(
+                    &format!("^/v1/instances/{}/disks$", value.to_string()),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
@@ -12451,7 +13600,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::DiskResultsPage) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -12461,7 +13611,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -12471,7 +13622,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -12485,7 +13637,9 @@ pub mod operations {
             Self(
                 inner
                     .method(::httpmock::Method::POST)
-                    .path_matches(regex::Regex::new("^/v1/instances/[^/]*/disks/attach$").unwrap()),
+                    .path_matches(
+                        regex::Regex::new("^/v1/instances/[^/]*/disks/attach$").unwrap(),
+                    ),
             )
         }
 
@@ -12494,11 +13648,10 @@ pub mod operations {
         }
 
         pub fn instance(self, value: &types::NameOrId) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/v1/instances/{}/disks/attach$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!("^/v1/instances/{}/disks/attach$", value.to_string()),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
@@ -12541,7 +13694,8 @@ pub mod operations {
 
         pub fn accepted(self, value: &types::Disk) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(202u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -12551,7 +13705,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -12561,7 +13716,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -12575,7 +13731,9 @@ pub mod operations {
             Self(
                 inner
                     .method(::httpmock::Method::POST)
-                    .path_matches(regex::Regex::new("^/v1/instances/[^/]*/disks/detach$").unwrap()),
+                    .path_matches(
+                        regex::Regex::new("^/v1/instances/[^/]*/disks/detach$").unwrap(),
+                    ),
             )
         }
 
@@ -12584,11 +13742,10 @@ pub mod operations {
         }
 
         pub fn instance(self, value: &types::NameOrId) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/v1/instances/{}/disks/detach$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!("^/v1/instances/{}/disks/detach$", value.to_string()),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
@@ -12631,7 +13788,8 @@ pub mod operations {
 
         pub fn accepted(self, value: &types::Disk) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(202u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -12641,7 +13799,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -12651,7 +13810,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -12665,7 +13825,9 @@ pub mod operations {
             Self(
                 inner
                     .method(::httpmock::Method::POST)
-                    .path_matches(regex::Regex::new("^/v1/instances/[^/]*/migrate$").unwrap()),
+                    .path_matches(
+                        regex::Regex::new("^/v1/instances/[^/]*/migrate$").unwrap(),
+                    ),
             )
         }
 
@@ -12674,7 +13836,9 @@ pub mod operations {
         }
 
         pub fn instance(self, value: &types::NameOrId) -> Self {
-            let re = regex::Regex::new(&format!("^/v1/instances/{}/migrate$", value.to_string()))
+            let re = regex::Regex::new(
+                    &format!("^/v1/instances/{}/migrate$", value.to_string()),
+                )
                 .unwrap();
             Self(self.0.path_matches(re))
         }
@@ -12718,7 +13882,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::Instance) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -12728,7 +13893,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -12738,7 +13904,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -12752,7 +13919,9 @@ pub mod operations {
             Self(
                 inner
                     .method(::httpmock::Method::POST)
-                    .path_matches(regex::Regex::new("^/v1/instances/[^/]*/reboot$").unwrap()),
+                    .path_matches(
+                        regex::Regex::new("^/v1/instances/[^/]*/reboot$").unwrap(),
+                    ),
             )
         }
 
@@ -12761,7 +13930,9 @@ pub mod operations {
         }
 
         pub fn instance(self, value: &types::NameOrId) -> Self {
-            let re = regex::Regex::new(&format!("^/v1/instances/{}/reboot$", value.to_string()))
+            let re = regex::Regex::new(
+                    &format!("^/v1/instances/{}/reboot$", value.to_string()),
+                )
                 .unwrap();
             Self(self.0.path_matches(re))
         }
@@ -12801,7 +13972,8 @@ pub mod operations {
 
         pub fn accepted(self, value: &types::Instance) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(202u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -12811,7 +13983,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -12821,7 +13994,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -12833,9 +14007,12 @@ pub mod operations {
     impl InstanceSerialConsoleV1When {
         pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(::httpmock::Method::GET).path_matches(
-                    regex::Regex::new("^/v1/instances/[^/]*/serial-console$").unwrap(),
-                ),
+                inner
+                    .method(::httpmock::Method::GET)
+                    .path_matches(
+                        regex::Regex::new("^/v1/instances/[^/]*/serial-console$")
+                            .unwrap(),
+                    ),
             )
         }
 
@@ -12844,11 +14021,10 @@ pub mod operations {
         }
 
         pub fn instance(self, value: &types::NameOrId) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/v1/instances/{}/serial-console$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!("^/v1/instances/{}/serial-console$", value.to_string()),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
@@ -12920,7 +14096,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::InstanceSerialConsoleData) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -12930,7 +14107,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -12940,7 +14118,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -12951,9 +14130,14 @@ pub mod operations {
     pub struct InstanceSerialConsoleStreamV1When(::httpmock::When);
     impl InstanceSerialConsoleStreamV1When {
         pub fn new(inner: ::httpmock::When) -> Self {
-            Self(inner.method(::httpmock::Method::GET).path_matches(
-                regex::Regex::new("^/v1/instances/[^/]*/serial-console/stream$").unwrap(),
-            ))
+            Self(
+                inner
+                    .method(::httpmock::Method::GET)
+                    .path_matches(
+                        regex::Regex::new("^/v1/instances/[^/]*/serial-console/stream$")
+                            .unwrap(),
+                    ),
+            )
         }
 
         pub fn into_inner(self) -> ::httpmock::When {
@@ -12961,11 +14145,12 @@ pub mod operations {
         }
 
         pub fn instance(self, value: &types::NameOrId) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/v1/instances/{}/serial-console/stream$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/v1/instances/{}/serial-console/stream$", value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
@@ -13009,7 +14194,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -13019,7 +14205,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -13033,7 +14220,9 @@ pub mod operations {
             Self(
                 inner
                     .method(::httpmock::Method::POST)
-                    .path_matches(regex::Regex::new("^/v1/instances/[^/]*/start$").unwrap()),
+                    .path_matches(
+                        regex::Regex::new("^/v1/instances/[^/]*/start$").unwrap(),
+                    ),
             )
         }
 
@@ -13042,8 +14231,10 @@ pub mod operations {
         }
 
         pub fn instance(self, value: &types::NameOrId) -> Self {
-            let re =
-                regex::Regex::new(&format!("^/v1/instances/{}/start$", value.to_string())).unwrap();
+            let re = regex::Regex::new(
+                    &format!("^/v1/instances/{}/start$", value.to_string()),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
@@ -13082,7 +14273,8 @@ pub mod operations {
 
         pub fn accepted(self, value: &types::Instance) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(202u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -13092,7 +14284,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -13102,7 +14295,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -13116,7 +14310,9 @@ pub mod operations {
             Self(
                 inner
                     .method(::httpmock::Method::POST)
-                    .path_matches(regex::Regex::new("^/v1/instances/[^/]*/stop$").unwrap()),
+                    .path_matches(
+                        regex::Regex::new("^/v1/instances/[^/]*/stop$").unwrap(),
+                    ),
             )
         }
 
@@ -13125,8 +14321,10 @@ pub mod operations {
         }
 
         pub fn instance(self, value: &types::NameOrId) -> Self {
-            let re =
-                regex::Regex::new(&format!("^/v1/instances/{}/stop$", value.to_string())).unwrap();
+            let re = regex::Regex::new(
+                    &format!("^/v1/instances/{}/stop$", value.to_string()),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
@@ -13165,7 +14363,8 @@ pub mod operations {
 
         pub fn accepted(self, value: &types::Instance) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(202u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -13175,7 +14374,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -13185,7 +14385,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -13253,7 +14454,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::OrganizationResultsPage) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -13263,7 +14465,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -13273,7 +14476,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -13312,7 +14516,8 @@ pub mod operations {
 
         pub fn created(self, value: &types::Organization) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(201u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -13322,7 +14527,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -13332,7 +14538,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -13346,7 +14553,9 @@ pub mod operations {
             Self(
                 inner
                     .method(::httpmock::Method::GET)
-                    .path_matches(regex::Regex::new("^/v1/organizations/[^/]*$").unwrap()),
+                    .path_matches(
+                        regex::Regex::new("^/v1/organizations/[^/]*$").unwrap(),
+                    ),
             )
         }
 
@@ -13355,8 +14564,10 @@ pub mod operations {
         }
 
         pub fn organization(self, value: &types::NameOrId) -> Self {
-            let re =
-                regex::Regex::new(&format!("^/v1/organizations/{}$", value.to_string())).unwrap();
+            let re = regex::Regex::new(
+                    &format!("^/v1/organizations/{}$", value.to_string()),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
     }
@@ -13373,7 +14584,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::Organization) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -13383,7 +14595,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -13393,7 +14606,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -13407,7 +14621,9 @@ pub mod operations {
             Self(
                 inner
                     .method(::httpmock::Method::PUT)
-                    .path_matches(regex::Regex::new("^/v1/organizations/[^/]*$").unwrap()),
+                    .path_matches(
+                        regex::Regex::new("^/v1/organizations/[^/]*$").unwrap(),
+                    ),
             )
         }
 
@@ -13416,8 +14632,10 @@ pub mod operations {
         }
 
         pub fn organization(self, value: &types::NameOrId) -> Self {
-            let re =
-                regex::Regex::new(&format!("^/v1/organizations/{}$", value.to_string())).unwrap();
+            let re = regex::Regex::new(
+                    &format!("^/v1/organizations/{}$", value.to_string()),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
@@ -13438,7 +14656,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::Organization) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -13448,7 +14667,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -13458,7 +14678,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -13472,7 +14693,9 @@ pub mod operations {
             Self(
                 inner
                     .method(::httpmock::Method::DELETE)
-                    .path_matches(regex::Regex::new("^/v1/organizations/[^/]*$").unwrap()),
+                    .path_matches(
+                        regex::Regex::new("^/v1/organizations/[^/]*$").unwrap(),
+                    ),
             )
         }
 
@@ -13481,8 +14704,10 @@ pub mod operations {
         }
 
         pub fn organization(self, value: &types::NameOrId) -> Self {
-            let re =
-                regex::Regex::new(&format!("^/v1/organizations/{}$", value.to_string())).unwrap();
+            let re = regex::Regex::new(
+                    &format!("^/v1/organizations/{}$", value.to_string()),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
     }
@@ -13504,7 +14729,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -13514,7 +14740,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -13528,7 +14755,9 @@ pub mod operations {
             Self(
                 inner
                     .method(::httpmock::Method::GET)
-                    .path_matches(regex::Regex::new("^/v1/organizations/[^/]*/policy$").unwrap()),
+                    .path_matches(
+                        regex::Regex::new("^/v1/organizations/[^/]*/policy$").unwrap(),
+                    ),
             )
         }
 
@@ -13537,9 +14766,10 @@ pub mod operations {
         }
 
         pub fn organization(self, value: &types::NameOrId) -> Self {
-            let re =
-                regex::Regex::new(&format!("^/v1/organizations/{}/policy$", value.to_string()))
-                    .unwrap();
+            let re = regex::Regex::new(
+                    &format!("^/v1/organizations/{}/policy$", value.to_string()),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
     }
@@ -13556,7 +14786,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::OrganizationRolePolicy) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -13566,7 +14797,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -13576,7 +14808,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -13590,7 +14823,9 @@ pub mod operations {
             Self(
                 inner
                     .method(::httpmock::Method::PUT)
-                    .path_matches(regex::Regex::new("^/v1/organizations/[^/]*/policy$").unwrap()),
+                    .path_matches(
+                        regex::Regex::new("^/v1/organizations/[^/]*/policy$").unwrap(),
+                    ),
             )
         }
 
@@ -13599,9 +14834,10 @@ pub mod operations {
         }
 
         pub fn organization(self, value: &types::NameOrId) -> Self {
-            let re =
-                regex::Regex::new(&format!("^/v1/organizations/{}/policy$", value.to_string()))
-                    .unwrap();
+            let re = regex::Regex::new(
+                    &format!("^/v1/organizations/{}/policy$", value.to_string()),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
@@ -13622,7 +14858,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::OrganizationRolePolicy) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -13632,7 +14869,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -13642,7 +14880,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -13721,7 +14960,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::ProjectResultsPage) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -13731,7 +14971,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -13741,7 +14982,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -13784,7 +15026,8 @@ pub mod operations {
 
         pub fn created(self, value: &types::Project) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(201u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -13794,7 +15037,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -13804,7 +15048,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -13827,7 +15072,8 @@ pub mod operations {
         }
 
         pub fn project(self, value: &types::NameOrId) -> Self {
-            let re = regex::Regex::new(&format!("^/v1/projects/{}$", value.to_string())).unwrap();
+            let re = regex::Regex::new(&format!("^/v1/projects/{}$", value.to_string()))
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
@@ -13855,7 +15101,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::Project) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -13865,7 +15112,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -13875,7 +15123,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -13898,7 +15147,8 @@ pub mod operations {
         }
 
         pub fn project(self, value: &types::NameOrId) -> Self {
-            let re = regex::Regex::new(&format!("^/v1/projects/{}$", value.to_string())).unwrap();
+            let re = regex::Regex::new(&format!("^/v1/projects/{}$", value.to_string()))
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
@@ -13930,7 +15180,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::Project) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -13940,7 +15191,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -13950,7 +15202,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -13973,7 +15226,8 @@ pub mod operations {
         }
 
         pub fn project(self, value: &types::NameOrId) -> Self {
-            let re = regex::Regex::new(&format!("^/v1/projects/{}$", value.to_string())).unwrap();
+            let re = regex::Regex::new(&format!("^/v1/projects/{}$", value.to_string()))
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
@@ -14006,7 +15260,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -14016,7 +15271,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -14030,7 +15286,9 @@ pub mod operations {
             Self(
                 inner
                     .method(::httpmock::Method::GET)
-                    .path_matches(regex::Regex::new("^/v1/projects/[^/]*/policy$").unwrap()),
+                    .path_matches(
+                        regex::Regex::new("^/v1/projects/[^/]*/policy$").unwrap(),
+                    ),
             )
         }
 
@@ -14039,8 +15297,10 @@ pub mod operations {
         }
 
         pub fn project(self, value: &types::NameOrId) -> Self {
-            let re =
-                regex::Regex::new(&format!("^/v1/projects/{}/policy$", value.to_string())).unwrap();
+            let re = regex::Regex::new(
+                    &format!("^/v1/projects/{}/policy$", value.to_string()),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
@@ -14068,7 +15328,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::ProjectRolePolicy) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -14078,7 +15339,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -14088,7 +15350,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -14102,7 +15365,9 @@ pub mod operations {
             Self(
                 inner
                     .method(::httpmock::Method::PUT)
-                    .path_matches(regex::Regex::new("^/v1/projects/[^/]*/policy$").unwrap()),
+                    .path_matches(
+                        regex::Regex::new("^/v1/projects/[^/]*/policy$").unwrap(),
+                    ),
             )
         }
 
@@ -14111,8 +15376,10 @@ pub mod operations {
         }
 
         pub fn project(self, value: &types::NameOrId) -> Self {
-            let re =
-                regex::Regex::new(&format!("^/v1/projects/{}/policy$", value.to_string())).unwrap();
+            let re = regex::Regex::new(
+                    &format!("^/v1/projects/{}/policy$", value.to_string()),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
 
@@ -14144,7 +15411,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::ProjectRolePolicy) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -14154,7 +15422,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -14164,7 +15433,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -14178,7 +15448,9 @@ pub mod operations {
             Self(
                 inner
                     .method(::httpmock::Method::GET)
-                    .path_matches(regex::Regex::new("^/v1/system/update/components$").unwrap()),
+                    .path_matches(
+                        regex::Regex::new("^/v1/system/update/components$").unwrap(),
+                    ),
             )
         }
 
@@ -14232,7 +15504,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::UpdateableComponentResultsPage) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -14242,7 +15515,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -14252,7 +15526,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -14266,7 +15541,9 @@ pub mod operations {
             Self(
                 inner
                     .method(::httpmock::Method::GET)
-                    .path_matches(regex::Regex::new("^/v1/system/update/deployments$").unwrap()),
+                    .path_matches(
+                        regex::Regex::new("^/v1/system/update/deployments$").unwrap(),
+                    ),
             )
         }
 
@@ -14320,7 +15597,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::UpdateDeploymentResultsPage) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -14330,7 +15608,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -14340,7 +15619,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -14352,9 +15632,12 @@ pub mod operations {
     impl UpdateDeploymentViewWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(::httpmock::Method::GET).path_matches(
-                    regex::Regex::new("^/v1/system/update/deployments/[^/]*$").unwrap(),
-                ),
+                inner
+                    .method(::httpmock::Method::GET)
+                    .path_matches(
+                        regex::Regex::new("^/v1/system/update/deployments/[^/]*$")
+                            .unwrap(),
+                    ),
             )
         }
 
@@ -14363,11 +15646,10 @@ pub mod operations {
         }
 
         pub fn id(self, value: &::uuid::Uuid) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/v1/system/update/deployments/{}$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!("^/v1/system/update/deployments/{}$", value.to_string()),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
     }
@@ -14384,7 +15666,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::UpdateDeployment) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -14394,7 +15677,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -14404,7 +15688,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -14418,7 +15703,9 @@ pub mod operations {
             Self(
                 inner
                     .method(::httpmock::Method::POST)
-                    .path_matches(regex::Regex::new("^/v1/system/update/refresh$").unwrap()),
+                    .path_matches(
+                        regex::Regex::new("^/v1/system/update/refresh$").unwrap(),
+                    ),
             )
         }
 
@@ -14444,7 +15731,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -14454,7 +15742,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -14468,7 +15757,9 @@ pub mod operations {
             Self(
                 inner
                     .method(::httpmock::Method::POST)
-                    .path_matches(regex::Regex::new("^/v1/system/update/start$").unwrap()),
+                    .path_matches(
+                        regex::Regex::new("^/v1/system/update/start$").unwrap(),
+                    ),
             )
         }
 
@@ -14493,7 +15784,8 @@ pub mod operations {
 
         pub fn accepted(self, value: &types::UpdateDeployment) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(202u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -14503,7 +15795,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -14513,7 +15806,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -14553,7 +15847,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -14563,7 +15858,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -14577,7 +15873,9 @@ pub mod operations {
             Self(
                 inner
                     .method(::httpmock::Method::GET)
-                    .path_matches(regex::Regex::new("^/v1/system/update/updates$").unwrap()),
+                    .path_matches(
+                        regex::Regex::new("^/v1/system/update/updates$").unwrap(),
+                    ),
             )
         }
 
@@ -14631,7 +15929,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::SystemUpdateResultsPage) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -14641,7 +15940,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -14651,7 +15951,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -14665,7 +15966,9 @@ pub mod operations {
             Self(
                 inner
                     .method(::httpmock::Method::GET)
-                    .path_matches(regex::Regex::new("^/v1/system/update/updates/[^/]*$").unwrap()),
+                    .path_matches(
+                        regex::Regex::new("^/v1/system/update/updates/[^/]*$").unwrap(),
+                    ),
             )
         }
 
@@ -14674,11 +15977,10 @@ pub mod operations {
         }
 
         pub fn version(self, value: &types::SemverVersion) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/v1/system/update/updates/{}$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!("^/v1/system/update/updates/{}$", value.to_string()),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
     }
@@ -14695,7 +15997,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::SystemUpdate) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -14705,7 +16008,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -14715,7 +16019,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -14726,9 +16031,14 @@ pub mod operations {
     pub struct SystemUpdateComponentsListWhen(::httpmock::When);
     impl SystemUpdateComponentsListWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
-            Self(inner.method(::httpmock::Method::GET).path_matches(
-                regex::Regex::new("^/v1/system/update/updates/[^/]*/components$").unwrap(),
-            ))
+            Self(
+                inner
+                    .method(::httpmock::Method::GET)
+                    .path_matches(
+                        regex::Regex::new("^/v1/system/update/updates/[^/]*/components$")
+                            .unwrap(),
+                    ),
+            )
         }
 
         pub fn into_inner(self) -> ::httpmock::When {
@@ -14736,11 +16046,12 @@ pub mod operations {
         }
 
         pub fn version(self, value: &types::SemverVersion) -> Self {
-            let re = regex::Regex::new(&format!(
-                "^/v1/system/update/updates/{}/components$",
-                value.to_string()
-            ))
-            .unwrap();
+            let re = regex::Regex::new(
+                    &format!(
+                        "^/v1/system/update/updates/{}/components$", value.to_string()
+                    ),
+                )
+                .unwrap();
             Self(self.0.path_matches(re))
         }
     }
@@ -14757,7 +16068,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::ComponentUpdateResultsPage) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -14767,7 +16079,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -14777,7 +16090,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -14791,7 +16105,9 @@ pub mod operations {
             Self(
                 inner
                     .method(::httpmock::Method::GET)
-                    .path_matches(regex::Regex::new("^/v1/system/update/version$").unwrap()),
+                    .path_matches(
+                        regex::Regex::new("^/v1/system/update/version$").unwrap(),
+                    ),
             )
         }
 
@@ -14812,7 +16128,8 @@ pub mod operations {
 
         pub fn ok(self, value: &types::SystemVersion) -> Self {
             Self(
-                self.0
+                self
+                    .0
                     .status(200u16)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -14822,7 +16139,8 @@ pub mod operations {
         pub fn client_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 4u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -14832,7 +16150,8 @@ pub mod operations {
         pub fn server_error(self, status: u16, value: &types::Error) -> Self {
             assert_eq!(status / 100u16, 5u16);
             Self(
-                self.0
+                self
+                    .0
                     .status(status)
                     .header("content-type", "application/json")
                     .json_body_obj(value),
@@ -14841,9 +16160,9 @@ pub mod operations {
     }
 }
 
-#[doc = r" An extension trait for [`MockServer`](::httpmock::MockServer) that"]
-#[doc = r" adds a method for each operation. These are the equivalent of"]
-#[doc = r" type-checked [`mock()`](::httpmock::MockServer::mock) calls."]
+/// An extension trait for [`MockServer`](::httpmock::MockServer) that
+/// adds a method for each operation. These are the equivalent of
+/// type-checked [`mock()`](::httpmock::MockServer::mock) calls.
 pub trait MockServerExt {
     fn disk_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
@@ -14854,7 +16173,10 @@ pub trait MockServerExt {
     fn instance_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceViewByIdWhen, operations::InstanceViewByIdThen);
-    fn instance_network_interface_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
+    fn instance_network_interface_view_by_id<F>(
+        &self,
+        config_fn: F,
+    ) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::InstanceNetworkInterfaceViewByIdWhen,
@@ -14862,7 +16184,10 @@ pub trait MockServerExt {
         );
     fn organization_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::OrganizationViewByIdWhen, operations::OrganizationViewByIdThen);
+        F: FnOnce(
+            operations::OrganizationViewByIdWhen,
+            operations::OrganizationViewByIdThen,
+        );
     fn project_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ProjectViewByIdWhen, operations::ProjectViewByIdThen);
@@ -14871,7 +16196,10 @@ pub trait MockServerExt {
         F: FnOnce(operations::SnapshotViewByIdWhen, operations::SnapshotViewByIdThen);
     fn vpc_router_route_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::VpcRouterRouteViewByIdWhen, operations::VpcRouterRouteViewByIdThen);
+        F: FnOnce(
+            operations::VpcRouterRouteViewByIdWhen,
+            operations::VpcRouterRouteViewByIdThen,
+        );
     fn vpc_router_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcRouterViewByIdWhen, operations::VpcRouterViewByIdThen);
@@ -14913,19 +16241,31 @@ pub trait MockServerExt {
         F: FnOnce(operations::OrganizationListWhen, operations::OrganizationListThen);
     fn organization_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::OrganizationCreateWhen, operations::OrganizationCreateThen);
+        F: FnOnce(
+            operations::OrganizationCreateWhen,
+            operations::OrganizationCreateThen,
+        );
     fn organization_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::OrganizationViewWhen, operations::OrganizationViewThen);
     fn organization_update<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::OrganizationUpdateWhen, operations::OrganizationUpdateThen);
+        F: FnOnce(
+            operations::OrganizationUpdateWhen,
+            operations::OrganizationUpdateThen,
+        );
     fn organization_delete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::OrganizationDeleteWhen, operations::OrganizationDeleteThen);
+        F: FnOnce(
+            operations::OrganizationDeleteWhen,
+            operations::OrganizationDeleteThen,
+        );
     fn organization_policy_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::OrganizationPolicyViewWhen, operations::OrganizationPolicyViewThen);
+        F: FnOnce(
+            operations::OrganizationPolicyViewWhen,
+            operations::OrganizationPolicyViewThen,
+        );
     fn organization_policy_update<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
@@ -14991,13 +16331,22 @@ pub trait MockServerExt {
         F: FnOnce(operations::InstanceDiskListWhen, operations::InstanceDiskListThen);
     fn instance_disk_attach<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::InstanceDiskAttachWhen, operations::InstanceDiskAttachThen);
+        F: FnOnce(
+            operations::InstanceDiskAttachWhen,
+            operations::InstanceDiskAttachThen,
+        );
     fn instance_disk_detach<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::InstanceDiskDetachWhen, operations::InstanceDiskDetachThen);
+        F: FnOnce(
+            operations::InstanceDiskDetachWhen,
+            operations::InstanceDiskDetachThen,
+        );
     fn instance_external_ip_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::InstanceExternalIpListWhen, operations::InstanceExternalIpListThen);
+        F: FnOnce(
+            operations::InstanceExternalIpListWhen,
+            operations::InstanceExternalIpListThen,
+        );
     fn instance_migrate<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceMigrateWhen, operations::InstanceMigrateThen);
@@ -15036,7 +16385,10 @@ pub trait MockServerExt {
         F: FnOnce(operations::InstanceRebootWhen, operations::InstanceRebootThen);
     fn instance_serial_console<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::InstanceSerialConsoleWhen, operations::InstanceSerialConsoleThen);
+        F: FnOnce(
+            operations::InstanceSerialConsoleWhen,
+            operations::InstanceSerialConsoleThen,
+        );
     fn instance_serial_console_stream<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
@@ -15060,7 +16412,10 @@ pub trait MockServerExt {
         F: FnOnce(operations::ProjectPolicyViewWhen, operations::ProjectPolicyViewThen);
     fn project_policy_update<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::ProjectPolicyUpdateWhen, operations::ProjectPolicyUpdateThen);
+        F: FnOnce(
+            operations::ProjectPolicyUpdateWhen,
+            operations::ProjectPolicyUpdateThen,
+        );
     fn snapshot_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SnapshotListWhen, operations::SnapshotListThen);
@@ -15090,10 +16445,16 @@ pub trait MockServerExt {
         F: FnOnce(operations::VpcDeleteWhen, operations::VpcDeleteThen);
     fn vpc_firewall_rules_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::VpcFirewallRulesViewWhen, operations::VpcFirewallRulesViewThen);
+        F: FnOnce(
+            operations::VpcFirewallRulesViewWhen,
+            operations::VpcFirewallRulesViewThen,
+        );
     fn vpc_firewall_rules_update<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::VpcFirewallRulesUpdateWhen, operations::VpcFirewallRulesUpdateThen);
+        F: FnOnce(
+            operations::VpcFirewallRulesUpdateWhen,
+            operations::VpcFirewallRulesUpdateThen,
+        );
     fn vpc_router_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcRouterListWhen, operations::VpcRouterListThen);
@@ -15111,19 +16472,34 @@ pub trait MockServerExt {
         F: FnOnce(operations::VpcRouterDeleteWhen, operations::VpcRouterDeleteThen);
     fn vpc_router_route_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::VpcRouterRouteListWhen, operations::VpcRouterRouteListThen);
+        F: FnOnce(
+            operations::VpcRouterRouteListWhen,
+            operations::VpcRouterRouteListThen,
+        );
     fn vpc_router_route_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::VpcRouterRouteCreateWhen, operations::VpcRouterRouteCreateThen);
+        F: FnOnce(
+            operations::VpcRouterRouteCreateWhen,
+            operations::VpcRouterRouteCreateThen,
+        );
     fn vpc_router_route_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::VpcRouterRouteViewWhen, operations::VpcRouterRouteViewThen);
+        F: FnOnce(
+            operations::VpcRouterRouteViewWhen,
+            operations::VpcRouterRouteViewThen,
+        );
     fn vpc_router_route_update<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::VpcRouterRouteUpdateWhen, operations::VpcRouterRouteUpdateThen);
+        F: FnOnce(
+            operations::VpcRouterRouteUpdateWhen,
+            operations::VpcRouterRouteUpdateThen,
+        );
     fn vpc_router_route_delete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::VpcRouterRouteDeleteWhen, operations::VpcRouterRouteDeleteThen);
+        F: FnOnce(
+            operations::VpcRouterRouteDeleteWhen,
+            operations::VpcRouterRouteDeleteThen,
+        );
     fn vpc_subnet_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcSubnetListWhen, operations::VpcSubnetListThen);
@@ -15168,16 +16544,25 @@ pub trait MockServerExt {
         F: FnOnce(operations::SessionSshkeyListWhen, operations::SessionSshkeyListThen);
     fn session_sshkey_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::SessionSshkeyCreateWhen, operations::SessionSshkeyCreateThen);
+        F: FnOnce(
+            operations::SessionSshkeyCreateWhen,
+            operations::SessionSshkeyCreateThen,
+        );
     fn session_sshkey_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SessionSshkeyViewWhen, operations::SessionSshkeyViewThen);
     fn session_sshkey_delete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::SessionSshkeyDeleteWhen, operations::SessionSshkeyDeleteThen);
+        F: FnOnce(
+            operations::SessionSshkeyDeleteWhen,
+            operations::SessionSshkeyDeleteThen,
+        );
     fn system_image_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::SystemImageViewByIdWhen, operations::SystemImageViewByIdThen);
+        F: FnOnce(
+            operations::SystemImageViewByIdWhen,
+            operations::SystemImageViewByIdThen,
+        );
     fn ip_pool_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::IpPoolViewByIdWhen, operations::IpPoolViewByIdThen);
@@ -15213,7 +16598,10 @@ pub trait MockServerExt {
         F: FnOnce(operations::SledViewWhen, operations::SledViewThen);
     fn sled_physical_disk_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::SledPhysicalDiskListWhen, operations::SledPhysicalDiskListThen);
+        F: FnOnce(
+            operations::SledPhysicalDiskListWhen,
+            operations::SledPhysicalDiskListThen,
+        );
     fn system_image_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SystemImageListWhen, operations::SystemImageListThen);
@@ -15255,10 +16643,16 @@ pub trait MockServerExt {
         F: FnOnce(operations::IpPoolServiceViewWhen, operations::IpPoolServiceViewThen);
     fn ip_pool_service_range_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::IpPoolServiceRangeListWhen, operations::IpPoolServiceRangeListThen);
+        F: FnOnce(
+            operations::IpPoolServiceRangeListWhen,
+            operations::IpPoolServiceRangeListThen,
+        );
     fn ip_pool_service_range_add<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::IpPoolServiceRangeAddWhen, operations::IpPoolServiceRangeAddThen);
+        F: FnOnce(
+            operations::IpPoolServiceRangeAddWhen,
+            operations::IpPoolServiceRangeAddThen,
+        );
     fn ip_pool_service_range_remove<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
@@ -15273,7 +16667,10 @@ pub trait MockServerExt {
         F: FnOnce(operations::SystemPolicyViewWhen, operations::SystemPolicyViewThen);
     fn system_policy_update<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::SystemPolicyUpdateWhen, operations::SystemPolicyUpdateThen);
+        F: FnOnce(
+            operations::SystemPolicyUpdateWhen,
+            operations::SystemPolicyUpdateThen,
+        );
     fn saga_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SagaListWhen, operations::SagaListThen);
@@ -15300,13 +16697,22 @@ pub trait MockServerExt {
         );
     fn local_idp_user_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::LocalIdpUserCreateWhen, operations::LocalIdpUserCreateThen);
+        F: FnOnce(
+            operations::LocalIdpUserCreateWhen,
+            operations::LocalIdpUserCreateThen,
+        );
     fn local_idp_user_delete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::LocalIdpUserDeleteWhen, operations::LocalIdpUserDeleteThen);
+        F: FnOnce(
+            operations::LocalIdpUserDeleteWhen,
+            operations::LocalIdpUserDeleteThen,
+        );
     fn local_idp_user_set_password<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::LocalIdpUserSetPasswordWhen, operations::LocalIdpUserSetPasswordThen);
+        F: FnOnce(
+            operations::LocalIdpUserSetPasswordWhen,
+            operations::LocalIdpUserSetPasswordThen,
+        );
     fn saml_identity_provider_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
@@ -15339,7 +16745,10 @@ pub trait MockServerExt {
         F: FnOnce(operations::SystemUserViewWhen, operations::SystemUserViewThen);
     fn timeseries_schema_get<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::TimeseriesSchemaGetWhen, operations::TimeseriesSchemaGetThen);
+        F: FnOnce(
+            operations::TimeseriesSchemaGetWhen,
+            operations::TimeseriesSchemaGetThen,
+        );
     fn user_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::UserListWhen, operations::UserListThen);
@@ -15369,13 +16778,22 @@ pub trait MockServerExt {
         F: FnOnce(operations::InstanceDeleteV1When, operations::InstanceDeleteV1Then);
     fn instance_disk_list_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::InstanceDiskListV1When, operations::InstanceDiskListV1Then);
+        F: FnOnce(
+            operations::InstanceDiskListV1When,
+            operations::InstanceDiskListV1Then,
+        );
     fn instance_disk_attach_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::InstanceDiskAttachV1When, operations::InstanceDiskAttachV1Then);
+        F: FnOnce(
+            operations::InstanceDiskAttachV1When,
+            operations::InstanceDiskAttachV1Then,
+        );
     fn instance_disk_detach_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::InstanceDiskDetachV1When, operations::InstanceDiskDetachV1Then);
+        F: FnOnce(
+            operations::InstanceDiskDetachV1When,
+            operations::InstanceDiskDetachV1Then,
+        );
     fn instance_migrate_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceMigrateV1When, operations::InstanceMigrateV1Then);
@@ -15384,7 +16802,10 @@ pub trait MockServerExt {
         F: FnOnce(operations::InstanceRebootV1When, operations::InstanceRebootV1Then);
     fn instance_serial_console_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::InstanceSerialConsoleV1When, operations::InstanceSerialConsoleV1Then);
+        F: FnOnce(
+            operations::InstanceSerialConsoleV1When,
+            operations::InstanceSerialConsoleV1Then,
+        );
     fn instance_serial_console_stream_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
@@ -15399,19 +16820,34 @@ pub trait MockServerExt {
         F: FnOnce(operations::InstanceStopV1When, operations::InstanceStopV1Then);
     fn organization_list_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::OrganizationListV1When, operations::OrganizationListV1Then);
+        F: FnOnce(
+            operations::OrganizationListV1When,
+            operations::OrganizationListV1Then,
+        );
     fn organization_create_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::OrganizationCreateV1When, operations::OrganizationCreateV1Then);
+        F: FnOnce(
+            operations::OrganizationCreateV1When,
+            operations::OrganizationCreateV1Then,
+        );
     fn organization_view_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::OrganizationViewV1When, operations::OrganizationViewV1Then);
+        F: FnOnce(
+            operations::OrganizationViewV1When,
+            operations::OrganizationViewV1Then,
+        );
     fn organization_update_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::OrganizationUpdateV1When, operations::OrganizationUpdateV1Then);
+        F: FnOnce(
+            operations::OrganizationUpdateV1When,
+            operations::OrganizationUpdateV1Then,
+        );
     fn organization_delete_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::OrganizationDeleteV1When, operations::OrganizationDeleteV1Then);
+        F: FnOnce(
+            operations::OrganizationDeleteV1When,
+            operations::OrganizationDeleteV1Then,
+        );
     fn organization_policy_view_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
@@ -15441,10 +16877,16 @@ pub trait MockServerExt {
         F: FnOnce(operations::ProjectDeleteV1When, operations::ProjectDeleteV1Then);
     fn project_policy_view_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::ProjectPolicyViewV1When, operations::ProjectPolicyViewV1Then);
+        F: FnOnce(
+            operations::ProjectPolicyViewV1When,
+            operations::ProjectPolicyViewV1Then,
+        );
     fn project_policy_update_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::ProjectPolicyUpdateV1When, operations::ProjectPolicyUpdateV1Then);
+        F: FnOnce(
+            operations::ProjectPolicyUpdateV1When,
+            operations::ProjectPolicyUpdateV1Then,
+        );
     fn system_component_version_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
@@ -15453,13 +16895,22 @@ pub trait MockServerExt {
         );
     fn update_deployments_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::UpdateDeploymentsListWhen, operations::UpdateDeploymentsListThen);
+        F: FnOnce(
+            operations::UpdateDeploymentsListWhen,
+            operations::UpdateDeploymentsListThen,
+        );
     fn update_deployment_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::UpdateDeploymentViewWhen, operations::UpdateDeploymentViewThen);
+        F: FnOnce(
+            operations::UpdateDeploymentViewWhen,
+            operations::UpdateDeploymentViewThen,
+        );
     fn system_update_refresh<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::SystemUpdateRefreshWhen, operations::SystemUpdateRefreshThen);
+        F: FnOnce(
+            operations::SystemUpdateRefreshWhen,
+            operations::SystemUpdateRefreshThen,
+        );
     fn system_update_start<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SystemUpdateStartWhen, operations::SystemUpdateStartThen);
@@ -15520,7 +16971,10 @@ impl MockServerExt for ::httpmock::MockServer {
         })
     }
 
-    fn instance_network_interface_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
+    fn instance_network_interface_view_by_id<F>(
+        &self,
+        config_fn: F,
+    ) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::InstanceNetworkInterfaceViewByIdWhen,
@@ -15537,7 +16991,10 @@ impl MockServerExt for ::httpmock::MockServer {
 
     fn organization_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::OrganizationViewByIdWhen, operations::OrganizationViewByIdThen),
+        F: FnOnce(
+            operations::OrganizationViewByIdWhen,
+            operations::OrganizationViewByIdThen,
+        ),
     {
         self.mock(|when, then| {
             config_fn(
@@ -15573,7 +17030,10 @@ impl MockServerExt for ::httpmock::MockServer {
 
     fn vpc_router_route_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::VpcRouterRouteViewByIdWhen, operations::VpcRouterRouteViewByIdThen),
+        F: FnOnce(
+            operations::VpcRouterRouteViewByIdWhen,
+            operations::VpcRouterRouteViewByIdThen,
+        ),
     {
         self.mock(|when, then| {
             config_fn(
@@ -15741,7 +17201,10 @@ impl MockServerExt for ::httpmock::MockServer {
 
     fn organization_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::OrganizationCreateWhen, operations::OrganizationCreateThen),
+        F: FnOnce(
+            operations::OrganizationCreateWhen,
+            operations::OrganizationCreateThen,
+        ),
     {
         self.mock(|when, then| {
             config_fn(
@@ -15765,7 +17228,10 @@ impl MockServerExt for ::httpmock::MockServer {
 
     fn organization_update<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::OrganizationUpdateWhen, operations::OrganizationUpdateThen),
+        F: FnOnce(
+            operations::OrganizationUpdateWhen,
+            operations::OrganizationUpdateThen,
+        ),
     {
         self.mock(|when, then| {
             config_fn(
@@ -15777,7 +17243,10 @@ impl MockServerExt for ::httpmock::MockServer {
 
     fn organization_delete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::OrganizationDeleteWhen, operations::OrganizationDeleteThen),
+        F: FnOnce(
+            operations::OrganizationDeleteWhen,
+            operations::OrganizationDeleteThen,
+        ),
     {
         self.mock(|when, then| {
             config_fn(
@@ -15789,7 +17258,10 @@ impl MockServerExt for ::httpmock::MockServer {
 
     fn organization_policy_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::OrganizationPolicyViewWhen, operations::OrganizationPolicyViewThen),
+        F: FnOnce(
+            operations::OrganizationPolicyViewWhen,
+            operations::OrganizationPolicyViewThen,
+        ),
     {
         self.mock(|when, then| {
             config_fn(
@@ -16044,7 +17516,10 @@ impl MockServerExt for ::httpmock::MockServer {
 
     fn instance_disk_attach<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::InstanceDiskAttachWhen, operations::InstanceDiskAttachThen),
+        F: FnOnce(
+            operations::InstanceDiskAttachWhen,
+            operations::InstanceDiskAttachThen,
+        ),
     {
         self.mock(|when, then| {
             config_fn(
@@ -16056,7 +17531,10 @@ impl MockServerExt for ::httpmock::MockServer {
 
     fn instance_disk_detach<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::InstanceDiskDetachWhen, operations::InstanceDiskDetachThen),
+        F: FnOnce(
+            operations::InstanceDiskDetachWhen,
+            operations::InstanceDiskDetachThen,
+        ),
     {
         self.mock(|when, then| {
             config_fn(
@@ -16068,7 +17546,10 @@ impl MockServerExt for ::httpmock::MockServer {
 
     fn instance_external_ip_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::InstanceExternalIpListWhen, operations::InstanceExternalIpListThen),
+        F: FnOnce(
+            operations::InstanceExternalIpListWhen,
+            operations::InstanceExternalIpListThen,
+        ),
     {
         self.mock(|when, then| {
             config_fn(
@@ -16179,7 +17660,10 @@ impl MockServerExt for ::httpmock::MockServer {
 
     fn instance_serial_console<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::InstanceSerialConsoleWhen, operations::InstanceSerialConsoleThen),
+        F: FnOnce(
+            operations::InstanceSerialConsoleWhen,
+            operations::InstanceSerialConsoleThen,
+        ),
     {
         self.mock(|when, then| {
             config_fn(
@@ -16257,7 +17741,10 @@ impl MockServerExt for ::httpmock::MockServer {
 
     fn project_policy_update<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::ProjectPolicyUpdateWhen, operations::ProjectPolicyUpdateThen),
+        F: FnOnce(
+            operations::ProjectPolicyUpdateWhen,
+            operations::ProjectPolicyUpdateThen,
+        ),
     {
         self.mock(|when, then| {
             config_fn(
@@ -16377,7 +17864,10 @@ impl MockServerExt for ::httpmock::MockServer {
 
     fn vpc_firewall_rules_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::VpcFirewallRulesViewWhen, operations::VpcFirewallRulesViewThen),
+        F: FnOnce(
+            operations::VpcFirewallRulesViewWhen,
+            operations::VpcFirewallRulesViewThen,
+        ),
     {
         self.mock(|when, then| {
             config_fn(
@@ -16389,7 +17879,10 @@ impl MockServerExt for ::httpmock::MockServer {
 
     fn vpc_firewall_rules_update<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::VpcFirewallRulesUpdateWhen, operations::VpcFirewallRulesUpdateThen),
+        F: FnOnce(
+            operations::VpcFirewallRulesUpdateWhen,
+            operations::VpcFirewallRulesUpdateThen,
+        ),
     {
         self.mock(|when, then| {
             config_fn(
@@ -16461,7 +17954,10 @@ impl MockServerExt for ::httpmock::MockServer {
 
     fn vpc_router_route_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::VpcRouterRouteListWhen, operations::VpcRouterRouteListThen),
+        F: FnOnce(
+            operations::VpcRouterRouteListWhen,
+            operations::VpcRouterRouteListThen,
+        ),
     {
         self.mock(|when, then| {
             config_fn(
@@ -16473,7 +17969,10 @@ impl MockServerExt for ::httpmock::MockServer {
 
     fn vpc_router_route_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::VpcRouterRouteCreateWhen, operations::VpcRouterRouteCreateThen),
+        F: FnOnce(
+            operations::VpcRouterRouteCreateWhen,
+            operations::VpcRouterRouteCreateThen,
+        ),
     {
         self.mock(|when, then| {
             config_fn(
@@ -16485,7 +17984,10 @@ impl MockServerExt for ::httpmock::MockServer {
 
     fn vpc_router_route_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::VpcRouterRouteViewWhen, operations::VpcRouterRouteViewThen),
+        F: FnOnce(
+            operations::VpcRouterRouteViewWhen,
+            operations::VpcRouterRouteViewThen,
+        ),
     {
         self.mock(|when, then| {
             config_fn(
@@ -16497,7 +17999,10 @@ impl MockServerExt for ::httpmock::MockServer {
 
     fn vpc_router_route_update<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::VpcRouterRouteUpdateWhen, operations::VpcRouterRouteUpdateThen),
+        F: FnOnce(
+            operations::VpcRouterRouteUpdateWhen,
+            operations::VpcRouterRouteUpdateThen,
+        ),
     {
         self.mock(|when, then| {
             config_fn(
@@ -16509,7 +18014,10 @@ impl MockServerExt for ::httpmock::MockServer {
 
     fn vpc_router_route_delete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::VpcRouterRouteDeleteWhen, operations::VpcRouterRouteDeleteThen),
+        F: FnOnce(
+            operations::VpcRouterRouteDeleteWhen,
+            operations::VpcRouterRouteDeleteThen,
+        ),
     {
         self.mock(|when, then| {
             config_fn(
@@ -16680,7 +18188,10 @@ impl MockServerExt for ::httpmock::MockServer {
 
     fn session_sshkey_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::SessionSshkeyCreateWhen, operations::SessionSshkeyCreateThen),
+        F: FnOnce(
+            operations::SessionSshkeyCreateWhen,
+            operations::SessionSshkeyCreateThen,
+        ),
     {
         self.mock(|when, then| {
             config_fn(
@@ -16704,7 +18215,10 @@ impl MockServerExt for ::httpmock::MockServer {
 
     fn session_sshkey_delete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::SessionSshkeyDeleteWhen, operations::SessionSshkeyDeleteThen),
+        F: FnOnce(
+            operations::SessionSshkeyDeleteWhen,
+            operations::SessionSshkeyDeleteThen,
+        ),
     {
         self.mock(|when, then| {
             config_fn(
@@ -16716,7 +18230,10 @@ impl MockServerExt for ::httpmock::MockServer {
 
     fn system_image_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::SystemImageViewByIdWhen, operations::SystemImageViewByIdThen),
+        F: FnOnce(
+            operations::SystemImageViewByIdWhen,
+            operations::SystemImageViewByIdThen,
+        ),
     {
         self.mock(|when, then| {
             config_fn(
@@ -16860,7 +18377,10 @@ impl MockServerExt for ::httpmock::MockServer {
 
     fn sled_physical_disk_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::SledPhysicalDiskListWhen, operations::SledPhysicalDiskListThen),
+        F: FnOnce(
+            operations::SledPhysicalDiskListWhen,
+            operations::SledPhysicalDiskListThen,
+        ),
     {
         self.mock(|when, then| {
             config_fn(
@@ -17028,7 +18548,10 @@ impl MockServerExt for ::httpmock::MockServer {
 
     fn ip_pool_service_range_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::IpPoolServiceRangeListWhen, operations::IpPoolServiceRangeListThen),
+        F: FnOnce(
+            operations::IpPoolServiceRangeListWhen,
+            operations::IpPoolServiceRangeListThen,
+        ),
     {
         self.mock(|when, then| {
             config_fn(
@@ -17040,7 +18563,10 @@ impl MockServerExt for ::httpmock::MockServer {
 
     fn ip_pool_service_range_add<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::IpPoolServiceRangeAddWhen, operations::IpPoolServiceRangeAddThen),
+        F: FnOnce(
+            operations::IpPoolServiceRangeAddWhen,
+            operations::IpPoolServiceRangeAddThen,
+        ),
     {
         self.mock(|when, then| {
             config_fn(
@@ -17091,7 +18617,10 @@ impl MockServerExt for ::httpmock::MockServer {
 
     fn system_policy_update<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::SystemPolicyUpdateWhen, operations::SystemPolicyUpdateThen),
+        F: FnOnce(
+            operations::SystemPolicyUpdateWhen,
+            operations::SystemPolicyUpdateThen,
+        ),
     {
         self.mock(|when, then| {
             config_fn(
@@ -17190,7 +18719,10 @@ impl MockServerExt for ::httpmock::MockServer {
 
     fn local_idp_user_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::LocalIdpUserCreateWhen, operations::LocalIdpUserCreateThen),
+        F: FnOnce(
+            operations::LocalIdpUserCreateWhen,
+            operations::LocalIdpUserCreateThen,
+        ),
     {
         self.mock(|when, then| {
             config_fn(
@@ -17202,7 +18734,10 @@ impl MockServerExt for ::httpmock::MockServer {
 
     fn local_idp_user_delete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::LocalIdpUserDeleteWhen, operations::LocalIdpUserDeleteThen),
+        F: FnOnce(
+            operations::LocalIdpUserDeleteWhen,
+            operations::LocalIdpUserDeleteThen,
+        ),
     {
         self.mock(|when, then| {
             config_fn(
@@ -17214,7 +18749,10 @@ impl MockServerExt for ::httpmock::MockServer {
 
     fn local_idp_user_set_password<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::LocalIdpUserSetPasswordWhen, operations::LocalIdpUserSetPasswordThen),
+        F: FnOnce(
+            operations::LocalIdpUserSetPasswordWhen,
+            operations::LocalIdpUserSetPasswordThen,
+        ),
     {
         self.mock(|when, then| {
             config_fn(
@@ -17328,7 +18866,10 @@ impl MockServerExt for ::httpmock::MockServer {
 
     fn timeseries_schema_get<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::TimeseriesSchemaGetWhen, operations::TimeseriesSchemaGetThen),
+        F: FnOnce(
+            operations::TimeseriesSchemaGetWhen,
+            operations::TimeseriesSchemaGetThen,
+        ),
     {
         self.mock(|when, then| {
             config_fn(
@@ -17448,7 +18989,10 @@ impl MockServerExt for ::httpmock::MockServer {
 
     fn instance_disk_list_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::InstanceDiskListV1When, operations::InstanceDiskListV1Then),
+        F: FnOnce(
+            operations::InstanceDiskListV1When,
+            operations::InstanceDiskListV1Then,
+        ),
     {
         self.mock(|when, then| {
             config_fn(
@@ -17460,7 +19004,10 @@ impl MockServerExt for ::httpmock::MockServer {
 
     fn instance_disk_attach_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::InstanceDiskAttachV1When, operations::InstanceDiskAttachV1Then),
+        F: FnOnce(
+            operations::InstanceDiskAttachV1When,
+            operations::InstanceDiskAttachV1Then,
+        ),
     {
         self.mock(|when, then| {
             config_fn(
@@ -17472,7 +19019,10 @@ impl MockServerExt for ::httpmock::MockServer {
 
     fn instance_disk_detach_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::InstanceDiskDetachV1When, operations::InstanceDiskDetachV1Then),
+        F: FnOnce(
+            operations::InstanceDiskDetachV1When,
+            operations::InstanceDiskDetachV1Then,
+        ),
     {
         self.mock(|when, then| {
             config_fn(
@@ -17508,7 +19058,10 @@ impl MockServerExt for ::httpmock::MockServer {
 
     fn instance_serial_console_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::InstanceSerialConsoleV1When, operations::InstanceSerialConsoleV1Then),
+        F: FnOnce(
+            operations::InstanceSerialConsoleV1When,
+            operations::InstanceSerialConsoleV1Then,
+        ),
     {
         self.mock(|when, then| {
             config_fn(
@@ -17559,7 +19112,10 @@ impl MockServerExt for ::httpmock::MockServer {
 
     fn organization_list_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::OrganizationListV1When, operations::OrganizationListV1Then),
+        F: FnOnce(
+            operations::OrganizationListV1When,
+            operations::OrganizationListV1Then,
+        ),
     {
         self.mock(|when, then| {
             config_fn(
@@ -17571,7 +19127,10 @@ impl MockServerExt for ::httpmock::MockServer {
 
     fn organization_create_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::OrganizationCreateV1When, operations::OrganizationCreateV1Then),
+        F: FnOnce(
+            operations::OrganizationCreateV1When,
+            operations::OrganizationCreateV1Then,
+        ),
     {
         self.mock(|when, then| {
             config_fn(
@@ -17583,7 +19142,10 @@ impl MockServerExt for ::httpmock::MockServer {
 
     fn organization_view_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::OrganizationViewV1When, operations::OrganizationViewV1Then),
+        F: FnOnce(
+            operations::OrganizationViewV1When,
+            operations::OrganizationViewV1Then,
+        ),
     {
         self.mock(|when, then| {
             config_fn(
@@ -17595,7 +19157,10 @@ impl MockServerExt for ::httpmock::MockServer {
 
     fn organization_update_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::OrganizationUpdateV1When, operations::OrganizationUpdateV1Then),
+        F: FnOnce(
+            operations::OrganizationUpdateV1When,
+            operations::OrganizationUpdateV1Then,
+        ),
     {
         self.mock(|when, then| {
             config_fn(
@@ -17607,7 +19172,10 @@ impl MockServerExt for ::httpmock::MockServer {
 
     fn organization_delete_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::OrganizationDeleteV1When, operations::OrganizationDeleteV1Then),
+        F: FnOnce(
+            operations::OrganizationDeleteV1When,
+            operations::OrganizationDeleteV1Then,
+        ),
     {
         self.mock(|when, then| {
             config_fn(
@@ -17709,7 +19277,10 @@ impl MockServerExt for ::httpmock::MockServer {
 
     fn project_policy_view_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::ProjectPolicyViewV1When, operations::ProjectPolicyViewV1Then),
+        F: FnOnce(
+            operations::ProjectPolicyViewV1When,
+            operations::ProjectPolicyViewV1Then,
+        ),
     {
         self.mock(|when, then| {
             config_fn(
@@ -17721,7 +19292,10 @@ impl MockServerExt for ::httpmock::MockServer {
 
     fn project_policy_update_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::ProjectPolicyUpdateV1When, operations::ProjectPolicyUpdateV1Then),
+        F: FnOnce(
+            operations::ProjectPolicyUpdateV1When,
+            operations::ProjectPolicyUpdateV1Then,
+        ),
     {
         self.mock(|when, then| {
             config_fn(
@@ -17748,7 +19322,10 @@ impl MockServerExt for ::httpmock::MockServer {
 
     fn update_deployments_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::UpdateDeploymentsListWhen, operations::UpdateDeploymentsListThen),
+        F: FnOnce(
+            operations::UpdateDeploymentsListWhen,
+            operations::UpdateDeploymentsListThen,
+        ),
     {
         self.mock(|when, then| {
             config_fn(
@@ -17760,7 +19337,10 @@ impl MockServerExt for ::httpmock::MockServer {
 
     fn update_deployment_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::UpdateDeploymentViewWhen, operations::UpdateDeploymentViewThen),
+        F: FnOnce(
+            operations::UpdateDeploymentViewWhen,
+            operations::UpdateDeploymentViewThen,
+        ),
     {
         self.mock(|when, then| {
             config_fn(
@@ -17772,7 +19352,10 @@ impl MockServerExt for ::httpmock::MockServer {
 
     fn system_update_refresh<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
-        F: FnOnce(operations::SystemUpdateRefreshWhen, operations::SystemUpdateRefreshThen),
+        F: FnOnce(
+            operations::SystemUpdateRefreshWhen,
+            operations::SystemUpdateRefreshThen,
+        ),
     {
         self.mock(|when, then| {
             config_fn(

@@ -1,7 +1,7 @@
 #[allow(unused_imports)]
-use progenitor_client::{encode_path, ClientHooks, OperationInfo, RequestBuilderExt};
-#[allow(unused_imports)]
 pub use progenitor_client::{ByteStream, ClientInfo, Error, ResponseValue};
+#[allow(unused_imports)]
+use progenitor_client::{encode_path, ClientHooks, OperationInfo, RequestBuilderExt};
 /// Types used as operation parameters and responses.
 #[allow(clippy::all)]
 pub mod types {
@@ -11,13 +11,19 @@ pub mod types {
         pub struct ConversionError(::std::borrow::Cow<'static, str>);
         impl ::std::error::Error for ConversionError {}
         impl ::std::fmt::Display for ConversionError {
-            fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> Result<(), ::std::fmt::Error> {
+            fn fmt(
+                &self,
+                f: &mut ::std::fmt::Formatter<'_>,
+            ) -> Result<(), ::std::fmt::Error> {
                 ::std::fmt::Display::fmt(&self.0, f)
             }
         }
 
         impl ::std::fmt::Debug for ConversionError {
-            fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> Result<(), ::std::fmt::Error> {
+            fn fmt(
+                &self,
+                f: &mut ::std::fmt::Formatter<'_>,
+            ) -> Result<(), ::std::fmt::Error> {
                 ::std::fmt::Debug::fmt(&self.0, f)
             }
         }
@@ -59,7 +65,11 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
-        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+        ::serde::Deserialize,
+        ::serde::Serialize,
+        Clone,
+        Debug,
+        schemars::JsonSchema
     )]
     pub struct EnrolBody {
         pub host: ::std::string::String,
@@ -95,7 +105,11 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
-        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+        ::serde::Deserialize,
+        ::serde::Serialize,
+        Clone,
+        Debug,
+        schemars::JsonSchema
     )]
     pub struct GlobalJobsResult {
         pub summary: ::std::vec::Vec<ReportSummary>,
@@ -135,7 +149,11 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
-        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+        ::serde::Deserialize,
+        ::serde::Serialize,
+        Clone,
+        Debug,
+        schemars::JsonSchema
     )]
     pub struct OutputRecord {
         pub msg: ::std::string::String,
@@ -173,7 +191,11 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
-        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+        ::serde::Deserialize,
+        ::serde::Serialize,
+        Clone,
+        Debug,
+        schemars::JsonSchema
     )]
     pub struct PingResult {
         pub host: ::std::string::String,
@@ -221,7 +243,11 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
-        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+        ::serde::Deserialize,
+        ::serde::Serialize,
+        Clone,
+        Debug,
+        schemars::JsonSchema
     )]
     pub struct ReportFinishBody {
         pub duration_millis: usize,
@@ -274,7 +300,11 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
-        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+        ::serde::Deserialize,
+        ::serde::Serialize,
+        Clone,
+        Debug,
+        schemars::JsonSchema
     )]
     pub struct ReportId {
         pub host: ::std::string::String,
@@ -314,7 +344,11 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
-        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+        ::serde::Deserialize,
+        ::serde::Serialize,
+        Clone,
+        Debug,
+        schemars::JsonSchema
     )]
     pub struct ReportOutputBody {
         pub id: ReportId,
@@ -347,7 +381,11 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
-        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+        ::serde::Deserialize,
+        ::serde::Serialize,
+        Clone,
+        Debug,
+        schemars::JsonSchema
     )]
     pub struct ReportResult {
         pub existed_already: bool,
@@ -388,7 +426,11 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
-        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+        ::serde::Deserialize,
+        ::serde::Serialize,
+        Clone,
+        Debug,
+        schemars::JsonSchema
     )]
     pub struct ReportStartBody {
         pub id: ReportId,
@@ -445,7 +487,11 @@ pub mod types {
     /// ```
     /// </details>
     #[derive(
-        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+        ::serde::Deserialize,
+        ::serde::Serialize,
+        Clone,
+        Debug,
+        schemars::JsonSchema
     )]
     pub struct ReportSummary {
         pub age_seconds: usize,
@@ -487,7 +533,9 @@ pub mod types {
             {
                 self.host = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for host: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for host: {e}")
+                    });
                 self
             }
             pub fn key<T>(mut self, value: T) -> Self
@@ -497,7 +545,9 @@ pub mod types {
             {
                 self.key = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for key: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for key: {e}")
+                    });
                 self
             }
         }
@@ -525,8 +575,10 @@ pub mod types {
 
         #[derive(Clone, Debug)]
         pub struct GlobalJobsResult {
-            summary:
-                ::std::result::Result<::std::vec::Vec<super::ReportSummary>, ::std::string::String>,
+            summary: ::std::result::Result<
+                ::std::vec::Vec<super::ReportSummary>,
+                ::std::string::String,
+            >,
         }
 
         impl ::std::default::Default for GlobalJobsResult {
@@ -545,7 +597,9 @@ pub mod types {
             {
                 self.summary = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for summary: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for summary: {e}")
+                    });
                 self
             }
         }
@@ -555,17 +609,13 @@ pub mod types {
             fn try_from(
                 value: GlobalJobsResult,
             ) -> ::std::result::Result<Self, super::error::ConversionError> {
-                Ok(Self {
-                    summary: value.summary?,
-                })
+                Ok(Self { summary: value.summary? })
             }
         }
 
         impl ::std::convert::From<super::GlobalJobsResult> for GlobalJobsResult {
             fn from(value: super::GlobalJobsResult) -> Self {
-                Self {
-                    summary: Ok(value.summary),
-                }
+                Self { summary: Ok(value.summary) }
             }
         }
 
@@ -597,7 +647,9 @@ pub mod types {
             {
                 self.msg = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for msg: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for msg: {e}")
+                    });
                 self
             }
             pub fn stream<T>(mut self, value: T) -> Self
@@ -607,7 +659,9 @@ pub mod types {
             {
                 self.stream = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for stream: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for stream: {e}")
+                    });
                 self
             }
             pub fn time<T>(mut self, value: T) -> Self
@@ -617,7 +671,9 @@ pub mod types {
             {
                 self.time = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for time: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for time: {e}")
+                    });
                 self
             }
         }
@@ -668,7 +724,9 @@ pub mod types {
             {
                 self.host = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for host: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for host: {e}")
+                    });
                 self
             }
             pub fn ok<T>(mut self, value: T) -> Self
@@ -718,7 +776,9 @@ pub mod types {
         impl ::std::default::Default for ReportFinishBody {
             fn default() -> Self {
                 Self {
-                    duration_millis: Err("no value supplied for duration_millis".to_string()),
+                    duration_millis: Err(
+                        "no value supplied for duration_millis".to_string(),
+                    ),
                     end_time: Err("no value supplied for end_time".to_string()),
                     exit_status: Err("no value supplied for exit_status".to_string()),
                     id: Err("no value supplied for id".to_string()),
@@ -732,9 +792,13 @@ pub mod types {
                 T: ::std::convert::TryInto<usize>,
                 T::Error: ::std::fmt::Display,
             {
-                self.duration_millis = value.try_into().map_err(|e| {
-                    format!("error converting supplied value for duration_millis: {e}")
-                });
+                self.duration_millis = value
+                    .try_into()
+                    .map_err(|e| {
+                        format!(
+                            "error converting supplied value for duration_millis: {e}"
+                        )
+                    });
                 self
             }
             pub fn end_time<T>(mut self, value: T) -> Self
@@ -744,7 +808,9 @@ pub mod types {
             {
                 self.end_time = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for end_time: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for end_time: {e}")
+                    });
                 self
             }
             pub fn exit_status<T>(mut self, value: T) -> Self
@@ -754,7 +820,9 @@ pub mod types {
             {
                 self.exit_status = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for exit_status: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for exit_status: {e}")
+                    });
                 self
             }
             pub fn id<T>(mut self, value: T) -> Self
@@ -826,7 +894,9 @@ pub mod types {
             {
                 self.host = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for host: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for host: {e}")
+                    });
                 self
             }
             pub fn job<T>(mut self, value: T) -> Self
@@ -836,7 +906,9 @@ pub mod types {
             {
                 self.job = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for job: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for job: {e}")
+                    });
                 self
             }
             pub fn pid<T>(mut self, value: T) -> Self
@@ -846,7 +918,9 @@ pub mod types {
             {
                 self.pid = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for pid: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for pid: {e}")
+                    });
                 self
             }
             pub fn time<T>(mut self, value: T) -> Self
@@ -856,7 +930,9 @@ pub mod types {
             {
                 self.time = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for time: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for time: {e}")
+                    });
                 self
             }
             pub fn uuid<T>(mut self, value: T) -> Self
@@ -866,7 +942,9 @@ pub mod types {
             {
                 self.uuid = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for uuid: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for uuid: {e}")
+                    });
                 self
             }
         }
@@ -931,7 +1009,9 @@ pub mod types {
             {
                 self.record = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for record: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for record: {e}")
+                    });
                 self
             }
         }
@@ -965,7 +1045,9 @@ pub mod types {
         impl ::std::default::Default for ReportResult {
             fn default() -> Self {
                 Self {
-                    existed_already: Err("no value supplied for existed_already".to_string()),
+                    existed_already: Err(
+                        "no value supplied for existed_already".to_string(),
+                    ),
                 }
             }
         }
@@ -976,9 +1058,13 @@ pub mod types {
                 T: ::std::convert::TryInto<bool>,
                 T::Error: ::std::fmt::Display,
             {
-                self.existed_already = value.try_into().map_err(|e| {
-                    format!("error converting supplied value for existed_already: {e}")
-                });
+                self.existed_already = value
+                    .try_into()
+                    .map_err(|e| {
+                        format!(
+                            "error converting supplied value for existed_already: {e}"
+                        )
+                    });
                 self
             }
         }
@@ -1040,7 +1126,9 @@ pub mod types {
             {
                 self.script = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for script: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for script: {e}")
+                    });
                 self
             }
             pub fn start_time<T>(mut self, value: T) -> Self
@@ -1050,7 +1138,9 @@ pub mod types {
             {
                 self.start_time = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for start_time: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for start_time: {e}")
+                    });
                 self
             }
         }
@@ -1095,7 +1185,9 @@ pub mod types {
             fn default() -> Self {
                 Self {
                     age_seconds: Err("no value supplied for age_seconds".to_string()),
-                    duration_seconds: Err("no value supplied for duration_seconds".to_string()),
+                    duration_seconds: Err(
+                        "no value supplied for duration_seconds".to_string(),
+                    ),
                     host: Err("no value supplied for host".to_string()),
                     job: Err("no value supplied for job".to_string()),
                     status: Err("no value supplied for status".to_string()),
@@ -1112,7 +1204,9 @@ pub mod types {
             {
                 self.age_seconds = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for age_seconds: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for age_seconds: {e}")
+                    });
                 self
             }
             pub fn duration_seconds<T>(mut self, value: T) -> Self
@@ -1120,9 +1214,13 @@ pub mod types {
                 T: ::std::convert::TryInto<usize>,
                 T::Error: ::std::fmt::Display,
             {
-                self.duration_seconds = value.try_into().map_err(|e| {
-                    format!("error converting supplied value for duration_seconds: {e}")
-                });
+                self.duration_seconds = value
+                    .try_into()
+                    .map_err(|e| {
+                        format!(
+                            "error converting supplied value for duration_seconds: {e}"
+                        )
+                    });
                 self
             }
             pub fn host<T>(mut self, value: T) -> Self
@@ -1132,7 +1230,9 @@ pub mod types {
             {
                 self.host = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for host: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for host: {e}")
+                    });
                 self
             }
             pub fn job<T>(mut self, value: T) -> Self
@@ -1142,7 +1242,9 @@ pub mod types {
             {
                 self.job = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for job: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for job: {e}")
+                    });
                 self
             }
             pub fn status<T>(mut self, value: T) -> Self
@@ -1152,7 +1254,9 @@ pub mod types {
             {
                 self.status = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for status: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for status: {e}")
+                    });
                 self
             }
             pub fn when<T>(mut self, value: T) -> Self
@@ -1162,7 +1266,9 @@ pub mod types {
             {
                 self.when = value
                     .try_into()
-                    .map_err(|e| format!("error converting supplied value for when: {e}"));
+                    .map_err(|e| {
+                        format!("error converting supplied value for when: {e}")
+                    });
                 self
             }
         }
@@ -1219,9 +1325,7 @@ impl Client {
         #[cfg(not(target_arch = "wasm32"))]
         let client = {
             let dur = ::std::time::Duration::from_secs(15u64);
-            reqwest::ClientBuilder::new()
-                .connect_timeout(dur)
-                .timeout(dur)
+            reqwest::ClientBuilder::new().connect_timeout(dur).timeout(dur)
         };
         #[cfg(target_arch = "wasm32")]
         let client = reqwest::ClientBuilder::new();
@@ -1265,15 +1369,15 @@ impl Client {
     ///Sends a `POST` request to `/enrol`
     ///
     ///Arguments:
-    /// - `authorization`: Authorization header (bearer token)
-    /// - `body`
+    ///- `authorization`: Authorization header (bearer token)
+    ///- `body`
     ///```ignore
-    /// let response = client.enrol()
+    ///let response = client.enrol()
     ///    .authorization(authorization)
     ///    .body(body)
     ///    .send()
     ///    .await;
-    /// ```
+    ///```
     pub fn enrol(&self) -> builder::Enrol<'_> {
         builder::Enrol::new(self)
     }
@@ -1281,13 +1385,13 @@ impl Client {
     ///Sends a `GET` request to `/global/jobs`
     ///
     ///Arguments:
-    /// - `authorization`: Authorization header (bearer token)
+    ///- `authorization`: Authorization header (bearer token)
     ///```ignore
-    /// let response = client.global_jobs()
+    ///let response = client.global_jobs()
     ///    .authorization(authorization)
     ///    .send()
     ///    .await;
-    /// ```
+    ///```
     pub fn global_jobs(&self) -> builder::GlobalJobs<'_> {
         builder::GlobalJobs::new(self)
     }
@@ -1295,13 +1399,13 @@ impl Client {
     ///Sends a `GET` request to `/ping`
     ///
     ///Arguments:
-    /// - `authorization`: Authorization header (bearer token)
+    ///- `authorization`: Authorization header (bearer token)
     ///```ignore
-    /// let response = client.ping()
+    ///let response = client.ping()
     ///    .authorization(authorization)
     ///    .send()
     ///    .await;
-    /// ```
+    ///```
     pub fn ping(&self) -> builder::Ping<'_> {
         builder::Ping::new(self)
     }
@@ -1309,15 +1413,15 @@ impl Client {
     ///Sends a `POST` request to `/report/finish`
     ///
     ///Arguments:
-    /// - `authorization`: Authorization header (bearer token)
-    /// - `body`
+    ///- `authorization`: Authorization header (bearer token)
+    ///- `body`
     ///```ignore
-    /// let response = client.report_finish()
+    ///let response = client.report_finish()
     ///    .authorization(authorization)
     ///    .body(body)
     ///    .send()
     ///    .await;
-    /// ```
+    ///```
     pub fn report_finish(&self) -> builder::ReportFinish<'_> {
         builder::ReportFinish::new(self)
     }
@@ -1325,15 +1429,15 @@ impl Client {
     ///Sends a `POST` request to `/report/output`
     ///
     ///Arguments:
-    /// - `authorization`: Authorization header (bearer token)
-    /// - `body`
+    ///- `authorization`: Authorization header (bearer token)
+    ///- `body`
     ///```ignore
-    /// let response = client.report_output()
+    ///let response = client.report_output()
     ///    .authorization(authorization)
     ///    .body(body)
     ///    .send()
     ///    .await;
-    /// ```
+    ///```
     pub fn report_output(&self) -> builder::ReportOutput<'_> {
         builder::ReportOutput::new(self)
     }
@@ -1341,15 +1445,15 @@ impl Client {
     ///Sends a `POST` request to `/report/start`
     ///
     ///Arguments:
-    /// - `authorization`: Authorization header (bearer token)
-    /// - `body`
+    ///- `authorization`: Authorization header (bearer token)
+    ///- `body`
     ///```ignore
-    /// let response = client.report_start()
+    ///let response = client.report_start()
     ///    .authorization(authorization)
     ///    .body(body)
     ///    .send()
     ///    .await;
-    /// ```
+    ///```
     pub fn report_start(&self) -> builder::ReportStart<'_> {
         builder::ReportStart::new(self)
     }
@@ -1361,8 +1465,8 @@ pub mod builder {
     use super::types;
     #[allow(unused_imports)]
     use super::{
-        encode_path, ByteStream, ClientHooks, ClientInfo, Error, OperationInfo, RequestBuilderExt,
-        ResponseValue,
+        encode_path, ByteStream, ClientInfo, ClientHooks, Error, OperationInfo,
+        RequestBuilderExt, ResponseValue,
     };
     ///Builder for [`Client::enrol`]
     ///
@@ -1387,9 +1491,12 @@ pub mod builder {
         where
             V: std::convert::TryInto<::std::string::String>,
         {
-            self.authorization = value.try_into().map_err(|_| {
-                "conversion to `:: std :: string :: String` for authorization failed".to_string()
-            });
+            self.authorization = value
+                .try_into()
+                .map_err(|_| {
+                    "conversion to `:: std :: string :: String` for authorization failed"
+                        .to_string()
+                });
             self
         }
 
@@ -1401,7 +1508,9 @@ pub mod builder {
             self.body = value
                 .try_into()
                 .map(From::from)
-                .map_err(|s| format!("conversion to `EnrolBody` for body failed: {}", s));
+                .map_err(|s| {
+                    format!("conversion to `EnrolBody` for body failed: {}", s)
+                });
             self
         }
 
@@ -1415,21 +1524,20 @@ pub mod builder {
 
         ///Sends a `POST` request to `/enrol`
         pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
-            let Self {
-                client,
-                authorization,
-                body,
-            } = self;
+            let Self { client, authorization, body } = self;
             let authorization = authorization.map_err(Error::InvalidRequest)?;
             let body = body
                 .and_then(|v| types::EnrolBody::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/enrol", client.baseurl,);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(2usize);
-            header_map.append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
-            );
+            header_map
+                .append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(
+                        super::Client::api_version(),
+                    ),
+                );
             header_map.append("Authorization", authorization.to_string().try_into()?);
             #[allow(unused_mut)]
             let mut request = client
@@ -1473,25 +1581,30 @@ pub mod builder {
         where
             V: std::convert::TryInto<::std::string::String>,
         {
-            self.authorization = value.try_into().map_err(|_| {
-                "conversion to `:: std :: string :: String` for authorization failed".to_string()
-            });
+            self.authorization = value
+                .try_into()
+                .map_err(|_| {
+                    "conversion to `:: std :: string :: String` for authorization failed"
+                        .to_string()
+                });
             self
         }
 
         ///Sends a `GET` request to `/global/jobs`
-        pub async fn send(self) -> Result<ResponseValue<types::GlobalJobsResult>, Error<()>> {
-            let Self {
-                client,
-                authorization,
-            } = self;
+        pub async fn send(
+            self,
+        ) -> Result<ResponseValue<types::GlobalJobsResult>, Error<()>> {
+            let Self { client, authorization } = self;
             let authorization = authorization.map_err(Error::InvalidRequest)?;
             let url = format!("{}/global/jobs", client.baseurl,);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(2usize);
-            header_map.append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
-            );
+            header_map
+                .append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(
+                        super::Client::api_version(),
+                    ),
+                );
             header_map.append("Authorization", authorization.to_string().try_into()?);
             #[allow(unused_mut)]
             let mut request = client
@@ -1538,25 +1651,28 @@ pub mod builder {
         where
             V: std::convert::TryInto<::std::string::String>,
         {
-            self.authorization = value.try_into().map_err(|_| {
-                "conversion to `:: std :: string :: String` for authorization failed".to_string()
-            });
+            self.authorization = value
+                .try_into()
+                .map_err(|_| {
+                    "conversion to `:: std :: string :: String` for authorization failed"
+                        .to_string()
+                });
             self
         }
 
         ///Sends a `GET` request to `/ping`
         pub async fn send(self) -> Result<ResponseValue<types::PingResult>, Error<()>> {
-            let Self {
-                client,
-                authorization,
-            } = self;
+            let Self { client, authorization } = self;
             let authorization = authorization.map_err(Error::InvalidRequest)?;
             let url = format!("{}/ping", client.baseurl,);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(2usize);
-            header_map.append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
-            );
+            header_map
+                .append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(
+                        super::Client::api_version(),
+                    ),
+                );
             header_map.append("Authorization", authorization.to_string().try_into()?);
             #[allow(unused_mut)]
             let mut request = client
@@ -1605,21 +1721,28 @@ pub mod builder {
         where
             V: std::convert::TryInto<::std::string::String>,
         {
-            self.authorization = value.try_into().map_err(|_| {
-                "conversion to `:: std :: string :: String` for authorization failed".to_string()
-            });
+            self.authorization = value
+                .try_into()
+                .map_err(|_| {
+                    "conversion to `:: std :: string :: String` for authorization failed"
+                        .to_string()
+                });
             self
         }
 
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::ReportFinishBody>,
-            <V as std::convert::TryInto<types::ReportFinishBody>>::Error: std::fmt::Display,
+            <V as std::convert::TryInto<
+                types::ReportFinishBody,
+            >>::Error: std::fmt::Display,
         {
             self.body = value
                 .try_into()
                 .map(From::from)
-                .map_err(|s| format!("conversion to `ReportFinishBody` for body failed: {}", s));
+                .map_err(|s| {
+                    format!("conversion to `ReportFinishBody` for body failed: {}", s)
+                });
             self
         }
 
@@ -1634,22 +1757,25 @@ pub mod builder {
         }
 
         ///Sends a `POST` request to `/report/finish`
-        pub async fn send(self) -> Result<ResponseValue<types::ReportResult>, Error<()>> {
-            let Self {
-                client,
-                authorization,
-                body,
-            } = self;
+        pub async fn send(
+            self,
+        ) -> Result<ResponseValue<types::ReportResult>, Error<()>> {
+            let Self { client, authorization, body } = self;
             let authorization = authorization.map_err(Error::InvalidRequest)?;
             let body = body
-                .and_then(|v| types::ReportFinishBody::try_from(v).map_err(|e| e.to_string()))
+                .and_then(|v| {
+                    types::ReportFinishBody::try_from(v).map_err(|e| e.to_string())
+                })
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/report/finish", client.baseurl,);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(2usize);
-            header_map.append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
-            );
+            header_map
+                .append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(
+                        super::Client::api_version(),
+                    ),
+                );
             header_map.append("Authorization", authorization.to_string().try_into()?);
             #[allow(unused_mut)]
             let mut request = client
@@ -1699,21 +1825,28 @@ pub mod builder {
         where
             V: std::convert::TryInto<::std::string::String>,
         {
-            self.authorization = value.try_into().map_err(|_| {
-                "conversion to `:: std :: string :: String` for authorization failed".to_string()
-            });
+            self.authorization = value
+                .try_into()
+                .map_err(|_| {
+                    "conversion to `:: std :: string :: String` for authorization failed"
+                        .to_string()
+                });
             self
         }
 
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::ReportOutputBody>,
-            <V as std::convert::TryInto<types::ReportOutputBody>>::Error: std::fmt::Display,
+            <V as std::convert::TryInto<
+                types::ReportOutputBody,
+            >>::Error: std::fmt::Display,
         {
             self.body = value
                 .try_into()
                 .map(From::from)
-                .map_err(|s| format!("conversion to `ReportOutputBody` for body failed: {}", s));
+                .map_err(|s| {
+                    format!("conversion to `ReportOutputBody` for body failed: {}", s)
+                });
             self
         }
 
@@ -1728,22 +1861,25 @@ pub mod builder {
         }
 
         ///Sends a `POST` request to `/report/output`
-        pub async fn send(self) -> Result<ResponseValue<types::ReportResult>, Error<()>> {
-            let Self {
-                client,
-                authorization,
-                body,
-            } = self;
+        pub async fn send(
+            self,
+        ) -> Result<ResponseValue<types::ReportResult>, Error<()>> {
+            let Self { client, authorization, body } = self;
             let authorization = authorization.map_err(Error::InvalidRequest)?;
             let body = body
-                .and_then(|v| types::ReportOutputBody::try_from(v).map_err(|e| e.to_string()))
+                .and_then(|v| {
+                    types::ReportOutputBody::try_from(v).map_err(|e| e.to_string())
+                })
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/report/output", client.baseurl,);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(2usize);
-            header_map.append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
-            );
+            header_map
+                .append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(
+                        super::Client::api_version(),
+                    ),
+                );
             header_map.append("Authorization", authorization.to_string().try_into()?);
             #[allow(unused_mut)]
             let mut request = client
@@ -1793,49 +1929,61 @@ pub mod builder {
         where
             V: std::convert::TryInto<::std::string::String>,
         {
-            self.authorization = value.try_into().map_err(|_| {
-                "conversion to `:: std :: string :: String` for authorization failed".to_string()
-            });
+            self.authorization = value
+                .try_into()
+                .map_err(|_| {
+                    "conversion to `:: std :: string :: String` for authorization failed"
+                        .to_string()
+                });
             self
         }
 
         pub fn body<V>(mut self, value: V) -> Self
         where
             V: std::convert::TryInto<types::ReportStartBody>,
-            <V as std::convert::TryInto<types::ReportStartBody>>::Error: std::fmt::Display,
+            <V as std::convert::TryInto<
+                types::ReportStartBody,
+            >>::Error: std::fmt::Display,
         {
             self.body = value
                 .try_into()
                 .map(From::from)
-                .map_err(|s| format!("conversion to `ReportStartBody` for body failed: {}", s));
+                .map_err(|s| {
+                    format!("conversion to `ReportStartBody` for body failed: {}", s)
+                });
             self
         }
 
         pub fn body_map<F>(mut self, f: F) -> Self
         where
-            F: std::ops::FnOnce(types::builder::ReportStartBody) -> types::builder::ReportStartBody,
+            F: std::ops::FnOnce(
+                types::builder::ReportStartBody,
+            ) -> types::builder::ReportStartBody,
         {
             self.body = self.body.map(f);
             self
         }
 
         ///Sends a `POST` request to `/report/start`
-        pub async fn send(self) -> Result<ResponseValue<types::ReportResult>, Error<()>> {
-            let Self {
-                client,
-                authorization,
-                body,
-            } = self;
+        pub async fn send(
+            self,
+        ) -> Result<ResponseValue<types::ReportResult>, Error<()>> {
+            let Self { client, authorization, body } = self;
             let authorization = authorization.map_err(Error::InvalidRequest)?;
             let body = body
-                .and_then(|v| types::ReportStartBody::try_from(v).map_err(|e| e.to_string()))
+                .and_then(|v| {
+                    types::ReportStartBody::try_from(v).map_err(|e| e.to_string())
+                })
                 .map_err(Error::InvalidRequest)?;
             let url = format!("{}/report/start", client.baseurl,);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(2usize);
-            header_map.append(
-                ::reqwest::header::HeaderName::from_static("api-version"),
-                ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
-            );
+            header_map
+                .append(
+                    ::reqwest::header::HeaderName::from_static("api-version"),
+                    ::reqwest::header::HeaderValue::from_static(
+                        super::Client::api_version(),
+                    ),
+                );
             header_map.append("Authorization", authorization.to_string().try_into()?);
             #[allow(unused_mut)]
             let mut request = client
