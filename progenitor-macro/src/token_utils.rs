@@ -1,10 +1,10 @@
-// Copyright 2023 Oxide Computer Company
+// Copyright 2026 Oxide Computer Company
 
 use std::collections::HashSet;
 
 use quote::ToTokens;
 use syn::{
-    Ident, Path, Token, TraitBoundModifier,
+    Ident, Path, Token,
     parse::Parse,
     punctuated::Punctuated,
     token::{Colon, Plus},
@@ -37,8 +37,8 @@ impl TypeAndImpls {
                 // TODO should this be an error rather than silently ignored?
                 if let Some(impl_name) = impl_name {
                     match modifier {
-                        syn::TraitBoundModifier::None => impls.insert(impl_name),
-                        syn::TraitBoundModifier::Maybe(_) => impls.remove(&impl_name),
+                        None => impls.insert(impl_name),
+                        Some(_) => impls.remove(&impl_name),
                     };
                 }
             },
@@ -83,14 +83,14 @@ impl ToTokens for TypeAndImpls {
 
 #[derive(Debug)]
 pub struct ImplTrait {
-    pub modifier: TraitBoundModifier,
+    pub modifier: Option<Token![?]>,
     pub impl_ident: Ident,
     pub impl_name: Option<TypeImpl>,
 }
 
 impl Parse for ImplTrait {
     fn parse(input: syn::parse::ParseStream) -> syn::Result<Self> {
-        let modifier: TraitBoundModifier = input.parse()?;
+        let modifier = input.parse()?;
         let impl_ident: Ident = input.parse()?;
         let impl_name = impl_ident.to_string().parse().ok();
 

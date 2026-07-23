@@ -614,7 +614,7 @@ dependencies = [
  "quote",
  "semver",
  "serde",
- "serde_tokenstream",
+ "serde_tokenstream 0.2.3",
  "syn 2.0.118",
 ]
 
@@ -739,13 +739,13 @@ version = "0.1.0"
 dependencies = [
  "base64",
  "chrono",
- "prettyplease 0.2.37",
+ "prettyplease 0.3.0",
  "progenitor",
  "progenitor-client",
  "reqwest",
  "serde",
  "serde_json",
- "syn 2.0.118",
+ "syn 3.0.2",
  "uuid",
  "wasm-bindgen-test",
 ]
@@ -1842,9 +1842,9 @@ dependencies = [
  "schemars",
  "serde",
  "serde_json",
- "serde_tokenstream",
+ "serde_tokenstream 0.3.0",
  "serde_yaml",
- "syn 2.0.118",
+ "syn 3.0.2",
 ]
 
 [[package]]
@@ -2412,6 +2412,18 @@ dependencies = [
  "quote",
  "serde",
  "syn 2.0.118",
+]
+
+[[package]]
+name = "serde_tokenstream"
+version = "0.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "db95b8acf6eca5bc1bc771a7d7fb1a0d1485bdef0c46eec2f573bbaf4b4118f8"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "serde",
+ "syn 3.0.2",
 ]
 
 [[package]]
@@ -3062,7 +3074,7 @@ dependencies = [
  "semver",
  "serde",
  "serde_json",
- "serde_tokenstream",
+ "serde_tokenstream 0.2.3",
  "syn 2.0.118",
  "typify-impl",
 ]
