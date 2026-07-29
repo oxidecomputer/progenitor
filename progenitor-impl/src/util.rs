@@ -8,43 +8,43 @@ use unicode_ident::{is_xid_continue, is_xid_start};
 
 use crate::Result;
 
-pub(crate) trait ReferenceOrExt<T: ComponentLookup> {
-    fn item<'a>(&'a self, components: &'a Option<Components>) -> Result<&'a T>;
+pub trait ReferenceOrExt<T: ComponentLookup> {
+    fn item<'a>(&'a self, components: Option<&'a Components>) -> Result<&'a T>;
 }
-pub(crate) trait ComponentLookup: Sized {
+pub trait ComponentLookup: Sized {
     fn get_components(components: &Components) -> &IndexMap<String, ReferenceOr<Self>>;
 }
 
 impl<T: ComponentLookup> ReferenceOrExt<T> for openapiv3::ReferenceOr<T> {
-    fn item<'a>(&'a self, components: &'a Option<Components>) -> Result<&'a T> {
+    fn item<'a>(&'a self, components: Option<&'a Components>) -> Result<&'a T> {
         match self {
-            ReferenceOr::Item(item) => Ok(item),
-            ReferenceOr::Reference { reference } => {
+            Self::Item(item) => Ok(item),
+            Self::Reference { reference } => {
                 let idx = reference.rfind('/').unwrap();
                 let key = &reference[idx + 1..];
-                let parameters = T::get_components(components.as_ref().unwrap());
+                let parameters = T::get_components(components.unwrap());
                 parameters
                     .get(key)
-                    .unwrap_or_else(|| panic!("key {} is missing", key))
+                    .unwrap_or_else(|| panic!("key {key} is missing"))
                     .item(components)
             }
         }
     }
 }
 
-pub(crate) fn items<'a, T>(
+pub fn items<'a, T>(
     refs: &'a [ReferenceOr<T>],
-    components: &'a Option<Components>,
+    components: Option<&'a Components>,
 ) -> impl Iterator<Item = Result<&'a T>>
 where
     T: ComponentLookup,
 {
-    refs.iter().map(|r| r.item(components))
+    refs.iter().map(move |r| r.item(components))
 }
 
-pub(crate) fn parameter_map<'a>(
+pub fn parameter_map<'a>(
     refs: &'a [ReferenceOr<Parameter>],
-    components: &'a Option<Components>,
+    components: Option<&'a Components>,
 ) -> Result<BTreeMap<&'a String, &'a Parameter>> {
     items(refs, components)
         .map(|res| res.map(|param| (&param.parameter_data_ref().name, param)))
@@ -75,12 +75,13 @@ impl ComponentLookup for Schema {
     }
 }
 
-pub(crate) enum Case {
+#[derive(Clone, Copy)]
+pub enum Case {
     Pascal,
     Snake,
 }
 
-pub(crate) fn sanitize(input: &str, case: Case) -> String {
+pub fn sanitize(input: &str, case: Case) -> String {
     use heck::{ToPascalCase, ToSnakeCase};
     let to_case = match case {
         Case::Pascal => str::to_pascal_case,
@@ -100,23 +101,20 @@ pub(crate) fn sanitize(input: &str, case: Case) -> String {
     let out = match out.chars().next() {
         None => to_case("x"),
         Some(c) if is_xid_start(c) => out,
-        Some(_) => format!("_{}", out),
+        Some(_) => format!("_{out}"),
     };
 
     // Make sure the string is a valid Rust identifier.
     if typify::accept_as_ident(&out) {
         out
     } else {
-        format!("{}_", out)
+        format!("{out}_")
     }
 }
 
-/// Given a desired name and a slice of proc_macro2::Ident, generate a new
+/// Given a desired name and a slice of `proc_macro2::Ident`, generate a new
 /// Ident that is unique from the slice.
-pub(crate) fn unique_ident_from(
-    name: &str,
-    identities: &[proc_macro2::Ident],
-) -> proc_macro2::Ident {
+pub fn unique_ident_from(name: &str, identities: &[proc_macro2::Ident]) -> proc_macro2::Ident {
     let mut name = name.to_string();
 
     loop {
@@ -126,6 +124,6 @@ pub(crate) fn unique_ident_from(
             return ident;
         }
 
-        name.insert_str(0, "_");
+        name.insert(0, '_');
     }
 }

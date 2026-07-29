@@ -4,6 +4,14 @@ use progenitor_client::{encode_path, ClientHooks, OperationInfo, RequestBuilderE
 pub use progenitor_client::{ByteStream, ClientInfo, Error, ResponseValue};
 /// Types used as operation parameters and responses.
 #[allow(clippy::all)]
+#[allow(
+    clippy::struct_field_names,
+    reason = "type definitions are emitted by typify"
+)]
+#[allow(
+    clippy::default_trait_access,
+    reason = "default expressions are emitted by typify"
+)]
 pub mod types {
     /// Error types.
     pub mod error {
@@ -24678,7 +24686,7 @@ pub mod types {
 }
 
 #[derive(Clone, Debug)]
-///Client for Oxide Region API
+///Client for `Oxide Region API`
 ///
 ///API for interacting with the Oxide control plane
 ///
@@ -24694,6 +24702,11 @@ impl Client {
     /// `baseurl` is the base URL provided to the internal
     /// `reqwest::Client`, and should include a scheme and hostname,
     /// as well as port and a path stem if applicable.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the default `reqwest::Client` cannot be built.
+    #[must_use]
     pub fn new(baseurl: &str) -> Self {
         #[cfg(not(target_arch = "wasm32"))]
         let client = {
@@ -24713,6 +24726,7 @@ impl Client {
     /// `baseurl` is the base URL provided to the internal
     /// `reqwest::Client`, and should include a scheme and hostname,
     /// as well as port and a path stem if applicable.
+    #[must_use]
     pub fn new_with_client(baseurl: &str, client: reqwest::Client) -> Self {
         Self {
             baseurl: baseurl.to_string(),
@@ -24749,7 +24763,12 @@ pub trait ClientDisksExt {
     ///
     ///Sends a `GET` request to `/by-id/disks/{id}`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.disk_view_by_id()
     ///    .id(id)
     ///    .send()
@@ -24770,7 +24789,12 @@ pub trait ClientDisksExt {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.disk_list()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -24790,7 +24814,12 @@ pub trait ClientDisksExt {
     /// - `organization_name`: The organization's unique name.
     /// - `project_name`: The project's unique name within the organization.
     /// - `body`
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.disk_create()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -24807,7 +24836,12 @@ pub trait ClientDisksExt {
     /// `/organizations/{organization_name}/projects/{project_name}/disks/
     /// {disk_name}`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.disk_view()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -24822,7 +24856,12 @@ pub trait ClientDisksExt {
     /// `/organizations/{organization_name}/projects/{project_name}/disks/
     /// {disk_name}`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.disk_delete()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -24847,7 +24886,12 @@ pub trait ClientDisksExt {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `start_time`: An inclusive start time of metrics.
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.disk_metrics_list()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -24872,7 +24916,12 @@ pub trait ClientDisksExt {
     ///   subsequent page
     /// - `project`
     /// - `sort_by`
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.disk_list_v1()
     ///    .limit(limit)
     ///    .organization(organization)
@@ -24887,7 +24936,12 @@ pub trait ClientDisksExt {
     ///
     ///Sends a `POST` request to `/v1/disks`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.disk_create_v1()
     ///    .organization(organization)
     ///    .project(project)
@@ -24900,7 +24954,12 @@ pub trait ClientDisksExt {
     ///
     ///Sends a `GET` request to `/v1/disks/{disk}`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.disk_view_v1()
     ///    .disk(disk)
     ///    .organization(organization)
@@ -24913,7 +24972,12 @@ pub trait ClientDisksExt {
     ///
     ///Sends a `DELETE` request to `/v1/disks/{disk}`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.disk_delete_v1()
     ///    .disk(disk)
     ///    .organization(organization)
@@ -24976,7 +25040,12 @@ pub trait ClientHiddenExt {
     ///
     ///Sends a `POST` request to `/device/auth`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.device_auth_request()
     ///    .body(body)
     ///    .send()
@@ -24992,7 +25061,12 @@ pub trait ClientHiddenExt {
     ///
     ///Sends a `POST` request to `/device/confirm`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.device_auth_confirm()
     ///    .body(body)
     ///    .send()
@@ -25006,7 +25080,12 @@ pub trait ClientHiddenExt {
     ///
     ///Sends a `POST` request to `/device/token`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.device_access_token()
     ///    .body(body)
     ///    .send()
@@ -25015,7 +25094,12 @@ pub trait ClientHiddenExt {
     fn device_access_token(&self) -> builder::DeviceAccessToken<'_>;
     ///Sends a `POST` request to `/login`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.login_spoof()
     ///    .body(body)
     ///    .send()
@@ -25024,7 +25108,12 @@ pub trait ClientHiddenExt {
     fn login_spoof(&self) -> builder::LoginSpoof<'_>;
     ///Sends a `POST` request to `/logout`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.logout()
     ///    .send()
     ///    .await;
@@ -25034,7 +25123,12 @@ pub trait ClientHiddenExt {
     ///
     ///Sends a `GET` request to `/session/me`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.session_me()
     ///    .send()
     ///    .await;
@@ -25049,7 +25143,12 @@ pub trait ClientHiddenExt {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.session_me_groups()
     ///    .limit(limit)
     ///    .page_token(page_token)
@@ -25096,7 +25195,12 @@ pub trait ClientImagesExt {
     ///
     ///Sends a `GET` request to `/by-id/images/{id}`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.image_view_by_id()
     ///    .id(id)
     ///    .send()
@@ -25118,7 +25222,12 @@ pub trait ClientImagesExt {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.image_list()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -25140,7 +25249,12 @@ pub trait ClientImagesExt {
     /// - `organization_name`: The organization's unique name.
     /// - `project_name`: The project's unique name within the organization.
     /// - `body`
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.image_create()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -25157,7 +25271,12 @@ pub trait ClientImagesExt {
     /// `/organizations/{organization_name}/projects/{project_name}/images/
     /// {image_name}`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.image_view()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -25176,7 +25295,12 @@ pub trait ClientImagesExt {
     /// `/organizations/{organization_name}/projects/{project_name}/images/
     /// {image_name}`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.image_delete()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -25216,7 +25340,12 @@ pub trait ClientInstancesExt {
     ///
     ///Sends a `GET` request to `/by-id/instances/{id}`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.instance_view_by_id()
     ///    .id(id)
     ///    .send()
@@ -25227,7 +25356,12 @@ pub trait ClientInstancesExt {
     ///
     ///Sends a `GET` request to `/by-id/network-interfaces/{id}`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.instance_network_interface_view_by_id()
     ///    .id(id)
     ///    .send()
@@ -25248,7 +25382,12 @@ pub trait ClientInstancesExt {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.instance_list()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -25270,7 +25409,12 @@ pub trait ClientInstancesExt {
     /// - `organization_name`: The organization's unique name.
     /// - `project_name`: The project's unique name within the organization.
     /// - `body`
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.instance_create()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -25287,7 +25431,12 @@ pub trait ClientInstancesExt {
     /// `/organizations/{organization_name}/projects/{project_name}/instances/
     /// {instance_name}`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.instance_view()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -25302,7 +25451,12 @@ pub trait ClientInstancesExt {
     /// `/organizations/{organization_name}/projects/{project_name}/instances/
     /// {instance_name}`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.instance_delete()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -25327,7 +25481,12 @@ pub trait ClientInstancesExt {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.instance_disk_list()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -25347,7 +25506,12 @@ pub trait ClientInstancesExt {
     /// `/organizations/{organization_name}/projects/{project_name}/instances/
     /// {instance_name}/disks/attach`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.instance_disk_attach()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -25365,7 +25529,12 @@ pub trait ClientInstancesExt {
     /// `/organizations/{organization_name}/projects/{project_name}/instances/
     /// {instance_name}/disks/detach`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.instance_disk_detach()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -25381,7 +25550,12 @@ pub trait ClientInstancesExt {
     /// `/organizations/{organization_name}/projects/{project_name}/instances/
     /// {instance_name}/external-ips`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.instance_external_ip_list()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -25398,7 +25572,12 @@ pub trait ClientInstancesExt {
     /// `/organizations/{organization_name}/projects/{project_name}/instances/
     /// {instance_name}/migrate`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.instance_migrate()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -25422,7 +25601,12 @@ pub trait ClientInstancesExt {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.instance_network_interface_list()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -25440,7 +25624,12 @@ pub trait ClientInstancesExt {
     /// `/organizations/{organization_name}/projects/{project_name}/instances/
     /// {instance_name}/network-interfaces`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.instance_network_interface_create()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -25456,7 +25645,12 @@ pub trait ClientInstancesExt {
     /// `/organizations/{organization_name}/projects/{project_name}/instances/
     /// {instance_name}/network-interfaces/{interface_name}`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.instance_network_interface_view()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -25472,7 +25666,12 @@ pub trait ClientInstancesExt {
     /// `/organizations/{organization_name}/projects/{project_name}/instances/
     /// {instance_name}/network-interfaces/{interface_name}`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.instance_network_interface_update()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -25494,7 +25693,12 @@ pub trait ClientInstancesExt {
     /// `/organizations/{organization_name}/projects/{project_name}/instances/
     /// {instance_name}/network-interfaces/{interface_name}`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.instance_network_interface_delete()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -25512,7 +25716,12 @@ pub trait ClientInstancesExt {
     /// `/organizations/{organization_name}/projects/{project_name}/instances/
     /// {instance_name}/reboot`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.instance_reboot()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -25544,7 +25753,12 @@ pub trait ClientInstancesExt {
     ///   read, counting *backward* from the most recently buffered data
     ///   retrieved from the instance. (See note on `from_start` about mutual
     ///   exclusivity)
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.instance_serial_console()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -25564,7 +25778,12 @@ pub trait ClientInstancesExt {
     /// `/organizations/{organization_name}/projects/{project_name}/instances/
     /// {instance_name}/serial-console/stream`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.instance_serial_console_stream()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -25581,7 +25800,12 @@ pub trait ClientInstancesExt {
     /// `/organizations/{organization_name}/projects/{project_name}/instances/
     /// {instance_name}/serial-console/stream_v2`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.instance_serial_console_stream_v2()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -25598,7 +25822,12 @@ pub trait ClientInstancesExt {
     /// `/organizations/{organization_name}/projects/{project_name}/instances/
     /// {instance_name}/start`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.instance_start()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -25615,7 +25844,12 @@ pub trait ClientInstancesExt {
     /// `/organizations/{organization_name}/projects/{project_name}/instances/
     /// {instance_name}/stop`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.instance_stop()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -25635,7 +25869,12 @@ pub trait ClientInstancesExt {
     ///   subsequent page
     /// - `project`
     /// - `sort_by`
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.instance_list_v1()
     ///    .limit(limit)
     ///    .organization(organization)
@@ -25650,7 +25889,12 @@ pub trait ClientInstancesExt {
     ///
     ///Sends a `POST` request to `/v1/instances`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.instance_create_v1()
     ///    .organization(organization)
     ///    .project(project)
@@ -25663,7 +25907,12 @@ pub trait ClientInstancesExt {
     ///
     ///Sends a `GET` request to `/v1/instances/{instance}`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.instance_view_v1()
     ///    .instance(instance)
     ///    .organization(organization)
@@ -25676,7 +25925,12 @@ pub trait ClientInstancesExt {
     ///
     ///Sends a `DELETE` request to `/v1/instances/{instance}`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.instance_delete_v1()
     ///    .instance(instance)
     ///    .organization(organization)
@@ -25697,7 +25951,12 @@ pub trait ClientInstancesExt {
     ///   subsequent page
     /// - `project`
     /// - `sort_by`
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.instance_disk_list_v1()
     ///    .instance(instance)
     ///    .limit(limit)
@@ -25713,7 +25972,12 @@ pub trait ClientInstancesExt {
     ///
     ///Sends a `POST` request to `/v1/instances/{instance}/disks/attach`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.instance_disk_attach_v1()
     ///    .instance(instance)
     ///    .organization(organization)
@@ -25727,7 +25991,12 @@ pub trait ClientInstancesExt {
     ///
     ///Sends a `POST` request to `/v1/instances/{instance}/disks/detach`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.instance_disk_detach_v1()
     ///    .instance(instance)
     ///    .organization(organization)
@@ -25741,7 +26010,12 @@ pub trait ClientInstancesExt {
     ///
     ///Sends a `POST` request to `/v1/instances/{instance}/migrate`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.instance_migrate_v1()
     ///    .instance(instance)
     ///    .organization(organization)
@@ -25755,7 +26029,12 @@ pub trait ClientInstancesExt {
     ///
     ///Sends a `POST` request to `/v1/instances/{instance}/reboot`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.instance_reboot_v1()
     ///    .instance(instance)
     ///    .organization(organization)
@@ -25783,7 +26062,12 @@ pub trait ClientInstancesExt {
     ///   exclusivity)
     /// - `organization`
     /// - `project`
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.instance_serial_console_v1()
     ///    .instance(instance)
     ///    .from_start(from_start)
@@ -25800,7 +26084,12 @@ pub trait ClientInstancesExt {
     ///Sends a `GET` request to
     /// `/v1/instances/{instance}/serial-console/stream`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.instance_serial_console_stream_v1()
     ///    .instance(instance)
     ///    .organization(organization)
@@ -25813,7 +26102,12 @@ pub trait ClientInstancesExt {
     ///
     ///Sends a `POST` request to `/v1/instances/{instance}/start`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.instance_start_v1()
     ///    .instance(instance)
     ///    .organization(organization)
@@ -25826,7 +26120,12 @@ pub trait ClientInstancesExt {
     ///
     ///Sends a `POST` request to `/v1/instances/{instance}/stop`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.instance_stop_v1()
     ///    .instance(instance)
     ///    .organization(organization)
@@ -25987,7 +26286,12 @@ pub trait ClientLoginExt {
     ///
     ///Sends a `POST` request to `/login/{silo_name}/local`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.login_local()
     ///    .silo_name(silo_name)
     ///    .body(body)
@@ -26002,7 +26306,12 @@ pub trait ClientLoginExt {
     ///
     ///Sends a `GET` request to `/login/{silo_name}/saml/{provider_name}`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.login_saml_begin()
     ///    .silo_name(silo_name)
     ///    .provider_name(provider_name)
@@ -26014,7 +26323,12 @@ pub trait ClientLoginExt {
     ///
     ///Sends a `POST` request to `/login/{silo_name}/saml/{provider_name}`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.login_saml()
     ///    .silo_name(silo_name)
     ///    .provider_name(provider_name)
@@ -26051,7 +26365,12 @@ pub trait ClientMetricsExt {
     /// - `limit`: Maximum number of items returned by a single call
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.timeseries_schema_get()
     ///    .limit(limit)
     ///    .page_token(page_token)
@@ -26076,7 +26395,12 @@ pub trait ClientOrganizationsExt {
     ///
     ///Sends a `GET` request to `/by-id/organizations/{id}`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.organization_view_by_id()
     ///    .id(id)
     ///    .send()
@@ -26094,7 +26418,12 @@ pub trait ClientOrganizationsExt {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.organization_list()
     ///    .limit(limit)
     ///    .page_token(page_token)
@@ -26109,7 +26438,12 @@ pub trait ClientOrganizationsExt {
     ///
     ///Sends a `POST` request to `/organizations`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.organization_create()
     ///    .body(body)
     ///    .send()
@@ -26124,7 +26458,12 @@ pub trait ClientOrganizationsExt {
     ///
     ///Arguments:
     /// - `organization_name`: The organization's unique name.
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.organization_view()
     ///    .organization_name(organization_name)
     ///    .send()
@@ -26140,7 +26479,12 @@ pub trait ClientOrganizationsExt {
     ///Arguments:
     /// - `organization_name`: The organization's unique name.
     /// - `body`
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.organization_update()
     ///    .organization_name(organization_name)
     ///    .body(body)
@@ -26156,7 +26500,12 @@ pub trait ClientOrganizationsExt {
     ///
     ///Arguments:
     /// - `organization_name`: The organization's unique name.
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.organization_delete()
     ///    .organization_name(organization_name)
     ///    .send()
@@ -26171,7 +26520,12 @@ pub trait ClientOrganizationsExt {
     ///
     ///Arguments:
     /// - `organization_name`: The organization's unique name.
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.organization_policy_view()
     ///    .organization_name(organization_name)
     ///    .send()
@@ -26187,7 +26541,12 @@ pub trait ClientOrganizationsExt {
     ///Arguments:
     /// - `organization_name`: The organization's unique name.
     /// - `body`
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.organization_policy_update()
     ///    .organization_name(organization_name)
     ///    .body(body)
@@ -26204,7 +26563,12 @@ pub trait ClientOrganizationsExt {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.organization_list_v1()
     ///    .limit(limit)
     ///    .page_token(page_token)
@@ -26217,7 +26581,12 @@ pub trait ClientOrganizationsExt {
     ///
     ///Sends a `POST` request to `/v1/organizations`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.organization_create_v1()
     ///    .body(body)
     ///    .send()
@@ -26228,7 +26597,12 @@ pub trait ClientOrganizationsExt {
     ///
     ///Sends a `GET` request to `/v1/organizations/{organization}`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.organization_view_v1()
     ///    .organization(organization)
     ///    .send()
@@ -26239,7 +26613,12 @@ pub trait ClientOrganizationsExt {
     ///
     ///Sends a `PUT` request to `/v1/organizations/{organization}`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.organization_update_v1()
     ///    .organization(organization)
     ///    .body(body)
@@ -26251,7 +26630,12 @@ pub trait ClientOrganizationsExt {
     ///
     ///Sends a `DELETE` request to `/v1/organizations/{organization}`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.organization_delete_v1()
     ///    .organization(organization)
     ///    .send()
@@ -26262,7 +26646,12 @@ pub trait ClientOrganizationsExt {
     ///
     ///Sends a `GET` request to `/v1/organizations/{organization}/policy`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.organization_policy_view_v1()
     ///    .organization(organization)
     ///    .send()
@@ -26273,7 +26662,12 @@ pub trait ClientOrganizationsExt {
     ///
     ///Sends a `PUT` request to `/v1/organizations/{organization}/policy`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.organization_policy_update_v1()
     ///    .organization(organization)
     ///    .body(body)
@@ -26351,7 +26745,12 @@ pub trait ClientPolicyExt {
     ///
     ///Sends a `GET` request to `/system/policy`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.system_policy_view()
     ///    .send()
     ///    .await;
@@ -26361,7 +26760,12 @@ pub trait ClientPolicyExt {
     ///
     ///Sends a `PUT` request to `/system/policy`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.system_policy_update()
     ///    .body(body)
     ///    .send()
@@ -26389,7 +26793,12 @@ pub trait ClientProjectsExt {
     ///
     ///Sends a `GET` request to `/by-id/projects/{id}`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.project_view_by_id()
     ///    .id(id)
     ///    .send()
@@ -26408,7 +26817,12 @@ pub trait ClientProjectsExt {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.project_list()
     ///    .organization_name(organization_name)
     ///    .limit(limit)
@@ -26427,7 +26841,12 @@ pub trait ClientProjectsExt {
     ///Arguments:
     /// - `organization_name`: The organization's unique name.
     /// - `body`
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.project_create()
     ///    .organization_name(organization_name)
     ///    .body(body)
@@ -26445,7 +26864,12 @@ pub trait ClientProjectsExt {
     ///Arguments:
     /// - `organization_name`: The organization's unique name.
     /// - `project_name`: The project's unique name within the organization.
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.project_view()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -26464,7 +26888,12 @@ pub trait ClientProjectsExt {
     /// - `organization_name`: The organization's unique name.
     /// - `project_name`: The project's unique name within the organization.
     /// - `body`
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.project_update()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -26483,7 +26912,12 @@ pub trait ClientProjectsExt {
     ///Arguments:
     /// - `organization_name`: The organization's unique name.
     /// - `project_name`: The project's unique name within the organization.
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.project_delete()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -26501,7 +26935,12 @@ pub trait ClientProjectsExt {
     ///Arguments:
     /// - `organization_name`: The organization's unique name.
     /// - `project_name`: The project's unique name within the organization.
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.project_policy_view()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -26518,7 +26957,12 @@ pub trait ClientProjectsExt {
     /// - `organization_name`: The organization's unique name.
     /// - `project_name`: The project's unique name within the organization.
     /// - `body`
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.project_policy_update()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -26537,7 +26981,12 @@ pub trait ClientProjectsExt {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.project_list_v1()
     ///    .limit(limit)
     ///    .organization(organization)
@@ -26551,7 +27000,12 @@ pub trait ClientProjectsExt {
     ///
     ///Sends a `POST` request to `/v1/projects`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.project_create_v1()
     ///    .organization(organization)
     ///    .body(body)
@@ -26563,7 +27017,12 @@ pub trait ClientProjectsExt {
     ///
     ///Sends a `GET` request to `/v1/projects/{project}`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.project_view_v1()
     ///    .project(project)
     ///    .organization(organization)
@@ -26575,7 +27034,12 @@ pub trait ClientProjectsExt {
     ///
     ///Sends a `PUT` request to `/v1/projects/{project}`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.project_update_v1()
     ///    .project(project)
     ///    .organization(organization)
@@ -26588,7 +27052,12 @@ pub trait ClientProjectsExt {
     ///
     ///Sends a `DELETE` request to `/v1/projects/{project}`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.project_delete_v1()
     ///    .project(project)
     ///    .organization(organization)
@@ -26600,7 +27069,12 @@ pub trait ClientProjectsExt {
     ///
     ///Sends a `GET` request to `/v1/projects/{project}/policy`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.project_policy_view_v1()
     ///    .project(project)
     ///    .organization(organization)
@@ -26612,7 +27086,12 @@ pub trait ClientProjectsExt {
     ///
     ///Sends a `PUT` request to `/v1/projects/{project}/policy`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.project_policy_update_v1()
     ///    .project(project)
     ///    .organization(organization)
@@ -26696,7 +27175,12 @@ pub trait ClientRolesExt {
     /// - `limit`: Maximum number of items returned by a single call
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.role_list()
     ///    .limit(limit)
     ///    .page_token(page_token)
@@ -26710,7 +27194,12 @@ pub trait ClientRolesExt {
     ///
     ///Arguments:
     /// - `role_name`: The built-in role's unique name.
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.role_view()
     ///    .role_name(role_name)
     ///    .send()
@@ -26742,7 +27231,12 @@ pub trait ClientSessionExt {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.session_sshkey_list()
     ///    .limit(limit)
     ///    .page_token(page_token)
@@ -26757,7 +27251,12 @@ pub trait ClientSessionExt {
     ///
     ///Sends a `POST` request to `/session/me/sshkeys`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.session_sshkey_create()
     ///    .body(body)
     ///    .send()
@@ -26771,7 +27270,12 @@ pub trait ClientSessionExt {
     ///
     ///Sends a `GET` request to `/session/me/sshkeys/{ssh_key_name}`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.session_sshkey_view()
     ///    .ssh_key_name(ssh_key_name)
     ///    .send()
@@ -26785,7 +27289,12 @@ pub trait ClientSessionExt {
     ///
     ///Sends a `DELETE` request to `/session/me/sshkeys/{ssh_key_name}`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.session_sshkey_delete()
     ///    .ssh_key_name(ssh_key_name)
     ///    .send()
@@ -26823,7 +27332,12 @@ pub trait ClientSilosExt {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.group_list()
     ///    .limit(limit)
     ///    .page_token(page_token)
@@ -26836,7 +27350,12 @@ pub trait ClientSilosExt {
     ///
     ///Sends a `GET` request to `/policy`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.policy_view()
     ///    .send()
     ///    .await;
@@ -26846,7 +27365,12 @@ pub trait ClientSilosExt {
     ///
     ///Sends a `PUT` request to `/policy`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.policy_update()
     ///    .body(body)
     ///    .send()
@@ -26862,7 +27386,12 @@ pub trait ClientSilosExt {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.user_list()
     ///    .limit(limit)
     ///    .page_token(page_token)
@@ -26897,7 +27426,12 @@ pub trait ClientSnapshotsExt {
     ///
     ///Sends a `GET` request to `/by-id/snapshots/{id}`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.snapshot_view_by_id()
     ///    .id(id)
     ///    .send()
@@ -26916,7 +27450,12 @@ pub trait ClientSnapshotsExt {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.snapshot_list()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -26938,7 +27477,12 @@ pub trait ClientSnapshotsExt {
     /// - `organization_name`: The organization's unique name.
     /// - `project_name`: The project's unique name within the organization.
     /// - `body`
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.snapshot_create()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -26953,7 +27497,12 @@ pub trait ClientSnapshotsExt {
     /// `/organizations/{organization_name}/projects/{project_name}/snapshots/
     /// {snapshot_name}`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.snapshot_view()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -26968,7 +27517,12 @@ pub trait ClientSnapshotsExt {
     /// `/organizations/{organization_name}/projects/{project_name}/snapshots/
     /// {snapshot_name}`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.snapshot_delete()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -27007,7 +27561,12 @@ pub trait ClientSystemExt {
     ///
     ///Sends a `GET` request to `/system/by-id/images/{id}`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.system_image_view_by_id()
     ///    .id(id)
     ///    .send()
@@ -27018,7 +27577,12 @@ pub trait ClientSystemExt {
     ///
     ///Sends a `GET` request to `/system/by-id/ip-pools/{id}`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.ip_pool_view_by_id()
     ///    .id(id)
     ///    .send()
@@ -27029,7 +27593,12 @@ pub trait ClientSystemExt {
     ///
     ///Sends a `GET` request to `/system/by-id/silos/{id}`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.silo_view_by_id()
     ///    .id(id)
     ///    .send()
@@ -27049,7 +27618,12 @@ pub trait ClientSystemExt {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.certificate_list()
     ///    .limit(limit)
     ///    .page_token(page_token)
@@ -27065,7 +27639,12 @@ pub trait ClientSystemExt {
     ///
     ///Sends a `POST` request to `/system/certificates`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.certificate_create()
     ///    .body(body)
     ///    .send()
@@ -27078,7 +27657,12 @@ pub trait ClientSystemExt {
     ///
     ///Sends a `GET` request to `/system/certificates/{certificate}`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.certificate_view()
     ///    .certificate(certificate)
     ///    .send()
@@ -27091,7 +27675,12 @@ pub trait ClientSystemExt {
     ///
     ///Sends a `DELETE` request to `/system/certificates/{certificate}`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.certificate_delete()
     ///    .certificate(certificate)
     ///    .send()
@@ -27107,7 +27696,12 @@ pub trait ClientSystemExt {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.physical_disk_list()
     ///    .limit(limit)
     ///    .page_token(page_token)
@@ -27125,7 +27719,12 @@ pub trait ClientSystemExt {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.rack_list()
     ///    .limit(limit)
     ///    .page_token(page_token)
@@ -27140,7 +27739,12 @@ pub trait ClientSystemExt {
     ///
     ///Arguments:
     /// - `rack_id`: The rack's unique ID.
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.rack_view()
     ///    .rack_id(rack_id)
     ///    .send()
@@ -27156,7 +27760,12 @@ pub trait ClientSystemExt {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.sled_list()
     ///    .limit(limit)
     ///    .page_token(page_token)
@@ -27171,7 +27780,12 @@ pub trait ClientSystemExt {
     ///
     ///Arguments:
     /// - `sled_id`: The sled's unique ID.
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.sled_view()
     ///    .sled_id(sled_id)
     ///    .send()
@@ -27188,7 +27802,12 @@ pub trait ClientSystemExt {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.sled_physical_disk_list()
     ///    .sled_id(sled_id)
     ///    .limit(limit)
@@ -27211,7 +27830,12 @@ pub trait ClientSystemExt {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.system_image_list()
     ///    .limit(limit)
     ///    .page_token(page_token)
@@ -27227,7 +27851,12 @@ pub trait ClientSystemExt {
     ///
     ///Sends a `POST` request to `/system/images`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.system_image_create()
     ///    .body(body)
     ///    .send()
@@ -27240,7 +27869,12 @@ pub trait ClientSystemExt {
     ///
     ///Sends a `GET` request to `/system/images/{image_name}`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.system_image_view()
     ///    .image_name(image_name)
     ///    .send()
@@ -27255,7 +27889,12 @@ pub trait ClientSystemExt {
     ///
     ///Sends a `DELETE` request to `/system/images/{image_name}`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.system_image_delete()
     ///    .image_name(image_name)
     ///    .send()
@@ -27271,7 +27910,12 @@ pub trait ClientSystemExt {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.ip_pool_list()
     ///    .limit(limit)
     ///    .page_token(page_token)
@@ -27284,7 +27928,12 @@ pub trait ClientSystemExt {
     ///
     ///Sends a `POST` request to `/system/ip-pools`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.ip_pool_create()
     ///    .body(body)
     ///    .send()
@@ -27295,7 +27944,12 @@ pub trait ClientSystemExt {
     ///
     ///Sends a `GET` request to `/system/ip-pools/{pool_name}`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.ip_pool_view()
     ///    .pool_name(pool_name)
     ///    .send()
@@ -27306,7 +27960,12 @@ pub trait ClientSystemExt {
     ///
     ///Sends a `PUT` request to `/system/ip-pools/{pool_name}`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.ip_pool_update()
     ///    .pool_name(pool_name)
     ///    .body(body)
@@ -27318,7 +27977,12 @@ pub trait ClientSystemExt {
     ///
     ///Sends a `DELETE` request to `/system/ip-pools/{pool_name}`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.ip_pool_delete()
     ///    .pool_name(pool_name)
     ///    .send()
@@ -27336,7 +28000,12 @@ pub trait ClientSystemExt {
     /// - `limit`: Maximum number of items returned by a single call
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.ip_pool_range_list()
     ///    .pool_name(pool_name)
     ///    .limit(limit)
@@ -27349,7 +28018,12 @@ pub trait ClientSystemExt {
     ///
     ///Sends a `POST` request to `/system/ip-pools/{pool_name}/ranges/add`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.ip_pool_range_add()
     ///    .pool_name(pool_name)
     ///    .body(body)
@@ -27361,7 +28035,12 @@ pub trait ClientSystemExt {
     ///
     ///Sends a `POST` request to `/system/ip-pools/{pool_name}/ranges/remove`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.ip_pool_range_remove()
     ///    .pool_name(pool_name)
     ///    .body(body)
@@ -27373,7 +28052,12 @@ pub trait ClientSystemExt {
     ///
     ///Sends a `GET` request to `/system/ip-pools-service`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.ip_pool_service_view()
     ///    .send()
     ///    .await;
@@ -27389,7 +28073,12 @@ pub trait ClientSystemExt {
     /// - `limit`: Maximum number of items returned by a single call
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.ip_pool_service_range_list()
     ///    .limit(limit)
     ///    .page_token(page_token)
@@ -27401,7 +28090,12 @@ pub trait ClientSystemExt {
     ///
     ///Sends a `POST` request to `/system/ip-pools-service/ranges/add`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.ip_pool_service_range_add()
     ///    .body(body)
     ///    .send()
@@ -27412,7 +28106,12 @@ pub trait ClientSystemExt {
     ///
     ///Sends a `POST` request to `/system/ip-pools-service/ranges/remove`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.ip_pool_service_range_remove()
     ///    .body(body)
     ///    .send()
@@ -27431,7 +28130,12 @@ pub trait ClientSystemExt {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `start_time`: An inclusive start time of metrics.
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.system_metric()
     ///    .metric_name(metric_name)
     ///    .end_time(end_time)
@@ -27452,7 +28156,12 @@ pub trait ClientSystemExt {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.saga_list()
     ///    .limit(limit)
     ///    .page_token(page_token)
@@ -27465,7 +28174,12 @@ pub trait ClientSystemExt {
     ///
     ///Sends a `GET` request to `/system/sagas/{saga_id}`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.saga_view()
     ///    .saga_id(saga_id)
     ///    .send()
@@ -27483,7 +28197,12 @@ pub trait ClientSystemExt {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.silo_list()
     ///    .limit(limit)
     ///    .page_token(page_token)
@@ -27496,7 +28215,12 @@ pub trait ClientSystemExt {
     ///
     ///Sends a `POST` request to `/system/silos`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.silo_create()
     ///    .body(body)
     ///    .send()
@@ -27511,7 +28235,12 @@ pub trait ClientSystemExt {
     ///
     ///Arguments:
     /// - `silo_name`: The silo's unique name.
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.silo_view()
     ///    .silo_name(silo_name)
     ///    .send()
@@ -27526,7 +28255,12 @@ pub trait ClientSystemExt {
     ///
     ///Arguments:
     /// - `silo_name`: The silo's unique name.
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.silo_delete()
     ///    .silo_name(silo_name)
     ///    .send()
@@ -27543,7 +28277,12 @@ pub trait ClientSystemExt {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.silo_identity_provider_list()
     ///    .silo_name(silo_name)
     ///    .limit(limit)
@@ -27565,7 +28304,12 @@ pub trait ClientSystemExt {
     ///Arguments:
     /// - `silo_name`: The silo's unique name.
     /// - `body`
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.local_idp_user_create()
     ///    .silo_name(silo_name)
     ///    .body(body)
@@ -27581,7 +28325,12 @@ pub trait ClientSystemExt {
     ///Arguments:
     /// - `silo_name`: The silo's unique name.
     /// - `user_id`: The user's internal id
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.local_idp_user_delete()
     ///    .silo_name(silo_name)
     ///    .user_id(user_id)
@@ -27602,7 +28351,12 @@ pub trait ClientSystemExt {
     /// - `silo_name`: The silo's unique name.
     /// - `user_id`: The user's internal id
     /// - `body`
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.local_idp_user_set_password()
     ///    .silo_name(silo_name)
     ///    .user_id(user_id)
@@ -27619,7 +28373,12 @@ pub trait ClientSystemExt {
     ///Arguments:
     /// - `silo_name`: The silo's unique name.
     /// - `body`
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.saml_identity_provider_create()
     ///    .silo_name(silo_name)
     ///    .body(body)
@@ -27635,7 +28394,12 @@ pub trait ClientSystemExt {
     ///Arguments:
     /// - `silo_name`: The silo's unique name.
     /// - `provider_name`: The SAML identity provider's name
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.saml_identity_provider_view()
     ///    .silo_name(silo_name)
     ///    .provider_name(provider_name)
@@ -27649,7 +28413,12 @@ pub trait ClientSystemExt {
     ///
     ///Arguments:
     /// - `silo_name`: The silo's unique name.
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.silo_policy_view()
     ///    .silo_name(silo_name)
     ///    .send()
@@ -27663,7 +28432,12 @@ pub trait ClientSystemExt {
     ///Arguments:
     /// - `silo_name`: The silo's unique name.
     /// - `body`
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.silo_policy_update()
     ///    .silo_name(silo_name)
     ///    .body(body)
@@ -27681,7 +28455,12 @@ pub trait ClientSystemExt {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.silo_users_list()
     ///    .silo_name(silo_name)
     ///    .limit(limit)
@@ -27698,7 +28477,12 @@ pub trait ClientSystemExt {
     ///Arguments:
     /// - `silo_name`: The silo's unique name.
     /// - `user_id`: The user's internal id
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.silo_user_view()
     ///    .silo_name(silo_name)
     ///    .user_id(user_id)
@@ -27715,7 +28499,12 @@ pub trait ClientSystemExt {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.system_user_list()
     ///    .limit(limit)
     ///    .page_token(page_token)
@@ -27730,7 +28519,12 @@ pub trait ClientSystemExt {
     ///
     ///Arguments:
     /// - `user_name`: The built-in user's unique name.
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.system_user_view()
     ///    .user_name(user_name)
     ///    .send()
@@ -27746,7 +28540,12 @@ pub trait ClientSystemExt {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.system_component_version_list()
     ///    .limit(limit)
     ///    .page_token(page_token)
@@ -27764,7 +28563,12 @@ pub trait ClientSystemExt {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.update_deployments_list()
     ///    .limit(limit)
     ///    .page_token(page_token)
@@ -27777,7 +28581,12 @@ pub trait ClientSystemExt {
     ///
     ///Sends a `GET` request to `/v1/system/update/deployments/{id}`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.update_deployment_view()
     ///    .id(id)
     ///    .send()
@@ -27788,7 +28597,12 @@ pub trait ClientSystemExt {
     ///
     ///Sends a `POST` request to `/v1/system/update/refresh`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.system_update_refresh()
     ///    .send()
     ///    .await;
@@ -27798,7 +28612,12 @@ pub trait ClientSystemExt {
     ///
     ///Sends a `POST` request to `/v1/system/update/start`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.system_update_start()
     ///    .body(body)
     ///    .send()
@@ -27811,7 +28630,12 @@ pub trait ClientSystemExt {
     ///
     ///Sends a `POST` request to `/v1/system/update/stop`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.system_update_stop()
     ///    .send()
     ///    .await;
@@ -27826,7 +28650,12 @@ pub trait ClientSystemExt {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.system_update_list()
     ///    .limit(limit)
     ///    .page_token(page_token)
@@ -27839,7 +28668,12 @@ pub trait ClientSystemExt {
     ///
     ///Sends a `GET` request to `/v1/system/update/updates/{version}`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.system_update_view()
     ///    .version(version)
     ///    .send()
@@ -27851,7 +28685,12 @@ pub trait ClientSystemExt {
     ///Sends a `GET` request to
     /// `/v1/system/update/updates/{version}/components`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.system_update_components_list()
     ///    .version(version)
     ///    .send()
@@ -27862,7 +28701,12 @@ pub trait ClientSystemExt {
     ///
     ///Sends a `GET` request to `/v1/system/update/version`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.system_version()
     ///    .send()
     ///    .await;
@@ -28111,7 +28955,12 @@ pub trait ClientVpcsExt {
     ///
     ///Sends a `GET` request to `/by-id/vpc-router-routes/{id}`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.vpc_router_route_view_by_id()
     ///    .id(id)
     ///    .send()
@@ -28122,7 +28971,12 @@ pub trait ClientVpcsExt {
     ///
     ///Sends a `GET` request to `/by-id/vpc-routers/{id}`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.vpc_router_view_by_id()
     ///    .id(id)
     ///    .send()
@@ -28133,7 +28987,12 @@ pub trait ClientVpcsExt {
     ///
     ///Sends a `GET` request to `/by-id/vpc-subnets/{id}`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.vpc_subnet_view_by_id()
     ///    .id(id)
     ///    .send()
@@ -28144,7 +29003,12 @@ pub trait ClientVpcsExt {
     ///
     ///Sends a `GET` request to `/by-id/vpcs/{id}`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.vpc_view_by_id()
     ///    .id(id)
     ///    .send()
@@ -28163,7 +29027,12 @@ pub trait ClientVpcsExt {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.vpc_list()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -28183,7 +29052,12 @@ pub trait ClientVpcsExt {
     /// - `organization_name`: The organization's unique name.
     /// - `project_name`: The project's unique name within the organization.
     /// - `body`
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.vpc_create()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -28198,7 +29072,12 @@ pub trait ClientVpcsExt {
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
     /// {vpc_name}`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.vpc_view()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -28213,7 +29092,12 @@ pub trait ClientVpcsExt {
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
     /// {vpc_name}`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.vpc_update()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -28229,7 +29113,12 @@ pub trait ClientVpcsExt {
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
     /// {vpc_name}`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.vpc_delete()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -28244,7 +29133,12 @@ pub trait ClientVpcsExt {
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
     /// {vpc_name}/firewall/rules`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.vpc_firewall_rules_view()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -28259,7 +29153,12 @@ pub trait ClientVpcsExt {
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
     /// {vpc_name}/firewall/rules`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.vpc_firewall_rules_update()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -28283,7 +29182,12 @@ pub trait ClientVpcsExt {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.vpc_router_list()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -28301,7 +29205,12 @@ pub trait ClientVpcsExt {
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
     /// {vpc_name}/routers`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.vpc_router_create()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -28317,7 +29226,12 @@ pub trait ClientVpcsExt {
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
     /// {vpc_name}/routers/{router_name}`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.vpc_router_view()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -28333,7 +29247,12 @@ pub trait ClientVpcsExt {
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
     /// {vpc_name}/routers/{router_name}`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.vpc_router_update()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -28350,7 +29269,12 @@ pub trait ClientVpcsExt {
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
     /// {vpc_name}/routers/{router_name}`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.vpc_router_delete()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -28377,7 +29301,12 @@ pub trait ClientVpcsExt {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.vpc_router_route_list()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -28396,7 +29325,12 @@ pub trait ClientVpcsExt {
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
     /// {vpc_name}/routers/{router_name}/routes`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.vpc_router_route_create()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -28413,7 +29347,12 @@ pub trait ClientVpcsExt {
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
     /// {vpc_name}/routers/{router_name}/routes/{route_name}`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.vpc_router_route_view()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -28430,7 +29369,12 @@ pub trait ClientVpcsExt {
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
     /// {vpc_name}/routers/{router_name}/routes/{route_name}`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.vpc_router_route_update()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -28448,7 +29392,12 @@ pub trait ClientVpcsExt {
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
     /// {vpc_name}/routers/{router_name}/routes/{route_name}`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.vpc_router_route_delete()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -28473,7 +29422,12 @@ pub trait ClientVpcsExt {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.vpc_subnet_list()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -28491,7 +29445,12 @@ pub trait ClientVpcsExt {
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
     /// {vpc_name}/subnets`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.vpc_subnet_create()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -28507,7 +29466,12 @@ pub trait ClientVpcsExt {
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
     /// {vpc_name}/subnets/{subnet_name}`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.vpc_subnet_view()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -28523,7 +29487,12 @@ pub trait ClientVpcsExt {
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
     /// {vpc_name}/subnets/{subnet_name}`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.vpc_subnet_update()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -28540,7 +29509,12 @@ pub trait ClientVpcsExt {
     /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
     /// {vpc_name}/subnets/{subnet_name}`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.vpc_subnet_delete()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -28565,7 +29539,12 @@ pub trait ClientVpcsExt {
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
     /// - `sort_by`
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.vpc_subnet_list_network_interfaces()
     ///    .organization_name(organization_name)
     ///    .project_name(project_name)
@@ -28692,6 +29671,21 @@ impl ClientVpcsExt for Client {
 
 /// Types for composing operation parameters.
 #[allow(clippy::all)]
+#[allow(
+    clippy::result_large_err,
+    reason = "generated methods preserve the public Error representation"
+)]
+#[cfg_attr(
+    target_arch = "wasm32",
+    allow(
+        clippy::future_not_send,
+        reason = "reqwest futures use browser-local state on wasm"
+    )
+)]
+#[allow(
+    clippy::match_same_arms,
+    reason = "generated status ranges remain explicit"
+)]
 pub mod builder {
     use super::types;
     #[allow(unused_imports)]
@@ -28709,9 +29703,13 @@ pub mod builder {
     }
 
     impl<'a> DiskViewById<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 id: Err("id was not initialized".to_string()),
             }
         }
@@ -28727,13 +29725,18 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/by-id/disks/{id}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::Disk>, Error<types::Error>> {
             let Self { client, id } = self;
             let id = id.map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/by-id/disks/{}",
                 client.baseurl,
-                encode_path(&id.to_string()),
+                encode_path(&id.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -28780,9 +29783,13 @@ pub mod builder {
     }
 
     impl<'a> ImageViewById<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 id: Err("id was not initialized".to_string()),
             }
         }
@@ -28798,13 +29805,18 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/by-id/images/{id}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::Image>, Error<types::Error>> {
             let Self { client, id } = self;
             let id = id.map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/by-id/images/{}",
                 client.baseurl,
-                encode_path(&id.to_string()),
+                encode_path(&id.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -28851,9 +29863,13 @@ pub mod builder {
     }
 
     impl<'a> InstanceViewById<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 id: Err("id was not initialized".to_string()),
             }
         }
@@ -28869,13 +29885,18 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/by-id/instances/{id}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
             let Self { client, id } = self;
             let id = id.map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/by-id/instances/{}",
                 client.baseurl,
-                encode_path(&id.to_string()),
+                encode_path(&id.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -28923,9 +29944,13 @@ pub mod builder {
     }
 
     impl<'a> InstanceNetworkInterfaceViewById<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 id: Err("id was not initialized".to_string()),
             }
         }
@@ -28941,6 +29966,11 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/by-id/network-interfaces/{id}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::NetworkInterface>, Error<types::Error>> {
@@ -28949,7 +29979,7 @@ pub mod builder {
             let url = format!(
                 "{}/by-id/network-interfaces/{}",
                 client.baseurl,
-                encode_path(&id.to_string()),
+                encode_path(&id.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -28996,9 +30026,13 @@ pub mod builder {
     }
 
     impl<'a> OrganizationViewById<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 id: Err("id was not initialized".to_string()),
             }
         }
@@ -29014,13 +30048,18 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/by-id/organizations/{id}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::Organization>, Error<types::Error>> {
             let Self { client, id } = self;
             let id = id.map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/by-id/organizations/{}",
                 client.baseurl,
-                encode_path(&id.to_string()),
+                encode_path(&id.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -29067,9 +30106,13 @@ pub mod builder {
     }
 
     impl<'a> ProjectViewById<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 id: Err("id was not initialized".to_string()),
             }
         }
@@ -29085,13 +30128,18 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/by-id/projects/{id}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::Project>, Error<types::Error>> {
             let Self { client, id } = self;
             let id = id.map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/by-id/projects/{}",
                 client.baseurl,
-                encode_path(&id.to_string()),
+                encode_path(&id.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -29138,9 +30186,13 @@ pub mod builder {
     }
 
     impl<'a> SnapshotViewById<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 id: Err("id was not initialized".to_string()),
             }
         }
@@ -29156,13 +30208,18 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/by-id/snapshots/{id}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::Snapshot>, Error<types::Error>> {
             let Self { client, id } = self;
             let id = id.map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/by-id/snapshots/{}",
                 client.baseurl,
-                encode_path(&id.to_string()),
+                encode_path(&id.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -29209,9 +30266,13 @@ pub mod builder {
     }
 
     impl<'a> VpcRouterRouteViewById<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 id: Err("id was not initialized".to_string()),
             }
         }
@@ -29227,13 +30288,18 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/by-id/vpc-router-routes/{id}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::RouterRoute>, Error<types::Error>> {
             let Self { client, id } = self;
             let id = id.map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/by-id/vpc-router-routes/{}",
                 client.baseurl,
-                encode_path(&id.to_string()),
+                encode_path(&id.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -29280,9 +30346,13 @@ pub mod builder {
     }
 
     impl<'a> VpcRouterViewById<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 id: Err("id was not initialized".to_string()),
             }
         }
@@ -29298,13 +30368,18 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/by-id/vpc-routers/{id}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::VpcRouter>, Error<types::Error>> {
             let Self { client, id } = self;
             let id = id.map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/by-id/vpc-routers/{}",
                 client.baseurl,
-                encode_path(&id.to_string()),
+                encode_path(&id.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -29351,9 +30426,13 @@ pub mod builder {
     }
 
     impl<'a> VpcSubnetViewById<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 id: Err("id was not initialized".to_string()),
             }
         }
@@ -29369,13 +30448,18 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/by-id/vpc-subnets/{id}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::VpcSubnet>, Error<types::Error>> {
             let Self { client, id } = self;
             let id = id.map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/by-id/vpc-subnets/{}",
                 client.baseurl,
-                encode_path(&id.to_string()),
+                encode_path(&id.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -29422,9 +30506,13 @@ pub mod builder {
     }
 
     impl<'a> VpcViewById<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 id: Err("id was not initialized".to_string()),
             }
         }
@@ -29440,13 +30528,18 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/by-id/vpcs/{id}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::Vpc>, Error<types::Error>> {
             let Self { client, id } = self;
             let id = id.map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/by-id/vpcs/{}",
                 client.baseurl,
-                encode_path(&id.to_string()),
+                encode_path(&id.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -29493,9 +30586,13 @@ pub mod builder {
     }
 
     impl<'a> DeviceAuthRequest<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 body: Ok(::std::default::Default::default()),
             }
         }
@@ -29523,12 +30620,17 @@ pub mod builder {
         }
 
         ///Sends a `POST` request to `/device/auth`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<ByteStream>, Error<ByteStream>> {
             let Self { client, body } = self;
             let body = body
                 .and_then(|v| types::DeviceAuthRequest::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!("{}/device/auth", client.baseurl,);
+            let url = format!("{}/device/auth", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
@@ -29565,9 +30667,13 @@ pub mod builder {
     }
 
     impl<'a> DeviceAuthConfirm<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 body: Ok(::std::default::Default::default()),
             }
         }
@@ -29595,12 +30701,17 @@ pub mod builder {
         }
 
         ///Sends a `POST` request to `/device/confirm`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
             let Self { client, body } = self;
             let body = body
                 .and_then(|v| types::DeviceAuthVerify::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!("{}/device/confirm", client.baseurl,);
+            let url = format!("{}/device/confirm", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
@@ -29625,7 +30736,7 @@ pub mod builder {
             client.post(&result, &info).await?;
             let response = result?;
             match response.status().as_u16() {
-                204u16 => Ok(ResponseValue::empty(response)),
+                204u16 => Ok(ResponseValue::empty(&response)),
                 400u16..=499u16 => Err(Error::ErrorResponse(
                     ResponseValue::from_response(response).await?,
                 )),
@@ -29647,9 +30758,13 @@ pub mod builder {
     }
 
     impl<'a> DeviceAccessToken<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 body: Ok(::std::default::Default::default()),
             }
         }
@@ -29679,6 +30794,11 @@ pub mod builder {
         }
 
         ///Sends a `POST` request to `/device/token`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<ByteStream>, Error<ByteStream>> {
             let Self { client, body } = self;
             let body = body
@@ -29686,7 +30806,7 @@ pub mod builder {
                     types::DeviceAccessTokenRequest::try_from(v).map_err(|e| e.to_string())
                 })
                 .map_err(Error::InvalidRequest)?;
-            let url = format!("{}/device/token", client.baseurl,);
+            let url = format!("{}/device/token", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
@@ -29725,9 +30845,13 @@ pub mod builder {
     }
 
     impl<'a> GroupList<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 limit: Ok(None),
                 page_token: Ok(None),
                 sort_by: Ok(None),
@@ -29766,6 +30890,11 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/groups`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::GroupResultsPage>, Error<types::Error>> {
@@ -29778,7 +30907,7 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/groups", client.baseurl,);
+            let url = format!("{}/groups", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
@@ -29876,9 +31005,13 @@ pub mod builder {
     }
 
     impl<'a> LoginSpoof<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 body: Ok(::std::default::Default::default()),
             }
         }
@@ -29904,12 +31037,17 @@ pub mod builder {
         }
 
         ///Sends a `POST` request to `/login`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
             let Self { client, body } = self;
             let body = body
                 .and_then(|v| types::SpoofLoginBody::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!("{}/login", client.baseurl,);
+            let url = format!("{}/login", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
@@ -29934,7 +31072,7 @@ pub mod builder {
             client.post(&result, &info).await?;
             let response = result?;
             match response.status().as_u16() {
-                204u16 => Ok(ResponseValue::empty(response)),
+                204u16 => Ok(ResponseValue::empty(&response)),
                 400u16..=499u16 => Err(Error::ErrorResponse(
                     ResponseValue::from_response(response).await?,
                 )),
@@ -29957,9 +31095,13 @@ pub mod builder {
     }
 
     impl<'a> LoginLocal<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 silo_name: Err("silo_name was not initialized".to_string()),
                 body: Ok(::std::default::Default::default()),
             }
@@ -30001,6 +31143,11 @@ pub mod builder {
         }
 
         ///Sends a `POST` request to `/login/{silo_name}/local`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<ByteStream>, Error<types::Error>> {
             let Self {
                 client,
@@ -30016,7 +31163,7 @@ pub mod builder {
             let url = format!(
                 "{}/login/{}/local",
                 client.baseurl,
-                encode_path(&silo_name.to_string()),
+                encode_path(&silo_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -30061,9 +31208,13 @@ pub mod builder {
     }
 
     impl<'a> LoginSamlBegin<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 silo_name: Err("silo_name was not initialized".to_string()),
                 provider_name: Err("provider_name was not initialized".to_string()),
             }
@@ -30090,6 +31241,11 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/login/{silo_name}/saml/{provider_name}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<ByteStream>, Error<types::Error>> {
             let Self {
                 client,
@@ -30102,7 +31258,7 @@ pub mod builder {
                 "{}/login/{}/saml/{}",
                 client.baseurl,
                 encode_path(&silo_name.to_string()),
-                encode_path(&provider_name.to_string()),
+                encode_path(&provider_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -30143,9 +31299,13 @@ pub mod builder {
     }
 
     impl<'a> LoginSaml<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 silo_name: Err("silo_name was not initialized".to_string()),
                 provider_name: Err("provider_name was not initialized".to_string()),
                 body: Err("body was not initialized".to_string()),
@@ -30183,6 +31343,11 @@ pub mod builder {
         }
 
         ///Sends a `POST` request to `/login/{silo_name}/saml/{provider_name}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<ByteStream>, Error<types::Error>> {
             let Self {
                 client,
@@ -30197,7 +31362,7 @@ pub mod builder {
                 "{}/login/{}/saml/{}",
                 client.baseurl,
                 encode_path(&silo_name.to_string()),
-                encode_path(&provider_name.to_string()),
+                encode_path(&provider_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -30244,14 +31409,23 @@ pub mod builder {
     }
 
     impl<'a> Logout<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
-            Self { client: client }
+            Self { client }
         }
 
         ///Sends a `POST` request to `/logout`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
             let Self { client } = self;
-            let url = format!("{}/logout", client.baseurl,);
+            let url = format!("{}/logout", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
@@ -30275,7 +31449,7 @@ pub mod builder {
             client.post(&result, &info).await?;
             let response = result?;
             match response.status().as_u16() {
-                204u16 => Ok(ResponseValue::empty(response)),
+                204u16 => Ok(ResponseValue::empty(&response)),
                 400u16..=499u16 => Err(Error::ErrorResponse(
                     ResponseValue::from_response(response).await?,
                 )),
@@ -30299,9 +31473,13 @@ pub mod builder {
     }
 
     impl<'a> OrganizationList<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 limit: Ok(None),
                 page_token: Ok(None),
                 sort_by: Ok(None),
@@ -30340,6 +31518,11 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/organizations`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::OrganizationResultsPage>, Error<types::Error>> {
@@ -30352,7 +31535,7 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/organizations", client.baseurl,);
+            let url = format!("{}/organizations", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
@@ -30450,9 +31633,13 @@ pub mod builder {
     }
 
     impl<'a> OrganizationCreate<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 body: Ok(::std::default::Default::default()),
             }
         }
@@ -30480,12 +31667,17 @@ pub mod builder {
         }
 
         ///Sends a `POST` request to `/organizations`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::Organization>, Error<types::Error>> {
             let Self { client, body } = self;
             let body = body
                 .and_then(|v| types::OrganizationCreate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!("{}/organizations", client.baseurl,);
+            let url = format!("{}/organizations", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
@@ -30532,9 +31724,13 @@ pub mod builder {
     }
 
     impl<'a> OrganizationView<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
             }
         }
@@ -30550,6 +31746,11 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/organizations/{organization_name}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::Organization>, Error<types::Error>> {
             let Self {
                 client,
@@ -30559,7 +31760,7 @@ pub mod builder {
             let url = format!(
                 "{}/organizations/{}",
                 client.baseurl,
-                encode_path(&organization_name.to_string()),
+                encode_path(&organization_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -30607,9 +31808,13 @@ pub mod builder {
     }
 
     impl<'a> OrganizationUpdate<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 body: Ok(::std::default::Default::default()),
             }
@@ -30648,6 +31853,11 @@ pub mod builder {
         }
 
         ///Sends a `PUT` request to `/organizations/{organization_name}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::Organization>, Error<types::Error>> {
             let Self {
                 client,
@@ -30661,7 +31871,7 @@ pub mod builder {
             let url = format!(
                 "{}/organizations/{}",
                 client.baseurl,
-                encode_path(&organization_name.to_string()),
+                encode_path(&organization_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -30709,9 +31919,13 @@ pub mod builder {
     }
 
     impl<'a> OrganizationDelete<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
             }
         }
@@ -30727,6 +31941,11 @@ pub mod builder {
         }
 
         ///Sends a `DELETE` request to `/organizations/{organization_name}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
             let Self {
                 client,
@@ -30736,7 +31955,7 @@ pub mod builder {
             let url = format!(
                 "{}/organizations/{}",
                 client.baseurl,
-                encode_path(&organization_name.to_string()),
+                encode_path(&organization_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -30761,7 +31980,7 @@ pub mod builder {
             client.post(&result, &info).await?;
             let response = result?;
             match response.status().as_u16() {
-                204u16 => Ok(ResponseValue::empty(response)),
+                204u16 => Ok(ResponseValue::empty(&response)),
                 400u16..=499u16 => Err(Error::ErrorResponse(
                     ResponseValue::from_response(response).await?,
                 )),
@@ -30783,9 +32002,13 @@ pub mod builder {
     }
 
     impl<'a> OrganizationPolicyView<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
             }
         }
@@ -30801,6 +32024,11 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/organizations/{organization_name}/policy`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::OrganizationRolePolicy>, Error<types::Error>> {
@@ -30812,7 +32040,7 @@ pub mod builder {
             let url = format!(
                 "{}/organizations/{}/policy",
                 client.baseurl,
-                encode_path(&organization_name.to_string()),
+                encode_path(&organization_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -30860,9 +32088,13 @@ pub mod builder {
     }
 
     impl<'a> OrganizationPolicyUpdate<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 body: Ok(::std::default::Default::default()),
             }
@@ -30903,6 +32135,11 @@ pub mod builder {
         }
 
         ///Sends a `PUT` request to `/organizations/{organization_name}/policy`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::OrganizationRolePolicy>, Error<types::Error>> {
@@ -30918,7 +32155,7 @@ pub mod builder {
             let url = format!(
                 "{}/organizations/{}/policy",
                 client.baseurl,
-                encode_path(&organization_name.to_string()),
+                encode_path(&organization_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -30969,9 +32206,13 @@ pub mod builder {
     }
 
     impl<'a> ProjectList<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 limit: Ok(None),
                 page_token: Ok(None),
@@ -31022,6 +32263,11 @@ pub mod builder {
 
         ///Sends a `GET` request to
         /// `/organizations/{organization_name}/projects`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::ProjectResultsPage>, Error<types::Error>> {
@@ -31039,7 +32285,7 @@ pub mod builder {
             let url = format!(
                 "{}/organizations/{}/projects",
                 client.baseurl,
-                encode_path(&organization_name.to_string()),
+                encode_path(&organization_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -31140,9 +32386,13 @@ pub mod builder {
     }
 
     impl<'a> ProjectCreate<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 body: Ok(::std::default::Default::default()),
             }
@@ -31180,6 +32430,11 @@ pub mod builder {
 
         ///Sends a `POST` request to
         /// `/organizations/{organization_name}/projects`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::Project>, Error<types::Error>> {
             let Self {
                 client,
@@ -31193,7 +32448,7 @@ pub mod builder {
             let url = format!(
                 "{}/organizations/{}/projects",
                 client.baseurl,
-                encode_path(&organization_name.to_string()),
+                encode_path(&organization_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -31242,9 +32497,13 @@ pub mod builder {
     }
 
     impl<'a> ProjectView<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
             }
@@ -31272,6 +32531,11 @@ pub mod builder {
 
         ///Sends a `GET` request to
         /// `/organizations/{organization_name}/projects/{project_name}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::Project>, Error<types::Error>> {
             let Self {
                 client,
@@ -31284,7 +32548,7 @@ pub mod builder {
                 "{}/organizations/{}/projects/{}",
                 client.baseurl,
                 encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
+                encode_path(&project_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -31333,9 +32597,13 @@ pub mod builder {
     }
 
     impl<'a> ProjectUpdate<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 body: Ok(::std::default::Default::default()),
@@ -31384,6 +32652,11 @@ pub mod builder {
 
         ///Sends a `PUT` request to
         /// `/organizations/{organization_name}/projects/{project_name}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::Project>, Error<types::Error>> {
             let Self {
                 client,
@@ -31400,7 +32673,7 @@ pub mod builder {
                 "{}/organizations/{}/projects/{}",
                 client.baseurl,
                 encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
+                encode_path(&project_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -31449,9 +32722,13 @@ pub mod builder {
     }
 
     impl<'a> ProjectDelete<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
             }
@@ -31479,6 +32756,11 @@ pub mod builder {
 
         ///Sends a `DELETE` request to
         /// `/organizations/{organization_name}/projects/{project_name}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
             let Self {
                 client,
@@ -31491,7 +32773,7 @@ pub mod builder {
                 "{}/organizations/{}/projects/{}",
                 client.baseurl,
                 encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
+                encode_path(&project_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -31516,7 +32798,7 @@ pub mod builder {
             client.post(&result, &info).await?;
             let response = result?;
             match response.status().as_u16() {
-                204u16 => Ok(ResponseValue::empty(response)),
+                204u16 => Ok(ResponseValue::empty(&response)),
                 400u16..=499u16 => Err(Error::ErrorResponse(
                     ResponseValue::from_response(response).await?,
                 )),
@@ -31542,9 +32824,13 @@ pub mod builder {
     }
 
     impl<'a> DiskList<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 limit: Ok(None),
@@ -31606,6 +32892,11 @@ pub mod builder {
 
         ///Sends a `GET` request to
         /// `/organizations/{organization_name}/projects/{project_name}/disks`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::DiskResultsPage>, Error<types::Error>> {
@@ -31626,7 +32917,7 @@ pub mod builder {
                 "{}/organizations/{}/projects/{}/disks",
                 client.baseurl,
                 encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
+                encode_path(&project_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -31728,9 +33019,13 @@ pub mod builder {
     }
 
     impl<'a> DiskCreate<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 body: Ok(::std::default::Default::default()),
@@ -31779,6 +33074,11 @@ pub mod builder {
 
         ///Sends a `POST` request to
         /// `/organizations/{organization_name}/projects/{project_name}/disks`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::Disk>, Error<types::Error>> {
             let Self {
                 client,
@@ -31795,7 +33095,7 @@ pub mod builder {
                 "{}/organizations/{}/projects/{}/disks",
                 client.baseurl,
                 encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
+                encode_path(&project_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -31845,9 +33145,13 @@ pub mod builder {
     }
 
     impl<'a> DiskView<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 disk_name: Err("disk_name was not initialized".to_string()),
@@ -31887,6 +33191,11 @@ pub mod builder {
         ///Sends a `GET` request to
         /// `/organizations/{organization_name}/projects/{project_name}/disks/
         /// {disk_name}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::Disk>, Error<types::Error>> {
             let Self {
                 client,
@@ -31902,7 +33211,7 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&organization_name.to_string()),
                 encode_path(&project_name.to_string()),
-                encode_path(&disk_name.to_string()),
+                encode_path(&disk_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -31951,9 +33260,13 @@ pub mod builder {
     }
 
     impl<'a> DiskDelete<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 disk_name: Err("disk_name was not initialized".to_string()),
@@ -31993,6 +33306,11 @@ pub mod builder {
         ///Sends a `DELETE` request to
         /// `/organizations/{organization_name}/projects/{project_name}/disks/
         /// {disk_name}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
             let Self {
                 client,
@@ -32008,7 +33326,7 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&organization_name.to_string()),
                 encode_path(&project_name.to_string()),
-                encode_path(&disk_name.to_string()),
+                encode_path(&disk_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -32033,7 +33351,7 @@ pub mod builder {
             client.post(&result, &info).await?;
             let response = result?;
             match response.status().as_u16() {
-                204u16 => Ok(ResponseValue::empty(response)),
+                204u16 => Ok(ResponseValue::empty(&response)),
                 400u16..=499u16 => Err(Error::ErrorResponse(
                     ResponseValue::from_response(response).await?,
                 )),
@@ -32062,9 +33380,13 @@ pub mod builder {
     }
 
     impl<'a> DiskMetricsList<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 disk_name: Err("disk_name was not initialized".to_string()),
@@ -32163,6 +33485,11 @@ pub mod builder {
         ///Sends a `GET` request to
         /// `/organizations/{organization_name}/projects/{project_name}/disks/
         /// {disk_name}/metrics/{metric_name}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::MeasurementResultsPage>, Error<types::Error>> {
@@ -32191,7 +33518,7 @@ pub mod builder {
                 encode_path(&organization_name.to_string()),
                 encode_path(&project_name.to_string()),
                 encode_path(&disk_name.to_string()),
-                encode_path(&metric_name.to_string()),
+                encode_path(&metric_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -32301,9 +33628,13 @@ pub mod builder {
     }
 
     impl<'a> ImageList<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 limit: Ok(None),
@@ -32365,6 +33696,11 @@ pub mod builder {
 
         ///Sends a `GET` request to
         /// `/organizations/{organization_name}/projects/{project_name}/images`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::ImageResultsPage>, Error<types::Error>> {
@@ -32385,7 +33721,7 @@ pub mod builder {
                 "{}/organizations/{}/projects/{}/images",
                 client.baseurl,
                 encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
+                encode_path(&project_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -32487,9 +33823,13 @@ pub mod builder {
     }
 
     impl<'a> ImageCreate<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 body: Ok(::std::default::Default::default()),
@@ -32538,6 +33878,11 @@ pub mod builder {
 
         ///Sends a `POST` request to
         /// `/organizations/{organization_name}/projects/{project_name}/images`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::Image>, Error<types::Error>> {
             let Self {
                 client,
@@ -32554,7 +33899,7 @@ pub mod builder {
                 "{}/organizations/{}/projects/{}/images",
                 client.baseurl,
                 encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
+                encode_path(&project_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -32604,9 +33949,13 @@ pub mod builder {
     }
 
     impl<'a> ImageView<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 image_name: Err("image_name was not initialized".to_string()),
@@ -32646,6 +33995,11 @@ pub mod builder {
         ///Sends a `GET` request to
         /// `/organizations/{organization_name}/projects/{project_name}/images/
         /// {image_name}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::Image>, Error<types::Error>> {
             let Self {
                 client,
@@ -32661,7 +34015,7 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&organization_name.to_string()),
                 encode_path(&project_name.to_string()),
-                encode_path(&image_name.to_string()),
+                encode_path(&image_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -32710,9 +34064,13 @@ pub mod builder {
     }
 
     impl<'a> ImageDelete<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 image_name: Err("image_name was not initialized".to_string()),
@@ -32752,6 +34110,11 @@ pub mod builder {
         ///Sends a `DELETE` request to
         /// `/organizations/{organization_name}/projects/{project_name}/images/
         /// {image_name}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
             let Self {
                 client,
@@ -32767,7 +34130,7 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&organization_name.to_string()),
                 encode_path(&project_name.to_string()),
-                encode_path(&image_name.to_string()),
+                encode_path(&image_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -32792,7 +34155,7 @@ pub mod builder {
             client.post(&result, &info).await?;
             let response = result?;
             match response.status().as_u16() {
-                204u16 => Ok(ResponseValue::empty(response)),
+                204u16 => Ok(ResponseValue::empty(&response)),
                 400u16..=499u16 => Err(Error::ErrorResponse(
                     ResponseValue::from_response(response).await?,
                 )),
@@ -32818,9 +34181,13 @@ pub mod builder {
     }
 
     impl<'a> InstanceList<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 limit: Ok(None),
@@ -32883,6 +34250,11 @@ pub mod builder {
         ///Sends a `GET` request to
         /// `/organizations/{organization_name}/projects/{project_name}/
         /// instances`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::InstanceResultsPage>, Error<types::Error>> {
@@ -32903,7 +34275,7 @@ pub mod builder {
                 "{}/organizations/{}/projects/{}/instances",
                 client.baseurl,
                 encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
+                encode_path(&project_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -33006,9 +34378,13 @@ pub mod builder {
     }
 
     impl<'a> InstanceCreate<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 body: Ok(::std::default::Default::default()),
@@ -33058,6 +34434,11 @@ pub mod builder {
         ///Sends a `POST` request to
         /// `/organizations/{organization_name}/projects/{project_name}/
         /// instances`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
             let Self {
                 client,
@@ -33074,7 +34455,7 @@ pub mod builder {
                 "{}/organizations/{}/projects/{}/instances",
                 client.baseurl,
                 encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
+                encode_path(&project_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -33124,9 +34505,13 @@ pub mod builder {
     }
 
     impl<'a> InstanceView<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 instance_name: Err("instance_name was not initialized".to_string()),
@@ -33166,6 +34551,11 @@ pub mod builder {
         ///Sends a `GET` request to
         /// `/organizations/{organization_name}/projects/{project_name}/
         /// instances/{instance_name}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
             let Self {
                 client,
@@ -33181,7 +34571,7 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&organization_name.to_string()),
                 encode_path(&project_name.to_string()),
-                encode_path(&instance_name.to_string()),
+                encode_path(&instance_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -33230,9 +34620,13 @@ pub mod builder {
     }
 
     impl<'a> InstanceDelete<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 instance_name: Err("instance_name was not initialized".to_string()),
@@ -33272,6 +34666,11 @@ pub mod builder {
         ///Sends a `DELETE` request to
         /// `/organizations/{organization_name}/projects/{project_name}/
         /// instances/{instance_name}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
             let Self {
                 client,
@@ -33287,7 +34686,7 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&organization_name.to_string()),
                 encode_path(&project_name.to_string()),
-                encode_path(&instance_name.to_string()),
+                encode_path(&instance_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -33312,7 +34711,7 @@ pub mod builder {
             client.post(&result, &info).await?;
             let response = result?;
             match response.status().as_u16() {
-                204u16 => Ok(ResponseValue::empty(response)),
+                204u16 => Ok(ResponseValue::empty(&response)),
                 400u16..=499u16 => Err(Error::ErrorResponse(
                     ResponseValue::from_response(response).await?,
                 )),
@@ -33339,9 +34738,13 @@ pub mod builder {
     }
 
     impl<'a> InstanceDiskList<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 instance_name: Err("instance_name was not initialized".to_string()),
@@ -33415,6 +34818,11 @@ pub mod builder {
         ///Sends a `GET` request to
         /// `/organizations/{organization_name}/projects/{project_name}/
         /// instances/{instance_name}/disks`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::DiskResultsPage>, Error<types::Error>> {
@@ -33438,7 +34846,7 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&organization_name.to_string()),
                 encode_path(&project_name.to_string()),
-                encode_path(&instance_name.to_string()),
+                encode_path(&instance_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -33542,9 +34950,13 @@ pub mod builder {
     }
 
     impl<'a> InstanceDiskAttach<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 instance_name: Err("instance_name was not initialized".to_string()),
@@ -33605,6 +35017,11 @@ pub mod builder {
         ///Sends a `POST` request to
         /// `/organizations/{organization_name}/projects/{project_name}/
         /// instances/{instance_name}/disks/attach`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::Disk>, Error<types::Error>> {
             let Self {
                 client,
@@ -33624,7 +35041,7 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&organization_name.to_string()),
                 encode_path(&project_name.to_string()),
-                encode_path(&instance_name.to_string()),
+                encode_path(&instance_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -33675,9 +35092,13 @@ pub mod builder {
     }
 
     impl<'a> InstanceDiskDetach<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 instance_name: Err("instance_name was not initialized".to_string()),
@@ -33738,6 +35159,11 @@ pub mod builder {
         ///Sends a `POST` request to
         /// `/organizations/{organization_name}/projects/{project_name}/
         /// instances/{instance_name}/disks/detach`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::Disk>, Error<types::Error>> {
             let Self {
                 client,
@@ -33757,7 +35183,7 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&organization_name.to_string()),
                 encode_path(&project_name.to_string()),
-                encode_path(&instance_name.to_string()),
+                encode_path(&instance_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -33807,9 +35233,13 @@ pub mod builder {
     }
 
     impl<'a> InstanceExternalIpList<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 instance_name: Err("instance_name was not initialized".to_string()),
@@ -33849,6 +35279,11 @@ pub mod builder {
         ///Sends a `GET` request to
         /// `/organizations/{organization_name}/projects/{project_name}/
         /// instances/{instance_name}/external-ips`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::ExternalIpResultsPage>, Error<types::Error>> {
@@ -33866,7 +35301,7 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&organization_name.to_string()),
                 encode_path(&project_name.to_string()),
-                encode_path(&instance_name.to_string()),
+                encode_path(&instance_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -33916,9 +35351,13 @@ pub mod builder {
     }
 
     impl<'a> InstanceMigrate<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 instance_name: Err("instance_name was not initialized".to_string()),
@@ -33979,6 +35418,11 @@ pub mod builder {
         ///Sends a `POST` request to
         /// `/organizations/{organization_name}/projects/{project_name}/
         /// instances/{instance_name}/migrate`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
             let Self {
                 client,
@@ -33998,7 +35442,7 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&organization_name.to_string()),
                 encode_path(&project_name.to_string()),
-                encode_path(&instance_name.to_string()),
+                encode_path(&instance_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -34051,9 +35495,13 @@ pub mod builder {
     }
 
     impl<'a> InstanceNetworkInterfaceList<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 instance_name: Err("instance_name was not initialized".to_string()),
@@ -34127,6 +35575,11 @@ pub mod builder {
         ///Sends a `GET` request to
         /// `/organizations/{organization_name}/projects/{project_name}/
         /// instances/{instance_name}/network-interfaces`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::NetworkInterfaceResultsPage>, Error<types::Error>>
@@ -34151,7 +35604,7 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&organization_name.to_string()),
                 encode_path(&project_name.to_string()),
-                encode_path(&instance_name.to_string()),
+                encode_path(&instance_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -34255,9 +35708,13 @@ pub mod builder {
     }
 
     impl<'a> InstanceNetworkInterfaceCreate<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 instance_name: Err("instance_name was not initialized".to_string()),
@@ -34322,6 +35779,11 @@ pub mod builder {
         ///Sends a `POST` request to
         /// `/organizations/{organization_name}/projects/{project_name}/
         /// instances/{instance_name}/network-interfaces`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::NetworkInterface>, Error<types::Error>> {
@@ -34343,7 +35805,7 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&organization_name.to_string()),
                 encode_path(&project_name.to_string()),
-                encode_path(&instance_name.to_string()),
+                encode_path(&instance_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -34394,9 +35856,13 @@ pub mod builder {
     }
 
     impl<'a> InstanceNetworkInterfaceView<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 instance_name: Err("instance_name was not initialized".to_string()),
@@ -34447,6 +35913,11 @@ pub mod builder {
         ///Sends a `GET` request to
         /// `/organizations/{organization_name}/projects/{project_name}/
         /// instances/{instance_name}/network-interfaces/{interface_name}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::NetworkInterface>, Error<types::Error>> {
@@ -34467,7 +35938,7 @@ pub mod builder {
                 encode_path(&organization_name.to_string()),
                 encode_path(&project_name.to_string()),
                 encode_path(&instance_name.to_string()),
-                encode_path(&interface_name.to_string()),
+                encode_path(&interface_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -34518,9 +35989,13 @@ pub mod builder {
     }
 
     impl<'a> InstanceNetworkInterfaceUpdate<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 instance_name: Err("instance_name was not initialized".to_string()),
@@ -34596,6 +36071,11 @@ pub mod builder {
         ///Sends a `PUT` request to
         /// `/organizations/{organization_name}/projects/{project_name}/
         /// instances/{instance_name}/network-interfaces/{interface_name}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::NetworkInterface>, Error<types::Error>> {
@@ -34620,7 +36100,7 @@ pub mod builder {
                 encode_path(&organization_name.to_string()),
                 encode_path(&project_name.to_string()),
                 encode_path(&instance_name.to_string()),
-                encode_path(&interface_name.to_string()),
+                encode_path(&interface_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -34671,9 +36151,13 @@ pub mod builder {
     }
 
     impl<'a> InstanceNetworkInterfaceDelete<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 instance_name: Err("instance_name was not initialized".to_string()),
@@ -34724,6 +36208,11 @@ pub mod builder {
         ///Sends a `DELETE` request to
         /// `/organizations/{organization_name}/projects/{project_name}/
         /// instances/{instance_name}/network-interfaces/{interface_name}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
             let Self {
                 client,
@@ -34742,7 +36231,7 @@ pub mod builder {
                 encode_path(&organization_name.to_string()),
                 encode_path(&project_name.to_string()),
                 encode_path(&instance_name.to_string()),
-                encode_path(&interface_name.to_string()),
+                encode_path(&interface_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -34767,7 +36256,7 @@ pub mod builder {
             client.post(&result, &info).await?;
             let response = result?;
             match response.status().as_u16() {
-                204u16 => Ok(ResponseValue::empty(response)),
+                204u16 => Ok(ResponseValue::empty(&response)),
                 400u16..=499u16 => Err(Error::ErrorResponse(
                     ResponseValue::from_response(response).await?,
                 )),
@@ -34791,9 +36280,13 @@ pub mod builder {
     }
 
     impl<'a> InstanceReboot<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 instance_name: Err("instance_name was not initialized".to_string()),
@@ -34833,6 +36326,11 @@ pub mod builder {
         ///Sends a `POST` request to
         /// `/organizations/{organization_name}/projects/{project_name}/
         /// instances/{instance_name}/reboot`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
             let Self {
                 client,
@@ -34848,7 +36346,7 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&organization_name.to_string()),
                 encode_path(&project_name.to_string()),
-                encode_path(&instance_name.to_string()),
+                encode_path(&instance_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -34900,9 +36398,13 @@ pub mod builder {
     }
 
     impl<'a> InstanceSerialConsole<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 instance_name: Err("instance_name was not initialized".to_string()),
@@ -34978,6 +36480,11 @@ pub mod builder {
         ///Sends a `GET` request to
         /// `/organizations/{organization_name}/projects/{project_name}/
         /// instances/{instance_name}/serial-console`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::InstanceSerialConsoleData>, Error<types::Error>> {
@@ -35001,7 +36508,7 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&organization_name.to_string()),
                 encode_path(&project_name.to_string()),
-                encode_path(&instance_name.to_string()),
+                encode_path(&instance_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -35059,9 +36566,13 @@ pub mod builder {
     }
 
     impl<'a> InstanceSerialConsoleStream<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 instance_name: Err("instance_name was not initialized".to_string()),
@@ -35101,6 +36612,11 @@ pub mod builder {
         ///Sends a `GET` request to
         /// `/organizations/{organization_name}/projects/{project_name}/
         /// instances/{instance_name}/serial-console/stream`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<reqwest::Upgraded>, Error<()>> {
             let Self {
                 client,
@@ -35116,7 +36632,7 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&organization_name.to_string()),
                 encode_path(&project_name.to_string()),
-                encode_path(&instance_name.to_string()),
+                encode_path(&instance_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -35165,9 +36681,13 @@ pub mod builder {
     }
 
     impl<'a> InstanceSerialConsoleStreamV2<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 instance_name: Err("instance_name was not initialized".to_string()),
@@ -35207,6 +36727,11 @@ pub mod builder {
         ///Sends a `GET` request to
         /// `/organizations/{organization_name}/projects/{project_name}/
         /// instances/{instance_name}/serial-console/stream_v2`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<reqwest::Upgraded>, Error<types::Error>> {
             let Self {
                 client,
@@ -35222,7 +36747,7 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&organization_name.to_string()),
                 encode_path(&project_name.to_string()),
-                encode_path(&instance_name.to_string()),
+                encode_path(&instance_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -35277,9 +36802,13 @@ pub mod builder {
     }
 
     impl<'a> InstanceStart<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 instance_name: Err("instance_name was not initialized".to_string()),
@@ -35319,6 +36848,11 @@ pub mod builder {
         ///Sends a `POST` request to
         /// `/organizations/{organization_name}/projects/{project_name}/
         /// instances/{instance_name}/start`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
             let Self {
                 client,
@@ -35334,7 +36868,7 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&organization_name.to_string()),
                 encode_path(&project_name.to_string()),
-                encode_path(&instance_name.to_string()),
+                encode_path(&instance_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -35383,9 +36917,13 @@ pub mod builder {
     }
 
     impl<'a> InstanceStop<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 instance_name: Err("instance_name was not initialized".to_string()),
@@ -35425,6 +36963,11 @@ pub mod builder {
         ///Sends a `POST` request to
         /// `/organizations/{organization_name}/projects/{project_name}/
         /// instances/{instance_name}/stop`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
             let Self {
                 client,
@@ -35440,7 +36983,7 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&organization_name.to_string()),
                 encode_path(&project_name.to_string()),
-                encode_path(&instance_name.to_string()),
+                encode_path(&instance_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -35488,9 +37031,13 @@ pub mod builder {
     }
 
     impl<'a> ProjectPolicyView<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
             }
@@ -35518,6 +37065,11 @@ pub mod builder {
 
         ///Sends a `GET` request to
         /// `/organizations/{organization_name}/projects/{project_name}/policy`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::ProjectRolePolicy>, Error<types::Error>> {
@@ -35532,7 +37084,7 @@ pub mod builder {
                 "{}/organizations/{}/projects/{}/policy",
                 client.baseurl,
                 encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
+                encode_path(&project_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -35581,9 +37133,13 @@ pub mod builder {
     }
 
     impl<'a> ProjectPolicyUpdate<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 body: Ok(::std::default::Default::default()),
@@ -35634,6 +37190,11 @@ pub mod builder {
 
         ///Sends a `PUT` request to
         /// `/organizations/{organization_name}/projects/{project_name}/policy`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::ProjectRolePolicy>, Error<types::Error>> {
@@ -35652,7 +37213,7 @@ pub mod builder {
                 "{}/organizations/{}/projects/{}/policy",
                 client.baseurl,
                 encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
+                encode_path(&project_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -35704,9 +37265,13 @@ pub mod builder {
     }
 
     impl<'a> SnapshotList<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 limit: Ok(None),
@@ -35769,6 +37334,11 @@ pub mod builder {
         ///Sends a `GET` request to
         /// `/organizations/{organization_name}/projects/{project_name}/
         /// snapshots`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::SnapshotResultsPage>, Error<types::Error>> {
@@ -35789,7 +37359,7 @@ pub mod builder {
                 "{}/organizations/{}/projects/{}/snapshots",
                 client.baseurl,
                 encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
+                encode_path(&project_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -35892,9 +37462,13 @@ pub mod builder {
     }
 
     impl<'a> SnapshotCreate<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 body: Ok(::std::default::Default::default()),
@@ -35944,6 +37518,11 @@ pub mod builder {
         ///Sends a `POST` request to
         /// `/organizations/{organization_name}/projects/{project_name}/
         /// snapshots`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::Snapshot>, Error<types::Error>> {
             let Self {
                 client,
@@ -35960,7 +37539,7 @@ pub mod builder {
                 "{}/organizations/{}/projects/{}/snapshots",
                 client.baseurl,
                 encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
+                encode_path(&project_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -36010,9 +37589,13 @@ pub mod builder {
     }
 
     impl<'a> SnapshotView<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 snapshot_name: Err("snapshot_name was not initialized".to_string()),
@@ -36052,6 +37635,11 @@ pub mod builder {
         ///Sends a `GET` request to
         /// `/organizations/{organization_name}/projects/{project_name}/
         /// snapshots/{snapshot_name}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::Snapshot>, Error<types::Error>> {
             let Self {
                 client,
@@ -36067,7 +37655,7 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&organization_name.to_string()),
                 encode_path(&project_name.to_string()),
-                encode_path(&snapshot_name.to_string()),
+                encode_path(&snapshot_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -36116,9 +37704,13 @@ pub mod builder {
     }
 
     impl<'a> SnapshotDelete<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 snapshot_name: Err("snapshot_name was not initialized".to_string()),
@@ -36158,6 +37750,11 @@ pub mod builder {
         ///Sends a `DELETE` request to
         /// `/organizations/{organization_name}/projects/{project_name}/
         /// snapshots/{snapshot_name}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
             let Self {
                 client,
@@ -36173,7 +37770,7 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&organization_name.to_string()),
                 encode_path(&project_name.to_string()),
-                encode_path(&snapshot_name.to_string()),
+                encode_path(&snapshot_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -36198,7 +37795,7 @@ pub mod builder {
             client.post(&result, &info).await?;
             let response = result?;
             match response.status().as_u16() {
-                204u16 => Ok(ResponseValue::empty(response)),
+                204u16 => Ok(ResponseValue::empty(&response)),
                 400u16..=499u16 => Err(Error::ErrorResponse(
                     ResponseValue::from_response(response).await?,
                 )),
@@ -36224,9 +37821,13 @@ pub mod builder {
     }
 
     impl<'a> VpcList<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 limit: Ok(None),
@@ -36288,6 +37889,11 @@ pub mod builder {
 
         ///Sends a `GET` request to
         /// `/organizations/{organization_name}/projects/{project_name}/vpcs`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::VpcResultsPage>, Error<types::Error>> {
@@ -36308,7 +37914,7 @@ pub mod builder {
                 "{}/organizations/{}/projects/{}/vpcs",
                 client.baseurl,
                 encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
+                encode_path(&project_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -36410,9 +38016,13 @@ pub mod builder {
     }
 
     impl<'a> VpcCreate<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 body: Ok(::std::default::Default::default()),
@@ -36461,6 +38071,11 @@ pub mod builder {
 
         ///Sends a `POST` request to
         /// `/organizations/{organization_name}/projects/{project_name}/vpcs`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::Vpc>, Error<types::Error>> {
             let Self {
                 client,
@@ -36477,7 +38092,7 @@ pub mod builder {
                 "{}/organizations/{}/projects/{}/vpcs",
                 client.baseurl,
                 encode_path(&organization_name.to_string()),
-                encode_path(&project_name.to_string()),
+                encode_path(&project_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -36527,9 +38142,13 @@ pub mod builder {
     }
 
     impl<'a> VpcView<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 vpc_name: Err("vpc_name was not initialized".to_string()),
@@ -36569,6 +38188,11 @@ pub mod builder {
         ///Sends a `GET` request to
         /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
         /// {vpc_name}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::Vpc>, Error<types::Error>> {
             let Self {
                 client,
@@ -36584,7 +38208,7 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&organization_name.to_string()),
                 encode_path(&project_name.to_string()),
-                encode_path(&vpc_name.to_string()),
+                encode_path(&vpc_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -36634,9 +38258,13 @@ pub mod builder {
     }
 
     impl<'a> VpcUpdate<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 vpc_name: Err("vpc_name was not initialized".to_string()),
@@ -36697,6 +38325,11 @@ pub mod builder {
         ///Sends a `PUT` request to
         /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
         /// {vpc_name}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::Vpc>, Error<types::Error>> {
             let Self {
                 client,
@@ -36716,7 +38349,7 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&organization_name.to_string()),
                 encode_path(&project_name.to_string()),
-                encode_path(&vpc_name.to_string()),
+                encode_path(&vpc_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -36766,9 +38399,13 @@ pub mod builder {
     }
 
     impl<'a> VpcDelete<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 vpc_name: Err("vpc_name was not initialized".to_string()),
@@ -36808,6 +38445,11 @@ pub mod builder {
         ///Sends a `DELETE` request to
         /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
         /// {vpc_name}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
             let Self {
                 client,
@@ -36823,7 +38465,7 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&organization_name.to_string()),
                 encode_path(&project_name.to_string()),
-                encode_path(&vpc_name.to_string()),
+                encode_path(&vpc_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -36848,7 +38490,7 @@ pub mod builder {
             client.post(&result, &info).await?;
             let response = result?;
             match response.status().as_u16() {
-                204u16 => Ok(ResponseValue::empty(response)),
+                204u16 => Ok(ResponseValue::empty(&response)),
                 400u16..=499u16 => Err(Error::ErrorResponse(
                     ResponseValue::from_response(response).await?,
                 )),
@@ -36872,9 +38514,13 @@ pub mod builder {
     }
 
     impl<'a> VpcFirewallRulesView<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 vpc_name: Err("vpc_name was not initialized".to_string()),
@@ -36914,6 +38560,11 @@ pub mod builder {
         ///Sends a `GET` request to
         /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
         /// {vpc_name}/firewall/rules`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::VpcFirewallRules>, Error<types::Error>> {
@@ -36931,7 +38582,7 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&organization_name.to_string()),
                 encode_path(&project_name.to_string()),
-                encode_path(&vpc_name.to_string()),
+                encode_path(&vpc_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -36981,9 +38632,13 @@ pub mod builder {
     }
 
     impl<'a> VpcFirewallRulesUpdate<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 vpc_name: Err("vpc_name was not initialized".to_string()),
@@ -37049,6 +38704,11 @@ pub mod builder {
         ///Sends a `PUT` request to
         /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
         /// {vpc_name}/firewall/rules`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::VpcFirewallRules>, Error<types::Error>> {
@@ -37072,7 +38732,7 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&organization_name.to_string()),
                 encode_path(&project_name.to_string()),
-                encode_path(&vpc_name.to_string()),
+                encode_path(&vpc_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -37125,9 +38785,13 @@ pub mod builder {
     }
 
     impl<'a> VpcRouterList<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 vpc_name: Err("vpc_name was not initialized".to_string()),
@@ -37201,6 +38865,11 @@ pub mod builder {
         ///Sends a `GET` request to
         /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
         /// {vpc_name}/routers`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::VpcRouterResultsPage>, Error<types::Error>> {
@@ -37224,7 +38893,7 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&organization_name.to_string()),
                 encode_path(&project_name.to_string()),
-                encode_path(&vpc_name.to_string()),
+                encode_path(&vpc_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -37328,9 +38997,13 @@ pub mod builder {
     }
 
     impl<'a> VpcRouterCreate<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 vpc_name: Err("vpc_name was not initialized".to_string()),
@@ -37391,6 +39064,11 @@ pub mod builder {
         ///Sends a `POST` request to
         /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
         /// {vpc_name}/routers`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::VpcRouter>, Error<types::Error>> {
             let Self {
                 client,
@@ -37410,7 +39088,7 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&organization_name.to_string()),
                 encode_path(&project_name.to_string()),
-                encode_path(&vpc_name.to_string()),
+                encode_path(&vpc_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -37461,9 +39139,13 @@ pub mod builder {
     }
 
     impl<'a> VpcRouterView<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 vpc_name: Err("vpc_name was not initialized".to_string()),
@@ -37514,6 +39196,11 @@ pub mod builder {
         ///Sends a `GET` request to
         /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
         /// {vpc_name}/routers/{router_name}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::VpcRouter>, Error<types::Error>> {
             let Self {
                 client,
@@ -37532,7 +39219,7 @@ pub mod builder {
                 encode_path(&organization_name.to_string()),
                 encode_path(&project_name.to_string()),
                 encode_path(&vpc_name.to_string()),
-                encode_path(&router_name.to_string()),
+                encode_path(&router_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -37583,9 +39270,13 @@ pub mod builder {
     }
 
     impl<'a> VpcRouterUpdate<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 vpc_name: Err("vpc_name was not initialized".to_string()),
@@ -37657,6 +39348,11 @@ pub mod builder {
         ///Sends a `PUT` request to
         /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
         /// {vpc_name}/routers/{router_name}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::VpcRouter>, Error<types::Error>> {
             let Self {
                 client,
@@ -37679,7 +39375,7 @@ pub mod builder {
                 encode_path(&organization_name.to_string()),
                 encode_path(&project_name.to_string()),
                 encode_path(&vpc_name.to_string()),
-                encode_path(&router_name.to_string()),
+                encode_path(&router_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -37730,9 +39426,13 @@ pub mod builder {
     }
 
     impl<'a> VpcRouterDelete<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 vpc_name: Err("vpc_name was not initialized".to_string()),
@@ -37783,6 +39483,11 @@ pub mod builder {
         ///Sends a `DELETE` request to
         /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
         /// {vpc_name}/routers/{router_name}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
             let Self {
                 client,
@@ -37801,7 +39506,7 @@ pub mod builder {
                 encode_path(&organization_name.to_string()),
                 encode_path(&project_name.to_string()),
                 encode_path(&vpc_name.to_string()),
-                encode_path(&router_name.to_string()),
+                encode_path(&router_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -37826,7 +39531,7 @@ pub mod builder {
             client.post(&result, &info).await?;
             let response = result?;
             match response.status().as_u16() {
-                204u16 => Ok(ResponseValue::empty(response)),
+                204u16 => Ok(ResponseValue::empty(&response)),
                 400u16..=499u16 => Err(Error::ErrorResponse(
                     ResponseValue::from_response(response).await?,
                 )),
@@ -37854,9 +39559,13 @@ pub mod builder {
     }
 
     impl<'a> VpcRouterRouteList<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 vpc_name: Err("vpc_name was not initialized".to_string()),
@@ -37941,6 +39650,11 @@ pub mod builder {
         ///Sends a `GET` request to
         /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
         /// {vpc_name}/routers/{router_name}/routes`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::RouterRouteResultsPage>, Error<types::Error>> {
@@ -37967,7 +39681,7 @@ pub mod builder {
                 encode_path(&organization_name.to_string()),
                 encode_path(&project_name.to_string()),
                 encode_path(&vpc_name.to_string()),
-                encode_path(&router_name.to_string()),
+                encode_path(&router_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -38072,9 +39786,13 @@ pub mod builder {
     }
 
     impl<'a> VpcRouterRouteCreate<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 vpc_name: Err("vpc_name was not initialized".to_string()),
@@ -38150,6 +39868,11 @@ pub mod builder {
         ///Sends a `POST` request to
         /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
         /// {vpc_name}/routers/{router_name}/routes`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::RouterRoute>, Error<types::Error>> {
             let Self {
                 client,
@@ -38174,7 +39897,7 @@ pub mod builder {
                 encode_path(&organization_name.to_string()),
                 encode_path(&project_name.to_string()),
                 encode_path(&vpc_name.to_string()),
-                encode_path(&router_name.to_string()),
+                encode_path(&router_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -38226,9 +39949,13 @@ pub mod builder {
     }
 
     impl<'a> VpcRouterRouteView<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 vpc_name: Err("vpc_name was not initialized".to_string()),
@@ -38290,6 +40017,11 @@ pub mod builder {
         ///Sends a `GET` request to
         /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
         /// {vpc_name}/routers/{router_name}/routes/{route_name}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::RouterRoute>, Error<types::Error>> {
             let Self {
                 client,
@@ -38311,7 +40043,7 @@ pub mod builder {
                 encode_path(&project_name.to_string()),
                 encode_path(&vpc_name.to_string()),
                 encode_path(&router_name.to_string()),
-                encode_path(&route_name.to_string()),
+                encode_path(&route_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -38363,9 +40095,13 @@ pub mod builder {
     }
 
     impl<'a> VpcRouterRouteUpdate<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 vpc_name: Err("vpc_name was not initialized".to_string()),
@@ -38452,6 +40188,11 @@ pub mod builder {
         ///Sends a `PUT` request to
         /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
         /// {vpc_name}/routers/{router_name}/routes/{route_name}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::RouterRoute>, Error<types::Error>> {
             let Self {
                 client,
@@ -38479,7 +40220,7 @@ pub mod builder {
                 encode_path(&project_name.to_string()),
                 encode_path(&vpc_name.to_string()),
                 encode_path(&router_name.to_string()),
-                encode_path(&route_name.to_string()),
+                encode_path(&route_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -38531,9 +40272,13 @@ pub mod builder {
     }
 
     impl<'a> VpcRouterRouteDelete<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 vpc_name: Err("vpc_name was not initialized".to_string()),
@@ -38595,6 +40340,11 @@ pub mod builder {
         ///Sends a `DELETE` request to
         /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
         /// {vpc_name}/routers/{router_name}/routes/{route_name}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
             let Self {
                 client,
@@ -38616,7 +40366,7 @@ pub mod builder {
                 encode_path(&project_name.to_string()),
                 encode_path(&vpc_name.to_string()),
                 encode_path(&router_name.to_string()),
-                encode_path(&route_name.to_string()),
+                encode_path(&route_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -38641,7 +40391,7 @@ pub mod builder {
             client.post(&result, &info).await?;
             let response = result?;
             match response.status().as_u16() {
-                204u16 => Ok(ResponseValue::empty(response)),
+                204u16 => Ok(ResponseValue::empty(&response)),
                 400u16..=499u16 => Err(Error::ErrorResponse(
                     ResponseValue::from_response(response).await?,
                 )),
@@ -38668,9 +40418,13 @@ pub mod builder {
     }
 
     impl<'a> VpcSubnetList<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 vpc_name: Err("vpc_name was not initialized".to_string()),
@@ -38744,6 +40498,11 @@ pub mod builder {
         ///Sends a `GET` request to
         /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
         /// {vpc_name}/subnets`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::VpcSubnetResultsPage>, Error<types::Error>> {
@@ -38767,7 +40526,7 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&organization_name.to_string()),
                 encode_path(&project_name.to_string()),
-                encode_path(&vpc_name.to_string()),
+                encode_path(&vpc_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -38871,9 +40630,13 @@ pub mod builder {
     }
 
     impl<'a> VpcSubnetCreate<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 vpc_name: Err("vpc_name was not initialized".to_string()),
@@ -38934,6 +40697,11 @@ pub mod builder {
         ///Sends a `POST` request to
         /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
         /// {vpc_name}/subnets`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::VpcSubnet>, Error<types::Error>> {
             let Self {
                 client,
@@ -38953,7 +40721,7 @@ pub mod builder {
                 client.baseurl,
                 encode_path(&organization_name.to_string()),
                 encode_path(&project_name.to_string()),
-                encode_path(&vpc_name.to_string()),
+                encode_path(&vpc_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -39004,9 +40772,13 @@ pub mod builder {
     }
 
     impl<'a> VpcSubnetView<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 vpc_name: Err("vpc_name was not initialized".to_string()),
@@ -39057,6 +40829,11 @@ pub mod builder {
         ///Sends a `GET` request to
         /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
         /// {vpc_name}/subnets/{subnet_name}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::VpcSubnet>, Error<types::Error>> {
             let Self {
                 client,
@@ -39075,7 +40852,7 @@ pub mod builder {
                 encode_path(&organization_name.to_string()),
                 encode_path(&project_name.to_string()),
                 encode_path(&vpc_name.to_string()),
-                encode_path(&subnet_name.to_string()),
+                encode_path(&subnet_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -39126,9 +40903,13 @@ pub mod builder {
     }
 
     impl<'a> VpcSubnetUpdate<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 vpc_name: Err("vpc_name was not initialized".to_string()),
@@ -39200,6 +40981,11 @@ pub mod builder {
         ///Sends a `PUT` request to
         /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
         /// {vpc_name}/subnets/{subnet_name}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::VpcSubnet>, Error<types::Error>> {
             let Self {
                 client,
@@ -39222,7 +41008,7 @@ pub mod builder {
                 encode_path(&organization_name.to_string()),
                 encode_path(&project_name.to_string()),
                 encode_path(&vpc_name.to_string()),
-                encode_path(&subnet_name.to_string()),
+                encode_path(&subnet_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -39273,9 +41059,13 @@ pub mod builder {
     }
 
     impl<'a> VpcSubnetDelete<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 vpc_name: Err("vpc_name was not initialized".to_string()),
@@ -39326,6 +41116,11 @@ pub mod builder {
         ///Sends a `DELETE` request to
         /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
         /// {vpc_name}/subnets/{subnet_name}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
             let Self {
                 client,
@@ -39344,7 +41139,7 @@ pub mod builder {
                 encode_path(&organization_name.to_string()),
                 encode_path(&project_name.to_string()),
                 encode_path(&vpc_name.to_string()),
-                encode_path(&subnet_name.to_string()),
+                encode_path(&subnet_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -39369,7 +41164,7 @@ pub mod builder {
             client.post(&result, &info).await?;
             let response = result?;
             match response.status().as_u16() {
-                204u16 => Ok(ResponseValue::empty(response)),
+                204u16 => Ok(ResponseValue::empty(&response)),
                 400u16..=499u16 => Err(Error::ErrorResponse(
                     ResponseValue::from_response(response).await?,
                 )),
@@ -39397,9 +41192,13 @@ pub mod builder {
     }
 
     impl<'a> VpcSubnetListNetworkInterfaces<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization_name: Err("organization_name was not initialized".to_string()),
                 project_name: Err("project_name was not initialized".to_string()),
                 vpc_name: Err("vpc_name was not initialized".to_string()),
@@ -39484,6 +41283,11 @@ pub mod builder {
         ///Sends a `GET` request to
         /// `/organizations/{organization_name}/projects/{project_name}/vpcs/
         /// {vpc_name}/subnets/{subnet_name}/network-interfaces`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::NetworkInterfaceResultsPage>, Error<types::Error>>
@@ -39511,7 +41315,7 @@ pub mod builder {
                 encode_path(&organization_name.to_string()),
                 encode_path(&project_name.to_string()),
                 encode_path(&vpc_name.to_string()),
-                encode_path(&subnet_name.to_string()),
+                encode_path(&subnet_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -39611,16 +41415,25 @@ pub mod builder {
     }
 
     impl<'a> PolicyView<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
-            Self { client: client }
+            Self { client }
         }
 
         ///Sends a `GET` request to `/policy`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::SiloRolePolicy>, Error<types::Error>> {
             let Self { client } = self;
-            let url = format!("{}/policy", client.baseurl,);
+            let url = format!("{}/policy", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
@@ -39666,9 +41479,13 @@ pub mod builder {
     }
 
     impl<'a> PolicyUpdate<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 body: Ok(::std::default::Default::default()),
             }
         }
@@ -39694,6 +41511,11 @@ pub mod builder {
         }
 
         ///Sends a `PUT` request to `/policy`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::SiloRolePolicy>, Error<types::Error>> {
@@ -39701,7 +41523,7 @@ pub mod builder {
             let body = body
                 .and_then(|v| types::SiloRolePolicy::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!("{}/policy", client.baseurl,);
+            let url = format!("{}/policy", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
@@ -39749,9 +41571,13 @@ pub mod builder {
     }
 
     impl<'a> RoleList<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 limit: Ok(None),
                 page_token: Ok(None),
             }
@@ -39778,6 +41604,11 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/roles`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::RoleResultsPage>, Error<types::Error>> {
@@ -39788,7 +41619,7 @@ pub mod builder {
             } = self;
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/roles", client.baseurl,);
+            let url = format!("{}/roles", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
@@ -39884,9 +41715,13 @@ pub mod builder {
     }
 
     impl<'a> RoleView<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 role_name: Err("role_name was not initialized".to_string()),
             }
         }
@@ -39902,13 +41737,18 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/roles/{role_name}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::Role>, Error<types::Error>> {
             let Self { client, role_name } = self;
             let role_name = role_name.map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/roles/{}",
                 client.baseurl,
-                encode_path(&role_name.to_string()),
+                encode_path(&role_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -39954,14 +41794,23 @@ pub mod builder {
     }
 
     impl<'a> SessionMe<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
-            Self { client: client }
+            Self { client }
         }
 
         ///Sends a `GET` request to `/session/me`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::User>, Error<types::Error>> {
             let Self { client } = self;
-            let url = format!("{}/session/me", client.baseurl,);
+            let url = format!("{}/session/me", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
@@ -40009,9 +41858,13 @@ pub mod builder {
     }
 
     impl<'a> SessionMeGroups<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 limit: Ok(None),
                 page_token: Ok(None),
                 sort_by: Ok(None),
@@ -40050,6 +41903,11 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/session/me/groups`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::GroupResultsPage>, Error<types::Error>> {
@@ -40062,7 +41920,7 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/session/me/groups", client.baseurl,);
+            let url = format!("{}/session/me/groups", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
@@ -40162,9 +42020,13 @@ pub mod builder {
     }
 
     impl<'a> SessionSshkeyList<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 limit: Ok(None),
                 page_token: Ok(None),
                 sort_by: Ok(None),
@@ -40203,6 +42065,11 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/session/me/sshkeys`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::SshKeyResultsPage>, Error<types::Error>> {
@@ -40215,7 +42082,7 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/session/me/sshkeys", client.baseurl,);
+            let url = format!("{}/session/me/sshkeys", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
@@ -40313,9 +42180,13 @@ pub mod builder {
     }
 
     impl<'a> SessionSshkeyCreate<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 body: Ok(::std::default::Default::default()),
             }
         }
@@ -40341,12 +42212,17 @@ pub mod builder {
         }
 
         ///Sends a `POST` request to `/session/me/sshkeys`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::SshKey>, Error<types::Error>> {
             let Self { client, body } = self;
             let body = body
                 .and_then(|v| types::SshKeyCreate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!("{}/session/me/sshkeys", client.baseurl,);
+            let url = format!("{}/session/me/sshkeys", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
@@ -40393,9 +42269,13 @@ pub mod builder {
     }
 
     impl<'a> SessionSshkeyView<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 ssh_key_name: Err("ssh_key_name was not initialized".to_string()),
             }
         }
@@ -40411,6 +42291,11 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/session/me/sshkeys/{ssh_key_name}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::SshKey>, Error<types::Error>> {
             let Self {
                 client,
@@ -40420,7 +42305,7 @@ pub mod builder {
             let url = format!(
                 "{}/session/me/sshkeys/{}",
                 client.baseurl,
-                encode_path(&ssh_key_name.to_string()),
+                encode_path(&ssh_key_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -40467,9 +42352,13 @@ pub mod builder {
     }
 
     impl<'a> SessionSshkeyDelete<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 ssh_key_name: Err("ssh_key_name was not initialized".to_string()),
             }
         }
@@ -40485,6 +42374,11 @@ pub mod builder {
         }
 
         ///Sends a `DELETE` request to `/session/me/sshkeys/{ssh_key_name}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
             let Self {
                 client,
@@ -40494,7 +42388,7 @@ pub mod builder {
             let url = format!(
                 "{}/session/me/sshkeys/{}",
                 client.baseurl,
-                encode_path(&ssh_key_name.to_string()),
+                encode_path(&ssh_key_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -40519,7 +42413,7 @@ pub mod builder {
             client.post(&result, &info).await?;
             let response = result?;
             match response.status().as_u16() {
-                204u16 => Ok(ResponseValue::empty(response)),
+                204u16 => Ok(ResponseValue::empty(&response)),
                 400u16..=499u16 => Err(Error::ErrorResponse(
                     ResponseValue::from_response(response).await?,
                 )),
@@ -40541,9 +42435,13 @@ pub mod builder {
     }
 
     impl<'a> SystemImageViewById<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 id: Err("id was not initialized".to_string()),
             }
         }
@@ -40559,13 +42457,18 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/system/by-id/images/{id}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::GlobalImage>, Error<types::Error>> {
             let Self { client, id } = self;
             let id = id.map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/system/by-id/images/{}",
                 client.baseurl,
-                encode_path(&id.to_string()),
+                encode_path(&id.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -40612,9 +42515,13 @@ pub mod builder {
     }
 
     impl<'a> IpPoolViewById<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 id: Err("id was not initialized".to_string()),
             }
         }
@@ -40630,13 +42537,18 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/system/by-id/ip-pools/{id}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::IpPool>, Error<types::Error>> {
             let Self { client, id } = self;
             let id = id.map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/system/by-id/ip-pools/{}",
                 client.baseurl,
-                encode_path(&id.to_string()),
+                encode_path(&id.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -40683,9 +42595,13 @@ pub mod builder {
     }
 
     impl<'a> SiloViewById<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 id: Err("id was not initialized".to_string()),
             }
         }
@@ -40701,13 +42617,18 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/system/by-id/silos/{id}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::Silo>, Error<types::Error>> {
             let Self { client, id } = self;
             let id = id.map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/system/by-id/silos/{}",
                 client.baseurl,
-                encode_path(&id.to_string()),
+                encode_path(&id.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -40756,9 +42677,13 @@ pub mod builder {
     }
 
     impl<'a> CertificateList<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 limit: Ok(None),
                 page_token: Ok(None),
                 sort_by: Ok(None),
@@ -40797,6 +42722,11 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/system/certificates`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::CertificateResultsPage>, Error<types::Error>> {
@@ -40809,7 +42739,7 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/system/certificates", client.baseurl,);
+            let url = format!("{}/system/certificates", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
@@ -40907,9 +42837,13 @@ pub mod builder {
     }
 
     impl<'a> CertificateCreate<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 body: Ok(::std::default::Default::default()),
             }
         }
@@ -40937,12 +42871,17 @@ pub mod builder {
         }
 
         ///Sends a `POST` request to `/system/certificates`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::Certificate>, Error<types::Error>> {
             let Self { client, body } = self;
             let body = body
                 .and_then(|v| types::CertificateCreate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!("{}/system/certificates", client.baseurl,);
+            let url = format!("{}/system/certificates", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
@@ -40989,9 +42928,13 @@ pub mod builder {
     }
 
     impl<'a> CertificateView<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 certificate: Err("certificate was not initialized".to_string()),
             }
         }
@@ -41007,6 +42950,11 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/system/certificates/{certificate}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::Certificate>, Error<types::Error>> {
             let Self {
                 client,
@@ -41016,7 +42964,7 @@ pub mod builder {
             let url = format!(
                 "{}/system/certificates/{}",
                 client.baseurl,
-                encode_path(&certificate.to_string()),
+                encode_path(&certificate.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -41063,9 +43011,13 @@ pub mod builder {
     }
 
     impl<'a> CertificateDelete<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 certificate: Err("certificate was not initialized".to_string()),
             }
         }
@@ -41081,6 +43033,11 @@ pub mod builder {
         }
 
         ///Sends a `DELETE` request to `/system/certificates/{certificate}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
             let Self {
                 client,
@@ -41090,7 +43047,7 @@ pub mod builder {
             let url = format!(
                 "{}/system/certificates/{}",
                 client.baseurl,
-                encode_path(&certificate.to_string()),
+                encode_path(&certificate.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -41115,7 +43072,7 @@ pub mod builder {
             client.post(&result, &info).await?;
             let response = result?;
             match response.status().as_u16() {
-                204u16 => Ok(ResponseValue::empty(response)),
+                204u16 => Ok(ResponseValue::empty(&response)),
                 400u16..=499u16 => Err(Error::ErrorResponse(
                     ResponseValue::from_response(response).await?,
                 )),
@@ -41139,9 +43096,13 @@ pub mod builder {
     }
 
     impl<'a> PhysicalDiskList<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 limit: Ok(None),
                 page_token: Ok(None),
                 sort_by: Ok(None),
@@ -41180,6 +43141,11 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/system/hardware/disks`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::PhysicalDiskResultsPage>, Error<types::Error>> {
@@ -41192,7 +43158,7 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/system/hardware/disks", client.baseurl,);
+            let url = format!("{}/system/hardware/disks", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
@@ -41292,9 +43258,13 @@ pub mod builder {
     }
 
     impl<'a> RackList<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 limit: Ok(None),
                 page_token: Ok(None),
                 sort_by: Ok(None),
@@ -41333,6 +43303,11 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/system/hardware/racks`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::RackResultsPage>, Error<types::Error>> {
@@ -41345,7 +43320,7 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/system/hardware/racks", client.baseurl,);
+            let url = format!("{}/system/hardware/racks", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
@@ -41443,9 +43418,13 @@ pub mod builder {
     }
 
     impl<'a> RackView<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 rack_id: Err("rack_id was not initialized".to_string()),
             }
         }
@@ -41461,13 +43440,18 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/system/hardware/racks/{rack_id}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::Rack>, Error<types::Error>> {
             let Self { client, rack_id } = self;
             let rack_id = rack_id.map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/system/hardware/racks/{}",
                 client.baseurl,
-                encode_path(&rack_id.to_string()),
+                encode_path(&rack_id.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -41516,9 +43500,13 @@ pub mod builder {
     }
 
     impl<'a> SledList<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 limit: Ok(None),
                 page_token: Ok(None),
                 sort_by: Ok(None),
@@ -41557,6 +43545,11 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/system/hardware/sleds`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::SledResultsPage>, Error<types::Error>> {
@@ -41569,7 +43562,7 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/system/hardware/sleds", client.baseurl,);
+            let url = format!("{}/system/hardware/sleds", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
@@ -41667,9 +43660,13 @@ pub mod builder {
     }
 
     impl<'a> SledView<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 sled_id: Err("sled_id was not initialized".to_string()),
             }
         }
@@ -41685,13 +43682,18 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/system/hardware/sleds/{sled_id}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::Sled>, Error<types::Error>> {
             let Self { client, sled_id } = self;
             let sled_id = sled_id.map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/system/hardware/sleds/{}",
                 client.baseurl,
-                encode_path(&sled_id.to_string()),
+                encode_path(&sled_id.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -41741,9 +43743,13 @@ pub mod builder {
     }
 
     impl<'a> SledPhysicalDiskList<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 sled_id: Err("sled_id was not initialized".to_string()),
                 limit: Ok(None),
                 page_token: Ok(None),
@@ -41793,6 +43799,11 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/system/hardware/sleds/{sled_id}/disks`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::PhysicalDiskResultsPage>, Error<types::Error>> {
@@ -41810,7 +43821,7 @@ pub mod builder {
             let url = format!(
                 "{}/system/hardware/sleds/{}/disks",
                 client.baseurl,
-                encode_path(&sled_id.to_string()),
+                encode_path(&sled_id.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -41911,9 +43922,13 @@ pub mod builder {
     }
 
     impl<'a> SystemImageList<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 limit: Ok(None),
                 page_token: Ok(None),
                 sort_by: Ok(None),
@@ -41952,6 +43967,11 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/system/images`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::GlobalImageResultsPage>, Error<types::Error>> {
@@ -41964,7 +43984,7 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/system/images", client.baseurl,);
+            let url = format!("{}/system/images", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
@@ -42062,9 +44082,13 @@ pub mod builder {
     }
 
     impl<'a> SystemImageCreate<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 body: Ok(::std::default::Default::default()),
             }
         }
@@ -42092,12 +44116,17 @@ pub mod builder {
         }
 
         ///Sends a `POST` request to `/system/images`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::GlobalImage>, Error<types::Error>> {
             let Self { client, body } = self;
             let body = body
                 .and_then(|v| types::GlobalImageCreate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!("{}/system/images", client.baseurl,);
+            let url = format!("{}/system/images", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
@@ -42144,9 +44173,13 @@ pub mod builder {
     }
 
     impl<'a> SystemImageView<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 image_name: Err("image_name was not initialized".to_string()),
             }
         }
@@ -42162,13 +44195,18 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/system/images/{image_name}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::GlobalImage>, Error<types::Error>> {
             let Self { client, image_name } = self;
             let image_name = image_name.map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/system/images/{}",
                 client.baseurl,
-                encode_path(&image_name.to_string()),
+                encode_path(&image_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -42215,9 +44253,13 @@ pub mod builder {
     }
 
     impl<'a> SystemImageDelete<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 image_name: Err("image_name was not initialized".to_string()),
             }
         }
@@ -42233,13 +44275,18 @@ pub mod builder {
         }
 
         ///Sends a `DELETE` request to `/system/images/{image_name}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
             let Self { client, image_name } = self;
             let image_name = image_name.map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/system/images/{}",
                 client.baseurl,
-                encode_path(&image_name.to_string()),
+                encode_path(&image_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -42264,7 +44311,7 @@ pub mod builder {
             client.post(&result, &info).await?;
             let response = result?;
             match response.status().as_u16() {
-                204u16 => Ok(ResponseValue::empty(response)),
+                204u16 => Ok(ResponseValue::empty(&response)),
                 400u16..=499u16 => Err(Error::ErrorResponse(
                     ResponseValue::from_response(response).await?,
                 )),
@@ -42288,9 +44335,13 @@ pub mod builder {
     }
 
     impl<'a> IpPoolList<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 limit: Ok(None),
                 page_token: Ok(None),
                 sort_by: Ok(None),
@@ -42329,6 +44380,11 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/system/ip-pools`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::IpPoolResultsPage>, Error<types::Error>> {
@@ -42341,7 +44397,7 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/system/ip-pools", client.baseurl,);
+            let url = format!("{}/system/ip-pools", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
@@ -42439,9 +44495,13 @@ pub mod builder {
     }
 
     impl<'a> IpPoolCreate<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 body: Ok(::std::default::Default::default()),
             }
         }
@@ -42467,12 +44527,17 @@ pub mod builder {
         }
 
         ///Sends a `POST` request to `/system/ip-pools`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::IpPool>, Error<types::Error>> {
             let Self { client, body } = self;
             let body = body
                 .and_then(|v| types::IpPoolCreate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!("{}/system/ip-pools", client.baseurl,);
+            let url = format!("{}/system/ip-pools", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
@@ -42519,9 +44584,13 @@ pub mod builder {
     }
 
     impl<'a> IpPoolView<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 pool_name: Err("pool_name was not initialized".to_string()),
             }
         }
@@ -42537,13 +44606,18 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/system/ip-pools/{pool_name}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::IpPool>, Error<types::Error>> {
             let Self { client, pool_name } = self;
             let pool_name = pool_name.map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/system/ip-pools/{}",
                 client.baseurl,
-                encode_path(&pool_name.to_string()),
+                encode_path(&pool_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -42591,9 +44665,13 @@ pub mod builder {
     }
 
     impl<'a> IpPoolUpdate<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 pool_name: Err("pool_name was not initialized".to_string()),
                 body: Ok(::std::default::Default::default()),
             }
@@ -42630,6 +44708,11 @@ pub mod builder {
         }
 
         ///Sends a `PUT` request to `/system/ip-pools/{pool_name}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::IpPool>, Error<types::Error>> {
             let Self {
                 client,
@@ -42643,7 +44726,7 @@ pub mod builder {
             let url = format!(
                 "{}/system/ip-pools/{}",
                 client.baseurl,
-                encode_path(&pool_name.to_string()),
+                encode_path(&pool_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -42691,9 +44774,13 @@ pub mod builder {
     }
 
     impl<'a> IpPoolDelete<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 pool_name: Err("pool_name was not initialized".to_string()),
             }
         }
@@ -42709,13 +44796,18 @@ pub mod builder {
         }
 
         ///Sends a `DELETE` request to `/system/ip-pools/{pool_name}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
             let Self { client, pool_name } = self;
             let pool_name = pool_name.map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/system/ip-pools/{}",
                 client.baseurl,
-                encode_path(&pool_name.to_string()),
+                encode_path(&pool_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -42740,7 +44832,7 @@ pub mod builder {
             client.post(&result, &info).await?;
             let response = result?;
             match response.status().as_u16() {
-                204u16 => Ok(ResponseValue::empty(response)),
+                204u16 => Ok(ResponseValue::empty(&response)),
                 400u16..=499u16 => Err(Error::ErrorResponse(
                     ResponseValue::from_response(response).await?,
                 )),
@@ -42764,9 +44856,13 @@ pub mod builder {
     }
 
     impl<'a> IpPoolRangeList<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 pool_name: Err("pool_name was not initialized".to_string()),
                 limit: Ok(None),
                 page_token: Ok(None),
@@ -42804,6 +44900,11 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/system/ip-pools/{pool_name}/ranges`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::IpPoolRangeResultsPage>, Error<types::Error>> {
@@ -42819,7 +44920,7 @@ pub mod builder {
             let url = format!(
                 "{}/system/ip-pools/{}/ranges",
                 client.baseurl,
-                encode_path(&pool_name.to_string()),
+                encode_path(&pool_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -42917,9 +45018,13 @@ pub mod builder {
     }
 
     impl<'a> IpPoolRangeAdd<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 pool_name: Err("pool_name was not initialized".to_string()),
                 body: Err("body was not initialized".to_string()),
             }
@@ -42946,6 +45051,11 @@ pub mod builder {
         }
 
         ///Sends a `POST` request to `/system/ip-pools/{pool_name}/ranges/add`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::IpPoolRange>, Error<types::Error>> {
             let Self {
                 client,
@@ -42957,7 +45067,7 @@ pub mod builder {
             let url = format!(
                 "{}/system/ip-pools/{}/ranges/add",
                 client.baseurl,
-                encode_path(&pool_name.to_string()),
+                encode_path(&pool_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -43006,9 +45116,13 @@ pub mod builder {
     }
 
     impl<'a> IpPoolRangeRemove<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 pool_name: Err("pool_name was not initialized".to_string()),
                 body: Err("body was not initialized".to_string()),
             }
@@ -43036,6 +45150,11 @@ pub mod builder {
 
         ///Sends a `POST` request to
         /// `/system/ip-pools/{pool_name}/ranges/remove`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
             let Self {
                 client,
@@ -43047,7 +45166,7 @@ pub mod builder {
             let url = format!(
                 "{}/system/ip-pools/{}/ranges/remove",
                 client.baseurl,
-                encode_path(&pool_name.to_string()),
+                encode_path(&pool_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -43073,7 +45192,7 @@ pub mod builder {
             client.post(&result, &info).await?;
             let response = result?;
             match response.status().as_u16() {
-                204u16 => Ok(ResponseValue::empty(response)),
+                204u16 => Ok(ResponseValue::empty(&response)),
                 400u16..=499u16 => Err(Error::ErrorResponse(
                     ResponseValue::from_response(response).await?,
                 )),
@@ -43094,14 +45213,23 @@ pub mod builder {
     }
 
     impl<'a> IpPoolServiceView<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
-            Self { client: client }
+            Self { client }
         }
 
         ///Sends a `GET` request to `/system/ip-pools-service`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::IpPool>, Error<types::Error>> {
             let Self { client } = self;
-            let url = format!("{}/system/ip-pools-service", client.baseurl,);
+            let url = format!("{}/system/ip-pools-service", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
@@ -43148,9 +45276,13 @@ pub mod builder {
     }
 
     impl<'a> IpPoolServiceRangeList<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 limit: Ok(None),
                 page_token: Ok(None),
             }
@@ -43177,6 +45309,11 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/system/ip-pools-service/ranges`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::IpPoolRangeResultsPage>, Error<types::Error>> {
@@ -43187,7 +45324,7 @@ pub mod builder {
             } = self;
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/system/ip-pools-service/ranges", client.baseurl,);
+            let url = format!("{}/system/ip-pools-service/ranges", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
@@ -43283,9 +45420,13 @@ pub mod builder {
     }
 
     impl<'a> IpPoolServiceRangeAdd<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 body: Err("body was not initialized".to_string()),
             }
         }
@@ -43301,10 +45442,15 @@ pub mod builder {
         }
 
         ///Sends a `POST` request to `/system/ip-pools-service/ranges/add`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::IpPoolRange>, Error<types::Error>> {
             let Self { client, body } = self;
             let body = body.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/system/ip-pools-service/ranges/add", client.baseurl,);
+            let url = format!("{}/system/ip-pools-service/ranges/add", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
@@ -43351,9 +45497,13 @@ pub mod builder {
     }
 
     impl<'a> IpPoolServiceRangeRemove<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 body: Err("body was not initialized".to_string()),
             }
         }
@@ -43369,10 +45519,15 @@ pub mod builder {
         }
 
         ///Sends a `POST` request to `/system/ip-pools-service/ranges/remove`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
             let Self { client, body } = self;
             let body = body.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/system/ip-pools-service/ranges/remove", client.baseurl,);
+            let url = format!("{}/system/ip-pools-service/ranges/remove", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
@@ -43397,7 +45552,7 @@ pub mod builder {
             client.post(&result, &info).await?;
             let response = result?;
             match response.status().as_u16() {
-                204u16 => Ok(ResponseValue::empty(response)),
+                204u16 => Ok(ResponseValue::empty(&response)),
                 400u16..=499u16 => Err(Error::ErrorResponse(
                     ResponseValue::from_response(response).await?,
                 )),
@@ -43424,9 +45579,13 @@ pub mod builder {
     }
 
     impl<'a> SystemMetric<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 metric_name: Err("metric_name was not initialized".to_string()),
                 end_time: Ok(None),
                 id: Err("id was not initialized".to_string()),
@@ -43501,6 +45660,11 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/system/metrics/{metric_name}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::MeasurementResultsPage>, Error<types::Error>> {
@@ -43522,7 +45686,7 @@ pub mod builder {
             let url = format!(
                 "{}/system/metrics/{}",
                 client.baseurl,
-                encode_path(&metric_name.to_string()),
+                encode_path(&metric_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -43579,16 +45743,25 @@ pub mod builder {
     }
 
     impl<'a> SystemPolicyView<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
-            Self { client: client }
+            Self { client }
         }
 
         ///Sends a `GET` request to `/system/policy`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::FleetRolePolicy>, Error<types::Error>> {
             let Self { client } = self;
-            let url = format!("{}/system/policy", client.baseurl,);
+            let url = format!("{}/system/policy", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
@@ -43634,9 +45807,13 @@ pub mod builder {
     }
 
     impl<'a> SystemPolicyUpdate<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 body: Ok(::std::default::Default::default()),
             }
         }
@@ -43662,6 +45839,11 @@ pub mod builder {
         }
 
         ///Sends a `PUT` request to `/system/policy`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::FleetRolePolicy>, Error<types::Error>> {
@@ -43669,7 +45851,7 @@ pub mod builder {
             let body = body
                 .and_then(|v| types::FleetRolePolicy::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!("{}/system/policy", client.baseurl,);
+            let url = format!("{}/system/policy", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
@@ -43718,9 +45900,13 @@ pub mod builder {
     }
 
     impl<'a> SagaList<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 limit: Ok(None),
                 page_token: Ok(None),
                 sort_by: Ok(None),
@@ -43759,6 +45945,11 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/system/sagas`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::SagaResultsPage>, Error<types::Error>> {
@@ -43771,7 +45962,7 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/system/sagas", client.baseurl,);
+            let url = format!("{}/system/sagas", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
@@ -43869,9 +46060,13 @@ pub mod builder {
     }
 
     impl<'a> SagaView<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 saga_id: Err("saga_id was not initialized".to_string()),
             }
         }
@@ -43887,13 +46082,18 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/system/sagas/{saga_id}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::Saga>, Error<types::Error>> {
             let Self { client, saga_id } = self;
             let saga_id = saga_id.map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/system/sagas/{}",
                 client.baseurl,
-                encode_path(&saga_id.to_string()),
+                encode_path(&saga_id.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -43942,9 +46142,13 @@ pub mod builder {
     }
 
     impl<'a> SiloList<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 limit: Ok(None),
                 page_token: Ok(None),
                 sort_by: Ok(None),
@@ -43983,6 +46187,11 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/system/silos`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::SiloResultsPage>, Error<types::Error>> {
@@ -43995,7 +46204,7 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/system/silos", client.baseurl,);
+            let url = format!("{}/system/silos", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
@@ -44093,9 +46302,13 @@ pub mod builder {
     }
 
     impl<'a> SiloCreate<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 body: Ok(::std::default::Default::default()),
             }
         }
@@ -44121,12 +46334,17 @@ pub mod builder {
         }
 
         ///Sends a `POST` request to `/system/silos`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::Silo>, Error<types::Error>> {
             let Self { client, body } = self;
             let body = body
                 .and_then(|v| types::SiloCreate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!("{}/system/silos", client.baseurl,);
+            let url = format!("{}/system/silos", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
@@ -44173,9 +46391,13 @@ pub mod builder {
     }
 
     impl<'a> SiloView<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 silo_name: Err("silo_name was not initialized".to_string()),
             }
         }
@@ -44191,13 +46413,18 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/system/silos/{silo_name}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::Silo>, Error<types::Error>> {
             let Self { client, silo_name } = self;
             let silo_name = silo_name.map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/system/silos/{}",
                 client.baseurl,
-                encode_path(&silo_name.to_string()),
+                encode_path(&silo_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -44244,9 +46471,13 @@ pub mod builder {
     }
 
     impl<'a> SiloDelete<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 silo_name: Err("silo_name was not initialized".to_string()),
             }
         }
@@ -44262,13 +46493,18 @@ pub mod builder {
         }
 
         ///Sends a `DELETE` request to `/system/silos/{silo_name}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
             let Self { client, silo_name } = self;
             let silo_name = silo_name.map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/system/silos/{}",
                 client.baseurl,
-                encode_path(&silo_name.to_string()),
+                encode_path(&silo_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -44293,7 +46529,7 @@ pub mod builder {
             client.post(&result, &info).await?;
             let response = result?;
             match response.status().as_u16() {
-                204u16 => Ok(ResponseValue::empty(response)),
+                204u16 => Ok(ResponseValue::empty(&response)),
                 400u16..=499u16 => Err(Error::ErrorResponse(
                     ResponseValue::from_response(response).await?,
                 )),
@@ -44318,9 +46554,13 @@ pub mod builder {
     }
 
     impl<'a> SiloIdentityProviderList<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 silo_name: Err("silo_name was not initialized".to_string()),
                 limit: Ok(None),
                 page_token: Ok(None),
@@ -44371,6 +46611,11 @@ pub mod builder {
 
         ///Sends a `GET` request to
         /// `/system/silos/{silo_name}/identity-providers`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::IdentityProviderResultsPage>, Error<types::Error>>
@@ -44389,7 +46634,7 @@ pub mod builder {
             let url = format!(
                 "{}/system/silos/{}/identity-providers",
                 client.baseurl,
-                encode_path(&silo_name.to_string()),
+                encode_path(&silo_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -44490,9 +46735,13 @@ pub mod builder {
     }
 
     impl<'a> LocalIdpUserCreate<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 silo_name: Err("silo_name was not initialized".to_string()),
                 body: Ok(::std::default::Default::default()),
             }
@@ -44530,6 +46779,11 @@ pub mod builder {
 
         ///Sends a `POST` request to
         /// `/system/silos/{silo_name}/identity-providers/local/users`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::User>, Error<types::Error>> {
             let Self {
                 client,
@@ -44543,7 +46797,7 @@ pub mod builder {
             let url = format!(
                 "{}/system/silos/{}/identity-providers/local/users",
                 client.baseurl,
-                encode_path(&silo_name.to_string()),
+                encode_path(&silo_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -44592,9 +46846,13 @@ pub mod builder {
     }
 
     impl<'a> LocalIdpUserDelete<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 silo_name: Err("silo_name was not initialized".to_string()),
                 user_id: Err("user_id was not initialized".to_string()),
             }
@@ -44622,6 +46880,11 @@ pub mod builder {
 
         ///Sends a `DELETE` request to
         /// `/system/silos/{silo_name}/identity-providers/local/users/{user_id}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
             let Self {
                 client,
@@ -44634,7 +46897,7 @@ pub mod builder {
                 "{}/system/silos/{}/identity-providers/local/users/{}",
                 client.baseurl,
                 encode_path(&silo_name.to_string()),
-                encode_path(&user_id.to_string()),
+                encode_path(&user_id.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -44659,7 +46922,7 @@ pub mod builder {
             client.post(&result, &info).await?;
             let response = result?;
             match response.status().as_u16() {
-                204u16 => Ok(ResponseValue::empty(response)),
+                204u16 => Ok(ResponseValue::empty(&response)),
                 400u16..=499u16 => Err(Error::ErrorResponse(
                     ResponseValue::from_response(response).await?,
                 )),
@@ -44683,9 +46946,13 @@ pub mod builder {
     }
 
     impl<'a> LocalIdpUserSetPassword<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 silo_name: Err("silo_name was not initialized".to_string()),
                 user_id: Err("user_id was not initialized".to_string()),
                 body: Err("body was not initialized".to_string()),
@@ -44725,6 +46992,11 @@ pub mod builder {
         ///Sends a `POST` request to
         /// `/system/silos/{silo_name}/identity-providers/local/users/{user_id}/
         /// set-password`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
             let Self {
                 client,
@@ -44739,7 +47011,7 @@ pub mod builder {
                 "{}/system/silos/{}/identity-providers/local/users/{}/set-password",
                 client.baseurl,
                 encode_path(&silo_name.to_string()),
-                encode_path(&user_id.to_string()),
+                encode_path(&user_id.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -44765,7 +47037,7 @@ pub mod builder {
             client.post(&result, &info).await?;
             let response = result?;
             match response.status().as_u16() {
-                204u16 => Ok(ResponseValue::empty(response)),
+                204u16 => Ok(ResponseValue::empty(&response)),
                 400u16..=499u16 => Err(Error::ErrorResponse(
                     ResponseValue::from_response(response).await?,
                 )),
@@ -44788,9 +47060,13 @@ pub mod builder {
     }
 
     impl<'a> SamlIdentityProviderCreate<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 silo_name: Err("silo_name was not initialized".to_string()),
                 body: Ok(::std::default::Default::default()),
             }
@@ -44833,6 +47109,11 @@ pub mod builder {
 
         ///Sends a `POST` request to
         /// `/system/silos/{silo_name}/identity-providers/saml`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::SamlIdentityProvider>, Error<types::Error>> {
@@ -44850,7 +47131,7 @@ pub mod builder {
             let url = format!(
                 "{}/system/silos/{}/identity-providers/saml",
                 client.baseurl,
-                encode_path(&silo_name.to_string()),
+                encode_path(&silo_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -44899,9 +47180,13 @@ pub mod builder {
     }
 
     impl<'a> SamlIdentityProviderView<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 silo_name: Err("silo_name was not initialized".to_string()),
                 provider_name: Err("provider_name was not initialized".to_string()),
             }
@@ -44929,6 +47214,11 @@ pub mod builder {
 
         ///Sends a `GET` request to
         /// `/system/silos/{silo_name}/identity-providers/saml/{provider_name}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::SamlIdentityProvider>, Error<types::Error>> {
@@ -44943,7 +47233,7 @@ pub mod builder {
                 "{}/system/silos/{}/identity-providers/saml/{}",
                 client.baseurl,
                 encode_path(&silo_name.to_string()),
-                encode_path(&provider_name.to_string()),
+                encode_path(&provider_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -44990,9 +47280,13 @@ pub mod builder {
     }
 
     impl<'a> SiloPolicyView<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 silo_name: Err("silo_name was not initialized".to_string()),
             }
         }
@@ -45008,6 +47302,11 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/system/silos/{silo_name}/policy`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::SiloRolePolicy>, Error<types::Error>> {
@@ -45016,7 +47315,7 @@ pub mod builder {
             let url = format!(
                 "{}/system/silos/{}/policy",
                 client.baseurl,
-                encode_path(&silo_name.to_string()),
+                encode_path(&silo_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -45064,9 +47363,13 @@ pub mod builder {
     }
 
     impl<'a> SiloPolicyUpdate<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 silo_name: Err("silo_name was not initialized".to_string()),
                 body: Ok(::std::default::Default::default()),
             }
@@ -45103,6 +47406,11 @@ pub mod builder {
         }
 
         ///Sends a `PUT` request to `/system/silos/{silo_name}/policy`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::SiloRolePolicy>, Error<types::Error>> {
@@ -45118,7 +47426,7 @@ pub mod builder {
             let url = format!(
                 "{}/system/silos/{}/policy",
                 client.baseurl,
-                encode_path(&silo_name.to_string()),
+                encode_path(&silo_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -45169,9 +47477,13 @@ pub mod builder {
     }
 
     impl<'a> SiloUsersList<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 silo_name: Err("silo_name was not initialized".to_string()),
                 limit: Ok(None),
                 page_token: Ok(None),
@@ -45221,6 +47533,11 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/system/silos/{silo_name}/users/all`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::UserResultsPage>, Error<types::Error>> {
@@ -45238,7 +47555,7 @@ pub mod builder {
             let url = format!(
                 "{}/system/silos/{}/users/all",
                 client.baseurl,
-                encode_path(&silo_name.to_string()),
+                encode_path(&silo_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -45338,9 +47655,13 @@ pub mod builder {
     }
 
     impl<'a> SiloUserView<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 silo_name: Err("silo_name was not initialized".to_string()),
                 user_id: Err("user_id was not initialized".to_string()),
             }
@@ -45368,6 +47689,11 @@ pub mod builder {
 
         ///Sends a `GET` request to
         /// `/system/silos/{silo_name}/users/id/{user_id}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::User>, Error<types::Error>> {
             let Self {
                 client,
@@ -45380,7 +47706,7 @@ pub mod builder {
                 "{}/system/silos/{}/users/id/{}",
                 client.baseurl,
                 encode_path(&silo_name.to_string()),
-                encode_path(&user_id.to_string()),
+                encode_path(&user_id.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -45429,9 +47755,13 @@ pub mod builder {
     }
 
     impl<'a> SystemUserList<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 limit: Ok(None),
                 page_token: Ok(None),
                 sort_by: Ok(None),
@@ -45470,6 +47800,11 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/system/user`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::UserBuiltinResultsPage>, Error<types::Error>> {
@@ -45482,7 +47817,7 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/system/user", client.baseurl,);
+            let url = format!("{}/system/user", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
@@ -45580,9 +47915,13 @@ pub mod builder {
     }
 
     impl<'a> SystemUserView<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 user_name: Err("user_name was not initialized".to_string()),
             }
         }
@@ -45598,13 +47937,18 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/system/user/{user_name}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::UserBuiltin>, Error<types::Error>> {
             let Self { client, user_name } = self;
             let user_name = user_name.map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/system/user/{}",
                 client.baseurl,
-                encode_path(&user_name.to_string()),
+                encode_path(&user_name.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -45652,9 +47996,13 @@ pub mod builder {
     }
 
     impl<'a> TimeseriesSchemaGet<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 limit: Ok(None),
                 page_token: Ok(None),
             }
@@ -45681,6 +48029,11 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/timeseries/schema`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::TimeseriesSchemaResultsPage>, Error<types::Error>>
@@ -45692,7 +48045,7 @@ pub mod builder {
             } = self;
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/timeseries/schema", client.baseurl,);
+            let url = format!("{}/timeseries/schema", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
@@ -45790,9 +48143,13 @@ pub mod builder {
     }
 
     impl<'a> UserList<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 limit: Ok(None),
                 page_token: Ok(None),
                 sort_by: Ok(None),
@@ -45831,6 +48188,11 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/users`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::UserResultsPage>, Error<types::Error>> {
@@ -45843,7 +48205,7 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/users", client.baseurl,);
+            let url = format!("{}/users", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
@@ -45945,9 +48307,13 @@ pub mod builder {
     }
 
     impl<'a> DiskListV1<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 limit: Ok(None),
                 organization: Ok(None),
                 page_token: Ok(None),
@@ -46010,6 +48376,11 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/v1/disks`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::DiskResultsPage>, Error<types::Error>> {
@@ -46026,7 +48397,7 @@ pub mod builder {
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let project = project.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/v1/disks", client.baseurl,);
+            let url = format!("{}/v1/disks", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
@@ -46133,9 +48504,13 @@ pub mod builder {
     }
 
     impl<'a> DiskCreateV1<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization: Ok(None),
                 project: Err("project was not initialized".to_string()),
                 body: Ok(::std::default::Default::default()),
@@ -46184,6 +48559,11 @@ pub mod builder {
         }
 
         ///Sends a `POST` request to `/v1/disks`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::Disk>, Error<types::Error>> {
             let Self {
                 client,
@@ -46196,7 +48576,7 @@ pub mod builder {
             let body = body
                 .and_then(|v| types::DiskCreate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!("{}/v1/disks", client.baseurl,);
+            let url = format!("{}/v1/disks", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
@@ -46250,9 +48630,13 @@ pub mod builder {
     }
 
     impl<'a> DiskViewV1<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 disk: Err("disk was not initialized".to_string()),
                 organization: Ok(None),
                 project: Ok(None),
@@ -46292,6 +48676,11 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/v1/disks/{disk}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::Disk>, Error<types::Error>> {
             let Self {
                 client,
@@ -46305,7 +48694,7 @@ pub mod builder {
             let url = format!(
                 "{}/v1/disks/{}",
                 client.baseurl,
-                encode_path(&disk.to_string()),
+                encode_path(&disk.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -46359,9 +48748,13 @@ pub mod builder {
     }
 
     impl<'a> DiskDeleteV1<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 disk: Err("disk was not initialized".to_string()),
                 organization: Ok(None),
                 project: Ok(None),
@@ -46401,6 +48794,11 @@ pub mod builder {
         }
 
         ///Sends a `DELETE` request to `/v1/disks/{disk}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
             let Self {
                 client,
@@ -46414,7 +48812,7 @@ pub mod builder {
             let url = format!(
                 "{}/v1/disks/{}",
                 client.baseurl,
-                encode_path(&disk.to_string()),
+                encode_path(&disk.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -46444,7 +48842,7 @@ pub mod builder {
             client.post(&result, &info).await?;
             let response = result?;
             match response.status().as_u16() {
-                204u16 => Ok(ResponseValue::empty(response)),
+                204u16 => Ok(ResponseValue::empty(&response)),
                 400u16..=499u16 => Err(Error::ErrorResponse(
                     ResponseValue::from_response(response).await?,
                 )),
@@ -46470,9 +48868,13 @@ pub mod builder {
     }
 
     impl<'a> InstanceListV1<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 limit: Ok(None),
                 organization: Ok(None),
                 page_token: Ok(None),
@@ -46535,6 +48937,11 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/v1/instances`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::InstanceResultsPage>, Error<types::Error>> {
@@ -46551,7 +48958,7 @@ pub mod builder {
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let project = project.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/v1/instances", client.baseurl,);
+            let url = format!("{}/v1/instances", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
@@ -46658,9 +49065,13 @@ pub mod builder {
     }
 
     impl<'a> InstanceCreateV1<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization: Ok(None),
                 project: Err("project was not initialized".to_string()),
                 body: Ok(::std::default::Default::default()),
@@ -46709,6 +49120,11 @@ pub mod builder {
         }
 
         ///Sends a `POST` request to `/v1/instances`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
             let Self {
                 client,
@@ -46721,7 +49137,7 @@ pub mod builder {
             let body = body
                 .and_then(|v| types::InstanceCreate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!("{}/v1/instances", client.baseurl,);
+            let url = format!("{}/v1/instances", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
@@ -46775,9 +49191,13 @@ pub mod builder {
     }
 
     impl<'a> InstanceViewV1<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 instance: Err("instance was not initialized".to_string()),
                 organization: Ok(None),
                 project: Ok(None),
@@ -46817,6 +49237,11 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/v1/instances/{instance}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
             let Self {
                 client,
@@ -46830,7 +49255,7 @@ pub mod builder {
             let url = format!(
                 "{}/v1/instances/{}",
                 client.baseurl,
-                encode_path(&instance.to_string()),
+                encode_path(&instance.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -46884,9 +49309,13 @@ pub mod builder {
     }
 
     impl<'a> InstanceDeleteV1<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 instance: Err("instance was not initialized".to_string()),
                 organization: Ok(None),
                 project: Ok(None),
@@ -46926,6 +49355,11 @@ pub mod builder {
         }
 
         ///Sends a `DELETE` request to `/v1/instances/{instance}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
             let Self {
                 client,
@@ -46939,7 +49373,7 @@ pub mod builder {
             let url = format!(
                 "{}/v1/instances/{}",
                 client.baseurl,
-                encode_path(&instance.to_string()),
+                encode_path(&instance.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -46969,7 +49403,7 @@ pub mod builder {
             client.post(&result, &info).await?;
             let response = result?;
             match response.status().as_u16() {
-                204u16 => Ok(ResponseValue::empty(response)),
+                204u16 => Ok(ResponseValue::empty(&response)),
                 400u16..=499u16 => Err(Error::ErrorResponse(
                     ResponseValue::from_response(response).await?,
                 )),
@@ -46996,9 +49430,13 @@ pub mod builder {
     }
 
     impl<'a> InstanceDiskListV1<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 instance: Err("instance was not initialized".to_string()),
                 limit: Ok(None),
                 organization: Ok(None),
@@ -47072,6 +49510,11 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/v1/instances/{instance}/disks`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::DiskResultsPage>, Error<types::Error>> {
@@ -47093,7 +49536,7 @@ pub mod builder {
             let url = format!(
                 "{}/v1/instances/{}/disks",
                 client.baseurl,
-                encode_path(&instance.to_string()),
+                encode_path(&instance.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -47202,9 +49645,13 @@ pub mod builder {
     }
 
     impl<'a> InstanceDiskAttachV1<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 instance: Err("instance was not initialized".to_string()),
                 organization: Ok(None),
                 project: Ok(None),
@@ -47265,6 +49712,11 @@ pub mod builder {
         }
 
         ///Sends a `POST` request to `/v1/instances/{instance}/disks/attach`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::Disk>, Error<types::Error>> {
             let Self {
                 client,
@@ -47282,7 +49734,7 @@ pub mod builder {
             let url = format!(
                 "{}/v1/instances/{}/disks/attach",
                 client.baseurl,
-                encode_path(&instance.to_string()),
+                encode_path(&instance.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -47338,9 +49790,13 @@ pub mod builder {
     }
 
     impl<'a> InstanceDiskDetachV1<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 instance: Err("instance was not initialized".to_string()),
                 organization: Ok(None),
                 project: Ok(None),
@@ -47401,6 +49857,11 @@ pub mod builder {
         }
 
         ///Sends a `POST` request to `/v1/instances/{instance}/disks/detach`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::Disk>, Error<types::Error>> {
             let Self {
                 client,
@@ -47418,7 +49879,7 @@ pub mod builder {
             let url = format!(
                 "{}/v1/instances/{}/disks/detach",
                 client.baseurl,
-                encode_path(&instance.to_string()),
+                encode_path(&instance.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -47474,9 +49935,13 @@ pub mod builder {
     }
 
     impl<'a> InstanceMigrateV1<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 instance: Err("instance was not initialized".to_string()),
                 organization: Ok(None),
                 project: Ok(None),
@@ -47537,6 +50002,11 @@ pub mod builder {
         }
 
         ///Sends a `POST` request to `/v1/instances/{instance}/migrate`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
             let Self {
                 client,
@@ -47554,7 +50024,7 @@ pub mod builder {
             let url = format!(
                 "{}/v1/instances/{}/migrate",
                 client.baseurl,
-                encode_path(&instance.to_string()),
+                encode_path(&instance.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -47609,9 +50079,13 @@ pub mod builder {
     }
 
     impl<'a> InstanceRebootV1<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 instance: Err("instance was not initialized".to_string()),
                 organization: Ok(None),
                 project: Ok(None),
@@ -47651,6 +50125,11 @@ pub mod builder {
         }
 
         ///Sends a `POST` request to `/v1/instances/{instance}/reboot`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
             let Self {
                 client,
@@ -47664,7 +50143,7 @@ pub mod builder {
             let url = format!(
                 "{}/v1/instances/{}/reboot",
                 client.baseurl,
-                encode_path(&instance.to_string()),
+                encode_path(&instance.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -47721,9 +50200,13 @@ pub mod builder {
     }
 
     impl<'a> InstanceSerialConsoleV1<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 instance: Err("instance was not initialized".to_string()),
                 from_start: Ok(None),
                 max_bytes: Ok(None),
@@ -47799,6 +50282,11 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/v1/instances/{instance}/serial-console`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::InstanceSerialConsoleData>, Error<types::Error>> {
@@ -47820,7 +50308,7 @@ pub mod builder {
             let url = format!(
                 "{}/v1/instances/{}/serial-console",
                 client.baseurl,
-                encode_path(&instance.to_string()),
+                encode_path(&instance.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -47883,9 +50371,13 @@ pub mod builder {
     }
 
     impl<'a> InstanceSerialConsoleStreamV1<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 instance: Err("instance was not initialized".to_string()),
                 organization: Ok(None),
                 project: Ok(None),
@@ -47926,6 +50418,11 @@ pub mod builder {
 
         ///Sends a `GET` request to
         /// `/v1/instances/{instance}/serial-console/stream`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<reqwest::Upgraded>, Error<types::Error>> {
             let Self {
                 client,
@@ -47939,7 +50436,7 @@ pub mod builder {
             let url = format!(
                 "{}/v1/instances/{}/serial-console/stream",
                 client.baseurl,
-                encode_path(&instance.to_string()),
+                encode_path(&instance.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -47999,9 +50496,13 @@ pub mod builder {
     }
 
     impl<'a> InstanceStartV1<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 instance: Err("instance was not initialized".to_string()),
                 organization: Ok(None),
                 project: Ok(None),
@@ -48041,6 +50542,11 @@ pub mod builder {
         }
 
         ///Sends a `POST` request to `/v1/instances/{instance}/start`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
             let Self {
                 client,
@@ -48054,7 +50560,7 @@ pub mod builder {
             let url = format!(
                 "{}/v1/instances/{}/start",
                 client.baseurl,
-                encode_path(&instance.to_string()),
+                encode_path(&instance.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -48108,9 +50614,13 @@ pub mod builder {
     }
 
     impl<'a> InstanceStopV1<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 instance: Err("instance was not initialized".to_string()),
                 organization: Ok(None),
                 project: Ok(None),
@@ -48150,6 +50660,11 @@ pub mod builder {
         }
 
         ///Sends a `POST` request to `/v1/instances/{instance}/stop`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::Instance>, Error<types::Error>> {
             let Self {
                 client,
@@ -48163,7 +50678,7 @@ pub mod builder {
             let url = format!(
                 "{}/v1/instances/{}/stop",
                 client.baseurl,
-                encode_path(&instance.to_string()),
+                encode_path(&instance.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -48217,9 +50732,13 @@ pub mod builder {
     }
 
     impl<'a> OrganizationListV1<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 limit: Ok(None),
                 page_token: Ok(None),
                 sort_by: Ok(None),
@@ -48258,6 +50777,11 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/v1/organizations`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::OrganizationResultsPage>, Error<types::Error>> {
@@ -48270,7 +50794,7 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/v1/organizations", client.baseurl,);
+            let url = format!("{}/v1/organizations", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
@@ -48368,9 +50892,13 @@ pub mod builder {
     }
 
     impl<'a> OrganizationCreateV1<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 body: Ok(::std::default::Default::default()),
             }
         }
@@ -48398,12 +50926,17 @@ pub mod builder {
         }
 
         ///Sends a `POST` request to `/v1/organizations`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::Organization>, Error<types::Error>> {
             let Self { client, body } = self;
             let body = body
                 .and_then(|v| types::OrganizationCreate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!("{}/v1/organizations", client.baseurl,);
+            let url = format!("{}/v1/organizations", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
@@ -48450,9 +50983,13 @@ pub mod builder {
     }
 
     impl<'a> OrganizationViewV1<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization: Err("organization was not initialized".to_string()),
             }
         }
@@ -48468,6 +51005,11 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/v1/organizations/{organization}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::Organization>, Error<types::Error>> {
             let Self {
                 client,
@@ -48477,7 +51019,7 @@ pub mod builder {
             let url = format!(
                 "{}/v1/organizations/{}",
                 client.baseurl,
-                encode_path(&organization.to_string()),
+                encode_path(&organization.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -48525,9 +51067,13 @@ pub mod builder {
     }
 
     impl<'a> OrganizationUpdateV1<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization: Err("organization was not initialized".to_string()),
                 body: Ok(::std::default::Default::default()),
             }
@@ -48566,6 +51112,11 @@ pub mod builder {
         }
 
         ///Sends a `PUT` request to `/v1/organizations/{organization}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::Organization>, Error<types::Error>> {
             let Self {
                 client,
@@ -48579,7 +51130,7 @@ pub mod builder {
             let url = format!(
                 "{}/v1/organizations/{}",
                 client.baseurl,
-                encode_path(&organization.to_string()),
+                encode_path(&organization.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -48627,9 +51178,13 @@ pub mod builder {
     }
 
     impl<'a> OrganizationDeleteV1<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization: Err("organization was not initialized".to_string()),
             }
         }
@@ -48645,6 +51200,11 @@ pub mod builder {
         }
 
         ///Sends a `DELETE` request to `/v1/organizations/{organization}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
             let Self {
                 client,
@@ -48654,7 +51214,7 @@ pub mod builder {
             let url = format!(
                 "{}/v1/organizations/{}",
                 client.baseurl,
-                encode_path(&organization.to_string()),
+                encode_path(&organization.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -48679,7 +51239,7 @@ pub mod builder {
             client.post(&result, &info).await?;
             let response = result?;
             match response.status().as_u16() {
-                204u16 => Ok(ResponseValue::empty(response)),
+                204u16 => Ok(ResponseValue::empty(&response)),
                 400u16..=499u16 => Err(Error::ErrorResponse(
                     ResponseValue::from_response(response).await?,
                 )),
@@ -48701,9 +51261,13 @@ pub mod builder {
     }
 
     impl<'a> OrganizationPolicyViewV1<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization: Err("organization was not initialized".to_string()),
             }
         }
@@ -48719,6 +51283,11 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/v1/organizations/{organization}/policy`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::OrganizationRolePolicy>, Error<types::Error>> {
@@ -48730,7 +51299,7 @@ pub mod builder {
             let url = format!(
                 "{}/v1/organizations/{}/policy",
                 client.baseurl,
-                encode_path(&organization.to_string()),
+                encode_path(&organization.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -48778,9 +51347,13 @@ pub mod builder {
     }
 
     impl<'a> OrganizationPolicyUpdateV1<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization: Err("organization was not initialized".to_string()),
                 body: Ok(::std::default::Default::default()),
             }
@@ -48821,6 +51394,11 @@ pub mod builder {
         }
 
         ///Sends a `PUT` request to `/v1/organizations/{organization}/policy`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::OrganizationRolePolicy>, Error<types::Error>> {
@@ -48836,7 +51414,7 @@ pub mod builder {
             let url = format!(
                 "{}/v1/organizations/{}/policy",
                 client.baseurl,
-                encode_path(&organization.to_string()),
+                encode_path(&organization.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -48887,9 +51465,13 @@ pub mod builder {
     }
 
     impl<'a> ProjectListV1<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 limit: Ok(None),
                 organization: Ok(None),
                 page_token: Ok(None),
@@ -48940,6 +51522,11 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/v1/projects`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::ProjectResultsPage>, Error<types::Error>> {
@@ -48954,7 +51541,7 @@ pub mod builder {
             let organization = organization.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/v1/projects", client.baseurl,);
+            let url = format!("{}/v1/projects", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
@@ -49058,9 +51645,13 @@ pub mod builder {
     }
 
     impl<'a> ProjectCreateV1<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 organization: Err("organization was not initialized".to_string()),
                 body: Ok(::std::default::Default::default()),
             }
@@ -49097,6 +51688,11 @@ pub mod builder {
         }
 
         ///Sends a `POST` request to `/v1/projects`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::Project>, Error<types::Error>> {
             let Self {
                 client,
@@ -49107,7 +51703,7 @@ pub mod builder {
             let body = body
                 .and_then(|v| types::ProjectCreate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!("{}/v1/projects", client.baseurl,);
+            let url = format!("{}/v1/projects", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
@@ -49159,9 +51755,13 @@ pub mod builder {
     }
 
     impl<'a> ProjectViewV1<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 project: Err("project was not initialized".to_string()),
                 organization: Ok(None),
             }
@@ -49189,6 +51789,11 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/v1/projects/{project}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::Project>, Error<types::Error>> {
             let Self {
                 client,
@@ -49200,7 +51805,7 @@ pub mod builder {
             let url = format!(
                 "{}/v1/projects/{}",
                 client.baseurl,
-                encode_path(&project.to_string()),
+                encode_path(&project.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -49253,9 +51858,13 @@ pub mod builder {
     }
 
     impl<'a> ProjectUpdateV1<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 project: Err("project was not initialized".to_string()),
                 organization: Ok(None),
                 body: Ok(::std::default::Default::default()),
@@ -49304,6 +51913,11 @@ pub mod builder {
         }
 
         ///Sends a `PUT` request to `/v1/projects/{project}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::Project>, Error<types::Error>> {
             let Self {
                 client,
@@ -49319,7 +51933,7 @@ pub mod builder {
             let url = format!(
                 "{}/v1/projects/{}",
                 client.baseurl,
-                encode_path(&project.to_string()),
+                encode_path(&project.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -49372,9 +51986,13 @@ pub mod builder {
     }
 
     impl<'a> ProjectDeleteV1<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 project: Err("project was not initialized".to_string()),
                 organization: Ok(None),
             }
@@ -49402,6 +52020,11 @@ pub mod builder {
         }
 
         ///Sends a `DELETE` request to `/v1/projects/{project}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
             let Self {
                 client,
@@ -49413,7 +52036,7 @@ pub mod builder {
             let url = format!(
                 "{}/v1/projects/{}",
                 client.baseurl,
-                encode_path(&project.to_string()),
+                encode_path(&project.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -49442,7 +52065,7 @@ pub mod builder {
             client.post(&result, &info).await?;
             let response = result?;
             match response.status().as_u16() {
-                204u16 => Ok(ResponseValue::empty(response)),
+                204u16 => Ok(ResponseValue::empty(&response)),
                 400u16..=499u16 => Err(Error::ErrorResponse(
                     ResponseValue::from_response(response).await?,
                 )),
@@ -49465,9 +52088,13 @@ pub mod builder {
     }
 
     impl<'a> ProjectPolicyViewV1<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 project: Err("project was not initialized".to_string()),
                 organization: Ok(None),
             }
@@ -49495,6 +52122,11 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/v1/projects/{project}/policy`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::ProjectRolePolicy>, Error<types::Error>> {
@@ -49508,7 +52140,7 @@ pub mod builder {
             let url = format!(
                 "{}/v1/projects/{}/policy",
                 client.baseurl,
-                encode_path(&project.to_string()),
+                encode_path(&project.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -49561,9 +52193,13 @@ pub mod builder {
     }
 
     impl<'a> ProjectPolicyUpdateV1<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 project: Err("project was not initialized".to_string()),
                 organization: Ok(None),
                 body: Ok(::std::default::Default::default()),
@@ -49614,6 +52250,11 @@ pub mod builder {
         }
 
         ///Sends a `PUT` request to `/v1/projects/{project}/policy`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::ProjectRolePolicy>, Error<types::Error>> {
@@ -49631,7 +52272,7 @@ pub mod builder {
             let url = format!(
                 "{}/v1/projects/{}/policy",
                 client.baseurl,
-                encode_path(&project.to_string()),
+                encode_path(&project.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -49685,9 +52326,13 @@ pub mod builder {
     }
 
     impl<'a> SystemComponentVersionList<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 limit: Ok(None),
                 page_token: Ok(None),
                 sort_by: Ok(None),
@@ -49726,6 +52371,11 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/v1/system/update/components`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::UpdateableComponentResultsPage>, Error<types::Error>>
@@ -49739,7 +52389,7 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/v1/system/update/components", client.baseurl,);
+            let url = format!("{}/v1/system/update/components", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
@@ -49840,9 +52490,13 @@ pub mod builder {
     }
 
     impl<'a> UpdateDeploymentsList<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 limit: Ok(None),
                 page_token: Ok(None),
                 sort_by: Ok(None),
@@ -49881,6 +52535,11 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/v1/system/update/deployments`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::UpdateDeploymentResultsPage>, Error<types::Error>>
@@ -49894,7 +52553,7 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/v1/system/update/deployments", client.baseurl,);
+            let url = format!("{}/v1/system/update/deployments", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
@@ -49992,9 +52651,13 @@ pub mod builder {
     }
 
     impl<'a> UpdateDeploymentView<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 id: Err("id was not initialized".to_string()),
             }
         }
@@ -50010,6 +52673,11 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/v1/system/update/deployments/{id}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::UpdateDeployment>, Error<types::Error>> {
@@ -50018,7 +52686,7 @@ pub mod builder {
             let url = format!(
                 "{}/v1/system/update/deployments/{}",
                 client.baseurl,
-                encode_path(&id.to_string()),
+                encode_path(&id.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -50064,14 +52732,23 @@ pub mod builder {
     }
 
     impl<'a> SystemUpdateRefresh<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
-            Self { client: client }
+            Self { client }
         }
 
         ///Sends a `POST` request to `/v1/system/update/refresh`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
             let Self { client } = self;
-            let url = format!("{}/v1/system/update/refresh", client.baseurl,);
+            let url = format!("{}/v1/system/update/refresh", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
@@ -50095,7 +52772,7 @@ pub mod builder {
             client.post(&result, &info).await?;
             let response = result?;
             match response.status().as_u16() {
-                204u16 => Ok(ResponseValue::empty(response)),
+                204u16 => Ok(ResponseValue::empty(&response)),
                 400u16..=499u16 => Err(Error::ErrorResponse(
                     ResponseValue::from_response(response).await?,
                 )),
@@ -50117,9 +52794,13 @@ pub mod builder {
     }
 
     impl<'a> SystemUpdateStart<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 body: Ok(::std::default::Default::default()),
             }
         }
@@ -50147,6 +52828,11 @@ pub mod builder {
         }
 
         ///Sends a `POST` request to `/v1/system/update/start`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::UpdateDeployment>, Error<types::Error>> {
@@ -50154,7 +52840,7 @@ pub mod builder {
             let body = body
                 .and_then(|v| types::SystemUpdateStart::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!("{}/v1/system/update/start", client.baseurl,);
+            let url = format!("{}/v1/system/update/start", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
@@ -50200,14 +52886,23 @@ pub mod builder {
     }
 
     impl<'a> SystemUpdateStop<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
-            Self { client: client }
+            Self { client }
         }
 
         ///Sends a `POST` request to `/v1/system/update/stop`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<()>, Error<types::Error>> {
             let Self { client } = self;
-            let url = format!("{}/v1/system/update/stop", client.baseurl,);
+            let url = format!("{}/v1/system/update/stop", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
@@ -50231,7 +52926,7 @@ pub mod builder {
             client.post(&result, &info).await?;
             let response = result?;
             match response.status().as_u16() {
-                204u16 => Ok(ResponseValue::empty(response)),
+                204u16 => Ok(ResponseValue::empty(&response)),
                 400u16..=499u16 => Err(Error::ErrorResponse(
                     ResponseValue::from_response(response).await?,
                 )),
@@ -50255,9 +52950,13 @@ pub mod builder {
     }
 
     impl<'a> SystemUpdateList<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 limit: Ok(None),
                 page_token: Ok(None),
                 sort_by: Ok(None),
@@ -50296,6 +52995,11 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/v1/system/update/updates`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::SystemUpdateResultsPage>, Error<types::Error>> {
@@ -50308,7 +53012,7 @@ pub mod builder {
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
             let sort_by = sort_by.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/v1/system/update/updates", client.baseurl,);
+            let url = format!("{}/v1/system/update/updates", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
@@ -50406,9 +53110,13 @@ pub mod builder {
     }
 
     impl<'a> SystemUpdateView<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 version: Err("version was not initialized".to_string()),
             }
         }
@@ -50424,13 +53132,18 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/v1/system/update/updates/{version}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::SystemUpdate>, Error<types::Error>> {
             let Self { client, version } = self;
             let version = version.map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/v1/system/update/updates/{}",
                 client.baseurl,
-                encode_path(&version.to_string()),
+                encode_path(&version.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -50477,9 +53190,13 @@ pub mod builder {
     }
 
     impl<'a> SystemUpdateComponentsList<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 version: Err("version was not initialized".to_string()),
             }
         }
@@ -50496,6 +53213,11 @@ pub mod builder {
 
         ///Sends a `GET` request to
         /// `/v1/system/update/updates/{version}/components`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::ComponentUpdateResultsPage>, Error<types::Error>> {
@@ -50504,7 +53226,7 @@ pub mod builder {
             let url = format!(
                 "{}/v1/system/update/updates/{}/components",
                 client.baseurl,
-                encode_path(&version.to_string()),
+                encode_path(&version.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -50550,16 +53272,25 @@ pub mod builder {
     }
 
     impl<'a> SystemVersion<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
-            Self { client: client }
+            Self { client }
         }
 
         ///Sends a `GET` request to `/v1/system/update/version`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::SystemVersion>, Error<types::Error>> {
             let Self { client } = self;
-            let url = format!("{}/v1/system/update/version", client.baseurl,);
+            let url = format!("{}/v1/system/update/version", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
