@@ -8,5 +8,5 @@ include!(concat!(env!("OUT_DIR"), "/codegen.rs"));
 #[wasm_bindgen_test::wasm_bindgen_test]
 fn test_client_new() {
     let client = Client::new("http://foo/bar");
-    assert!(client.baseurl == "http://foo/bar");
+    assert_eq!(client.baseurl, "http://foo/bar");
 }
