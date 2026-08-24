@@ -29,7 +29,7 @@ base64 = "0.23.0"
 bytes = "1.11.1"
 chrono = { version = "0.4.44", default-features = false, features = ["serde"] }
 clap = { version = "4.6.1" }
-clap-cargo = "0.18.3"
+clap-cargo = "0.19.0"
 dropshot = { version = "0.17.0", default-features = false }
 env_logger = "0.11.10"
 expectorate = { version = "1.2.0", features = ["predicates"] }
