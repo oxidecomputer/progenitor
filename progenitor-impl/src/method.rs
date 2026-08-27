@@ -135,9 +135,15 @@ impl OperationParameterKind {
 #[derive(Debug, PartialEq, Eq)]
 pub enum BodyContentType {
     OctetStream,
-    Json,
+    Json(String),
     FormUrlencoded,
     Text(String),
+}
+
+/// JSON is `application/json` or any media type with the `+json` structured
+/// syntax suffix (RFC 6839).
+fn is_json_media_type(media_type: &str) -> bool {
+    media_type == "application/json" || media_type.ends_with("+json")
 }
 
 impl FromStr for BodyContentType {
@@ -145,11 +151,12 @@ impl FromStr for BodyContentType {
 
     fn from_str(s: &str) -> Result<Self> {
         let offset = s.find(';').unwrap_or(s.len());
-        match &s[..offset] {
+        let media_type = &s[..offset];
+        match media_type {
             "application/octet-stream" => Ok(Self::OctetStream),
-            "application/json" => Ok(Self::Json),
             "application/x-www-form-urlencoded" => Ok(Self::FormUrlencoded),
-            "text/plain" | "text/x-markdown" => Ok(Self::Text(String::from(&s[..offset]))),
+            "text/plain" | "text/x-markdown" => Ok(Self::Text(String::from(media_type))),
+            _ if is_json_media_type(media_type) => Ok(Self::Json(String::from(media_type))),
             _ => Err(Error::UnexpectedFormat(format!(
                 "unexpected content type: {}",
                 s
@@ -162,7 +169,7 @@ impl std::fmt::Display for BodyContentType {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.write_str(match self {
             Self::OctetStream => "application/octet-stream",
-            Self::Json => "application/json",
+            Self::Json(typ) => typ,
             Self::FormUrlencoded => "application/x-www-form-urlencoded",
             Self::Text(typ) => typ,
         })
@@ -452,7 +459,8 @@ impl Generator {
                     }
 
                     // We categorize responses as "typed" based on the
-                    // "application/json" content type, "upgrade" if it's a
+                    // "application/json" content type (or any "+json"
+                    // structured syntax suffix), "upgrade" if it's a
                     // websocket channel without a meaningful content-type,
                     // "raw" if there's any other response content type (we don't
                     // investigate further), or "none" if there is no content.
@@ -462,7 +470,9 @@ impl Generator {
                     // content type of the response just as it currently examines
                     // the status code.
                     let typ = if let Some(mt) = response.content.iter().find_map(|(x, v)| {
-                        (x == "application/json" || x.starts_with("application/json;")).then_some(v)
+                        // Strip parameters (e.g. "; charset=utf-8")
+                        let media_type = &x[..x.find(';').unwrap_or(x.len())];
+                        is_json_media_type(media_type).then_some(v)
                     }) {
                         assert!(mt.encoding.is_empty());
 
@@ -913,12 +923,28 @@ impl Generator {
                     .body(body)
                 }),
                 (
-                    OperationParameterKind::Body(BodyContentType::Json),
+                    OperationParameterKind::Body(BodyContentType::Json(mime_type)),
                     OperationParameterType::Type(_),
-                ) => Some(quote! {
-                    // Serialization errors are deferred.
-                    .json(&body)
-                }),
+                ) => {
+                    // reqwest's json() sets Content-Type: application/json
+                    // only if none is already present, so for a "+json" type
+                    // we set the spec's media type first. Plain
+                    // application/json emits no header so existing output is
+                    // unchanged.
+                    let content_type = (mime_type != "application/json").then(|| {
+                        quote! {
+                            .header(
+                                ::reqwest::header::CONTENT_TYPE,
+                                ::reqwest::header::HeaderValue::from_static(#mime_type),
+                            )
+                        }
+                    });
+                    Some(quote! {
+                        #content_type
+                        // Serialization errors are deferred.
+                        .json(&body)
+                    })
+                }
                 (
                     OperationParameterKind::Body(BodyContentType::FormUrlencoded),
                     OperationParameterType::Type(_),
@@ -2140,7 +2166,7 @@ impl Generator {
                 }?;
                 OperationParameterType::RawBody
             }
-            BodyContentType::Json | BodyContentType::FormUrlencoded => {
+            BodyContentType::Json(_) | BodyContentType::FormUrlencoded => {
                 // TODO it would be legal to have the encoding field set for
                 // application/x-www-form-urlencoded content, but I'm not sure
                 // how to interpret the values.
@@ -2330,5 +2356,25 @@ impl ParameterDataExt for openapiv3::ParameterData {
                 format!("unexpected content {:#?}", c),
             )),
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use std::str::FromStr;
+
+    use super::BodyContentType;
+
+    #[test]
+    fn test_json_suffix() {
+        let json = |s: &str| BodyContentType::from_str(s).unwrap().to_string();
+        assert_eq!(json("application/json; charset=utf-8"), "application/json");
+        assert_eq!(json("application/problem+json"), "application/problem+json");
+        assert_eq!(
+            json("application/vnd.x+json; charset=utf-8"),
+            "application/vnd.x+json"
+        );
+        assert!(BodyContentType::from_str("application/soap+xml").is_err());
+        assert!(BodyContentType::from_str("application/jsonx").is_err());
     }
 }

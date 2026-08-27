@@ -1,0 +1,86 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "description": "Minimal API for testing RFC 6839 \"+json\" structured syntax suffix media types on request bodies, responses, and errors",
+        "title": "JSON structured syntax suffix test",
+        "version": "v1"
+    },
+    "paths": {
+        "/things/{id}/annotate": {
+            "post": {
+                "operationId": "annotate_thing",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/vnd.example.annotation+json; charset=utf-8": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Annotation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "2XX": {
+                        "description": "the annotated thing",
+                        "content": {
+                            "application/vnd.example.thing+json; charset=utf-8": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Thing"
+                                }
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "an RFC 9457 problem",
+                        "content": {
+                            "application/problem+json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Problem"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Annotation": {
+                "type": "object",
+                "required": ["note"],
+                "properties": {
+                    "note": { "type": "string" }
+                }
+            },
+            "Thing": {
+                "type": "object",
+                "required": ["id", "notes"],
+                "properties": {
+                    "id": { "type": "string" },
+                    "notes": { "type": "array", "items": { "type": "string" } }
+                }
+            },
+            "Problem": {
+                "type": "object",
+                "required": ["title", "status"],
+                "properties": {
+                    "type": { "type": "string" },
+                    "title": { "type": "string" },
+                    "status": { "type": "integer", "format": "uint16", "minimum": 0 },
+                    "detail": { "type": "string" }
+                }
+            }
+        }
+    }
+}
