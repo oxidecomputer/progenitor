@@ -164,6 +164,11 @@ fn test_cli_gen() {
 }
 
 #[test]
+fn test_json_suffix() {
+    verify_apis("json-suffix.json");
+}
+
+#[test]
 fn test_nexus_with_different_timeout() {
     const OPENAPI_FILE: &'static str = "nexus.json";
 
