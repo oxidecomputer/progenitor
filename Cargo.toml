@@ -45,7 +45,7 @@ proc-macro2 = "1.0.106"
 quote = "1.0.45"
 rand = "0.10.1"
 regex = "1.12.3"
-regress = "0.11.1"
+regress = "0.12.0"
 reqwest = { version = "0.13.4", default-features = false, features = ["json", "query", "stream"] }
 rustfmt-wrapper = "0.2.1"
 schemars = "0.8.22"
