@@ -4,6 +4,14 @@ use progenitor_client::{encode_path, ClientHooks, OperationInfo, RequestBuilderE
 pub use progenitor_client::{ByteStream, ClientInfo, Error, ResponseValue};
 /// Types used as operation parameters and responses.
 #[allow(clippy::all)]
+#[allow(
+    clippy::struct_field_names,
+    reason = "type definitions are emitted by typify"
+)]
+#[allow(
+    clippy::default_trait_access,
+    reason = "default expressions are emitted by typify"
+)]
 pub mod types {
     /// Error types.
     pub mod error {
@@ -266,7 +274,7 @@ pub mod types {
 }
 
 #[derive(Clone, Debug)]
-///Client for test_stream_pagination
+///Client for `test_stream_pagination`
 ///
 ///Version: 1.0.0
 pub struct Client {
@@ -280,6 +288,11 @@ impl Client {
     /// `baseurl` is the base URL provided to the internal
     /// `reqwest::Client`, and should include a scheme and hostname,
     /// as well as port and a path stem if applicable.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the default `reqwest::Client` cannot be built.
+    #[must_use]
     pub fn new(baseurl: &str) -> Self {
         #[cfg(not(target_arch = "wasm32"))]
         let client = {
@@ -299,6 +312,7 @@ impl Client {
     /// `baseurl` is the base URL provided to the internal
     /// `reqwest::Client`, and should include a scheme and hostname,
     /// as well as port and a path stem if applicable.
+    #[must_use]
     pub fn new_with_client(baseurl: &str, client: reqwest::Client) -> Self {
         Self {
             baseurl: baseurl.to_string(),
@@ -333,7 +347,12 @@ impl Client {
     /// - `limit`: Maximum number of items returned by a single call
     /// - `page_token`: Token returned by previous call to retrieve the
     ///   subsequent page
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.paginated_u32s()
     ///    .limit(limit)
     ///    .page_token(page_token)
@@ -347,6 +366,21 @@ impl Client {
 
 /// Types for composing operation parameters.
 #[allow(clippy::all)]
+#[allow(
+    clippy::result_large_err,
+    reason = "generated methods preserve the public Error representation"
+)]
+#[cfg_attr(
+    target_arch = "wasm32",
+    allow(
+        clippy::future_not_send,
+        reason = "reqwest futures use browser-local state on wasm"
+    )
+)]
+#[allow(
+    clippy::match_same_arms,
+    reason = "generated status ranges remain explicit"
+)]
 pub mod builder {
     use super::types;
     #[allow(unused_imports)]
@@ -365,9 +399,13 @@ pub mod builder {
     }
 
     impl<'a> PaginatedU32s<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 limit: Ok(None),
                 page_token: Ok(None),
             }
@@ -394,6 +432,11 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<types::Uint32ResultsPage>, Error<types::Error>> {
@@ -404,7 +447,7 @@ pub mod builder {
             } = self;
             let limit = limit.map_err(Error::InvalidRequest)?;
             let page_token = page_token.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/", client.baseurl,);
+            let url = format!("{}/", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),

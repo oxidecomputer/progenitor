@@ -4,6 +4,14 @@ use progenitor_client::{encode_path, ClientHooks, OperationInfo, RequestBuilderE
 pub use progenitor_client::{ByteStream, ClientInfo, Error, ResponseValue};
 /// Types used as operation parameters and responses.
 #[allow(clippy::all)]
+#[allow(
+    clippy::struct_field_names,
+    reason = "type definitions are emitted by typify"
+)]
+#[allow(
+    clippy::default_trait_access,
+    reason = "default expressions are emitted by typify"
+)]
 pub mod types {
     /// Error types.
     pub mod error {
@@ -37,7 +45,7 @@ pub mod types {
 }
 
 #[derive(Clone, Debug)]
-///Client for pagination-demo
+///Client for `pagination-demo`
 ///
 ///Version: 9000.0.0
 pub struct Client {
@@ -51,6 +59,11 @@ impl Client {
     /// `baseurl` is the base URL provided to the internal
     /// `reqwest::Client`, and should include a scheme and hostname,
     /// as well as port and a path stem if applicable.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the default `reqwest::Client` cannot be built.
+    #[must_use]
     pub fn new(baseurl: &str) -> Self {
         #[cfg(not(target_arch = "wasm32"))]
         let client = {
@@ -70,6 +83,7 @@ impl Client {
     /// `baseurl` is the base URL provided to the internal
     /// `reqwest::Client`, and should include a scheme and hostname,
     /// as well as port and a path stem if applicable.
+    #[must_use]
     pub fn new_with_client(baseurl: &str, client: reqwest::Client) -> Self {
         Self {
             baseurl: baseurl.to_string(),
@@ -98,12 +112,37 @@ impl ClientInfo<()> for Client {
 
 impl ClientHooks<()> for &Client {}
 #[allow(clippy::all)]
+#[allow(
+    clippy::too_many_arguments,
+    reason = "generated parameters mirror the OpenAPI operation"
+)]
+#[allow(
+    clippy::result_large_err,
+    reason = "generated methods preserve the public Error representation"
+)]
+#[cfg_attr(
+    target_arch = "wasm32",
+    allow(
+        clippy::future_not_send,
+        reason = "reqwest futures use browser-local state on wasm"
+    )
+)]
+#[allow(
+    clippy::match_same_arms,
+    reason = "generated status ranges remain explicit"
+)]
 impl Client {
     ///Sends a `GET` request to `/`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn freeform_response<'a>(
         &'a self,
     ) -> Result<ResponseValue<ByteStream>, Error<ByteStream>> {
-        let url = format!("{}/", self.baseurl,);
+        let url = format!("{}/", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),

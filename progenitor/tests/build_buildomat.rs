@@ -4,7 +4,8 @@ mod positional {
     progenitor::generate_api!("../sample_openapi/buildomat.json");
 
     fn _ignore() {
-        let _ = Client::new("").worker_task_upload_chunk("task", vec![0]);
+        let client = Client::new("");
+        let _future = client.worker_task_upload_chunk("task", vec![0]);
     }
 }
 
@@ -16,7 +17,8 @@ mod builder_untagged {
     );
 
     fn _ignore() {
-        let _ = Client::new("")
+        let client = Client::new("");
+        let _future = client
             .worker_task_upload_chunk()
             .task("task")
             .body(vec![0])
@@ -32,7 +34,8 @@ mod builder_tagged {
     );
 
     fn _ignore() {
-        let _ = Client::new("")
+        let client = Client::new("");
+        let _future = client
             .worker_task_upload_chunk()
             .task("task")
             .body(vec![0])
