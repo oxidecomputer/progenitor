@@ -386,6 +386,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "codespace"
+version = "0.0.1-alpha.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "61018db61b1cdf32bed05d3addbd3a49d03be38e1a7674e067e6ded193d0cf49"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 3.0.5",
+]
+
+[[package]]
 name = "colorchoice"
 version = "1.0.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1785,6 +1796,7 @@ dependencies = [
 name = "progenitor-impl"
 version = "0.15.0"
 dependencies = [
+ "codespace",
  "dropshot",
  "expectorate",
  "futures",
@@ -1807,6 +1819,7 @@ dependencies = [
  "syn 3.0.6",
  "thiserror 2.0.20",
  "tokio",
+ "typespace",
  "typify",
  "unicode-ident",
 ]
@@ -3022,10 +3035,23 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "562d481066bde0658276a35467c4af00bdc6ee726305698a55b86e61d7ad82bb"
 
 [[package]]
+name = "typespace"
+version = "0.0.1-alpha.1"
+dependencies = [
+ "codespace",
+ "heck",
+ "log",
+ "proc-macro2",
+ "quote",
+ "serde",
+ "serde_json",
+ "syn 3.0.5",
+ "thiserror 2.0.20",
+]
+
+[[package]]
 name = "typify"
-version = "0.8.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "71187d2e983363e9a6ca884f7b061620bc6da4316902058e74bbc9d61c347696"
+version = "0.7.0"
 dependencies = [
  "typify-impl",
  "typify-macro",
@@ -3033,9 +3059,7 @@ dependencies = [
 
 [[package]]
 name = "typify-impl"
-version = "0.8.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1cbc3132686085f84a068ad86fc281cb3d566dd940c8911fd3562013851e9ae8"
+version = "0.7.0"
 dependencies = [
  "heck",
  "log",
@@ -3048,14 +3072,13 @@ dependencies = [
  "serde_json",
  "syn 3.0.6",
  "thiserror 2.0.20",
+ "typespace",
  "unicode-ident",
 ]
 
 [[package]]
 name = "typify-macro"
-version = "0.8.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b3a7f8d08ec85254fb8b383a6c66fe43b81f7f6b288fa71eb365f0867fc8f3a6"
+version = "0.7.0"
 dependencies = [
  "proc-macro2",
  "quote",
