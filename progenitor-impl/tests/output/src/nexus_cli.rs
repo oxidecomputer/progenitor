@@ -1129,6 +1129,13 @@ impl<T: CliConfig> Cli<T> {
     pub fn cli_image_create() -> ::clap::Command {
         ::clap::Command::new("")
             .arg(
+                ::clap::Arg::new("block-size")
+                    .long("block-size")
+                    .value_parser(::clap::value_parser!(types::BlockSize))
+                    .required_unless_present("json-body")
+                    .help("block size in bytes"),
+            )
+            .arg(
                 ::clap::Arg::new("description")
                     .long("description")
                     .value_parser(::clap::value_parser!(::std::string::String))
@@ -3621,6 +3628,13 @@ impl<T: CliConfig> Cli<T> {
 
     pub fn cli_system_image_create() -> ::clap::Command {
         ::clap::Command::new("")
+            .arg(
+                ::clap::Arg::new("block-size")
+                    .long("block-size")
+                    .value_parser(::clap::value_parser!(types::BlockSize))
+                    .required_unless_present("json-body")
+                    .help("block size in bytes"),
+            )
             .arg(
                 ::clap::Arg::new("description")
                     .long("description")
@@ -7058,6 +7072,10 @@ impl<T: CliConfig> Cli<T> {
 
     pub async fn execute_image_create(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.image_create();
+        if let Some(value) = matches.get_one::<types::BlockSize>("block-size") {
+            request = request.body_map(|body| body.block_size(value.clone()))
+        }
+
         if let Some(value) = matches.get_one::<::std::string::String>("description") {
             request = request.body_map(|body| body.description(value.clone()))
         }
@@ -9910,6 +9928,10 @@ impl<T: CliConfig> Cli<T> {
         matches: &::clap::ArgMatches,
     ) -> anyhow::Result<()> {
         let mut request = self.client.system_image_create();
+        if let Some(value) = matches.get_one::<types::BlockSize>("block-size") {
+            request = request.body_map(|body| body.block_size(value.clone()))
+        }
+
         if let Some(value) = matches.get_one::<::std::string::String>("description") {
             request = request.body_map(|body| body.description(value.clone()))
         }
