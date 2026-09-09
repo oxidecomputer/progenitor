@@ -1297,10 +1297,7 @@ impl Progenitor {
         if let typify::Structure::Option(ref opt_id) =
             self.type_space.structure(properties.get("next_page")?)
         {
-            if !matches!(
-                self.type_space.structure(opt_id),
-                typify::Structure::String
-            ) {
+            if !matches!(self.type_space.structure(opt_id), typify::Structure::String) {
                 return None;
             }
         } else {

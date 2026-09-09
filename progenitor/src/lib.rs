@@ -25,5 +25,6 @@ pub use progenitor_impl::Progenitor;
 pub use progenitor_impl::TagStyle;
 pub use progenitor_impl::TypeImpl;
 pub use progenitor_impl::TypePatch;
+pub use progenitor_impl::codespace;
 #[cfg(feature = "macro")]
 pub use progenitor_macro::generate_api;

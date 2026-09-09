@@ -21,6 +21,8 @@ pub use typify::TypeSpaceImpl as TypeImpl;
 pub use typify::TypeSpacePatch as TypePatch;
 pub use typify::UnknownPolicy;
 
+pub use codespace;
+
 /// The module that generated types are emitted into.
 ///
 /// typespace makes the scope a per-query argument rather than a setting,
@@ -415,6 +417,72 @@ impl Progenitor {
 
     /// Emit a [TokenStream] containing the generated client code.
     pub fn generate_tokens(&self) -> Result<TokenStream> {
+        let prelude = self.sdk_prelude();
+        let types = self.typespace().to_codespace().into_stream();
+        let client = self.sdk_client()?;
+        Ok(quote! {
+            #prelude
+
+            /// Types used as operation parameters and responses.
+            #[allow(clippy::all)]
+            pub mod types {
+                #types
+            }
+
+            #client
+        })
+    }
+
+    /// Generate the SDK as a structured [codespace::Codespace].
+    ///
+    /// The root module holds the client items and a `types` submodule
+    /// holds the generated types. codespace fixes stream and file
+    /// order (items by key, then submodules), so the stream form of
+    /// this value lays items out in that order rather than in
+    /// [`Self::generate_tokens`] order.
+    pub fn generate_sdk(&self) -> codespace::Codespace {
+        let mut cs = codespace::Codespace::default();
+        let root = cs.get_root_mod();
+        root.add_item("", self.sdk_prelude());
+        root.add_item(
+            "Client",
+            self.sdk_client()
+                .expect("rendering a constructed document does not fail"),
+        );
+        let mut types = self.typespace().to_codespace().into_root_mod();
+        types.add_docs("Types used as operation parameters and responses.");
+        types.add_attr(quote! { allow(clippy::all) });
+        root.add_mod("types", types);
+        cs
+    }
+
+    /// The `use` items that lead the SDK.
+    fn sdk_prelude(&self) -> TokenStream {
+        // The allow(unused_imports) on the `pub use` is necessary with Rust
+        // 1.76+, in case the generated file is not at the top level of the
+        // crate.
+        quote! {
+            // Re-export types that are used by the public interface of Client.
+            #[allow(unused_imports)]
+            pub use progenitor_client::{
+                ByteStream,
+                ClientInfo,
+                Error,
+                ResponseValue,
+            };
+            #[allow(unused_imports)]
+            use progenitor_client::{
+                encode_path,
+                ClientHooks,
+                OperationInfo,
+                RequestBuilderExt,
+            };
+        }
+    }
+
+    /// The client half of the SDK: the `Client` type, its impls, and
+    /// the operation code for the configured interface and tag styles.
+    fn sdk_client(&self) -> Result<TokenStream> {
         let raw_methods = &self.raw_methods;
         let operation_code = match (&self.settings.interface, &self.settings.tag) {
             (InterfaceStyle::Positional, TagStyle::Merged) => self
@@ -439,8 +507,6 @@ impl Progenitor {
                 )
             }
         }?;
-
-        let types = self.typespace().to_codespace().into_stream();
 
         let (inner_type, inner_fn_value) = match self.settings.inner_type.as_ref() {
             Some(inner_type) => (inner_type.clone(), quote! { &self.inner }),
@@ -499,33 +565,8 @@ impl Progenitor {
             },
         };
 
-        // The allow(unused_imports) on the `pub use` is necessary with Rust
-        // 1.76+, in case the generated file is not at the top level of the
-        // crate.
 
         let file = quote! {
-            // Re-export types that are used by the public interface of Client.
-            #[allow(unused_imports)]
-            pub use progenitor_client::{
-                ByteStream,
-                ClientInfo,
-                Error,
-                ResponseValue,
-            };
-            #[allow(unused_imports)]
-            use progenitor_client::{
-                encode_path,
-                ClientHooks,
-                OperationInfo,
-                RequestBuilderExt,
-            };
-
-            /// Types used as operation parameters and responses.
-            #[allow(clippy::all)]
-            pub mod types {
-                #types
-            }
-
             #[derive(Clone, Debug)]
             #[doc = #client_docstring]
             pub struct Client {

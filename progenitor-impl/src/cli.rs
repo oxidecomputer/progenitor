@@ -21,9 +21,54 @@ struct CliOperation {
     execute_trait: TokenStream,
 }
 
+/// The CLI rendered as its top-level pieces.
+struct CliParts {
+    prelude: TokenStream,
+    cli: TokenStream,
+    config: TokenStream,
+    command: TokenStream,
+}
+
 impl Progenitor {
     /// Generate a `clap`-based CLI.
     pub fn cli(&self, crate_name: &str) -> Result<TokenStream> {
+        let CliParts {
+            prelude,
+            cli,
+            config,
+            command,
+        } = self.cli_parts(crate_name);
+        Ok(quote! {
+            #prelude
+            #cli
+            #config
+            #command
+        })
+    }
+
+    /// Generate the CLI as a structured [codespace::Codespace].
+    ///
+    /// The root module holds the CLI items; codespace fixes their
+    /// stream and file order (by item key), so the stream form of this
+    /// value lays items out in that order rather than in [`Self::cli`]
+    /// order.
+    pub fn generate_cli(&self, crate_name: &str) -> codespace::Codespace {
+        let CliParts {
+            prelude,
+            cli,
+            config,
+            command,
+        } = self.cli_parts(crate_name);
+        let mut cs = codespace::Codespace::default();
+        let root = cs.get_root_mod();
+        root.add_item("", prelude);
+        root.add_item("Cli", cli);
+        root.add_item("CliConfig", config);
+        root.add_item("CliCommand", command);
+        cs
+    }
+
+    fn cli_parts(&self, crate_name: &str) -> CliParts {
         let raw_methods = &self.raw_methods;
 
         let methods = raw_methods
@@ -62,10 +107,12 @@ impl Progenitor {
             .map(|b| syn::parse_str::<syn::Path>(b).unwrap())
             .collect::<Vec<_>>();
 
-        let code = quote! {
+        let prelude = quote! {
             use #crate_path::*;
             use anyhow::Context as _;
+        };
 
+        let cli = quote! {
             pub struct Cli<T: CliConfig> {
                 client: Client,
                 config: T,
@@ -105,7 +152,9 @@ impl Progenitor {
 
                 #(#execute_ops)*
             }
+        };
 
+        let config = quote! {
             pub trait CliConfig {
                 fn success_item<T>(&self, value: &ResponseValue<T>)
                 where
@@ -130,7 +179,9 @@ impl Progenitor {
 
                 #(#trait_ops)*
             }
+        };
 
+        let command = quote! {
             #[derive(Copy, Clone, Debug)]
             pub enum CliCommand {
                 #(#cli_variants,)*
@@ -153,10 +204,14 @@ impl Progenitor {
                     }
                 }
             }
-
         };
 
-        Ok(code)
+        CliParts {
+            prelude,
+            cli,
+            config,
+            command,
+        }
     }
 
     fn cli_method(&self, method: &crate::method::OperationMethod) -> CliOperation {
