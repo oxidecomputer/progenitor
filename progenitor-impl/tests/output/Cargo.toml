@@ -3,22 +3,25 @@
 [package]
 name = "test-output"
 version = "0.1.0"
-edition = "2024"
+# typify uses `gen` as a name for parameters of the `JsonSchema` impls it emits.
+# `gen` is a reserved word in Rust 2024, so generated code that derives `schemars::JsonSchema`
+# only parses under an earlier edition.
+edition = "2021"
 rust-version = "1.85"
 license = "MPL-2.0"
 
 [dependencies]
 anyhow = "1.0"
-base64 = "0.21"
+base64 = "0.23"
 chrono = { version = "0.4", features = ["serde"] }
 clap = { version = "4", features = ["string"] }
 futures = "0.3"
-httpmock = "0.7"
+httpmock = "0.8"
 progenitor-client = { path = "../../../progenitor-client" }
-rand = { version = "0.8", features = ["serde1"] }
+rand = { version = "0.10", features = ["serde"] }
 regex = "1.10"
-regress = "0.7"
-reqwest = "0.12"
+regress = "0.12"
+reqwest = "0.13"
 schemars = { version = "0.8", features = ["chrono", "uuid1"] }
 serde = { features = ["derive"], version = "1" }
 serde_json = "1"
