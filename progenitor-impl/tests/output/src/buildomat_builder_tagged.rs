@@ -5,56 +5,7 @@ pub use progenitor_client::{ByteStream, ClientInfo, Error, ResponseValue};
 /// Types used as operation parameters and responses.
 #[allow(clippy::all)]
 pub mod types {
-    /// Error types.
-    pub mod error {
-        /// Error from a `TryFrom` or `FromStr` implementation.
-        pub struct ConversionError(::std::borrow::Cow<'static, str>);
-        impl ::std::error::Error for ConversionError {}
-        impl ::std::fmt::Display for ConversionError {
-            fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> Result<(), ::std::fmt::Error> {
-                ::std::fmt::Display::fmt(&self.0, f)
-            }
-        }
-
-        impl ::std::fmt::Debug for ConversionError {
-            fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> Result<(), ::std::fmt::Error> {
-                ::std::fmt::Debug::fmt(&self.0, f)
-            }
-        }
-
-        impl From<&'static str> for ConversionError {
-            fn from(value: &'static str) -> Self {
-                Self(value.into())
-            }
-        }
-
-        impl From<String> for ConversionError {
-            fn from(value: String) -> Self {
-                Self(value.into())
-            }
-        }
-    }
-
     ///`GetThingOrThingsId`
-    ///
-    /// <details><summary>JSON schema</summary>
-    ///
-    /// ```json
-    ///{
-    ///  "oneOf": [
-    ///    {
-    ///      "type": "string"
-    ///    },
-    ///    {
-    ///      "type": "array",
-    ///      "items": {
-    ///        "type": "string"
-    ///      }
-    ///    }
-    ///  ]
-    ///}
-    /// ```
-    /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     #[serde(untagged)]
     pub enum GetThingOrThingsId {
@@ -69,20 +20,6 @@ pub mod types {
     }
 
     ///`HeaderArgAcceptLanguage`
-    ///
-    /// <details><summary>JSON schema</summary>
-    ///
-    /// ```json
-    ///{
-    ///  "default": "en",
-    ///  "type": "string",
-    ///  "enum": [
-    ///    "de",
-    ///    "en"
-    ///  ]
-    ///}
-    /// ```
-    /// </details>
     #[derive(
         :: serde :: Deserialize,
         :: serde :: Serialize,
@@ -129,15 +66,6 @@ pub mod types {
         }
     }
 
-    impl ::std::convert::TryFrom<&::std::string::String> for HeaderArgAcceptLanguage {
-        type Error = self::error::ConversionError;
-        fn try_from(
-            value: &::std::string::String,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
-            value.parse()
-        }
-    }
-
     impl ::std::convert::TryFrom<::std::string::String> for HeaderArgAcceptLanguage {
         type Error = self::error::ConversionError;
         fn try_from(
@@ -154,58 +82,6 @@ pub mod types {
     }
 
     ///`ObjWithOptionArray`
-    ///
-    /// <details><summary>JSON schema</summary>
-    ///
-    /// ```json
-    ///{
-    ///  "type": "object",
-    ///  "required": [
-    ///    "stranger-things",
-    ///    "things"
-    ///  ],
-    ///  "properties": {
-    ///    "stranger-things": {
-    ///      "type": "array",
-    ///      "items": {
-    ///        "oneOf": [
-    ///          {
-    ///            "type": "null"
-    ///          },
-    ///          {
-    ///            "allOf": [
-    ///              {
-    ///                "$ref": "#/components/schemas/Task"
-    ///              }
-    ///            ],
-    ///            "oneOf": [
-    ///              {}
-    ///            ]
-    ///          }
-    ///        ]
-    ///      }
-    ///    },
-    ///    "things": {
-    ///      "type": "array",
-    ///      "items": {
-    ///        "oneOf": [
-    ///          {
-    ///            "type": "null"
-    ///          },
-    ///          {
-    ///            "allOf": [
-    ///              {
-    ///                "$ref": "#/components/schemas/Task"
-    ///              }
-    ///            ]
-    ///          }
-    ///        ]
-    ///      }
-    ///    }
-    ///  }
-    ///}
-    /// ```
-    /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct ObjWithOptionArray {
         #[serde(rename = "stranger-things")]
@@ -220,42 +96,6 @@ pub mod types {
     }
 
     ///`Task`
-    ///
-    /// <details><summary>JSON schema</summary>
-    ///
-    /// ```json
-    ///{
-    ///  "type": "object",
-    ///  "required": [
-    ///    "id",
-    ///    "name",
-    ///    "output_rules",
-    ///    "script",
-    ///    "state"
-    ///  ],
-    ///  "properties": {
-    ///    "id": {
-    ///      "type": "string"
-    ///    },
-    ///    "name": {
-    ///      "type": "string"
-    ///    },
-    ///    "output_rules": {
-    ///      "type": "array",
-    ///      "items": {
-    ///        "type": "string"
-    ///      }
-    ///    },
-    ///    "script": {
-    ///      "type": "string"
-    ///    },
-    ///    "state": {
-    ///      "type": "string"
-    ///    }
-    ///  }
-    ///}
-    /// ```
-    /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct Task {
         pub id: ::std::string::String,
@@ -272,38 +112,6 @@ pub mod types {
     }
 
     ///`TaskEvent`
-    ///
-    /// <details><summary>JSON schema</summary>
-    ///
-    /// ```json
-    ///{
-    ///  "type": "object",
-    ///  "required": [
-    ///    "payload",
-    ///    "seq",
-    ///    "stream",
-    ///    "time"
-    ///  ],
-    ///  "properties": {
-    ///    "payload": {
-    ///      "type": "string"
-    ///    },
-    ///    "seq": {
-    ///      "type": "integer",
-    ///      "format": "uint",
-    ///      "minimum": 0.0
-    ///    },
-    ///    "stream": {
-    ///      "type": "string"
-    ///    },
-    ///    "time": {
-    ///      "type": "string",
-    ///      "format": "date-time"
-    ///    }
-    ///  }
-    ///}
-    /// ```
-    /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct TaskEvent {
         pub payload: ::std::string::String,
@@ -319,33 +127,6 @@ pub mod types {
     }
 
     ///`TaskOutput`
-    ///
-    /// <details><summary>JSON schema</summary>
-    ///
-    /// ```json
-    ///{
-    ///  "type": "object",
-    ///  "required": [
-    ///    "id",
-    ///    "path",
-    ///    "size"
-    ///  ],
-    ///  "properties": {
-    ///    "id": {
-    ///      "type": "string"
-    ///    },
-    ///    "path": {
-    ///      "type": "string"
-    ///    },
-    ///    "size": {
-    ///      "type": "integer",
-    ///      "format": "uint64",
-    ///      "minimum": 0.0
-    ///    }
-    ///  }
-    ///}
-    /// ```
-    /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct TaskOutput {
         pub id: ::std::string::String,
@@ -360,37 +141,6 @@ pub mod types {
     }
 
     ///`TaskSubmit`
-    ///
-    /// <details><summary>JSON schema</summary>
-    ///
-    /// ```json
-    ///{
-    ///  "type": "object",
-    ///  "required": [
-    ///    "default",
-    ///    "name",
-    ///    "script"
-    ///  ],
-    ///  "properties": {
-    ///    "default": {
-    ///      "type": "boolean"
-    ///    },
-    ///    "name": {
-    ///      "type": "string"
-    ///    },
-    ///    "output_rules": {
-    ///      "type": "array",
-    ///      "items": {
-    ///        "type": "string"
-    ///      }
-    ///    },
-    ///    "script": {
-    ///      "type": "string"
-    ///    }
-    ///  }
-    ///}
-    /// ```
-    /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct TaskSubmit {
         pub default: bool,
@@ -407,23 +157,6 @@ pub mod types {
     }
 
     ///`TaskSubmitResult`
-    ///
-    /// <details><summary>JSON schema</summary>
-    ///
-    /// ```json
-    ///{
-    ///  "type": "object",
-    ///  "required": [
-    ///    "id"
-    ///  ],
-    ///  "properties": {
-    ///    "id": {
-    ///      "type": "string"
-    ///    }
-    ///  }
-    ///}
-    /// ```
-    /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct TaskSubmitResult {
         pub id: ::std::string::String,
@@ -436,23 +169,6 @@ pub mod types {
     }
 
     ///`UploadedChunk`
-    ///
-    /// <details><summary>JSON schema</summary>
-    ///
-    /// ```json
-    ///{
-    ///  "type": "object",
-    ///  "required": [
-    ///    "id"
-    ///  ],
-    ///  "properties": {
-    ///    "id": {
-    ///      "type": "string"
-    ///    }
-    ///  }
-    ///}
-    /// ```
-    /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct UploadedChunk {
         pub id: ::std::string::String,
@@ -465,23 +181,6 @@ pub mod types {
     }
 
     ///`UserCreate`
-    ///
-    /// <details><summary>JSON schema</summary>
-    ///
-    /// ```json
-    ///{
-    ///  "type": "object",
-    ///  "required": [
-    ///    "name"
-    ///  ],
-    ///  "properties": {
-    ///    "name": {
-    ///      "type": "string"
-    ///    }
-    ///  }
-    ///}
-    /// ```
-    /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct UserCreate {
         pub name: ::std::string::String,
@@ -494,31 +193,6 @@ pub mod types {
     }
 
     ///`UserCreateResult`
-    ///
-    /// <details><summary>JSON schema</summary>
-    ///
-    /// ```json
-    ///{
-    ///  "type": "object",
-    ///  "required": [
-    ///    "id",
-    ///    "name",
-    ///    "token"
-    ///  ],
-    ///  "properties": {
-    ///    "id": {
-    ///      "type": "string"
-    ///    },
-    ///    "name": {
-    ///      "type": "string"
-    ///    },
-    ///    "token": {
-    ///      "type": "string"
-    ///    }
-    ///  }
-    ///}
-    /// ```
-    /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct UserCreateResult {
         pub id: ::std::string::String,
@@ -533,27 +207,6 @@ pub mod types {
     }
 
     ///`WhoamiResult`
-    ///
-    /// <details><summary>JSON schema</summary>
-    ///
-    /// ```json
-    ///{
-    ///  "type": "object",
-    ///  "required": [
-    ///    "id",
-    ///    "name"
-    ///  ],
-    ///  "properties": {
-    ///    "id": {
-    ///      "type": "string"
-    ///    },
-    ///    "name": {
-    ///      "type": "string"
-    ///    }
-    ///  }
-    ///}
-    /// ```
-    /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct WhoamiResult {
         pub id: ::std::string::String,
@@ -567,52 +220,13 @@ pub mod types {
     }
 
     ///`Worker`
-    ///
-    /// <details><summary>JSON schema</summary>
-    ///
-    /// ```json
-    ///{
-    ///  "type": "object",
-    ///  "required": [
-    ///    "deleted",
-    ///    "id",
-    ///    "recycle",
-    ///    "tasks"
-    ///  ],
-    ///  "properties": {
-    ///    "deleted": {
-    ///      "type": "boolean"
-    ///    },
-    ///    "id": {
-    ///      "type": "string"
-    ///    },
-    ///    "instance_id": {
-    ///      "type": "string"
-    ///    },
-    ///    "lastping": {
-    ///      "type": "string",
-    ///      "format": "date-time"
-    ///    },
-    ///    "recycle": {
-    ///      "type": "boolean"
-    ///    },
-    ///    "tasks": {
-    ///      "type": "array",
-    ///      "items": {
-    ///        "$ref": "#/components/schemas/WorkerTask"
-    ///      }
-    ///    }
-    ///  }
-    ///}
-    /// ```
-    /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct Worker {
         pub deleted: bool,
         pub id: ::std::string::String,
-        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
         pub instance_id: ::std::option::Option<::std::string::String>,
-        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
         pub lastping: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
         pub recycle: bool,
         pub tasks: ::std::vec::Vec<WorkerTask>,
@@ -625,35 +239,6 @@ pub mod types {
     }
 
     ///`WorkerAddOutput`
-    ///
-    /// <details><summary>JSON schema</summary>
-    ///
-    /// ```json
-    ///{
-    ///  "type": "object",
-    ///  "required": [
-    ///    "chunks",
-    ///    "path",
-    ///    "size"
-    ///  ],
-    ///  "properties": {
-    ///    "chunks": {
-    ///      "type": "array",
-    ///      "items": {
-    ///        "type": "string"
-    ///      }
-    ///    },
-    ///    "path": {
-    ///      "type": "string"
-    ///    },
-    ///    "size": {
-    ///      "type": "integer",
-    ///      "format": "int64"
-    ///    }
-    ///  }
-    ///}
-    /// ```
-    /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct WorkerAddOutput {
         pub chunks: ::std::vec::Vec<::std::string::String>,
@@ -668,32 +253,6 @@ pub mod types {
     }
 
     ///`WorkerAppendTask`
-    ///
-    /// <details><summary>JSON schema</summary>
-    ///
-    /// ```json
-    ///{
-    ///  "type": "object",
-    ///  "required": [
-    ///    "payload",
-    ///    "stream",
-    ///    "time"
-    ///  ],
-    ///  "properties": {
-    ///    "payload": {
-    ///      "type": "string"
-    ///    },
-    ///    "stream": {
-    ///      "type": "string"
-    ///    },
-    ///    "time": {
-    ///      "type": "string",
-    ///      "format": "date-time"
-    ///    }
-    ///  }
-    ///}
-    /// ```
-    /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct WorkerAppendTask {
         pub payload: ::std::string::String,
@@ -708,27 +267,6 @@ pub mod types {
     }
 
     ///`WorkerBootstrap`
-    ///
-    /// <details><summary>JSON schema</summary>
-    ///
-    /// ```json
-    ///{
-    ///  "type": "object",
-    ///  "required": [
-    ///    "bootstrap",
-    ///    "token"
-    ///  ],
-    ///  "properties": {
-    ///    "bootstrap": {
-    ///      "type": "string"
-    ///    },
-    ///    "token": {
-    ///      "type": "string"
-    ///    }
-    ///  }
-    ///}
-    /// ```
-    /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct WorkerBootstrap {
         pub bootstrap: ::std::string::String,
@@ -742,23 +280,6 @@ pub mod types {
     }
 
     ///`WorkerBootstrapResult`
-    ///
-    /// <details><summary>JSON schema</summary>
-    ///
-    /// ```json
-    ///{
-    ///  "type": "object",
-    ///  "required": [
-    ///    "id"
-    ///  ],
-    ///  "properties": {
-    ///    "id": {
-    ///      "type": "string"
-    ///    }
-    ///  }
-    ///}
-    /// ```
-    /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct WorkerBootstrapResult {
         pub id: ::std::string::String,
@@ -771,23 +292,6 @@ pub mod types {
     }
 
     ///`WorkerCompleteTask`
-    ///
-    /// <details><summary>JSON schema</summary>
-    ///
-    /// ```json
-    ///{
-    ///  "type": "object",
-    ///  "required": [
-    ///    "failed"
-    ///  ],
-    ///  "properties": {
-    ///    "failed": {
-    ///      "type": "boolean"
-    ///    }
-    ///  }
-    ///}
-    /// ```
-    /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct WorkerCompleteTask {
         pub failed: bool,
@@ -800,30 +304,10 @@ pub mod types {
     }
 
     ///`WorkerPingResult`
-    ///
-    /// <details><summary>JSON schema</summary>
-    ///
-    /// ```json
-    ///{
-    ///  "type": "object",
-    ///  "required": [
-    ///    "poweroff"
-    ///  ],
-    ///  "properties": {
-    ///    "poweroff": {
-    ///      "type": "boolean"
-    ///    },
-    ///    "task": {
-    ///      "$ref": "#/components/schemas/WorkerPingTask"
-    ///    }
-    ///  }
-    ///}
-    /// ```
-    /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct WorkerPingResult {
         pub poweroff: bool,
-        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
         pub task: ::std::option::Option<WorkerPingTask>,
     }
 
@@ -834,34 +318,6 @@ pub mod types {
     }
 
     ///`WorkerPingTask`
-    ///
-    /// <details><summary>JSON schema</summary>
-    ///
-    /// ```json
-    ///{
-    ///  "type": "object",
-    ///  "required": [
-    ///    "id",
-    ///    "output_rules",
-    ///    "script"
-    ///  ],
-    ///  "properties": {
-    ///    "id": {
-    ///      "type": "string"
-    ///    },
-    ///    "output_rules": {
-    ///      "type": "array",
-    ///      "items": {
-    ///        "type": "string"
-    ///      }
-    ///    },
-    ///    "script": {
-    ///      "type": "string"
-    ///    }
-    ///  }
-    ///}
-    /// ```
-    /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct WorkerPingTask {
         pub id: ::std::string::String,
@@ -876,31 +332,6 @@ pub mod types {
     }
 
     ///`WorkerTask`
-    ///
-    /// <details><summary>JSON schema</summary>
-    ///
-    /// ```json
-    ///{
-    ///  "type": "object",
-    ///  "required": [
-    ///    "id",
-    ///    "name",
-    ///    "owner"
-    ///  ],
-    ///  "properties": {
-    ///    "id": {
-    ///      "type": "string"
-    ///    },
-    ///    "name": {
-    ///      "type": "string"
-    ///    },
-    ///    "owner": {
-    ///      "type": "string"
-    ///    }
-    ///  }
-    ///}
-    /// ```
-    /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct WorkerTask {
         pub id: ::std::string::String,
@@ -915,26 +346,6 @@ pub mod types {
     }
 
     ///`WorkersResult`
-    ///
-    /// <details><summary>JSON schema</summary>
-    ///
-    /// ```json
-    ///{
-    ///  "type": "object",
-    ///  "required": [
-    ///    "workers"
-    ///  ],
-    ///  "properties": {
-    ///    "workers": {
-    ///      "type": "array",
-    ///      "items": {
-    ///        "$ref": "#/components/schemas/Worker"
-    ///      }
-    ///    }
-    ///  }
-    ///}
-    /// ```
-    /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct WorkersResult {
         pub workers: ::std::vec::Vec<Worker>,
@@ -2298,6 +1709,36 @@ pub mod types {
                 Self {
                     workers: Ok(value.workers),
                 }
+            }
+        }
+    }
+
+    /// Error types.
+    pub mod error {
+        /// Error from a `TryFrom` or `FromStr` implementation.
+        pub struct ConversionError(::std::borrow::Cow<'static, str>);
+        impl ::std::error::Error for ConversionError {}
+        impl ::std::fmt::Display for ConversionError {
+            fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> Result<(), ::std::fmt::Error> {
+                ::std::fmt::Display::fmt(&self.0, f)
+            }
+        }
+
+        impl ::std::fmt::Debug for ConversionError {
+            fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> Result<(), ::std::fmt::Error> {
+                ::std::fmt::Debug::fmt(&self.0, f)
+            }
+        }
+
+        impl From<&'static str> for ConversionError {
+            fn from(value: &'static str) -> Self {
+                Self(value.into())
+            }
+        }
+
+        impl From<String> for ConversionError {
+            fn from(value: String) -> Self {
+                Self(value.into())
             }
         }
     }

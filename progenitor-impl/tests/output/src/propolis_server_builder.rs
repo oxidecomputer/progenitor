@@ -5,126 +5,25 @@ pub use progenitor_client::{ByteStream, ClientInfo, Error, ResponseValue};
 /// Types used as operation parameters and responses.
 #[allow(clippy::all)]
 pub mod types {
-    /// Error types.
-    pub mod error {
-        /// Error from a `TryFrom` or `FromStr` implementation.
-        pub struct ConversionError(::std::borrow::Cow<'static, str>);
-        impl ::std::error::Error for ConversionError {}
-        impl ::std::fmt::Display for ConversionError {
-            fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> Result<(), ::std::fmt::Error> {
-                ::std::fmt::Display::fmt(&self.0, f)
-            }
-        }
-
-        impl ::std::fmt::Debug for ConversionError {
-            fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> Result<(), ::std::fmt::Error> {
-                ::std::fmt::Debug::fmt(&self.0, f)
-            }
-        }
-
-        impl From<&'static str> for ConversionError {
-            fn from(value: &'static str) -> Self {
-                Self(value.into())
-            }
-        }
-
-        impl From<String> for ConversionError {
-            fn from(value: String) -> Self {
-                Self(value.into())
-            }
-        }
-    }
-
     ///`CrucibleOpts`
-    ///
-    /// <details><summary>JSON schema</summary>
-    ///
-    /// ```json
-    ///{
-    ///  "type": "object",
-    ///  "required": [
-    ///    "id",
-    ///    "lossy",
-    ///    "read_only",
-    ///    "target"
-    ///  ],
-    ///  "properties": {
-    ///    "cert_pem": {
-    ///      "type": [
-    ///        "string",
-    ///        "null"
-    ///      ]
-    ///    },
-    ///    "control": {
-    ///      "type": [
-    ///        "string",
-    ///        "null"
-    ///      ]
-    ///    },
-    ///    "flush_timeout": {
-    ///      "type": [
-    ///        "integer",
-    ///        "null"
-    ///      ],
-    ///      "format": "uint32",
-    ///      "minimum": 0.0
-    ///    },
-    ///    "id": {
-    ///      "type": "string",
-    ///      "format": "uuid"
-    ///    },
-    ///    "key": {
-    ///      "type": [
-    ///        "string",
-    ///        "null"
-    ///      ]
-    ///    },
-    ///    "key_pem": {
-    ///      "type": [
-    ///        "string",
-    ///        "null"
-    ///      ]
-    ///    },
-    ///    "lossy": {
-    ///      "type": "boolean"
-    ///    },
-    ///    "read_only": {
-    ///      "type": "boolean"
-    ///    },
-    ///    "root_cert_pem": {
-    ///      "type": [
-    ///        "string",
-    ///        "null"
-    ///      ]
-    ///    },
-    ///    "target": {
-    ///      "type": "array",
-    ///      "items": {
-    ///        "type": "string"
-    ///      }
-    ///    }
-    ///  }
-    ///}
-    /// ```
-    /// </details>
     #[derive(
         :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
     )]
     pub struct CrucibleOpts {
-        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
         pub cert_pem: ::std::option::Option<::std::string::String>,
-        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
         pub control: ::std::option::Option<::std::string::String>,
-        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
         pub flush_timeout: ::std::option::Option<u32>,
         pub id: ::uuid::Uuid,
-        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
         pub key: ::std::option::Option<::std::string::String>,
-        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
         pub key_pem: ::std::option::Option<::std::string::String>,
         pub lossy: bool,
         pub read_only: bool,
-        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
         pub root_cert_pem: ::std::option::Option<::std::string::String>,
         pub target: ::std::vec::Vec<::std::string::String>,
     }
@@ -136,34 +35,6 @@ pub mod types {
     }
 
     ///`DiskAttachment`
-    ///
-    /// <details><summary>JSON schema</summary>
-    ///
-    /// ```json
-    ///{
-    ///  "type": "object",
-    ///  "required": [
-    ///    "disk_id",
-    ///    "generation_id",
-    ///    "state"
-    ///  ],
-    ///  "properties": {
-    ///    "disk_id": {
-    ///      "type": "string",
-    ///      "format": "uuid"
-    ///    },
-    ///    "generation_id": {
-    ///      "type": "integer",
-    ///      "format": "uint64",
-    ///      "minimum": 0.0
-    ///    },
-    ///    "state": {
-    ///      "$ref": "#/components/schemas/DiskAttachmentState"
-    ///    }
-    ///  }
-    ///}
-    /// ```
-    /// </details>
     #[derive(
         :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
     )]
@@ -180,37 +51,6 @@ pub mod types {
     }
 
     ///`DiskAttachmentState`
-    ///
-    /// <details><summary>JSON schema</summary>
-    ///
-    /// ```json
-    ///{
-    ///  "oneOf": [
-    ///    {
-    ///      "type": "string",
-    ///      "enum": [
-    ///        "Detached",
-    ///        "Destroyed",
-    ///        "Faulted"
-    ///      ]
-    ///    },
-    ///    {
-    ///      "type": "object",
-    ///      "required": [
-    ///        "Attached"
-    ///      ],
-    ///      "properties": {
-    ///        "Attached": {
-    ///          "type": "string",
-    ///          "format": "uuid"
-    ///        }
-    ///      },
-    ///      "additionalProperties": false
-    ///    }
-    ///  ]
-    ///}
-    /// ```
-    /// </details>
     #[derive(
         :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
     )]
@@ -228,45 +68,6 @@ pub mod types {
     }
 
     ///`DiskRequest`
-    ///
-    /// <details><summary>JSON schema</summary>
-    ///
-    /// ```json
-    ///{
-    ///  "type": "object",
-    ///  "required": [
-    ///    "device",
-    ///    "gen",
-    ///    "name",
-    ///    "read_only",
-    ///    "slot",
-    ///    "volume_construction_request"
-    ///  ],
-    ///  "properties": {
-    ///    "device": {
-    ///      "type": "string"
-    ///    },
-    ///    "gen": {
-    ///      "type": "integer",
-    ///      "format": "uint64",
-    ///      "minimum": 0.0
-    ///    },
-    ///    "name": {
-    ///      "type": "string"
-    ///    },
-    ///    "read_only": {
-    ///      "type": "boolean"
-    ///    },
-    ///    "slot": {
-    ///      "$ref": "#/components/schemas/Slot"
-    ///    },
-    ///    "volume_construction_request": {
-    ///      "$ref": "#/components/schemas/VolumeConstructionRequest"
-    ///    }
-    ///  }
-    ///}
-    /// ```
-    /// </details>
     #[derive(
         :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
     )]
@@ -287,36 +88,11 @@ pub mod types {
     }
 
     ///Error information from a response.
-    ///
-    /// <details><summary>JSON schema</summary>
-    ///
-    /// ```json
-    ///{
-    ///  "description": "Error information from a response.",
-    ///  "type": "object",
-    ///  "required": [
-    ///    "message",
-    ///    "request_id"
-    ///  ],
-    ///  "properties": {
-    ///    "error_code": {
-    ///      "type": "string"
-    ///    },
-    ///    "message": {
-    ///      "type": "string"
-    ///    },
-    ///    "request_id": {
-    ///      "type": "string"
-    ///    }
-    ///  }
-    ///}
-    /// ```
-    /// </details>
     #[derive(
         :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
     )]
     pub struct Error {
-        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
         pub error_code: ::std::option::Option<::std::string::String>,
         pub message: ::std::string::String,
         pub request_id: ::std::string::String,
@@ -329,41 +105,6 @@ pub mod types {
     }
 
     ///`Instance`
-    ///
-    /// <details><summary>JSON schema</summary>
-    ///
-    /// ```json
-    ///{
-    ///  "type": "object",
-    ///  "required": [
-    ///    "disks",
-    ///    "nics",
-    ///    "properties",
-    ///    "state"
-    ///  ],
-    ///  "properties": {
-    ///    "disks": {
-    ///      "type": "array",
-    ///      "items": {
-    ///        "$ref": "#/components/schemas/DiskAttachment"
-    ///      }
-    ///    },
-    ///    "nics": {
-    ///      "type": "array",
-    ///      "items": {
-    ///        "$ref": "#/components/schemas/NetworkInterface"
-    ///      }
-    ///    },
-    ///    "properties": {
-    ///      "$ref": "#/components/schemas/InstanceProperties"
-    ///    },
-    ///    "state": {
-    ///      "$ref": "#/components/schemas/InstanceState"
-    ///    }
-    ///  }
-    ///}
-    /// ```
-    /// </details>
     #[derive(
         :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
     )]
@@ -381,67 +122,15 @@ pub mod types {
     }
 
     ///`InstanceEnsureRequest`
-    ///
-    /// <details><summary>JSON schema</summary>
-    ///
-    /// ```json
-    ///{
-    ///  "type": "object",
-    ///  "required": [
-    ///    "properties"
-    ///  ],
-    ///  "properties": {
-    ///    "cloud_init_bytes": {
-    ///      "type": [
-    ///        "string",
-    ///        "null"
-    ///      ]
-    ///    },
-    ///    "disks": {
-    ///      "default": [],
-    ///      "type": "array",
-    ///      "items": {
-    ///        "$ref": "#/components/schemas/DiskRequest"
-    ///      }
-    ///    },
-    ///    "migrate": {
-    ///      "oneOf": [
-    ///        {
-    ///          "type": "null"
-    ///        },
-    ///        {
-    ///          "allOf": [
-    ///            {
-    ///              "$ref":
-    /// "#/components/schemas/InstanceMigrateInitiateRequest"
-    ///            }
-    ///          ]
-    ///        }
-    ///      ]
-    ///    },
-    ///    "nics": {
-    ///      "default": [],
-    ///      "type": "array",
-    ///      "items": {
-    ///        "$ref": "#/components/schemas/NetworkInterfaceRequest"
-    ///      }
-    ///    },
-    ///    "properties": {
-    ///      "$ref": "#/components/schemas/InstanceProperties"
-    ///    }
-    ///  }
-    ///}
-    /// ```
-    /// </details>
     #[derive(
         :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
     )]
     pub struct InstanceEnsureRequest {
-        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
         pub cloud_init_bytes: ::std::option::Option<::std::string::String>,
         #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
         pub disks: ::std::vec::Vec<DiskRequest>,
-        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
         pub migrate: ::std::option::Option<InstanceMigrateInitiateRequest>,
         #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
         pub nics: ::std::vec::Vec<NetworkInterfaceRequest>,
@@ -455,46 +144,17 @@ pub mod types {
     }
 
     ///`InstanceEnsureResponse`
-    ///
-    /// <details><summary>JSON schema</summary>
-    ///
-    /// ```json
-    ///{
-    ///  "type": "object",
-    ///  "properties": {
-    ///    "migrate": {
-    ///      "oneOf": [
-    ///        {
-    ///          "type": "null"
-    ///        },
-    ///        {
-    ///          "allOf": [
-    ///            {
-    ///              "$ref":
-    /// "#/components/schemas/InstanceMigrateInitiateResponse"
-    ///            }
-    ///          ]
-    ///        }
-    ///      ]
-    ///    }
-    ///  }
-    ///}
-    /// ```
-    /// </details>
     #[derive(
-        :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
+        :: serde :: Deserialize,
+        :: serde :: Serialize,
+        Clone,
+        Debug,
+        Default,
+        schemars :: JsonSchema,
     )]
     pub struct InstanceEnsureResponse {
-        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
         pub migrate: ::std::option::Option<InstanceMigrateInitiateResponse>,
-    }
-
-    impl ::std::default::Default for InstanceEnsureResponse {
-        fn default() -> Self {
-            Self {
-                migrate: Default::default(),
-            }
-        }
     }
 
     impl InstanceEnsureResponse {
@@ -504,23 +164,6 @@ pub mod types {
     }
 
     ///`InstanceGetResponse`
-    ///
-    /// <details><summary>JSON schema</summary>
-    ///
-    /// ```json
-    ///{
-    ///  "type": "object",
-    ///  "required": [
-    ///    "instance"
-    ///  ],
-    ///  "properties": {
-    ///    "instance": {
-    ///      "$ref": "#/components/schemas/Instance"
-    ///    }
-    ///  }
-    ///}
-    /// ```
-    /// </details>
     #[derive(
         :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
     )]
@@ -535,33 +178,6 @@ pub mod types {
     }
 
     ///`InstanceMigrateInitiateRequest`
-    ///
-    /// <details><summary>JSON schema</summary>
-    ///
-    /// ```json
-    ///{
-    ///  "type": "object",
-    ///  "required": [
-    ///    "migration_id",
-    ///    "src_addr",
-    ///    "src_uuid"
-    ///  ],
-    ///  "properties": {
-    ///    "migration_id": {
-    ///      "type": "string",
-    ///      "format": "uuid"
-    ///    },
-    ///    "src_addr": {
-    ///      "type": "string"
-    ///    },
-    ///    "src_uuid": {
-    ///      "type": "string",
-    ///      "format": "uuid"
-    ///    }
-    ///  }
-    ///}
-    /// ```
-    /// </details>
     #[derive(
         :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
     )]
@@ -578,24 +194,6 @@ pub mod types {
     }
 
     ///`InstanceMigrateInitiateResponse`
-    ///
-    /// <details><summary>JSON schema</summary>
-    ///
-    /// ```json
-    ///{
-    ///  "type": "object",
-    ///  "required": [
-    ///    "migration_id"
-    ///  ],
-    ///  "properties": {
-    ///    "migration_id": {
-    ///      "type": "string",
-    ///      "format": "uuid"
-    ///    }
-    ///  }
-    ///}
-    /// ```
-    /// </details>
     #[derive(
         :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
     )]
@@ -610,24 +208,6 @@ pub mod types {
     }
 
     ///`InstanceMigrateStatusRequest`
-    ///
-    /// <details><summary>JSON schema</summary>
-    ///
-    /// ```json
-    ///{
-    ///  "type": "object",
-    ///  "required": [
-    ///    "migration_id"
-    ///  ],
-    ///  "properties": {
-    ///    "migration_id": {
-    ///      "type": "string",
-    ///      "format": "uuid"
-    ///    }
-    ///  }
-    ///}
-    /// ```
-    /// </details>
     #[derive(
         :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
     )]
@@ -642,23 +222,6 @@ pub mod types {
     }
 
     ///`InstanceMigrateStatusResponse`
-    ///
-    /// <details><summary>JSON schema</summary>
-    ///
-    /// ```json
-    ///{
-    ///  "type": "object",
-    ///  "required": [
-    ///    "state"
-    ///  ],
-    ///  "properties": {
-    ///    "state": {
-    ///      "$ref": "#/components/schemas/MigrationState"
-    ///    }
-    ///  }
-    ///}
-    /// ```
-    /// </details>
     #[derive(
         :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
     )]
@@ -673,62 +236,6 @@ pub mod types {
     }
 
     ///`InstanceProperties`
-    ///
-    /// <details><summary>JSON schema</summary>
-    ///
-    /// ```json
-    ///{
-    ///  "type": "object",
-    ///  "required": [
-    ///    "bootrom_id",
-    ///    "description",
-    ///    "id",
-    ///    "image_id",
-    ///    "memory",
-    ///    "name",
-    ///    "vcpus"
-    ///  ],
-    ///  "properties": {
-    ///    "bootrom_id": {
-    ///      "description": "ID of the bootrom used to initialize this
-    /// Instance.",
-    ///      "type": "string",
-    ///      "format": "uuid"
-    ///    },
-    ///    "description": {
-    ///      "description": "Free-form text description of an Instance.",
-    ///      "type": "string"
-    ///    },
-    ///    "id": {
-    ///      "description": "Unique identifier for this Instance.",
-    ///      "type": "string",
-    ///      "format": "uuid"
-    ///    },
-    ///    "image_id": {
-    ///      "description": "ID of the image used to initialize this Instance.",
-    ///      "type": "string",
-    ///      "format": "uuid"
-    ///    },
-    ///    "memory": {
-    ///      "description": "Size of memory allocated to the Instance, in MiB.",
-    ///      "type": "integer",
-    ///      "format": "uint64",
-    ///      "minimum": 0.0
-    ///    },
-    ///    "name": {
-    ///      "description": "Human-readable name of the Instance.",
-    ///      "type": "string"
-    ///    },
-    ///    "vcpus": {
-    ///      "description": "Number of vCPUs to be allocated to the Instance.",
-    ///      "type": "integer",
-    ///      "format": "uint8",
-    ///      "minimum": 0.0
-    ///    }
-    ///  }
-    ///}
-    /// ```
-    /// </details>
     #[derive(
         :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
     )]
@@ -756,28 +263,6 @@ pub mod types {
     }
 
     ///Current state of an Instance.
-    ///
-    /// <details><summary>JSON schema</summary>
-    ///
-    /// ```json
-    ///{
-    ///  "description": "Current state of an Instance.",
-    ///  "type": "string",
-    ///  "enum": [
-    ///    "Creating",
-    ///    "Starting",
-    ///    "Running",
-    ///    "Stopping",
-    ///    "Stopped",
-    ///    "Rebooting",
-    ///    "Migrating",
-    ///    "Repairing",
-    ///    "Failed",
-    ///    "Destroyed"
-    ///  ]
-    ///}
-    /// ```
-    /// </details>
     #[derive(
         :: serde :: Deserialize,
         :: serde :: Serialize,
@@ -847,15 +332,6 @@ pub mod types {
         }
     }
 
-    impl ::std::convert::TryFrom<&::std::string::String> for InstanceState {
-        type Error = self::error::ConversionError;
-        fn try_from(
-            value: &::std::string::String,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
-            value.parse()
-        }
-    }
-
     impl ::std::convert::TryFrom<::std::string::String> for InstanceState {
         type Error = self::error::ConversionError;
         fn try_from(
@@ -866,25 +342,6 @@ pub mod types {
     }
 
     ///`InstanceStateMonitorRequest`
-    ///
-    /// <details><summary>JSON schema</summary>
-    ///
-    /// ```json
-    ///{
-    ///  "type": "object",
-    ///  "required": [
-    ///    "gen"
-    ///  ],
-    ///  "properties": {
-    ///    "gen": {
-    ///      "type": "integer",
-    ///      "format": "uint64",
-    ///      "minimum": 0.0
-    ///    }
-    ///  }
-    ///}
-    /// ```
-    /// </details>
     #[derive(
         :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
     )]
@@ -900,29 +357,6 @@ pub mod types {
     }
 
     ///`InstanceStateMonitorResponse`
-    ///
-    /// <details><summary>JSON schema</summary>
-    ///
-    /// ```json
-    ///{
-    ///  "type": "object",
-    ///  "required": [
-    ///    "gen",
-    ///    "state"
-    ///  ],
-    ///  "properties": {
-    ///    "gen": {
-    ///      "type": "integer",
-    ///      "format": "uint64",
-    ///      "minimum": 0.0
-    ///    },
-    ///    "state": {
-    ///      "$ref": "#/components/schemas/InstanceState"
-    ///    }
-    ///  }
-    ///}
-    /// ```
-    /// </details>
     #[derive(
         :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
     )]
@@ -939,21 +373,6 @@ pub mod types {
     }
 
     ///`InstanceStateRequested`
-    ///
-    /// <details><summary>JSON schema</summary>
-    ///
-    /// ```json
-    ///{
-    ///  "type": "string",
-    ///  "enum": [
-    ///    "Run",
-    ///    "Stop",
-    ///    "Reboot",
-    ///    "MigrateStart"
-    ///  ]
-    ///}
-    /// ```
-    /// </details>
     #[derive(
         :: serde :: Deserialize,
         :: serde :: Serialize,
@@ -1005,15 +424,6 @@ pub mod types {
         }
     }
 
-    impl ::std::convert::TryFrom<&::std::string::String> for InstanceStateRequested {
-        type Error = self::error::ConversionError;
-        fn try_from(
-            value: &::std::string::String,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
-            value.parse()
-        }
-    }
-
     impl ::std::convert::TryFrom<::std::string::String> for InstanceStateRequested {
         type Error = self::error::ConversionError;
         fn try_from(
@@ -1024,27 +434,6 @@ pub mod types {
     }
 
     ///`MigrationState`
-    ///
-    /// <details><summary>JSON schema</summary>
-    ///
-    /// ```json
-    ///{
-    ///  "type": "string",
-    ///  "enum": [
-    ///    "Sync",
-    ///    "RamPush",
-    ///    "Pause",
-    ///    "RamPushDirty",
-    ///    "Device",
-    ///    "Arch",
-    ///    "Resume",
-    ///    "RamPull",
-    ///    "Finish",
-    ///    "Error"
-    ///  ]
-    ///}
-    /// ```
-    /// </details>
     #[derive(
         :: serde :: Deserialize,
         :: serde :: Serialize,
@@ -1114,15 +503,6 @@ pub mod types {
         }
     }
 
-    impl ::std::convert::TryFrom<&::std::string::String> for MigrationState {
-        type Error = self::error::ConversionError;
-        fn try_from(
-            value: &::std::string::String,
-        ) -> ::std::result::Result<Self, self::error::ConversionError> {
-            value.parse()
-        }
-    }
-
     impl ::std::convert::TryFrom<::std::string::String> for MigrationState {
         type Error = self::error::ConversionError;
         fn try_from(
@@ -1133,27 +513,6 @@ pub mod types {
     }
 
     ///`NetworkInterface`
-    ///
-    /// <details><summary>JSON schema</summary>
-    ///
-    /// ```json
-    ///{
-    ///  "type": "object",
-    ///  "required": [
-    ///    "attachment",
-    ///    "name"
-    ///  ],
-    ///  "properties": {
-    ///    "attachment": {
-    ///      "$ref": "#/components/schemas/NetworkInterfaceAttachmentState"
-    ///    },
-    ///    "name": {
-    ///      "type": "string"
-    ///    }
-    ///  }
-    ///}
-    /// ```
-    /// </details>
     #[derive(
         :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
     )]
@@ -1169,35 +528,6 @@ pub mod types {
     }
 
     ///`NetworkInterfaceAttachmentState`
-    ///
-    /// <details><summary>JSON schema</summary>
-    ///
-    /// ```json
-    ///{
-    ///  "oneOf": [
-    ///    {
-    ///      "type": "string",
-    ///      "enum": [
-    ///        "Detached",
-    ///        "Faulted"
-    ///      ]
-    ///    },
-    ///    {
-    ///      "type": "object",
-    ///      "required": [
-    ///        "Attached"
-    ///      ],
-    ///      "properties": {
-    ///        "Attached": {
-    ///          "$ref": "#/components/schemas/Slot"
-    ///        }
-    ///      },
-    ///      "additionalProperties": false
-    ///    }
-    ///  ]
-    ///}
-    /// ```
-    /// </details>
     #[derive(
         :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
     )]
@@ -1214,27 +544,6 @@ pub mod types {
     }
 
     ///`NetworkInterfaceRequest`
-    ///
-    /// <details><summary>JSON schema</summary>
-    ///
-    /// ```json
-    ///{
-    ///  "type": "object",
-    ///  "required": [
-    ///    "name",
-    ///    "slot"
-    ///  ],
-    ///  "properties": {
-    ///    "name": {
-    ///      "type": "string"
-    ///    },
-    ///    "slot": {
-    ///      "$ref": "#/components/schemas/Slot"
-    ///    }
-    ///  }
-    ///}
-    /// ```
-    /// </details>
     #[derive(
         :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
     )]
@@ -1251,19 +560,6 @@ pub mod types {
 
     ///A stable index which is translated by Propolis into a PCI BDF, visible
     /// to the guest.
-    ///
-    /// <details><summary>JSON schema</summary>
-    ///
-    /// ```json
-    ///{
-    ///  "description": "A stable index which is translated by Propolis into a
-    /// PCI BDF, visible to the guest.",
-    ///  "type": "integer",
-    ///  "format": "uint8",
-    ///  "minimum": 0.0
-    ///}
-    /// ```
-    /// </details>
     #[derive(
         :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
     )]
@@ -1288,6 +584,12 @@ pub mod types {
         }
     }
 
+    impl ::std::fmt::Display for Slot {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+            self.0.fmt(f)
+        }
+    }
+
     impl ::std::str::FromStr for Slot {
         type Err = <u8 as ::std::str::FromStr>::Err;
         fn from_str(value: &str) -> ::std::result::Result<Self, Self::Err> {
@@ -1309,158 +611,7 @@ pub mod types {
         }
     }
 
-    impl ::std::fmt::Display for Slot {
-        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-            self.0.fmt(f)
-        }
-    }
-
     ///`VolumeConstructionRequest`
-    ///
-    /// <details><summary>JSON schema</summary>
-    ///
-    /// ```json
-    ///{
-    ///  "oneOf": [
-    ///    {
-    ///      "type": "object",
-    ///      "required": [
-    ///        "block_size",
-    ///        "id",
-    ///        "sub_volumes",
-    ///        "type"
-    ///      ],
-    ///      "properties": {
-    ///        "block_size": {
-    ///          "type": "integer",
-    ///          "format": "uint64",
-    ///          "minimum": 0.0
-    ///        },
-    ///        "id": {
-    ///          "type": "string",
-    ///          "format": "uuid"
-    ///        },
-    ///        "read_only_parent": {
-    ///          "oneOf": [
-    ///            {
-    ///              "type": "null"
-    ///            },
-    ///            {
-    ///              "allOf": [
-    ///                {
-    ///                  "$ref":
-    /// "#/components/schemas/VolumeConstructionRequest"
-    ///                }
-    ///              ]
-    ///            }
-    ///          ]
-    ///        },
-    ///        "sub_volumes": {
-    ///          "type": "array",
-    ///          "items": {
-    ///            "$ref": "#/components/schemas/VolumeConstructionRequest"
-    ///          }
-    ///        },
-    ///        "type": {
-    ///          "type": "string",
-    ///          "enum": [
-    ///            "volume"
-    ///          ]
-    ///        }
-    ///      }
-    ///    },
-    ///    {
-    ///      "type": "object",
-    ///      "required": [
-    ///        "block_size",
-    ///        "id",
-    ///        "type",
-    ///        "url"
-    ///      ],
-    ///      "properties": {
-    ///        "block_size": {
-    ///          "type": "integer",
-    ///          "format": "uint64",
-    ///          "minimum": 0.0
-    ///        },
-    ///        "id": {
-    ///          "type": "string",
-    ///          "format": "uuid"
-    ///        },
-    ///        "type": {
-    ///          "type": "string",
-    ///          "enum": [
-    ///            "url"
-    ///          ]
-    ///        },
-    ///        "url": {
-    ///          "type": "string"
-    ///        }
-    ///      }
-    ///    },
-    ///    {
-    ///      "type": "object",
-    ///      "required": [
-    ///        "block_size",
-    ///        "gen",
-    ///        "opts",
-    ///        "type"
-    ///      ],
-    ///      "properties": {
-    ///        "block_size": {
-    ///          "type": "integer",
-    ///          "format": "uint64",
-    ///          "minimum": 0.0
-    ///        },
-    ///        "gen": {
-    ///          "type": "integer",
-    ///          "format": "uint64",
-    ///          "minimum": 0.0
-    ///        },
-    ///        "opts": {
-    ///          "$ref": "#/components/schemas/CrucibleOpts"
-    ///        },
-    ///        "type": {
-    ///          "type": "string",
-    ///          "enum": [
-    ///            "region"
-    ///          ]
-    ///        }
-    ///      }
-    ///    },
-    ///    {
-    ///      "type": "object",
-    ///      "required": [
-    ///        "block_size",
-    ///        "id",
-    ///        "path",
-    ///        "type"
-    ///      ],
-    ///      "properties": {
-    ///        "block_size": {
-    ///          "type": "integer",
-    ///          "format": "uint64",
-    ///          "minimum": 0.0
-    ///        },
-    ///        "id": {
-    ///          "type": "string",
-    ///          "format": "uuid"
-    ///        },
-    ///        "path": {
-    ///          "type": "string"
-    ///        },
-    ///        "type": {
-    ///          "type": "string",
-    ///          "enum": [
-    ///            "file"
-    ///          ]
-    ///        }
-    ///      }
-    ///    }
-    ///  ]
-    ///}
-    /// ```
-    /// </details>
     #[derive(
         :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
     )]
@@ -1470,7 +621,7 @@ pub mod types {
         Volume {
             block_size: u64,
             id: ::uuid::Uuid,
-            #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+            #[serde(skip_serializing_if = "::std::option::Option::is_none")]
             read_only_parent: ::std::option::Option<::std::boxed::Box<VolumeConstructionRequest>>,
             sub_volumes: ::std::vec::Vec<VolumeConstructionRequest>,
         },
@@ -2821,6 +1972,36 @@ pub mod types {
                     name: Ok(value.name),
                     slot: Ok(value.slot),
                 }
+            }
+        }
+    }
+
+    /// Error types.
+    pub mod error {
+        /// Error from a `TryFrom` or `FromStr` implementation.
+        pub struct ConversionError(::std::borrow::Cow<'static, str>);
+        impl ::std::error::Error for ConversionError {}
+        impl ::std::fmt::Display for ConversionError {
+            fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> Result<(), ::std::fmt::Error> {
+                ::std::fmt::Display::fmt(&self.0, f)
+            }
+        }
+
+        impl ::std::fmt::Debug for ConversionError {
+            fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> Result<(), ::std::fmt::Error> {
+                ::std::fmt::Debug::fmt(&self.0, f)
+            }
+        }
+
+        impl From<&'static str> for ConversionError {
+            fn from(value: &'static str) -> Self {
+                Self(value.into())
+            }
+        }
+
+        impl From<String> for ConversionError {
+            fn from(value: String) -> Self {
+                Self(value.into())
             }
         }
     }

@@ -5,6 +5,25 @@ pub use progenitor_client::{ByteStream, ClientInfo, Error, ResponseValue};
 /// Types used as operation parameters and responses.
 #[allow(clippy::all)]
 pub mod types {
+    ///Error information from a response.
+    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    pub struct Error {
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        pub error_code: ::std::option::Option<::std::string::String>,
+        pub message: ::std::string::String,
+        pub request_id: ::std::string::String,
+    }
+
+    ///A single page of results
+    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    pub struct Uint32ResultsPage {
+        ///list of items on this page of results
+        pub items: ::std::vec::Vec<u32>,
+        ///token used to fetch the next page of results (if any)
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        pub next_page: ::std::option::Option<::std::string::String>,
+    }
+
     /// Error types.
     pub mod error {
         /// Error from a `TryFrom` or `FromStr` implementation.
@@ -33,82 +52,6 @@ pub mod types {
                 Self(value.into())
             }
         }
-    }
-
-    ///Error information from a response.
-    ///
-    /// <details><summary>JSON schema</summary>
-    ///
-    /// ```json
-    ///{
-    ///  "description": "Error information from a response.",
-    ///  "type": "object",
-    ///  "required": [
-    ///    "message",
-    ///    "request_id"
-    ///  ],
-    ///  "properties": {
-    ///    "error_code": {
-    ///      "type": "string"
-    ///    },
-    ///    "message": {
-    ///      "type": "string"
-    ///    },
-    ///    "request_id": {
-    ///      "type": "string"
-    ///    }
-    ///  }
-    ///}
-    /// ```
-    /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
-    pub struct Error {
-        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-        pub error_code: ::std::option::Option<::std::string::String>,
-        pub message: ::std::string::String,
-        pub request_id: ::std::string::String,
-    }
-
-    ///A single page of results
-    ///
-    /// <details><summary>JSON schema</summary>
-    ///
-    /// ```json
-    ///{
-    ///  "description": "A single page of results",
-    ///  "type": "object",
-    ///  "required": [
-    ///    "items"
-    ///  ],
-    ///  "properties": {
-    ///    "items": {
-    ///      "description": "list of items on this page of results",
-    ///      "type": "array",
-    ///      "items": {
-    ///        "type": "integer",
-    ///        "format": "uint32",
-    ///        "minimum": 0.0
-    ///      }
-    ///    },
-    ///    "next_page": {
-    ///      "description": "token used to fetch the next page of results (if
-    /// any)",
-    ///      "type": [
-    ///        "string",
-    ///        "null"
-    ///      ]
-    ///    }
-    ///  }
-    ///}
-    /// ```
-    /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
-    pub struct Uint32ResultsPage {
-        ///list of items on this page of results
-        pub items: ::std::vec::Vec<u32>,
-        ///token used to fetch the next page of results (if any)
-        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-        pub next_page: ::std::option::Option<::std::string::String>,
     }
 }
 

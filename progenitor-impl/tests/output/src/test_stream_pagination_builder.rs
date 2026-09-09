@@ -5,65 +5,10 @@ pub use progenitor_client::{ByteStream, ClientInfo, Error, ResponseValue};
 /// Types used as operation parameters and responses.
 #[allow(clippy::all)]
 pub mod types {
-    /// Error types.
-    pub mod error {
-        /// Error from a `TryFrom` or `FromStr` implementation.
-        pub struct ConversionError(::std::borrow::Cow<'static, str>);
-        impl ::std::error::Error for ConversionError {}
-        impl ::std::fmt::Display for ConversionError {
-            fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> Result<(), ::std::fmt::Error> {
-                ::std::fmt::Display::fmt(&self.0, f)
-            }
-        }
-
-        impl ::std::fmt::Debug for ConversionError {
-            fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> Result<(), ::std::fmt::Error> {
-                ::std::fmt::Debug::fmt(&self.0, f)
-            }
-        }
-
-        impl From<&'static str> for ConversionError {
-            fn from(value: &'static str) -> Self {
-                Self(value.into())
-            }
-        }
-
-        impl From<String> for ConversionError {
-            fn from(value: String) -> Self {
-                Self(value.into())
-            }
-        }
-    }
-
     ///Error information from a response.
-    ///
-    /// <details><summary>JSON schema</summary>
-    ///
-    /// ```json
-    ///{
-    ///  "description": "Error information from a response.",
-    ///  "type": "object",
-    ///  "required": [
-    ///    "message",
-    ///    "request_id"
-    ///  ],
-    ///  "properties": {
-    ///    "error_code": {
-    ///      "type": "string"
-    ///    },
-    ///    "message": {
-    ///      "type": "string"
-    ///    },
-    ///    "request_id": {
-    ///      "type": "string"
-    ///    }
-    ///  }
-    ///}
-    /// ```
-    /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct Error {
-        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
         pub error_code: ::std::option::Option<::std::string::String>,
         pub message: ::std::string::String,
         pub request_id: ::std::string::String,
@@ -76,44 +21,12 @@ pub mod types {
     }
 
     ///A single page of results
-    ///
-    /// <details><summary>JSON schema</summary>
-    ///
-    /// ```json
-    ///{
-    ///  "description": "A single page of results",
-    ///  "type": "object",
-    ///  "required": [
-    ///    "items"
-    ///  ],
-    ///  "properties": {
-    ///    "items": {
-    ///      "description": "list of items on this page of results",
-    ///      "type": "array",
-    ///      "items": {
-    ///        "type": "integer",
-    ///        "format": "uint32",
-    ///        "minimum": 0.0
-    ///      }
-    ///    },
-    ///    "next_page": {
-    ///      "description": "token used to fetch the next page of results (if
-    /// any)",
-    ///      "type": [
-    ///        "string",
-    ///        "null"
-    ///      ]
-    ///    }
-    ///  }
-    ///}
-    /// ```
-    /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct Uint32ResultsPage {
         ///list of items on this page of results
         pub items: ::std::vec::Vec<u32>,
         ///token used to fetch the next page of results (if any)
-        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
         pub next_page: ::std::option::Option<::std::string::String>,
     }
 
@@ -260,6 +173,36 @@ pub mod types {
                     items: Ok(value.items),
                     next_page: Ok(value.next_page),
                 }
+            }
+        }
+    }
+
+    /// Error types.
+    pub mod error {
+        /// Error from a `TryFrom` or `FromStr` implementation.
+        pub struct ConversionError(::std::borrow::Cow<'static, str>);
+        impl ::std::error::Error for ConversionError {}
+        impl ::std::fmt::Display for ConversionError {
+            fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> Result<(), ::std::fmt::Error> {
+                ::std::fmt::Display::fmt(&self.0, f)
+            }
+        }
+
+        impl ::std::fmt::Debug for ConversionError {
+            fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> Result<(), ::std::fmt::Error> {
+                ::std::fmt::Debug::fmt(&self.0, f)
+            }
+        }
+
+        impl From<&'static str> for ConversionError {
+            fn from(value: &'static str) -> Self {
+                Self(value.into())
+            }
+        }
+
+        impl From<String> for ConversionError {
+            fn from(value: String) -> Self {
+                Self(value.into())
             }
         }
     }

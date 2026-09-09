@@ -5,59 +5,7 @@ pub use progenitor_client::{ByteStream, ClientInfo, Error, ResponseValue};
 /// Types used as operation parameters and responses.
 #[allow(clippy::all)]
 pub mod types {
-    /// Error types.
-    pub mod error {
-        /// Error from a `TryFrom` or `FromStr` implementation.
-        pub struct ConversionError(::std::borrow::Cow<'static, str>);
-        impl ::std::error::Error for ConversionError {}
-        impl ::std::fmt::Display for ConversionError {
-            fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> Result<(), ::std::fmt::Error> {
-                ::std::fmt::Display::fmt(&self.0, f)
-            }
-        }
-
-        impl ::std::fmt::Debug for ConversionError {
-            fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> Result<(), ::std::fmt::Error> {
-                ::std::fmt::Debug::fmt(&self.0, f)
-            }
-        }
-
-        impl From<&'static str> for ConversionError {
-            fn from(value: &'static str) -> Self {
-                Self(value.into())
-            }
-        }
-
-        impl From<String> for ConversionError {
-            fn from(value: String) -> Self {
-                Self(value.into())
-            }
-        }
-    }
-
     ///`EnrolBody`
-    ///
-    /// <details><summary>JSON schema</summary>
-    ///
-    /// ```json
-    ///{
-    ///  "title": "EnrolBody",
-    ///  "type": "object",
-    ///  "required": [
-    ///    "host",
-    ///    "key"
-    ///  ],
-    ///  "properties": {
-    ///    "host": {
-    ///      "type": "string"
-    ///    },
-    ///    "key": {
-    ///      "type": "string"
-    ///    }
-    ///  }
-    ///}
-    /// ```
-    /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct EnrolBody {
         pub host: ::std::string::String,
@@ -71,27 +19,6 @@ pub mod types {
     }
 
     ///`GlobalJobsResult`
-    ///
-    /// <details><summary>JSON schema</summary>
-    ///
-    /// ```json
-    ///{
-    ///  "title": "GlobalJobsResult",
-    ///  "type": "object",
-    ///  "required": [
-    ///    "summary"
-    ///  ],
-    ///  "properties": {
-    ///    "summary": {
-    ///      "type": "array",
-    ///      "items": {
-    ///        "$ref": "#/components/schemas/ReportSummary"
-    ///      }
-    ///    }
-    ///  }
-    ///}
-    /// ```
-    /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct GlobalJobsResult {
         pub summary: ::std::vec::Vec<ReportSummary>,
@@ -104,32 +31,6 @@ pub mod types {
     }
 
     ///`OutputRecord`
-    ///
-    /// <details><summary>JSON schema</summary>
-    ///
-    /// ```json
-    ///{
-    ///  "type": "object",
-    ///  "required": [
-    ///    "msg",
-    ///    "stream",
-    ///    "time"
-    ///  ],
-    ///  "properties": {
-    ///    "msg": {
-    ///      "type": "string"
-    ///    },
-    ///    "stream": {
-    ///      "type": "string"
-    ///    },
-    ///    "time": {
-    ///      "type": "string",
-    ///      "format": "date-time"
-    ///    }
-    ///  }
-    ///}
-    /// ```
-    /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct OutputRecord {
         pub msg: ::std::string::String,
@@ -144,28 +45,6 @@ pub mod types {
     }
 
     ///`PingResult`
-    ///
-    /// <details><summary>JSON schema</summary>
-    ///
-    /// ```json
-    ///{
-    ///  "title": "PingResult",
-    ///  "type": "object",
-    ///  "required": [
-    ///    "host",
-    ///    "ok"
-    ///  ],
-    ///  "properties": {
-    ///    "host": {
-    ///      "type": "string"
-    ///    },
-    ///    "ok": {
-    ///      "type": "boolean"
-    ///    }
-    ///  }
-    ///}
-    /// ```
-    /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct PingResult {
         pub host: ::std::string::String,
@@ -179,39 +58,6 @@ pub mod types {
     }
 
     ///`ReportFinishBody`
-    ///
-    /// <details><summary>JSON schema</summary>
-    ///
-    /// ```json
-    ///{
-    ///  "title": "ReportFinishBody",
-    ///  "type": "object",
-    ///  "required": [
-    ///    "duration_millis",
-    ///    "end_time",
-    ///    "exit_status",
-    ///    "id"
-    ///  ],
-    ///  "properties": {
-    ///    "duration_millis": {
-    ///      "type": "integer",
-    ///      "format": "int32"
-    ///    },
-    ///    "end_time": {
-    ///      "type": "string",
-    ///      "format": "date-time"
-    ///    },
-    ///    "exit_status": {
-    ///      "type": "integer",
-    ///      "format": "int32"
-    ///    },
-    ///    "id": {
-    ///      "$ref": "#/components/schemas/ReportId"
-    ///    }
-    ///  }
-    ///}
-    /// ```
-    /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct ReportFinishBody {
         pub duration_millis: i32,
@@ -227,42 +73,6 @@ pub mod types {
     }
 
     ///`ReportId`
-    ///
-    /// <details><summary>JSON schema</summary>
-    ///
-    /// ```json
-    ///{
-    ///  "type": "object",
-    ///  "required": [
-    ///    "host",
-    ///    "job",
-    ///    "pid",
-    ///    "time",
-    ///    "uuid"
-    ///  ],
-    ///  "properties": {
-    ///    "host": {
-    ///      "type": "string"
-    ///    },
-    ///    "job": {
-    ///      "type": "string"
-    ///    },
-    ///    "pid": {
-    ///      "type": "integer",
-    ///      "format": "uint64",
-    ///      "minimum": 0.0
-    ///    },
-    ///    "time": {
-    ///      "type": "string",
-    ///      "format": "date-time"
-    ///    },
-    ///    "uuid": {
-    ///      "type": "string"
-    ///    }
-    ///  }
-    ///}
-    /// ```
-    /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct ReportId {
         pub host: ::std::string::String,
@@ -279,28 +89,6 @@ pub mod types {
     }
 
     ///`ReportOutputBody`
-    ///
-    /// <details><summary>JSON schema</summary>
-    ///
-    /// ```json
-    ///{
-    ///  "title": "ReportOutputBody",
-    ///  "type": "object",
-    ///  "required": [
-    ///    "id",
-    ///    "record"
-    ///  ],
-    ///  "properties": {
-    ///    "id": {
-    ///      "$ref": "#/components/schemas/ReportId"
-    ///    },
-    ///    "record": {
-    ///      "$ref": "#/components/schemas/OutputRecord"
-    ///    }
-    ///  }
-    ///}
-    /// ```
-    /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct ReportOutputBody {
         pub id: ReportId,
@@ -314,24 +102,6 @@ pub mod types {
     }
 
     ///`ReportResult`
-    ///
-    /// <details><summary>JSON schema</summary>
-    ///
-    /// ```json
-    ///{
-    ///  "title": "ReportResult",
-    ///  "type": "object",
-    ///  "required": [
-    ///    "existed_already"
-    ///  ],
-    ///  "properties": {
-    ///    "existed_already": {
-    ///      "type": "boolean"
-    ///    }
-    ///  }
-    ///}
-    /// ```
-    /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct ReportResult {
         pub existed_already: bool,
@@ -344,33 +114,6 @@ pub mod types {
     }
 
     ///`ReportStartBody`
-    ///
-    /// <details><summary>JSON schema</summary>
-    ///
-    /// ```json
-    ///{
-    ///  "title": "ReportStartBody",
-    ///  "type": "object",
-    ///  "required": [
-    ///    "id",
-    ///    "script",
-    ///    "start_time"
-    ///  ],
-    ///  "properties": {
-    ///    "id": {
-    ///      "$ref": "#/components/schemas/ReportId"
-    ///    },
-    ///    "script": {
-    ///      "type": "string"
-    ///    },
-    ///    "start_time": {
-    ///      "type": "string",
-    ///      "format": "date-time"
-    ///    }
-    ///  }
-    ///}
-    /// ```
-    /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct ReportStartBody {
         pub id: ReportId,
@@ -385,47 +128,6 @@ pub mod types {
     }
 
     ///`ReportSummary`
-    ///
-    /// <details><summary>JSON schema</summary>
-    ///
-    /// ```json
-    ///{
-    ///  "type": "object",
-    ///  "required": [
-    ///    "age_seconds",
-    ///    "duration_seconds",
-    ///    "host",
-    ///    "job",
-    ///    "status",
-    ///    "when"
-    ///  ],
-    ///  "properties": {
-    ///    "age_seconds": {
-    ///      "type": "integer",
-    ///      "format": "int32"
-    ///    },
-    ///    "duration_seconds": {
-    ///      "type": "integer",
-    ///      "format": "int32"
-    ///    },
-    ///    "host": {
-    ///      "type": "string"
-    ///    },
-    ///    "job": {
-    ///      "type": "string"
-    ///    },
-    ///    "status": {
-    ///      "type": "integer",
-    ///      "format": "int32"
-    ///    },
-    ///    "when": {
-    ///      "type": "string",
-    ///      "format": "date-time"
-    ///    }
-    ///  }
-    ///}
-    /// ```
-    /// </details>
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct ReportSummary {
         pub age_seconds: i32,
@@ -1173,6 +875,36 @@ pub mod types {
                     status: Ok(value.status),
                     when: Ok(value.when),
                 }
+            }
+        }
+    }
+
+    /// Error types.
+    pub mod error {
+        /// Error from a `TryFrom` or `FromStr` implementation.
+        pub struct ConversionError(::std::borrow::Cow<'static, str>);
+        impl ::std::error::Error for ConversionError {}
+        impl ::std::fmt::Display for ConversionError {
+            fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> Result<(), ::std::fmt::Error> {
+                ::std::fmt::Display::fmt(&self.0, f)
+            }
+        }
+
+        impl ::std::fmt::Debug for ConversionError {
+            fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> Result<(), ::std::fmt::Error> {
+                ::std::fmt::Debug::fmt(&self.0, f)
+            }
+        }
+
+        impl From<&'static str> for ConversionError {
+            fn from(value: &'static str) -> Self {
+                Self(value.into())
+            }
+        }
+
+        impl From<String> for ConversionError {
+            fn from(value: String) -> Self {
+                Self(value.into())
             }
         }
     }
