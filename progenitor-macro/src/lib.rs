@@ -129,9 +129,10 @@ impl syn::parse::Parse for SpecSource {
 /// The optional `pre_hook` is either a closure (that must be within
 /// parentheses: `(fn |[inner,] request| { .. })`) or a path to a function. The
 /// closure or function must take one or two parameters: the inner type (if one
-/// is specified) and a `&reqwest::Request`. This allows clients to examine
-/// requests before they're sent to the server, for example to log them. The
-/// optional `pre_hook_async` is the `async` variant of the same.
+/// is specified) and a `&mut reqwest::Request`. This allows clients to examine
+/// or modify requests before they're sent to the server, for example to log
+/// them or add a header. The optional `pre_hook_async` is the `async` variant
+/// of the same.
 ///
 /// The optional `post_hook` is either a closure (that must be within
 /// parentheses: `(fn |[inner,] result| { .. })`) or a path to a function. The
