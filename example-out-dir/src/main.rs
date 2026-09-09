@@ -1,11 +1,11 @@
 // Copyright 2026 Oxide Computer Company
 
-//! Test that `generate_sdk!` works with `relative_to = OutDir`, where a build
+//! Test that `generate_api!` works with `relative_to = OutDir`, where a build
 //! script copies the spec into `OUT_DIR`.
 
-use progenitor::generate_sdk;
+use progenitor::generate_api;
 
-generate_sdk!(
+generate_api!(
     spec = { path = "keeper.json", relative_to = OutDir },
 );
 

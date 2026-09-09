@@ -4,7 +4,7 @@ mod positional {
     use futures::StreamExt;
 
     mod nexus_client {
-        progenitor::generate_sdk!("../sample_openapi/nexus.json");
+        progenitor::generate_api!("../sample_openapi/nexus.json");
     }
 
     use nexus_client::{Client, types};
@@ -40,7 +40,7 @@ mod builder_untagged {
                 self.0.fmt(f)
             }
         }
-        progenitor::generate_sdk!(
+        progenitor::generate_api!(
             spec = "../sample_openapi/nexus.json",
             interface = Builder,
             tags = Merged,
@@ -76,7 +76,7 @@ mod builder_tagged {
     use futures::StreamExt;
 
     mod nexus_client {
-        progenitor::generate_sdk!(
+        progenitor::generate_api!(
             spec = "../sample_openapi/nexus.json",
             interface = Builder,
             tags = Separate,

@@ -75,15 +75,15 @@ impl syn::parse::Parse for SpecSource {
 
 /// Generates a client from the given OpenAPI document
 ///
-/// `generate_sdk!` can be invoked in two ways. The simple form, takes a path
+/// `generate_api!` can be invoked in two ways. The simple form, takes a path
 /// to the OpenAPI document:
 /// ```ignore
-/// generate_sdk!("path/to/spec.json");
+/// generate_api!("path/to/spec.json");
 /// ```
 ///
 /// The more complex form accepts the following key-value pairs in any order:
 /// ```ignore
-/// generate_sdk!(
+/// generate_api!(
 ///     // spec can be a simple path string:
 ///     spec = "path/to/spec.json",
 ///     // Or a struct with path and relative_to:
@@ -185,16 +185,6 @@ impl syn::parse::Parse for SpecSource {
 ///
 /// - `timeout`: the default connection timeout for the underlying reqwest
 ///   client (15s if not specified)
-#[proc_macro]
-pub fn generate_sdk(item: TokenStream) -> TokenStream {
-    match do_generate_api(item) {
-        Err(err) => err.to_compile_error().into(),
-        Ok(out) => out,
-    }
-}
-
-/// Deprecated name for [`generate_sdk!`].
-#[deprecated(note = "renamed to generate_sdk")]
 #[proc_macro]
 pub fn generate_api(item: TokenStream) -> TokenStream {
     match do_generate_api(item) {

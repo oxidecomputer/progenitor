@@ -48,11 +48,6 @@ pub enum Error {
 pub type Result<T> = std::result::Result<T, Error>;
 
 /// OpenAPI client generator.
-///
-/// A `Progenitor` is bound to one OpenAPI document for its whole life:
-/// [`Progenitor::build`] walks and validates the document up front, and
-/// the consumers render from that work without ever seeing a document
-/// again.
 pub struct Progenitor {
     type_space: TypeSpace,
     settings: GenerationSettings,
@@ -313,11 +308,6 @@ impl GenerationSettings {
 
 impl Progenitor {
     /// Build a generator from settings and an OpenAPI document.
-    ///
-    /// This does all of the document work up front: validation, the
-    /// conversion of component schemas into the type graph, and the
-    /// processing of every operation into the form the consumers
-    /// render from.
     pub fn build(settings: &GenerationSettings, spec: &OpenAPI) -> Result<Self> {
         let mut type_settings = TypeSpaceSettings::default();
         type_settings

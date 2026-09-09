@@ -1,7 +1,7 @@
 // Copyright 2022 Oxide Computer Company
 
 mod positional {
-    progenitor::generate_sdk!("../sample_openapi/buildomat.json");
+    progenitor::generate_api!("../sample_openapi/buildomat.json");
 
     fn _ignore() {
         let _ = Client::new("").worker_task_upload_chunk("task", vec![0]);
@@ -9,7 +9,7 @@ mod positional {
 }
 
 mod builder_untagged {
-    progenitor::generate_sdk!(
+    progenitor::generate_api!(
         spec = "../sample_openapi/buildomat.json",
         interface = Builder,
         tags = Merged,
@@ -25,7 +25,7 @@ mod builder_untagged {
 }
 
 mod builder_tagged {
-    progenitor::generate_sdk!(
+    progenitor::generate_api!(
         spec = "../sample_openapi/buildomat.json",
         interface = Builder,
         tags = Separate,
