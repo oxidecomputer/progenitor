@@ -31,4 +31,5 @@ pub mod propolis_server_positional;
 pub mod test_default_params_builder;
 pub mod test_default_params_positional;
 pub mod test_freeform_response;
+pub mod test_multiple_response_types;
 pub mod test_renamed_parameters;
