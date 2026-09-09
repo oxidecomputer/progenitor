@@ -32,3 +32,23 @@ pub mod test_default_params_builder;
 pub mod test_default_params_positional;
 pub mod test_freeform_response;
 pub mod test_renamed_parameters;
+
+// progenitor emits `clap::value_parser!(T)` for every argument, and clap
+// infers the parser from the traits the type implements. `GetThingOrThingsId`
+// implements none that clap accepts, so we, as the consumer, supply the
+// parser through `ValueParserFactory`, which is what the CLI generator asks a
+// consumer to do.
+impl ::clap::builder::ValueParserFactory for buildomat_builder::types::GetThingOrThingsId {
+    type Parser = ::clap::builder::MapValueParser<
+        ::clap::builder::StringValueParser,
+        fn(String) -> buildomat_builder::types::GetThingOrThingsId,
+    >;
+
+    fn value_parser() -> Self::Parser {
+        ::clap::builder::TypedValueParser::map(
+            ::clap::builder::StringValueParser::new(),
+            buildomat_builder::types::GetThingOrThingsId::String
+                as fn(String) -> buildomat_builder::types::GetThingOrThingsId,
+        )
+    }
+}

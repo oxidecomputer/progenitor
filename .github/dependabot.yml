@@ -11,3 +11,10 @@ updates:
     ignore:
       - dependency-name: "schemars"
         versions: [">=0.9.0"]
+  - package-ecosystem: "cargo"
+    directory: "/progenitor-impl/tests/output"
+    schedule:
+      interval: "weekly"
+    ignore:
+      - dependency-name: "schemars"
+        versions: [">=0.9.0"]

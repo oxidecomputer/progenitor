@@ -52,6 +52,16 @@ jobs:
     - name: Run tests
       run: cargo test --locked --verbose
 
+  build-test-output:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Install Rust
+      uses: dtolnay/rust-toolchain@stable
+    - name: Build the generated clients
+      # We don't apply --locked here as there's no Cargo.lock committed for this crate
+      run: cargo build --manifest-path progenitor-impl/tests/output/Cargo.toml --verbose
+
   build-no-default-features:
     runs-on: ${{ matrix.os }}
     strategy:
