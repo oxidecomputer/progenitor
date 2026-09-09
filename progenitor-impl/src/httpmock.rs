@@ -101,12 +101,7 @@ impl Progenitor {
     }
 
     fn httpmock_method(&self, method: &crate::method::OperationMethod) -> MockOp {
-        // ATTN REVIEWER: rebuilt here rather than threaded in because this
-        // function does not return Result; see cli.rs for the same note.
-        let typespace = self
-            .type_space
-            .to_typespace()
-            .expect("type conversion succeeded");
+        let typespace = self.typespace();
         let when_name = sanitize(&format!("{}-when", method.operation_id), Case::Pascal);
         let when = format_ident!("{}", when_name).to_token_stream();
         let then_name = sanitize(&format!("{}-then", method.operation_id), Case::Pascal);

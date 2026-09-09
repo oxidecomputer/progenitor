@@ -5,6 +5,7 @@
 #![deny(missing_docs)]
 
 use std::collections::{BTreeMap, HashMap, HashSet};
+use std::rc::Rc;
 
 use openapiv3::OpenAPI;
 use proc_macro2::TokenStream;
@@ -59,6 +60,7 @@ pub struct Progenitor {
     settings: GenerationSettings,
     spec: OpenAPI,
     raw_methods: Vec<method::OperationMethod>,
+    typespace: Option<Rc<typespace::Typespace<typify::TypeId>>>,
     uses_futures: bool,
     uses_websockets: bool,
 }
@@ -357,6 +359,7 @@ impl Progenitor {
             settings: settings.clone(),
             spec: spec.clone(),
             raw_methods: Vec::new(),
+            typespace: None,
             uses_futures: false,
             uses_websockets: false,
         };
@@ -365,7 +368,7 @@ impl Progenitor {
     }
 
     /// Walk the document: validate it, convert its component schemas,
-    /// and process every operation.
+    /// process every operation, and finalize the type graph once.
     fn construct(&mut self, spec: &OpenAPI) -> Result<()> {
         validate_openapi(spec)?;
 
@@ -405,6 +408,8 @@ impl Progenitor {
                 .iter()
                 .any(|method| method.dropshot_paginated.is_some());
 
+        self.typespace = Some(Rc::new(self.type_space.to_typespace()?));
+
         Ok(())
     }
 
@@ -435,7 +440,7 @@ impl Progenitor {
             }
         }?;
 
-        let types = self.type_space.to_stream()?;
+        let types = self.typespace().to_codespace().into_stream();
 
         let (inner_type, inner_fn_value) = match self.settings.inner_type.as_ref() {
             Some(inner_type) => (inner_type.clone(), quote! { &self.inner }),
@@ -732,14 +737,15 @@ impl Progenitor {
         &self.type_space
     }
 
-    /// Finalize the collected types into a queryable typespace.
+    /// The finalized typespace snapshot for the bound document.
     ///
     /// [TypeSpace] itself no longer answers questions about individual
-    /// types; the finalized [typespace::Typespace] does. Each call walks
-    /// and finalizes every collected type, so callers bind the result once
-    /// and query it repeatedly.
-    pub fn to_typespace(&self) -> Result<typespace::Typespace<typify::TypeId>> {
-        Ok(self.type_space.to_typespace()?)
+    /// types; the finalized [typespace::Typespace] does. The snapshot is
+    /// produced once by [`Progenitor::build`]; this getter hands out the
+    /// shared reference.
+    pub fn typespace(&self) -> Rc<typespace::Typespace<typify::TypeId>> {
+        // build() fills the slot before a Progenitor can be observed.
+        Rc::clone(self.typespace.as_ref().expect("set by build"))
     }
 
     /// Whether the generated client needs to use additional crates to support

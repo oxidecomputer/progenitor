@@ -160,13 +160,7 @@ impl Progenitor {
     }
 
     fn cli_method(&self, method: &crate::method::OperationMethod) -> CliOperation {
-        // ATTN REVIEWER: typify's TypeSpace answered type queries directly.
-        // typespace requires a finalized snapshot, which this and the two
-        // functions below each rebuild because neither returns Result.
-        let typespace = self
-            .type_space
-            .to_typespace()
-            .expect("type conversion succeeded");
+        let typespace = self.typespace();
         let CliArg {
             parser: parser_args,
             consumer: consumer_args,
@@ -373,10 +367,7 @@ impl Progenitor {
     }
 
     fn cli_method_args(&self, method: &crate::method::OperationMethod) -> CliArg {
-        let typespace = self
-            .type_space
-            .to_typespace()
-            .expect("type conversion succeeded");
+        let typespace = self.typespace();
         let mut args = CliOperationArgs::default();
 
         let first_page_required_set = method
@@ -554,10 +545,7 @@ impl Progenitor {
             type_id,
         } = prop_info;
 
-        let typespace = self
-            .type_space
-            .to_typespace()
-            .expect("type conversion succeeded");
+        let typespace = self.typespace();
         let prop_type = typespace.get_type(&type_id);
 
         // TODO this is maybe a kludge--not completely sure of the right way to

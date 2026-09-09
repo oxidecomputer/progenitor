@@ -125,7 +125,7 @@ fn main() -> Result<()> {
 
     match builder.generate_tokens() {
         Ok(api_code) => {
-            let typespace = builder.to_typespace()?;
+            let typespace = builder.typespace();
 
             println!("-----------------------------------------------------");
             println!(" TYPE SPACE");

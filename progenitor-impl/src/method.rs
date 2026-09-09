@@ -558,7 +558,7 @@ impl Progenitor {
         has_inner: bool,
     ) -> Result<TokenStream> {
         let operation_id = format_ident!("{}", method.operation_id);
-        let typespace = self.type_space.to_typespace()?;
+        let typespace = self.typespace();
 
         // Render each parameter as it will appear in the method signature.
         let params = method
@@ -1156,7 +1156,7 @@ impl Progenitor {
             }
         };
 
-        let typespace = self.type_space.to_typespace()?;
+        let typespace = self.typespace();
         Ok(MethodSigBody {
             success: response_type.into_tokens(&typespace),
             error: error_type.into_tokens(&typespace),
@@ -1418,7 +1418,7 @@ impl Progenitor {
             .collect::<Vec<_>>();
 
         let client_ident = unique_ident_from("client", &param_names);
-        let typespace = self.type_space.to_typespace()?;
+        let typespace = self.typespace();
 
         let mut cloneable = true;
 
