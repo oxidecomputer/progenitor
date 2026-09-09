@@ -71,7 +71,7 @@ jobs:
       with:
         components: rustfmt
         target: wasm32-unknown-unknown
-    - uses: nanasess/setup-chromedriver@v2
+    - uses: nanasess/setup-chromedriver@v3
     - name: Install matching wasm-bindgen-cli
       run: |
         VERSION=$(cargo metadata --format-version 1 \
