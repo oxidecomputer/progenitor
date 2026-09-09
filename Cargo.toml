@@ -3,19 +3,67 @@ members = [
 	"cargo-progenitor",
 	"example-build",
 	"example-macro",
+	"example-out-dir",
 	"example-wasm",
 	"progenitor",
 	"progenitor-client",
 	"progenitor-impl",
 	"progenitor-macro",
 ]
+resolver = "3"
 
-resolver = "2"
+[workspace.package]
+edition = "2024"
+rust-version = "1.88"
+license = "MPL-2.0"
 
-#[patch."https://github.com/oxidecomputer/dropshot"]
-#dropshot = { path = "../dropshot/dropshot" }
+[workspace.dependencies]
+progenitor = { version = "0.14.0", path = "progenitor", default-features = false }
+progenitor-client = { version = "0.14.0", path = "progenitor-client" }
+progenitor-impl = { version = "0.14.0", path = "progenitor-impl" }
+progenitor-macro = { version = "0.14.0", path = "progenitor-macro" }
 
-#[patch."https://github.com/oxidecomputer/typify"]
+anyhow = "1.0.102"
+assert_cmd = "2.2.2"
+base64 = "0.23.0"
+bytes = "1.11.1"
+chrono = { version = "0.4.44", default-features = false, features = ["serde"] }
+clap = { version = "4.6.1" }
+clap-cargo = "0.19.0"
+dropshot = { version = "0.17.0", default-features = false }
+env_logger = "0.11.10"
+expectorate = { version = "1.2.0", features = ["predicates"] }
+futures = "0.3.32"
+futures-core = "0.3.32"
+heck = "0.5.0"
+http = "1.4.1"
+hyper = "1.10.1"
+indexmap = "2.14.0"
+openapiv3 = "2.2.0"
+percent-encoding = "2.3.2"
+proc-macro2 = "1.0.106"
+quote = "1.0.45"
+rand = "0.10.1"
+regex = "1.12.3"
+regress = "0.12.0"
+reqwest = { version = "0.13.4", default-features = false, features = ["json", "query", "stream"] }
+rustfmt-wrapper = "0.2.1"
+schemars = "0.8.22"
+semver = "1.0.28"
+serde = { version = "1.0.226", features = ["derive"] }
+serde_json = "1.0.150"
+serde_tokenstream = "0.3.0"
+serde_urlencoded = "0.7.1"
+serde_yaml = "0.9"
+syn = { version = "3.0.2" }
+thiserror = "2.0.18"
+tokio = { version = "1.52.3", features = ["rt", "net"] }
+typify = { version = "0.8.0" }
+url = "2.5.8"
+unicode-ident = "1.0.24"
+uuid = { version = "1.23.2", features = ["serde", "v4"] }
+
+#[patch.crates-io]
 #typify = { path = "../typify/typify" }
 
 #[patch.crates-io]

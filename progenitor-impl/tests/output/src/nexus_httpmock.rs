@@ -1,36 +1,36 @@
 pub mod operations {
-    #![doc = r" [`When`](httpmock::When) and [`Then`](httpmock::Then)"]
+    #![doc = r" [`When`](::httpmock::When) and [`Then`](::httpmock::Then)"]
     #![doc = r" wrappers for each operation. Each can be converted to"]
     #![doc = r" its inner type with a call to `into_inner()`. This can"]
     #![doc = r" be used to explicitly deviate from permitted values."]
     use crate::nexus_builder::*;
-    pub struct DiskViewByIdWhen(httpmock::When);
+    pub struct DiskViewByIdWhen(::httpmock::When);
     impl DiskViewByIdWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::GET)
+                    .method(::httpmock::Method::GET)
                     .path_matches(regex::Regex::new("^/by-id/disks/[^/]*$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
-        pub fn id(self, value: &uuid::Uuid) -> Self {
+        pub fn id(self, value: &::uuid::Uuid) -> Self {
             let re = regex::Regex::new(&format!("^/by-id/disks/{}$", value.to_string())).unwrap();
             Self(self.0.path_matches(re))
         }
     }
 
-    pub struct DiskViewByIdThen(httpmock::Then);
+    pub struct DiskViewByIdThen(::httpmock::Then);
     impl DiskViewByIdThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -64,33 +64,33 @@ pub mod operations {
         }
     }
 
-    pub struct ImageViewByIdWhen(httpmock::When);
+    pub struct ImageViewByIdWhen(::httpmock::When);
     impl ImageViewByIdWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::GET)
+                    .method(::httpmock::Method::GET)
                     .path_matches(regex::Regex::new("^/by-id/images/[^/]*$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
-        pub fn id(self, value: &uuid::Uuid) -> Self {
+        pub fn id(self, value: &::uuid::Uuid) -> Self {
             let re = regex::Regex::new(&format!("^/by-id/images/{}$", value.to_string())).unwrap();
             Self(self.0.path_matches(re))
         }
     }
 
-    pub struct ImageViewByIdThen(httpmock::Then);
+    pub struct ImageViewByIdThen(::httpmock::Then);
     impl ImageViewByIdThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -124,34 +124,34 @@ pub mod operations {
         }
     }
 
-    pub struct InstanceViewByIdWhen(httpmock::When);
+    pub struct InstanceViewByIdWhen(::httpmock::When);
     impl InstanceViewByIdWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::GET)
+                    .method(::httpmock::Method::GET)
                     .path_matches(regex::Regex::new("^/by-id/instances/[^/]*$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
-        pub fn id(self, value: &uuid::Uuid) -> Self {
+        pub fn id(self, value: &::uuid::Uuid) -> Self {
             let re =
                 regex::Regex::new(&format!("^/by-id/instances/{}$", value.to_string())).unwrap();
             Self(self.0.path_matches(re))
         }
     }
 
-    pub struct InstanceViewByIdThen(httpmock::Then);
+    pub struct InstanceViewByIdThen(::httpmock::Then);
     impl InstanceViewByIdThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -185,21 +185,21 @@ pub mod operations {
         }
     }
 
-    pub struct InstanceNetworkInterfaceViewByIdWhen(httpmock::When);
+    pub struct InstanceNetworkInterfaceViewByIdWhen(::httpmock::When);
     impl InstanceNetworkInterfaceViewByIdWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::GET)
+                    .method(::httpmock::Method::GET)
                     .path_matches(regex::Regex::new("^/by-id/network-interfaces/[^/]*$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
-        pub fn id(self, value: &uuid::Uuid) -> Self {
+        pub fn id(self, value: &::uuid::Uuid) -> Self {
             let re = regex::Regex::new(&format!(
                 "^/by-id/network-interfaces/{}$",
                 value.to_string()
@@ -209,13 +209,13 @@ pub mod operations {
         }
     }
 
-    pub struct InstanceNetworkInterfaceViewByIdThen(httpmock::Then);
+    pub struct InstanceNetworkInterfaceViewByIdThen(::httpmock::Then);
     impl InstanceNetworkInterfaceViewByIdThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -249,34 +249,34 @@ pub mod operations {
         }
     }
 
-    pub struct OrganizationViewByIdWhen(httpmock::When);
+    pub struct OrganizationViewByIdWhen(::httpmock::When);
     impl OrganizationViewByIdWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::GET)
+                    .method(::httpmock::Method::GET)
                     .path_matches(regex::Regex::new("^/by-id/organizations/[^/]*$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
-        pub fn id(self, value: &uuid::Uuid) -> Self {
+        pub fn id(self, value: &::uuid::Uuid) -> Self {
             let re = regex::Regex::new(&format!("^/by-id/organizations/{}$", value.to_string()))
                 .unwrap();
             Self(self.0.path_matches(re))
         }
     }
 
-    pub struct OrganizationViewByIdThen(httpmock::Then);
+    pub struct OrganizationViewByIdThen(::httpmock::Then);
     impl OrganizationViewByIdThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -310,34 +310,34 @@ pub mod operations {
         }
     }
 
-    pub struct ProjectViewByIdWhen(httpmock::When);
+    pub struct ProjectViewByIdWhen(::httpmock::When);
     impl ProjectViewByIdWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::GET)
+                    .method(::httpmock::Method::GET)
                     .path_matches(regex::Regex::new("^/by-id/projects/[^/]*$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
-        pub fn id(self, value: &uuid::Uuid) -> Self {
+        pub fn id(self, value: &::uuid::Uuid) -> Self {
             let re =
                 regex::Regex::new(&format!("^/by-id/projects/{}$", value.to_string())).unwrap();
             Self(self.0.path_matches(re))
         }
     }
 
-    pub struct ProjectViewByIdThen(httpmock::Then);
+    pub struct ProjectViewByIdThen(::httpmock::Then);
     impl ProjectViewByIdThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -371,34 +371,34 @@ pub mod operations {
         }
     }
 
-    pub struct SnapshotViewByIdWhen(httpmock::When);
+    pub struct SnapshotViewByIdWhen(::httpmock::When);
     impl SnapshotViewByIdWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::GET)
+                    .method(::httpmock::Method::GET)
                     .path_matches(regex::Regex::new("^/by-id/snapshots/[^/]*$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
-        pub fn id(self, value: &uuid::Uuid) -> Self {
+        pub fn id(self, value: &::uuid::Uuid) -> Self {
             let re =
                 regex::Regex::new(&format!("^/by-id/snapshots/{}$", value.to_string())).unwrap();
             Self(self.0.path_matches(re))
         }
     }
 
-    pub struct SnapshotViewByIdThen(httpmock::Then);
+    pub struct SnapshotViewByIdThen(::httpmock::Then);
     impl SnapshotViewByIdThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -432,21 +432,21 @@ pub mod operations {
         }
     }
 
-    pub struct VpcRouterRouteViewByIdWhen(httpmock::When);
+    pub struct VpcRouterRouteViewByIdWhen(::httpmock::When);
     impl VpcRouterRouteViewByIdWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::GET)
+                    .method(::httpmock::Method::GET)
                     .path_matches(regex::Regex::new("^/by-id/vpc-router-routes/[^/]*$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
-        pub fn id(self, value: &uuid::Uuid) -> Self {
+        pub fn id(self, value: &::uuid::Uuid) -> Self {
             let re =
                 regex::Regex::new(&format!("^/by-id/vpc-router-routes/{}$", value.to_string()))
                     .unwrap();
@@ -454,13 +454,13 @@ pub mod operations {
         }
     }
 
-    pub struct VpcRouterRouteViewByIdThen(httpmock::Then);
+    pub struct VpcRouterRouteViewByIdThen(::httpmock::Then);
     impl VpcRouterRouteViewByIdThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -494,34 +494,34 @@ pub mod operations {
         }
     }
 
-    pub struct VpcRouterViewByIdWhen(httpmock::When);
+    pub struct VpcRouterViewByIdWhen(::httpmock::When);
     impl VpcRouterViewByIdWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::GET)
+                    .method(::httpmock::Method::GET)
                     .path_matches(regex::Regex::new("^/by-id/vpc-routers/[^/]*$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
-        pub fn id(self, value: &uuid::Uuid) -> Self {
+        pub fn id(self, value: &::uuid::Uuid) -> Self {
             let re =
                 regex::Regex::new(&format!("^/by-id/vpc-routers/{}$", value.to_string())).unwrap();
             Self(self.0.path_matches(re))
         }
     }
 
-    pub struct VpcRouterViewByIdThen(httpmock::Then);
+    pub struct VpcRouterViewByIdThen(::httpmock::Then);
     impl VpcRouterViewByIdThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -555,34 +555,34 @@ pub mod operations {
         }
     }
 
-    pub struct VpcSubnetViewByIdWhen(httpmock::When);
+    pub struct VpcSubnetViewByIdWhen(::httpmock::When);
     impl VpcSubnetViewByIdWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::GET)
+                    .method(::httpmock::Method::GET)
                     .path_matches(regex::Regex::new("^/by-id/vpc-subnets/[^/]*$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
-        pub fn id(self, value: &uuid::Uuid) -> Self {
+        pub fn id(self, value: &::uuid::Uuid) -> Self {
             let re =
                 regex::Regex::new(&format!("^/by-id/vpc-subnets/{}$", value.to_string())).unwrap();
             Self(self.0.path_matches(re))
         }
     }
 
-    pub struct VpcSubnetViewByIdThen(httpmock::Then);
+    pub struct VpcSubnetViewByIdThen(::httpmock::Then);
     impl VpcSubnetViewByIdThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -616,33 +616,33 @@ pub mod operations {
         }
     }
 
-    pub struct VpcViewByIdWhen(httpmock::When);
+    pub struct VpcViewByIdWhen(::httpmock::When);
     impl VpcViewByIdWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::GET)
+                    .method(::httpmock::Method::GET)
                     .path_matches(regex::Regex::new("^/by-id/vpcs/[^/]*$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
-        pub fn id(self, value: &uuid::Uuid) -> Self {
+        pub fn id(self, value: &::uuid::Uuid) -> Self {
             let re = regex::Regex::new(&format!("^/by-id/vpcs/{}$", value.to_string())).unwrap();
             Self(self.0.path_matches(re))
         }
     }
 
-    pub struct VpcViewByIdThen(httpmock::Then);
+    pub struct VpcViewByIdThen(::httpmock::Then);
     impl VpcViewByIdThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -676,17 +676,17 @@ pub mod operations {
         }
     }
 
-    pub struct DeviceAuthRequestWhen(httpmock::When);
+    pub struct DeviceAuthRequestWhen(::httpmock::When);
     impl DeviceAuthRequestWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::POST)
+                    .method(::httpmock::Method::POST)
                     .path_matches(regex::Regex::new("^/device/auth$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -695,17 +695,17 @@ pub mod operations {
         }
     }
 
-    pub struct DeviceAuthRequestThen(httpmock::Then);
+    pub struct DeviceAuthRequestThen(::httpmock::Then);
     impl DeviceAuthRequestThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
-        pub fn default_response(self, status: u16, value: serde_json::Value) -> Self {
+        pub fn default_response(self, status: u16, value: ::serde_json::Value) -> Self {
             Self(
                 self.0
                     .status(status)
@@ -715,17 +715,17 @@ pub mod operations {
         }
     }
 
-    pub struct DeviceAuthConfirmWhen(httpmock::When);
+    pub struct DeviceAuthConfirmWhen(::httpmock::When);
     impl DeviceAuthConfirmWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::POST)
+                    .method(::httpmock::Method::POST)
                     .path_matches(regex::Regex::new("^/device/confirm$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -734,13 +734,13 @@ pub mod operations {
         }
     }
 
-    pub struct DeviceAuthConfirmThen(httpmock::Then);
+    pub struct DeviceAuthConfirmThen(::httpmock::Then);
     impl DeviceAuthConfirmThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -769,17 +769,17 @@ pub mod operations {
         }
     }
 
-    pub struct DeviceAccessTokenWhen(httpmock::When);
+    pub struct DeviceAccessTokenWhen(::httpmock::When);
     impl DeviceAccessTokenWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::POST)
+                    .method(::httpmock::Method::POST)
                     .path_matches(regex::Regex::new("^/device/token$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -788,17 +788,17 @@ pub mod operations {
         }
     }
 
-    pub struct DeviceAccessTokenThen(httpmock::Then);
+    pub struct DeviceAccessTokenThen(::httpmock::Then);
     impl DeviceAccessTokenThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
-        pub fn default_response(self, status: u16, value: serde_json::Value) -> Self {
+        pub fn default_response(self, status: u16, value: ::serde_json::Value) -> Self {
             Self(
                 self.0
                     .status(status)
@@ -808,33 +808,28 @@ pub mod operations {
         }
     }
 
-    pub struct GroupListWhen(httpmock::When);
+    pub struct GroupListWhen(::httpmock::When);
     impl GroupListWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::GET)
+                    .method(::httpmock::Method::GET)
                     .path_matches(regex::Regex::new("^/groups$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("limit"))
             }
         }
 
@@ -845,12 +840,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("page_token"))
             }
         }
 
@@ -861,23 +851,18 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("sort_by", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "sort_by"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("sort_by"))
             }
         }
     }
 
-    pub struct GroupListThen(httpmock::Then);
+    pub struct GroupListThen(::httpmock::Then);
     impl GroupListThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -911,17 +896,17 @@ pub mod operations {
         }
     }
 
-    pub struct LoginSpoofWhen(httpmock::When);
+    pub struct LoginSpoofWhen(::httpmock::When);
     impl LoginSpoofWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::POST)
+                    .method(::httpmock::Method::POST)
                     .path_matches(regex::Regex::new("^/login$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -930,13 +915,13 @@ pub mod operations {
         }
     }
 
-    pub struct LoginSpoofThen(httpmock::Then);
+    pub struct LoginSpoofThen(::httpmock::Then);
     impl LoginSpoofThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -965,17 +950,17 @@ pub mod operations {
         }
     }
 
-    pub struct LoginLocalWhen(httpmock::When);
+    pub struct LoginLocalWhen(::httpmock::When);
     impl LoginLocalWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::POST)
+                    .method(::httpmock::Method::POST)
                     .path_matches(regex::Regex::new("^/login/[^/]*/local$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -989,13 +974,13 @@ pub mod operations {
         }
     }
 
-    pub struct LoginLocalThen(httpmock::Then);
+    pub struct LoginLocalThen(::httpmock::Then);
     impl LoginLocalThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -1023,7 +1008,7 @@ pub mod operations {
             )
         }
 
-        pub fn success(self, status: u16, value: serde_json::Value) -> Self {
+        pub fn success(self, status: u16, value: ::serde_json::Value) -> Self {
             assert_eq!(status / 100u16, 2u16);
             Self(
                 self.0
@@ -1034,17 +1019,17 @@ pub mod operations {
         }
     }
 
-    pub struct LoginSamlBeginWhen(httpmock::When);
+    pub struct LoginSamlBeginWhen(::httpmock::When);
     impl LoginSamlBeginWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::GET)
+                    .method(::httpmock::Method::GET)
                     .path_matches(regex::Regex::new("^/login/[^/]*/saml/[^/]*$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -1059,13 +1044,13 @@ pub mod operations {
         }
     }
 
-    pub struct LoginSamlBeginThen(httpmock::Then);
+    pub struct LoginSamlBeginThen(::httpmock::Then);
     impl LoginSamlBeginThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -1093,7 +1078,7 @@ pub mod operations {
             )
         }
 
-        pub fn success(self, status: u16, value: serde_json::Value) -> Self {
+        pub fn success(self, status: u16, value: ::serde_json::Value) -> Self {
             assert_eq!(status / 100u16, 2u16);
             Self(
                 self.0
@@ -1104,17 +1089,17 @@ pub mod operations {
         }
     }
 
-    pub struct LoginSamlWhen(httpmock::When);
+    pub struct LoginSamlWhen(::httpmock::When);
     impl LoginSamlWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::POST)
+                    .method(::httpmock::Method::POST)
                     .path_matches(regex::Regex::new("^/login/[^/]*/saml/[^/]*$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -1128,18 +1113,18 @@ pub mod operations {
             Self(self.0.path_matches(re))
         }
 
-        pub fn body(self, value: serde_json::Value) -> Self {
+        pub fn body(self, value: ::serde_json::Value) -> Self {
             Self(self.0.json_body(value))
         }
     }
 
-    pub struct LoginSamlThen(httpmock::Then);
+    pub struct LoginSamlThen(::httpmock::Then);
     impl LoginSamlThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -1167,7 +1152,7 @@ pub mod operations {
             )
         }
 
-        pub fn success(self, status: u16, value: serde_json::Value) -> Self {
+        pub fn success(self, status: u16, value: ::serde_json::Value) -> Self {
             assert_eq!(status / 100u16, 2u16);
             Self(
                 self.0
@@ -1178,28 +1163,28 @@ pub mod operations {
         }
     }
 
-    pub struct LogoutWhen(httpmock::When);
+    pub struct LogoutWhen(::httpmock::When);
     impl LogoutWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::POST)
+                    .method(::httpmock::Method::POST)
                     .path_matches(regex::Regex::new("^/logout$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
     }
 
-    pub struct LogoutThen(httpmock::Then);
+    pub struct LogoutThen(::httpmock::Then);
     impl LogoutThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -1228,33 +1213,28 @@ pub mod operations {
         }
     }
 
-    pub struct OrganizationListWhen(httpmock::When);
+    pub struct OrganizationListWhen(::httpmock::When);
     impl OrganizationListWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::GET)
+                    .method(::httpmock::Method::GET)
                     .path_matches(regex::Regex::new("^/organizations$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("limit"))
             }
         }
 
@@ -1265,12 +1245,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("page_token"))
             }
         }
 
@@ -1281,23 +1256,18 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("sort_by", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "sort_by"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("sort_by"))
             }
         }
     }
 
-    pub struct OrganizationListThen(httpmock::Then);
+    pub struct OrganizationListThen(::httpmock::Then);
     impl OrganizationListThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -1331,17 +1301,17 @@ pub mod operations {
         }
     }
 
-    pub struct OrganizationCreateWhen(httpmock::When);
+    pub struct OrganizationCreateWhen(::httpmock::When);
     impl OrganizationCreateWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::POST)
+                    .method(::httpmock::Method::POST)
                     .path_matches(regex::Regex::new("^/organizations$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -1350,13 +1320,13 @@ pub mod operations {
         }
     }
 
-    pub struct OrganizationCreateThen(httpmock::Then);
+    pub struct OrganizationCreateThen(::httpmock::Then);
     impl OrganizationCreateThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -1390,17 +1360,17 @@ pub mod operations {
         }
     }
 
-    pub struct OrganizationViewWhen(httpmock::When);
+    pub struct OrganizationViewWhen(::httpmock::When);
     impl OrganizationViewWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::GET)
+                    .method(::httpmock::Method::GET)
                     .path_matches(regex::Regex::new("^/organizations/[^/]*$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -1410,13 +1380,13 @@ pub mod operations {
         }
     }
 
-    pub struct OrganizationViewThen(httpmock::Then);
+    pub struct OrganizationViewThen(::httpmock::Then);
     impl OrganizationViewThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -1450,17 +1420,17 @@ pub mod operations {
         }
     }
 
-    pub struct OrganizationUpdateWhen(httpmock::When);
+    pub struct OrganizationUpdateWhen(::httpmock::When);
     impl OrganizationUpdateWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::PUT)
+                    .method(::httpmock::Method::PUT)
                     .path_matches(regex::Regex::new("^/organizations/[^/]*$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -1474,13 +1444,13 @@ pub mod operations {
         }
     }
 
-    pub struct OrganizationUpdateThen(httpmock::Then);
+    pub struct OrganizationUpdateThen(::httpmock::Then);
     impl OrganizationUpdateThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -1514,17 +1484,17 @@ pub mod operations {
         }
     }
 
-    pub struct OrganizationDeleteWhen(httpmock::When);
+    pub struct OrganizationDeleteWhen(::httpmock::When);
     impl OrganizationDeleteWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::DELETE)
+                    .method(::httpmock::Method::DELETE)
                     .path_matches(regex::Regex::new("^/organizations/[^/]*$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -1534,13 +1504,13 @@ pub mod operations {
         }
     }
 
-    pub struct OrganizationDeleteThen(httpmock::Then);
+    pub struct OrganizationDeleteThen(::httpmock::Then);
     impl OrganizationDeleteThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -1569,17 +1539,17 @@ pub mod operations {
         }
     }
 
-    pub struct OrganizationPolicyViewWhen(httpmock::When);
+    pub struct OrganizationPolicyViewWhen(::httpmock::When);
     impl OrganizationPolicyViewWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::GET)
+                    .method(::httpmock::Method::GET)
                     .path_matches(regex::Regex::new("^/organizations/[^/]*/policy$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -1590,13 +1560,13 @@ pub mod operations {
         }
     }
 
-    pub struct OrganizationPolicyViewThen(httpmock::Then);
+    pub struct OrganizationPolicyViewThen(::httpmock::Then);
     impl OrganizationPolicyViewThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -1630,17 +1600,17 @@ pub mod operations {
         }
     }
 
-    pub struct OrganizationPolicyUpdateWhen(httpmock::When);
+    pub struct OrganizationPolicyUpdateWhen(::httpmock::When);
     impl OrganizationPolicyUpdateWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::PUT)
+                    .method(::httpmock::Method::PUT)
                     .path_matches(regex::Regex::new("^/organizations/[^/]*/policy$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -1655,13 +1625,13 @@ pub mod operations {
         }
     }
 
-    pub struct OrganizationPolicyUpdateThen(httpmock::Then);
+    pub struct OrganizationPolicyUpdateThen(::httpmock::Then);
     impl OrganizationPolicyUpdateThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -1695,17 +1665,17 @@ pub mod operations {
         }
     }
 
-    pub struct ProjectListWhen(httpmock::When);
+    pub struct ProjectListWhen(::httpmock::When);
     impl ProjectListWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::GET)
+                    .method(::httpmock::Method::GET)
                     .path_matches(regex::Regex::new("^/organizations/[^/]*/projects$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -1717,17 +1687,12 @@ pub mod operations {
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("limit"))
             }
         }
 
@@ -1738,12 +1703,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("page_token"))
             }
         }
 
@@ -1754,23 +1714,18 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("sort_by", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "sort_by"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("sort_by"))
             }
         }
     }
 
-    pub struct ProjectListThen(httpmock::Then);
+    pub struct ProjectListThen(::httpmock::Then);
     impl ProjectListThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -1804,17 +1759,17 @@ pub mod operations {
         }
     }
 
-    pub struct ProjectCreateWhen(httpmock::When);
+    pub struct ProjectCreateWhen(::httpmock::When);
     impl ProjectCreateWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::POST)
+                    .method(::httpmock::Method::POST)
                     .path_matches(regex::Regex::new("^/organizations/[^/]*/projects$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -1829,13 +1784,13 @@ pub mod operations {
         }
     }
 
-    pub struct ProjectCreateThen(httpmock::Then);
+    pub struct ProjectCreateThen(::httpmock::Then);
     impl ProjectCreateThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -1869,17 +1824,17 @@ pub mod operations {
         }
     }
 
-    pub struct ProjectViewWhen(httpmock::When);
+    pub struct ProjectViewWhen(::httpmock::When);
     impl ProjectViewWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(httpmock::Method::GET).path_matches(
+                inner.method(::httpmock::Method::GET).path_matches(
                     regex::Regex::new("^/organizations/[^/]*/projects/[^/]*$").unwrap(),
                 ),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -1902,13 +1857,13 @@ pub mod operations {
         }
     }
 
-    pub struct ProjectViewThen(httpmock::Then);
+    pub struct ProjectViewThen(::httpmock::Then);
     impl ProjectViewThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -1942,17 +1897,17 @@ pub mod operations {
         }
     }
 
-    pub struct ProjectUpdateWhen(httpmock::When);
+    pub struct ProjectUpdateWhen(::httpmock::When);
     impl ProjectUpdateWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(httpmock::Method::PUT).path_matches(
+                inner.method(::httpmock::Method::PUT).path_matches(
                     regex::Regex::new("^/organizations/[^/]*/projects/[^/]*$").unwrap(),
                 ),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -1979,13 +1934,13 @@ pub mod operations {
         }
     }
 
-    pub struct ProjectUpdateThen(httpmock::Then);
+    pub struct ProjectUpdateThen(::httpmock::Then);
     impl ProjectUpdateThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -2019,17 +1974,17 @@ pub mod operations {
         }
     }
 
-    pub struct ProjectDeleteWhen(httpmock::When);
+    pub struct ProjectDeleteWhen(::httpmock::When);
     impl ProjectDeleteWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(httpmock::Method::DELETE).path_matches(
+                inner.method(::httpmock::Method::DELETE).path_matches(
                     regex::Regex::new("^/organizations/[^/]*/projects/[^/]*$").unwrap(),
                 ),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -2052,13 +2007,13 @@ pub mod operations {
         }
     }
 
-    pub struct ProjectDeleteThen(httpmock::Then);
+    pub struct ProjectDeleteThen(::httpmock::Then);
     impl ProjectDeleteThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -2087,15 +2042,15 @@ pub mod operations {
         }
     }
 
-    pub struct DiskListWhen(httpmock::When);
+    pub struct DiskListWhen(::httpmock::When);
     impl DiskListWhen {
-        pub fn new(inner: httpmock::When) -> Self {
-            Self(inner.method(httpmock::Method::GET).path_matches(
+        pub fn new(inner: ::httpmock::When) -> Self {
+            Self(inner.method(::httpmock::Method::GET).path_matches(
                 regex::Regex::new("^/organizations/[^/]*/projects/[^/]*/disks$").unwrap(),
             ))
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -2119,17 +2074,12 @@ pub mod operations {
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("limit"))
             }
         }
 
@@ -2140,12 +2090,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("page_token"))
             }
         }
 
@@ -2156,23 +2101,18 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("sort_by", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "sort_by"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("sort_by"))
             }
         }
     }
 
-    pub struct DiskListThen(httpmock::Then);
+    pub struct DiskListThen(::httpmock::Then);
     impl DiskListThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -2206,15 +2146,15 @@ pub mod operations {
         }
     }
 
-    pub struct DiskCreateWhen(httpmock::When);
+    pub struct DiskCreateWhen(::httpmock::When);
     impl DiskCreateWhen {
-        pub fn new(inner: httpmock::When) -> Self {
-            Self(inner.method(httpmock::Method::POST).path_matches(
+        pub fn new(inner: ::httpmock::When) -> Self {
+            Self(inner.method(::httpmock::Method::POST).path_matches(
                 regex::Regex::new("^/organizations/[^/]*/projects/[^/]*/disks$").unwrap(),
             ))
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -2241,13 +2181,13 @@ pub mod operations {
         }
     }
 
-    pub struct DiskCreateThen(httpmock::Then);
+    pub struct DiskCreateThen(::httpmock::Then);
     impl DiskCreateThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -2281,15 +2221,15 @@ pub mod operations {
         }
     }
 
-    pub struct DiskViewWhen(httpmock::When);
+    pub struct DiskViewWhen(::httpmock::When);
     impl DiskViewWhen {
-        pub fn new(inner: httpmock::When) -> Self {
-            Self(inner.method(httpmock::Method::GET).path_matches(
+        pub fn new(inner: ::httpmock::When) -> Self {
+            Self(inner.method(::httpmock::Method::GET).path_matches(
                 regex::Regex::new("^/organizations/[^/]*/projects/[^/]*/disks/[^/]*$").unwrap(),
             ))
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -2321,13 +2261,13 @@ pub mod operations {
         }
     }
 
-    pub struct DiskViewThen(httpmock::Then);
+    pub struct DiskViewThen(::httpmock::Then);
     impl DiskViewThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -2361,15 +2301,15 @@ pub mod operations {
         }
     }
 
-    pub struct DiskDeleteWhen(httpmock::When);
+    pub struct DiskDeleteWhen(::httpmock::When);
     impl DiskDeleteWhen {
-        pub fn new(inner: httpmock::When) -> Self {
-            Self(inner.method(httpmock::Method::DELETE).path_matches(
+        pub fn new(inner: ::httpmock::When) -> Self {
+            Self(inner.method(::httpmock::Method::DELETE).path_matches(
                 regex::Regex::new("^/organizations/[^/]*/projects/[^/]*/disks/[^/]*$").unwrap(),
             ))
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -2401,13 +2341,13 @@ pub mod operations {
         }
     }
 
-    pub struct DiskDeleteThen(httpmock::Then);
+    pub struct DiskDeleteThen(::httpmock::Then);
     impl DiskDeleteThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -2436,11 +2376,11 @@ pub mod operations {
         }
     }
 
-    pub struct DiskMetricsListWhen(httpmock::When);
+    pub struct DiskMetricsListWhen(::httpmock::When);
     impl DiskMetricsListWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(httpmock::Method::GET).path_matches(
+                inner.method(::httpmock::Method::GET).path_matches(
                     regex::Regex::new(
                         "^/organizations/[^/]*/projects/[^/]*/disks/[^/]*/metrics/[^/]*$",
                     )
@@ -2449,7 +2389,7 @@ pub mod operations {
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -2491,33 +2431,23 @@ pub mod operations {
 
         pub fn end_time<'a, T>(self, value: T) -> Self
         where
-            T: Into<Option<&'a chrono::DateTime<chrono::offset::Utc>>>,
+            T: Into<Option<&'a ::chrono::DateTime<::chrono::offset::Utc>>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("end_time", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "end_time"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("end_time"))
             }
         }
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("limit"))
             }
         }
 
@@ -2528,39 +2458,29 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("page_token"))
             }
         }
 
         pub fn start_time<'a, T>(self, value: T) -> Self
         where
-            T: Into<Option<&'a chrono::DateTime<chrono::offset::Utc>>>,
+            T: Into<Option<&'a ::chrono::DateTime<::chrono::offset::Utc>>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("start_time", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "start_time"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("start_time"))
             }
         }
     }
 
-    pub struct DiskMetricsListThen(httpmock::Then);
+    pub struct DiskMetricsListThen(::httpmock::Then);
     impl DiskMetricsListThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -2594,15 +2514,15 @@ pub mod operations {
         }
     }
 
-    pub struct ImageListWhen(httpmock::When);
+    pub struct ImageListWhen(::httpmock::When);
     impl ImageListWhen {
-        pub fn new(inner: httpmock::When) -> Self {
-            Self(inner.method(httpmock::Method::GET).path_matches(
+        pub fn new(inner: ::httpmock::When) -> Self {
+            Self(inner.method(::httpmock::Method::GET).path_matches(
                 regex::Regex::new("^/organizations/[^/]*/projects/[^/]*/images$").unwrap(),
             ))
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -2626,17 +2546,12 @@ pub mod operations {
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("limit"))
             }
         }
 
@@ -2647,12 +2562,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("page_token"))
             }
         }
 
@@ -2663,23 +2573,18 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("sort_by", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "sort_by"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("sort_by"))
             }
         }
     }
 
-    pub struct ImageListThen(httpmock::Then);
+    pub struct ImageListThen(::httpmock::Then);
     impl ImageListThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -2713,15 +2618,15 @@ pub mod operations {
         }
     }
 
-    pub struct ImageCreateWhen(httpmock::When);
+    pub struct ImageCreateWhen(::httpmock::When);
     impl ImageCreateWhen {
-        pub fn new(inner: httpmock::When) -> Self {
-            Self(inner.method(httpmock::Method::POST).path_matches(
+        pub fn new(inner: ::httpmock::When) -> Self {
+            Self(inner.method(::httpmock::Method::POST).path_matches(
                 regex::Regex::new("^/organizations/[^/]*/projects/[^/]*/images$").unwrap(),
             ))
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -2748,13 +2653,13 @@ pub mod operations {
         }
     }
 
-    pub struct ImageCreateThen(httpmock::Then);
+    pub struct ImageCreateThen(::httpmock::Then);
     impl ImageCreateThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -2788,15 +2693,15 @@ pub mod operations {
         }
     }
 
-    pub struct ImageViewWhen(httpmock::When);
+    pub struct ImageViewWhen(::httpmock::When);
     impl ImageViewWhen {
-        pub fn new(inner: httpmock::When) -> Self {
-            Self(inner.method(httpmock::Method::GET).path_matches(
+        pub fn new(inner: ::httpmock::When) -> Self {
+            Self(inner.method(::httpmock::Method::GET).path_matches(
                 regex::Regex::new("^/organizations/[^/]*/projects/[^/]*/images/[^/]*$").unwrap(),
             ))
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -2828,13 +2733,13 @@ pub mod operations {
         }
     }
 
-    pub struct ImageViewThen(httpmock::Then);
+    pub struct ImageViewThen(::httpmock::Then);
     impl ImageViewThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -2868,15 +2773,15 @@ pub mod operations {
         }
     }
 
-    pub struct ImageDeleteWhen(httpmock::When);
+    pub struct ImageDeleteWhen(::httpmock::When);
     impl ImageDeleteWhen {
-        pub fn new(inner: httpmock::When) -> Self {
-            Self(inner.method(httpmock::Method::DELETE).path_matches(
+        pub fn new(inner: ::httpmock::When) -> Self {
+            Self(inner.method(::httpmock::Method::DELETE).path_matches(
                 regex::Regex::new("^/organizations/[^/]*/projects/[^/]*/images/[^/]*$").unwrap(),
             ))
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -2908,13 +2813,13 @@ pub mod operations {
         }
     }
 
-    pub struct ImageDeleteThen(httpmock::Then);
+    pub struct ImageDeleteThen(::httpmock::Then);
     impl ImageDeleteThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -2943,15 +2848,15 @@ pub mod operations {
         }
     }
 
-    pub struct InstanceListWhen(httpmock::When);
+    pub struct InstanceListWhen(::httpmock::When);
     impl InstanceListWhen {
-        pub fn new(inner: httpmock::When) -> Self {
-            Self(inner.method(httpmock::Method::GET).path_matches(
+        pub fn new(inner: ::httpmock::When) -> Self {
+            Self(inner.method(::httpmock::Method::GET).path_matches(
                 regex::Regex::new("^/organizations/[^/]*/projects/[^/]*/instances$").unwrap(),
             ))
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -2975,17 +2880,12 @@ pub mod operations {
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("limit"))
             }
         }
 
@@ -2996,12 +2896,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("page_token"))
             }
         }
 
@@ -3012,23 +2907,18 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("sort_by", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "sort_by"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("sort_by"))
             }
         }
     }
 
-    pub struct InstanceListThen(httpmock::Then);
+    pub struct InstanceListThen(::httpmock::Then);
     impl InstanceListThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -3062,15 +2952,15 @@ pub mod operations {
         }
     }
 
-    pub struct InstanceCreateWhen(httpmock::When);
+    pub struct InstanceCreateWhen(::httpmock::When);
     impl InstanceCreateWhen {
-        pub fn new(inner: httpmock::When) -> Self {
-            Self(inner.method(httpmock::Method::POST).path_matches(
+        pub fn new(inner: ::httpmock::When) -> Self {
+            Self(inner.method(::httpmock::Method::POST).path_matches(
                 regex::Regex::new("^/organizations/[^/]*/projects/[^/]*/instances$").unwrap(),
             ))
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -3097,13 +2987,13 @@ pub mod operations {
         }
     }
 
-    pub struct InstanceCreateThen(httpmock::Then);
+    pub struct InstanceCreateThen(::httpmock::Then);
     impl InstanceCreateThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -3137,15 +3027,15 @@ pub mod operations {
         }
     }
 
-    pub struct InstanceViewWhen(httpmock::When);
+    pub struct InstanceViewWhen(::httpmock::When);
     impl InstanceViewWhen {
-        pub fn new(inner: httpmock::When) -> Self {
-            Self(inner.method(httpmock::Method::GET).path_matches(
+        pub fn new(inner: ::httpmock::When) -> Self {
+            Self(inner.method(::httpmock::Method::GET).path_matches(
                 regex::Regex::new("^/organizations/[^/]*/projects/[^/]*/instances/[^/]*$").unwrap(),
             ))
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -3177,13 +3067,13 @@ pub mod operations {
         }
     }
 
-    pub struct InstanceViewThen(httpmock::Then);
+    pub struct InstanceViewThen(::httpmock::Then);
     impl InstanceViewThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -3217,15 +3107,15 @@ pub mod operations {
         }
     }
 
-    pub struct InstanceDeleteWhen(httpmock::When);
+    pub struct InstanceDeleteWhen(::httpmock::When);
     impl InstanceDeleteWhen {
-        pub fn new(inner: httpmock::When) -> Self {
-            Self(inner.method(httpmock::Method::DELETE).path_matches(
+        pub fn new(inner: ::httpmock::When) -> Self {
+            Self(inner.method(::httpmock::Method::DELETE).path_matches(
                 regex::Regex::new("^/organizations/[^/]*/projects/[^/]*/instances/[^/]*$").unwrap(),
             ))
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -3257,13 +3147,13 @@ pub mod operations {
         }
     }
 
-    pub struct InstanceDeleteThen(httpmock::Then);
+    pub struct InstanceDeleteThen(::httpmock::Then);
     impl InstanceDeleteThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -3292,11 +3182,11 @@ pub mod operations {
         }
     }
 
-    pub struct InstanceDiskListWhen(httpmock::When);
+    pub struct InstanceDiskListWhen(::httpmock::When);
     impl InstanceDiskListWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(httpmock::Method::GET).path_matches(
+                inner.method(::httpmock::Method::GET).path_matches(
                     regex::Regex::new(
                         "^/organizations/[^/]*/projects/[^/]*/instances/[^/]*/disks$",
                     )
@@ -3305,7 +3195,7 @@ pub mod operations {
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -3338,17 +3228,12 @@ pub mod operations {
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("limit"))
             }
         }
 
@@ -3359,12 +3244,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("page_token"))
             }
         }
 
@@ -3375,23 +3255,18 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("sort_by", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "sort_by"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("sort_by"))
             }
         }
     }
 
-    pub struct InstanceDiskListThen(httpmock::Then);
+    pub struct InstanceDiskListThen(::httpmock::Then);
     impl InstanceDiskListThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -3425,11 +3300,11 @@ pub mod operations {
         }
     }
 
-    pub struct InstanceDiskAttachWhen(httpmock::When);
+    pub struct InstanceDiskAttachWhen(::httpmock::When);
     impl InstanceDiskAttachWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(httpmock::Method::POST).path_matches(
+                inner.method(::httpmock::Method::POST).path_matches(
                     regex::Regex::new(
                         "^/organizations/[^/]*/projects/[^/]*/instances/[^/]*/disks/attach$",
                     )
@@ -3438,7 +3313,7 @@ pub mod operations {
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -3474,13 +3349,13 @@ pub mod operations {
         }
     }
 
-    pub struct InstanceDiskAttachThen(httpmock::Then);
+    pub struct InstanceDiskAttachThen(::httpmock::Then);
     impl InstanceDiskAttachThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -3514,11 +3389,11 @@ pub mod operations {
         }
     }
 
-    pub struct InstanceDiskDetachWhen(httpmock::When);
+    pub struct InstanceDiskDetachWhen(::httpmock::When);
     impl InstanceDiskDetachWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(httpmock::Method::POST).path_matches(
+                inner.method(::httpmock::Method::POST).path_matches(
                     regex::Regex::new(
                         "^/organizations/[^/]*/projects/[^/]*/instances/[^/]*/disks/detach$",
                     )
@@ -3527,7 +3402,7 @@ pub mod operations {
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -3563,13 +3438,13 @@ pub mod operations {
         }
     }
 
-    pub struct InstanceDiskDetachThen(httpmock::Then);
+    pub struct InstanceDiskDetachThen(::httpmock::Then);
     impl InstanceDiskDetachThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -3603,11 +3478,11 @@ pub mod operations {
         }
     }
 
-    pub struct InstanceExternalIpListWhen(httpmock::When);
+    pub struct InstanceExternalIpListWhen(::httpmock::When);
     impl InstanceExternalIpListWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(httpmock::Method::GET).path_matches(
+                inner.method(::httpmock::Method::GET).path_matches(
                     regex::Regex::new(
                         "^/organizations/[^/]*/projects/[^/]*/instances/[^/]*/external-ips$",
                     )
@@ -3616,7 +3491,7 @@ pub mod operations {
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -3648,13 +3523,13 @@ pub mod operations {
         }
     }
 
-    pub struct InstanceExternalIpListThen(httpmock::Then);
+    pub struct InstanceExternalIpListThen(::httpmock::Then);
     impl InstanceExternalIpListThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -3688,11 +3563,11 @@ pub mod operations {
         }
     }
 
-    pub struct InstanceMigrateWhen(httpmock::When);
+    pub struct InstanceMigrateWhen(::httpmock::When);
     impl InstanceMigrateWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(httpmock::Method::POST).path_matches(
+                inner.method(::httpmock::Method::POST).path_matches(
                     regex::Regex::new(
                         "^/organizations/[^/]*/projects/[^/]*/instances/[^/]*/migrate$",
                     )
@@ -3701,7 +3576,7 @@ pub mod operations {
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -3737,13 +3612,13 @@ pub mod operations {
         }
     }
 
-    pub struct InstanceMigrateThen(httpmock::Then);
+    pub struct InstanceMigrateThen(::httpmock::Then);
     impl InstanceMigrateThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -3777,11 +3652,11 @@ pub mod operations {
         }
     }
 
-    pub struct InstanceNetworkInterfaceListWhen(httpmock::When);
+    pub struct InstanceNetworkInterfaceListWhen(::httpmock::When);
     impl InstanceNetworkInterfaceListWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(httpmock::Method::GET).path_matches(
+                inner.method(::httpmock::Method::GET).path_matches(
                     regex::Regex::new(
                         "^/organizations/[^/]*/projects/[^/]*/instances/[^/]*/network-interfaces$",
                     )
@@ -3790,7 +3665,7 @@ pub mod operations {
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -3823,17 +3698,12 @@ pub mod operations {
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("limit"))
             }
         }
 
@@ -3844,12 +3714,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("page_token"))
             }
         }
 
@@ -3860,23 +3725,18 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("sort_by", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "sort_by"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("sort_by"))
             }
         }
     }
 
-    pub struct InstanceNetworkInterfaceListThen(httpmock::Then);
+    pub struct InstanceNetworkInterfaceListThen(::httpmock::Then);
     impl InstanceNetworkInterfaceListThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -3910,11 +3770,11 @@ pub mod operations {
         }
     }
 
-    pub struct InstanceNetworkInterfaceCreateWhen(httpmock::When);
+    pub struct InstanceNetworkInterfaceCreateWhen(::httpmock::When);
     impl InstanceNetworkInterfaceCreateWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(httpmock::Method::POST).path_matches(
+                inner.method(::httpmock::Method::POST).path_matches(
                     regex::Regex::new(
                         "^/organizations/[^/]*/projects/[^/]*/instances/[^/]*/network-interfaces$",
                     )
@@ -3923,7 +3783,7 @@ pub mod operations {
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -3959,13 +3819,13 @@ pub mod operations {
         }
     }
 
-    pub struct InstanceNetworkInterfaceCreateThen(httpmock::Then);
+    pub struct InstanceNetworkInterfaceCreateThen(::httpmock::Then);
     impl InstanceNetworkInterfaceCreateThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -3999,11 +3859,11 @@ pub mod operations {
         }
     }
 
-    pub struct InstanceNetworkInterfaceViewWhen(httpmock::When);
+    pub struct InstanceNetworkInterfaceViewWhen(::httpmock::When);
     impl InstanceNetworkInterfaceViewWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(httpmock::Method::GET).path_matches(
+                inner.method(::httpmock::Method::GET).path_matches(
                     regex::Regex::new(
                         "^/organizations/[^/]*/projects/[^/]*/instances/[^/]*/network-interfaces/\
                          [^/]*$",
@@ -4013,7 +3873,7 @@ pub mod operations {
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -4054,13 +3914,13 @@ pub mod operations {
         }
     }
 
-    pub struct InstanceNetworkInterfaceViewThen(httpmock::Then);
+    pub struct InstanceNetworkInterfaceViewThen(::httpmock::Then);
     impl InstanceNetworkInterfaceViewThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -4094,11 +3954,11 @@ pub mod operations {
         }
     }
 
-    pub struct InstanceNetworkInterfaceUpdateWhen(httpmock::When);
+    pub struct InstanceNetworkInterfaceUpdateWhen(::httpmock::When);
     impl InstanceNetworkInterfaceUpdateWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(httpmock::Method::PUT).path_matches(
+                inner.method(::httpmock::Method::PUT).path_matches(
                     regex::Regex::new(
                         "^/organizations/[^/]*/projects/[^/]*/instances/[^/]*/network-interfaces/\
                          [^/]*$",
@@ -4108,7 +3968,7 @@ pub mod operations {
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -4153,13 +4013,13 @@ pub mod operations {
         }
     }
 
-    pub struct InstanceNetworkInterfaceUpdateThen(httpmock::Then);
+    pub struct InstanceNetworkInterfaceUpdateThen(::httpmock::Then);
     impl InstanceNetworkInterfaceUpdateThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -4193,11 +4053,11 @@ pub mod operations {
         }
     }
 
-    pub struct InstanceNetworkInterfaceDeleteWhen(httpmock::When);
+    pub struct InstanceNetworkInterfaceDeleteWhen(::httpmock::When);
     impl InstanceNetworkInterfaceDeleteWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(httpmock::Method::DELETE).path_matches(
+                inner.method(::httpmock::Method::DELETE).path_matches(
                     regex::Regex::new(
                         "^/organizations/[^/]*/projects/[^/]*/instances/[^/]*/network-interfaces/\
                          [^/]*$",
@@ -4207,7 +4067,7 @@ pub mod operations {
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -4248,13 +4108,13 @@ pub mod operations {
         }
     }
 
-    pub struct InstanceNetworkInterfaceDeleteThen(httpmock::Then);
+    pub struct InstanceNetworkInterfaceDeleteThen(::httpmock::Then);
     impl InstanceNetworkInterfaceDeleteThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -4283,11 +4143,11 @@ pub mod operations {
         }
     }
 
-    pub struct InstanceRebootWhen(httpmock::When);
+    pub struct InstanceRebootWhen(::httpmock::When);
     impl InstanceRebootWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(httpmock::Method::POST).path_matches(
+                inner.method(::httpmock::Method::POST).path_matches(
                     regex::Regex::new(
                         "^/organizations/[^/]*/projects/[^/]*/instances/[^/]*/reboot$",
                     )
@@ -4296,7 +4156,7 @@ pub mod operations {
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -4328,13 +4188,13 @@ pub mod operations {
         }
     }
 
-    pub struct InstanceRebootThen(httpmock::Then);
+    pub struct InstanceRebootThen(::httpmock::Then);
     impl InstanceRebootThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -4368,11 +4228,11 @@ pub mod operations {
         }
     }
 
-    pub struct InstanceSerialConsoleWhen(httpmock::When);
+    pub struct InstanceSerialConsoleWhen(::httpmock::When);
     impl InstanceSerialConsoleWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(httpmock::Method::GET).path_matches(
+                inner.method(::httpmock::Method::GET).path_matches(
                     regex::Regex::new(
                         "^/organizations/[^/]*/projects/[^/]*/instances/[^/]*/serial-console$",
                     )
@@ -4381,7 +4241,7 @@ pub mod operations {
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -4419,12 +4279,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("from_start", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "from_start"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("from_start"))
             }
         }
 
@@ -4435,12 +4290,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("max_bytes", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "max_bytes"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("max_bytes"))
             }
         }
 
@@ -4451,23 +4301,18 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("most_recent", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "most_recent"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("most_recent"))
             }
         }
     }
 
-    pub struct InstanceSerialConsoleThen(httpmock::Then);
+    pub struct InstanceSerialConsoleThen(::httpmock::Then);
     impl InstanceSerialConsoleThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -4501,11 +4346,11 @@ pub mod operations {
         }
     }
 
-    pub struct InstanceSerialConsoleStreamWhen(httpmock::When);
+    pub struct InstanceSerialConsoleStreamWhen(::httpmock::When);
     impl InstanceSerialConsoleStreamWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(httpmock::Method::GET).path_matches(
+                inner.method(::httpmock::Method::GET).path_matches(
                     regex::Regex::new(
                         "^/organizations/[^/]*/projects/[^/]*/instances/[^/]*/serial-console/\
                          stream$",
@@ -4515,7 +4360,7 @@ pub mod operations {
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -4547,18 +4392,14 @@ pub mod operations {
         }
     }
 
-    pub struct InstanceSerialConsoleStreamThen(httpmock::Then);
+    pub struct InstanceSerialConsoleStreamThen(::httpmock::Then);
     impl InstanceSerialConsoleStreamThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
-        }
-
-        pub fn default_response(self, status: u16) -> Self {
-            Self(self.0.status(status))
         }
 
         pub fn switching_protocols(self) -> Self {
@@ -4566,11 +4407,92 @@ pub mod operations {
         }
     }
 
-    pub struct InstanceStartWhen(httpmock::When);
-    impl InstanceStartWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+    pub struct InstanceSerialConsoleStreamV2When(::httpmock::When);
+    impl InstanceSerialConsoleStreamV2When {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(httpmock::Method::POST).path_matches(
+                inner.method(::httpmock::Method::GET).path_matches(
+                    regex::Regex::new(
+                        "^/organizations/[^/]*/projects/[^/]*/instances/[^/]*/serial-console/\
+                         stream_v2$",
+                    )
+                    .unwrap(),
+                ),
+            )
+        }
+
+        pub fn into_inner(self) -> ::httpmock::When {
+            self.0
+        }
+
+        pub fn organization_name(self, value: &types::Name) -> Self {
+            let re = regex::Regex::new(&format!(
+                "^/organizations/{}/projects/.*/instances/.*/serial-console/stream_v2$",
+                value.to_string()
+            ))
+            .unwrap();
+            Self(self.0.path_matches(re))
+        }
+
+        pub fn project_name(self, value: &types::Name) -> Self {
+            let re = regex::Regex::new(&format!(
+                "^/organizations/.*/projects/{}/instances/.*/serial-console/stream_v2$",
+                value.to_string()
+            ))
+            .unwrap();
+            Self(self.0.path_matches(re))
+        }
+
+        pub fn instance_name(self, value: &types::Name) -> Self {
+            let re = regex::Regex::new(&format!(
+                "^/organizations/.*/projects/.*/instances/{}/serial-console/stream_v2$",
+                value.to_string()
+            ))
+            .unwrap();
+            Self(self.0.path_matches(re))
+        }
+    }
+
+    pub struct InstanceSerialConsoleStreamV2Then(::httpmock::Then);
+    impl InstanceSerialConsoleStreamV2Then {
+        pub fn new(inner: ::httpmock::Then) -> Self {
+            Self(inner)
+        }
+
+        pub fn into_inner(self) -> ::httpmock::Then {
+            self.0
+        }
+
+        pub fn switching_protocols(self) -> Self {
+            Self(self.0.status(101u16))
+        }
+
+        pub fn client_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 4u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn server_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 5u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+    }
+
+    pub struct InstanceStartWhen(::httpmock::When);
+    impl InstanceStartWhen {
+        pub fn new(inner: ::httpmock::When) -> Self {
+            Self(
+                inner.method(::httpmock::Method::POST).path_matches(
                     regex::Regex::new(
                         "^/organizations/[^/]*/projects/[^/]*/instances/[^/]*/start$",
                     )
@@ -4579,7 +4501,7 @@ pub mod operations {
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -4611,13 +4533,13 @@ pub mod operations {
         }
     }
 
-    pub struct InstanceStartThen(httpmock::Then);
+    pub struct InstanceStartThen(::httpmock::Then);
     impl InstanceStartThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -4651,18 +4573,18 @@ pub mod operations {
         }
     }
 
-    pub struct InstanceStopWhen(httpmock::When);
+    pub struct InstanceStopWhen(::httpmock::When);
     impl InstanceStopWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(httpmock::Method::POST).path_matches(
+                inner.method(::httpmock::Method::POST).path_matches(
                     regex::Regex::new("^/organizations/[^/]*/projects/[^/]*/instances/[^/]*/stop$")
                         .unwrap(),
                 ),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -4694,13 +4616,13 @@ pub mod operations {
         }
     }
 
-    pub struct InstanceStopThen(httpmock::Then);
+    pub struct InstanceStopThen(::httpmock::Then);
     impl InstanceStopThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -4734,15 +4656,15 @@ pub mod operations {
         }
     }
 
-    pub struct ProjectPolicyViewWhen(httpmock::When);
+    pub struct ProjectPolicyViewWhen(::httpmock::When);
     impl ProjectPolicyViewWhen {
-        pub fn new(inner: httpmock::When) -> Self {
-            Self(inner.method(httpmock::Method::GET).path_matches(
+        pub fn new(inner: ::httpmock::When) -> Self {
+            Self(inner.method(::httpmock::Method::GET).path_matches(
                 regex::Regex::new("^/organizations/[^/]*/projects/[^/]*/policy$").unwrap(),
             ))
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -4765,13 +4687,13 @@ pub mod operations {
         }
     }
 
-    pub struct ProjectPolicyViewThen(httpmock::Then);
+    pub struct ProjectPolicyViewThen(::httpmock::Then);
     impl ProjectPolicyViewThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -4805,15 +4727,15 @@ pub mod operations {
         }
     }
 
-    pub struct ProjectPolicyUpdateWhen(httpmock::When);
+    pub struct ProjectPolicyUpdateWhen(::httpmock::When);
     impl ProjectPolicyUpdateWhen {
-        pub fn new(inner: httpmock::When) -> Self {
-            Self(inner.method(httpmock::Method::PUT).path_matches(
+        pub fn new(inner: ::httpmock::When) -> Self {
+            Self(inner.method(::httpmock::Method::PUT).path_matches(
                 regex::Regex::new("^/organizations/[^/]*/projects/[^/]*/policy$").unwrap(),
             ))
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -4840,13 +4762,13 @@ pub mod operations {
         }
     }
 
-    pub struct ProjectPolicyUpdateThen(httpmock::Then);
+    pub struct ProjectPolicyUpdateThen(::httpmock::Then);
     impl ProjectPolicyUpdateThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -4880,15 +4802,15 @@ pub mod operations {
         }
     }
 
-    pub struct SnapshotListWhen(httpmock::When);
+    pub struct SnapshotListWhen(::httpmock::When);
     impl SnapshotListWhen {
-        pub fn new(inner: httpmock::When) -> Self {
-            Self(inner.method(httpmock::Method::GET).path_matches(
+        pub fn new(inner: ::httpmock::When) -> Self {
+            Self(inner.method(::httpmock::Method::GET).path_matches(
                 regex::Regex::new("^/organizations/[^/]*/projects/[^/]*/snapshots$").unwrap(),
             ))
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -4912,17 +4834,12 @@ pub mod operations {
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("limit"))
             }
         }
 
@@ -4933,12 +4850,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("page_token"))
             }
         }
 
@@ -4949,23 +4861,18 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("sort_by", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "sort_by"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("sort_by"))
             }
         }
     }
 
-    pub struct SnapshotListThen(httpmock::Then);
+    pub struct SnapshotListThen(::httpmock::Then);
     impl SnapshotListThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -4999,15 +4906,15 @@ pub mod operations {
         }
     }
 
-    pub struct SnapshotCreateWhen(httpmock::When);
+    pub struct SnapshotCreateWhen(::httpmock::When);
     impl SnapshotCreateWhen {
-        pub fn new(inner: httpmock::When) -> Self {
-            Self(inner.method(httpmock::Method::POST).path_matches(
+        pub fn new(inner: ::httpmock::When) -> Self {
+            Self(inner.method(::httpmock::Method::POST).path_matches(
                 regex::Regex::new("^/organizations/[^/]*/projects/[^/]*/snapshots$").unwrap(),
             ))
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -5034,13 +4941,13 @@ pub mod operations {
         }
     }
 
-    pub struct SnapshotCreateThen(httpmock::Then);
+    pub struct SnapshotCreateThen(::httpmock::Then);
     impl SnapshotCreateThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -5074,15 +4981,15 @@ pub mod operations {
         }
     }
 
-    pub struct SnapshotViewWhen(httpmock::When);
+    pub struct SnapshotViewWhen(::httpmock::When);
     impl SnapshotViewWhen {
-        pub fn new(inner: httpmock::When) -> Self {
-            Self(inner.method(httpmock::Method::GET).path_matches(
+        pub fn new(inner: ::httpmock::When) -> Self {
+            Self(inner.method(::httpmock::Method::GET).path_matches(
                 regex::Regex::new("^/organizations/[^/]*/projects/[^/]*/snapshots/[^/]*$").unwrap(),
             ))
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -5114,13 +5021,13 @@ pub mod operations {
         }
     }
 
-    pub struct SnapshotViewThen(httpmock::Then);
+    pub struct SnapshotViewThen(::httpmock::Then);
     impl SnapshotViewThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -5154,15 +5061,15 @@ pub mod operations {
         }
     }
 
-    pub struct SnapshotDeleteWhen(httpmock::When);
+    pub struct SnapshotDeleteWhen(::httpmock::When);
     impl SnapshotDeleteWhen {
-        pub fn new(inner: httpmock::When) -> Self {
-            Self(inner.method(httpmock::Method::DELETE).path_matches(
+        pub fn new(inner: ::httpmock::When) -> Self {
+            Self(inner.method(::httpmock::Method::DELETE).path_matches(
                 regex::Regex::new("^/organizations/[^/]*/projects/[^/]*/snapshots/[^/]*$").unwrap(),
             ))
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -5194,13 +5101,13 @@ pub mod operations {
         }
     }
 
-    pub struct SnapshotDeleteThen(httpmock::Then);
+    pub struct SnapshotDeleteThen(::httpmock::Then);
     impl SnapshotDeleteThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -5229,15 +5136,15 @@ pub mod operations {
         }
     }
 
-    pub struct VpcListWhen(httpmock::When);
+    pub struct VpcListWhen(::httpmock::When);
     impl VpcListWhen {
-        pub fn new(inner: httpmock::When) -> Self {
-            Self(inner.method(httpmock::Method::GET).path_matches(
+        pub fn new(inner: ::httpmock::When) -> Self {
+            Self(inner.method(::httpmock::Method::GET).path_matches(
                 regex::Regex::new("^/organizations/[^/]*/projects/[^/]*/vpcs$").unwrap(),
             ))
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -5261,17 +5168,12 @@ pub mod operations {
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("limit"))
             }
         }
 
@@ -5282,12 +5184,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("page_token"))
             }
         }
 
@@ -5298,23 +5195,18 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("sort_by", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "sort_by"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("sort_by"))
             }
         }
     }
 
-    pub struct VpcListThen(httpmock::Then);
+    pub struct VpcListThen(::httpmock::Then);
     impl VpcListThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -5348,15 +5240,15 @@ pub mod operations {
         }
     }
 
-    pub struct VpcCreateWhen(httpmock::When);
+    pub struct VpcCreateWhen(::httpmock::When);
     impl VpcCreateWhen {
-        pub fn new(inner: httpmock::When) -> Self {
-            Self(inner.method(httpmock::Method::POST).path_matches(
+        pub fn new(inner: ::httpmock::When) -> Self {
+            Self(inner.method(::httpmock::Method::POST).path_matches(
                 regex::Regex::new("^/organizations/[^/]*/projects/[^/]*/vpcs$").unwrap(),
             ))
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -5383,13 +5275,13 @@ pub mod operations {
         }
     }
 
-    pub struct VpcCreateThen(httpmock::Then);
+    pub struct VpcCreateThen(::httpmock::Then);
     impl VpcCreateThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -5423,15 +5315,15 @@ pub mod operations {
         }
     }
 
-    pub struct VpcViewWhen(httpmock::When);
+    pub struct VpcViewWhen(::httpmock::When);
     impl VpcViewWhen {
-        pub fn new(inner: httpmock::When) -> Self {
-            Self(inner.method(httpmock::Method::GET).path_matches(
+        pub fn new(inner: ::httpmock::When) -> Self {
+            Self(inner.method(::httpmock::Method::GET).path_matches(
                 regex::Regex::new("^/organizations/[^/]*/projects/[^/]*/vpcs/[^/]*$").unwrap(),
             ))
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -5463,13 +5355,13 @@ pub mod operations {
         }
     }
 
-    pub struct VpcViewThen(httpmock::Then);
+    pub struct VpcViewThen(::httpmock::Then);
     impl VpcViewThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -5503,15 +5395,15 @@ pub mod operations {
         }
     }
 
-    pub struct VpcUpdateWhen(httpmock::When);
+    pub struct VpcUpdateWhen(::httpmock::When);
     impl VpcUpdateWhen {
-        pub fn new(inner: httpmock::When) -> Self {
-            Self(inner.method(httpmock::Method::PUT).path_matches(
+        pub fn new(inner: ::httpmock::When) -> Self {
+            Self(inner.method(::httpmock::Method::PUT).path_matches(
                 regex::Regex::new("^/organizations/[^/]*/projects/[^/]*/vpcs/[^/]*$").unwrap(),
             ))
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -5547,13 +5439,13 @@ pub mod operations {
         }
     }
 
-    pub struct VpcUpdateThen(httpmock::Then);
+    pub struct VpcUpdateThen(::httpmock::Then);
     impl VpcUpdateThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -5587,15 +5479,15 @@ pub mod operations {
         }
     }
 
-    pub struct VpcDeleteWhen(httpmock::When);
+    pub struct VpcDeleteWhen(::httpmock::When);
     impl VpcDeleteWhen {
-        pub fn new(inner: httpmock::When) -> Self {
-            Self(inner.method(httpmock::Method::DELETE).path_matches(
+        pub fn new(inner: ::httpmock::When) -> Self {
+            Self(inner.method(::httpmock::Method::DELETE).path_matches(
                 regex::Regex::new("^/organizations/[^/]*/projects/[^/]*/vpcs/[^/]*$").unwrap(),
             ))
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -5627,13 +5519,13 @@ pub mod operations {
         }
     }
 
-    pub struct VpcDeleteThen(httpmock::Then);
+    pub struct VpcDeleteThen(::httpmock::Then);
     impl VpcDeleteThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -5662,11 +5554,11 @@ pub mod operations {
         }
     }
 
-    pub struct VpcFirewallRulesViewWhen(httpmock::When);
+    pub struct VpcFirewallRulesViewWhen(::httpmock::When);
     impl VpcFirewallRulesViewWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(httpmock::Method::GET).path_matches(
+                inner.method(::httpmock::Method::GET).path_matches(
                     regex::Regex::new(
                         "^/organizations/[^/]*/projects/[^/]*/vpcs/[^/]*/firewall/rules$",
                     )
@@ -5675,7 +5567,7 @@ pub mod operations {
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -5707,13 +5599,13 @@ pub mod operations {
         }
     }
 
-    pub struct VpcFirewallRulesViewThen(httpmock::Then);
+    pub struct VpcFirewallRulesViewThen(::httpmock::Then);
     impl VpcFirewallRulesViewThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -5747,11 +5639,11 @@ pub mod operations {
         }
     }
 
-    pub struct VpcFirewallRulesUpdateWhen(httpmock::When);
+    pub struct VpcFirewallRulesUpdateWhen(::httpmock::When);
     impl VpcFirewallRulesUpdateWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(httpmock::Method::PUT).path_matches(
+                inner.method(::httpmock::Method::PUT).path_matches(
                     regex::Regex::new(
                         "^/organizations/[^/]*/projects/[^/]*/vpcs/[^/]*/firewall/rules$",
                     )
@@ -5760,7 +5652,7 @@ pub mod operations {
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -5796,13 +5688,13 @@ pub mod operations {
         }
     }
 
-    pub struct VpcFirewallRulesUpdateThen(httpmock::Then);
+    pub struct VpcFirewallRulesUpdateThen(::httpmock::Then);
     impl VpcFirewallRulesUpdateThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -5836,18 +5728,18 @@ pub mod operations {
         }
     }
 
-    pub struct VpcRouterListWhen(httpmock::When);
+    pub struct VpcRouterListWhen(::httpmock::When);
     impl VpcRouterListWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(httpmock::Method::GET).path_matches(
+                inner.method(::httpmock::Method::GET).path_matches(
                     regex::Regex::new("^/organizations/[^/]*/projects/[^/]*/vpcs/[^/]*/routers$")
                         .unwrap(),
                 ),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -5880,17 +5772,12 @@ pub mod operations {
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("limit"))
             }
         }
 
@@ -5901,12 +5788,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("page_token"))
             }
         }
 
@@ -5917,23 +5799,18 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("sort_by", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "sort_by"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("sort_by"))
             }
         }
     }
 
-    pub struct VpcRouterListThen(httpmock::Then);
+    pub struct VpcRouterListThen(::httpmock::Then);
     impl VpcRouterListThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -5967,18 +5844,18 @@ pub mod operations {
         }
     }
 
-    pub struct VpcRouterCreateWhen(httpmock::When);
+    pub struct VpcRouterCreateWhen(::httpmock::When);
     impl VpcRouterCreateWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(httpmock::Method::POST).path_matches(
+                inner.method(::httpmock::Method::POST).path_matches(
                     regex::Regex::new("^/organizations/[^/]*/projects/[^/]*/vpcs/[^/]*/routers$")
                         .unwrap(),
                 ),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -6014,13 +5891,13 @@ pub mod operations {
         }
     }
 
-    pub struct VpcRouterCreateThen(httpmock::Then);
+    pub struct VpcRouterCreateThen(::httpmock::Then);
     impl VpcRouterCreateThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -6054,11 +5931,11 @@ pub mod operations {
         }
     }
 
-    pub struct VpcRouterViewWhen(httpmock::When);
+    pub struct VpcRouterViewWhen(::httpmock::When);
     impl VpcRouterViewWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(httpmock::Method::GET).path_matches(
+                inner.method(::httpmock::Method::GET).path_matches(
                     regex::Regex::new(
                         "^/organizations/[^/]*/projects/[^/]*/vpcs/[^/]*/routers/[^/]*$",
                     )
@@ -6067,7 +5944,7 @@ pub mod operations {
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -6108,13 +5985,13 @@ pub mod operations {
         }
     }
 
-    pub struct VpcRouterViewThen(httpmock::Then);
+    pub struct VpcRouterViewThen(::httpmock::Then);
     impl VpcRouterViewThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -6148,11 +6025,11 @@ pub mod operations {
         }
     }
 
-    pub struct VpcRouterUpdateWhen(httpmock::When);
+    pub struct VpcRouterUpdateWhen(::httpmock::When);
     impl VpcRouterUpdateWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(httpmock::Method::PUT).path_matches(
+                inner.method(::httpmock::Method::PUT).path_matches(
                     regex::Regex::new(
                         "^/organizations/[^/]*/projects/[^/]*/vpcs/[^/]*/routers/[^/]*$",
                     )
@@ -6161,7 +6038,7 @@ pub mod operations {
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -6206,13 +6083,13 @@ pub mod operations {
         }
     }
 
-    pub struct VpcRouterUpdateThen(httpmock::Then);
+    pub struct VpcRouterUpdateThen(::httpmock::Then);
     impl VpcRouterUpdateThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -6246,11 +6123,11 @@ pub mod operations {
         }
     }
 
-    pub struct VpcRouterDeleteWhen(httpmock::When);
+    pub struct VpcRouterDeleteWhen(::httpmock::When);
     impl VpcRouterDeleteWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(httpmock::Method::DELETE).path_matches(
+                inner.method(::httpmock::Method::DELETE).path_matches(
                     regex::Regex::new(
                         "^/organizations/[^/]*/projects/[^/]*/vpcs/[^/]*/routers/[^/]*$",
                     )
@@ -6259,7 +6136,7 @@ pub mod operations {
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -6300,13 +6177,13 @@ pub mod operations {
         }
     }
 
-    pub struct VpcRouterDeleteThen(httpmock::Then);
+    pub struct VpcRouterDeleteThen(::httpmock::Then);
     impl VpcRouterDeleteThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -6335,11 +6212,11 @@ pub mod operations {
         }
     }
 
-    pub struct VpcRouterRouteListWhen(httpmock::When);
+    pub struct VpcRouterRouteListWhen(::httpmock::When);
     impl VpcRouterRouteListWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(httpmock::Method::GET).path_matches(
+                inner.method(::httpmock::Method::GET).path_matches(
                     regex::Regex::new(
                         "^/organizations/[^/]*/projects/[^/]*/vpcs/[^/]*/routers/[^/]*/routes$",
                     )
@@ -6348,7 +6225,7 @@ pub mod operations {
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -6390,17 +6267,12 @@ pub mod operations {
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("limit"))
             }
         }
 
@@ -6411,12 +6283,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("page_token"))
             }
         }
 
@@ -6427,23 +6294,18 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("sort_by", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "sort_by"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("sort_by"))
             }
         }
     }
 
-    pub struct VpcRouterRouteListThen(httpmock::Then);
+    pub struct VpcRouterRouteListThen(::httpmock::Then);
     impl VpcRouterRouteListThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -6477,11 +6339,11 @@ pub mod operations {
         }
     }
 
-    pub struct VpcRouterRouteCreateWhen(httpmock::When);
+    pub struct VpcRouterRouteCreateWhen(::httpmock::When);
     impl VpcRouterRouteCreateWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(httpmock::Method::POST).path_matches(
+                inner.method(::httpmock::Method::POST).path_matches(
                     regex::Regex::new(
                         "^/organizations/[^/]*/projects/[^/]*/vpcs/[^/]*/routers/[^/]*/routes$",
                     )
@@ -6490,7 +6352,7 @@ pub mod operations {
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -6535,13 +6397,13 @@ pub mod operations {
         }
     }
 
-    pub struct VpcRouterRouteCreateThen(httpmock::Then);
+    pub struct VpcRouterRouteCreateThen(::httpmock::Then);
     impl VpcRouterRouteCreateThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -6575,11 +6437,11 @@ pub mod operations {
         }
     }
 
-    pub struct VpcRouterRouteViewWhen(httpmock::When);
+    pub struct VpcRouterRouteViewWhen(::httpmock::When);
     impl VpcRouterRouteViewWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(httpmock::Method::GET).path_matches(
+                inner.method(::httpmock::Method::GET).path_matches(
                     regex::Regex::new(
                         "^/organizations/[^/]*/projects/[^/]*/vpcs/[^/]*/routers/[^/]*/routes/[^/\
                          ]*$",
@@ -6589,7 +6451,7 @@ pub mod operations {
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -6639,13 +6501,13 @@ pub mod operations {
         }
     }
 
-    pub struct VpcRouterRouteViewThen(httpmock::Then);
+    pub struct VpcRouterRouteViewThen(::httpmock::Then);
     impl VpcRouterRouteViewThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -6679,11 +6541,11 @@ pub mod operations {
         }
     }
 
-    pub struct VpcRouterRouteUpdateWhen(httpmock::When);
+    pub struct VpcRouterRouteUpdateWhen(::httpmock::When);
     impl VpcRouterRouteUpdateWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(httpmock::Method::PUT).path_matches(
+                inner.method(::httpmock::Method::PUT).path_matches(
                     regex::Regex::new(
                         "^/organizations/[^/]*/projects/[^/]*/vpcs/[^/]*/routers/[^/]*/routes/[^/\
                          ]*$",
@@ -6693,7 +6555,7 @@ pub mod operations {
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -6747,13 +6609,13 @@ pub mod operations {
         }
     }
 
-    pub struct VpcRouterRouteUpdateThen(httpmock::Then);
+    pub struct VpcRouterRouteUpdateThen(::httpmock::Then);
     impl VpcRouterRouteUpdateThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -6787,11 +6649,11 @@ pub mod operations {
         }
     }
 
-    pub struct VpcRouterRouteDeleteWhen(httpmock::When);
+    pub struct VpcRouterRouteDeleteWhen(::httpmock::When);
     impl VpcRouterRouteDeleteWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(httpmock::Method::DELETE).path_matches(
+                inner.method(::httpmock::Method::DELETE).path_matches(
                     regex::Regex::new(
                         "^/organizations/[^/]*/projects/[^/]*/vpcs/[^/]*/routers/[^/]*/routes/[^/\
                          ]*$",
@@ -6801,7 +6663,7 @@ pub mod operations {
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -6851,13 +6713,13 @@ pub mod operations {
         }
     }
 
-    pub struct VpcRouterRouteDeleteThen(httpmock::Then);
+    pub struct VpcRouterRouteDeleteThen(::httpmock::Then);
     impl VpcRouterRouteDeleteThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -6886,18 +6748,18 @@ pub mod operations {
         }
     }
 
-    pub struct VpcSubnetListWhen(httpmock::When);
+    pub struct VpcSubnetListWhen(::httpmock::When);
     impl VpcSubnetListWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(httpmock::Method::GET).path_matches(
+                inner.method(::httpmock::Method::GET).path_matches(
                     regex::Regex::new("^/organizations/[^/]*/projects/[^/]*/vpcs/[^/]*/subnets$")
                         .unwrap(),
                 ),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -6930,17 +6792,12 @@ pub mod operations {
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("limit"))
             }
         }
 
@@ -6951,12 +6808,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("page_token"))
             }
         }
 
@@ -6967,23 +6819,18 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("sort_by", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "sort_by"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("sort_by"))
             }
         }
     }
 
-    pub struct VpcSubnetListThen(httpmock::Then);
+    pub struct VpcSubnetListThen(::httpmock::Then);
     impl VpcSubnetListThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -7017,18 +6864,18 @@ pub mod operations {
         }
     }
 
-    pub struct VpcSubnetCreateWhen(httpmock::When);
+    pub struct VpcSubnetCreateWhen(::httpmock::When);
     impl VpcSubnetCreateWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(httpmock::Method::POST).path_matches(
+                inner.method(::httpmock::Method::POST).path_matches(
                     regex::Regex::new("^/organizations/[^/]*/projects/[^/]*/vpcs/[^/]*/subnets$")
                         .unwrap(),
                 ),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -7064,13 +6911,13 @@ pub mod operations {
         }
     }
 
-    pub struct VpcSubnetCreateThen(httpmock::Then);
+    pub struct VpcSubnetCreateThen(::httpmock::Then);
     impl VpcSubnetCreateThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -7104,11 +6951,11 @@ pub mod operations {
         }
     }
 
-    pub struct VpcSubnetViewWhen(httpmock::When);
+    pub struct VpcSubnetViewWhen(::httpmock::When);
     impl VpcSubnetViewWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(httpmock::Method::GET).path_matches(
+                inner.method(::httpmock::Method::GET).path_matches(
                     regex::Regex::new(
                         "^/organizations/[^/]*/projects/[^/]*/vpcs/[^/]*/subnets/[^/]*$",
                     )
@@ -7117,7 +6964,7 @@ pub mod operations {
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -7158,13 +7005,13 @@ pub mod operations {
         }
     }
 
-    pub struct VpcSubnetViewThen(httpmock::Then);
+    pub struct VpcSubnetViewThen(::httpmock::Then);
     impl VpcSubnetViewThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -7198,11 +7045,11 @@ pub mod operations {
         }
     }
 
-    pub struct VpcSubnetUpdateWhen(httpmock::When);
+    pub struct VpcSubnetUpdateWhen(::httpmock::When);
     impl VpcSubnetUpdateWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(httpmock::Method::PUT).path_matches(
+                inner.method(::httpmock::Method::PUT).path_matches(
                     regex::Regex::new(
                         "^/organizations/[^/]*/projects/[^/]*/vpcs/[^/]*/subnets/[^/]*$",
                     )
@@ -7211,7 +7058,7 @@ pub mod operations {
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -7256,13 +7103,13 @@ pub mod operations {
         }
     }
 
-    pub struct VpcSubnetUpdateThen(httpmock::Then);
+    pub struct VpcSubnetUpdateThen(::httpmock::Then);
     impl VpcSubnetUpdateThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -7296,11 +7143,11 @@ pub mod operations {
         }
     }
 
-    pub struct VpcSubnetDeleteWhen(httpmock::When);
+    pub struct VpcSubnetDeleteWhen(::httpmock::When);
     impl VpcSubnetDeleteWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(httpmock::Method::DELETE).path_matches(
+                inner.method(::httpmock::Method::DELETE).path_matches(
                     regex::Regex::new(
                         "^/organizations/[^/]*/projects/[^/]*/vpcs/[^/]*/subnets/[^/]*$",
                     )
@@ -7309,7 +7156,7 @@ pub mod operations {
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -7350,13 +7197,13 @@ pub mod operations {
         }
     }
 
-    pub struct VpcSubnetDeleteThen(httpmock::Then);
+    pub struct VpcSubnetDeleteThen(::httpmock::Then);
     impl VpcSubnetDeleteThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -7385,11 +7232,11 @@ pub mod operations {
         }
     }
 
-    pub struct VpcSubnetListNetworkInterfacesWhen(httpmock::When);
+    pub struct VpcSubnetListNetworkInterfacesWhen(::httpmock::When);
     impl VpcSubnetListNetworkInterfacesWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(httpmock::Method::GET).path_matches(
+                inner.method(::httpmock::Method::GET).path_matches(
                     regex::Regex::new(
                         "^/organizations/[^/]*/projects/[^/]*/vpcs/[^/]*/subnets/[^/]*/\
                          network-interfaces$",
@@ -7399,7 +7246,7 @@ pub mod operations {
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -7441,17 +7288,12 @@ pub mod operations {
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("limit"))
             }
         }
 
@@ -7462,12 +7304,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("page_token"))
             }
         }
 
@@ -7478,23 +7315,18 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("sort_by", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "sort_by"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("sort_by"))
             }
         }
     }
 
-    pub struct VpcSubnetListNetworkInterfacesThen(httpmock::Then);
+    pub struct VpcSubnetListNetworkInterfacesThen(::httpmock::Then);
     impl VpcSubnetListNetworkInterfacesThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -7528,28 +7360,28 @@ pub mod operations {
         }
     }
 
-    pub struct PolicyViewWhen(httpmock::When);
+    pub struct PolicyViewWhen(::httpmock::When);
     impl PolicyViewWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::GET)
+                    .method(::httpmock::Method::GET)
                     .path_matches(regex::Regex::new("^/policy$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
     }
 
-    pub struct PolicyViewThen(httpmock::Then);
+    pub struct PolicyViewThen(::httpmock::Then);
     impl PolicyViewThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -7583,17 +7415,17 @@ pub mod operations {
         }
     }
 
-    pub struct PolicyUpdateWhen(httpmock::When);
+    pub struct PolicyUpdateWhen(::httpmock::When);
     impl PolicyUpdateWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::PUT)
+                    .method(::httpmock::Method::PUT)
                     .path_matches(regex::Regex::new("^/policy$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -7602,13 +7434,13 @@ pub mod operations {
         }
     }
 
-    pub struct PolicyUpdateThen(httpmock::Then);
+    pub struct PolicyUpdateThen(::httpmock::Then);
     impl PolicyUpdateThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -7642,33 +7474,28 @@ pub mod operations {
         }
     }
 
-    pub struct RoleListWhen(httpmock::When);
+    pub struct RoleListWhen(::httpmock::When);
     impl RoleListWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::GET)
+                    .method(::httpmock::Method::GET)
                     .path_matches(regex::Regex::new("^/roles$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("limit"))
             }
         }
 
@@ -7679,23 +7506,18 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("page_token"))
             }
         }
     }
 
-    pub struct RoleListThen(httpmock::Then);
+    pub struct RoleListThen(::httpmock::Then);
     impl RoleListThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -7729,17 +7551,17 @@ pub mod operations {
         }
     }
 
-    pub struct RoleViewWhen(httpmock::When);
+    pub struct RoleViewWhen(::httpmock::When);
     impl RoleViewWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::GET)
+                    .method(::httpmock::Method::GET)
                     .path_matches(regex::Regex::new("^/roles/[^/]*$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -7749,13 +7571,13 @@ pub mod operations {
         }
     }
 
-    pub struct RoleViewThen(httpmock::Then);
+    pub struct RoleViewThen(::httpmock::Then);
     impl RoleViewThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -7789,28 +7611,28 @@ pub mod operations {
         }
     }
 
-    pub struct SessionMeWhen(httpmock::When);
+    pub struct SessionMeWhen(::httpmock::When);
     impl SessionMeWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::GET)
+                    .method(::httpmock::Method::GET)
                     .path_matches(regex::Regex::new("^/session/me$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
     }
 
-    pub struct SessionMeThen(httpmock::Then);
+    pub struct SessionMeThen(::httpmock::Then);
     impl SessionMeThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -7844,33 +7666,28 @@ pub mod operations {
         }
     }
 
-    pub struct SessionMeGroupsWhen(httpmock::When);
+    pub struct SessionMeGroupsWhen(::httpmock::When);
     impl SessionMeGroupsWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::GET)
+                    .method(::httpmock::Method::GET)
                     .path_matches(regex::Regex::new("^/session/me/groups$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("limit"))
             }
         }
 
@@ -7881,12 +7698,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("page_token"))
             }
         }
 
@@ -7897,23 +7709,18 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("sort_by", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "sort_by"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("sort_by"))
             }
         }
     }
 
-    pub struct SessionMeGroupsThen(httpmock::Then);
+    pub struct SessionMeGroupsThen(::httpmock::Then);
     impl SessionMeGroupsThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -7947,33 +7754,28 @@ pub mod operations {
         }
     }
 
-    pub struct SessionSshkeyListWhen(httpmock::When);
+    pub struct SessionSshkeyListWhen(::httpmock::When);
     impl SessionSshkeyListWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::GET)
+                    .method(::httpmock::Method::GET)
                     .path_matches(regex::Regex::new("^/session/me/sshkeys$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("limit"))
             }
         }
 
@@ -7984,12 +7786,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("page_token"))
             }
         }
 
@@ -8000,23 +7797,18 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("sort_by", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "sort_by"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("sort_by"))
             }
         }
     }
 
-    pub struct SessionSshkeyListThen(httpmock::Then);
+    pub struct SessionSshkeyListThen(::httpmock::Then);
     impl SessionSshkeyListThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -8050,17 +7842,17 @@ pub mod operations {
         }
     }
 
-    pub struct SessionSshkeyCreateWhen(httpmock::When);
+    pub struct SessionSshkeyCreateWhen(::httpmock::When);
     impl SessionSshkeyCreateWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::POST)
+                    .method(::httpmock::Method::POST)
                     .path_matches(regex::Regex::new("^/session/me/sshkeys$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -8069,13 +7861,13 @@ pub mod operations {
         }
     }
 
-    pub struct SessionSshkeyCreateThen(httpmock::Then);
+    pub struct SessionSshkeyCreateThen(::httpmock::Then);
     impl SessionSshkeyCreateThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -8109,17 +7901,17 @@ pub mod operations {
         }
     }
 
-    pub struct SessionSshkeyViewWhen(httpmock::When);
+    pub struct SessionSshkeyViewWhen(::httpmock::When);
     impl SessionSshkeyViewWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::GET)
+                    .method(::httpmock::Method::GET)
                     .path_matches(regex::Regex::new("^/session/me/sshkeys/[^/]*$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -8130,13 +7922,13 @@ pub mod operations {
         }
     }
 
-    pub struct SessionSshkeyViewThen(httpmock::Then);
+    pub struct SessionSshkeyViewThen(::httpmock::Then);
     impl SessionSshkeyViewThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -8170,17 +7962,17 @@ pub mod operations {
         }
     }
 
-    pub struct SessionSshkeyDeleteWhen(httpmock::When);
+    pub struct SessionSshkeyDeleteWhen(::httpmock::When);
     impl SessionSshkeyDeleteWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::DELETE)
+                    .method(::httpmock::Method::DELETE)
                     .path_matches(regex::Regex::new("^/session/me/sshkeys/[^/]*$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -8191,13 +7983,13 @@ pub mod operations {
         }
     }
 
-    pub struct SessionSshkeyDeleteThen(httpmock::Then);
+    pub struct SessionSshkeyDeleteThen(::httpmock::Then);
     impl SessionSshkeyDeleteThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -8226,34 +8018,34 @@ pub mod operations {
         }
     }
 
-    pub struct SystemImageViewByIdWhen(httpmock::When);
+    pub struct SystemImageViewByIdWhen(::httpmock::When);
     impl SystemImageViewByIdWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::GET)
+                    .method(::httpmock::Method::GET)
                     .path_matches(regex::Regex::new("^/system/by-id/images/[^/]*$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
-        pub fn id(self, value: &uuid::Uuid) -> Self {
+        pub fn id(self, value: &::uuid::Uuid) -> Self {
             let re = regex::Regex::new(&format!("^/system/by-id/images/{}$", value.to_string()))
                 .unwrap();
             Self(self.0.path_matches(re))
         }
     }
 
-    pub struct SystemImageViewByIdThen(httpmock::Then);
+    pub struct SystemImageViewByIdThen(::httpmock::Then);
     impl SystemImageViewByIdThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -8287,34 +8079,34 @@ pub mod operations {
         }
     }
 
-    pub struct IpPoolViewByIdWhen(httpmock::When);
+    pub struct IpPoolViewByIdWhen(::httpmock::When);
     impl IpPoolViewByIdWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::GET)
+                    .method(::httpmock::Method::GET)
                     .path_matches(regex::Regex::new("^/system/by-id/ip-pools/[^/]*$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
-        pub fn id(self, value: &uuid::Uuid) -> Self {
+        pub fn id(self, value: &::uuid::Uuid) -> Self {
             let re = regex::Regex::new(&format!("^/system/by-id/ip-pools/{}$", value.to_string()))
                 .unwrap();
             Self(self.0.path_matches(re))
         }
     }
 
-    pub struct IpPoolViewByIdThen(httpmock::Then);
+    pub struct IpPoolViewByIdThen(::httpmock::Then);
     impl IpPoolViewByIdThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -8348,34 +8140,34 @@ pub mod operations {
         }
     }
 
-    pub struct SiloViewByIdWhen(httpmock::When);
+    pub struct SiloViewByIdWhen(::httpmock::When);
     impl SiloViewByIdWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::GET)
+                    .method(::httpmock::Method::GET)
                     .path_matches(regex::Regex::new("^/system/by-id/silos/[^/]*$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
-        pub fn id(self, value: &uuid::Uuid) -> Self {
+        pub fn id(self, value: &::uuid::Uuid) -> Self {
             let re =
                 regex::Regex::new(&format!("^/system/by-id/silos/{}$", value.to_string())).unwrap();
             Self(self.0.path_matches(re))
         }
     }
 
-    pub struct SiloViewByIdThen(httpmock::Then);
+    pub struct SiloViewByIdThen(::httpmock::Then);
     impl SiloViewByIdThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -8409,33 +8201,28 @@ pub mod operations {
         }
     }
 
-    pub struct CertificateListWhen(httpmock::When);
+    pub struct CertificateListWhen(::httpmock::When);
     impl CertificateListWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::GET)
+                    .method(::httpmock::Method::GET)
                     .path_matches(regex::Regex::new("^/system/certificates$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("limit"))
             }
         }
 
@@ -8446,12 +8233,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("page_token"))
             }
         }
 
@@ -8462,23 +8244,18 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("sort_by", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "sort_by"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("sort_by"))
             }
         }
     }
 
-    pub struct CertificateListThen(httpmock::Then);
+    pub struct CertificateListThen(::httpmock::Then);
     impl CertificateListThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -8512,17 +8289,17 @@ pub mod operations {
         }
     }
 
-    pub struct CertificateCreateWhen(httpmock::When);
+    pub struct CertificateCreateWhen(::httpmock::When);
     impl CertificateCreateWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::POST)
+                    .method(::httpmock::Method::POST)
                     .path_matches(regex::Regex::new("^/system/certificates$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -8531,13 +8308,13 @@ pub mod operations {
         }
     }
 
-    pub struct CertificateCreateThen(httpmock::Then);
+    pub struct CertificateCreateThen(::httpmock::Then);
     impl CertificateCreateThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -8571,17 +8348,17 @@ pub mod operations {
         }
     }
 
-    pub struct CertificateViewWhen(httpmock::When);
+    pub struct CertificateViewWhen(::httpmock::When);
     impl CertificateViewWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::GET)
+                    .method(::httpmock::Method::GET)
                     .path_matches(regex::Regex::new("^/system/certificates/[^/]*$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -8592,13 +8369,13 @@ pub mod operations {
         }
     }
 
-    pub struct CertificateViewThen(httpmock::Then);
+    pub struct CertificateViewThen(::httpmock::Then);
     impl CertificateViewThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -8632,17 +8409,17 @@ pub mod operations {
         }
     }
 
-    pub struct CertificateDeleteWhen(httpmock::When);
+    pub struct CertificateDeleteWhen(::httpmock::When);
     impl CertificateDeleteWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::DELETE)
+                    .method(::httpmock::Method::DELETE)
                     .path_matches(regex::Regex::new("^/system/certificates/[^/]*$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -8653,13 +8430,13 @@ pub mod operations {
         }
     }
 
-    pub struct CertificateDeleteThen(httpmock::Then);
+    pub struct CertificateDeleteThen(::httpmock::Then);
     impl CertificateDeleteThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -8688,33 +8465,28 @@ pub mod operations {
         }
     }
 
-    pub struct PhysicalDiskListWhen(httpmock::When);
+    pub struct PhysicalDiskListWhen(::httpmock::When);
     impl PhysicalDiskListWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::GET)
+                    .method(::httpmock::Method::GET)
                     .path_matches(regex::Regex::new("^/system/hardware/disks$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("limit"))
             }
         }
 
@@ -8725,12 +8497,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("page_token"))
             }
         }
 
@@ -8741,23 +8508,18 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("sort_by", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "sort_by"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("sort_by"))
             }
         }
     }
 
-    pub struct PhysicalDiskListThen(httpmock::Then);
+    pub struct PhysicalDiskListThen(::httpmock::Then);
     impl PhysicalDiskListThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -8791,33 +8553,28 @@ pub mod operations {
         }
     }
 
-    pub struct RackListWhen(httpmock::When);
+    pub struct RackListWhen(::httpmock::When);
     impl RackListWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::GET)
+                    .method(::httpmock::Method::GET)
                     .path_matches(regex::Regex::new("^/system/hardware/racks$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("limit"))
             }
         }
 
@@ -8828,12 +8585,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("page_token"))
             }
         }
 
@@ -8844,23 +8596,18 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("sort_by", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "sort_by"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("sort_by"))
             }
         }
     }
 
-    pub struct RackListThen(httpmock::Then);
+    pub struct RackListThen(::httpmock::Then);
     impl RackListThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -8894,34 +8641,34 @@ pub mod operations {
         }
     }
 
-    pub struct RackViewWhen(httpmock::When);
+    pub struct RackViewWhen(::httpmock::When);
     impl RackViewWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::GET)
+                    .method(::httpmock::Method::GET)
                     .path_matches(regex::Regex::new("^/system/hardware/racks/[^/]*$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
-        pub fn rack_id(self, value: &uuid::Uuid) -> Self {
+        pub fn rack_id(self, value: &::uuid::Uuid) -> Self {
             let re = regex::Regex::new(&format!("^/system/hardware/racks/{}$", value.to_string()))
                 .unwrap();
             Self(self.0.path_matches(re))
         }
     }
 
-    pub struct RackViewThen(httpmock::Then);
+    pub struct RackViewThen(::httpmock::Then);
     impl RackViewThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -8955,33 +8702,28 @@ pub mod operations {
         }
     }
 
-    pub struct SledListWhen(httpmock::When);
+    pub struct SledListWhen(::httpmock::When);
     impl SledListWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::GET)
+                    .method(::httpmock::Method::GET)
                     .path_matches(regex::Regex::new("^/system/hardware/sleds$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("limit"))
             }
         }
 
@@ -8992,12 +8734,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("page_token"))
             }
         }
 
@@ -9008,23 +8745,18 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("sort_by", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "sort_by"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("sort_by"))
             }
         }
     }
 
-    pub struct SledListThen(httpmock::Then);
+    pub struct SledListThen(::httpmock::Then);
     impl SledListThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -9058,34 +8790,34 @@ pub mod operations {
         }
     }
 
-    pub struct SledViewWhen(httpmock::When);
+    pub struct SledViewWhen(::httpmock::When);
     impl SledViewWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::GET)
+                    .method(::httpmock::Method::GET)
                     .path_matches(regex::Regex::new("^/system/hardware/sleds/[^/]*$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
-        pub fn sled_id(self, value: &uuid::Uuid) -> Self {
+        pub fn sled_id(self, value: &::uuid::Uuid) -> Self {
             let re = regex::Regex::new(&format!("^/system/hardware/sleds/{}$", value.to_string()))
                 .unwrap();
             Self(self.0.path_matches(re))
         }
     }
 
-    pub struct SledViewThen(httpmock::Then);
+    pub struct SledViewThen(::httpmock::Then);
     impl SledViewThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -9119,21 +8851,21 @@ pub mod operations {
         }
     }
 
-    pub struct SledPhysicalDiskListWhen(httpmock::When);
+    pub struct SledPhysicalDiskListWhen(::httpmock::When);
     impl SledPhysicalDiskListWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(httpmock::Method::GET).path_matches(
+                inner.method(::httpmock::Method::GET).path_matches(
                     regex::Regex::new("^/system/hardware/sleds/[^/]*/disks$").unwrap(),
                 ),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
-        pub fn sled_id(self, value: &uuid::Uuid) -> Self {
+        pub fn sled_id(self, value: &::uuid::Uuid) -> Self {
             let re = regex::Regex::new(&format!(
                 "^/system/hardware/sleds/{}/disks$",
                 value.to_string()
@@ -9144,17 +8876,12 @@ pub mod operations {
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("limit"))
             }
         }
 
@@ -9165,12 +8892,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("page_token"))
             }
         }
 
@@ -9181,23 +8903,18 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("sort_by", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "sort_by"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("sort_by"))
             }
         }
     }
 
-    pub struct SledPhysicalDiskListThen(httpmock::Then);
+    pub struct SledPhysicalDiskListThen(::httpmock::Then);
     impl SledPhysicalDiskListThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -9231,33 +8948,28 @@ pub mod operations {
         }
     }
 
-    pub struct SystemImageListWhen(httpmock::When);
+    pub struct SystemImageListWhen(::httpmock::When);
     impl SystemImageListWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::GET)
+                    .method(::httpmock::Method::GET)
                     .path_matches(regex::Regex::new("^/system/images$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("limit"))
             }
         }
 
@@ -9268,12 +8980,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("page_token"))
             }
         }
 
@@ -9284,23 +8991,18 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("sort_by", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "sort_by"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("sort_by"))
             }
         }
     }
 
-    pub struct SystemImageListThen(httpmock::Then);
+    pub struct SystemImageListThen(::httpmock::Then);
     impl SystemImageListThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -9334,17 +9036,17 @@ pub mod operations {
         }
     }
 
-    pub struct SystemImageCreateWhen(httpmock::When);
+    pub struct SystemImageCreateWhen(::httpmock::When);
     impl SystemImageCreateWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::POST)
+                    .method(::httpmock::Method::POST)
                     .path_matches(regex::Regex::new("^/system/images$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -9353,13 +9055,13 @@ pub mod operations {
         }
     }
 
-    pub struct SystemImageCreateThen(httpmock::Then);
+    pub struct SystemImageCreateThen(::httpmock::Then);
     impl SystemImageCreateThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -9393,17 +9095,17 @@ pub mod operations {
         }
     }
 
-    pub struct SystemImageViewWhen(httpmock::When);
+    pub struct SystemImageViewWhen(::httpmock::When);
     impl SystemImageViewWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::GET)
+                    .method(::httpmock::Method::GET)
                     .path_matches(regex::Regex::new("^/system/images/[^/]*$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -9413,13 +9115,13 @@ pub mod operations {
         }
     }
 
-    pub struct SystemImageViewThen(httpmock::Then);
+    pub struct SystemImageViewThen(::httpmock::Then);
     impl SystemImageViewThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -9453,17 +9155,17 @@ pub mod operations {
         }
     }
 
-    pub struct SystemImageDeleteWhen(httpmock::When);
+    pub struct SystemImageDeleteWhen(::httpmock::When);
     impl SystemImageDeleteWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::DELETE)
+                    .method(::httpmock::Method::DELETE)
                     .path_matches(regex::Regex::new("^/system/images/[^/]*$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -9473,13 +9175,13 @@ pub mod operations {
         }
     }
 
-    pub struct SystemImageDeleteThen(httpmock::Then);
+    pub struct SystemImageDeleteThen(::httpmock::Then);
     impl SystemImageDeleteThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -9508,33 +9210,28 @@ pub mod operations {
         }
     }
 
-    pub struct IpPoolListWhen(httpmock::When);
+    pub struct IpPoolListWhen(::httpmock::When);
     impl IpPoolListWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::GET)
+                    .method(::httpmock::Method::GET)
                     .path_matches(regex::Regex::new("^/system/ip-pools$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("limit"))
             }
         }
 
@@ -9545,12 +9242,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("page_token"))
             }
         }
 
@@ -9561,23 +9253,18 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("sort_by", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "sort_by"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("sort_by"))
             }
         }
     }
 
-    pub struct IpPoolListThen(httpmock::Then);
+    pub struct IpPoolListThen(::httpmock::Then);
     impl IpPoolListThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -9611,17 +9298,17 @@ pub mod operations {
         }
     }
 
-    pub struct IpPoolCreateWhen(httpmock::When);
+    pub struct IpPoolCreateWhen(::httpmock::When);
     impl IpPoolCreateWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::POST)
+                    .method(::httpmock::Method::POST)
                     .path_matches(regex::Regex::new("^/system/ip-pools$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -9630,13 +9317,13 @@ pub mod operations {
         }
     }
 
-    pub struct IpPoolCreateThen(httpmock::Then);
+    pub struct IpPoolCreateThen(::httpmock::Then);
     impl IpPoolCreateThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -9670,17 +9357,17 @@ pub mod operations {
         }
     }
 
-    pub struct IpPoolViewWhen(httpmock::When);
+    pub struct IpPoolViewWhen(::httpmock::When);
     impl IpPoolViewWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::GET)
+                    .method(::httpmock::Method::GET)
                     .path_matches(regex::Regex::new("^/system/ip-pools/[^/]*$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -9691,13 +9378,13 @@ pub mod operations {
         }
     }
 
-    pub struct IpPoolViewThen(httpmock::Then);
+    pub struct IpPoolViewThen(::httpmock::Then);
     impl IpPoolViewThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -9731,17 +9418,17 @@ pub mod operations {
         }
     }
 
-    pub struct IpPoolUpdateWhen(httpmock::When);
+    pub struct IpPoolUpdateWhen(::httpmock::When);
     impl IpPoolUpdateWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::PUT)
+                    .method(::httpmock::Method::PUT)
                     .path_matches(regex::Regex::new("^/system/ip-pools/[^/]*$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -9756,13 +9443,13 @@ pub mod operations {
         }
     }
 
-    pub struct IpPoolUpdateThen(httpmock::Then);
+    pub struct IpPoolUpdateThen(::httpmock::Then);
     impl IpPoolUpdateThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -9796,17 +9483,17 @@ pub mod operations {
         }
     }
 
-    pub struct IpPoolDeleteWhen(httpmock::When);
+    pub struct IpPoolDeleteWhen(::httpmock::When);
     impl IpPoolDeleteWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::DELETE)
+                    .method(::httpmock::Method::DELETE)
                     .path_matches(regex::Regex::new("^/system/ip-pools/[^/]*$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -9817,13 +9504,13 @@ pub mod operations {
         }
     }
 
-    pub struct IpPoolDeleteThen(httpmock::Then);
+    pub struct IpPoolDeleteThen(::httpmock::Then);
     impl IpPoolDeleteThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -9852,17 +9539,17 @@ pub mod operations {
         }
     }
 
-    pub struct IpPoolRangeListWhen(httpmock::When);
+    pub struct IpPoolRangeListWhen(::httpmock::When);
     impl IpPoolRangeListWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::GET)
+                    .method(::httpmock::Method::GET)
                     .path_matches(regex::Regex::new("^/system/ip-pools/[^/]*/ranges$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -9874,17 +9561,12 @@ pub mod operations {
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("limit"))
             }
         }
 
@@ -9895,23 +9577,18 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("page_token"))
             }
         }
     }
 
-    pub struct IpPoolRangeListThen(httpmock::Then);
+    pub struct IpPoolRangeListThen(::httpmock::Then);
     impl IpPoolRangeListThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -9945,17 +9622,17 @@ pub mod operations {
         }
     }
 
-    pub struct IpPoolRangeAddWhen(httpmock::When);
+    pub struct IpPoolRangeAddWhen(::httpmock::When);
     impl IpPoolRangeAddWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(httpmock::Method::POST).path_matches(
+                inner.method(::httpmock::Method::POST).path_matches(
                     regex::Regex::new("^/system/ip-pools/[^/]*/ranges/add$").unwrap(),
                 ),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -9973,13 +9650,13 @@ pub mod operations {
         }
     }
 
-    pub struct IpPoolRangeAddThen(httpmock::Then);
+    pub struct IpPoolRangeAddThen(::httpmock::Then);
     impl IpPoolRangeAddThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -10013,17 +9690,17 @@ pub mod operations {
         }
     }
 
-    pub struct IpPoolRangeRemoveWhen(httpmock::When);
+    pub struct IpPoolRangeRemoveWhen(::httpmock::When);
     impl IpPoolRangeRemoveWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(httpmock::Method::POST).path_matches(
+                inner.method(::httpmock::Method::POST).path_matches(
                     regex::Regex::new("^/system/ip-pools/[^/]*/ranges/remove$").unwrap(),
                 ),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -10041,13 +9718,13 @@ pub mod operations {
         }
     }
 
-    pub struct IpPoolRangeRemoveThen(httpmock::Then);
+    pub struct IpPoolRangeRemoveThen(::httpmock::Then);
     impl IpPoolRangeRemoveThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -10076,28 +9753,28 @@ pub mod operations {
         }
     }
 
-    pub struct IpPoolServiceViewWhen(httpmock::When);
+    pub struct IpPoolServiceViewWhen(::httpmock::When);
     impl IpPoolServiceViewWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::GET)
+                    .method(::httpmock::Method::GET)
                     .path_matches(regex::Regex::new("^/system/ip-pools-service$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
     }
 
-    pub struct IpPoolServiceViewThen(httpmock::Then);
+    pub struct IpPoolServiceViewThen(::httpmock::Then);
     impl IpPoolServiceViewThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -10131,33 +9808,28 @@ pub mod operations {
         }
     }
 
-    pub struct IpPoolServiceRangeListWhen(httpmock::When);
+    pub struct IpPoolServiceRangeListWhen(::httpmock::When);
     impl IpPoolServiceRangeListWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::GET)
+                    .method(::httpmock::Method::GET)
                     .path_matches(regex::Regex::new("^/system/ip-pools-service/ranges$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("limit"))
             }
         }
 
@@ -10168,23 +9840,18 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("page_token"))
             }
         }
     }
 
-    pub struct IpPoolServiceRangeListThen(httpmock::Then);
+    pub struct IpPoolServiceRangeListThen(::httpmock::Then);
     impl IpPoolServiceRangeListThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -10218,17 +9885,17 @@ pub mod operations {
         }
     }
 
-    pub struct IpPoolServiceRangeAddWhen(httpmock::When);
+    pub struct IpPoolServiceRangeAddWhen(::httpmock::When);
     impl IpPoolServiceRangeAddWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(httpmock::Method::POST).path_matches(
+                inner.method(::httpmock::Method::POST).path_matches(
                     regex::Regex::new("^/system/ip-pools-service/ranges/add$").unwrap(),
                 ),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -10237,13 +9904,13 @@ pub mod operations {
         }
     }
 
-    pub struct IpPoolServiceRangeAddThen(httpmock::Then);
+    pub struct IpPoolServiceRangeAddThen(::httpmock::Then);
     impl IpPoolServiceRangeAddThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -10277,15 +9944,15 @@ pub mod operations {
         }
     }
 
-    pub struct IpPoolServiceRangeRemoveWhen(httpmock::When);
+    pub struct IpPoolServiceRangeRemoveWhen(::httpmock::When);
     impl IpPoolServiceRangeRemoveWhen {
-        pub fn new(inner: httpmock::When) -> Self {
-            Self(inner.method(httpmock::Method::POST).path_matches(
+        pub fn new(inner: ::httpmock::When) -> Self {
+            Self(inner.method(::httpmock::Method::POST).path_matches(
                 regex::Regex::new("^/system/ip-pools-service/ranges/remove$").unwrap(),
             ))
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -10294,13 +9961,13 @@ pub mod operations {
         }
     }
 
-    pub struct IpPoolServiceRangeRemoveThen(httpmock::Then);
+    pub struct IpPoolServiceRangeRemoveThen(::httpmock::Then);
     impl IpPoolServiceRangeRemoveThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -10329,17 +9996,17 @@ pub mod operations {
         }
     }
 
-    pub struct SystemMetricWhen(httpmock::When);
+    pub struct SystemMetricWhen(::httpmock::When);
     impl SystemMetricWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::GET)
+                    .method(::httpmock::Method::GET)
                     .path_matches(regex::Regex::new("^/system/metrics/[^/]*$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -10351,37 +10018,27 @@ pub mod operations {
 
         pub fn end_time<'a, T>(self, value: T) -> Self
         where
-            T: Into<Option<&'a chrono::DateTime<chrono::offset::Utc>>>,
+            T: Into<Option<&'a ::chrono::DateTime<::chrono::offset::Utc>>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("end_time", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "end_time"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("end_time"))
             }
         }
 
-        pub fn id(self, value: &uuid::Uuid) -> Self {
+        pub fn id(self, value: &::uuid::Uuid) -> Self {
             Self(self.0.query_param("id", value.to_string()))
         }
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("limit"))
             }
         }
 
@@ -10392,39 +10049,29 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("page_token"))
             }
         }
 
         pub fn start_time<'a, T>(self, value: T) -> Self
         where
-            T: Into<Option<&'a chrono::DateTime<chrono::offset::Utc>>>,
+            T: Into<Option<&'a ::chrono::DateTime<::chrono::offset::Utc>>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("start_time", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "start_time"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("start_time"))
             }
         }
     }
 
-    pub struct SystemMetricThen(httpmock::Then);
+    pub struct SystemMetricThen(::httpmock::Then);
     impl SystemMetricThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -10458,28 +10105,28 @@ pub mod operations {
         }
     }
 
-    pub struct SystemPolicyViewWhen(httpmock::When);
+    pub struct SystemPolicyViewWhen(::httpmock::When);
     impl SystemPolicyViewWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::GET)
+                    .method(::httpmock::Method::GET)
                     .path_matches(regex::Regex::new("^/system/policy$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
     }
 
-    pub struct SystemPolicyViewThen(httpmock::Then);
+    pub struct SystemPolicyViewThen(::httpmock::Then);
     impl SystemPolicyViewThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -10513,17 +10160,17 @@ pub mod operations {
         }
     }
 
-    pub struct SystemPolicyUpdateWhen(httpmock::When);
+    pub struct SystemPolicyUpdateWhen(::httpmock::When);
     impl SystemPolicyUpdateWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::PUT)
+                    .method(::httpmock::Method::PUT)
                     .path_matches(regex::Regex::new("^/system/policy$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -10532,13 +10179,13 @@ pub mod operations {
         }
     }
 
-    pub struct SystemPolicyUpdateThen(httpmock::Then);
+    pub struct SystemPolicyUpdateThen(::httpmock::Then);
     impl SystemPolicyUpdateThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -10572,33 +10219,28 @@ pub mod operations {
         }
     }
 
-    pub struct SagaListWhen(httpmock::When);
+    pub struct SagaListWhen(::httpmock::When);
     impl SagaListWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::GET)
+                    .method(::httpmock::Method::GET)
                     .path_matches(regex::Regex::new("^/system/sagas$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("limit"))
             }
         }
 
@@ -10609,12 +10251,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("page_token"))
             }
         }
 
@@ -10625,23 +10262,18 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("sort_by", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "sort_by"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("sort_by"))
             }
         }
     }
 
-    pub struct SagaListThen(httpmock::Then);
+    pub struct SagaListThen(::httpmock::Then);
     impl SagaListThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -10675,33 +10307,33 @@ pub mod operations {
         }
     }
 
-    pub struct SagaViewWhen(httpmock::When);
+    pub struct SagaViewWhen(::httpmock::When);
     impl SagaViewWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::GET)
+                    .method(::httpmock::Method::GET)
                     .path_matches(regex::Regex::new("^/system/sagas/[^/]*$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
-        pub fn saga_id(self, value: &uuid::Uuid) -> Self {
+        pub fn saga_id(self, value: &::uuid::Uuid) -> Self {
             let re = regex::Regex::new(&format!("^/system/sagas/{}$", value.to_string())).unwrap();
             Self(self.0.path_matches(re))
         }
     }
 
-    pub struct SagaViewThen(httpmock::Then);
+    pub struct SagaViewThen(::httpmock::Then);
     impl SagaViewThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -10735,33 +10367,28 @@ pub mod operations {
         }
     }
 
-    pub struct SiloListWhen(httpmock::When);
+    pub struct SiloListWhen(::httpmock::When);
     impl SiloListWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::GET)
+                    .method(::httpmock::Method::GET)
                     .path_matches(regex::Regex::new("^/system/silos$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("limit"))
             }
         }
 
@@ -10772,12 +10399,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("page_token"))
             }
         }
 
@@ -10788,23 +10410,18 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("sort_by", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "sort_by"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("sort_by"))
             }
         }
     }
 
-    pub struct SiloListThen(httpmock::Then);
+    pub struct SiloListThen(::httpmock::Then);
     impl SiloListThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -10838,17 +10455,17 @@ pub mod operations {
         }
     }
 
-    pub struct SiloCreateWhen(httpmock::When);
+    pub struct SiloCreateWhen(::httpmock::When);
     impl SiloCreateWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::POST)
+                    .method(::httpmock::Method::POST)
                     .path_matches(regex::Regex::new("^/system/silos$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -10857,13 +10474,13 @@ pub mod operations {
         }
     }
 
-    pub struct SiloCreateThen(httpmock::Then);
+    pub struct SiloCreateThen(::httpmock::Then);
     impl SiloCreateThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -10897,17 +10514,17 @@ pub mod operations {
         }
     }
 
-    pub struct SiloViewWhen(httpmock::When);
+    pub struct SiloViewWhen(::httpmock::When);
     impl SiloViewWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::GET)
+                    .method(::httpmock::Method::GET)
                     .path_matches(regex::Regex::new("^/system/silos/[^/]*$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -10917,13 +10534,13 @@ pub mod operations {
         }
     }
 
-    pub struct SiloViewThen(httpmock::Then);
+    pub struct SiloViewThen(::httpmock::Then);
     impl SiloViewThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -10957,17 +10574,17 @@ pub mod operations {
         }
     }
 
-    pub struct SiloDeleteWhen(httpmock::When);
+    pub struct SiloDeleteWhen(::httpmock::When);
     impl SiloDeleteWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::DELETE)
+                    .method(::httpmock::Method::DELETE)
                     .path_matches(regex::Regex::new("^/system/silos/[^/]*$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -10977,13 +10594,13 @@ pub mod operations {
         }
     }
 
-    pub struct SiloDeleteThen(httpmock::Then);
+    pub struct SiloDeleteThen(::httpmock::Then);
     impl SiloDeleteThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -11012,15 +10629,15 @@ pub mod operations {
         }
     }
 
-    pub struct SiloIdentityProviderListWhen(httpmock::When);
+    pub struct SiloIdentityProviderListWhen(::httpmock::When);
     impl SiloIdentityProviderListWhen {
-        pub fn new(inner: httpmock::When) -> Self {
-            Self(inner.method(httpmock::Method::GET).path_matches(
+        pub fn new(inner: ::httpmock::When) -> Self {
+            Self(inner.method(::httpmock::Method::GET).path_matches(
                 regex::Regex::new("^/system/silos/[^/]*/identity-providers$").unwrap(),
             ))
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -11035,17 +10652,12 @@ pub mod operations {
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("limit"))
             }
         }
 
@@ -11056,12 +10668,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("page_token"))
             }
         }
 
@@ -11072,23 +10679,18 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("sort_by", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "sort_by"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("sort_by"))
             }
         }
     }
 
-    pub struct SiloIdentityProviderListThen(httpmock::Then);
+    pub struct SiloIdentityProviderListThen(::httpmock::Then);
     impl SiloIdentityProviderListThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -11122,15 +10724,15 @@ pub mod operations {
         }
     }
 
-    pub struct LocalIdpUserCreateWhen(httpmock::When);
+    pub struct LocalIdpUserCreateWhen(::httpmock::When);
     impl LocalIdpUserCreateWhen {
-        pub fn new(inner: httpmock::When) -> Self {
-            Self(inner.method(httpmock::Method::POST).path_matches(
+        pub fn new(inner: ::httpmock::When) -> Self {
+            Self(inner.method(::httpmock::Method::POST).path_matches(
                 regex::Regex::new("^/system/silos/[^/]*/identity-providers/local/users$").unwrap(),
             ))
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -11148,13 +10750,13 @@ pub mod operations {
         }
     }
 
-    pub struct LocalIdpUserCreateThen(httpmock::Then);
+    pub struct LocalIdpUserCreateThen(::httpmock::Then);
     impl LocalIdpUserCreateThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -11188,18 +10790,18 @@ pub mod operations {
         }
     }
 
-    pub struct LocalIdpUserDeleteWhen(httpmock::When);
+    pub struct LocalIdpUserDeleteWhen(::httpmock::When);
     impl LocalIdpUserDeleteWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(httpmock::Method::DELETE).path_matches(
+                inner.method(::httpmock::Method::DELETE).path_matches(
                     regex::Regex::new("^/system/silos/[^/]*/identity-providers/local/users/[^/]*$")
                         .unwrap(),
                 ),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -11212,7 +10814,7 @@ pub mod operations {
             Self(self.0.path_matches(re))
         }
 
-        pub fn user_id(self, value: &uuid::Uuid) -> Self {
+        pub fn user_id(self, value: &::uuid::Uuid) -> Self {
             let re = regex::Regex::new(&format!(
                 "^/system/silos/.*/identity-providers/local/users/{}$",
                 value.to_string()
@@ -11222,13 +10824,13 @@ pub mod operations {
         }
     }
 
-    pub struct LocalIdpUserDeleteThen(httpmock::Then);
+    pub struct LocalIdpUserDeleteThen(::httpmock::Then);
     impl LocalIdpUserDeleteThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -11257,11 +10859,11 @@ pub mod operations {
         }
     }
 
-    pub struct LocalIdpUserSetPasswordWhen(httpmock::When);
+    pub struct LocalIdpUserSetPasswordWhen(::httpmock::When);
     impl LocalIdpUserSetPasswordWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(httpmock::Method::POST).path_matches(
+                inner.method(::httpmock::Method::POST).path_matches(
                     regex::Regex::new(
                         "^/system/silos/[^/]*/identity-providers/local/users/[^/]*/set-password$",
                     )
@@ -11270,7 +10872,7 @@ pub mod operations {
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -11283,7 +10885,7 @@ pub mod operations {
             Self(self.0.path_matches(re))
         }
 
-        pub fn user_id(self, value: &uuid::Uuid) -> Self {
+        pub fn user_id(self, value: &::uuid::Uuid) -> Self {
             let re = regex::Regex::new(&format!(
                 "^/system/silos/.*/identity-providers/local/users/{}/set-password$",
                 value.to_string()
@@ -11297,13 +10899,13 @@ pub mod operations {
         }
     }
 
-    pub struct LocalIdpUserSetPasswordThen(httpmock::Then);
+    pub struct LocalIdpUserSetPasswordThen(::httpmock::Then);
     impl LocalIdpUserSetPasswordThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -11332,15 +10934,15 @@ pub mod operations {
         }
     }
 
-    pub struct SamlIdentityProviderCreateWhen(httpmock::When);
+    pub struct SamlIdentityProviderCreateWhen(::httpmock::When);
     impl SamlIdentityProviderCreateWhen {
-        pub fn new(inner: httpmock::When) -> Self {
-            Self(inner.method(httpmock::Method::POST).path_matches(
+        pub fn new(inner: ::httpmock::When) -> Self {
+            Self(inner.method(::httpmock::Method::POST).path_matches(
                 regex::Regex::new("^/system/silos/[^/]*/identity-providers/saml$").unwrap(),
             ))
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -11358,13 +10960,13 @@ pub mod operations {
         }
     }
 
-    pub struct SamlIdentityProviderCreateThen(httpmock::Then);
+    pub struct SamlIdentityProviderCreateThen(::httpmock::Then);
     impl SamlIdentityProviderCreateThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -11398,15 +11000,15 @@ pub mod operations {
         }
     }
 
-    pub struct SamlIdentityProviderViewWhen(httpmock::When);
+    pub struct SamlIdentityProviderViewWhen(::httpmock::When);
     impl SamlIdentityProviderViewWhen {
-        pub fn new(inner: httpmock::When) -> Self {
-            Self(inner.method(httpmock::Method::GET).path_matches(
+        pub fn new(inner: ::httpmock::When) -> Self {
+            Self(inner.method(::httpmock::Method::GET).path_matches(
                 regex::Regex::new("^/system/silos/[^/]*/identity-providers/saml/[^/]*$").unwrap(),
             ))
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -11429,13 +11031,13 @@ pub mod operations {
         }
     }
 
-    pub struct SamlIdentityProviderViewThen(httpmock::Then);
+    pub struct SamlIdentityProviderViewThen(::httpmock::Then);
     impl SamlIdentityProviderViewThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -11469,17 +11071,17 @@ pub mod operations {
         }
     }
 
-    pub struct SiloPolicyViewWhen(httpmock::When);
+    pub struct SiloPolicyViewWhen(::httpmock::When);
     impl SiloPolicyViewWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::GET)
+                    .method(::httpmock::Method::GET)
                     .path_matches(regex::Regex::new("^/system/silos/[^/]*/policy$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -11490,13 +11092,13 @@ pub mod operations {
         }
     }
 
-    pub struct SiloPolicyViewThen(httpmock::Then);
+    pub struct SiloPolicyViewThen(::httpmock::Then);
     impl SiloPolicyViewThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -11530,17 +11132,17 @@ pub mod operations {
         }
     }
 
-    pub struct SiloPolicyUpdateWhen(httpmock::When);
+    pub struct SiloPolicyUpdateWhen(::httpmock::When);
     impl SiloPolicyUpdateWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::PUT)
+                    .method(::httpmock::Method::PUT)
                     .path_matches(regex::Regex::new("^/system/silos/[^/]*/policy$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -11555,13 +11157,13 @@ pub mod operations {
         }
     }
 
-    pub struct SiloPolicyUpdateThen(httpmock::Then);
+    pub struct SiloPolicyUpdateThen(::httpmock::Then);
     impl SiloPolicyUpdateThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -11595,17 +11197,17 @@ pub mod operations {
         }
     }
 
-    pub struct SiloUsersListWhen(httpmock::When);
+    pub struct SiloUsersListWhen(::httpmock::When);
     impl SiloUsersListWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::GET)
+                    .method(::httpmock::Method::GET)
                     .path_matches(regex::Regex::new("^/system/silos/[^/]*/users/all$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -11617,17 +11219,12 @@ pub mod operations {
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("limit"))
             }
         }
 
@@ -11638,12 +11235,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("page_token"))
             }
         }
 
@@ -11654,23 +11246,18 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("sort_by", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "sort_by"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("sort_by"))
             }
         }
     }
 
-    pub struct SiloUsersListThen(httpmock::Then);
+    pub struct SiloUsersListThen(::httpmock::Then);
     impl SiloUsersListThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -11704,17 +11291,17 @@ pub mod operations {
         }
     }
 
-    pub struct SiloUserViewWhen(httpmock::When);
+    pub struct SiloUserViewWhen(::httpmock::When);
     impl SiloUserViewWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(httpmock::Method::GET).path_matches(
+                inner.method(::httpmock::Method::GET).path_matches(
                     regex::Regex::new("^/system/silos/[^/]*/users/id/[^/]*$").unwrap(),
                 ),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -11727,7 +11314,7 @@ pub mod operations {
             Self(self.0.path_matches(re))
         }
 
-        pub fn user_id(self, value: &uuid::Uuid) -> Self {
+        pub fn user_id(self, value: &::uuid::Uuid) -> Self {
             let re = regex::Regex::new(&format!(
                 "^/system/silos/.*/users/id/{}$",
                 value.to_string()
@@ -11737,13 +11324,13 @@ pub mod operations {
         }
     }
 
-    pub struct SiloUserViewThen(httpmock::Then);
+    pub struct SiloUserViewThen(::httpmock::Then);
     impl SiloUserViewThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -11777,33 +11364,28 @@ pub mod operations {
         }
     }
 
-    pub struct SystemUserListWhen(httpmock::When);
+    pub struct SystemUserListWhen(::httpmock::When);
     impl SystemUserListWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::GET)
+                    .method(::httpmock::Method::GET)
                     .path_matches(regex::Regex::new("^/system/user$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("limit"))
             }
         }
 
@@ -11814,12 +11396,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("page_token"))
             }
         }
 
@@ -11830,23 +11407,18 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("sort_by", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "sort_by"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("sort_by"))
             }
         }
     }
 
-    pub struct SystemUserListThen(httpmock::Then);
+    pub struct SystemUserListThen(::httpmock::Then);
     impl SystemUserListThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -11880,17 +11452,17 @@ pub mod operations {
         }
     }
 
-    pub struct SystemUserViewWhen(httpmock::When);
+    pub struct SystemUserViewWhen(::httpmock::When);
     impl SystemUserViewWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::GET)
+                    .method(::httpmock::Method::GET)
                     .path_matches(regex::Regex::new("^/system/user/[^/]*$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -11900,13 +11472,13 @@ pub mod operations {
         }
     }
 
-    pub struct SystemUserViewThen(httpmock::Then);
+    pub struct SystemUserViewThen(::httpmock::Then);
     impl SystemUserViewThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -11940,33 +11512,28 @@ pub mod operations {
         }
     }
 
-    pub struct TimeseriesSchemaGetWhen(httpmock::When);
+    pub struct TimeseriesSchemaGetWhen(::httpmock::When);
     impl TimeseriesSchemaGetWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::GET)
+                    .method(::httpmock::Method::GET)
                     .path_matches(regex::Regex::new("^/timeseries/schema$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("limit"))
             }
         }
 
@@ -11977,23 +11544,18 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("page_token"))
             }
         }
     }
 
-    pub struct TimeseriesSchemaGetThen(httpmock::Then);
+    pub struct TimeseriesSchemaGetThen(::httpmock::Then);
     impl TimeseriesSchemaGetThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -12027,33 +11589,28 @@ pub mod operations {
         }
     }
 
-    pub struct UserListWhen(httpmock::When);
+    pub struct UserListWhen(::httpmock::When);
     impl UserListWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::GET)
+                    .method(::httpmock::Method::GET)
                     .path_matches(regex::Regex::new("^/users$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("limit"))
             }
         }
 
@@ -12064,12 +11621,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("page_token"))
             }
         }
 
@@ -12080,23 +11632,18 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("sort_by", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "sort_by"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("sort_by"))
             }
         }
     }
 
-    pub struct UserListThen(httpmock::Then);
+    pub struct UserListThen(::httpmock::Then);
     impl UserListThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -12130,33 +11677,28 @@ pub mod operations {
         }
     }
 
-    pub struct DiskListV1When(httpmock::When);
+    pub struct DiskListV1When(::httpmock::When);
     impl DiskListV1When {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::GET)
+                    .method(::httpmock::Method::GET)
                     .path_matches(regex::Regex::new("^/v1/disks$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("limit"))
             }
         }
 
@@ -12167,12 +11709,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("organization", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "organization"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("organization"))
             }
         }
 
@@ -12183,12 +11720,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("page_token"))
             }
         }
 
@@ -12199,12 +11731,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("project", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "project"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("project"))
             }
         }
 
@@ -12215,23 +11742,18 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("sort_by", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "sort_by"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("sort_by"))
             }
         }
     }
 
-    pub struct DiskListV1Then(httpmock::Then);
+    pub struct DiskListV1Then(::httpmock::Then);
     impl DiskListV1Then {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -12265,17 +11787,17 @@ pub mod operations {
         }
     }
 
-    pub struct DiskCreateV1When(httpmock::When);
+    pub struct DiskCreateV1When(::httpmock::When);
     impl DiskCreateV1When {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::POST)
+                    .method(::httpmock::Method::POST)
                     .path_matches(regex::Regex::new("^/v1/disks$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -12286,12 +11808,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("organization", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "organization"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("organization"))
             }
         }
 
@@ -12304,13 +11821,13 @@ pub mod operations {
         }
     }
 
-    pub struct DiskCreateV1Then(httpmock::Then);
+    pub struct DiskCreateV1Then(::httpmock::Then);
     impl DiskCreateV1Then {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -12344,17 +11861,17 @@ pub mod operations {
         }
     }
 
-    pub struct DiskViewV1When(httpmock::When);
+    pub struct DiskViewV1When(::httpmock::When);
     impl DiskViewV1When {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::GET)
+                    .method(::httpmock::Method::GET)
                     .path_matches(regex::Regex::new("^/v1/disks/[^/]*$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -12370,12 +11887,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("organization", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "organization"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("organization"))
             }
         }
 
@@ -12386,23 +11898,18 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("project", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "project"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("project"))
             }
         }
     }
 
-    pub struct DiskViewV1Then(httpmock::Then);
+    pub struct DiskViewV1Then(::httpmock::Then);
     impl DiskViewV1Then {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -12436,17 +11943,17 @@ pub mod operations {
         }
     }
 
-    pub struct DiskDeleteV1When(httpmock::When);
+    pub struct DiskDeleteV1When(::httpmock::When);
     impl DiskDeleteV1When {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::DELETE)
+                    .method(::httpmock::Method::DELETE)
                     .path_matches(regex::Regex::new("^/v1/disks/[^/]*$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -12462,12 +11969,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("organization", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "organization"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("organization"))
             }
         }
 
@@ -12478,23 +11980,18 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("project", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "project"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("project"))
             }
         }
     }
 
-    pub struct DiskDeleteV1Then(httpmock::Then);
+    pub struct DiskDeleteV1Then(::httpmock::Then);
     impl DiskDeleteV1Then {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -12523,33 +12020,28 @@ pub mod operations {
         }
     }
 
-    pub struct InstanceListV1When(httpmock::When);
+    pub struct InstanceListV1When(::httpmock::When);
     impl InstanceListV1When {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::GET)
+                    .method(::httpmock::Method::GET)
                     .path_matches(regex::Regex::new("^/v1/instances$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("limit"))
             }
         }
 
@@ -12560,12 +12052,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("organization", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "organization"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("organization"))
             }
         }
 
@@ -12576,12 +12063,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("page_token"))
             }
         }
 
@@ -12592,12 +12074,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("project", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "project"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("project"))
             }
         }
 
@@ -12608,23 +12085,18 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("sort_by", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "sort_by"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("sort_by"))
             }
         }
     }
 
-    pub struct InstanceListV1Then(httpmock::Then);
+    pub struct InstanceListV1Then(::httpmock::Then);
     impl InstanceListV1Then {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -12658,17 +12130,17 @@ pub mod operations {
         }
     }
 
-    pub struct InstanceCreateV1When(httpmock::When);
+    pub struct InstanceCreateV1When(::httpmock::When);
     impl InstanceCreateV1When {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::POST)
+                    .method(::httpmock::Method::POST)
                     .path_matches(regex::Regex::new("^/v1/instances$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -12679,12 +12151,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("organization", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "organization"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("organization"))
             }
         }
 
@@ -12697,13 +12164,13 @@ pub mod operations {
         }
     }
 
-    pub struct InstanceCreateV1Then(httpmock::Then);
+    pub struct InstanceCreateV1Then(::httpmock::Then);
     impl InstanceCreateV1Then {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -12737,17 +12204,17 @@ pub mod operations {
         }
     }
 
-    pub struct InstanceViewV1When(httpmock::When);
+    pub struct InstanceViewV1When(::httpmock::When);
     impl InstanceViewV1When {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::GET)
+                    .method(::httpmock::Method::GET)
                     .path_matches(regex::Regex::new("^/v1/instances/[^/]*$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -12763,12 +12230,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("organization", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "organization"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("organization"))
             }
         }
 
@@ -12779,23 +12241,18 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("project", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "project"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("project"))
             }
         }
     }
 
-    pub struct InstanceViewV1Then(httpmock::Then);
+    pub struct InstanceViewV1Then(::httpmock::Then);
     impl InstanceViewV1Then {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -12829,17 +12286,17 @@ pub mod operations {
         }
     }
 
-    pub struct InstanceDeleteV1When(httpmock::When);
+    pub struct InstanceDeleteV1When(::httpmock::When);
     impl InstanceDeleteV1When {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::DELETE)
+                    .method(::httpmock::Method::DELETE)
                     .path_matches(regex::Regex::new("^/v1/instances/[^/]*$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -12855,12 +12312,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("organization", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "organization"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("organization"))
             }
         }
 
@@ -12871,23 +12323,18 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("project", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "project"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("project"))
             }
         }
     }
 
-    pub struct InstanceDeleteV1Then(httpmock::Then);
+    pub struct InstanceDeleteV1Then(::httpmock::Then);
     impl InstanceDeleteV1Then {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -12916,17 +12363,17 @@ pub mod operations {
         }
     }
 
-    pub struct InstanceDiskListV1When(httpmock::When);
+    pub struct InstanceDiskListV1When(::httpmock::When);
     impl InstanceDiskListV1When {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::GET)
+                    .method(::httpmock::Method::GET)
                     .path_matches(regex::Regex::new("^/v1/instances/[^/]*/disks$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -12938,17 +12385,12 @@ pub mod operations {
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("limit"))
             }
         }
 
@@ -12959,12 +12401,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("organization", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "organization"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("organization"))
             }
         }
 
@@ -12975,12 +12412,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("page_token"))
             }
         }
 
@@ -12991,12 +12423,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("project", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "project"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("project"))
             }
         }
 
@@ -13007,23 +12434,18 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("sort_by", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "sort_by"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("sort_by"))
             }
         }
     }
 
-    pub struct InstanceDiskListV1Then(httpmock::Then);
+    pub struct InstanceDiskListV1Then(::httpmock::Then);
     impl InstanceDiskListV1Then {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -13057,17 +12479,17 @@ pub mod operations {
         }
     }
 
-    pub struct InstanceDiskAttachV1When(httpmock::When);
+    pub struct InstanceDiskAttachV1When(::httpmock::When);
     impl InstanceDiskAttachV1When {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::POST)
+                    .method(::httpmock::Method::POST)
                     .path_matches(regex::Regex::new("^/v1/instances/[^/]*/disks/attach$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -13087,12 +12509,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("organization", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "organization"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("organization"))
             }
         }
 
@@ -13103,12 +12520,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("project", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "project"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("project"))
             }
         }
 
@@ -13117,13 +12529,13 @@ pub mod operations {
         }
     }
 
-    pub struct InstanceDiskAttachV1Then(httpmock::Then);
+    pub struct InstanceDiskAttachV1Then(::httpmock::Then);
     impl InstanceDiskAttachV1Then {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -13157,17 +12569,17 @@ pub mod operations {
         }
     }
 
-    pub struct InstanceDiskDetachV1When(httpmock::When);
+    pub struct InstanceDiskDetachV1When(::httpmock::When);
     impl InstanceDiskDetachV1When {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::POST)
+                    .method(::httpmock::Method::POST)
                     .path_matches(regex::Regex::new("^/v1/instances/[^/]*/disks/detach$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -13187,12 +12599,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("organization", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "organization"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("organization"))
             }
         }
 
@@ -13203,12 +12610,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("project", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "project"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("project"))
             }
         }
 
@@ -13217,13 +12619,13 @@ pub mod operations {
         }
     }
 
-    pub struct InstanceDiskDetachV1Then(httpmock::Then);
+    pub struct InstanceDiskDetachV1Then(::httpmock::Then);
     impl InstanceDiskDetachV1Then {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -13257,17 +12659,17 @@ pub mod operations {
         }
     }
 
-    pub struct InstanceMigrateV1When(httpmock::When);
+    pub struct InstanceMigrateV1When(::httpmock::When);
     impl InstanceMigrateV1When {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::POST)
+                    .method(::httpmock::Method::POST)
                     .path_matches(regex::Regex::new("^/v1/instances/[^/]*/migrate$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -13284,12 +12686,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("organization", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "organization"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("organization"))
             }
         }
 
@@ -13300,12 +12697,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("project", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "project"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("project"))
             }
         }
 
@@ -13314,13 +12706,13 @@ pub mod operations {
         }
     }
 
-    pub struct InstanceMigrateV1Then(httpmock::Then);
+    pub struct InstanceMigrateV1Then(::httpmock::Then);
     impl InstanceMigrateV1Then {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -13354,17 +12746,17 @@ pub mod operations {
         }
     }
 
-    pub struct InstanceRebootV1When(httpmock::When);
+    pub struct InstanceRebootV1When(::httpmock::When);
     impl InstanceRebootV1When {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::POST)
+                    .method(::httpmock::Method::POST)
                     .path_matches(regex::Regex::new("^/v1/instances/[^/]*/reboot$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -13381,12 +12773,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("organization", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "organization"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("organization"))
             }
         }
 
@@ -13397,23 +12784,18 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("project", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "project"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("project"))
             }
         }
     }
 
-    pub struct InstanceRebootV1Then(httpmock::Then);
+    pub struct InstanceRebootV1Then(::httpmock::Then);
     impl InstanceRebootV1Then {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -13447,17 +12829,17 @@ pub mod operations {
         }
     }
 
-    pub struct InstanceSerialConsoleV1When(httpmock::When);
+    pub struct InstanceSerialConsoleV1When(::httpmock::When);
     impl InstanceSerialConsoleV1When {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(httpmock::Method::GET).path_matches(
+                inner.method(::httpmock::Method::GET).path_matches(
                     regex::Regex::new("^/v1/instances/[^/]*/serial-console$").unwrap(),
                 ),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -13477,12 +12859,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("from_start", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "from_start"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("from_start"))
             }
         }
 
@@ -13493,12 +12870,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("max_bytes", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "max_bytes"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("max_bytes"))
             }
         }
 
@@ -13509,12 +12881,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("most_recent", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "most_recent"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("most_recent"))
             }
         }
 
@@ -13525,12 +12892,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("organization", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "organization"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("organization"))
             }
         }
 
@@ -13541,23 +12903,18 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("project", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "project"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("project"))
             }
         }
     }
 
-    pub struct InstanceSerialConsoleV1Then(httpmock::Then);
+    pub struct InstanceSerialConsoleV1Then(::httpmock::Then);
     impl InstanceSerialConsoleV1Then {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -13591,15 +12948,15 @@ pub mod operations {
         }
     }
 
-    pub struct InstanceSerialConsoleStreamV1When(httpmock::When);
+    pub struct InstanceSerialConsoleStreamV1When(::httpmock::When);
     impl InstanceSerialConsoleStreamV1When {
-        pub fn new(inner: httpmock::When) -> Self {
-            Self(inner.method(httpmock::Method::GET).path_matches(
+        pub fn new(inner: ::httpmock::When) -> Self {
+            Self(inner.method(::httpmock::Method::GET).path_matches(
                 regex::Regex::new("^/v1/instances/[^/]*/serial-console/stream$").unwrap(),
             ))
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -13619,12 +12976,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("organization", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "organization"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("organization"))
             }
         }
 
@@ -13635,46 +12987,57 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("project", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "project"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("project"))
             }
         }
     }
 
-    pub struct InstanceSerialConsoleStreamV1Then(httpmock::Then);
+    pub struct InstanceSerialConsoleStreamV1Then(::httpmock::Then);
     impl InstanceSerialConsoleStreamV1Then {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
-        }
-
-        pub fn default_response(self, status: u16) -> Self {
-            Self(self.0.status(status))
         }
 
         pub fn switching_protocols(self) -> Self {
             Self(self.0.status(101u16))
         }
+
+        pub fn client_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 4u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
+
+        pub fn server_error(self, status: u16, value: &types::Error) -> Self {
+            assert_eq!(status / 100u16, 5u16);
+            Self(
+                self.0
+                    .status(status)
+                    .header("content-type", "application/json")
+                    .json_body_obj(value),
+            )
+        }
     }
 
-    pub struct InstanceStartV1When(httpmock::When);
+    pub struct InstanceStartV1When(::httpmock::When);
     impl InstanceStartV1When {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::POST)
+                    .method(::httpmock::Method::POST)
                     .path_matches(regex::Regex::new("^/v1/instances/[^/]*/start$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -13691,12 +13054,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("organization", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "organization"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("organization"))
             }
         }
 
@@ -13707,23 +13065,18 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("project", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "project"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("project"))
             }
         }
     }
 
-    pub struct InstanceStartV1Then(httpmock::Then);
+    pub struct InstanceStartV1Then(::httpmock::Then);
     impl InstanceStartV1Then {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -13757,17 +13110,17 @@ pub mod operations {
         }
     }
 
-    pub struct InstanceStopV1When(httpmock::When);
+    pub struct InstanceStopV1When(::httpmock::When);
     impl InstanceStopV1When {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::POST)
+                    .method(::httpmock::Method::POST)
                     .path_matches(regex::Regex::new("^/v1/instances/[^/]*/stop$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -13784,12 +13137,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("organization", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "organization"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("organization"))
             }
         }
 
@@ -13800,23 +13148,18 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("project", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "project"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("project"))
             }
         }
     }
 
-    pub struct InstanceStopV1Then(httpmock::Then);
+    pub struct InstanceStopV1Then(::httpmock::Then);
     impl InstanceStopV1Then {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -13850,33 +13193,28 @@ pub mod operations {
         }
     }
 
-    pub struct OrganizationListV1When(httpmock::When);
+    pub struct OrganizationListV1When(::httpmock::When);
     impl OrganizationListV1When {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::GET)
+                    .method(::httpmock::Method::GET)
                     .path_matches(regex::Regex::new("^/v1/organizations$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("limit"))
             }
         }
 
@@ -13887,12 +13225,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("page_token"))
             }
         }
 
@@ -13903,23 +13236,18 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("sort_by", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "sort_by"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("sort_by"))
             }
         }
     }
 
-    pub struct OrganizationListV1Then(httpmock::Then);
+    pub struct OrganizationListV1Then(::httpmock::Then);
     impl OrganizationListV1Then {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -13953,17 +13281,17 @@ pub mod operations {
         }
     }
 
-    pub struct OrganizationCreateV1When(httpmock::When);
+    pub struct OrganizationCreateV1When(::httpmock::When);
     impl OrganizationCreateV1When {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::POST)
+                    .method(::httpmock::Method::POST)
                     .path_matches(regex::Regex::new("^/v1/organizations$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -13972,13 +13300,13 @@ pub mod operations {
         }
     }
 
-    pub struct OrganizationCreateV1Then(httpmock::Then);
+    pub struct OrganizationCreateV1Then(::httpmock::Then);
     impl OrganizationCreateV1Then {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -14012,17 +13340,17 @@ pub mod operations {
         }
     }
 
-    pub struct OrganizationViewV1When(httpmock::When);
+    pub struct OrganizationViewV1When(::httpmock::When);
     impl OrganizationViewV1When {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::GET)
+                    .method(::httpmock::Method::GET)
                     .path_matches(regex::Regex::new("^/v1/organizations/[^/]*$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -14033,13 +13361,13 @@ pub mod operations {
         }
     }
 
-    pub struct OrganizationViewV1Then(httpmock::Then);
+    pub struct OrganizationViewV1Then(::httpmock::Then);
     impl OrganizationViewV1Then {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -14073,17 +13401,17 @@ pub mod operations {
         }
     }
 
-    pub struct OrganizationUpdateV1When(httpmock::When);
+    pub struct OrganizationUpdateV1When(::httpmock::When);
     impl OrganizationUpdateV1When {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::PUT)
+                    .method(::httpmock::Method::PUT)
                     .path_matches(regex::Regex::new("^/v1/organizations/[^/]*$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -14098,13 +13426,13 @@ pub mod operations {
         }
     }
 
-    pub struct OrganizationUpdateV1Then(httpmock::Then);
+    pub struct OrganizationUpdateV1Then(::httpmock::Then);
     impl OrganizationUpdateV1Then {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -14138,17 +13466,17 @@ pub mod operations {
         }
     }
 
-    pub struct OrganizationDeleteV1When(httpmock::When);
+    pub struct OrganizationDeleteV1When(::httpmock::When);
     impl OrganizationDeleteV1When {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::DELETE)
+                    .method(::httpmock::Method::DELETE)
                     .path_matches(regex::Regex::new("^/v1/organizations/[^/]*$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -14159,13 +13487,13 @@ pub mod operations {
         }
     }
 
-    pub struct OrganizationDeleteV1Then(httpmock::Then);
+    pub struct OrganizationDeleteV1Then(::httpmock::Then);
     impl OrganizationDeleteV1Then {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -14194,17 +13522,17 @@ pub mod operations {
         }
     }
 
-    pub struct OrganizationPolicyViewV1When(httpmock::When);
+    pub struct OrganizationPolicyViewV1When(::httpmock::When);
     impl OrganizationPolicyViewV1When {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::GET)
+                    .method(::httpmock::Method::GET)
                     .path_matches(regex::Regex::new("^/v1/organizations/[^/]*/policy$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -14216,13 +13544,13 @@ pub mod operations {
         }
     }
 
-    pub struct OrganizationPolicyViewV1Then(httpmock::Then);
+    pub struct OrganizationPolicyViewV1Then(::httpmock::Then);
     impl OrganizationPolicyViewV1Then {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -14256,17 +13584,17 @@ pub mod operations {
         }
     }
 
-    pub struct OrganizationPolicyUpdateV1When(httpmock::When);
+    pub struct OrganizationPolicyUpdateV1When(::httpmock::When);
     impl OrganizationPolicyUpdateV1When {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::PUT)
+                    .method(::httpmock::Method::PUT)
                     .path_matches(regex::Regex::new("^/v1/organizations/[^/]*/policy$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -14282,13 +13610,13 @@ pub mod operations {
         }
     }
 
-    pub struct OrganizationPolicyUpdateV1Then(httpmock::Then);
+    pub struct OrganizationPolicyUpdateV1Then(::httpmock::Then);
     impl OrganizationPolicyUpdateV1Then {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -14322,33 +13650,28 @@ pub mod operations {
         }
     }
 
-    pub struct ProjectListV1When(httpmock::When);
+    pub struct ProjectListV1When(::httpmock::When);
     impl ProjectListV1When {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::GET)
+                    .method(::httpmock::Method::GET)
                     .path_matches(regex::Regex::new("^/v1/projects$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("limit"))
             }
         }
 
@@ -14359,12 +13682,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("organization", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "organization"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("organization"))
             }
         }
 
@@ -14375,12 +13693,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("page_token"))
             }
         }
 
@@ -14391,23 +13704,18 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("sort_by", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "sort_by"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("sort_by"))
             }
         }
     }
 
-    pub struct ProjectListV1Then(httpmock::Then);
+    pub struct ProjectListV1Then(::httpmock::Then);
     impl ProjectListV1Then {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -14441,17 +13749,17 @@ pub mod operations {
         }
     }
 
-    pub struct ProjectCreateV1When(httpmock::When);
+    pub struct ProjectCreateV1When(::httpmock::When);
     impl ProjectCreateV1When {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::POST)
+                    .method(::httpmock::Method::POST)
                     .path_matches(regex::Regex::new("^/v1/projects$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -14464,13 +13772,13 @@ pub mod operations {
         }
     }
 
-    pub struct ProjectCreateV1Then(httpmock::Then);
+    pub struct ProjectCreateV1Then(::httpmock::Then);
     impl ProjectCreateV1Then {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -14504,17 +13812,17 @@ pub mod operations {
         }
     }
 
-    pub struct ProjectViewV1When(httpmock::When);
+    pub struct ProjectViewV1When(::httpmock::When);
     impl ProjectViewV1When {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::GET)
+                    .method(::httpmock::Method::GET)
                     .path_matches(regex::Regex::new("^/v1/projects/[^/]*$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -14530,23 +13838,18 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("organization", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "organization"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("organization"))
             }
         }
     }
 
-    pub struct ProjectViewV1Then(httpmock::Then);
+    pub struct ProjectViewV1Then(::httpmock::Then);
     impl ProjectViewV1Then {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -14580,17 +13883,17 @@ pub mod operations {
         }
     }
 
-    pub struct ProjectUpdateV1When(httpmock::When);
+    pub struct ProjectUpdateV1When(::httpmock::When);
     impl ProjectUpdateV1When {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::PUT)
+                    .method(::httpmock::Method::PUT)
                     .path_matches(regex::Regex::new("^/v1/projects/[^/]*$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -14606,12 +13909,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("organization", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "organization"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("organization"))
             }
         }
 
@@ -14620,13 +13918,13 @@ pub mod operations {
         }
     }
 
-    pub struct ProjectUpdateV1Then(httpmock::Then);
+    pub struct ProjectUpdateV1Then(::httpmock::Then);
     impl ProjectUpdateV1Then {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -14660,17 +13958,17 @@ pub mod operations {
         }
     }
 
-    pub struct ProjectDeleteV1When(httpmock::When);
+    pub struct ProjectDeleteV1When(::httpmock::When);
     impl ProjectDeleteV1When {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::DELETE)
+                    .method(::httpmock::Method::DELETE)
                     .path_matches(regex::Regex::new("^/v1/projects/[^/]*$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -14686,23 +13984,18 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("organization", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "organization"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("organization"))
             }
         }
     }
 
-    pub struct ProjectDeleteV1Then(httpmock::Then);
+    pub struct ProjectDeleteV1Then(::httpmock::Then);
     impl ProjectDeleteV1Then {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -14731,17 +14024,17 @@ pub mod operations {
         }
     }
 
-    pub struct ProjectPolicyViewV1When(httpmock::When);
+    pub struct ProjectPolicyViewV1When(::httpmock::When);
     impl ProjectPolicyViewV1When {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::GET)
+                    .method(::httpmock::Method::GET)
                     .path_matches(regex::Regex::new("^/v1/projects/[^/]*/policy$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -14758,23 +14051,18 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("organization", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "organization"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("organization"))
             }
         }
     }
 
-    pub struct ProjectPolicyViewV1Then(httpmock::Then);
+    pub struct ProjectPolicyViewV1Then(::httpmock::Then);
     impl ProjectPolicyViewV1Then {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -14808,17 +14096,17 @@ pub mod operations {
         }
     }
 
-    pub struct ProjectPolicyUpdateV1When(httpmock::When);
+    pub struct ProjectPolicyUpdateV1When(::httpmock::When);
     impl ProjectPolicyUpdateV1When {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::PUT)
+                    .method(::httpmock::Method::PUT)
                     .path_matches(regex::Regex::new("^/v1/projects/[^/]*/policy$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -14835,12 +14123,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("organization", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "organization"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("organization"))
             }
         }
 
@@ -14849,13 +14132,13 @@ pub mod operations {
         }
     }
 
-    pub struct ProjectPolicyUpdateV1Then(httpmock::Then);
+    pub struct ProjectPolicyUpdateV1Then(::httpmock::Then);
     impl ProjectPolicyUpdateV1Then {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -14889,33 +14172,28 @@ pub mod operations {
         }
     }
 
-    pub struct SystemComponentVersionListWhen(httpmock::When);
+    pub struct SystemComponentVersionListWhen(::httpmock::When);
     impl SystemComponentVersionListWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::GET)
+                    .method(::httpmock::Method::GET)
                     .path_matches(regex::Regex::new("^/v1/system/update/components$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("limit"))
             }
         }
 
@@ -14926,12 +14204,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("page_token"))
             }
         }
 
@@ -14942,23 +14215,18 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("sort_by", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "sort_by"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("sort_by"))
             }
         }
     }
 
-    pub struct SystemComponentVersionListThen(httpmock::Then);
+    pub struct SystemComponentVersionListThen(::httpmock::Then);
     impl SystemComponentVersionListThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -14992,33 +14260,28 @@ pub mod operations {
         }
     }
 
-    pub struct UpdateDeploymentsListWhen(httpmock::When);
+    pub struct UpdateDeploymentsListWhen(::httpmock::When);
     impl UpdateDeploymentsListWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::GET)
+                    .method(::httpmock::Method::GET)
                     .path_matches(regex::Regex::new("^/v1/system/update/deployments$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("limit"))
             }
         }
 
@@ -15029,12 +14292,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("page_token"))
             }
         }
 
@@ -15045,23 +14303,18 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("sort_by", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "sort_by"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("sort_by"))
             }
         }
     }
 
-    pub struct UpdateDeploymentsListThen(httpmock::Then);
+    pub struct UpdateDeploymentsListThen(::httpmock::Then);
     impl UpdateDeploymentsListThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -15095,21 +14348,21 @@ pub mod operations {
         }
     }
 
-    pub struct UpdateDeploymentViewWhen(httpmock::When);
+    pub struct UpdateDeploymentViewWhen(::httpmock::When);
     impl UpdateDeploymentViewWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
-                inner.method(httpmock::Method::GET).path_matches(
+                inner.method(::httpmock::Method::GET).path_matches(
                     regex::Regex::new("^/v1/system/update/deployments/[^/]*$").unwrap(),
                 ),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
-        pub fn id(self, value: &uuid::Uuid) -> Self {
+        pub fn id(self, value: &::uuid::Uuid) -> Self {
             let re = regex::Regex::new(&format!(
                 "^/v1/system/update/deployments/{}$",
                 value.to_string()
@@ -15119,13 +14372,13 @@ pub mod operations {
         }
     }
 
-    pub struct UpdateDeploymentViewThen(httpmock::Then);
+    pub struct UpdateDeploymentViewThen(::httpmock::Then);
     impl UpdateDeploymentViewThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -15159,28 +14412,28 @@ pub mod operations {
         }
     }
 
-    pub struct SystemUpdateRefreshWhen(httpmock::When);
+    pub struct SystemUpdateRefreshWhen(::httpmock::When);
     impl SystemUpdateRefreshWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::POST)
+                    .method(::httpmock::Method::POST)
                     .path_matches(regex::Regex::new("^/v1/system/update/refresh$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
     }
 
-    pub struct SystemUpdateRefreshThen(httpmock::Then);
+    pub struct SystemUpdateRefreshThen(::httpmock::Then);
     impl SystemUpdateRefreshThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -15209,17 +14462,17 @@ pub mod operations {
         }
     }
 
-    pub struct SystemUpdateStartWhen(httpmock::When);
+    pub struct SystemUpdateStartWhen(::httpmock::When);
     impl SystemUpdateStartWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::POST)
+                    .method(::httpmock::Method::POST)
                     .path_matches(regex::Regex::new("^/v1/system/update/start$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -15228,13 +14481,13 @@ pub mod operations {
         }
     }
 
-    pub struct SystemUpdateStartThen(httpmock::Then);
+    pub struct SystemUpdateStartThen(::httpmock::Then);
     impl SystemUpdateStartThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -15268,28 +14521,28 @@ pub mod operations {
         }
     }
 
-    pub struct SystemUpdateStopWhen(httpmock::When);
+    pub struct SystemUpdateStopWhen(::httpmock::When);
     impl SystemUpdateStopWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::POST)
+                    .method(::httpmock::Method::POST)
                     .path_matches(regex::Regex::new("^/v1/system/update/stop$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
     }
 
-    pub struct SystemUpdateStopThen(httpmock::Then);
+    pub struct SystemUpdateStopThen(::httpmock::Then);
     impl SystemUpdateStopThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -15318,33 +14571,28 @@ pub mod operations {
         }
     }
 
-    pub struct SystemUpdateListWhen(httpmock::When);
+    pub struct SystemUpdateListWhen(::httpmock::When);
     impl SystemUpdateListWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::GET)
+                    .method(::httpmock::Method::GET)
                     .path_matches(regex::Regex::new("^/v1/system/update/updates$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
         pub fn limit<T>(self, value: T) -> Self
         where
-            T: Into<Option<std::num::NonZeroU32>>,
+            T: Into<Option<::std::num::NonZeroU32>>,
         {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("limit", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "limit"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("limit"))
             }
         }
 
@@ -15355,12 +14603,7 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("page_token", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "page_token"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("page_token"))
             }
         }
 
@@ -15371,23 +14614,18 @@ pub mod operations {
             if let Some(value) = value.into() {
                 Self(self.0.query_param("sort_by", value.to_string()))
             } else {
-                Self(self.0.matches(|req| {
-                    req.query_params
-                        .as_ref()
-                        .and_then(|qs| qs.iter().find(|(key, _)| key == "sort_by"))
-                        .is_none()
-                }))
+                Self(self.0.query_param_missing("sort_by"))
             }
         }
     }
 
-    pub struct SystemUpdateListThen(httpmock::Then);
+    pub struct SystemUpdateListThen(::httpmock::Then);
     impl SystemUpdateListThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -15421,17 +14659,17 @@ pub mod operations {
         }
     }
 
-    pub struct SystemUpdateViewWhen(httpmock::When);
+    pub struct SystemUpdateViewWhen(::httpmock::When);
     impl SystemUpdateViewWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::GET)
+                    .method(::httpmock::Method::GET)
                     .path_matches(regex::Regex::new("^/v1/system/update/updates/[^/]*$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -15445,13 +14683,13 @@ pub mod operations {
         }
     }
 
-    pub struct SystemUpdateViewThen(httpmock::Then);
+    pub struct SystemUpdateViewThen(::httpmock::Then);
     impl SystemUpdateViewThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -15485,15 +14723,15 @@ pub mod operations {
         }
     }
 
-    pub struct SystemUpdateComponentsListWhen(httpmock::When);
+    pub struct SystemUpdateComponentsListWhen(::httpmock::When);
     impl SystemUpdateComponentsListWhen {
-        pub fn new(inner: httpmock::When) -> Self {
-            Self(inner.method(httpmock::Method::GET).path_matches(
+        pub fn new(inner: ::httpmock::When) -> Self {
+            Self(inner.method(::httpmock::Method::GET).path_matches(
                 regex::Regex::new("^/v1/system/update/updates/[^/]*/components$").unwrap(),
             ))
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
 
@@ -15507,13 +14745,13 @@ pub mod operations {
         }
     }
 
-    pub struct SystemUpdateComponentsListThen(httpmock::Then);
+    pub struct SystemUpdateComponentsListThen(::httpmock::Then);
     impl SystemUpdateComponentsListThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -15547,28 +14785,28 @@ pub mod operations {
         }
     }
 
-    pub struct SystemVersionWhen(httpmock::When);
+    pub struct SystemVersionWhen(::httpmock::When);
     impl SystemVersionWhen {
-        pub fn new(inner: httpmock::When) -> Self {
+        pub fn new(inner: ::httpmock::When) -> Self {
             Self(
                 inner
-                    .method(httpmock::Method::GET)
+                    .method(::httpmock::Method::GET)
                     .path_matches(regex::Regex::new("^/v1/system/update/version$").unwrap()),
             )
         }
 
-        pub fn into_inner(self) -> httpmock::When {
+        pub fn into_inner(self) -> ::httpmock::When {
             self.0
         }
     }
 
-    pub struct SystemVersionThen(httpmock::Then);
+    pub struct SystemVersionThen(::httpmock::Then);
     impl SystemVersionThen {
-        pub fn new(inner: httpmock::Then) -> Self {
+        pub fn new(inner: ::httpmock::Then) -> Self {
             Self(inner)
         }
 
-        pub fn into_inner(self) -> httpmock::Then {
+        pub fn into_inner(self) -> ::httpmock::Then {
             self.0
         }
 
@@ -15603,644 +14841,650 @@ pub mod operations {
     }
 }
 
-#[doc = r" An extension trait for [`MockServer`](httpmock::MockServer) that"]
+#[doc = r" An extension trait for [`MockServer`](::httpmock::MockServer) that"]
 #[doc = r" adds a method for each operation. These are the equivalent of"]
-#[doc = r" type-checked [`mock()`](httpmock::MockServer::mock) calls."]
+#[doc = r" type-checked [`mock()`](::httpmock::MockServer::mock) calls."]
 pub trait MockServerExt {
-    fn disk_view_by_id<F>(&self, config_fn: F) -> httpmock::Mock
+    fn disk_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::DiskViewByIdWhen, operations::DiskViewByIdThen);
-    fn image_view_by_id<F>(&self, config_fn: F) -> httpmock::Mock
+    fn image_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ImageViewByIdWhen, operations::ImageViewByIdThen);
-    fn instance_view_by_id<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceViewByIdWhen, operations::InstanceViewByIdThen);
-    fn instance_network_interface_view_by_id<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_network_interface_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::InstanceNetworkInterfaceViewByIdWhen,
             operations::InstanceNetworkInterfaceViewByIdThen,
         );
-    fn organization_view_by_id<F>(&self, config_fn: F) -> httpmock::Mock
+    fn organization_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::OrganizationViewByIdWhen, operations::OrganizationViewByIdThen);
-    fn project_view_by_id<F>(&self, config_fn: F) -> httpmock::Mock
+    fn project_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ProjectViewByIdWhen, operations::ProjectViewByIdThen);
-    fn snapshot_view_by_id<F>(&self, config_fn: F) -> httpmock::Mock
+    fn snapshot_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SnapshotViewByIdWhen, operations::SnapshotViewByIdThen);
-    fn vpc_router_route_view_by_id<F>(&self, config_fn: F) -> httpmock::Mock
+    fn vpc_router_route_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcRouterRouteViewByIdWhen, operations::VpcRouterRouteViewByIdThen);
-    fn vpc_router_view_by_id<F>(&self, config_fn: F) -> httpmock::Mock
+    fn vpc_router_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcRouterViewByIdWhen, operations::VpcRouterViewByIdThen);
-    fn vpc_subnet_view_by_id<F>(&self, config_fn: F) -> httpmock::Mock
+    fn vpc_subnet_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcSubnetViewByIdWhen, operations::VpcSubnetViewByIdThen);
-    fn vpc_view_by_id<F>(&self, config_fn: F) -> httpmock::Mock
+    fn vpc_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcViewByIdWhen, operations::VpcViewByIdThen);
-    fn device_auth_request<F>(&self, config_fn: F) -> httpmock::Mock
+    fn device_auth_request<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::DeviceAuthRequestWhen, operations::DeviceAuthRequestThen);
-    fn device_auth_confirm<F>(&self, config_fn: F) -> httpmock::Mock
+    fn device_auth_confirm<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::DeviceAuthConfirmWhen, operations::DeviceAuthConfirmThen);
-    fn device_access_token<F>(&self, config_fn: F) -> httpmock::Mock
+    fn device_access_token<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::DeviceAccessTokenWhen, operations::DeviceAccessTokenThen);
-    fn group_list<F>(&self, config_fn: F) -> httpmock::Mock
+    fn group_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::GroupListWhen, operations::GroupListThen);
-    fn login_spoof<F>(&self, config_fn: F) -> httpmock::Mock
+    fn login_spoof<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::LoginSpoofWhen, operations::LoginSpoofThen);
-    fn login_local<F>(&self, config_fn: F) -> httpmock::Mock
+    fn login_local<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::LoginLocalWhen, operations::LoginLocalThen);
-    fn login_saml_begin<F>(&self, config_fn: F) -> httpmock::Mock
+    fn login_saml_begin<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::LoginSamlBeginWhen, operations::LoginSamlBeginThen);
-    fn login_saml<F>(&self, config_fn: F) -> httpmock::Mock
+    fn login_saml<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::LoginSamlWhen, operations::LoginSamlThen);
-    fn logout<F>(&self, config_fn: F) -> httpmock::Mock
+    fn logout<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::LogoutWhen, operations::LogoutThen);
-    fn organization_list<F>(&self, config_fn: F) -> httpmock::Mock
+    fn organization_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::OrganizationListWhen, operations::OrganizationListThen);
-    fn organization_create<F>(&self, config_fn: F) -> httpmock::Mock
+    fn organization_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::OrganizationCreateWhen, operations::OrganizationCreateThen);
-    fn organization_view<F>(&self, config_fn: F) -> httpmock::Mock
+    fn organization_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::OrganizationViewWhen, operations::OrganizationViewThen);
-    fn organization_update<F>(&self, config_fn: F) -> httpmock::Mock
+    fn organization_update<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::OrganizationUpdateWhen, operations::OrganizationUpdateThen);
-    fn organization_delete<F>(&self, config_fn: F) -> httpmock::Mock
+    fn organization_delete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::OrganizationDeleteWhen, operations::OrganizationDeleteThen);
-    fn organization_policy_view<F>(&self, config_fn: F) -> httpmock::Mock
+    fn organization_policy_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::OrganizationPolicyViewWhen, operations::OrganizationPolicyViewThen);
-    fn organization_policy_update<F>(&self, config_fn: F) -> httpmock::Mock
+    fn organization_policy_update<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::OrganizationPolicyUpdateWhen,
             operations::OrganizationPolicyUpdateThen,
         );
-    fn project_list<F>(&self, config_fn: F) -> httpmock::Mock
+    fn project_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ProjectListWhen, operations::ProjectListThen);
-    fn project_create<F>(&self, config_fn: F) -> httpmock::Mock
+    fn project_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ProjectCreateWhen, operations::ProjectCreateThen);
-    fn project_view<F>(&self, config_fn: F) -> httpmock::Mock
+    fn project_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ProjectViewWhen, operations::ProjectViewThen);
-    fn project_update<F>(&self, config_fn: F) -> httpmock::Mock
+    fn project_update<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ProjectUpdateWhen, operations::ProjectUpdateThen);
-    fn project_delete<F>(&self, config_fn: F) -> httpmock::Mock
+    fn project_delete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ProjectDeleteWhen, operations::ProjectDeleteThen);
-    fn disk_list<F>(&self, config_fn: F) -> httpmock::Mock
+    fn disk_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::DiskListWhen, operations::DiskListThen);
-    fn disk_create<F>(&self, config_fn: F) -> httpmock::Mock
+    fn disk_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::DiskCreateWhen, operations::DiskCreateThen);
-    fn disk_view<F>(&self, config_fn: F) -> httpmock::Mock
+    fn disk_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::DiskViewWhen, operations::DiskViewThen);
-    fn disk_delete<F>(&self, config_fn: F) -> httpmock::Mock
+    fn disk_delete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::DiskDeleteWhen, operations::DiskDeleteThen);
-    fn disk_metrics_list<F>(&self, config_fn: F) -> httpmock::Mock
+    fn disk_metrics_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::DiskMetricsListWhen, operations::DiskMetricsListThen);
-    fn image_list<F>(&self, config_fn: F) -> httpmock::Mock
+    fn image_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ImageListWhen, operations::ImageListThen);
-    fn image_create<F>(&self, config_fn: F) -> httpmock::Mock
+    fn image_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ImageCreateWhen, operations::ImageCreateThen);
-    fn image_view<F>(&self, config_fn: F) -> httpmock::Mock
+    fn image_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ImageViewWhen, operations::ImageViewThen);
-    fn image_delete<F>(&self, config_fn: F) -> httpmock::Mock
+    fn image_delete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ImageDeleteWhen, operations::ImageDeleteThen);
-    fn instance_list<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceListWhen, operations::InstanceListThen);
-    fn instance_create<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceCreateWhen, operations::InstanceCreateThen);
-    fn instance_view<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceViewWhen, operations::InstanceViewThen);
-    fn instance_delete<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_delete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceDeleteWhen, operations::InstanceDeleteThen);
-    fn instance_disk_list<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_disk_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceDiskListWhen, operations::InstanceDiskListThen);
-    fn instance_disk_attach<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_disk_attach<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceDiskAttachWhen, operations::InstanceDiskAttachThen);
-    fn instance_disk_detach<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_disk_detach<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceDiskDetachWhen, operations::InstanceDiskDetachThen);
-    fn instance_external_ip_list<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_external_ip_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceExternalIpListWhen, operations::InstanceExternalIpListThen);
-    fn instance_migrate<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_migrate<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceMigrateWhen, operations::InstanceMigrateThen);
-    fn instance_network_interface_list<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_network_interface_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::InstanceNetworkInterfaceListWhen,
             operations::InstanceNetworkInterfaceListThen,
         );
-    fn instance_network_interface_create<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_network_interface_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::InstanceNetworkInterfaceCreateWhen,
             operations::InstanceNetworkInterfaceCreateThen,
         );
-    fn instance_network_interface_view<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_network_interface_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::InstanceNetworkInterfaceViewWhen,
             operations::InstanceNetworkInterfaceViewThen,
         );
-    fn instance_network_interface_update<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_network_interface_update<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::InstanceNetworkInterfaceUpdateWhen,
             operations::InstanceNetworkInterfaceUpdateThen,
         );
-    fn instance_network_interface_delete<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_network_interface_delete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::InstanceNetworkInterfaceDeleteWhen,
             operations::InstanceNetworkInterfaceDeleteThen,
         );
-    fn instance_reboot<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_reboot<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceRebootWhen, operations::InstanceRebootThen);
-    fn instance_serial_console<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_serial_console<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceSerialConsoleWhen, operations::InstanceSerialConsoleThen);
-    fn instance_serial_console_stream<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_serial_console_stream<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::InstanceSerialConsoleStreamWhen,
             operations::InstanceSerialConsoleStreamThen,
         );
-    fn instance_start<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_serial_console_stream_v2<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
+    where
+        F: FnOnce(
+            operations::InstanceSerialConsoleStreamV2When,
+            operations::InstanceSerialConsoleStreamV2Then,
+        );
+    fn instance_start<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceStartWhen, operations::InstanceStartThen);
-    fn instance_stop<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_stop<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceStopWhen, operations::InstanceStopThen);
-    fn project_policy_view<F>(&self, config_fn: F) -> httpmock::Mock
+    fn project_policy_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ProjectPolicyViewWhen, operations::ProjectPolicyViewThen);
-    fn project_policy_update<F>(&self, config_fn: F) -> httpmock::Mock
+    fn project_policy_update<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ProjectPolicyUpdateWhen, operations::ProjectPolicyUpdateThen);
-    fn snapshot_list<F>(&self, config_fn: F) -> httpmock::Mock
+    fn snapshot_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SnapshotListWhen, operations::SnapshotListThen);
-    fn snapshot_create<F>(&self, config_fn: F) -> httpmock::Mock
+    fn snapshot_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SnapshotCreateWhen, operations::SnapshotCreateThen);
-    fn snapshot_view<F>(&self, config_fn: F) -> httpmock::Mock
+    fn snapshot_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SnapshotViewWhen, operations::SnapshotViewThen);
-    fn snapshot_delete<F>(&self, config_fn: F) -> httpmock::Mock
+    fn snapshot_delete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SnapshotDeleteWhen, operations::SnapshotDeleteThen);
-    fn vpc_list<F>(&self, config_fn: F) -> httpmock::Mock
+    fn vpc_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcListWhen, operations::VpcListThen);
-    fn vpc_create<F>(&self, config_fn: F) -> httpmock::Mock
+    fn vpc_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcCreateWhen, operations::VpcCreateThen);
-    fn vpc_view<F>(&self, config_fn: F) -> httpmock::Mock
+    fn vpc_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcViewWhen, operations::VpcViewThen);
-    fn vpc_update<F>(&self, config_fn: F) -> httpmock::Mock
+    fn vpc_update<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcUpdateWhen, operations::VpcUpdateThen);
-    fn vpc_delete<F>(&self, config_fn: F) -> httpmock::Mock
+    fn vpc_delete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcDeleteWhen, operations::VpcDeleteThen);
-    fn vpc_firewall_rules_view<F>(&self, config_fn: F) -> httpmock::Mock
+    fn vpc_firewall_rules_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcFirewallRulesViewWhen, operations::VpcFirewallRulesViewThen);
-    fn vpc_firewall_rules_update<F>(&self, config_fn: F) -> httpmock::Mock
+    fn vpc_firewall_rules_update<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcFirewallRulesUpdateWhen, operations::VpcFirewallRulesUpdateThen);
-    fn vpc_router_list<F>(&self, config_fn: F) -> httpmock::Mock
+    fn vpc_router_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcRouterListWhen, operations::VpcRouterListThen);
-    fn vpc_router_create<F>(&self, config_fn: F) -> httpmock::Mock
+    fn vpc_router_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcRouterCreateWhen, operations::VpcRouterCreateThen);
-    fn vpc_router_view<F>(&self, config_fn: F) -> httpmock::Mock
+    fn vpc_router_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcRouterViewWhen, operations::VpcRouterViewThen);
-    fn vpc_router_update<F>(&self, config_fn: F) -> httpmock::Mock
+    fn vpc_router_update<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcRouterUpdateWhen, operations::VpcRouterUpdateThen);
-    fn vpc_router_delete<F>(&self, config_fn: F) -> httpmock::Mock
+    fn vpc_router_delete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcRouterDeleteWhen, operations::VpcRouterDeleteThen);
-    fn vpc_router_route_list<F>(&self, config_fn: F) -> httpmock::Mock
+    fn vpc_router_route_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcRouterRouteListWhen, operations::VpcRouterRouteListThen);
-    fn vpc_router_route_create<F>(&self, config_fn: F) -> httpmock::Mock
+    fn vpc_router_route_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcRouterRouteCreateWhen, operations::VpcRouterRouteCreateThen);
-    fn vpc_router_route_view<F>(&self, config_fn: F) -> httpmock::Mock
+    fn vpc_router_route_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcRouterRouteViewWhen, operations::VpcRouterRouteViewThen);
-    fn vpc_router_route_update<F>(&self, config_fn: F) -> httpmock::Mock
+    fn vpc_router_route_update<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcRouterRouteUpdateWhen, operations::VpcRouterRouteUpdateThen);
-    fn vpc_router_route_delete<F>(&self, config_fn: F) -> httpmock::Mock
+    fn vpc_router_route_delete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcRouterRouteDeleteWhen, operations::VpcRouterRouteDeleteThen);
-    fn vpc_subnet_list<F>(&self, config_fn: F) -> httpmock::Mock
+    fn vpc_subnet_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcSubnetListWhen, operations::VpcSubnetListThen);
-    fn vpc_subnet_create<F>(&self, config_fn: F) -> httpmock::Mock
+    fn vpc_subnet_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcSubnetCreateWhen, operations::VpcSubnetCreateThen);
-    fn vpc_subnet_view<F>(&self, config_fn: F) -> httpmock::Mock
+    fn vpc_subnet_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcSubnetViewWhen, operations::VpcSubnetViewThen);
-    fn vpc_subnet_update<F>(&self, config_fn: F) -> httpmock::Mock
+    fn vpc_subnet_update<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcSubnetUpdateWhen, operations::VpcSubnetUpdateThen);
-    fn vpc_subnet_delete<F>(&self, config_fn: F) -> httpmock::Mock
+    fn vpc_subnet_delete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcSubnetDeleteWhen, operations::VpcSubnetDeleteThen);
-    fn vpc_subnet_list_network_interfaces<F>(&self, config_fn: F) -> httpmock::Mock
+    fn vpc_subnet_list_network_interfaces<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::VpcSubnetListNetworkInterfacesWhen,
             operations::VpcSubnetListNetworkInterfacesThen,
         );
-    fn policy_view<F>(&self, config_fn: F) -> httpmock::Mock
+    fn policy_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::PolicyViewWhen, operations::PolicyViewThen);
-    fn policy_update<F>(&self, config_fn: F) -> httpmock::Mock
+    fn policy_update<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::PolicyUpdateWhen, operations::PolicyUpdateThen);
-    fn role_list<F>(&self, config_fn: F) -> httpmock::Mock
+    fn role_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::RoleListWhen, operations::RoleListThen);
-    fn role_view<F>(&self, config_fn: F) -> httpmock::Mock
+    fn role_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::RoleViewWhen, operations::RoleViewThen);
-    fn session_me<F>(&self, config_fn: F) -> httpmock::Mock
+    fn session_me<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SessionMeWhen, operations::SessionMeThen);
-    fn session_me_groups<F>(&self, config_fn: F) -> httpmock::Mock
+    fn session_me_groups<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SessionMeGroupsWhen, operations::SessionMeGroupsThen);
-    fn session_sshkey_list<F>(&self, config_fn: F) -> httpmock::Mock
+    fn session_sshkey_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SessionSshkeyListWhen, operations::SessionSshkeyListThen);
-    fn session_sshkey_create<F>(&self, config_fn: F) -> httpmock::Mock
+    fn session_sshkey_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SessionSshkeyCreateWhen, operations::SessionSshkeyCreateThen);
-    fn session_sshkey_view<F>(&self, config_fn: F) -> httpmock::Mock
+    fn session_sshkey_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SessionSshkeyViewWhen, operations::SessionSshkeyViewThen);
-    fn session_sshkey_delete<F>(&self, config_fn: F) -> httpmock::Mock
+    fn session_sshkey_delete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SessionSshkeyDeleteWhen, operations::SessionSshkeyDeleteThen);
-    fn system_image_view_by_id<F>(&self, config_fn: F) -> httpmock::Mock
+    fn system_image_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SystemImageViewByIdWhen, operations::SystemImageViewByIdThen);
-    fn ip_pool_view_by_id<F>(&self, config_fn: F) -> httpmock::Mock
+    fn ip_pool_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::IpPoolViewByIdWhen, operations::IpPoolViewByIdThen);
-    fn silo_view_by_id<F>(&self, config_fn: F) -> httpmock::Mock
+    fn silo_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SiloViewByIdWhen, operations::SiloViewByIdThen);
-    fn certificate_list<F>(&self, config_fn: F) -> httpmock::Mock
+    fn certificate_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::CertificateListWhen, operations::CertificateListThen);
-    fn certificate_create<F>(&self, config_fn: F) -> httpmock::Mock
+    fn certificate_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::CertificateCreateWhen, operations::CertificateCreateThen);
-    fn certificate_view<F>(&self, config_fn: F) -> httpmock::Mock
+    fn certificate_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::CertificateViewWhen, operations::CertificateViewThen);
-    fn certificate_delete<F>(&self, config_fn: F) -> httpmock::Mock
+    fn certificate_delete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::CertificateDeleteWhen, operations::CertificateDeleteThen);
-    fn physical_disk_list<F>(&self, config_fn: F) -> httpmock::Mock
+    fn physical_disk_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::PhysicalDiskListWhen, operations::PhysicalDiskListThen);
-    fn rack_list<F>(&self, config_fn: F) -> httpmock::Mock
+    fn rack_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::RackListWhen, operations::RackListThen);
-    fn rack_view<F>(&self, config_fn: F) -> httpmock::Mock
+    fn rack_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::RackViewWhen, operations::RackViewThen);
-    fn sled_list<F>(&self, config_fn: F) -> httpmock::Mock
+    fn sled_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SledListWhen, operations::SledListThen);
-    fn sled_view<F>(&self, config_fn: F) -> httpmock::Mock
+    fn sled_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SledViewWhen, operations::SledViewThen);
-    fn sled_physical_disk_list<F>(&self, config_fn: F) -> httpmock::Mock
+    fn sled_physical_disk_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SledPhysicalDiskListWhen, operations::SledPhysicalDiskListThen);
-    fn system_image_list<F>(&self, config_fn: F) -> httpmock::Mock
+    fn system_image_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SystemImageListWhen, operations::SystemImageListThen);
-    fn system_image_create<F>(&self, config_fn: F) -> httpmock::Mock
+    fn system_image_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SystemImageCreateWhen, operations::SystemImageCreateThen);
-    fn system_image_view<F>(&self, config_fn: F) -> httpmock::Mock
+    fn system_image_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SystemImageViewWhen, operations::SystemImageViewThen);
-    fn system_image_delete<F>(&self, config_fn: F) -> httpmock::Mock
+    fn system_image_delete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SystemImageDeleteWhen, operations::SystemImageDeleteThen);
-    fn ip_pool_list<F>(&self, config_fn: F) -> httpmock::Mock
+    fn ip_pool_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::IpPoolListWhen, operations::IpPoolListThen);
-    fn ip_pool_create<F>(&self, config_fn: F) -> httpmock::Mock
+    fn ip_pool_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::IpPoolCreateWhen, operations::IpPoolCreateThen);
-    fn ip_pool_view<F>(&self, config_fn: F) -> httpmock::Mock
+    fn ip_pool_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::IpPoolViewWhen, operations::IpPoolViewThen);
-    fn ip_pool_update<F>(&self, config_fn: F) -> httpmock::Mock
+    fn ip_pool_update<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::IpPoolUpdateWhen, operations::IpPoolUpdateThen);
-    fn ip_pool_delete<F>(&self, config_fn: F) -> httpmock::Mock
+    fn ip_pool_delete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::IpPoolDeleteWhen, operations::IpPoolDeleteThen);
-    fn ip_pool_range_list<F>(&self, config_fn: F) -> httpmock::Mock
+    fn ip_pool_range_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::IpPoolRangeListWhen, operations::IpPoolRangeListThen);
-    fn ip_pool_range_add<F>(&self, config_fn: F) -> httpmock::Mock
+    fn ip_pool_range_add<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::IpPoolRangeAddWhen, operations::IpPoolRangeAddThen);
-    fn ip_pool_range_remove<F>(&self, config_fn: F) -> httpmock::Mock
+    fn ip_pool_range_remove<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::IpPoolRangeRemoveWhen, operations::IpPoolRangeRemoveThen);
-    fn ip_pool_service_view<F>(&self, config_fn: F) -> httpmock::Mock
+    fn ip_pool_service_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::IpPoolServiceViewWhen, operations::IpPoolServiceViewThen);
-    fn ip_pool_service_range_list<F>(&self, config_fn: F) -> httpmock::Mock
+    fn ip_pool_service_range_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::IpPoolServiceRangeListWhen, operations::IpPoolServiceRangeListThen);
-    fn ip_pool_service_range_add<F>(&self, config_fn: F) -> httpmock::Mock
+    fn ip_pool_service_range_add<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::IpPoolServiceRangeAddWhen, operations::IpPoolServiceRangeAddThen);
-    fn ip_pool_service_range_remove<F>(&self, config_fn: F) -> httpmock::Mock
+    fn ip_pool_service_range_remove<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::IpPoolServiceRangeRemoveWhen,
             operations::IpPoolServiceRangeRemoveThen,
         );
-    fn system_metric<F>(&self, config_fn: F) -> httpmock::Mock
+    fn system_metric<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SystemMetricWhen, operations::SystemMetricThen);
-    fn system_policy_view<F>(&self, config_fn: F) -> httpmock::Mock
+    fn system_policy_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SystemPolicyViewWhen, operations::SystemPolicyViewThen);
-    fn system_policy_update<F>(&self, config_fn: F) -> httpmock::Mock
+    fn system_policy_update<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SystemPolicyUpdateWhen, operations::SystemPolicyUpdateThen);
-    fn saga_list<F>(&self, config_fn: F) -> httpmock::Mock
+    fn saga_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SagaListWhen, operations::SagaListThen);
-    fn saga_view<F>(&self, config_fn: F) -> httpmock::Mock
+    fn saga_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SagaViewWhen, operations::SagaViewThen);
-    fn silo_list<F>(&self, config_fn: F) -> httpmock::Mock
+    fn silo_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SiloListWhen, operations::SiloListThen);
-    fn silo_create<F>(&self, config_fn: F) -> httpmock::Mock
+    fn silo_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SiloCreateWhen, operations::SiloCreateThen);
-    fn silo_view<F>(&self, config_fn: F) -> httpmock::Mock
+    fn silo_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SiloViewWhen, operations::SiloViewThen);
-    fn silo_delete<F>(&self, config_fn: F) -> httpmock::Mock
+    fn silo_delete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SiloDeleteWhen, operations::SiloDeleteThen);
-    fn silo_identity_provider_list<F>(&self, config_fn: F) -> httpmock::Mock
+    fn silo_identity_provider_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::SiloIdentityProviderListWhen,
             operations::SiloIdentityProviderListThen,
         );
-    fn local_idp_user_create<F>(&self, config_fn: F) -> httpmock::Mock
+    fn local_idp_user_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::LocalIdpUserCreateWhen, operations::LocalIdpUserCreateThen);
-    fn local_idp_user_delete<F>(&self, config_fn: F) -> httpmock::Mock
+    fn local_idp_user_delete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::LocalIdpUserDeleteWhen, operations::LocalIdpUserDeleteThen);
-    fn local_idp_user_set_password<F>(&self, config_fn: F) -> httpmock::Mock
+    fn local_idp_user_set_password<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::LocalIdpUserSetPasswordWhen, operations::LocalIdpUserSetPasswordThen);
-    fn saml_identity_provider_create<F>(&self, config_fn: F) -> httpmock::Mock
+    fn saml_identity_provider_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::SamlIdentityProviderCreateWhen,
             operations::SamlIdentityProviderCreateThen,
         );
-    fn saml_identity_provider_view<F>(&self, config_fn: F) -> httpmock::Mock
+    fn saml_identity_provider_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::SamlIdentityProviderViewWhen,
             operations::SamlIdentityProviderViewThen,
         );
-    fn silo_policy_view<F>(&self, config_fn: F) -> httpmock::Mock
+    fn silo_policy_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SiloPolicyViewWhen, operations::SiloPolicyViewThen);
-    fn silo_policy_update<F>(&self, config_fn: F) -> httpmock::Mock
+    fn silo_policy_update<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SiloPolicyUpdateWhen, operations::SiloPolicyUpdateThen);
-    fn silo_users_list<F>(&self, config_fn: F) -> httpmock::Mock
+    fn silo_users_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SiloUsersListWhen, operations::SiloUsersListThen);
-    fn silo_user_view<F>(&self, config_fn: F) -> httpmock::Mock
+    fn silo_user_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SiloUserViewWhen, operations::SiloUserViewThen);
-    fn system_user_list<F>(&self, config_fn: F) -> httpmock::Mock
+    fn system_user_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SystemUserListWhen, operations::SystemUserListThen);
-    fn system_user_view<F>(&self, config_fn: F) -> httpmock::Mock
+    fn system_user_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SystemUserViewWhen, operations::SystemUserViewThen);
-    fn timeseries_schema_get<F>(&self, config_fn: F) -> httpmock::Mock
+    fn timeseries_schema_get<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::TimeseriesSchemaGetWhen, operations::TimeseriesSchemaGetThen);
-    fn user_list<F>(&self, config_fn: F) -> httpmock::Mock
+    fn user_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::UserListWhen, operations::UserListThen);
-    fn disk_list_v1<F>(&self, config_fn: F) -> httpmock::Mock
+    fn disk_list_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::DiskListV1When, operations::DiskListV1Then);
-    fn disk_create_v1<F>(&self, config_fn: F) -> httpmock::Mock
+    fn disk_create_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::DiskCreateV1When, operations::DiskCreateV1Then);
-    fn disk_view_v1<F>(&self, config_fn: F) -> httpmock::Mock
+    fn disk_view_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::DiskViewV1When, operations::DiskViewV1Then);
-    fn disk_delete_v1<F>(&self, config_fn: F) -> httpmock::Mock
+    fn disk_delete_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::DiskDeleteV1When, operations::DiskDeleteV1Then);
-    fn instance_list_v1<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_list_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceListV1When, operations::InstanceListV1Then);
-    fn instance_create_v1<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_create_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceCreateV1When, operations::InstanceCreateV1Then);
-    fn instance_view_v1<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_view_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceViewV1When, operations::InstanceViewV1Then);
-    fn instance_delete_v1<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_delete_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceDeleteV1When, operations::InstanceDeleteV1Then);
-    fn instance_disk_list_v1<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_disk_list_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceDiskListV1When, operations::InstanceDiskListV1Then);
-    fn instance_disk_attach_v1<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_disk_attach_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceDiskAttachV1When, operations::InstanceDiskAttachV1Then);
-    fn instance_disk_detach_v1<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_disk_detach_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceDiskDetachV1When, operations::InstanceDiskDetachV1Then);
-    fn instance_migrate_v1<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_migrate_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceMigrateV1When, operations::InstanceMigrateV1Then);
-    fn instance_reboot_v1<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_reboot_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceRebootV1When, operations::InstanceRebootV1Then);
-    fn instance_serial_console_v1<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_serial_console_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceSerialConsoleV1When, operations::InstanceSerialConsoleV1Then);
-    fn instance_serial_console_stream_v1<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_serial_console_stream_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::InstanceSerialConsoleStreamV1When,
             operations::InstanceSerialConsoleStreamV1Then,
         );
-    fn instance_start_v1<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_start_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceStartV1When, operations::InstanceStartV1Then);
-    fn instance_stop_v1<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_stop_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceStopV1When, operations::InstanceStopV1Then);
-    fn organization_list_v1<F>(&self, config_fn: F) -> httpmock::Mock
+    fn organization_list_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::OrganizationListV1When, operations::OrganizationListV1Then);
-    fn organization_create_v1<F>(&self, config_fn: F) -> httpmock::Mock
+    fn organization_create_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::OrganizationCreateV1When, operations::OrganizationCreateV1Then);
-    fn organization_view_v1<F>(&self, config_fn: F) -> httpmock::Mock
+    fn organization_view_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::OrganizationViewV1When, operations::OrganizationViewV1Then);
-    fn organization_update_v1<F>(&self, config_fn: F) -> httpmock::Mock
+    fn organization_update_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::OrganizationUpdateV1When, operations::OrganizationUpdateV1Then);
-    fn organization_delete_v1<F>(&self, config_fn: F) -> httpmock::Mock
+    fn organization_delete_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::OrganizationDeleteV1When, operations::OrganizationDeleteV1Then);
-    fn organization_policy_view_v1<F>(&self, config_fn: F) -> httpmock::Mock
+    fn organization_policy_view_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::OrganizationPolicyViewV1When,
             operations::OrganizationPolicyViewV1Then,
         );
-    fn organization_policy_update_v1<F>(&self, config_fn: F) -> httpmock::Mock
+    fn organization_policy_update_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::OrganizationPolicyUpdateV1When,
             operations::OrganizationPolicyUpdateV1Then,
         );
-    fn project_list_v1<F>(&self, config_fn: F) -> httpmock::Mock
+    fn project_list_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ProjectListV1When, operations::ProjectListV1Then);
-    fn project_create_v1<F>(&self, config_fn: F) -> httpmock::Mock
+    fn project_create_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ProjectCreateV1When, operations::ProjectCreateV1Then);
-    fn project_view_v1<F>(&self, config_fn: F) -> httpmock::Mock
+    fn project_view_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ProjectViewV1When, operations::ProjectViewV1Then);
-    fn project_update_v1<F>(&self, config_fn: F) -> httpmock::Mock
+    fn project_update_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ProjectUpdateV1When, operations::ProjectUpdateV1Then);
-    fn project_delete_v1<F>(&self, config_fn: F) -> httpmock::Mock
+    fn project_delete_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ProjectDeleteV1When, operations::ProjectDeleteV1Then);
-    fn project_policy_view_v1<F>(&self, config_fn: F) -> httpmock::Mock
+    fn project_policy_view_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ProjectPolicyViewV1When, operations::ProjectPolicyViewV1Then);
-    fn project_policy_update_v1<F>(&self, config_fn: F) -> httpmock::Mock
+    fn project_policy_update_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ProjectPolicyUpdateV1When, operations::ProjectPolicyUpdateV1Then);
-    fn system_component_version_list<F>(&self, config_fn: F) -> httpmock::Mock
+    fn system_component_version_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::SystemComponentVersionListWhen,
             operations::SystemComponentVersionListThen,
         );
-    fn update_deployments_list<F>(&self, config_fn: F) -> httpmock::Mock
+    fn update_deployments_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::UpdateDeploymentsListWhen, operations::UpdateDeploymentsListThen);
-    fn update_deployment_view<F>(&self, config_fn: F) -> httpmock::Mock
+    fn update_deployment_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::UpdateDeploymentViewWhen, operations::UpdateDeploymentViewThen);
-    fn system_update_refresh<F>(&self, config_fn: F) -> httpmock::Mock
+    fn system_update_refresh<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SystemUpdateRefreshWhen, operations::SystemUpdateRefreshThen);
-    fn system_update_start<F>(&self, config_fn: F) -> httpmock::Mock
+    fn system_update_start<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SystemUpdateStartWhen, operations::SystemUpdateStartThen);
-    fn system_update_stop<F>(&self, config_fn: F) -> httpmock::Mock
+    fn system_update_stop<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SystemUpdateStopWhen, operations::SystemUpdateStopThen);
-    fn system_update_list<F>(&self, config_fn: F) -> httpmock::Mock
+    fn system_update_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SystemUpdateListWhen, operations::SystemUpdateListThen);
-    fn system_update_view<F>(&self, config_fn: F) -> httpmock::Mock
+    fn system_update_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SystemUpdateViewWhen, operations::SystemUpdateViewThen);
-    fn system_update_components_list<F>(&self, config_fn: F) -> httpmock::Mock
+    fn system_update_components_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::SystemUpdateComponentsListWhen,
             operations::SystemUpdateComponentsListThen,
         );
-    fn system_version<F>(&self, config_fn: F) -> httpmock::Mock
+    fn system_version<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SystemVersionWhen, operations::SystemVersionThen);
 }
 
-impl MockServerExt for httpmock::MockServer {
-    fn disk_view_by_id<F>(&self, config_fn: F) -> httpmock::Mock
+impl MockServerExt for ::httpmock::MockServer {
+    fn disk_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::DiskViewByIdWhen, operations::DiskViewByIdThen),
     {
@@ -16252,7 +15496,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn image_view_by_id<F>(&self, config_fn: F) -> httpmock::Mock
+    fn image_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ImageViewByIdWhen, operations::ImageViewByIdThen),
     {
@@ -16264,7 +15508,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn instance_view_by_id<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceViewByIdWhen, operations::InstanceViewByIdThen),
     {
@@ -16276,7 +15520,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn instance_network_interface_view_by_id<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_network_interface_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::InstanceNetworkInterfaceViewByIdWhen,
@@ -16291,7 +15535,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn organization_view_by_id<F>(&self, config_fn: F) -> httpmock::Mock
+    fn organization_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::OrganizationViewByIdWhen, operations::OrganizationViewByIdThen),
     {
@@ -16303,7 +15547,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn project_view_by_id<F>(&self, config_fn: F) -> httpmock::Mock
+    fn project_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ProjectViewByIdWhen, operations::ProjectViewByIdThen),
     {
@@ -16315,7 +15559,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn snapshot_view_by_id<F>(&self, config_fn: F) -> httpmock::Mock
+    fn snapshot_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SnapshotViewByIdWhen, operations::SnapshotViewByIdThen),
     {
@@ -16327,7 +15571,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn vpc_router_route_view_by_id<F>(&self, config_fn: F) -> httpmock::Mock
+    fn vpc_router_route_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcRouterRouteViewByIdWhen, operations::VpcRouterRouteViewByIdThen),
     {
@@ -16339,7 +15583,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn vpc_router_view_by_id<F>(&self, config_fn: F) -> httpmock::Mock
+    fn vpc_router_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcRouterViewByIdWhen, operations::VpcRouterViewByIdThen),
     {
@@ -16351,7 +15595,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn vpc_subnet_view_by_id<F>(&self, config_fn: F) -> httpmock::Mock
+    fn vpc_subnet_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcSubnetViewByIdWhen, operations::VpcSubnetViewByIdThen),
     {
@@ -16363,7 +15607,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn vpc_view_by_id<F>(&self, config_fn: F) -> httpmock::Mock
+    fn vpc_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcViewByIdWhen, operations::VpcViewByIdThen),
     {
@@ -16375,7 +15619,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn device_auth_request<F>(&self, config_fn: F) -> httpmock::Mock
+    fn device_auth_request<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::DeviceAuthRequestWhen, operations::DeviceAuthRequestThen),
     {
@@ -16387,7 +15631,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn device_auth_confirm<F>(&self, config_fn: F) -> httpmock::Mock
+    fn device_auth_confirm<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::DeviceAuthConfirmWhen, operations::DeviceAuthConfirmThen),
     {
@@ -16399,7 +15643,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn device_access_token<F>(&self, config_fn: F) -> httpmock::Mock
+    fn device_access_token<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::DeviceAccessTokenWhen, operations::DeviceAccessTokenThen),
     {
@@ -16411,7 +15655,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn group_list<F>(&self, config_fn: F) -> httpmock::Mock
+    fn group_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::GroupListWhen, operations::GroupListThen),
     {
@@ -16423,7 +15667,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn login_spoof<F>(&self, config_fn: F) -> httpmock::Mock
+    fn login_spoof<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::LoginSpoofWhen, operations::LoginSpoofThen),
     {
@@ -16435,7 +15679,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn login_local<F>(&self, config_fn: F) -> httpmock::Mock
+    fn login_local<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::LoginLocalWhen, operations::LoginLocalThen),
     {
@@ -16447,7 +15691,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn login_saml_begin<F>(&self, config_fn: F) -> httpmock::Mock
+    fn login_saml_begin<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::LoginSamlBeginWhen, operations::LoginSamlBeginThen),
     {
@@ -16459,7 +15703,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn login_saml<F>(&self, config_fn: F) -> httpmock::Mock
+    fn login_saml<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::LoginSamlWhen, operations::LoginSamlThen),
     {
@@ -16471,7 +15715,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn logout<F>(&self, config_fn: F) -> httpmock::Mock
+    fn logout<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::LogoutWhen, operations::LogoutThen),
     {
@@ -16483,7 +15727,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn organization_list<F>(&self, config_fn: F) -> httpmock::Mock
+    fn organization_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::OrganizationListWhen, operations::OrganizationListThen),
     {
@@ -16495,7 +15739,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn organization_create<F>(&self, config_fn: F) -> httpmock::Mock
+    fn organization_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::OrganizationCreateWhen, operations::OrganizationCreateThen),
     {
@@ -16507,7 +15751,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn organization_view<F>(&self, config_fn: F) -> httpmock::Mock
+    fn organization_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::OrganizationViewWhen, operations::OrganizationViewThen),
     {
@@ -16519,7 +15763,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn organization_update<F>(&self, config_fn: F) -> httpmock::Mock
+    fn organization_update<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::OrganizationUpdateWhen, operations::OrganizationUpdateThen),
     {
@@ -16531,7 +15775,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn organization_delete<F>(&self, config_fn: F) -> httpmock::Mock
+    fn organization_delete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::OrganizationDeleteWhen, operations::OrganizationDeleteThen),
     {
@@ -16543,7 +15787,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn organization_policy_view<F>(&self, config_fn: F) -> httpmock::Mock
+    fn organization_policy_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::OrganizationPolicyViewWhen, operations::OrganizationPolicyViewThen),
     {
@@ -16555,7 +15799,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn organization_policy_update<F>(&self, config_fn: F) -> httpmock::Mock
+    fn organization_policy_update<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::OrganizationPolicyUpdateWhen,
@@ -16570,7 +15814,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn project_list<F>(&self, config_fn: F) -> httpmock::Mock
+    fn project_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ProjectListWhen, operations::ProjectListThen),
     {
@@ -16582,7 +15826,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn project_create<F>(&self, config_fn: F) -> httpmock::Mock
+    fn project_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ProjectCreateWhen, operations::ProjectCreateThen),
     {
@@ -16594,7 +15838,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn project_view<F>(&self, config_fn: F) -> httpmock::Mock
+    fn project_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ProjectViewWhen, operations::ProjectViewThen),
     {
@@ -16606,7 +15850,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn project_update<F>(&self, config_fn: F) -> httpmock::Mock
+    fn project_update<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ProjectUpdateWhen, operations::ProjectUpdateThen),
     {
@@ -16618,7 +15862,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn project_delete<F>(&self, config_fn: F) -> httpmock::Mock
+    fn project_delete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ProjectDeleteWhen, operations::ProjectDeleteThen),
     {
@@ -16630,7 +15874,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn disk_list<F>(&self, config_fn: F) -> httpmock::Mock
+    fn disk_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::DiskListWhen, operations::DiskListThen),
     {
@@ -16642,7 +15886,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn disk_create<F>(&self, config_fn: F) -> httpmock::Mock
+    fn disk_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::DiskCreateWhen, operations::DiskCreateThen),
     {
@@ -16654,7 +15898,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn disk_view<F>(&self, config_fn: F) -> httpmock::Mock
+    fn disk_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::DiskViewWhen, operations::DiskViewThen),
     {
@@ -16666,7 +15910,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn disk_delete<F>(&self, config_fn: F) -> httpmock::Mock
+    fn disk_delete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::DiskDeleteWhen, operations::DiskDeleteThen),
     {
@@ -16678,7 +15922,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn disk_metrics_list<F>(&self, config_fn: F) -> httpmock::Mock
+    fn disk_metrics_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::DiskMetricsListWhen, operations::DiskMetricsListThen),
     {
@@ -16690,7 +15934,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn image_list<F>(&self, config_fn: F) -> httpmock::Mock
+    fn image_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ImageListWhen, operations::ImageListThen),
     {
@@ -16702,7 +15946,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn image_create<F>(&self, config_fn: F) -> httpmock::Mock
+    fn image_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ImageCreateWhen, operations::ImageCreateThen),
     {
@@ -16714,7 +15958,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn image_view<F>(&self, config_fn: F) -> httpmock::Mock
+    fn image_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ImageViewWhen, operations::ImageViewThen),
     {
@@ -16726,7 +15970,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn image_delete<F>(&self, config_fn: F) -> httpmock::Mock
+    fn image_delete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ImageDeleteWhen, operations::ImageDeleteThen),
     {
@@ -16738,7 +15982,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn instance_list<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceListWhen, operations::InstanceListThen),
     {
@@ -16750,7 +15994,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn instance_create<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceCreateWhen, operations::InstanceCreateThen),
     {
@@ -16762,7 +16006,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn instance_view<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceViewWhen, operations::InstanceViewThen),
     {
@@ -16774,7 +16018,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn instance_delete<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_delete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceDeleteWhen, operations::InstanceDeleteThen),
     {
@@ -16786,7 +16030,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn instance_disk_list<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_disk_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceDiskListWhen, operations::InstanceDiskListThen),
     {
@@ -16798,7 +16042,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn instance_disk_attach<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_disk_attach<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceDiskAttachWhen, operations::InstanceDiskAttachThen),
     {
@@ -16810,7 +16054,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn instance_disk_detach<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_disk_detach<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceDiskDetachWhen, operations::InstanceDiskDetachThen),
     {
@@ -16822,7 +16066,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn instance_external_ip_list<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_external_ip_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceExternalIpListWhen, operations::InstanceExternalIpListThen),
     {
@@ -16834,7 +16078,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn instance_migrate<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_migrate<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceMigrateWhen, operations::InstanceMigrateThen),
     {
@@ -16846,7 +16090,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn instance_network_interface_list<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_network_interface_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::InstanceNetworkInterfaceListWhen,
@@ -16861,7 +16105,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn instance_network_interface_create<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_network_interface_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::InstanceNetworkInterfaceCreateWhen,
@@ -16876,7 +16120,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn instance_network_interface_view<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_network_interface_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::InstanceNetworkInterfaceViewWhen,
@@ -16891,7 +16135,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn instance_network_interface_update<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_network_interface_update<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::InstanceNetworkInterfaceUpdateWhen,
@@ -16906,7 +16150,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn instance_network_interface_delete<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_network_interface_delete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::InstanceNetworkInterfaceDeleteWhen,
@@ -16921,7 +16165,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn instance_reboot<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_reboot<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceRebootWhen, operations::InstanceRebootThen),
     {
@@ -16933,7 +16177,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn instance_serial_console<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_serial_console<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceSerialConsoleWhen, operations::InstanceSerialConsoleThen),
     {
@@ -16945,7 +16189,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn instance_serial_console_stream<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_serial_console_stream<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::InstanceSerialConsoleStreamWhen,
@@ -16960,7 +16204,22 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn instance_start<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_serial_console_stream_v2<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
+    where
+        F: FnOnce(
+            operations::InstanceSerialConsoleStreamV2When,
+            operations::InstanceSerialConsoleStreamV2Then,
+        ),
+    {
+        self.mock(|when, then| {
+            config_fn(
+                operations::InstanceSerialConsoleStreamV2When::new(when),
+                operations::InstanceSerialConsoleStreamV2Then::new(then),
+            )
+        })
+    }
+
+    fn instance_start<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceStartWhen, operations::InstanceStartThen),
     {
@@ -16972,7 +16231,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn instance_stop<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_stop<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceStopWhen, operations::InstanceStopThen),
     {
@@ -16984,7 +16243,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn project_policy_view<F>(&self, config_fn: F) -> httpmock::Mock
+    fn project_policy_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ProjectPolicyViewWhen, operations::ProjectPolicyViewThen),
     {
@@ -16996,7 +16255,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn project_policy_update<F>(&self, config_fn: F) -> httpmock::Mock
+    fn project_policy_update<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ProjectPolicyUpdateWhen, operations::ProjectPolicyUpdateThen),
     {
@@ -17008,7 +16267,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn snapshot_list<F>(&self, config_fn: F) -> httpmock::Mock
+    fn snapshot_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SnapshotListWhen, operations::SnapshotListThen),
     {
@@ -17020,7 +16279,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn snapshot_create<F>(&self, config_fn: F) -> httpmock::Mock
+    fn snapshot_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SnapshotCreateWhen, operations::SnapshotCreateThen),
     {
@@ -17032,7 +16291,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn snapshot_view<F>(&self, config_fn: F) -> httpmock::Mock
+    fn snapshot_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SnapshotViewWhen, operations::SnapshotViewThen),
     {
@@ -17044,7 +16303,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn snapshot_delete<F>(&self, config_fn: F) -> httpmock::Mock
+    fn snapshot_delete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SnapshotDeleteWhen, operations::SnapshotDeleteThen),
     {
@@ -17056,7 +16315,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn vpc_list<F>(&self, config_fn: F) -> httpmock::Mock
+    fn vpc_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcListWhen, operations::VpcListThen),
     {
@@ -17068,7 +16327,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn vpc_create<F>(&self, config_fn: F) -> httpmock::Mock
+    fn vpc_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcCreateWhen, operations::VpcCreateThen),
     {
@@ -17080,7 +16339,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn vpc_view<F>(&self, config_fn: F) -> httpmock::Mock
+    fn vpc_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcViewWhen, operations::VpcViewThen),
     {
@@ -17092,7 +16351,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn vpc_update<F>(&self, config_fn: F) -> httpmock::Mock
+    fn vpc_update<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcUpdateWhen, operations::VpcUpdateThen),
     {
@@ -17104,7 +16363,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn vpc_delete<F>(&self, config_fn: F) -> httpmock::Mock
+    fn vpc_delete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcDeleteWhen, operations::VpcDeleteThen),
     {
@@ -17116,7 +16375,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn vpc_firewall_rules_view<F>(&self, config_fn: F) -> httpmock::Mock
+    fn vpc_firewall_rules_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcFirewallRulesViewWhen, operations::VpcFirewallRulesViewThen),
     {
@@ -17128,7 +16387,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn vpc_firewall_rules_update<F>(&self, config_fn: F) -> httpmock::Mock
+    fn vpc_firewall_rules_update<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcFirewallRulesUpdateWhen, operations::VpcFirewallRulesUpdateThen),
     {
@@ -17140,7 +16399,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn vpc_router_list<F>(&self, config_fn: F) -> httpmock::Mock
+    fn vpc_router_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcRouterListWhen, operations::VpcRouterListThen),
     {
@@ -17152,7 +16411,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn vpc_router_create<F>(&self, config_fn: F) -> httpmock::Mock
+    fn vpc_router_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcRouterCreateWhen, operations::VpcRouterCreateThen),
     {
@@ -17164,7 +16423,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn vpc_router_view<F>(&self, config_fn: F) -> httpmock::Mock
+    fn vpc_router_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcRouterViewWhen, operations::VpcRouterViewThen),
     {
@@ -17176,7 +16435,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn vpc_router_update<F>(&self, config_fn: F) -> httpmock::Mock
+    fn vpc_router_update<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcRouterUpdateWhen, operations::VpcRouterUpdateThen),
     {
@@ -17188,7 +16447,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn vpc_router_delete<F>(&self, config_fn: F) -> httpmock::Mock
+    fn vpc_router_delete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcRouterDeleteWhen, operations::VpcRouterDeleteThen),
     {
@@ -17200,7 +16459,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn vpc_router_route_list<F>(&self, config_fn: F) -> httpmock::Mock
+    fn vpc_router_route_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcRouterRouteListWhen, operations::VpcRouterRouteListThen),
     {
@@ -17212,7 +16471,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn vpc_router_route_create<F>(&self, config_fn: F) -> httpmock::Mock
+    fn vpc_router_route_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcRouterRouteCreateWhen, operations::VpcRouterRouteCreateThen),
     {
@@ -17224,7 +16483,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn vpc_router_route_view<F>(&self, config_fn: F) -> httpmock::Mock
+    fn vpc_router_route_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcRouterRouteViewWhen, operations::VpcRouterRouteViewThen),
     {
@@ -17236,7 +16495,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn vpc_router_route_update<F>(&self, config_fn: F) -> httpmock::Mock
+    fn vpc_router_route_update<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcRouterRouteUpdateWhen, operations::VpcRouterRouteUpdateThen),
     {
@@ -17248,7 +16507,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn vpc_router_route_delete<F>(&self, config_fn: F) -> httpmock::Mock
+    fn vpc_router_route_delete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcRouterRouteDeleteWhen, operations::VpcRouterRouteDeleteThen),
     {
@@ -17260,7 +16519,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn vpc_subnet_list<F>(&self, config_fn: F) -> httpmock::Mock
+    fn vpc_subnet_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcSubnetListWhen, operations::VpcSubnetListThen),
     {
@@ -17272,7 +16531,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn vpc_subnet_create<F>(&self, config_fn: F) -> httpmock::Mock
+    fn vpc_subnet_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcSubnetCreateWhen, operations::VpcSubnetCreateThen),
     {
@@ -17284,7 +16543,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn vpc_subnet_view<F>(&self, config_fn: F) -> httpmock::Mock
+    fn vpc_subnet_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcSubnetViewWhen, operations::VpcSubnetViewThen),
     {
@@ -17296,7 +16555,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn vpc_subnet_update<F>(&self, config_fn: F) -> httpmock::Mock
+    fn vpc_subnet_update<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcSubnetUpdateWhen, operations::VpcSubnetUpdateThen),
     {
@@ -17308,7 +16567,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn vpc_subnet_delete<F>(&self, config_fn: F) -> httpmock::Mock
+    fn vpc_subnet_delete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::VpcSubnetDeleteWhen, operations::VpcSubnetDeleteThen),
     {
@@ -17320,7 +16579,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn vpc_subnet_list_network_interfaces<F>(&self, config_fn: F) -> httpmock::Mock
+    fn vpc_subnet_list_network_interfaces<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::VpcSubnetListNetworkInterfacesWhen,
@@ -17335,7 +16594,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn policy_view<F>(&self, config_fn: F) -> httpmock::Mock
+    fn policy_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::PolicyViewWhen, operations::PolicyViewThen),
     {
@@ -17347,7 +16606,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn policy_update<F>(&self, config_fn: F) -> httpmock::Mock
+    fn policy_update<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::PolicyUpdateWhen, operations::PolicyUpdateThen),
     {
@@ -17359,7 +16618,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn role_list<F>(&self, config_fn: F) -> httpmock::Mock
+    fn role_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::RoleListWhen, operations::RoleListThen),
     {
@@ -17371,7 +16630,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn role_view<F>(&self, config_fn: F) -> httpmock::Mock
+    fn role_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::RoleViewWhen, operations::RoleViewThen),
     {
@@ -17383,7 +16642,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn session_me<F>(&self, config_fn: F) -> httpmock::Mock
+    fn session_me<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SessionMeWhen, operations::SessionMeThen),
     {
@@ -17395,7 +16654,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn session_me_groups<F>(&self, config_fn: F) -> httpmock::Mock
+    fn session_me_groups<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SessionMeGroupsWhen, operations::SessionMeGroupsThen),
     {
@@ -17407,7 +16666,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn session_sshkey_list<F>(&self, config_fn: F) -> httpmock::Mock
+    fn session_sshkey_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SessionSshkeyListWhen, operations::SessionSshkeyListThen),
     {
@@ -17419,7 +16678,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn session_sshkey_create<F>(&self, config_fn: F) -> httpmock::Mock
+    fn session_sshkey_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SessionSshkeyCreateWhen, operations::SessionSshkeyCreateThen),
     {
@@ -17431,7 +16690,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn session_sshkey_view<F>(&self, config_fn: F) -> httpmock::Mock
+    fn session_sshkey_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SessionSshkeyViewWhen, operations::SessionSshkeyViewThen),
     {
@@ -17443,7 +16702,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn session_sshkey_delete<F>(&self, config_fn: F) -> httpmock::Mock
+    fn session_sshkey_delete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SessionSshkeyDeleteWhen, operations::SessionSshkeyDeleteThen),
     {
@@ -17455,7 +16714,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn system_image_view_by_id<F>(&self, config_fn: F) -> httpmock::Mock
+    fn system_image_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SystemImageViewByIdWhen, operations::SystemImageViewByIdThen),
     {
@@ -17467,7 +16726,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn ip_pool_view_by_id<F>(&self, config_fn: F) -> httpmock::Mock
+    fn ip_pool_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::IpPoolViewByIdWhen, operations::IpPoolViewByIdThen),
     {
@@ -17479,7 +16738,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn silo_view_by_id<F>(&self, config_fn: F) -> httpmock::Mock
+    fn silo_view_by_id<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SiloViewByIdWhen, operations::SiloViewByIdThen),
     {
@@ -17491,7 +16750,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn certificate_list<F>(&self, config_fn: F) -> httpmock::Mock
+    fn certificate_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::CertificateListWhen, operations::CertificateListThen),
     {
@@ -17503,7 +16762,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn certificate_create<F>(&self, config_fn: F) -> httpmock::Mock
+    fn certificate_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::CertificateCreateWhen, operations::CertificateCreateThen),
     {
@@ -17515,7 +16774,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn certificate_view<F>(&self, config_fn: F) -> httpmock::Mock
+    fn certificate_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::CertificateViewWhen, operations::CertificateViewThen),
     {
@@ -17527,7 +16786,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn certificate_delete<F>(&self, config_fn: F) -> httpmock::Mock
+    fn certificate_delete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::CertificateDeleteWhen, operations::CertificateDeleteThen),
     {
@@ -17539,7 +16798,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn physical_disk_list<F>(&self, config_fn: F) -> httpmock::Mock
+    fn physical_disk_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::PhysicalDiskListWhen, operations::PhysicalDiskListThen),
     {
@@ -17551,7 +16810,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn rack_list<F>(&self, config_fn: F) -> httpmock::Mock
+    fn rack_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::RackListWhen, operations::RackListThen),
     {
@@ -17563,7 +16822,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn rack_view<F>(&self, config_fn: F) -> httpmock::Mock
+    fn rack_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::RackViewWhen, operations::RackViewThen),
     {
@@ -17575,7 +16834,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn sled_list<F>(&self, config_fn: F) -> httpmock::Mock
+    fn sled_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SledListWhen, operations::SledListThen),
     {
@@ -17587,7 +16846,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn sled_view<F>(&self, config_fn: F) -> httpmock::Mock
+    fn sled_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SledViewWhen, operations::SledViewThen),
     {
@@ -17599,7 +16858,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn sled_physical_disk_list<F>(&self, config_fn: F) -> httpmock::Mock
+    fn sled_physical_disk_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SledPhysicalDiskListWhen, operations::SledPhysicalDiskListThen),
     {
@@ -17611,7 +16870,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn system_image_list<F>(&self, config_fn: F) -> httpmock::Mock
+    fn system_image_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SystemImageListWhen, operations::SystemImageListThen),
     {
@@ -17623,7 +16882,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn system_image_create<F>(&self, config_fn: F) -> httpmock::Mock
+    fn system_image_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SystemImageCreateWhen, operations::SystemImageCreateThen),
     {
@@ -17635,7 +16894,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn system_image_view<F>(&self, config_fn: F) -> httpmock::Mock
+    fn system_image_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SystemImageViewWhen, operations::SystemImageViewThen),
     {
@@ -17647,7 +16906,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn system_image_delete<F>(&self, config_fn: F) -> httpmock::Mock
+    fn system_image_delete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SystemImageDeleteWhen, operations::SystemImageDeleteThen),
     {
@@ -17659,7 +16918,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn ip_pool_list<F>(&self, config_fn: F) -> httpmock::Mock
+    fn ip_pool_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::IpPoolListWhen, operations::IpPoolListThen),
     {
@@ -17671,7 +16930,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn ip_pool_create<F>(&self, config_fn: F) -> httpmock::Mock
+    fn ip_pool_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::IpPoolCreateWhen, operations::IpPoolCreateThen),
     {
@@ -17683,7 +16942,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn ip_pool_view<F>(&self, config_fn: F) -> httpmock::Mock
+    fn ip_pool_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::IpPoolViewWhen, operations::IpPoolViewThen),
     {
@@ -17695,7 +16954,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn ip_pool_update<F>(&self, config_fn: F) -> httpmock::Mock
+    fn ip_pool_update<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::IpPoolUpdateWhen, operations::IpPoolUpdateThen),
     {
@@ -17707,7 +16966,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn ip_pool_delete<F>(&self, config_fn: F) -> httpmock::Mock
+    fn ip_pool_delete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::IpPoolDeleteWhen, operations::IpPoolDeleteThen),
     {
@@ -17719,7 +16978,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn ip_pool_range_list<F>(&self, config_fn: F) -> httpmock::Mock
+    fn ip_pool_range_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::IpPoolRangeListWhen, operations::IpPoolRangeListThen),
     {
@@ -17731,7 +16990,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn ip_pool_range_add<F>(&self, config_fn: F) -> httpmock::Mock
+    fn ip_pool_range_add<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::IpPoolRangeAddWhen, operations::IpPoolRangeAddThen),
     {
@@ -17743,7 +17002,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn ip_pool_range_remove<F>(&self, config_fn: F) -> httpmock::Mock
+    fn ip_pool_range_remove<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::IpPoolRangeRemoveWhen, operations::IpPoolRangeRemoveThen),
     {
@@ -17755,7 +17014,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn ip_pool_service_view<F>(&self, config_fn: F) -> httpmock::Mock
+    fn ip_pool_service_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::IpPoolServiceViewWhen, operations::IpPoolServiceViewThen),
     {
@@ -17767,7 +17026,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn ip_pool_service_range_list<F>(&self, config_fn: F) -> httpmock::Mock
+    fn ip_pool_service_range_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::IpPoolServiceRangeListWhen, operations::IpPoolServiceRangeListThen),
     {
@@ -17779,7 +17038,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn ip_pool_service_range_add<F>(&self, config_fn: F) -> httpmock::Mock
+    fn ip_pool_service_range_add<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::IpPoolServiceRangeAddWhen, operations::IpPoolServiceRangeAddThen),
     {
@@ -17791,7 +17050,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn ip_pool_service_range_remove<F>(&self, config_fn: F) -> httpmock::Mock
+    fn ip_pool_service_range_remove<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::IpPoolServiceRangeRemoveWhen,
@@ -17806,7 +17065,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn system_metric<F>(&self, config_fn: F) -> httpmock::Mock
+    fn system_metric<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SystemMetricWhen, operations::SystemMetricThen),
     {
@@ -17818,7 +17077,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn system_policy_view<F>(&self, config_fn: F) -> httpmock::Mock
+    fn system_policy_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SystemPolicyViewWhen, operations::SystemPolicyViewThen),
     {
@@ -17830,7 +17089,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn system_policy_update<F>(&self, config_fn: F) -> httpmock::Mock
+    fn system_policy_update<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SystemPolicyUpdateWhen, operations::SystemPolicyUpdateThen),
     {
@@ -17842,7 +17101,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn saga_list<F>(&self, config_fn: F) -> httpmock::Mock
+    fn saga_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SagaListWhen, operations::SagaListThen),
     {
@@ -17854,7 +17113,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn saga_view<F>(&self, config_fn: F) -> httpmock::Mock
+    fn saga_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SagaViewWhen, operations::SagaViewThen),
     {
@@ -17866,7 +17125,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn silo_list<F>(&self, config_fn: F) -> httpmock::Mock
+    fn silo_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SiloListWhen, operations::SiloListThen),
     {
@@ -17878,7 +17137,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn silo_create<F>(&self, config_fn: F) -> httpmock::Mock
+    fn silo_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SiloCreateWhen, operations::SiloCreateThen),
     {
@@ -17890,7 +17149,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn silo_view<F>(&self, config_fn: F) -> httpmock::Mock
+    fn silo_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SiloViewWhen, operations::SiloViewThen),
     {
@@ -17902,7 +17161,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn silo_delete<F>(&self, config_fn: F) -> httpmock::Mock
+    fn silo_delete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SiloDeleteWhen, operations::SiloDeleteThen),
     {
@@ -17914,7 +17173,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn silo_identity_provider_list<F>(&self, config_fn: F) -> httpmock::Mock
+    fn silo_identity_provider_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::SiloIdentityProviderListWhen,
@@ -17929,7 +17188,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn local_idp_user_create<F>(&self, config_fn: F) -> httpmock::Mock
+    fn local_idp_user_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::LocalIdpUserCreateWhen, operations::LocalIdpUserCreateThen),
     {
@@ -17941,7 +17200,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn local_idp_user_delete<F>(&self, config_fn: F) -> httpmock::Mock
+    fn local_idp_user_delete<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::LocalIdpUserDeleteWhen, operations::LocalIdpUserDeleteThen),
     {
@@ -17953,7 +17212,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn local_idp_user_set_password<F>(&self, config_fn: F) -> httpmock::Mock
+    fn local_idp_user_set_password<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::LocalIdpUserSetPasswordWhen, operations::LocalIdpUserSetPasswordThen),
     {
@@ -17965,7 +17224,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn saml_identity_provider_create<F>(&self, config_fn: F) -> httpmock::Mock
+    fn saml_identity_provider_create<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::SamlIdentityProviderCreateWhen,
@@ -17980,7 +17239,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn saml_identity_provider_view<F>(&self, config_fn: F) -> httpmock::Mock
+    fn saml_identity_provider_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::SamlIdentityProviderViewWhen,
@@ -17995,7 +17254,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn silo_policy_view<F>(&self, config_fn: F) -> httpmock::Mock
+    fn silo_policy_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SiloPolicyViewWhen, operations::SiloPolicyViewThen),
     {
@@ -18007,7 +17266,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn silo_policy_update<F>(&self, config_fn: F) -> httpmock::Mock
+    fn silo_policy_update<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SiloPolicyUpdateWhen, operations::SiloPolicyUpdateThen),
     {
@@ -18019,7 +17278,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn silo_users_list<F>(&self, config_fn: F) -> httpmock::Mock
+    fn silo_users_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SiloUsersListWhen, operations::SiloUsersListThen),
     {
@@ -18031,7 +17290,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn silo_user_view<F>(&self, config_fn: F) -> httpmock::Mock
+    fn silo_user_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SiloUserViewWhen, operations::SiloUserViewThen),
     {
@@ -18043,7 +17302,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn system_user_list<F>(&self, config_fn: F) -> httpmock::Mock
+    fn system_user_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SystemUserListWhen, operations::SystemUserListThen),
     {
@@ -18055,7 +17314,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn system_user_view<F>(&self, config_fn: F) -> httpmock::Mock
+    fn system_user_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SystemUserViewWhen, operations::SystemUserViewThen),
     {
@@ -18067,7 +17326,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn timeseries_schema_get<F>(&self, config_fn: F) -> httpmock::Mock
+    fn timeseries_schema_get<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::TimeseriesSchemaGetWhen, operations::TimeseriesSchemaGetThen),
     {
@@ -18079,7 +17338,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn user_list<F>(&self, config_fn: F) -> httpmock::Mock
+    fn user_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::UserListWhen, operations::UserListThen),
     {
@@ -18091,7 +17350,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn disk_list_v1<F>(&self, config_fn: F) -> httpmock::Mock
+    fn disk_list_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::DiskListV1When, operations::DiskListV1Then),
     {
@@ -18103,7 +17362,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn disk_create_v1<F>(&self, config_fn: F) -> httpmock::Mock
+    fn disk_create_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::DiskCreateV1When, operations::DiskCreateV1Then),
     {
@@ -18115,7 +17374,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn disk_view_v1<F>(&self, config_fn: F) -> httpmock::Mock
+    fn disk_view_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::DiskViewV1When, operations::DiskViewV1Then),
     {
@@ -18127,7 +17386,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn disk_delete_v1<F>(&self, config_fn: F) -> httpmock::Mock
+    fn disk_delete_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::DiskDeleteV1When, operations::DiskDeleteV1Then),
     {
@@ -18139,7 +17398,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn instance_list_v1<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_list_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceListV1When, operations::InstanceListV1Then),
     {
@@ -18151,7 +17410,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn instance_create_v1<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_create_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceCreateV1When, operations::InstanceCreateV1Then),
     {
@@ -18163,7 +17422,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn instance_view_v1<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_view_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceViewV1When, operations::InstanceViewV1Then),
     {
@@ -18175,7 +17434,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn instance_delete_v1<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_delete_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceDeleteV1When, operations::InstanceDeleteV1Then),
     {
@@ -18187,7 +17446,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn instance_disk_list_v1<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_disk_list_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceDiskListV1When, operations::InstanceDiskListV1Then),
     {
@@ -18199,7 +17458,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn instance_disk_attach_v1<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_disk_attach_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceDiskAttachV1When, operations::InstanceDiskAttachV1Then),
     {
@@ -18211,7 +17470,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn instance_disk_detach_v1<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_disk_detach_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceDiskDetachV1When, operations::InstanceDiskDetachV1Then),
     {
@@ -18223,7 +17482,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn instance_migrate_v1<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_migrate_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceMigrateV1When, operations::InstanceMigrateV1Then),
     {
@@ -18235,7 +17494,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn instance_reboot_v1<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_reboot_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceRebootV1When, operations::InstanceRebootV1Then),
     {
@@ -18247,7 +17506,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn instance_serial_console_v1<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_serial_console_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceSerialConsoleV1When, operations::InstanceSerialConsoleV1Then),
     {
@@ -18259,7 +17518,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn instance_serial_console_stream_v1<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_serial_console_stream_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::InstanceSerialConsoleStreamV1When,
@@ -18274,7 +17533,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn instance_start_v1<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_start_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceStartV1When, operations::InstanceStartV1Then),
     {
@@ -18286,7 +17545,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn instance_stop_v1<F>(&self, config_fn: F) -> httpmock::Mock
+    fn instance_stop_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::InstanceStopV1When, operations::InstanceStopV1Then),
     {
@@ -18298,7 +17557,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn organization_list_v1<F>(&self, config_fn: F) -> httpmock::Mock
+    fn organization_list_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::OrganizationListV1When, operations::OrganizationListV1Then),
     {
@@ -18310,7 +17569,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn organization_create_v1<F>(&self, config_fn: F) -> httpmock::Mock
+    fn organization_create_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::OrganizationCreateV1When, operations::OrganizationCreateV1Then),
     {
@@ -18322,7 +17581,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn organization_view_v1<F>(&self, config_fn: F) -> httpmock::Mock
+    fn organization_view_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::OrganizationViewV1When, operations::OrganizationViewV1Then),
     {
@@ -18334,7 +17593,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn organization_update_v1<F>(&self, config_fn: F) -> httpmock::Mock
+    fn organization_update_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::OrganizationUpdateV1When, operations::OrganizationUpdateV1Then),
     {
@@ -18346,7 +17605,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn organization_delete_v1<F>(&self, config_fn: F) -> httpmock::Mock
+    fn organization_delete_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::OrganizationDeleteV1When, operations::OrganizationDeleteV1Then),
     {
@@ -18358,7 +17617,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn organization_policy_view_v1<F>(&self, config_fn: F) -> httpmock::Mock
+    fn organization_policy_view_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::OrganizationPolicyViewV1When,
@@ -18373,7 +17632,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn organization_policy_update_v1<F>(&self, config_fn: F) -> httpmock::Mock
+    fn organization_policy_update_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::OrganizationPolicyUpdateV1When,
@@ -18388,7 +17647,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn project_list_v1<F>(&self, config_fn: F) -> httpmock::Mock
+    fn project_list_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ProjectListV1When, operations::ProjectListV1Then),
     {
@@ -18400,7 +17659,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn project_create_v1<F>(&self, config_fn: F) -> httpmock::Mock
+    fn project_create_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ProjectCreateV1When, operations::ProjectCreateV1Then),
     {
@@ -18412,7 +17671,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn project_view_v1<F>(&self, config_fn: F) -> httpmock::Mock
+    fn project_view_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ProjectViewV1When, operations::ProjectViewV1Then),
     {
@@ -18424,7 +17683,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn project_update_v1<F>(&self, config_fn: F) -> httpmock::Mock
+    fn project_update_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ProjectUpdateV1When, operations::ProjectUpdateV1Then),
     {
@@ -18436,7 +17695,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn project_delete_v1<F>(&self, config_fn: F) -> httpmock::Mock
+    fn project_delete_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ProjectDeleteV1When, operations::ProjectDeleteV1Then),
     {
@@ -18448,7 +17707,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn project_policy_view_v1<F>(&self, config_fn: F) -> httpmock::Mock
+    fn project_policy_view_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ProjectPolicyViewV1When, operations::ProjectPolicyViewV1Then),
     {
@@ -18460,7 +17719,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn project_policy_update_v1<F>(&self, config_fn: F) -> httpmock::Mock
+    fn project_policy_update_v1<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::ProjectPolicyUpdateV1When, operations::ProjectPolicyUpdateV1Then),
     {
@@ -18472,7 +17731,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn system_component_version_list<F>(&self, config_fn: F) -> httpmock::Mock
+    fn system_component_version_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::SystemComponentVersionListWhen,
@@ -18487,7 +17746,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn update_deployments_list<F>(&self, config_fn: F) -> httpmock::Mock
+    fn update_deployments_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::UpdateDeploymentsListWhen, operations::UpdateDeploymentsListThen),
     {
@@ -18499,7 +17758,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn update_deployment_view<F>(&self, config_fn: F) -> httpmock::Mock
+    fn update_deployment_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::UpdateDeploymentViewWhen, operations::UpdateDeploymentViewThen),
     {
@@ -18511,7 +17770,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn system_update_refresh<F>(&self, config_fn: F) -> httpmock::Mock
+    fn system_update_refresh<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SystemUpdateRefreshWhen, operations::SystemUpdateRefreshThen),
     {
@@ -18523,7 +17782,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn system_update_start<F>(&self, config_fn: F) -> httpmock::Mock
+    fn system_update_start<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SystemUpdateStartWhen, operations::SystemUpdateStartThen),
     {
@@ -18535,7 +17794,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn system_update_stop<F>(&self, config_fn: F) -> httpmock::Mock
+    fn system_update_stop<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SystemUpdateStopWhen, operations::SystemUpdateStopThen),
     {
@@ -18547,7 +17806,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn system_update_list<F>(&self, config_fn: F) -> httpmock::Mock
+    fn system_update_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SystemUpdateListWhen, operations::SystemUpdateListThen),
     {
@@ -18559,7 +17818,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn system_update_view<F>(&self, config_fn: F) -> httpmock::Mock
+    fn system_update_view<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SystemUpdateViewWhen, operations::SystemUpdateViewThen),
     {
@@ -18571,7 +17830,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn system_update_components_list<F>(&self, config_fn: F) -> httpmock::Mock
+    fn system_update_components_list<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(
             operations::SystemUpdateComponentsListWhen,
@@ -18586,7 +17845,7 @@ impl MockServerExt for httpmock::MockServer {
         })
     }
 
-    fn system_version<F>(&self, config_fn: F) -> httpmock::Mock
+    fn system_version<F>(&self, config_fn: F) -> ::httpmock::Mock<'_>
     where
         F: FnOnce(operations::SystemVersionWhen, operations::SystemVersionThen),
     {

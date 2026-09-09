@@ -1,0 +1,43 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "description": "Test case to exercise CLI generation",
+    "title": "CLI gen test",
+    "version": "9000"
+  },
+  "paths": {
+    "/uno": {
+      "get": {
+        "operationId": "uno",
+        "parameters": [
+          {
+            "name": "gateway",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "gateway": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "required"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {}
+      }
+    }
+  }
+}

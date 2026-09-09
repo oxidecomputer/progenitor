@@ -1,8 +1,9 @@
 [package]
 name = "progenitor-macro"
-version = "0.7.0"
-edition = "2021"
-license = "MPL-2.0"
+version = "0.14.0"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
 description = "An OpenAPI client generator - macros"
 repository = "https://github.com/oxidecomputer/progenitor.git"
 readme = "../README.md"
@@ -11,13 +12,13 @@ readme = "../README.md"
 proc-macro = true
 
 [dependencies]
-openapiv3 = "2.0.0"
-proc-macro2 = "1.0"
-progenitor-impl = { version = "0.7.0", path = "../progenitor-impl" }
-quote = "1.0"
-schemars = "0.8.21"
-serde = { version = "1.0", features = ["derive"] }
-serde_json = "1.0"
-serde_yaml = "0.9"
-serde_tokenstream = "0.2.0"
-syn = { version = "2.0", features = ["full", "extra-traits"] }
+openapiv3 = { workspace = true }
+proc-macro2 = { workspace = true }
+progenitor-impl = { workspace = true }
+quote = { workspace = true }
+schemars = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+serde_yaml = { workspace = true }
+serde_tokenstream = { workspace = true }
+syn = { workspace = true, features = ["full", "extra-traits"] }

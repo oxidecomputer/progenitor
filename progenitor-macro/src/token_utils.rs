@@ -1,13 +1,13 @@
-// Copyright 2023 Oxide Computer Company
+// Copyright 2026 Oxide Computer Company
 
 use std::collections::HashSet;
 
 use quote::ToTokens;
 use syn::{
+    Ident, Path, Token,
     parse::Parse,
     punctuated::Punctuated,
     token::{Colon, Plus},
-    Ident, Path, Token, TraitBoundModifier,
 };
 
 use progenitor_impl::TypeImpl;
@@ -20,14 +20,11 @@ pub struct TypeAndImpls {
 }
 
 impl TypeAndImpls {
-    pub(crate) fn into_name_and_impls(
-        self,
-    ) -> (String, impl Iterator<Item = TypeImpl>) {
+    pub(crate) fn into_name_and_impls(self) -> (String, impl Iterator<Item = TypeImpl>) {
         // If there are no traits specified, these are assumed to be
         // implemented. A user would use the `?FromStr` syntax to remove one of
         // these defaults;
-        const DEFAULT_IMPLS: [TypeImpl; 2] =
-            [TypeImpl::FromStr, TypeImpl::Display];
+        const DEFAULT_IMPLS: [TypeImpl; 2] = [TypeImpl::FromStr, TypeImpl::Display];
 
         let name = self.type_name.to_token_stream().to_string();
         let mut impls = DEFAULT_IMPLS.into_iter().collect::<HashSet<_>>();
@@ -40,12 +37,8 @@ impl TypeAndImpls {
                 // TODO should this be an error rather than silently ignored?
                 if let Some(impl_name) = impl_name {
                     match modifier {
-                        syn::TraitBoundModifier::None => {
-                            impls.insert(impl_name)
-                        }
-                        syn::TraitBoundModifier::Maybe(_) => {
-                            impls.remove(&impl_name)
-                        }
+                        None => impls.insert(impl_name),
+                        Some(_) => impls.remove(&impl_name),
                     };
                 }
             },
@@ -90,14 +83,14 @@ impl ToTokens for TypeAndImpls {
 
 #[derive(Debug)]
 pub struct ImplTrait {
-    pub modifier: TraitBoundModifier,
+    pub modifier: Option<Token![?]>,
     pub impl_ident: Ident,
     pub impl_name: Option<TypeImpl>,
 }
 
 impl Parse for ImplTrait {
     fn parse(input: syn::parse::ParseStream) -> syn::Result<Self> {
-        let modifier: TraitBoundModifier = input.parse()?;
+        let modifier = input.parse()?;
         let impl_ident: Ident = input.parse()?;
         let impl_name = impl_ident.to_string().parse().ok();
 
@@ -120,7 +113,7 @@ impl ToTokens for ImplTrait {
 mod tests {
     use super::TypeAndImpls;
 
-    use quote::{quote, ToTokens};
+    use quote::{ToTokens, quote};
 
     #[test]
     fn test_parse_type_and_impls() {

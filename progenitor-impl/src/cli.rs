@@ -1,4 +1,4 @@
-// Copyright 2024 Oxide Computer Company
+// Copyright 2026 Oxide Computer Company
 
 use std::collections::BTreeMap;
 
@@ -9,12 +9,11 @@ use quote::{format_ident, quote};
 use typify::{Type, TypeEnumVariant, TypeSpaceImpl, TypeStructPropInfo};
 
 use crate::{
-    method::{
-        OperationParameterKind, OperationParameterType, OperationResponseStatus,
-    },
+    Generator, Result,
+    method::{OperationParameterKind, OperationParameterType, OperationResponseStatus},
     to_schema::ToSchema,
-    util::{sanitize, Case},
-    validate_openapi, Generator, Result,
+    util::{Case, sanitize},
+    validate_openapi,
 };
 
 struct CliOperation {
@@ -25,18 +24,15 @@ struct CliOperation {
 
 impl Generator {
     /// Generate a `clap`-based CLI.
-    pub fn cli(
-        &mut self,
-        spec: &OpenAPI,
-        crate_name: &str,
-    ) -> Result<TokenStream> {
+    pub fn cli(&mut self, spec: &OpenAPI, crate_name: &str) -> Result<TokenStream> {
         validate_openapi(spec)?;
 
         // Convert our components dictionary to schemars
         let schemas = spec.components.iter().flat_map(|components| {
-            components.schemas.iter().map(|(name, ref_or_schema)| {
-                (name.clone(), ref_or_schema.to_schema())
-            })
+            components
+                .schemas
+                .iter()
+                .map(|(name, ref_or_schema)| (name.clone(), ref_or_schema.to_schema()))
         });
 
         self.type_space.add_ref_types(schemas)?;
@@ -52,13 +48,7 @@ impl Generator {
                 })
             })
             .map(|(path, method, operation, path_parameters)| {
-                self.process_operation(
-                    operation,
-                    &spec.components,
-                    path,
-                    method,
-                    path_parameters,
-                )
+                self.process_operation(operation, &spec.components, path, method, path_parameters)
             })
             .collect::<Result<Vec<_>>>()?;
 
@@ -71,42 +61,36 @@ impl Generator {
         let execute_ops = methods.iter().map(|op| &op.execute_fn);
         let trait_ops = methods.iter().map(|op| &op.execute_trait);
 
+        let operation_id = raw_methods.iter().map(|method| &method.operation_id);
+
         let cli_fns = raw_methods
             .iter()
-            .map(|method| {
-                format_ident!(
-                    "cli_{}",
-                    sanitize(&method.operation_id, Case::Snake)
-                )
-            })
-            .collect::<Vec<_>>();
+            .map(|method| format_ident!("cli_{}", sanitize(&method.operation_id, Case::Snake)));
         let execute_fns = raw_methods
             .iter()
-            .map(|method| {
-                format_ident!(
-                    "execute_{}",
-                    sanitize(&method.operation_id, Case::Snake)
-                )
-            })
-            .collect::<Vec<_>>();
+            .map(|method| format_ident!("execute_{}", sanitize(&method.operation_id, Case::Snake)));
 
         let cli_variants = raw_methods
             .iter()
-            .map(|method| {
-                format_ident!(
-                    "{}",
-                    sanitize(&method.operation_id, Case::Pascal)
-                )
-            })
+            .map(|method| format_ident!("{}", sanitize(&method.operation_id, Case::Pascal)))
             .collect::<Vec<_>>();
 
         let crate_path = syn::TypePath {
+            attrs: Default::default(),
             qself: None,
             path: syn::parse_str(crate_name).unwrap(),
         };
 
+        let cli_bounds = self
+            .settings
+            .extra_cli_bounds
+            .iter()
+            .map(|b| syn::parse_str::<syn::Path>(b).unwrap())
+            .collect::<Vec<_>>();
+
         let code = quote! {
             use #crate_path::*;
+            use anyhow::Context as _;
 
             pub struct Cli<T: CliConfig> {
                 client: Client,
@@ -120,7 +104,7 @@ impl Generator {
                     Self { client, config }
                 }
 
-                pub fn get_command(cmd: CliCommand) -> clap::Command {
+                pub fn get_command(cmd: CliCommand) -> ::clap::Command {
                     match cmd {
                         #(
                             CliCommand::#cli_variants => Self::#cli_fns(),
@@ -133,7 +117,7 @@ impl Generator {
                 pub async fn execute(
                     &self,
                     cmd: CliCommand,
-                    matches: &clap::ArgMatches,
+                    matches: &::clap::ArgMatches,
                 ) -> anyhow::Result<()> {
                     match cmd {
                         #(
@@ -151,24 +135,24 @@ impl Generator {
             pub trait CliConfig {
                 fn success_item<T>(&self, value: &ResponseValue<T>)
                 where
-                    T: schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
+                    T: #(#cli_bounds+)* schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
                 fn success_no_item(&self, value: &ResponseValue<()>);
                 fn error<T>(&self, value: &Error<T>)
                 where
-                    T: schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
+                    T: #(#cli_bounds+)* schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
 
                 fn list_start<T>(&self)
                 where
-                    T: schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
+                    T: #(#cli_bounds+)* schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
                 fn list_item<T>(&self, value: &T)
                 where
-                    T: schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
+                    T: #(#cli_bounds+)* schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
                 fn list_end_success<T>(&self)
                 where
-                    T: schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
+                    T: #(#cli_bounds+)* schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
                 fn list_end_error<T>(&self, value: &Error<T>)
                 where
-                    T: schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
+                    T: #(#cli_bounds+)* schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
 
                 #(#trait_ops)*
             }
@@ -186,6 +170,14 @@ impl Generator {
                         )*
                     ].into_iter()
                 }
+
+                pub fn operation_id(&self) -> &'static str {
+                    match self {
+                        #(
+                            CliCommand::#cli_variants => #operation_id,
+                        )*
+                    }
+                }
             }
 
         };
@@ -193,50 +185,58 @@ impl Generator {
         Ok(code)
     }
 
-    fn cli_method(
-        &mut self,
-        method: &crate::method::OperationMethod,
-    ) -> CliOperation {
+    fn cli_method(&mut self, method: &crate::method::OperationMethod) -> CliOperation {
         let CliArg {
             parser: parser_args,
             consumer: consumer_args,
         } = self.cli_method_args(method);
 
-        let about = method.summary.as_ref().map(|summary| {
+        // A clap command has two help fields, `about` and `long_about`. When
+        // both are set, `-h` (and the parent's subcommand listing) shows
+        // `about`, while `--help` shows `long_about`. The natural mapping --
+        // short summary into `about`, description into `long_about` -- exploits
+        // that to keep listings to one line, but it means `-h` and `--help`
+        // behave differently, and `-h` never shows the description, and
+        // `--help` is missing the summary.
+        //
+        // We instead merge summary and description into a single `about` and
+        // set no `long_about`. clap only diverges `-h` from `--help` when there
+        // is "long" content (a `long_about`, or an arg with `long_help`), so
+        // with only `about` set the two views render identically and always
+        // show the full prose. The downside is that the parent's subcommand
+        // listing prints this combined text untruncated, so multi-paragraph
+        // descriptions make for tall rows. On the other hand, a) in Nexus, long
+        // descriptions are relatively rare, and b) that information is useful
+        // even if it makes the listing less visually neat.
+        let about_text = match (&method.summary, &method.description) {
+            (Some(summary), Some(description)) => Some(format!("{summary}\n\n{description}")),
+            (Some(text), None) | (None, Some(text)) => Some(text.clone()),
+            (None, None) => None,
+        };
+        let about = about_text.map(|about| {
             quote! {
-                .about(#summary)
-            }
-        });
-
-        let long_about = method.description.as_ref().map(|description| {
-            quote! {
-                .long_about(#description)
+                .about(#about)
             }
         });
 
         let fn_name = format_ident!("cli_{}", &method.operation_id);
 
         let cli_fn = quote! {
-            pub fn #fn_name() -> clap::Command
+            pub fn #fn_name() -> ::clap::Command
             {
-                clap::Command::new("")
+                ::clap::Command::new("")
                 #parser_args
                 #about
-                #long_about
             }
         };
 
         let fn_name = format_ident!("execute_{}", &method.operation_id);
         let op_name = format_ident!("{}", &method.operation_id);
 
-        let (_, success_kind) = self.extract_responses(
-            method,
-            OperationResponseStatus::is_success_or_default,
-        );
-        let (_, error_kind) = self.extract_responses(
-            method,
-            OperationResponseStatus::is_error_or_default,
-        );
+        let (_, success_kind) =
+            self.extract_responses(method, OperationResponseStatus::is_success_or_default);
+        let (_, error_kind) =
+            self.extract_responses(method, OperationResponseStatus::is_error_or_default);
 
         let execute_and_output = match method.dropshot_paginated {
             // Normal, one-shot API calls.
@@ -357,7 +357,7 @@ impl Generator {
         };
 
         let execute_fn = quote! {
-            pub async fn #fn_name(&self, matches: &clap::ArgMatches)
+            pub async fn #fn_name(&self, matches: &::clap::ArgMatches)
                 -> anyhow::Result<()>
             {
                 let mut request = self.client.#op_name();
@@ -377,7 +377,7 @@ impl Generator {
         let execute_trait = quote! {
             fn #fn_name(
                 &self,
-                matches: &clap::ArgMatches,
+                matches: &::clap::ArgMatches,
                 request: &mut builder :: #struct_ident,
             ) -> anyhow::Result<()> {
                 Ok(())
@@ -391,10 +391,7 @@ impl Generator {
         }
     }
 
-    fn cli_method_args(
-        &self,
-        method: &crate::method::OperationMethod,
-    ) -> CliArg {
+    fn cli_method_args(&self, method: &crate::method::OperationMethod) -> CliArg {
         let mut args = CliOperationArgs::default();
 
         let first_page_required_set = method
@@ -413,9 +410,7 @@ impl Generator {
             };
 
             // For paginated endpoints, we don't generate 'page_token' args.
-            if method.dropshot_paginated.is_some()
-                && param.name.as_str() == "page_token"
-            {
+            if method.dropshot_paginated.is_some() && param.name.as_str() == "page_token" {
                 continue;
             }
 
@@ -438,12 +433,7 @@ impl Generator {
             // There should be no conflicting path or query parameters.
             assert!(!args.has_arg(&arg_name));
 
-            let parser = clap_arg(
-                &arg_name,
-                volitionality,
-                &param.description,
-                &arg_type,
-            );
+            let parser = clap_arg(&arg_name, volitionality, &param.description, &arg_type);
 
             let arg_fn_name = sanitize(&param.name, Case::Snake);
             let arg_fn = format_ident!("{}", arg_fn_name);
@@ -469,18 +459,14 @@ impl Generator {
         let maybe_body_type_id = method
             .params
             .iter()
-            .find(|param| {
-                matches!(&param.kind, OperationParameterKind::Body(_))
-            })
+            .find(|param| matches!(&param.kind, OperationParameterKind::Body(_)))
             .and_then(|param| match &param.typ {
                 // TODO not sure how to deal with raw bodies, but we definitely
                 // need **some** input so we shouldn't just ignore it... as we
                 // are currently...
                 OperationParameterType::RawBody => None,
 
-                OperationParameterType::Type(body_type_id) => {
-                    Some(body_type_id)
-                }
+                OperationParameterType::Type(body_type_id) => Some(body_type_id),
             });
 
         if let Some(body_type_id) = maybe_body_type_id {
@@ -503,8 +489,7 @@ impl Generator {
             }
         }
 
-        let parser_args =
-            args.args.values().map(|CliArg { parser, .. }| parser);
+        let parser_args = args.args.values().map(|CliArg { parser, .. }| parser);
 
         // TODO do this as args we add in.
         let body_json_args = (match args.body {
@@ -517,19 +502,19 @@ impl Generator {
 
             quote! {
                 .arg(
-                    clap::Arg::new("json-body")
+                    ::clap::Arg::new("json-body")
                         .long("json-body")
                         .value_name("JSON-FILE")
                         // Required if we can't turn the body into individual
                         // parameters.
                         .required(#required)
-                        .value_parser(clap::value_parser!(std::path::PathBuf))
+                        .value_parser(::clap::value_parser!(std::path::PathBuf))
                         .help(#help)
                 )
                 .arg(
-                    clap::Arg::new("json-body-template")
+                    ::clap::Arg::new("json-body-template")
                         .long("json-body-template")
-                        .action(clap::ArgAction::SetTrue)
+                        .action(::clap::ArgAction::SetTrue)
                         .help("XXX")
                 )
             }
@@ -542,8 +527,7 @@ impl Generator {
             #body_json_args
         };
 
-        let consumer_args =
-            args.args.values().map(|CliArg { consumer, .. }| consumer);
+        let consumer_args = args.args.values().map(|CliArg { consumer, .. }| consumer);
 
         let body_json_consumer = maybe_body_type_id.map(|body_type_id| {
             let body_type = self.type_space.get_type(body_type_id).unwrap();
@@ -552,12 +536,12 @@ impl Generator {
                 if let Some(value) =
                     matches.get_one::<std::path::PathBuf>("json-body")
                 {
-                    let body_txt = std::fs::read_to_string(value).unwrap();
+                    let body_txt = std::fs::read_to_string(value).with_context(|| format!("failed to read {}", value.display()))?;
                     let body_value =
                         serde_json::from_str::<#body_type_ident>(
                             &body_txt,
                         )
-                        .unwrap();
+                        .with_context(|| format!("failed to parse {}", value.display()))?;
                     request = request.body(body_value);
                 }
             }
@@ -573,11 +557,7 @@ impl Generator {
         CliArg { parser, consumer }
     }
 
-    fn cli_method_body_arg(
-        &self,
-        args: &mut CliOperationArgs,
-        prop_info: TypeStructPropInfo<'_>,
-    ) {
+    fn cli_method_body_arg(&self, args: &mut CliOperationArgs, prop_info: TypeStructPropInfo<'_>) {
         let TypeStructPropInfo {
             name,
             description,
@@ -596,11 +576,8 @@ impl Generator {
         // omitting the field. Back to the first hand: is that last point just
         // a serde issue rather than an interface one?
         let maybe_inner_type =
-            if let typify::TypeDetails::Option(inner_type_id) =
-                prop_type.details()
-            {
-                let inner_type =
-                    self.type_space.get_type(&inner_type_id).unwrap();
+            if let typify::TypeDetails::Option(inner_type_id) = prop_type.details() {
+                let inner_type = self.type_space.get_type(&inner_type_id).unwrap();
                 Some(inner_type)
             } else {
                 None
@@ -614,13 +591,13 @@ impl Generator {
 
         let scalar = prop_type.has_impl(TypeSpaceImpl::FromStr);
 
-        if scalar {
+        let prop_name = name.to_kebab_case();
+        if scalar && !args.has_arg(&prop_name) {
             let volitionality = if required {
                 Volitionality::RequiredIfNoBody
             } else {
                 Volitionality::Optional
             };
-            let prop_name = name.to_kebab_case();
             let parser = clap_arg(
                 &prop_name,
                 volitionality,
@@ -685,32 +662,31 @@ fn clap_arg(
     // we use clap's `PossibleValuesParser` with each variant converted to a
     // string. Then we use TypedValueParser::map to translate that into the
     // actual type of the enum.
-    let maybe_enum_parser =
-        if let typify::TypeDetails::Enum(e) = arg_type.details() {
-            let maybe_var_names = e
-                .variants()
-                .map(|(var_name, var_details)| {
-                    if let TypeEnumVariant::Simple = var_details {
-                        Some(format_ident!("{}", var_name))
-                    } else {
-                        None
-                    }
-                })
-                .collect::<Option<Vec<_>>>();
-
-            maybe_var_names.map(|var_names| {
-                quote! {
-                    clap::builder::TypedValueParser::map(
-                        clap::builder::PossibleValuesParser::new([
-                            #( #arg_type_name :: #var_names.to_string(), )*
-                        ]),
-                        |s| #arg_type_name :: try_from(s).unwrap()
-                    )
+    let maybe_enum_parser = if let typify::TypeDetails::Enum(e) = arg_type.details() {
+        let maybe_var_names = e
+            .variants()
+            .map(|(var_name, var_details)| {
+                if let TypeEnumVariant::Simple = var_details {
+                    Some(format_ident!("{}", var_name))
+                } else {
+                    None
                 }
             })
-        } else {
-            None
-        };
+            .collect::<Option<Vec<_>>>();
+
+        maybe_var_names.map(|var_names| {
+            quote! {
+                ::clap::builder::TypedValueParser::map(
+                    ::clap::builder::PossibleValuesParser::new([
+                        #( #arg_type_name :: #var_names.to_string(), )*
+                    ]),
+                    |s| #arg_type_name :: try_from(s).unwrap()
+                )
+            }
+        })
+    } else {
+        None
+    };
 
     let value_parser = if let Some(enum_parser) = maybe_enum_parser {
         enum_parser
@@ -719,7 +695,7 @@ fn clap_arg(
         // allowing for override implementations. A generated client may
         // implement ValueParserFactory for a type to create a custom parser.
         quote! {
-            clap::value_parser!(#arg_type_name)
+            ::clap::value_parser!(#arg_type_name)
         }
     };
 
@@ -732,7 +708,7 @@ fn clap_arg(
     };
 
     quote! {
-        clap::Arg::new(#arg_name)
+        ::clap::Arg::new(#arg_name)
             .long(#arg_name)
             .value_parser(#value_parser)
             #required
@@ -777,10 +753,7 @@ impl CliOperationArgs {
     }
 
     fn body_required(&mut self) {
-        assert!(
-            self.body == CliBodyArg::Optional
-                || self.body == CliBodyArg::Required
-        );
+        assert!(self.body == CliBodyArg::Optional || self.body == CliBodyArg::Required);
         self.body = CliBodyArg::Required;
     }
 }

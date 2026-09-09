@@ -1,4 +1,5 @@
 use crate::param_collision_builder::*;
+use anyhow::Context as _;
 pub struct Cli<T: CliConfig> {
     client: Client,
     config: T,
@@ -9,66 +10,70 @@ impl<T: CliConfig> Cli<T> {
         Self { client, config }
     }
 
-    pub fn get_command(cmd: CliCommand) -> clap::Command {
+    pub fn get_command(cmd: CliCommand) -> ::clap::Command {
         match cmd {
             CliCommand::KeyGet => Self::cli_key_get(),
         }
     }
 
-    pub fn cli_key_get() -> clap::Command {
-        clap::Command::new("")
+    pub fn cli_key_get() -> ::clap::Command {
+        ::clap::Command::new("")
             .arg(
-                clap::Arg::new("client")
+                ::clap::Arg::new("client")
                     .long("client")
-                    .value_parser(clap::value_parser!(bool))
+                    .value_parser(::clap::value_parser!(bool))
                     .required(true)
                     .help("Parameter name that was previously colliding"),
             )
             .arg(
-                clap::Arg::new("query")
+                ::clap::Arg::new("query")
                     .long("query")
-                    .value_parser(clap::value_parser!(bool))
+                    .value_parser(::clap::value_parser!(bool))
                     .required(true)
                     .help("Parameter name that was previously colliding"),
             )
             .arg(
-                clap::Arg::new("request")
+                ::clap::Arg::new("request")
                     .long("request")
-                    .value_parser(clap::value_parser!(bool))
+                    .value_parser(::clap::value_parser!(bool))
                     .required(true)
                     .help("Parameter name that was previously colliding"),
             )
             .arg(
-                clap::Arg::new("response")
+                ::clap::Arg::new("response")
                     .long("response")
-                    .value_parser(clap::value_parser!(bool))
+                    .value_parser(::clap::value_parser!(bool))
                     .required(true)
                     .help("Parameter name that was previously colliding"),
             )
             .arg(
-                clap::Arg::new("result")
+                ::clap::Arg::new("result")
                     .long("result")
-                    .value_parser(clap::value_parser!(bool))
+                    .value_parser(::clap::value_parser!(bool))
                     .required(true)
                     .help("Parameter name that was previously colliding"),
             )
             .arg(
-                clap::Arg::new("url")
+                ::clap::Arg::new("url")
                     .long("url")
-                    .value_parser(clap::value_parser!(bool))
+                    .value_parser(::clap::value_parser!(bool))
                     .required(true)
                     .help("Parameter name that was previously colliding"),
             )
-            .long_about("Gets a key")
+            .about("Gets a key")
     }
 
-    pub async fn execute(&self, cmd: CliCommand, matches: &clap::ArgMatches) -> anyhow::Result<()> {
+    pub async fn execute(
+        &self,
+        cmd: CliCommand,
+        matches: &::clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         match cmd {
             CliCommand::KeyGet => self.execute_key_get(matches).await,
         }
     }
 
-    pub async fn execute_key_get(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
+    pub async fn execute_key_get(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.key_get();
         if let Some(value) = matches.get_one::<bool>("client") {
             request = request.client(value.clone());
@@ -112,26 +117,26 @@ impl<T: CliConfig> Cli<T> {
 pub trait CliConfig {
     fn success_item<T>(&self, value: &ResponseValue<T>)
     where
-        T: schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
+        T: std::clone::Clone + schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
     fn success_no_item(&self, value: &ResponseValue<()>);
     fn error<T>(&self, value: &Error<T>)
     where
-        T: schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
+        T: std::clone::Clone + schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
     fn list_start<T>(&self)
     where
-        T: schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
+        T: std::clone::Clone + schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
     fn list_item<T>(&self, value: &T)
     where
-        T: schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
+        T: std::clone::Clone + schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
     fn list_end_success<T>(&self)
     where
-        T: schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
+        T: std::clone::Clone + schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
     fn list_end_error<T>(&self, value: &Error<T>)
     where
-        T: schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
+        T: std::clone::Clone + schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
     fn execute_key_get(
         &self,
-        matches: &clap::ArgMatches,
+        matches: &::clap::ArgMatches,
         request: &mut builder::KeyGet,
     ) -> anyhow::Result<()> {
         Ok(())
@@ -146,5 +151,11 @@ pub enum CliCommand {
 impl CliCommand {
     pub fn iter() -> impl Iterator<Item = CliCommand> {
         vec![CliCommand::KeyGet].into_iter()
+    }
+
+    pub fn operation_id(&self) -> &'static str {
+        match self {
+            CliCommand::KeyGet => "key_get",
+        }
     }
 }

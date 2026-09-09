@@ -1,23 +1,17 @@
-// Copyright 2022 Oxide Computer Company
+// Copyright 2026 Oxide Computer Company
 
 //! Macros for the progenitor OpenAPI client generator.
 
 #![deny(missing_docs)]
 
-use std::{
-    collections::HashMap,
-    fmt::Display,
-    fs::File,
-    path::{Path, PathBuf},
-};
+use std::{collections::HashMap, fs::File, path::PathBuf};
 
 use openapiv3::OpenAPI;
 use proc_macro::TokenStream;
 use progenitor_impl::{
-    CrateVers, GenerationSettings, Generator, InterfaceStyle, TagStyle,
-    TypePatch, UnknownPolicy,
+    CrateVers, GenerationSettings, Generator, InterfaceStyle, TagStyle, TypePatch, UnknownPolicy,
 };
-use quote::{quote, ToTokens};
+use quote::{ToTokens, quote};
 use schemars::schema::SchemaObject;
 use serde::Deserialize;
 use serde_tokenstream::{OrderedMap, ParseWrapper};
@@ -25,6 +19,58 @@ use syn::LitStr;
 use token_utils::TypeAndImpls;
 
 mod token_utils;
+
+/// Where to resolve the spec path relative to.
+#[derive(Debug, Clone, Copy, Deserialize)]
+enum RelativeTo {
+    /// Resolve relative to CARGO_MANIFEST_DIR (the default).
+    ManifestDir,
+    /// Resolve relative to OUT_DIR.
+    OutDir,
+}
+
+/// Specification of where to find the OpenAPI document.
+#[derive(Debug)]
+struct SpecSource {
+    /// The path to the spec file.
+    path: LitStr,
+    /// Where to resolve the path relative to.
+    relative_to: RelativeTo,
+}
+
+impl syn::parse::Parse for SpecSource {
+    fn parse(input: syn::parse::ParseStream) -> syn::Result<Self> {
+        /// Helper struct for deserializing the struct form of SpecSource.
+        #[derive(Deserialize)]
+        struct SpecSourceStruct {
+            path: ParseWrapper<LitStr>,
+            relative_to: RelativeTo,
+        }
+
+        let lookahead = input.lookahead1();
+        if lookahead.peek(LitStr) {
+            // spec = "path/to/spec.json"
+            let path: LitStr = input.parse()?;
+            Ok(SpecSource {
+                path,
+                relative_to: RelativeTo::ManifestDir,
+            })
+        } else if lookahead.peek(syn::token::Brace) {
+            // spec = { path = "...", relative_to = ... }
+            let content;
+            let brace_token = syn::braced!(content in input);
+            let stream: proc_macro2::TokenStream = content.parse()?;
+            let helper: SpecSourceStruct =
+                serde_tokenstream::from_tokenstream_spanned(&brace_token.span, &stream)?;
+            Ok(SpecSource {
+                path: helper.path.into_inner(),
+                relative_to: helper.relative_to,
+            })
+        } else {
+            Err(lookahead.error())
+        }
+    }
+}
 
 /// Generates a client from the given OpenAPI document
 ///
@@ -37,11 +83,16 @@ mod token_utils;
 /// The more complex form accepts the following key-value pairs in any order:
 /// ```ignore
 /// generate_api!(
+///     // spec can be a simple path string:
 ///     spec = "path/to/spec.json",
+///     // Or a struct with path and relative_to:
+///     spec = { path = "path/to/spec.json", relative_to = OutDir },
 ///     [ interface = ( Positional | Builder ), ]
 ///     [ tags = ( Merged | Separate ), ]
 ///     [ pre_hook = closure::or::path::to::function, ]
 ///     [ post_hook = closure::or::path::to::function, ]
+///     [ pre_hook_async = closure::or::path::to::function, ]
+///     [ post_hook_async = closure::or::path::to::function, ]
 ///
 ///     [ derives = [ path::to::DeriveMacro ], ]
 ///
@@ -51,12 +102,18 @@ mod token_utils;
 ///     [ patch = { TypeName = { [rename = NewTypeName], [derives = []] }, } ]
 ///     [ replace = { TypeName = full_path::to::other::TypeName, }]
 ///     [ convert = { { <schema> } = full_path::to::TypeName, }]
-///
+///     [ timeout = u64 ]
 /// );
 /// ```
 ///
 /// The `spec` key is required; it is the OpenAPI document (JSON or YAML) from
-/// which the client is derived.
+/// which the client is derived. It can be specified as a simple string path, or
+/// as a struct with `path` and `relative_to` fields. The `relative_to`
+/// field controls where the path is resolved from:
+///
+/// - `ManifestDir`: relative to `CARGO_MANIFEST_DIR`. This is the default when
+///   the spec is provided as a string path.
+/// - `OutDir`: relative to `OUT_DIR` (useful for build script outputs).
 ///
 /// The optional `interface` lets you specify either a `Positional` argument or
 /// `Builder` argument style; `Positional` is the default.
@@ -67,19 +124,21 @@ mod token_utils;
 /// is `Merged`.
 ///
 /// The optional `inner_type` is for ancillary data, stored with the generated
-/// client that can be usd by the pre and post hooks.
+/// client that can be used by the pre- and post-hooks.
 ///
 /// The optional `pre_hook` is either a closure (that must be within
-/// parentheses: `(fn |inner, request| { .. })`) or a path to a function. The
-/// closure or function must take two parameters: the inner type and a
-/// `&reqwest::Request`. This allows clients to examine requests before they're
-/// sent to the server, for example to log them.
+/// parentheses: `(fn |[inner,] request| { .. })`) or a path to a function. The
+/// closure or function must take one or two parameters: the inner type (if one
+/// is specified) and a `&reqwest::Request`. This allows clients to examine
+/// requests before they're sent to the server, for example to log them. The
+/// optional `pre_hook_async` is the `async` variant of the same.
 ///
 /// The optional `post_hook` is either a closure (that must be within
-/// parentheses: `(fn |inner, result| { .. })`) or a path to a function. The
-/// closure or function must take two parameters: the inner type and a
-/// `&Result<reqwest::Response, reqwest::Error>`. This allows clients to
-/// examine responses, for example to log them.
+/// parentheses: `(fn |[inner,] result| { .. })`) or a path to a function. The
+/// closure or function must take one or two parameters: the inner type (if one
+/// is specified) and a `&Result<reqwest::Response, reqwest::Error>`. This
+/// allows clients to examine responses, for example to log them. The optional
+/// `post_hook_async` is the `async` variant of the same.
 ///
 /// Additional options control type generation:
 /// - `derives`: optional array of derive macro paths; the derive macros to be
@@ -104,7 +163,7 @@ mod token_utils;
 ///   the constraints of type compatibility).
 ///
 /// - `patch`: optional map from type to an object with the optional members
-///   `rename` and `derives`. This may be used to renamed generated types or
+///   `rename` and `derives`. This may be used to rename generated types or
 ///   to apply additional (non-default) derive macros to them.
 ///
 /// - `replace`: optional map from definition name to a replacement type. This
@@ -114,6 +173,9 @@ mod token_utils;
 /// - `convert`: optional map from a JSON schema type defined in `$defs` to a
 ///   replacement type. This may be used to skip generation of the schema and
 ///   use an existing Rust type.
+///
+/// - `timeout`: the default connection timeout for the underlying reqwest
+///   client (15s if not specified)
 #[proc_macro]
 pub fn generate_api(item: TokenStream) -> TokenStream {
     match do_generate_api(item) {
@@ -124,7 +186,7 @@ pub fn generate_api(item: TokenStream) -> TokenStream {
 
 #[derive(Deserialize)]
 struct MacroSettings {
-    spec: ParseWrapper<LitStr>,
+    spec: ParseWrapper<SpecSource>,
     #[serde(default)]
     interface: InterfaceStyle,
     #[serde(default)]
@@ -134,6 +196,9 @@ struct MacroSettings {
     pre_hook: Option<ParseWrapper<ClosureOrPath>>,
     pre_hook_async: Option<ParseWrapper<ClosureOrPath>>,
     post_hook: Option<ParseWrapper<ClosureOrPath>>,
+    post_hook_async: Option<ParseWrapper<ClosureOrPath>>,
+
+    map_type: Option<ParseWrapper<syn::Type>>,
 
     #[serde(default)]
     derives: Vec<ParseWrapper<syn::Path>>,
@@ -149,19 +214,7 @@ struct MacroSettings {
     replace: HashMap<ParseWrapper<syn::Ident>, ParseWrapper<TypeAndImpls>>,
     #[serde(default)]
     convert: OrderedMap<SchemaObject, ParseWrapper<TypeAndImpls>>,
-}
-
-#[derive(Deserialize)]
-enum MacroSettingsImpl {
-    Display,
-}
-
-impl Display for MacroSettingsImpl {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match self {
-            MacroSettingsImpl::Display => f.write_str("Display"),
-        }
-    }
+    timeout: Option<u64>,
 }
 
 #[derive(Deserialize)]
@@ -182,18 +235,6 @@ impl From<MacroPatch> for TypePatch {
             s.with_derive(derive.to_token_stream().to_string());
         });
         s
-    }
-}
-
-#[derive(Deserialize)]
-enum GenerationStyle {
-    Positional,
-    Builder,
-}
-
-impl Default for GenerationStyle {
-    fn default() -> Self {
-        Self::Positional
     }
 }
 
@@ -281,10 +322,7 @@ fn is_crate(s: &str) -> bool {
     !s.contains(|cc: char| !cc.is_alphanumeric() && cc != '_' && cc != '-')
 }
 
-fn open_file(
-    path: PathBuf,
-    span: proc_macro2::Span,
-) -> Result<File, syn::Error> {
+fn open_file(path: PathBuf, span: proc_macro2::Span) -> Result<File, syn::Error> {
     File::open(path.clone()).map_err(|e| {
         let path_str = path.to_string_lossy();
         syn::Error::new(span, format!("couldn't read file {}: {}", path_str, e))
@@ -292,9 +330,12 @@ fn open_file(
 }
 
 fn do_generate_api(item: TokenStream) -> Result<TokenStream, syn::Error> {
-    let (spec, settings) = if let Ok(spec) = syn::parse::<LitStr>(item.clone())
-    {
-        (spec, GenerationSettings::default())
+    let (spec_source, settings) = if let Ok(spec) = syn::parse::<LitStr>(item.clone()) {
+        let spec_source = SpecSource {
+            path: spec,
+            relative_to: RelativeTo::ManifestDir,
+        };
+        (spec_source, GenerationSettings::default())
     } else {
         let MacroSettings {
             spec,
@@ -304,36 +345,36 @@ fn do_generate_api(item: TokenStream) -> Result<TokenStream, syn::Error> {
             pre_hook,
             pre_hook_async,
             post_hook,
+            post_hook_async,
+            map_type,
             unknown_crates,
             crates,
             derives,
             patch,
             replace,
             convert,
+            timeout,
         } = serde_tokenstream::from_tokenstream(&item.into())?;
+
+        let spec = spec.into_inner();
+
         let mut settings = GenerationSettings::default();
         settings.with_interface(interface);
         settings.with_tag(tags);
-        inner_type.map(|inner_type| {
-            settings.with_inner_type(inner_type.to_token_stream())
-        });
-        pre_hook
-            .map(|pre_hook| settings.with_pre_hook(pre_hook.into_inner().0));
-        pre_hook_async.map(|pre_hook_async| {
-            settings.with_pre_hook_async(pre_hook_async.into_inner().0)
-        });
-        post_hook
-            .map(|post_hook| settings.with_post_hook(post_hook.into_inner().0));
+        inner_type.map(|inner_type| settings.with_inner_type(inner_type.to_token_stream()));
+        pre_hook.map(|pre_hook| settings.with_pre_hook(pre_hook.into_inner().0));
+        pre_hook_async
+            .map(|pre_hook_async| settings.with_pre_hook_async(pre_hook_async.into_inner().0));
+        post_hook.map(|post_hook| settings.with_post_hook(post_hook.into_inner().0));
+        post_hook_async
+            .map(|post_hook_async| settings.with_post_hook_async(post_hook_async.into_inner().0));
+        map_type.map(|map_type| settings.with_map_type(map_type.to_token_stream()));
 
         settings.with_unknown_crates(unknown_crates);
         crates.into_iter().for_each(
             |(CrateName(crate_name), MacroCrateSpec { original, version })| {
                 if let Some(original_crate) = original {
-                    settings.with_crate(
-                        original_crate,
-                        version,
-                        Some(&crate_name),
-                    );
+                    settings.with_crate(original_crate, version, Some(&crate_name));
                 } else {
                     settings.with_crate(crate_name, version, None);
                 }
@@ -344,41 +385,50 @@ fn do_generate_api(item: TokenStream) -> Result<TokenStream, syn::Error> {
             settings.with_derive(derive.to_token_stream());
         });
         patch.into_iter().for_each(|(type_name, patch)| {
-            settings.with_patch(
-                type_name.to_token_stream().to_string(),
-                &patch.into(),
-            );
+            settings.with_patch(type_name.to_token_stream().to_string(), &patch.into());
         });
         replace.into_iter().for_each(|(type_name, type_and_impls)| {
             let type_name = type_name.to_token_stream();
-            let (replace_name, impls) =
-                type_and_impls.into_inner().into_name_and_impls();
+            let (replace_name, impls) = type_and_impls.into_inner().into_name_and_impls();
             settings.with_replacement(type_name, replace_name, impls);
         });
         convert.into_iter().for_each(|(schema, type_and_impls)| {
-            let (type_name, impls) =
-                type_and_impls.into_inner().into_name_and_impls();
+            let (type_name, impls) = type_and_impls.into_inner().into_name_and_impls();
             settings.with_conversion(schema, type_name, impls);
         });
-        (spec.into_inner(), settings)
+        if let Some(timeout) = timeout {
+            settings.with_timeout(timeout);
+        }
+        (spec, settings)
     };
 
-    let dir = std::env::var("CARGO_MANIFEST_DIR").map_or_else(
-        |_| std::env::current_dir().unwrap(),
-        |s| Path::new(&s).to_path_buf(),
-    );
+    let spec_path = spec_source.path;
+    let base_dir = match spec_source.relative_to {
+        RelativeTo::ManifestDir => std::env::var("CARGO_MANIFEST_DIR")
+            .map_or_else(|_| std::env::current_dir().unwrap(), PathBuf::from),
+        RelativeTo::OutDir => {
+            let out_dir = std::env::var("OUT_DIR").map_err(|_| {
+                syn::Error::new(
+                    spec_path.span(),
+                    "relative_to = OutDir requires OUT_DIR to be set \
+                     (are you using this from a build script?)",
+                )
+            })?;
+            PathBuf::from(out_dir)
+        }
+    };
 
-    let path = dir.join(spec.value());
+    let path = base_dir.join(spec_path.value());
     let path_str = path.to_string_lossy();
 
-    let mut f = open_file(path.clone(), spec.span())?;
+    let mut f = open_file(path.clone(), spec_path.span())?;
     let oapi: OpenAPI = match serde_json::from_reader(f) {
         Ok(json_value) => json_value,
         _ => {
-            f = open_file(path.clone(), spec.span())?;
+            f = open_file(path.clone(), spec_path.span())?;
             serde_yaml::from_reader(f).map_err(|e| {
                 syn::Error::new(
-                    spec.span(),
+                    spec_path.span(),
                     format!("failed to parse {}: {}", path_str, e),
                 )
             })?
@@ -389,8 +439,8 @@ fn do_generate_api(item: TokenStream) -> Result<TokenStream, syn::Error> {
 
     let code = builder.generate_tokens(&oapi).map_err(|e| {
         syn::Error::new(
-            spec.span(),
-            format!("generation error for {}: {}", spec.value(), e),
+            spec_path.span(),
+            format!("generation error for {}: {}", spec_path.value(), e),
         )
     })?;
 

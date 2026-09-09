@@ -1,29 +1,24 @@
 #[allow(unused_imports)]
-use progenitor_client::{encode_path, RequestBuilderExt};
+use progenitor_client::{encode_path, ClientHooks, OperationInfo, RequestBuilderExt};
 #[allow(unused_imports)]
-pub use progenitor_client::{ByteStream, Error, ResponseValue};
-#[allow(unused_imports)]
-use reqwest::header::{HeaderMap, HeaderValue};
+pub use progenitor_client::{ByteStream, ClientInfo, Error, ResponseValue};
 /// Types used as operation parameters and responses.
 #[allow(clippy::all)]
 pub mod types {
-    use serde::{Deserialize, Serialize};
-    #[allow(unused_imports)]
-    use std::convert::TryFrom;
     /// Error types.
     pub mod error {
-        /// Error from a TryFrom or FromStr implementation.
-        pub struct ConversionError(std::borrow::Cow<'static, str>);
-        impl std::error::Error for ConversionError {}
-        impl std::fmt::Display for ConversionError {
-            fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> Result<(), std::fmt::Error> {
-                std::fmt::Display::fmt(&self.0, f)
+        /// Error from a `TryFrom` or `FromStr` implementation.
+        pub struct ConversionError(::std::borrow::Cow<'static, str>);
+        impl ::std::error::Error for ConversionError {}
+        impl ::std::fmt::Display for ConversionError {
+            fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> Result<(), ::std::fmt::Error> {
+                ::std::fmt::Display::fmt(&self.0, f)
             }
         }
 
-        impl std::fmt::Debug for ConversionError {
-            fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> Result<(), std::fmt::Error> {
-                std::fmt::Debug::fmt(&self.0, f)
+        impl ::std::fmt::Debug for ConversionError {
+            fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> Result<(), ::std::fmt::Error> {
+                ::std::fmt::Debug::fmt(&self.0, f)
             }
         }
 
@@ -61,7 +56,7 @@ impl Client {
     pub fn new(baseurl: &str) -> Self {
         #[cfg(not(target_arch = "wasm32"))]
         let client = {
-            let dur = std::time::Duration::from_secs(15);
+            let dur = ::std::time::Duration::from_secs(15u64);
             reqwest::ClientBuilder::new()
                 .connect_timeout(dur)
                 .timeout(dur)
@@ -83,26 +78,27 @@ impl Client {
             client,
         }
     }
+}
 
-    /// Get the base URL to which requests are made.
-    pub fn baseurl(&self) -> &String {
-        &self.baseurl
+impl ClientInfo<()> for Client {
+    fn api_version() -> &'static str {
+        "v1"
     }
 
-    /// Get the internal `reqwest::Client` used to make requests.
-    pub fn client(&self) -> &reqwest::Client {
+    fn baseurl(&self) -> &str {
+        self.baseurl.as_str()
+    }
+
+    fn client(&self) -> &reqwest::Client {
         &self.client
     }
 
-    /// Get the version of this API.
-    ///
-    /// This string is pulled directly from the source OpenAPI
-    /// document and may be in any format the API selects.
-    pub fn api_version(&self) -> &'static str {
-        "v1"
+    fn inner(&self) -> &() {
+        &()
     }
 }
 
+impl ClientHooks<()> for &Client {}
 #[allow(clippy::all)]
 impl Client {
     ///Gets a key
@@ -120,18 +116,28 @@ impl Client {
         unique_key: Option<&'a str>,
     ) -> Result<ResponseValue<()>, Error<()>> {
         let url = format!("{}/key", self.baseurl,);
-        let mut query = Vec::with_capacity(2usize);
-        if let Some(v) = &key {
-            query.push(("key", v.to_string()));
-        }
-
-        if let Some(v) = &unique_key {
-            query.push(("uniqueKey", v.to_string()));
-        }
-
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
         #[allow(unused_mut)]
-        let mut request = self.client.get(url).query(&query).build()?;
-        let result = self.client.execute(request).await;
+        let mut request = self
+            .client
+            .get(url)
+            .query(&progenitor_client::QueryParam::new("key", &key))
+            .query(&progenitor_client::QueryParam::new(
+                "uniqueKey",
+                &unique_key,
+            ))
+            .headers(header_map)
+            .build()?;
+        let info = OperationInfo {
+            operation_id: "key_get",
+        };
+        self.pre(&mut request, &info).await?;
+        let result = self.exec(request, &info).await;
+        self.post(&result, &info).await?;
         let response = result?;
         match response.status().as_u16() {
             200u16 => Ok(ResponseValue::empty(response)),

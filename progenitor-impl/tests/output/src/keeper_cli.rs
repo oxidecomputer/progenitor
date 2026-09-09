@@ -1,4 +1,5 @@
 use crate::keeper_builder::*;
+use anyhow::Context as _;
 pub struct Cli<T: CliConfig> {
     client: Client,
     config: T,
@@ -9,7 +10,7 @@ impl<T: CliConfig> Cli<T> {
         Self { client, config }
     }
 
-    pub fn get_command(cmd: CliCommand) -> clap::Command {
+    pub fn get_command(cmd: CliCommand) -> ::clap::Command {
         match cmd {
             CliCommand::Enrol => Self::cli_enrol(),
             CliCommand::GlobalJobs => Self::cli_global_jobs(),
@@ -20,169 +21,177 @@ impl<T: CliConfig> Cli<T> {
         }
     }
 
-    pub fn cli_enrol() -> clap::Command {
-        clap::Command::new("")
+    pub fn cli_enrol() -> ::clap::Command {
+        ::clap::Command::new("")
             .arg(
-                clap::Arg::new("authorization")
+                ::clap::Arg::new("authorization")
                     .long("authorization")
-                    .value_parser(clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required(true)
                     .help("Authorization header (bearer token)"),
             )
             .arg(
-                clap::Arg::new("host")
+                ::clap::Arg::new("host")
                     .long("host")
-                    .value_parser(clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required_unless_present("json-body"),
             )
             .arg(
-                clap::Arg::new("key")
+                ::clap::Arg::new("key")
                     .long("key")
-                    .value_parser(clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required_unless_present("json-body"),
             )
             .arg(
-                clap::Arg::new("json-body")
+                ::clap::Arg::new("json-body")
                     .long("json-body")
                     .value_name("JSON-FILE")
                     .required(false)
-                    .value_parser(clap::value_parser!(std::path::PathBuf))
+                    .value_parser(::clap::value_parser!(std::path::PathBuf))
                     .help("Path to a file that contains the full json body."),
             )
             .arg(
-                clap::Arg::new("json-body-template")
+                ::clap::Arg::new("json-body-template")
                     .long("json-body-template")
-                    .action(clap::ArgAction::SetTrue)
+                    .action(::clap::ArgAction::SetTrue)
                     .help("XXX"),
             )
     }
 
-    pub fn cli_global_jobs() -> clap::Command {
-        clap::Command::new("").arg(
-            clap::Arg::new("authorization")
+    pub fn cli_global_jobs() -> ::clap::Command {
+        ::clap::Command::new("").arg(
+            ::clap::Arg::new("authorization")
                 .long("authorization")
-                .value_parser(clap::value_parser!(String))
+                .value_parser(::clap::value_parser!(::std::string::String))
                 .required(true)
                 .help("Authorization header (bearer token)"),
         )
     }
 
-    pub fn cli_ping() -> clap::Command {
-        clap::Command::new("").arg(
-            clap::Arg::new("authorization")
+    pub fn cli_ping() -> ::clap::Command {
+        ::clap::Command::new("").arg(
+            ::clap::Arg::new("authorization")
                 .long("authorization")
-                .value_parser(clap::value_parser!(String))
+                .value_parser(::clap::value_parser!(::std::string::String))
                 .required(true)
                 .help("Authorization header (bearer token)"),
         )
     }
 
-    pub fn cli_report_finish() -> clap::Command {
-        clap::Command::new("")
+    pub fn cli_report_finish() -> ::clap::Command {
+        ::clap::Command::new("")
             .arg(
-                clap::Arg::new("authorization")
+                ::clap::Arg::new("authorization")
                     .long("authorization")
-                    .value_parser(clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required(true)
                     .help("Authorization header (bearer token)"),
             )
             .arg(
-                clap::Arg::new("duration-millis")
+                ::clap::Arg::new("duration-millis")
                     .long("duration-millis")
-                    .value_parser(clap::value_parser!(i32))
+                    .value_parser(::clap::value_parser!(i32))
                     .required_unless_present("json-body"),
             )
             .arg(
-                clap::Arg::new("end-time")
+                ::clap::Arg::new("end-time")
                     .long("end-time")
-                    .value_parser(clap::value_parser!(chrono::DateTime<chrono::offset::Utc>))
+                    .value_parser(::clap::value_parser!(
+                        ::chrono::DateTime<::chrono::offset::Utc>
+                    ))
                     .required_unless_present("json-body"),
             )
             .arg(
-                clap::Arg::new("exit-status")
+                ::clap::Arg::new("exit-status")
                     .long("exit-status")
-                    .value_parser(clap::value_parser!(i32))
+                    .value_parser(::clap::value_parser!(i32))
                     .required_unless_present("json-body"),
             )
             .arg(
-                clap::Arg::new("json-body")
+                ::clap::Arg::new("json-body")
                     .long("json-body")
                     .value_name("JSON-FILE")
                     .required(true)
-                    .value_parser(clap::value_parser!(std::path::PathBuf))
+                    .value_parser(::clap::value_parser!(std::path::PathBuf))
                     .help("Path to a file that contains the full json body."),
             )
             .arg(
-                clap::Arg::new("json-body-template")
+                ::clap::Arg::new("json-body-template")
                     .long("json-body-template")
-                    .action(clap::ArgAction::SetTrue)
+                    .action(::clap::ArgAction::SetTrue)
                     .help("XXX"),
             )
     }
 
-    pub fn cli_report_output() -> clap::Command {
-        clap::Command::new("")
+    pub fn cli_report_output() -> ::clap::Command {
+        ::clap::Command::new("")
             .arg(
-                clap::Arg::new("authorization")
+                ::clap::Arg::new("authorization")
                     .long("authorization")
-                    .value_parser(clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required(true)
                     .help("Authorization header (bearer token)"),
             )
             .arg(
-                clap::Arg::new("json-body")
+                ::clap::Arg::new("json-body")
                     .long("json-body")
                     .value_name("JSON-FILE")
                     .required(true)
-                    .value_parser(clap::value_parser!(std::path::PathBuf))
+                    .value_parser(::clap::value_parser!(std::path::PathBuf))
                     .help("Path to a file that contains the full json body."),
             )
             .arg(
-                clap::Arg::new("json-body-template")
+                ::clap::Arg::new("json-body-template")
                     .long("json-body-template")
-                    .action(clap::ArgAction::SetTrue)
+                    .action(::clap::ArgAction::SetTrue)
                     .help("XXX"),
             )
     }
 
-    pub fn cli_report_start() -> clap::Command {
-        clap::Command::new("")
+    pub fn cli_report_start() -> ::clap::Command {
+        ::clap::Command::new("")
             .arg(
-                clap::Arg::new("authorization")
+                ::clap::Arg::new("authorization")
                     .long("authorization")
-                    .value_parser(clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required(true)
                     .help("Authorization header (bearer token)"),
             )
             .arg(
-                clap::Arg::new("script")
+                ::clap::Arg::new("script")
                     .long("script")
-                    .value_parser(clap::value_parser!(String))
+                    .value_parser(::clap::value_parser!(::std::string::String))
                     .required_unless_present("json-body"),
             )
             .arg(
-                clap::Arg::new("start-time")
+                ::clap::Arg::new("start-time")
                     .long("start-time")
-                    .value_parser(clap::value_parser!(chrono::DateTime<chrono::offset::Utc>))
+                    .value_parser(::clap::value_parser!(
+                        ::chrono::DateTime<::chrono::offset::Utc>
+                    ))
                     .required_unless_present("json-body"),
             )
             .arg(
-                clap::Arg::new("json-body")
+                ::clap::Arg::new("json-body")
                     .long("json-body")
                     .value_name("JSON-FILE")
                     .required(true)
-                    .value_parser(clap::value_parser!(std::path::PathBuf))
+                    .value_parser(::clap::value_parser!(std::path::PathBuf))
                     .help("Path to a file that contains the full json body."),
             )
             .arg(
-                clap::Arg::new("json-body-template")
+                ::clap::Arg::new("json-body-template")
                     .long("json-body-template")
-                    .action(clap::ArgAction::SetTrue)
+                    .action(::clap::ArgAction::SetTrue)
                     .help("XXX"),
             )
     }
 
-    pub async fn execute(&self, cmd: CliCommand, matches: &clap::ArgMatches) -> anyhow::Result<()> {
+    pub async fn execute(
+        &self,
+        cmd: CliCommand,
+        matches: &::clap::ArgMatches,
+    ) -> anyhow::Result<()> {
         match cmd {
             CliCommand::Enrol => self.execute_enrol(matches).await,
             CliCommand::GlobalJobs => self.execute_global_jobs(matches).await,
@@ -193,23 +202,25 @@ impl<T: CliConfig> Cli<T> {
         }
     }
 
-    pub async fn execute_enrol(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
+    pub async fn execute_enrol(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.enrol();
-        if let Some(value) = matches.get_one::<String>("authorization") {
+        if let Some(value) = matches.get_one::<::std::string::String>("authorization") {
             request = request.authorization(value.clone());
         }
 
-        if let Some(value) = matches.get_one::<String>("host") {
+        if let Some(value) = matches.get_one::<::std::string::String>("host") {
             request = request.body_map(|body| body.host(value.clone()))
         }
 
-        if let Some(value) = matches.get_one::<String>("key") {
+        if let Some(value) = matches.get_one::<::std::string::String>("key") {
             request = request.body_map(|body| body.key(value.clone()))
         }
 
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
-            let body_txt = std::fs::read_to_string(value).unwrap();
-            let body_value = serde_json::from_str::<types::EnrolBody>(&body_txt).unwrap();
+            let body_txt = std::fs::read_to_string(value)
+                .with_context(|| format!("failed to read {}", value.display()))?;
+            let body_value = serde_json::from_str::<types::EnrolBody>(&body_txt)
+                .with_context(|| format!("failed to parse {}", value.display()))?;
             request = request.body(body_value);
         }
 
@@ -227,9 +238,9 @@ impl<T: CliConfig> Cli<T> {
         }
     }
 
-    pub async fn execute_global_jobs(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
+    pub async fn execute_global_jobs(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.global_jobs();
-        if let Some(value) = matches.get_one::<String>("authorization") {
+        if let Some(value) = matches.get_one::<::std::string::String>("authorization") {
             request = request.authorization(value.clone());
         }
 
@@ -247,9 +258,9 @@ impl<T: CliConfig> Cli<T> {
         }
     }
 
-    pub async fn execute_ping(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
+    pub async fn execute_ping(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.ping();
-        if let Some(value) = matches.get_one::<String>("authorization") {
+        if let Some(value) = matches.get_one::<::std::string::String>("authorization") {
             request = request.authorization(value.clone());
         }
 
@@ -267,9 +278,9 @@ impl<T: CliConfig> Cli<T> {
         }
     }
 
-    pub async fn execute_report_finish(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
+    pub async fn execute_report_finish(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.report_finish();
-        if let Some(value) = matches.get_one::<String>("authorization") {
+        if let Some(value) = matches.get_one::<::std::string::String>("authorization") {
             request = request.authorization(value.clone());
         }
 
@@ -277,7 +288,9 @@ impl<T: CliConfig> Cli<T> {
             request = request.body_map(|body| body.duration_millis(value.clone()))
         }
 
-        if let Some(value) = matches.get_one::<chrono::DateTime<chrono::offset::Utc>>("end-time") {
+        if let Some(value) =
+            matches.get_one::<::chrono::DateTime<::chrono::offset::Utc>>("end-time")
+        {
             request = request.body_map(|body| body.end_time(value.clone()))
         }
 
@@ -286,8 +299,10 @@ impl<T: CliConfig> Cli<T> {
         }
 
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
-            let body_txt = std::fs::read_to_string(value).unwrap();
-            let body_value = serde_json::from_str::<types::ReportFinishBody>(&body_txt).unwrap();
+            let body_txt = std::fs::read_to_string(value)
+                .with_context(|| format!("failed to read {}", value.display()))?;
+            let body_value = serde_json::from_str::<types::ReportFinishBody>(&body_txt)
+                .with_context(|| format!("failed to parse {}", value.display()))?;
             request = request.body(body_value);
         }
 
@@ -305,15 +320,17 @@ impl<T: CliConfig> Cli<T> {
         }
     }
 
-    pub async fn execute_report_output(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
+    pub async fn execute_report_output(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.report_output();
-        if let Some(value) = matches.get_one::<String>("authorization") {
+        if let Some(value) = matches.get_one::<::std::string::String>("authorization") {
             request = request.authorization(value.clone());
         }
 
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
-            let body_txt = std::fs::read_to_string(value).unwrap();
-            let body_value = serde_json::from_str::<types::ReportOutputBody>(&body_txt).unwrap();
+            let body_txt = std::fs::read_to_string(value)
+                .with_context(|| format!("failed to read {}", value.display()))?;
+            let body_value = serde_json::from_str::<types::ReportOutputBody>(&body_txt)
+                .with_context(|| format!("failed to parse {}", value.display()))?;
             request = request.body(body_value);
         }
 
@@ -331,24 +348,27 @@ impl<T: CliConfig> Cli<T> {
         }
     }
 
-    pub async fn execute_report_start(&self, matches: &clap::ArgMatches) -> anyhow::Result<()> {
+    pub async fn execute_report_start(&self, matches: &::clap::ArgMatches) -> anyhow::Result<()> {
         let mut request = self.client.report_start();
-        if let Some(value) = matches.get_one::<String>("authorization") {
+        if let Some(value) = matches.get_one::<::std::string::String>("authorization") {
             request = request.authorization(value.clone());
         }
 
-        if let Some(value) = matches.get_one::<String>("script") {
+        if let Some(value) = matches.get_one::<::std::string::String>("script") {
             request = request.body_map(|body| body.script(value.clone()))
         }
 
-        if let Some(value) = matches.get_one::<chrono::DateTime<chrono::offset::Utc>>("start-time")
+        if let Some(value) =
+            matches.get_one::<::chrono::DateTime<::chrono::offset::Utc>>("start-time")
         {
             request = request.body_map(|body| body.start_time(value.clone()))
         }
 
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
-            let body_txt = std::fs::read_to_string(value).unwrap();
-            let body_value = serde_json::from_str::<types::ReportStartBody>(&body_txt).unwrap();
+            let body_txt = std::fs::read_to_string(value)
+                .with_context(|| format!("failed to read {}", value.display()))?;
+            let body_value = serde_json::from_str::<types::ReportStartBody>(&body_txt)
+                .with_context(|| format!("failed to parse {}", value.display()))?;
             request = request.body(body_value);
         }
 
@@ -370,26 +390,26 @@ impl<T: CliConfig> Cli<T> {
 pub trait CliConfig {
     fn success_item<T>(&self, value: &ResponseValue<T>)
     where
-        T: schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
+        T: std::clone::Clone + schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
     fn success_no_item(&self, value: &ResponseValue<()>);
     fn error<T>(&self, value: &Error<T>)
     where
-        T: schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
+        T: std::clone::Clone + schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
     fn list_start<T>(&self)
     where
-        T: schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
+        T: std::clone::Clone + schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
     fn list_item<T>(&self, value: &T)
     where
-        T: schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
+        T: std::clone::Clone + schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
     fn list_end_success<T>(&self)
     where
-        T: schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
+        T: std::clone::Clone + schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
     fn list_end_error<T>(&self, value: &Error<T>)
     where
-        T: schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
+        T: std::clone::Clone + schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
     fn execute_enrol(
         &self,
-        matches: &clap::ArgMatches,
+        matches: &::clap::ArgMatches,
         request: &mut builder::Enrol,
     ) -> anyhow::Result<()> {
         Ok(())
@@ -397,7 +417,7 @@ pub trait CliConfig {
 
     fn execute_global_jobs(
         &self,
-        matches: &clap::ArgMatches,
+        matches: &::clap::ArgMatches,
         request: &mut builder::GlobalJobs,
     ) -> anyhow::Result<()> {
         Ok(())
@@ -405,7 +425,7 @@ pub trait CliConfig {
 
     fn execute_ping(
         &self,
-        matches: &clap::ArgMatches,
+        matches: &::clap::ArgMatches,
         request: &mut builder::Ping,
     ) -> anyhow::Result<()> {
         Ok(())
@@ -413,7 +433,7 @@ pub trait CliConfig {
 
     fn execute_report_finish(
         &self,
-        matches: &clap::ArgMatches,
+        matches: &::clap::ArgMatches,
         request: &mut builder::ReportFinish,
     ) -> anyhow::Result<()> {
         Ok(())
@@ -421,7 +441,7 @@ pub trait CliConfig {
 
     fn execute_report_output(
         &self,
-        matches: &clap::ArgMatches,
+        matches: &::clap::ArgMatches,
         request: &mut builder::ReportOutput,
     ) -> anyhow::Result<()> {
         Ok(())
@@ -429,7 +449,7 @@ pub trait CliConfig {
 
     fn execute_report_start(
         &self,
-        matches: &clap::ArgMatches,
+        matches: &::clap::ArgMatches,
         request: &mut builder::ReportStart,
     ) -> anyhow::Result<()> {
         Ok(())
@@ -457,5 +477,16 @@ impl CliCommand {
             CliCommand::ReportStart,
         ]
         .into_iter()
+    }
+
+    pub fn operation_id(&self) -> &'static str {
+        match self {
+            CliCommand::Enrol => "enrol",
+            CliCommand::GlobalJobs => "global_jobs",
+            CliCommand::Ping => "ping",
+            CliCommand::ReportFinish => "report_finish",
+            CliCommand::ReportOutput => "report_output",
+            CliCommand::ReportStart => "report_start",
+        }
     }
 }
