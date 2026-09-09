@@ -705,7 +705,7 @@ dependencies = [
  "reqwest",
  "serde",
  "serde_json",
- "syn 3.0.4",
+ "syn 3.0.5",
  "uuid",
 ]
 
@@ -744,7 +744,7 @@ dependencies = [
  "reqwest",
  "serde",
  "serde_json",
- "syn 3.0.4",
+ "syn 3.0.5",
  "uuid",
  "wasm-bindgen-test",
 ]
@@ -876,7 +876,7 @@ checksum = "9fb9654ba8355388abeb8dcb4fc62f511300867002afc858860463bdd9fe0c44"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 3.0.4",
+ "syn 3.0.5",
 ]
 
 [[package]]
@@ -1726,7 +1726,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2bfe0f4c752e450fc2faf62654f1c134747922825d5b04ca717b8874f41a40c0"
 dependencies = [
  "proc-macro2",
- "syn 3.0.4",
+ "syn 3.0.5",
 ]
 
 [[package]]
@@ -1797,7 +1797,7 @@ dependencies = [
  "serde",
  "serde_json",
  "serde_yaml",
- "syn 3.0.4",
+ "syn 3.0.5",
  "thiserror 2.0.20",
  "tokio",
  "typify",
@@ -1817,7 +1817,7 @@ dependencies = [
  "serde_json",
  "serde_tokenstream 0.3.0",
  "serde_yaml",
- "syn 3.0.4",
+ "syn 3.0.5",
 ]
 
 [[package]]
@@ -2295,7 +2295,7 @@ checksum = "e7a5d71263a5a7d47b41f6b3f06ba276f10cc18b0931f1799f710578e2309348"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 3.0.4",
+ "syn 3.0.5",
 ]
 
 [[package]]
@@ -2372,7 +2372,7 @@ dependencies = [
  "proc-macro2",
  "quote",
  "serde",
- "syn 3.0.4",
+ "syn 3.0.5",
 ]
 
 [[package]]
@@ -2562,9 +2562,9 @@ dependencies = [
 
 [[package]]
 name = "syn"
-version = "3.0.4"
+version = "3.0.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e6275cddf4610d1775e6d1fe9469b2e77d0f39fd98fb7450901b821e0c53649f"
+checksum = "12df2e0110f65b775f769bb17ef989067a1d931b2eb822bd4346631eeada89f9"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -2683,7 +2683,7 @@ checksum = "bc04cd3e1236dd4a98afca4569f2deb3f120e5422a4023be2cb683f8486292af"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 3.0.4",
+ "syn 3.0.5",
 ]
 
 [[package]]
@@ -3009,7 +3009,7 @@ dependencies = [
  "semver",
  "serde",
  "serde_json",
- "syn 3.0.4",
+ "syn 3.0.5",
  "thiserror 2.0.20",
  "unicode-ident",
 ]
@@ -3027,7 +3027,7 @@ dependencies = [
  "serde",
  "serde_json",
  "serde_tokenstream 0.3.0",
- "syn 3.0.4",
+ "syn 3.0.5",
  "typify-impl",
 ]
 
