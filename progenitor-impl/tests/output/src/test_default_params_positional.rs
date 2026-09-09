@@ -5,6 +5,33 @@ pub use progenitor_client::{ByteStream, ClientInfo, Error, ResponseValue};
 /// Types used as operation parameters and responses.
 #[allow(clippy::all)]
 pub mod types {
+    ///`BodyWithDefaults`
+    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    pub struct BodyWithDefaults {
+        #[serde(rename = "forty-two", default = "defaults::default_u64::<u32, 42>")]
+        pub forty_two: u32,
+        pub s: ::std::string::String,
+        #[serde(default = "defaults::body_with_defaults_something")]
+        pub something: ::std::option::Option<bool>,
+        #[serde(default)]
+        pub yes: bool,
+    }
+
+    /// Generation of default values for serde.
+    pub mod defaults {
+        pub(super) fn default_u64<T, const V: u64>() -> T
+        where
+            T: ::std::convert::TryFrom<u64>,
+            <T as ::std::convert::TryFrom<u64>>::Error: ::std::fmt::Debug,
+        {
+            T::try_from(V).unwrap()
+        }
+
+        pub(super) fn body_with_defaults_something() -> ::std::option::Option<bool> {
+            ::std::option::Option::Some(true)
+        }
+    }
+
     /// Error types.
     pub mod error {
         /// Error from a `TryFrom` or `FromStr` implementation.
@@ -32,67 +59,6 @@ pub mod types {
             fn from(value: String) -> Self {
                 Self(value.into())
             }
-        }
-    }
-
-    ///`BodyWithDefaults`
-    ///
-    /// <details><summary>JSON schema</summary>
-    ///
-    /// ```json
-    ///{
-    ///  "type": "object",
-    ///  "required": [
-    ///    "s"
-    ///  ],
-    ///  "properties": {
-    ///    "forty-two": {
-    ///      "default": 42,
-    ///      "type": "integer",
-    ///      "format": "uint32",
-    ///      "minimum": 0.0
-    ///    },
-    ///    "s": {
-    ///      "type": "string"
-    ///    },
-    ///    "something": {
-    ///      "default": true,
-    ///      "type": [
-    ///        "boolean",
-    ///        "null"
-    ///      ]
-    ///    },
-    ///    "yes": {
-    ///      "default": false,
-    ///      "type": "boolean"
-    ///    }
-    ///  }
-    ///}
-    /// ```
-    /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
-    pub struct BodyWithDefaults {
-        #[serde(rename = "forty-two", default = "defaults::default_u64::<u32, 42>")]
-        pub forty_two: u32,
-        pub s: ::std::string::String,
-        #[serde(default = "defaults::body_with_defaults_something")]
-        pub something: ::std::option::Option<bool>,
-        #[serde(default)]
-        pub yes: bool,
-    }
-
-    /// Generation of default values for serde.
-    pub mod defaults {
-        pub(super) fn default_u64<T, const V: u64>() -> T
-        where
-            T: ::std::convert::TryFrom<u64>,
-            <T as ::std::convert::TryFrom<u64>>::Error: ::std::fmt::Debug,
-        {
-            T::try_from(V).unwrap()
-        }
-
-        pub(super) fn body_with_defaults_something() -> ::std::option::Option<bool> {
-            ::std::option::Option::Some(true)
         }
     }
 }

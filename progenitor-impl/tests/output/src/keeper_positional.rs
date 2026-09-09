@@ -5,6 +5,85 @@ pub use progenitor_client::{ByteStream, ClientInfo, Error, ResponseValue};
 /// Types used as operation parameters and responses.
 #[allow(clippy::all)]
 pub mod types {
+    ///`EnrolBody`
+    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    pub struct EnrolBody {
+        pub host: ::std::string::String,
+        pub key: ::std::string::String,
+    }
+
+    ///`GlobalJobsResult`
+    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    pub struct GlobalJobsResult {
+        pub summary: ::std::vec::Vec<ReportSummary>,
+    }
+
+    ///`OutputRecord`
+    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    pub struct OutputRecord {
+        pub msg: ::std::string::String,
+        pub stream: ::std::string::String,
+        pub time: ::chrono::DateTime<::chrono::offset::Utc>,
+    }
+
+    ///`PingResult`
+    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    pub struct PingResult {
+        pub host: ::std::string::String,
+        pub ok: bool,
+    }
+
+    ///`ReportFinishBody`
+    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    pub struct ReportFinishBody {
+        pub duration_millis: i32,
+        pub end_time: ::chrono::DateTime<::chrono::offset::Utc>,
+        pub exit_status: i32,
+        pub id: ReportId,
+    }
+
+    ///`ReportId`
+    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    pub struct ReportId {
+        pub host: ::std::string::String,
+        pub job: ::std::string::String,
+        pub pid: u64,
+        pub time: ::chrono::DateTime<::chrono::offset::Utc>,
+        pub uuid: ::std::string::String,
+    }
+
+    ///`ReportOutputBody`
+    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    pub struct ReportOutputBody {
+        pub id: ReportId,
+        pub record: OutputRecord,
+    }
+
+    ///`ReportResult`
+    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    pub struct ReportResult {
+        pub existed_already: bool,
+    }
+
+    ///`ReportStartBody`
+    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    pub struct ReportStartBody {
+        pub id: ReportId,
+        pub script: ::std::string::String,
+        pub start_time: ::chrono::DateTime<::chrono::offset::Utc>,
+    }
+
+    ///`ReportSummary`
+    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    pub struct ReportSummary {
+        pub age_seconds: i32,
+        pub duration_seconds: i32,
+        pub host: ::std::string::String,
+        pub job: ::std::string::String,
+        pub status: i32,
+        pub when: ::chrono::DateTime<::chrono::offset::Utc>,
+    }
+
     /// Error types.
     pub mod error {
         /// Error from a `TryFrom` or `FromStr` implementation.
@@ -33,353 +112,6 @@ pub mod types {
                 Self(value.into())
             }
         }
-    }
-
-    ///`EnrolBody`
-    ///
-    /// <details><summary>JSON schema</summary>
-    ///
-    /// ```json
-    ///{
-    ///  "title": "EnrolBody",
-    ///  "type": "object",
-    ///  "required": [
-    ///    "host",
-    ///    "key"
-    ///  ],
-    ///  "properties": {
-    ///    "host": {
-    ///      "type": "string"
-    ///    },
-    ///    "key": {
-    ///      "type": "string"
-    ///    }
-    ///  }
-    ///}
-    /// ```
-    /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
-    pub struct EnrolBody {
-        pub host: ::std::string::String,
-        pub key: ::std::string::String,
-    }
-
-    ///`GlobalJobsResult`
-    ///
-    /// <details><summary>JSON schema</summary>
-    ///
-    /// ```json
-    ///{
-    ///  "title": "GlobalJobsResult",
-    ///  "type": "object",
-    ///  "required": [
-    ///    "summary"
-    ///  ],
-    ///  "properties": {
-    ///    "summary": {
-    ///      "type": "array",
-    ///      "items": {
-    ///        "$ref": "#/components/schemas/ReportSummary"
-    ///      }
-    ///    }
-    ///  }
-    ///}
-    /// ```
-    /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
-    pub struct GlobalJobsResult {
-        pub summary: ::std::vec::Vec<ReportSummary>,
-    }
-
-    ///`OutputRecord`
-    ///
-    /// <details><summary>JSON schema</summary>
-    ///
-    /// ```json
-    ///{
-    ///  "type": "object",
-    ///  "required": [
-    ///    "msg",
-    ///    "stream",
-    ///    "time"
-    ///  ],
-    ///  "properties": {
-    ///    "msg": {
-    ///      "type": "string"
-    ///    },
-    ///    "stream": {
-    ///      "type": "string"
-    ///    },
-    ///    "time": {
-    ///      "type": "string",
-    ///      "format": "date-time"
-    ///    }
-    ///  }
-    ///}
-    /// ```
-    /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
-    pub struct OutputRecord {
-        pub msg: ::std::string::String,
-        pub stream: ::std::string::String,
-        pub time: ::chrono::DateTime<::chrono::offset::Utc>,
-    }
-
-    ///`PingResult`
-    ///
-    /// <details><summary>JSON schema</summary>
-    ///
-    /// ```json
-    ///{
-    ///  "title": "PingResult",
-    ///  "type": "object",
-    ///  "required": [
-    ///    "host",
-    ///    "ok"
-    ///  ],
-    ///  "properties": {
-    ///    "host": {
-    ///      "type": "string"
-    ///    },
-    ///    "ok": {
-    ///      "type": "boolean"
-    ///    }
-    ///  }
-    ///}
-    /// ```
-    /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
-    pub struct PingResult {
-        pub host: ::std::string::String,
-        pub ok: bool,
-    }
-
-    ///`ReportFinishBody`
-    ///
-    /// <details><summary>JSON schema</summary>
-    ///
-    /// ```json
-    ///{
-    ///  "title": "ReportFinishBody",
-    ///  "type": "object",
-    ///  "required": [
-    ///    "duration_millis",
-    ///    "end_time",
-    ///    "exit_status",
-    ///    "id"
-    ///  ],
-    ///  "properties": {
-    ///    "duration_millis": {
-    ///      "type": "integer",
-    ///      "format": "int32"
-    ///    },
-    ///    "end_time": {
-    ///      "type": "string",
-    ///      "format": "date-time"
-    ///    },
-    ///    "exit_status": {
-    ///      "type": "integer",
-    ///      "format": "int32"
-    ///    },
-    ///    "id": {
-    ///      "$ref": "#/components/schemas/ReportId"
-    ///    }
-    ///  }
-    ///}
-    /// ```
-    /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
-    pub struct ReportFinishBody {
-        pub duration_millis: i32,
-        pub end_time: ::chrono::DateTime<::chrono::offset::Utc>,
-        pub exit_status: i32,
-        pub id: ReportId,
-    }
-
-    ///`ReportId`
-    ///
-    /// <details><summary>JSON schema</summary>
-    ///
-    /// ```json
-    ///{
-    ///  "type": "object",
-    ///  "required": [
-    ///    "host",
-    ///    "job",
-    ///    "pid",
-    ///    "time",
-    ///    "uuid"
-    ///  ],
-    ///  "properties": {
-    ///    "host": {
-    ///      "type": "string"
-    ///    },
-    ///    "job": {
-    ///      "type": "string"
-    ///    },
-    ///    "pid": {
-    ///      "type": "integer",
-    ///      "format": "uint64",
-    ///      "minimum": 0.0
-    ///    },
-    ///    "time": {
-    ///      "type": "string",
-    ///      "format": "date-time"
-    ///    },
-    ///    "uuid": {
-    ///      "type": "string"
-    ///    }
-    ///  }
-    ///}
-    /// ```
-    /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
-    pub struct ReportId {
-        pub host: ::std::string::String,
-        pub job: ::std::string::String,
-        pub pid: u64,
-        pub time: ::chrono::DateTime<::chrono::offset::Utc>,
-        pub uuid: ::std::string::String,
-    }
-
-    ///`ReportOutputBody`
-    ///
-    /// <details><summary>JSON schema</summary>
-    ///
-    /// ```json
-    ///{
-    ///  "title": "ReportOutputBody",
-    ///  "type": "object",
-    ///  "required": [
-    ///    "id",
-    ///    "record"
-    ///  ],
-    ///  "properties": {
-    ///    "id": {
-    ///      "$ref": "#/components/schemas/ReportId"
-    ///    },
-    ///    "record": {
-    ///      "$ref": "#/components/schemas/OutputRecord"
-    ///    }
-    ///  }
-    ///}
-    /// ```
-    /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
-    pub struct ReportOutputBody {
-        pub id: ReportId,
-        pub record: OutputRecord,
-    }
-
-    ///`ReportResult`
-    ///
-    /// <details><summary>JSON schema</summary>
-    ///
-    /// ```json
-    ///{
-    ///  "title": "ReportResult",
-    ///  "type": "object",
-    ///  "required": [
-    ///    "existed_already"
-    ///  ],
-    ///  "properties": {
-    ///    "existed_already": {
-    ///      "type": "boolean"
-    ///    }
-    ///  }
-    ///}
-    /// ```
-    /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
-    pub struct ReportResult {
-        pub existed_already: bool,
-    }
-
-    ///`ReportStartBody`
-    ///
-    /// <details><summary>JSON schema</summary>
-    ///
-    /// ```json
-    ///{
-    ///  "title": "ReportStartBody",
-    ///  "type": "object",
-    ///  "required": [
-    ///    "id",
-    ///    "script",
-    ///    "start_time"
-    ///  ],
-    ///  "properties": {
-    ///    "id": {
-    ///      "$ref": "#/components/schemas/ReportId"
-    ///    },
-    ///    "script": {
-    ///      "type": "string"
-    ///    },
-    ///    "start_time": {
-    ///      "type": "string",
-    ///      "format": "date-time"
-    ///    }
-    ///  }
-    ///}
-    /// ```
-    /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
-    pub struct ReportStartBody {
-        pub id: ReportId,
-        pub script: ::std::string::String,
-        pub start_time: ::chrono::DateTime<::chrono::offset::Utc>,
-    }
-
-    ///`ReportSummary`
-    ///
-    /// <details><summary>JSON schema</summary>
-    ///
-    /// ```json
-    ///{
-    ///  "type": "object",
-    ///  "required": [
-    ///    "age_seconds",
-    ///    "duration_seconds",
-    ///    "host",
-    ///    "job",
-    ///    "status",
-    ///    "when"
-    ///  ],
-    ///  "properties": {
-    ///    "age_seconds": {
-    ///      "type": "integer",
-    ///      "format": "int32"
-    ///    },
-    ///    "duration_seconds": {
-    ///      "type": "integer",
-    ///      "format": "int32"
-    ///    },
-    ///    "host": {
-    ///      "type": "string"
-    ///    },
-    ///    "job": {
-    ///      "type": "string"
-    ///    },
-    ///    "status": {
-    ///      "type": "integer",
-    ///      "format": "int32"
-    ///    },
-    ///    "when": {
-    ///      "type": "string",
-    ///      "format": "date-time"
-    ///    }
-    ///  }
-    ///}
-    /// ```
-    /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
-    pub struct ReportSummary {
-        pub age_seconds: i32,
-        pub duration_seconds: i32,
-        pub host: ::std::string::String,
-        pub job: ::std::string::String,
-        pub status: i32,
-        pub when: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 }
 

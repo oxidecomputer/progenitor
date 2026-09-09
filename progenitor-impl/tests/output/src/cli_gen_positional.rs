@@ -5,6 +5,14 @@ pub use progenitor_client::{ByteStream, ClientInfo, Error, ResponseValue};
 /// Types used as operation parameters and responses.
 #[allow(clippy::all)]
 pub mod types {
+    ///`UnoBody`
+    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    pub struct UnoBody {
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        pub gateway: ::std::option::Option<::std::string::String>,
+        pub required: ::serde_json::Value,
+    }
+
     /// Error types.
     pub mod error {
         /// Error from a `TryFrom` or `FromStr` implementation.
@@ -33,31 +41,6 @@ pub mod types {
                 Self(value.into())
             }
         }
-    }
-
-    ///`UnoBody`
-    ///
-    /// <details><summary>JSON schema</summary>
-    ///
-    /// ```json
-    ///{
-    ///  "type": "object",
-    ///  "required": [
-    ///    "required"
-    ///  ],
-    ///  "properties": {
-    ///    "gateway": {
-    ///      "type": "string"
-    ///    }
-    ///  }
-    ///}
-    /// ```
-    /// </details>
-    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
-    pub struct UnoBody {
-        #[serde(default, skip_serializing_if = "::std::option::Option::is_none")]
-        pub gateway: ::std::option::Option<::std::string::String>,
-        pub required: ::serde_json::Value,
     }
 }
 
