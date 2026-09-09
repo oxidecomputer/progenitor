@@ -346,19 +346,13 @@ impl Progenitor {
 
                         let type_id = self.type_space.add_type_with_name(&schema, Some(name))?;
 
-                        let typespace = self.type_space.to_typespace()?;
-                        let ty = typespace.get_type(&type_id);
-
                         // If the type is itself optional, then we'll treat it
                         // as optional (irrespective of the `required` field on
                         // the parameter) and use the "inner" type.
-                        let details = ty.details();
-                        let (type_id, required) =
-                            if let typespace::view::TypeDetails::Option(inner_type_id) = details {
-                                (inner_type_id, false)
-                            } else {
-                                (type_id, parameter_data.required)
-                            };
+                        let (type_id, required) = match self.type_space.structure(&type_id) {
+                            typify::Structure::Option(inner_type_id) => (inner_type_id, false),
+                            _ => (type_id, parameter_data.required),
+                        };
 
                         Ok(OperationParameter {
                             name: sanitize(&parameter_data.name, Case::Snake),
@@ -1287,14 +1281,12 @@ impl Progenitor {
             (Some(success), None) => success,
         };
 
-        let typespace = self.type_space.to_typespace().ok()?;
-        let typ = typespace.get_type(success_response);
-        let details = match typ.details() {
-            typespace::view::TypeDetails::Struct(details) => details,
+        let properties = match self.type_space.structure(success_response) {
+            typify::Structure::Struct(properties) => {
+                properties.into_iter().collect::<BTreeMap<_, _>>()
+            }
             _ => return None,
         };
-
-        let properties = details.properties().collect::<BTreeMap<_, _>>();
 
         // There should be exactly two properties: items and next_page
         if properties.len() != 2 {
@@ -1302,12 +1294,12 @@ impl Progenitor {
         }
 
         // We need a next_page property that's an Option<String>.
-        if let typespace::view::TypeDetails::Option(ref opt_id) =
-            typespace.get_type(properties.get("next_page")?).details()
+        if let typify::Structure::Option(ref opt_id) =
+            self.type_space.structure(properties.get("next_page")?)
         {
             if !matches!(
-                typespace.get_type(opt_id).details(),
-                typespace::view::TypeDetails::String
+                self.type_space.structure(opt_id),
+                typify::Structure::String
             ) {
                 return None;
             }
@@ -1315,8 +1307,8 @@ impl Progenitor {
             return None;
         }
 
-        match typespace.get_type(properties.get("items")?).details() {
-            typespace::view::TypeDetails::Vec(item) => {
+        match self.type_space.structure(properties.get("items")?) {
+            typify::Structure::Vec(item) => {
                 #[derive(serde::Deserialize, Default)]
                 struct DropshotPaginationFormat {
                     required: Vec<String>,
