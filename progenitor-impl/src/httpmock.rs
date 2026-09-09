@@ -101,6 +101,12 @@ impl Progenitor {
     }
 
     fn httpmock_method(&self, method: &crate::method::OperationMethod) -> MockOp {
+        // ATTN REVIEWER: rebuilt here rather than threaded in because this
+        // function does not return Result; see cli.rs for the same note.
+        let typespace = self
+            .type_space
+            .to_typespace()
+            .expect("type conversion succeeded");
         let when_name = sanitize(&format!("{}-when", method.operation_id), Case::Pascal);
         let when = format_ident!("{}", when_name).to_token_stream();
         let then_name = sanitize(&format!("{}-then", method.operation_id), Case::Pascal);
@@ -130,11 +136,9 @@ impl Progenitor {
                  description: _,
              }| {
                 let arg_type_name = match typ {
-                    OperationParameterType::Type(arg_type_id) => self
-                        .type_space
+                    OperationParameterType::Type(arg_type_id) => typespace
                         .get_type(arg_type_id)
-                        .unwrap()
-                        .parameter_ident(),
+                        .parameter_ident_in(crate::TYPES_MOD),
                     OperationParameterType::RawBody => match kind {
                         OperationParameterKind::Body(BodyContentType::OctetStream) => quote! {
                             ::serde_json::Value
@@ -289,8 +293,8 @@ impl Progenitor {
              }| {
                 let (value_param, value_use) = match typ {
                     crate::method::OperationResponseKind::Type(arg_type_id) => {
-                        let arg_type = self.type_space.get_type(arg_type_id).unwrap();
-                        let arg_type_ident = arg_type.parameter_ident();
+                        let arg_type = typespace.get_type(arg_type_id);
+                        let arg_type_ident = arg_type.parameter_ident_in(crate::TYPES_MOD);
                         (
                             quote! {
                                 value: #arg_type_ident,

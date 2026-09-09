@@ -5,7 +5,9 @@ use std::collections::BTreeMap;
 use heck::ToKebabCase;
 use proc_macro2::TokenStream;
 use quote::{format_ident, quote};
-use typify::{Type, TypeEnumVariant, TypeSpaceImpl, TypeStructPropInfo};
+use typespace::TypeSpaceImpl;
+use typespace::view::{StructProperty, TypeDetails, VariantDetails};
+use typify::TypeId;
 
 use crate::{
     Progenitor, Result,
@@ -158,6 +160,13 @@ impl Progenitor {
     }
 
     fn cli_method(&self, method: &crate::method::OperationMethod) -> CliOperation {
+        // ATTN REVIEWER: typify's TypeSpace answered type queries directly.
+        // typespace requires a finalized snapshot, which this and the two
+        // functions below each rebuild because neither returns Result.
+        let typespace = self
+            .type_space
+            .to_typespace()
+            .expect("type conversion succeeded");
         let CliArg {
             parser: parser_args,
             consumer: consumer_args,
@@ -274,7 +283,7 @@ impl Progenitor {
             Some(_) => {
                 let success_type = match success_kind {
                     crate::method::OperationResponseKind::Type(type_id) => {
-                        self.type_space.get_type(&type_id).unwrap().ident()
+                        typespace.get_type(&type_id).ident_in(crate::TYPES_MOD)
                     }
                     crate::method::OperationResponseKind::None => quote! { () },
                     crate::method::OperationResponseKind::Raw => todo!(),
@@ -364,6 +373,10 @@ impl Progenitor {
     }
 
     fn cli_method_args(&self, method: &crate::method::OperationMethod) -> CliArg {
+        let typespace = self
+            .type_space
+            .to_typespace()
+            .expect("type conversion succeeded");
         let mut args = CliOperationArgs::default();
 
         let first_page_required_set = method
@@ -398,7 +411,7 @@ impl Progenitor {
             let OperationParameterType::Type(arg_type_id) = &param.typ else {
                 unreachable!("query and path parameters must be typed")
             };
-            let arg_type = self.type_space.get_type(arg_type_id).unwrap();
+            let arg_type = typespace.get_type(arg_type_id);
 
             let arg_name = param.name.to_kebab_case();
 
@@ -412,8 +425,8 @@ impl Progenitor {
             let OperationParameterType::Type(arg_type_id) = &param.typ else {
                 panic!()
             };
-            let arg_type = self.type_space.get_type(arg_type_id).unwrap();
-            let arg_type_name = arg_type.ident();
+            let arg_type = typespace.get_type(arg_type_id);
+            let arg_type_name = arg_type.ident_in(crate::TYPES_MOD);
 
             let consumer = quote! {
                 if let Some(value) =
@@ -443,11 +456,11 @@ impl Progenitor {
 
         if let Some(body_type_id) = maybe_body_type_id {
             args.body_present();
-            let body_type = self.type_space.get_type(body_type_id).unwrap();
+            let body_type = typespace.get_type(body_type_id);
             let details = body_type.details();
 
             match details {
-                typify::TypeDetails::Struct(struct_info) => {
+                TypeDetails::Struct(struct_info) => {
                     for prop_info in struct_info.properties_info() {
                         self.cli_method_body_arg(&mut args, prop_info)
                     }
@@ -502,8 +515,8 @@ impl Progenitor {
         let consumer_args = args.args.values().map(|CliArg { consumer, .. }| consumer);
 
         let body_json_consumer = maybe_body_type_id.map(|body_type_id| {
-            let body_type = self.type_space.get_type(body_type_id).unwrap();
-            let body_type_ident = body_type.ident();
+            let body_type = typespace.get_type(body_type_id);
+            let body_type_ident = body_type.ident_in(crate::TYPES_MOD);
             quote! {
                 if let Some(value) =
                     matches.get_one::<std::path::PathBuf>("json-body")
@@ -529,15 +542,23 @@ impl Progenitor {
         CliArg { parser, consumer }
     }
 
-    fn cli_method_body_arg(&self, args: &mut CliOperationArgs, prop_info: TypeStructPropInfo<'_>) {
-        let TypeStructPropInfo {
+    fn cli_method_body_arg(
+        &self,
+        args: &mut CliOperationArgs,
+        prop_info: StructProperty<'_, TypeId>,
+    ) {
+        let StructProperty {
             name,
             description,
             required,
             type_id,
         } = prop_info;
 
-        let prop_type = self.type_space.get_type(&type_id).unwrap();
+        let typespace = self
+            .type_space
+            .to_typespace()
+            .expect("type conversion succeeded");
+        let prop_type = typespace.get_type(&type_id);
 
         // TODO this is maybe a kludge--not completely sure of the right way to
         // handle option types. On one hand, we could want types from this
@@ -547,13 +568,12 @@ impl Progenitor {
         // sense, meaning that we need to include `"foo": null` rather than
         // omitting the field. Back to the first hand: is that last point just
         // a serde issue rather than an interface one?
-        let maybe_inner_type =
-            if let typify::TypeDetails::Option(inner_type_id) = prop_type.details() {
-                let inner_type = self.type_space.get_type(&inner_type_id).unwrap();
-                Some(inner_type)
-            } else {
-                None
-            };
+        let maybe_inner_type = if let TypeDetails::Option(inner_type_id) = prop_type.details() {
+            let inner_type = typespace.get_type(&inner_type_id);
+            Some(inner_type)
+        } else {
+            None
+        };
 
         let prop_type = if let Some(inner_type) = maybe_inner_type {
             inner_type
@@ -577,8 +597,8 @@ impl Progenitor {
                 &prop_type,
             );
 
-            let prop_fn = format_ident!("{}", sanitize(name, Case::Snake));
-            let prop_type_ident = prop_type.ident();
+            let prop_fn = format_ident!("{}", sanitize(&name, Case::Snake));
+            let prop_type_ident = prop_type.ident_in(crate::TYPES_MOD);
             let consumer = quote! {
                 if let Some(value) =
                     matches.get_one::<#prop_type_ident>(
@@ -620,25 +640,25 @@ fn clap_arg(
     arg_name: &str,
     volitionality: Volitionality,
     description: &Option<String>,
-    arg_type: &Type,
+    arg_type: &typespace::view::Type<'_, TypeId>,
 ) -> TokenStream {
     let help = description.as_ref().map(|description| {
         quote! {
             .help(#description)
         }
     });
-    let arg_type_name = arg_type.ident();
+    let arg_type_name = arg_type.ident_in(crate::TYPES_MOD);
 
     // For enums that have **only** simple variants, we do some slightly
     // fancier argument handling to expose the possible values. In particular,
     // we use clap's `PossibleValuesParser` with each variant converted to a
     // string. Then we use TypedValueParser::map to translate that into the
     // actual type of the enum.
-    let maybe_enum_parser = if let typify::TypeDetails::Enum(e) = arg_type.details() {
+    let maybe_enum_parser = if let TypeDetails::Enum(e) = arg_type.details() {
         let maybe_var_names = e
             .variants()
             .map(|(var_name, var_details)| {
-                if let TypeEnumVariant::Simple = var_details {
+                if let VariantDetails::Unit = var_details {
                     Some(format_ident!("{}", var_name))
                 } else {
                     None

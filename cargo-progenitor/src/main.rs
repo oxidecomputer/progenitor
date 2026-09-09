@@ -125,14 +125,17 @@ fn main() -> Result<()> {
 
     match builder.generate_tokens() {
         Ok(api_code) => {
-            let type_space = builder.get_type_space();
+            let typespace = builder.to_typespace()?;
 
             println!("-----------------------------------------------------");
             println!(" TYPE SPACE");
             println!("-----------------------------------------------------");
-            for (idx, type_entry) in type_space.iter_types().enumerate() {
-                let n = type_entry.describe();
-                println!("{:>4}  {}", idx, n);
+            // ATTN REVIEWER: typify's `Type::describe` produced a debug
+            // description of each type; typespace's nearest answer is
+            // `name`, which names a named type and renders the identifier
+            // of an unnamed one.
+            for (idx, typ) in typespace.iter_types().enumerate() {
+                println!("{:>4}  {}", idx, typ.name());
             }
             println!("-----------------------------------------------------");
             println!();

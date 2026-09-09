@@ -8,7 +8,7 @@ use std::collections::{BTreeMap, HashMap, HashSet};
 
 use openapiv3::OpenAPI;
 use proc_macro2::TokenStream;
-use quote::quote;
+use quote::{format_ident, quote};
 use serde::Deserialize;
 use thiserror::Error;
 use typify::{TypeSpace, TypeSpaceSettings};
@@ -19,6 +19,12 @@ pub use typify::CrateVers;
 pub use typify::TypeSpaceImpl as TypeImpl;
 pub use typify::TypeSpacePatch as TypePatch;
 pub use typify::UnknownPolicy;
+
+/// The module that generated types are emitted into.
+///
+/// typespace makes the scope a per-query argument rather than a setting,
+/// so every identifier query passes this.
+pub(crate) const TYPES_MOD: &str = "types";
 
 mod cli;
 mod httpmock;
@@ -310,9 +316,7 @@ impl Progenitor {
     /// Build a generator from settings and an OpenAPI document.
     pub fn build(settings: &GenerationSettings, spec: &OpenAPI) -> Result<Self> {
         let mut type_settings = TypeSpaceSettings::default();
-        type_settings
-            .with_type_mod("types")
-            .with_struct_builder(settings.interface == InterfaceStyle::Builder);
+        type_settings.with_struct_builder(settings.interface == InterfaceStyle::Builder);
         settings.extra_derives.iter().for_each(|derive| {
             let _ = type_settings.with_derive(derive.clone());
         });
@@ -431,7 +435,7 @@ impl Progenitor {
             }
         }?;
 
-        let types = self.type_space.to_stream();
+        let types = self.type_space.to_stream()?;
 
         let (inner_type, inner_fn_value) = match self.settings.inner_type.as_ref() {
             Some(inner_type) => (inner_type.clone(), quote! { &self.inner }),
@@ -726,6 +730,41 @@ impl Progenitor {
     /// Get the [TypeSpace] for schemas present in the OpenAPI specification.
     pub fn get_type_space(&self) -> &TypeSpace {
         &self.type_space
+    }
+
+    /// Finalize the collected types into a queryable typespace.
+    ///
+    /// [TypeSpace] itself no longer answers questions about individual
+    /// types; the finalized [typespace::Typespace] does. Each call walks
+    /// and finalizes every collected type, so callers bind the result once
+    /// and query it repeatedly.
+    pub fn to_typespace(&self) -> Result<typespace::Typespace<typify::TypeId>> {
+        Ok(self.type_space.to_typespace()?)
+    }
+
+    /// The identifier of the builder type for `ty`, if it has one.
+    ///
+    /// A struct gets a builder when the generated interface is the builder
+    /// style; every other kind of type has none.
+    // ATTN REVIEWER: typify's `Type::builder` answered this directly.
+    // typespace has no equivalent, so this reconstructs the identifier from
+    // the type's name and the module layout typify's struct-builder output
+    // used.
+    pub(crate) fn builder_ident(
+        &self,
+        ty: &typespace::view::Type<'_, typify::TypeId>,
+    ) -> Option<TokenStream> {
+        if self.settings.interface != InterfaceStyle::Builder {
+            return None;
+        }
+        match ty.details() {
+            typespace::view::TypeDetails::Struct(_) => {
+                let types_mod = format_ident!("{}", TYPES_MOD);
+                let type_name = format_ident!("{}", ty.name());
+                Some(quote! { #types_mod :: builder :: #type_name })
+            }
+            _ => None,
+        }
     }
 
     /// Whether the generated client needs to use additional crates to support

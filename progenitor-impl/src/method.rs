@@ -9,12 +9,12 @@ use std::{
 use openapiv3::{Components, Parameter, ReferenceOr, Response, StatusCode};
 use proc_macro2::TokenStream;
 use quote::{ToTokens, format_ident, quote};
-use typify::{TypeId, TypeSpace};
+use typify::TypeId;
 
 use crate::{
     Error, Progenitor, Result, TagStyle,
     template::PathTemplate,
-    util::{Case, items, parameter_map, sanitize, unique_ident_from},
+    util::{Case, items, parameter_map, sanitize, unique_ident_from, with_lifetime},
 };
 use crate::{to_schema::ToSchema, util::ReferenceOrExt};
 
@@ -263,10 +263,10 @@ pub(crate) enum OperationResponseKind {
 }
 
 impl OperationResponseKind {
-    pub fn into_tokens(self, type_space: &TypeSpace) -> TokenStream {
+    pub fn into_tokens(self, typespace: &typespace::Typespace<TypeId>) -> TokenStream {
         match self {
             OperationResponseKind::Type(ref type_id) => {
-                let type_name = type_space.get_type(type_id).unwrap().ident();
+                let type_name = typespace.get_type(type_id).ident_in(crate::TYPES_MOD);
                 quote! { #type_name }
             }
             OperationResponseKind::None => {
@@ -346,14 +346,15 @@ impl Progenitor {
 
                         let type_id = self.type_space.add_type_with_name(&schema, Some(name))?;
 
-                        let ty = self.type_space.get_type(&type_id).unwrap();
+                        let typespace = self.type_space.to_typespace()?;
+                        let ty = typespace.get_type(&type_id);
 
                         // If the type is itself optional, then we'll treat it
                         // as optional (irrespective of the `required` field on
                         // the parameter) and use the "inner" type.
                         let details = ty.details();
                         let (type_id, required) =
-                            if let typify::TypeDetails::Option(inner_type_id) = details {
+                            if let typespace::view::TypeDetails::Option(inner_type_id) = details {
                                 (inner_type_id, false)
                             } else {
                                 (type_id, parameter_data.required)
@@ -563,6 +564,7 @@ impl Progenitor {
         has_inner: bool,
     ) -> Result<TokenStream> {
         let operation_id = format_ident!("{}", method.operation_id);
+        let typespace = self.type_space.to_typespace()?;
 
         // Render each parameter as it will appear in the method signature.
         let params = method
@@ -571,17 +573,19 @@ impl Progenitor {
             .map(|param| {
                 let name = format_ident!("{}", param.name);
                 let typ = match (&param.typ, param.kind.is_optional()) {
-                    (OperationParameterType::Type(type_id), false) => self
-                        .type_space
-                        .get_type(type_id)
-                        .unwrap()
-                        .parameter_ident_with_lifetime("a"),
-                    (OperationParameterType::Type(type_id), true) => {
-                        let t = self
-                            .type_space
+                    (OperationParameterType::Type(type_id), false) => with_lifetime(
+                        typespace
                             .get_type(type_id)
-                            .unwrap()
-                            .parameter_ident_with_lifetime("a");
+                            .parameter_ident_in(crate::TYPES_MOD),
+                        "a",
+                    ),
+                    (OperationParameterType::Type(type_id), true) => {
+                        let t = with_lifetime(
+                            typespace
+                                .get_type(type_id)
+                                .parameter_ident_in(crate::TYPES_MOD),
+                            "a",
+                        );
                         quote! { Option<#t> }
                     }
                     (OperationParameterType::RawBody, false) => match &param.kind {
@@ -688,8 +692,8 @@ impl Progenitor {
             // The item type that we've saved (by picking apart the original
             // function's return type) will be the Item type parameter for the
             // Stream type we return.
-            let item = self.type_space.get_type(&page_data.item).unwrap();
-            let item_type = item.ident();
+            let item = typespace.get_type(&page_data.item);
+            let item_type = item.ident_in(crate::TYPES_MOD);
 
             let doc_comment = make_stream_doc_comment(method);
 
@@ -1164,9 +1168,10 @@ impl Progenitor {
             }
         };
 
+        let typespace = self.type_space.to_typespace()?;
         Ok(MethodSigBody {
-            success: response_type.into_tokens(&self.type_space),
-            error: error_type.into_tokens(&self.type_space),
+            success: response_type.into_tokens(&typespace),
+            error: error_type.into_tokens(&typespace),
             body: body_impl,
         })
     }
@@ -1288,9 +1293,10 @@ impl Progenitor {
             (Some(success), None) => success,
         };
 
-        let typ = self.type_space.get_type(success_response).ok()?;
+        let typespace = self.type_space.to_typespace().ok()?;
+        let typ = typespace.get_type(success_response);
         let details = match typ.details() {
-            typify::TypeDetails::Struct(details) => details,
+            typespace::view::TypeDetails::Struct(details) => details,
             _ => return None,
         };
 
@@ -1302,15 +1308,12 @@ impl Progenitor {
         }
 
         // We need a next_page property that's an Option<String>.
-        if let typify::TypeDetails::Option(ref opt_id) = self
-            .type_space
-            .get_type(properties.get("next_page")?)
-            .ok()?
-            .details()
+        if let typespace::view::TypeDetails::Option(ref opt_id) =
+            typespace.get_type(properties.get("next_page")?).details()
         {
             if !matches!(
-                self.type_space.get_type(opt_id).ok()?.details(),
-                typify::TypeDetails::String
+                typespace.get_type(opt_id).details(),
+                typespace::view::TypeDetails::String
             ) {
                 return None;
             }
@@ -1318,13 +1321,8 @@ impl Progenitor {
             return None;
         }
 
-        match self
-            .type_space
-            .get_type(properties.get("items")?)
-            .ok()?
-            .details()
-        {
-            typify::TypeDetails::Vec(item) => {
+        match typespace.get_type(properties.get("items")?).details() {
+            typespace::view::TypeDetails::Vec(item) => {
                 #[derive(serde::Deserialize, Default)]
                 struct DropshotPaginationFormat {
                     required: Vec<String>,
@@ -1434,6 +1432,7 @@ impl Progenitor {
             .collect::<Vec<_>>();
 
         let client_ident = unique_ident_from("client", &param_names);
+        let typespace = self.type_space.to_typespace()?;
 
         let mut cloneable = true;
 
@@ -1443,19 +1442,19 @@ impl Progenitor {
             .iter()
             .map(|param| match &param.typ {
                 OperationParameterType::Type(type_id) => {
-                    let ty = self.type_space.get_type(type_id)?;
+                    let ty = typespace.get_type(type_id);
 
                     // For body parameters only, if there's a builder we'll
                     // nest that within this builder.
                     if let (OperationParameterKind::Body(_), Some(builder_name)) =
-                        (&param.kind, ty.builder())
+                        (&param.kind, self.builder_ident(&ty))
                     {
                         Ok(quote! { Result<#builder_name, String> })
                     } else if param.kind.is_required() {
-                        let t = ty.ident();
+                        let t = ty.ident_in(crate::TYPES_MOD);
                         Ok(quote! { Result<#t, String> })
                     } else {
-                        let t = ty.ident();
+                        let t = ty.ident_in(crate::TYPES_MOD);
                         Ok(quote! { Result<Option<#t>, String> })
                     }
                 }
@@ -1476,11 +1475,12 @@ impl Progenitor {
             .iter()
             .map(|param| match &param.typ {
                 OperationParameterType::Type(type_id) => {
-                    let ty = self.type_space.get_type(type_id)?;
+                    let ty = typespace.get_type(type_id);
 
                     // Fill in the appropriate initial value for the
                     // param_types generated above.
-                    if let (OperationParameterKind::Body(_), Some(_)) = (&param.kind, ty.builder())
+                    if let (OperationParameterKind::Body(_), Some(_)) =
+                        (&param.kind, self.builder_ident(&ty))
                     {
                         Ok(quote! { Ok(::std::default::Default::default()) })
                     } else if param.kind.is_required() {
@@ -1506,9 +1506,9 @@ impl Progenitor {
             .iter()
             .map(|param| match &param.typ {
                 OperationParameterType::Type(type_id) => {
-                    let ty = self.type_space.get_type(type_id)?;
-                    if ty.builder().is_some() {
-                        let type_name = ty.ident();
+                    let ty = typespace.get_type(type_id);
+                    if self.builder_ident(&ty).is_some() {
+                        let type_name = ty.ident_in(crate::TYPES_MOD);
                         Ok(quote! {
                             .and_then(|v| #type_name::try_from(v)
                                 .map_err(|e| e.to_string()))
@@ -1530,15 +1530,15 @@ impl Progenitor {
                 let param_name = format_ident!("{}", param.name);
                 match &param.typ {
                     OperationParameterType::Type(type_id) => {
-                        let ty = self.type_space.get_type(type_id)?;
-                        match (ty.builder(), param.kind.is_optional()) {
+                        let ty = typespace.get_type(type_id);
+                        match (self.builder_ident(&ty), param.kind.is_optional()) {
                             // TODO right now optional body parameters are not
                             // addressed
                             (Some(_), true) => {
                                 unreachable!()
                             }
                             (None, true) => {
-                                let typ = ty.ident();
+                                let typ = ty.ident_in(crate::TYPES_MOD);
                                 let err_msg = format!(
                                     "conversion to `{}` for {} failed",
                                     ty.name(),
@@ -1559,7 +1559,7 @@ impl Progenitor {
                                 })
                             }
                             (None, false) => {
-                                let typ = ty.ident();
+                                let typ = ty.ident_in(crate::TYPES_MOD);
                                 let err_msg = format!(
                                     "conversion to `{}` for {} failed",
                                     ty.name(),
@@ -1586,7 +1586,7 @@ impl Progenitor {
                             // builder itself.
                             (Some(builder_name), false) => {
                                 assert_eq!(param.name, "body");
-                                let typ = ty.ident();
+                                let typ = ty.ident_in(crate::TYPES_MOD);
                                 let err_msg = format!(
                                     "conversion to `{}` for {} failed: {{}}",
                                     ty.name(),
@@ -1721,8 +1721,8 @@ impl Progenitor {
             // The item type that we've saved (by picking apart the original
             // function's return type) will be the Item type parameter for the
             // Stream impl we return.
-            let item = self.type_space.get_type(&page_data.item).unwrap();
-            let item_type = item.ident();
+            let item = typespace.get_type(&page_data.item);
+            let item_type = item.ident_in(crate::TYPES_MOD);
 
             let stream_doc = format!(
                 "Streams `{}` requests to `{}`",
