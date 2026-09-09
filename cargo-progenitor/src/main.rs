@@ -9,7 +9,7 @@ use std::{
 use anyhow::{Result, bail};
 use clap::{Parser, ValueEnum};
 use openapiv3::OpenAPI;
-use progenitor::{GenerationSettings, Generator, InterfaceStyle, TagStyle};
+use progenitor::{GenerationSettings, InterfaceStyle, Progenitor, TagStyle};
 use progenitor_impl::space_out_items;
 
 fn is_non_release() -> bool {
@@ -116,13 +116,14 @@ fn main() -> Result<()> {
     let CargoCli::Progenitor(args) = CargoCli::parse();
     let api = load_api(&args.input)?;
 
-    let mut builder = Generator::new(
+    let builder = Progenitor::build(
         GenerationSettings::default()
             .with_interface(args.interface.into())
             .with_tag(args.tags.into()),
-    );
+        &api,
+    )?;
 
-    match builder.generate_tokens(&api) {
+    match builder.generate_tokens() {
         Ok(api_code) => {
             let type_space = builder.get_type_space();
 
@@ -239,7 +240,7 @@ static DEPENDENCIES: Dependencies = Dependencies {
     uuid: "1.0",
 };
 
-pub fn dependencies(builder: Generator, include_client: bool) -> Vec<String> {
+pub fn dependencies(builder: Progenitor, include_client: bool) -> Vec<String> {
     let mut deps = vec![
         format!("bytes = \"{}\"", DEPENDENCIES.bytes),
         format!("futures-core = \"{}\"", DEPENDENCIES.futures),

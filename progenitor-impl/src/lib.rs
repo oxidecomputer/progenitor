@@ -47,15 +47,26 @@ pub enum Error {
 #[allow(missing_docs)]
 pub type Result<T> = std::result::Result<T, Error>;
 
-/// OpenAPI generator.
-pub struct Generator {
+/// OpenAPI client generator.
+///
+/// A `Progenitor` is bound to one OpenAPI document for its whole life:
+/// [`Progenitor::build`] walks and validates the document up front, and
+/// the consumers render from that work without ever seeing a document
+/// again.
+pub struct Progenitor {
     type_space: TypeSpace,
     settings: GenerationSettings,
+    spec: OpenAPI,
+    raw_methods: Vec<method::OperationMethod>,
     uses_futures: bool,
     uses_websockets: bool,
 }
 
-/// Settings for [Generator].
+/// Deprecated name for [`Progenitor`].
+#[deprecated(note = "renamed to Progenitor")]
+pub type Generator = Progenitor;
+
+/// Settings for [Progenitor].
 #[derive(Default, Clone)]
 pub struct GenerationSettings {
     interface: InterfaceStyle,
@@ -300,20 +311,14 @@ impl GenerationSettings {
     }
 }
 
-impl Default for Generator {
-    fn default() -> Self {
-        Self {
-            type_space: TypeSpace::new(TypeSpaceSettings::default().with_type_mod("types")),
-            settings: Default::default(),
-            uses_futures: Default::default(),
-            uses_websockets: Default::default(),
-        }
-    }
-}
-
-impl Generator {
-    /// Create a new generator with default values.
-    pub fn new(settings: &GenerationSettings) -> Self {
+impl Progenitor {
+    /// Build a generator from settings and an OpenAPI document.
+    ///
+    /// This does all of the document work up front: validation, the
+    /// conversion of component schemas into the type graph, and the
+    /// processing of every operation into the form the consumers
+    /// render from.
+    pub fn build(settings: &GenerationSettings, spec: &OpenAPI) -> Result<Self> {
         let mut type_settings = TypeSpaceSettings::default();
         type_settings
             .with_type_mod("types")
@@ -353,16 +358,21 @@ impl Generator {
             type_settings.with_map_type(map_type.clone());
         }
 
-        Self {
+        let mut progenitor = Self {
             type_space: TypeSpace::new(&type_settings),
             settings: settings.clone(),
+            spec: spec.clone(),
+            raw_methods: Vec::new(),
             uses_futures: false,
             uses_websockets: false,
-        }
+        };
+        progenitor.construct(spec)?;
+        Ok(progenitor)
     }
 
-    /// Emit a [TokenStream] containing the generated client code.
-    pub fn generate_tokens(&mut self, spec: &OpenAPI) -> Result<TokenStream> {
+    /// Walk the document: validate it, convert its component schemas,
+    /// and process every operation.
+    fn construct(&mut self, spec: &OpenAPI) -> Result<()> {
         validate_openapi(spec)?;
 
         // Convert our components dictionary to schemars
@@ -375,7 +385,7 @@ impl Generator {
 
         self.type_space.add_ref_types(schemas)?;
 
-        let raw_methods = spec
+        self.raw_methods = spec
             .paths
             .iter()
             .flat_map(|(path, ref_or_item)| {
@@ -390,25 +400,41 @@ impl Generator {
             })
             .collect::<Result<Vec<_>>>()?;
 
+        // The positional rendering path emits a futures stream method
+        // for each paginated operation; the builder path renders the
+        // same streams without consulting this flag. ATTN REVIEWER:
+        // that asymmetry predates this change and is reproduced here
+        // rather than corrected.
+        self.uses_futures = self.settings.interface == InterfaceStyle::Positional
+            && self
+                .raw_methods
+                .iter()
+                .any(|method| method.dropshot_paginated.is_some());
+
+        Ok(())
+    }
+
+    /// Emit a [TokenStream] containing the generated client code.
+    pub fn generate_tokens(&self) -> Result<TokenStream> {
+        let raw_methods = &self.raw_methods;
         let operation_code = match (&self.settings.interface, &self.settings.tag) {
             (InterfaceStyle::Positional, TagStyle::Merged) => self
-                .generate_tokens_positional_merged(
-                    &raw_methods,
-                    self.settings.inner_type.is_some(),
-                ),
+                .generate_tokens_positional_merged(raw_methods, self.settings.inner_type.is_some()),
             (InterfaceStyle::Positional, TagStyle::Separate) => {
                 unimplemented!("positional arguments with separate tags are currently unsupported")
             }
-            (InterfaceStyle::Builder, TagStyle::Merged) => self
-                .generate_tokens_builder_merged(&raw_methods, self.settings.inner_type.is_some()),
+            (InterfaceStyle::Builder, TagStyle::Merged) => {
+                self.generate_tokens_builder_merged(raw_methods, self.settings.inner_type.is_some())
+            }
             (InterfaceStyle::Builder, TagStyle::Separate) => {
-                let tag_info = spec
+                let tag_info = self
+                    .spec
                     .tags
                     .iter()
                     .map(|tag| (&tag.name, tag))
                     .collect::<BTreeMap<_, _>>();
                 self.generate_tokens_builder_separate(
-                    &raw_methods,
+                    raw_methods,
                     tag_info,
                     self.settings.inner_type.is_some(),
                 )
@@ -440,23 +466,23 @@ impl Generator {
         let client_timeout = self.settings.timeout.unwrap_or(15);
 
         let client_docstring = {
-            let mut s = format!("Client for {}", spec.info.title);
+            let mut s = format!("Client for {}", self.spec.info.title);
 
-            if let Some(ss) = &spec.info.description {
+            if let Some(ss) = &self.spec.info.description {
                 s.push_str("\n\n");
                 s.push_str(ss);
             }
-            if let Some(ss) = &spec.info.terms_of_service {
+            if let Some(ss) = &self.spec.info.terms_of_service {
                 s.push_str("\n\n");
                 s.push_str(ss);
             }
 
-            s.push_str(&format!("\n\nVersion: {}", &spec.info.version));
+            s.push_str(&format!("\n\nVersion: {}", &self.spec.info.version));
 
             s
         };
 
-        let version_str = &spec.info.version;
+        let version_str = &self.spec.info.version;
 
         let client_hooks = match self.settings.hooks {
             HooksMode::Optional => quote! {
@@ -580,7 +606,7 @@ impl Generator {
     }
 
     fn generate_tokens_positional_merged(
-        &mut self,
+        &self,
         input_methods: &[method::OperationMethod],
         has_inner: bool,
     ) -> Result<TokenStream> {
@@ -609,7 +635,7 @@ impl Generator {
     }
 
     fn generate_tokens_builder_merged(
-        &mut self,
+        &self,
         input_methods: &[method::OperationMethod],
         has_inner: bool,
     ) -> Result<TokenStream> {
@@ -657,7 +683,7 @@ impl Generator {
     }
 
     fn generate_tokens_builder_separate(
-        &mut self,
+        &self,
         input_methods: &[method::OperationMethod],
         tag_info: BTreeMap<&String, &openapiv3::Tag>,
         has_inner: bool,

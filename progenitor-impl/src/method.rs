@@ -12,7 +12,7 @@ use quote::{ToTokens, format_ident, quote};
 use typify::{TypeId, TypeSpace};
 
 use crate::{
-    Error, Generator, Result, TagStyle,
+    Error, Progenitor, Result, TagStyle,
     template::PathTemplate,
     util::{Case, items, parameter_map, sanitize, unique_ident_from},
 };
@@ -282,7 +282,7 @@ impl OperationResponseKind {
     }
 }
 
-impl Generator {
+impl Progenitor {
     pub(crate) fn process_operation(
         &mut self,
         operation: &openapiv3::Operation,
@@ -558,7 +558,7 @@ impl Generator {
     }
 
     pub(crate) fn positional_method(
-        &mut self,
+        &self,
         method: &OperationMethod,
         has_inner: bool,
     ) -> Result<TokenStream> {
@@ -634,9 +634,6 @@ impl Generator {
         };
 
         let stream_impl = method.dropshot_paginated.as_ref().map(|page_data| {
-            // We're now using futures.
-            self.uses_futures = true;
-
             let stream_id = format_ident!("{}_stream", method.operation_id);
 
             // The parameters are the same as those to the paged method, but
@@ -1421,7 +1418,7 @@ impl Generator {
     /// `send()` method above to fetch each page of results to assemble the
     /// items into a single `impl Stream`.
     pub(crate) fn builder_struct(
-        &mut self,
+        &self,
         method: &OperationMethod,
         tag_style: TagStyle,
         has_inner: bool,
@@ -1705,9 +1702,6 @@ impl Generator {
         };
 
         let stream_impl = method.dropshot_paginated.as_ref().map(|page_data| {
-            // We're now using futures.
-            self.uses_futures = true;
-
             let step_params = method.params.iter().filter_map(|param| {
                 if param.api_name.as_str() != "limit"
                     && matches!(param.kind, OperationParameterKind::Query(_))

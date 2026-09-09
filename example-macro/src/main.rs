@@ -1,8 +1,8 @@
 // Copyright 2022 Oxide Computer Company
 
-use progenitor::generate_api;
+use progenitor::generate_sdk;
 
-generate_api!(
+generate_sdk!(
     spec = "../sample_openapi/keeper.json",
     pre_hook = (|request| {
         println!("doing this {:?}", request);
@@ -30,9 +30,9 @@ async fn add_auth_headers(
 fn all_done(_result: &reqwest::Result<reqwest::Response>) {}
 
 mod buildomat {
-    use progenitor::generate_api;
+    use progenitor::generate_sdk;
 
-    generate_api!("../sample_openapi/buildomat.json");
+    generate_sdk!("../sample_openapi/buildomat.json");
 }
 
 fn main() {}

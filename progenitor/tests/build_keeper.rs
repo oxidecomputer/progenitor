@@ -1,7 +1,7 @@
 // Copyright 2022 Oxide Computer Company
 
 mod positional {
-    progenitor::generate_api!("../sample_openapi/keeper.json");
+    progenitor::generate_sdk!("../sample_openapi/keeper.json");
 
     fn _ignore() {
         let _ = Client::new("").enrol(
@@ -15,7 +15,7 @@ mod positional {
 }
 
 mod builder_untagged {
-    progenitor::generate_api!(
+    progenitor::generate_sdk!(
         spec = "../sample_openapi/keeper.json",
         interface = Builder,
         tags = Merged,
@@ -34,7 +34,7 @@ mod builder_untagged {
 }
 
 mod builder_tagged {
-    progenitor::generate_api!(
+    progenitor::generate_sdk!(
         spec = "../sample_openapi/keeper.json",
         interface = Builder,
         tags = Separate,

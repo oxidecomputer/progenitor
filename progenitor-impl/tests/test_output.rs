@@ -6,7 +6,7 @@ use std::{
 };
 
 use progenitor_impl::{
-    GenerationSettings, Generator, HooksMode, InterfaceStyle, TagStyle, TypeImpl, TypePatch,
+    GenerationSettings, HooksMode, InterfaceStyle, Progenitor, TagStyle, TypeImpl, TypePatch,
     space_out_items,
 };
 
@@ -27,8 +27,8 @@ where
     }
 }
 
-fn generate_formatted(generator: &mut Generator, spec: &OpenAPI) -> String {
-    let content = generator.generate_tokens(&spec).unwrap();
+fn generate_formatted(progenitor: &Progenitor) -> String {
+    let content = progenitor.generate_tokens().unwrap();
     reformat_code(content)
 }
 
@@ -51,15 +51,15 @@ fn verify_apis(openapi_file: &str) {
     let spec = load_api(in_path);
 
     // Positional generation.
-    let mut generator = Generator::default();
-    let output = generate_formatted(&mut generator, &spec);
+    let generator = Progenitor::build(&GenerationSettings::default(), &spec).unwrap();
+    let output = generate_formatted(&generator);
     expectorate::assert_contents(
         format!("tests/output/src/{}_positional.rs", openapi_stem),
         &output,
     );
 
     // Builder generation with derives and patches.
-    let mut generator = Generator::new(
+    let generator = Progenitor::build(
         GenerationSettings::default()
             .with_interface(InterfaceStyle::Builder)
             .with_tag(TagStyle::Merged)
@@ -74,21 +74,25 @@ fn verify_apis(openapi_file: &str) {
                 "usize",
                 [TypeImpl::Display].into_iter(),
             ),
-    );
-    let output = generate_formatted(&mut generator, &spec);
+        &spec,
+    )
+    .unwrap();
+    let output = generate_formatted(&generator);
     expectorate::assert_contents(
         format!("tests/output/src/{}_builder.rs", openapi_stem),
         &output,
     );
 
     // Builder generation with tags.
-    let mut generator = Generator::new(
+    let generator = Progenitor::build(
         GenerationSettings::default()
             .with_interface(InterfaceStyle::Builder)
             .with_cli_bounds("std::clone::Clone")
             .with_tag(TagStyle::Separate),
-    );
-    let output = generate_formatted(&mut generator, &spec);
+        &spec,
+    )
+    .unwrap();
+    let output = generate_formatted(&generator);
     expectorate::assert_contents(
         format!("tests/output/src/{}_builder_tagged.rs", openapi_stem),
         &output,
@@ -96,7 +100,7 @@ fn verify_apis(openapi_file: &str) {
 
     // CLI generation.
     let tokens = generator
-        .cli(&spec, &format!("crate::{openapi_stem}_builder"))
+        .cli(&format!("crate::{openapi_stem}_builder"))
         .unwrap();
     let output = reformat_code(tokens);
 
@@ -104,7 +108,7 @@ fn verify_apis(openapi_file: &str) {
 
     // httpmock generation.
     let code = generator
-        .httpmock(&spec, &format!("crate::{openapi_stem}_builder"))
+        .httpmock(&format!("crate::{openapi_stem}_builder"))
         .unwrap();
 
     // TODO pending #368
@@ -174,8 +178,9 @@ fn test_nexus_with_different_timeout() {
 
     let spec = load_api(in_path);
 
-    let mut generator = Generator::new(GenerationSettings::default().with_timeout(75));
-    let output = generate_formatted(&mut generator, &spec);
+    let generator =
+        Progenitor::build(GenerationSettings::default().with_timeout(75), &spec).unwrap();
+    let output = generate_formatted(&generator);
     expectorate::assert_contents(
         format!("tests/output/src/{}_with_timeout.rs", openapi_stem),
         &output,

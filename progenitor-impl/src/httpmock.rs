@@ -2,19 +2,16 @@
 
 //! Generation of mocking extensions for `httpmock`
 
-use openapiv3::OpenAPI;
 use proc_macro2::TokenStream;
 use quote::{ToTokens, format_ident, quote};
 
 use crate::{
-    Generator, Result,
+    Progenitor, Result,
     method::{
         BodyContentType, HttpMethod, OperationParameter, OperationParameterKind,
         OperationParameterType, OperationResponse, OperationResponseStatus,
     },
-    to_schema::ToSchema,
     util::{Case, sanitize},
-    validate_openapi,
 };
 
 struct MockOp {
@@ -24,39 +21,14 @@ struct MockOp {
     then_impl: TokenStream,
 }
 
-impl Generator {
+impl Progenitor {
     /// Generate a strongly-typed mocking extension to the `httpmock` crate.
     ///
     /// The `crate_path` parameter should be a valid Rust path corresponding to
     /// the SDK. This can include `::` and instances of `-` in the crate name
     /// should be converted to `_`.
-    pub fn httpmock(&mut self, spec: &OpenAPI, crate_path: &str) -> Result<TokenStream> {
-        validate_openapi(spec)?;
-
-        // Convert our components dictionary to schemars
-        let schemas = spec.components.iter().flat_map(|components| {
-            components
-                .schemas
-                .iter()
-                .map(|(name, ref_or_schema)| (name.clone(), ref_or_schema.to_schema()))
-        });
-
-        self.type_space.add_ref_types(schemas)?;
-
-        let raw_methods = spec
-            .paths
-            .iter()
-            .flat_map(|(path, ref_or_item)| {
-                // Exclude externally defined path items.
-                let item = ref_or_item.as_item().unwrap();
-                item.iter().map(move |(method, operation)| {
-                    (path.as_str(), method, operation, &item.parameters)
-                })
-            })
-            .map(|(path, method, operation, path_parameters)| {
-                self.process_operation(operation, &spec.components, path, method, path_parameters)
-            })
-            .collect::<Result<Vec<_>>>()?;
+    pub fn httpmock(&self, crate_path: &str) -> Result<TokenStream> {
+        let raw_methods = &self.raw_methods;
 
         let methods = raw_methods
             .iter()
@@ -128,7 +100,7 @@ impl Generator {
         Ok(code)
     }
 
-    fn httpmock_method(&mut self, method: &crate::method::OperationMethod) -> MockOp {
+    fn httpmock_method(&self, method: &crate::method::OperationMethod) -> MockOp {
         let when_name = sanitize(&format!("{}-when", method.operation_id), Case::Pascal);
         let when = format_ident!("{}", when_name).to_token_stream();
         let then_name = sanitize(&format!("{}-then", method.operation_id), Case::Pascal);

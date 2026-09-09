@@ -3,17 +3,14 @@
 use std::collections::BTreeMap;
 
 use heck::ToKebabCase;
-use openapiv3::OpenAPI;
 use proc_macro2::TokenStream;
 use quote::{format_ident, quote};
 use typify::{Type, TypeEnumVariant, TypeSpaceImpl, TypeStructPropInfo};
 
 use crate::{
-    Generator, Result,
+    Progenitor, Result,
     method::{OperationParameterKind, OperationParameterType, OperationResponseStatus},
-    to_schema::ToSchema,
     util::{Case, sanitize},
-    validate_openapi,
 };
 
 struct CliOperation {
@@ -22,35 +19,10 @@ struct CliOperation {
     execute_trait: TokenStream,
 }
 
-impl Generator {
+impl Progenitor {
     /// Generate a `clap`-based CLI.
-    pub fn cli(&mut self, spec: &OpenAPI, crate_name: &str) -> Result<TokenStream> {
-        validate_openapi(spec)?;
-
-        // Convert our components dictionary to schemars
-        let schemas = spec.components.iter().flat_map(|components| {
-            components
-                .schemas
-                .iter()
-                .map(|(name, ref_or_schema)| (name.clone(), ref_or_schema.to_schema()))
-        });
-
-        self.type_space.add_ref_types(schemas)?;
-
-        let raw_methods = spec
-            .paths
-            .iter()
-            .flat_map(|(path, ref_or_item)| {
-                // Exclude externally defined path items.
-                let item = ref_or_item.as_item().unwrap();
-                item.iter().map(move |(method, operation)| {
-                    (path.as_str(), method, operation, &item.parameters)
-                })
-            })
-            .map(|(path, method, operation, path_parameters)| {
-                self.process_operation(operation, &spec.components, path, method, path_parameters)
-            })
-            .collect::<Result<Vec<_>>>()?;
+    pub fn cli(&self, crate_name: &str) -> Result<TokenStream> {
+        let raw_methods = &self.raw_methods;
 
         let methods = raw_methods
             .iter()
@@ -185,7 +157,7 @@ impl Generator {
         Ok(code)
     }
 
-    fn cli_method(&mut self, method: &crate::method::OperationMethod) -> CliOperation {
+    fn cli_method(&self, method: &crate::method::OperationMethod) -> CliOperation {
         let CliArg {
             parser: parser_args,
             consumer: consumer_args,

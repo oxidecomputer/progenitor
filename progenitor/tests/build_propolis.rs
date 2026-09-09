@@ -2,7 +2,7 @@
 
 // ensure that the websocket channel used for serial console compiles.
 mod propolis_client {
-    progenitor::generate_api!(
+    progenitor::generate_sdk!(
         spec = "../sample_openapi/propolis-server.json",
         interface = Builder,
         tags = Merged,
