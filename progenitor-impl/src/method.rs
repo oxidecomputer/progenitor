@@ -14,7 +14,7 @@ use typify::TypeId;
 use crate::{
     Error, Progenitor, Result, TagStyle,
     template::PathTemplate,
-    util::{Case, items, parameter_map, sanitize, unique_ident_from, with_lifetime},
+    util::{Case, items, parameter_map, sanitize, unique_ident_from},
 };
 use crate::{to_schema::ToSchema, util::ReferenceOrExt};
 
@@ -573,19 +573,13 @@ impl Progenitor {
             .map(|param| {
                 let name = format_ident!("{}", param.name);
                 let typ = match (&param.typ, param.kind.is_optional()) {
-                    (OperationParameterType::Type(type_id), false) => with_lifetime(
-                        typespace
-                            .get_type(type_id)
-                            .parameter_ident_in(crate::TYPES_MOD),
-                        "a",
-                    ),
+                    (OperationParameterType::Type(type_id), false) => typespace
+                        .get_type(type_id)
+                        .parameter_ident(Some(crate::TYPES_MOD), Some("a")),
                     (OperationParameterType::Type(type_id), true) => {
-                        let t = with_lifetime(
-                            typespace
-                                .get_type(type_id)
-                                .parameter_ident_in(crate::TYPES_MOD),
-                            "a",
-                        );
+                        let t = typespace
+                            .get_type(type_id)
+                            .parameter_ident(Some(crate::TYPES_MOD), Some("a"));
                         quote! { Option<#t> }
                     }
                     (OperationParameterType::RawBody, false) => match &param.kind {
@@ -1447,7 +1441,7 @@ impl Progenitor {
                     // For body parameters only, if there's a builder we'll
                     // nest that within this builder.
                     if let (OperationParameterKind::Body(_), Some(builder_name)) =
-                        (&param.kind, self.builder_ident(&ty))
+                        (&param.kind, ty.builder_ident(Some(crate::TYPES_MOD)))
                     {
                         Ok(quote! { Result<#builder_name, String> })
                     } else if param.kind.is_required() {
@@ -1480,7 +1474,7 @@ impl Progenitor {
                     // Fill in the appropriate initial value for the
                     // param_types generated above.
                     if let (OperationParameterKind::Body(_), Some(_)) =
-                        (&param.kind, self.builder_ident(&ty))
+                        (&param.kind, ty.builder_ident(Some(crate::TYPES_MOD)))
                     {
                         Ok(quote! { Ok(::std::default::Default::default()) })
                     } else if param.kind.is_required() {
@@ -1507,7 +1501,7 @@ impl Progenitor {
             .map(|param| match &param.typ {
                 OperationParameterType::Type(type_id) => {
                     let ty = typespace.get_type(type_id);
-                    if self.builder_ident(&ty).is_some() {
+                    if ty.builder_ident(Some(crate::TYPES_MOD)).is_some() {
                         let type_name = ty.ident_in(crate::TYPES_MOD);
                         Ok(quote! {
                             .and_then(|v| #type_name::try_from(v)
@@ -1531,7 +1525,10 @@ impl Progenitor {
                 match &param.typ {
                     OperationParameterType::Type(type_id) => {
                         let ty = typespace.get_type(type_id);
-                        match (self.builder_ident(&ty), param.kind.is_optional()) {
+                        match (
+                            ty.builder_ident(Some(crate::TYPES_MOD)),
+                            param.kind.is_optional(),
+                        ) {
                             // TODO right now optional body parameters are not
                             // addressed
                             (Some(_), true) => {

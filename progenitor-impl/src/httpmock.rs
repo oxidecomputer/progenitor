@@ -138,7 +138,7 @@ impl Progenitor {
                 let arg_type_name = match typ {
                     OperationParameterType::Type(arg_type_id) => typespace
                         .get_type(arg_type_id)
-                        .parameter_ident_in(crate::TYPES_MOD),
+                        .parameter_ident(Some(crate::TYPES_MOD), None),
                     OperationParameterType::RawBody => match kind {
                         OperationParameterKind::Body(BodyContentType::OctetStream) => quote! {
                             ::serde_json::Value
@@ -294,7 +294,7 @@ impl Progenitor {
                 let (value_param, value_use) = match typ {
                     crate::method::OperationResponseKind::Type(arg_type_id) => {
                         let arg_type = typespace.get_type(arg_type_id);
-                        let arg_type_ident = arg_type.parameter_ident_in(crate::TYPES_MOD);
+                        let arg_type_ident = arg_type.parameter_ident(Some(crate::TYPES_MOD), None);
                         (
                             quote! {
                                 value: #arg_type_ident,

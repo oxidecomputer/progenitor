@@ -8,7 +8,7 @@ use std::collections::{BTreeMap, HashMap, HashSet};
 
 use openapiv3::OpenAPI;
 use proc_macro2::TokenStream;
-use quote::{format_ident, quote};
+use quote::quote;
 use serde::Deserialize;
 use thiserror::Error;
 use typify::{TypeSpace, TypeSpaceSettings};
@@ -740,31 +740,6 @@ impl Progenitor {
     /// and query it repeatedly.
     pub fn to_typespace(&self) -> Result<typespace::Typespace<typify::TypeId>> {
         Ok(self.type_space.to_typespace()?)
-    }
-
-    /// The identifier of the builder type for `ty`, if it has one.
-    ///
-    /// A struct gets a builder when the generated interface is the builder
-    /// style; every other kind of type has none.
-    // ATTN REVIEWER: typify's `Type::builder` answered this directly.
-    // typespace has no equivalent, so this reconstructs the identifier from
-    // the type's name and the module layout typify's struct-builder output
-    // used.
-    pub(crate) fn builder_ident(
-        &self,
-        ty: &typespace::view::Type<'_, typify::TypeId>,
-    ) -> Option<TokenStream> {
-        if self.settings.interface != InterfaceStyle::Builder {
-            return None;
-        }
-        match ty.details() {
-            typespace::view::TypeDetails::Struct(_) => {
-                let types_mod = format_ident!("{}", TYPES_MOD);
-                let type_name = format_ident!("{}", ty.name());
-                Some(quote! { #types_mod :: builder :: #type_name })
-            }
-            _ => None,
-        }
     }
 
     /// Whether the generated client needs to use additional crates to support

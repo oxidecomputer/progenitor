@@ -129,39 +129,3 @@ pub(crate) fn unique_ident_from(
         name.insert_str(0, "_");
     }
 }
-
-/// Name `lifetime` on every reference in a rendered parameter identifier.
-///
-/// A parameter identifier introduces a reference wherever the caller
-/// borrows rather than owns, and every one of those needs the method's
-/// lifetime.
-// ATTN REVIEWER: typespace renders a parameter identifier with a module
-// scope (`parameter_ident_in`) or with a lifetime
-// (`parameter_ident_with_lifetime`), but has no query for both at once,
-// and progenitor needs both. `&` appears in a parameter identifier only
-// where typespace would have placed the lifetime, so inserting it after
-// each one reproduces the identifier typespace would have rendered.
-pub(crate) fn with_lifetime(
-    tokens: proc_macro2::TokenStream,
-    lifetime: &str,
-) -> proc_macro2::TokenStream {
-    use proc_macro2::{Group, TokenStream, TokenTree};
-
-    let lifetime_tok = syn::Lifetime::new(&format!("'{lifetime}"), proc_macro2::Span::call_site());
-
-    tokens
-        .into_iter()
-        .flat_map(|tree| match tree {
-            TokenTree::Group(group) => {
-                let inner = with_lifetime(group.stream(), lifetime);
-                vec![TokenTree::Group(Group::new(group.delimiter(), inner))]
-            }
-            TokenTree::Punct(punct) if punct.as_char() == '&' => {
-                let mut out = vec![TokenTree::Punct(punct)];
-                out.extend(quote::ToTokens::to_token_stream(&lifetime_tok));
-                out
-            }
-            tree => vec![tree],
-        })
-        .collect::<TokenStream>()
-}
