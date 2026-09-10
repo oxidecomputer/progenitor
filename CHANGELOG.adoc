@@ -15,6 +15,11 @@
 
 https://github.com/oxidecomputer/progenitor/compare/v0.14.0\...HEAD[Full list of commits]
 
+* Update typify to 0.8.0 (#1369) (#1423)
+* Make the request mutable in the sync pre_hook (#825)
+* Stop activating schemars chrono/uuid1 features in progenitor (#1363)
+* CLI generation: merge summary and description into a single about (#1380)
+
 == 0.14.0 (released 2026-04-24)
 
 https://github.com/oxidecomputer/progenitor/compare/v0.13.0\...v0.14.0[Full list of commits]
