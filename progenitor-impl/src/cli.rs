@@ -5,7 +5,7 @@ use std::collections::BTreeMap;
 use heck::ToKebabCase;
 use proc_macro2::TokenStream;
 use quote::{format_ident, quote};
-use typespace::TypeSpaceImpl;
+use typespace::TypespaceTrait;
 use typespace::view::{StructProperty, TypeDetails, VariantDetails};
 use typify::TypeId;
 
@@ -624,7 +624,7 @@ impl Progenitor {
             prop_type
         };
 
-        let scalar = prop_type.has_impl(TypeSpaceImpl::FromStr);
+        let scalar = prop_type.has_impl(TypespaceTrait::FromStr);
 
         let prop_name = name.to_kebab_case();
         if scalar && !args.has_arg(&prop_name) {
