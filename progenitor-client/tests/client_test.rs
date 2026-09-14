@@ -171,6 +171,18 @@ fn test_query_enum_untagged() {
         Object { a: u64, b: u64 },
         Array(Vec<u64>),
     }
+
+    #[derive(Serialize)]
+    #[serde(transparent)]
+    struct Name(String);
+
+    #[derive(Serialize)]
+    #[serde(untagged)]
+    enum NameOrId {
+        Name(Name),
+        Id(uuid::Uuid),
+    }
+
     let value = Value::Simple;
     let result = encode_query_param("ignored", &value).unwrap();
     assert_eq!(result, "");
@@ -190,15 +202,6 @@ fn test_query_enum_untagged() {
     let result = encode_query_param("paramName", &value).unwrap();
     assert_eq!(result, "paramName=1&paramName=2&paramName=3&paramName=4");
 
-    #[derive(Serialize)]
-    #[serde(transparent)]
-    struct Name(String);
-    #[derive(Serialize)]
-    #[serde(untagged)]
-    enum NameOrId {
-        Name(Name),
-        Id(uuid::Uuid),
-    }
     let value = Some(NameOrId::Name(Name("xyz".to_string())));
     let result = encode_query_param("paramName", &value).unwrap();
     assert_eq!(result, "paramName=xyz");

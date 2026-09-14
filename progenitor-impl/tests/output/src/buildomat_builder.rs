@@ -4,6 +4,14 @@ use progenitor_client::{encode_path, ClientHooks, OperationInfo, RequestBuilderE
 pub use progenitor_client::{ByteStream, ClientInfo, Error, ResponseValue};
 /// Types used as operation parameters and responses.
 #[allow(clippy::all)]
+#[allow(
+    clippy::struct_field_names,
+    reason = "type definitions are emitted by typify"
+)]
+#[allow(
+    clippy::default_trait_access,
+    reason = "default expressions are emitted by typify"
+)]
 pub mod types {
     ///`GetThingOrThingsId`
     #[derive(
@@ -1788,7 +1796,7 @@ pub mod types {
 }
 
 #[derive(Clone, Debug)]
-///Client for Buildomat
+///Client for `Buildomat`
 ///
 ///Version: 1.0
 pub struct Client {
@@ -1802,6 +1810,11 @@ impl Client {
     /// `baseurl` is the base URL provided to the internal
     /// `reqwest::Client`, and should include a scheme and hostname,
     /// as well as port and a path stem if applicable.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the default `reqwest::Client` cannot be built.
+    #[must_use]
     pub fn new(baseurl: &str) -> Self {
         #[cfg(not(target_arch = "wasm32"))]
         let client = {
@@ -1821,6 +1834,7 @@ impl Client {
     /// `baseurl` is the base URL provided to the internal
     /// `reqwest::Client`, and should include a scheme and hostname,
     /// as well as port and a path stem if applicable.
+    #[must_use]
     pub fn new_with_client(baseurl: &str, client: reqwest::Client) -> Self {
         Self {
             baseurl: baseurl.to_string(),
@@ -1851,7 +1865,12 @@ impl ClientHooks<()> for &Client {}
 impl Client {
     ///Sends a `POST` request to `/v1/control/hold`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.control_hold()
     ///    .send()
     ///    .await;
@@ -1862,7 +1881,12 @@ impl Client {
 
     ///Sends a `POST` request to `/v1/control/resume`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.control_resume()
     ///    .send()
     ///    .await;
@@ -1873,7 +1897,12 @@ impl Client {
 
     ///Sends a `GET` request to `/v1/task/{Task}`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.task_get()
     ///    .task(task)
     ///    .send()
@@ -1885,7 +1914,12 @@ impl Client {
 
     ///Sends a `GET` request to `/v1/tasks`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.tasks_get()
     ///    .send()
     ///    .await;
@@ -1896,7 +1930,12 @@ impl Client {
 
     ///Sends a `POST` request to `/v1/tasks`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.task_submit()
     ///    .body(body)
     ///    .send()
@@ -1908,7 +1947,12 @@ impl Client {
 
     ///Sends a `GET` request to `/v1/tasks/{task}/events`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.task_events_get()
     ///    .task(task)
     ///    .minseq(minseq)
@@ -1921,7 +1965,12 @@ impl Client {
 
     ///Sends a `GET` request to `/v1/tasks/{task}/outputs`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.task_outputs_get()
     ///    .task(task)
     ///    .send()
@@ -1933,7 +1982,12 @@ impl Client {
 
     ///Sends a `GET` request to `/v1/tasks/{task}/outputs/{output}`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.task_output_download()
     ///    .task(task)
     ///    .output(output)
@@ -1946,7 +2000,12 @@ impl Client {
 
     ///Sends a `POST` request to `/v1/users`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.user_create()
     ///    .body(body)
     ///    .send()
@@ -1958,7 +2017,12 @@ impl Client {
 
     ///Sends a `GET` request to `/v1/whoami`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.whoami()
     ///    .send()
     ///    .await;
@@ -1969,7 +2033,12 @@ impl Client {
 
     ///Sends a `PUT` request to `/v1/whoami/name`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.whoami_put_name()
     ///    .body(body)
     ///    .send()
@@ -1981,7 +2050,12 @@ impl Client {
 
     ///Sends a `POST` request to `/v1/worker/bootstrap`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.worker_bootstrap()
     ///    .body(body)
     ///    .send()
@@ -1993,7 +2067,12 @@ impl Client {
 
     ///Sends a `GET` request to `/v1/worker/ping`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.worker_ping()
     ///    .send()
     ///    .await;
@@ -2004,7 +2083,12 @@ impl Client {
 
     ///Sends a `POST` request to `/v1/worker/task/{task}/append`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.worker_task_append()
     ///    .task(task)
     ///    .body(body)
@@ -2017,7 +2101,12 @@ impl Client {
 
     ///Sends a `POST` request to `/v1/worker/task/{task}/chunk`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.worker_task_upload_chunk()
     ///    .task(task)
     ///    .body(body)
@@ -2030,7 +2119,12 @@ impl Client {
 
     ///Sends a `POST` request to `/v1/worker/task/{task}/complete`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.worker_task_complete()
     ///    .task(task)
     ///    .body(body)
@@ -2043,7 +2137,12 @@ impl Client {
 
     ///Sends a `POST` request to `/v1/worker/task/{task}/output`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.worker_task_add_output()
     ///    .task(task)
     ///    .body(body)
@@ -2056,7 +2155,12 @@ impl Client {
 
     ///Sends a `GET` request to `/v1/workers`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.workers_list()
     ///    .send()
     ///    .await;
@@ -2067,7 +2171,12 @@ impl Client {
 
     ///Sends a `POST` request to `/v1/workers/recycle`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.workers_recycle()
     ///    .send()
     ///    .await;
@@ -2078,7 +2187,12 @@ impl Client {
 
     ///Sends a `GET` request to `/v1/things`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.get_thing_or_things()
     ///    .id(id)
     ///    .send()
@@ -2090,7 +2204,12 @@ impl Client {
 
     ///Sends a `GET` request to `/v1/header-arg`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.header_arg()
     ///    .accept_language(accept_language)
     ///    .send()
@@ -2103,6 +2222,21 @@ impl Client {
 
 /// Types for composing operation parameters.
 #[allow(clippy::all)]
+#[allow(
+    clippy::result_large_err,
+    reason = "generated methods preserve the public Error representation"
+)]
+#[cfg_attr(
+    target_arch = "wasm32",
+    allow(
+        clippy::future_not_send,
+        reason = "reqwest futures use browser-local state on wasm"
+    )
+)]
+#[allow(
+    clippy::match_same_arms,
+    reason = "generated status ranges remain explicit"
+)]
 pub mod builder {
     use super::types;
     #[allow(unused_imports)]
@@ -2119,14 +2253,23 @@ pub mod builder {
     }
 
     impl<'a> ControlHold<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
-            Self { client: client }
+            Self { client }
         }
 
         ///Sends a `POST` request to `/v1/control/hold`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
             let Self { client } = self;
-            let url = format!("{}/v1/control/hold", client.baseurl,);
+            let url = format!("{}/v1/control/hold", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
@@ -2165,14 +2308,23 @@ pub mod builder {
     }
 
     impl<'a> ControlResume<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
-            Self { client: client }
+            Self { client }
         }
 
         ///Sends a `POST` request to `/v1/control/resume`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
             let Self { client } = self;
-            let url = format!("{}/v1/control/resume", client.baseurl,);
+            let url = format!("{}/v1/control/resume", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
@@ -2188,7 +2340,7 @@ pub mod builder {
             client.post(&result, &info).await?;
             let response = result?;
             match response.status().as_u16() {
-                200u16 => Ok(ResponseValue::empty(response)),
+                200u16 => Ok(ResponseValue::empty(&response)),
                 _ => Err(Error::UnexpectedResponse(response)),
             }
         }
@@ -2204,9 +2356,13 @@ pub mod builder {
     }
 
     impl<'a> TaskGet<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 task: Err("task was not initialized".to_string()),
             }
         }
@@ -2222,13 +2378,18 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/v1/task/{Task}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::Task>, Error<()>> {
             let Self { client, task } = self;
             let task = task.map_err(Error::InvalidRequest)?;
             let url = format!(
                 "{}/v1/task/{}",
                 client.baseurl,
-                encode_path(&task.to_string()),
+                encode_path(&task.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -2268,14 +2429,23 @@ pub mod builder {
     }
 
     impl<'a> TasksGet<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
-            Self { client: client }
+            Self { client }
         }
 
         ///Sends a `GET` request to `/v1/tasks`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<::std::vec::Vec<types::Task>>, Error<()>> {
             let Self { client } = self;
-            let url = format!("{}/v1/tasks", client.baseurl,);
+            let url = format!("{}/v1/tasks", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
@@ -2315,9 +2485,13 @@ pub mod builder {
     }
 
     impl<'a> TaskSubmit<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 body: Ok(::std::default::Default::default()),
             }
         }
@@ -2343,12 +2517,17 @@ pub mod builder {
         }
 
         ///Sends a `POST` request to `/v1/tasks`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::TaskSubmitResult>, Error<()>> {
             let Self { client, body } = self;
             let body = body
                 .and_then(|v| types::TaskSubmit::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!("{}/v1/tasks", client.baseurl,);
+            let url = format!("{}/v1/tasks", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
@@ -2390,9 +2569,13 @@ pub mod builder {
     }
 
     impl<'a> TaskEventsGet<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 task: Err("task was not initialized".to_string()),
                 minseq: Ok(None),
             }
@@ -2420,6 +2603,11 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/v1/tasks/{task}/events`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<::std::vec::Vec<types::TaskEvent>>, Error<()>> {
@@ -2433,7 +2621,7 @@ pub mod builder {
             let url = format!(
                 "{}/v1/tasks/{}/events",
                 client.baseurl,
-                encode_path(&task.to_string()),
+                encode_path(&task.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -2475,9 +2663,13 @@ pub mod builder {
     }
 
     impl<'a> TaskOutputsGet<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 task: Err("task was not initialized".to_string()),
             }
         }
@@ -2493,6 +2685,11 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/v1/tasks/{task}/outputs`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(
             self,
         ) -> Result<ResponseValue<::std::vec::Vec<types::TaskOutput>>, Error<()>> {
@@ -2501,7 +2698,7 @@ pub mod builder {
             let url = format!(
                 "{}/v1/tasks/{}/outputs",
                 client.baseurl,
-                encode_path(&task.to_string()),
+                encode_path(&task.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -2543,9 +2740,13 @@ pub mod builder {
     }
 
     impl<'a> TaskOutputDownload<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 task: Err("task was not initialized".to_string()),
                 output: Err("output was not initialized".to_string()),
             }
@@ -2572,6 +2773,11 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/v1/tasks/{task}/outputs/{output}`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<ByteStream>, Error<()>> {
             let Self {
                 client,
@@ -2584,7 +2790,7 @@ pub mod builder {
                 "{}/v1/tasks/{}/outputs/{}",
                 client.baseurl,
                 encode_path(&task.to_string()),
-                encode_path(&output.to_string()),
+                encode_path(&output.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -2617,9 +2823,13 @@ pub mod builder {
     }
 
     impl<'a> UserCreate<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 body: Ok(::std::default::Default::default()),
             }
         }
@@ -2645,12 +2855,17 @@ pub mod builder {
         }
 
         ///Sends a `POST` request to `/v1/users`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::UserCreateResult>, Error<()>> {
             let Self { client, body } = self;
             let body = body
                 .and_then(|v| types::UserCreate::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!("{}/v1/users", client.baseurl,);
+            let url = format!("{}/v1/users", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
@@ -2690,14 +2905,23 @@ pub mod builder {
     }
 
     impl<'a> Whoami<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
-            Self { client: client }
+            Self { client }
         }
 
         ///Sends a `GET` request to `/v1/whoami`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::WhoamiResult>, Error<()>> {
             let Self { client } = self;
-            let url = format!("{}/v1/whoami", client.baseurl,);
+            let url = format!("{}/v1/whoami", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
@@ -2737,9 +2961,13 @@ pub mod builder {
     }
 
     impl<'a> WhoamiPutName<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 body: Err("body was not initialized".to_string()),
             }
         }
@@ -2756,10 +2984,15 @@ pub mod builder {
         }
 
         ///Sends a `PUT` request to `/v1/whoami/name`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
             let Self { client, body } = self;
             let body = body.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/v1/whoami/name", client.baseurl,);
+            let url = format!("{}/v1/whoami/name", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
@@ -2784,7 +3017,7 @@ pub mod builder {
             client.post(&result, &info).await?;
             let response = result?;
             match response.status().as_u16() {
-                200u16 => Ok(ResponseValue::empty(response)),
+                200u16 => Ok(ResponseValue::empty(&response)),
                 _ => Err(Error::UnexpectedResponse(response)),
             }
         }
@@ -2800,9 +3033,13 @@ pub mod builder {
     }
 
     impl<'a> WorkerBootstrap<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 body: Ok(::std::default::Default::default()),
             }
         }
@@ -2828,12 +3065,17 @@ pub mod builder {
         }
 
         ///Sends a `POST` request to `/v1/worker/bootstrap`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::WorkerBootstrapResult>, Error<()>> {
             let Self { client, body } = self;
             let body = body
                 .and_then(|v| types::WorkerBootstrap::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!("{}/v1/worker/bootstrap", client.baseurl,);
+            let url = format!("{}/v1/worker/bootstrap", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
@@ -2873,14 +3115,23 @@ pub mod builder {
     }
 
     impl<'a> WorkerPing<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
-            Self { client: client }
+            Self { client }
         }
 
         ///Sends a `GET` request to `/v1/worker/ping`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::WorkerPingResult>, Error<()>> {
             let Self { client } = self;
-            let url = format!("{}/v1/worker/ping", client.baseurl,);
+            let url = format!("{}/v1/worker/ping", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
@@ -2921,9 +3172,13 @@ pub mod builder {
     }
 
     impl<'a> WorkerTaskAppend<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 task: Err("task was not initialized".to_string()),
                 body: Ok(::std::default::Default::default()),
             }
@@ -2962,6 +3217,11 @@ pub mod builder {
         }
 
         ///Sends a `POST` request to `/v1/worker/task/{task}/append`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
             let Self { client, task, body } = self;
             let task = task.map_err(Error::InvalidRequest)?;
@@ -2971,7 +3231,7 @@ pub mod builder {
             let url = format!(
                 "{}/v1/worker/task/{}/append",
                 client.baseurl,
-                encode_path(&task.to_string()),
+                encode_path(&task.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -2993,7 +3253,7 @@ pub mod builder {
             client.post(&result, &info).await?;
             let response = result?;
             match response.status().as_u16() {
-                201u16 => Ok(ResponseValue::empty(response)),
+                201u16 => Ok(ResponseValue::empty(&response)),
                 _ => Err(Error::UnexpectedResponse(response)),
             }
         }
@@ -3010,9 +3270,13 @@ pub mod builder {
     }
 
     impl<'a> WorkerTaskUploadChunk<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 task: Err("task was not initialized".to_string()),
                 body: Err("body was not initialized".to_string()),
             }
@@ -3039,6 +3303,11 @@ pub mod builder {
         }
 
         ///Sends a `POST` request to `/v1/worker/task/{task}/chunk`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::UploadedChunk>, Error<()>> {
             let Self { client, task, body } = self;
             let task = task.map_err(Error::InvalidRequest)?;
@@ -3046,7 +3315,7 @@ pub mod builder {
             let url = format!(
                 "{}/v1/worker/task/{}/chunk",
                 client.baseurl,
-                encode_path(&task.to_string()),
+                encode_path(&task.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -3093,9 +3362,13 @@ pub mod builder {
     }
 
     impl<'a> WorkerTaskComplete<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 task: Err("task was not initialized".to_string()),
                 body: Ok(::std::default::Default::default()),
             }
@@ -3134,6 +3407,11 @@ pub mod builder {
         }
 
         ///Sends a `POST` request to `/v1/worker/task/{task}/complete`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
             let Self { client, task, body } = self;
             let task = task.map_err(Error::InvalidRequest)?;
@@ -3143,7 +3421,7 @@ pub mod builder {
             let url = format!(
                 "{}/v1/worker/task/{}/complete",
                 client.baseurl,
-                encode_path(&task.to_string()),
+                encode_path(&task.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -3165,7 +3443,7 @@ pub mod builder {
             client.post(&result, &info).await?;
             let response = result?;
             match response.status().as_u16() {
-                200u16 => Ok(ResponseValue::empty(response)),
+                200u16 => Ok(ResponseValue::empty(&response)),
                 _ => Err(Error::UnexpectedResponse(response)),
             }
         }
@@ -3182,9 +3460,13 @@ pub mod builder {
     }
 
     impl<'a> WorkerTaskAddOutput<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 task: Err("task was not initialized".to_string()),
                 body: Ok(::std::default::Default::default()),
             }
@@ -3221,6 +3503,11 @@ pub mod builder {
         }
 
         ///Sends a `POST` request to `/v1/worker/task/{task}/output`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
             let Self { client, task, body } = self;
             let task = task.map_err(Error::InvalidRequest)?;
@@ -3230,7 +3517,7 @@ pub mod builder {
             let url = format!(
                 "{}/v1/worker/task/{}/output",
                 client.baseurl,
-                encode_path(&task.to_string()),
+                encode_path(&task.to_string())
             );
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -3252,7 +3539,7 @@ pub mod builder {
             client.post(&result, &info).await?;
             let response = result?;
             match response.status().as_u16() {
-                201u16 => Ok(ResponseValue::empty(response)),
+                201u16 => Ok(ResponseValue::empty(&response)),
                 _ => Err(Error::UnexpectedResponse(response)),
             }
         }
@@ -3267,14 +3554,23 @@ pub mod builder {
     }
 
     impl<'a> WorkersList<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
-            Self { client: client }
+            Self { client }
         }
 
         ///Sends a `GET` request to `/v1/workers`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<types::WorkersResult>, Error<()>> {
             let Self { client } = self;
-            let url = format!("{}/v1/workers", client.baseurl,);
+            let url = format!("{}/v1/workers", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
@@ -3313,14 +3609,23 @@ pub mod builder {
     }
 
     impl<'a> WorkersRecycle<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
-            Self { client: client }
+            Self { client }
         }
 
         ///Sends a `POST` request to `/v1/workers/recycle`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
             let Self { client } = self;
-            let url = format!("{}/v1/workers/recycle", client.baseurl,);
+            let url = format!("{}/v1/workers/recycle", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
@@ -3336,7 +3641,7 @@ pub mod builder {
             client.post(&result, &info).await?;
             let response = result?;
             match response.status().as_u16() {
-                200u16 => Ok(ResponseValue::empty(response)),
+                200u16 => Ok(ResponseValue::empty(&response)),
                 _ => Err(Error::UnexpectedResponse(response)),
             }
         }
@@ -3352,9 +3657,13 @@ pub mod builder {
     }
 
     impl<'a> GetThingOrThings<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 id: Ok(None),
             }
         }
@@ -3371,10 +3680,15 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/v1/things`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<::std::string::String>, Error<()>> {
             let Self { client, id } = self;
             let id = id.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/v1/things", client.baseurl,);
+            let url = format!("{}/v1/things", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
@@ -3415,9 +3729,13 @@ pub mod builder {
     }
 
     impl<'a> HeaderArg<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 accept_language: Ok(None),
             }
         }
@@ -3433,13 +3751,18 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/v1/header-arg`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<()>, Error<()>> {
             let Self {
                 client,
                 accept_language,
             } = self;
             let accept_language = accept_language.map_err(Error::InvalidRequest)?;
-            let url = format!("{}/v1/header-arg", client.baseurl,);
+            let url = format!("{}/v1/header-arg", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(2usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
@@ -3458,8 +3781,8 @@ pub mod builder {
             client.post(&result, &info).await?;
             let response = result?;
             match response.status().as_u16() {
-                200..=299 => Ok(ResponseValue::empty(response)),
-                _ => Err(Error::ErrorResponse(ResponseValue::empty(response))),
+                200..=299 => Ok(ResponseValue::empty(&response)),
+                _ => Err(Error::ErrorResponse(ResponseValue::empty(&response))),
             }
         }
     }

@@ -19,10 +19,10 @@ pub struct PathTemplate {
 }
 
 impl PathTemplate {
-    pub fn compile(&self, rename: HashMap<&String, &String>, client: TokenStream) -> TokenStream {
+    pub fn compile(&self, rename: &HashMap<&String, &String>, client: &TokenStream) -> TokenStream {
         let mut fmt = String::new();
         fmt.push_str("{}");
-        for c in self.components.iter() {
+        for c in &self.components {
             match c {
                 Component::Constant(n) => fmt.push_str(n),
                 Component::Parameter(_) => fmt.push_str("{}"),
@@ -35,7 +35,7 @@ impl PathTemplate {
                     "{}",
                     rename
                         .get(&n)
-                        .expect(&format!("missing path name mapping {}", n)),
+                        .unwrap_or_else(|| panic!("missing path name mapping {n}")),
                 );
                 Some(quote! {
                     encode_path(&#param.to_string())
@@ -46,7 +46,7 @@ impl PathTemplate {
         });
 
         quote! {
-            format!(#fmt, #client.baseurl, #(#components,)*)
+            format!(#fmt, #client.baseurl #(, #components)*)
         }
     }
 
@@ -54,7 +54,7 @@ impl PathTemplate {
         self.components
             .iter()
             .filter_map(|c| match c {
-                Component::Parameter(name) => Some(name.to_string()),
+                Component::Parameter(name) => Some(name.clone()),
                 Component::Constant(_) => None,
             })
             .collect()
@@ -69,7 +69,7 @@ impl PathTemplate {
                 Component::Parameter(_) => "[^/]*".to_string(),
             })
             .collect::<String>();
-        format!("^{}$", inner)
+        format!("^{inner}$")
     }
 
     pub fn as_wildcard_param(&self, param: &str) -> String {
@@ -82,7 +82,7 @@ impl PathTemplate {
                 Component::Parameter(_) => ".*".to_string(),
             })
             .collect::<String>();
-        format!("^{}$", inner)
+        format!("^{inner}$")
     }
 }
 
@@ -133,10 +133,7 @@ pub fn parse(t: &str) -> Result<PathTemplate> {
             State::Parameter => {
                 if c == '}' {
                     if a.contains('/') || a.contains('{') {
-                        return Err(Error::InvalidPath(format!(
-                            "invalid parameter name {:?}",
-                            a,
-                        )));
+                        return Err(Error::InvalidPath(format!("invalid parameter name {a:?}")));
                     }
                     components.push(Component::Parameter(a));
                     a = String::new();
@@ -158,15 +155,16 @@ pub fn parse(t: &str) -> Result<PathTemplate> {
     Ok(PathTemplate { components })
 }
 
-impl ToString for PathTemplate {
-    fn to_string(&self) -> std::string::String {
-        self.components
-            .iter()
-            .map(|component| match component {
-                Component::Constant(s) => s.clone(),
-                Component::Parameter(s) => format!("{{{}}}", s),
-            })
-            .fold(String::new(), |a, b| a + &b)
+impl std::fmt::Display for PathTemplate {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        for component in &self.components {
+            match component {
+                Component::Constant(s) => f.write_str(s)?,
+                Component::Parameter(s) => write!(f, "{{{s}}}")?,
+            }
+        }
+
+        Ok(())
     }
 }
 
@@ -178,7 +176,7 @@ mod tests {
 
     #[test]
     fn basic() {
-        let trials = vec![
+        let trials = [
             (
                 "/info",
                 "/info",
@@ -258,20 +256,20 @@ mod tests {
             ),
         ];
 
-        for (path, expect_string, want) in trials.iter() {
+        for (path, expect_string, want) in &trials {
             match parse(path) {
                 Ok(t) => {
                     assert_eq!(&t, want);
                     assert_eq!(t.to_string().as_str(), *expect_string);
                 }
-                Err(e) => panic!("path {} {}", path, e),
+                Err(e) => panic!("path {path} {e}"),
             }
         }
     }
 
     #[test]
     fn names() {
-        let trials = vec![
+        let trials = [
             ("/info", vec![]),
             ("/measure/{number}", vec!["number".to_string()]),
             (
@@ -280,10 +278,10 @@ mod tests {
             ),
         ];
 
-        for (path, want) in trials.iter() {
+        for (path, want) in &trials {
             match parse(path) {
                 Ok(t) => assert_eq!(&t.names(), want),
-                Err(e) => panic!("path {} {}", path, e),
+                Err(e) => panic!("path {path} {e}"),
             }
         }
     }
@@ -293,8 +291,12 @@ mod tests {
         let mut rename = HashMap::new();
         let number = "number".to_string();
         rename.insert(&number, &number);
+        #[allow(
+            clippy::literal_string_with_formatting_args,
+            reason = "braces delimit path template parameters"
+        )]
         let t = parse("/measure/{number}").unwrap();
-        let out = t.compile(rename, quote::quote! { self });
+        let out = t.compile(&rename, &quote::quote! { self });
         let want = quote::quote! {
             format!("{}/measure/{}",
                 self.baseurl,
@@ -313,8 +315,12 @@ mod tests {
         rename.insert(&one, &one);
         rename.insert(&two, &two);
         rename.insert(&three, &three);
+        #[allow(
+            clippy::literal_string_with_formatting_args,
+            reason = "braces delimit path template parameters"
+        )]
         let t = parse("/abc/def:{one}:jkl/{two}/a:{three}").unwrap();
-        let out = t.compile(rename, quote::quote! { self });
+        let out = t.compile(&rename, &quote::quote! { self });
         let want = quote::quote! {
             format!("{}/abc/def:{}:jkl/{}/a:{}",
                 self.baseurl,
