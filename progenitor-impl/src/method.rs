@@ -144,12 +144,19 @@ impl FromStr for BodyContentType {
     type Err = Error;
 
     fn from_str(s: &str) -> Result<Self> {
-        let offset = s.find(';').unwrap_or(s.len());
-        match &s[..offset] {
-            "application/octet-stream" => Ok(Self::OctetStream),
-            "application/json" => Ok(Self::Json),
-            "application/x-www-form-urlencoded" => Ok(Self::FormUrlencoded),
-            "text/plain" | "text/x-markdown" => Ok(Self::Text(String::from(&s[..offset]))),
+        let media_type = s
+            .parse::<mime::Mime>()
+            .map_err(|_| Error::UnexpectedFormat(format!("unexpected content type: {}", s)))?;
+
+        match media_type.essence_str() {
+            essence if essence == mime::APPLICATION_OCTET_STREAM.essence_str() => {
+                Ok(Self::OctetStream)
+            }
+            essence if essence == mime::APPLICATION_JSON.essence_str() => Ok(Self::Json),
+            essence if essence == mime::APPLICATION_WWW_FORM_URLENCODED.essence_str() => {
+                Ok(Self::FormUrlencoded)
+            }
+            essence @ ("text/plain" | "text/x-markdown") => Ok(Self::Text(essence.to_string())),
             _ => Err(Error::UnexpectedFormat(format!(
                 "unexpected content type: {}",
                 s
@@ -461,9 +468,13 @@ impl Generator {
                     // enum; the generated client method would check for the
                     // content type of the response just as it currently examines
                     // the status code.
-                    let typ = if let Some(mt) = response.content.iter().find_map(|(x, v)| {
-                        (x == "application/json" || x.starts_with("application/json;")).then_some(v)
-                    }) {
+                    let typ = if let Some(mt) =
+                        response
+                            .content
+                            .iter()
+                            .find_map(|(content_type, media_type)| {
+                                is_json_media_type(content_type).then_some(media_type)
+                            }) {
                         assert!(mt.encoding.is_empty());
 
                         let typ = if let Some(schema) = &mt.schema {
@@ -2168,6 +2179,12 @@ impl Generator {
     }
 }
 
+fn is_json_media_type(content_type: &str) -> bool {
+    content_type
+        .parse::<mime::Mime>()
+        .is_ok_and(|media_type| media_type.essence_str() == mime::APPLICATION_JSON.essence_str())
+}
+
 fn make_doc_comment(method: &OperationMethod) -> String {
     let mut buf = String::new();
 
@@ -2330,5 +2347,54 @@ impl ParameterDataExt for openapiv3::ParameterData {
                 format!("unexpected content {:#?}", c),
             )),
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn parse_body_content_types() {
+        let cases = [
+            ("application/octet-stream", BodyContentType::OctetStream),
+            (
+                "application/octet-stream; version=1",
+                BodyContentType::OctetStream,
+            ),
+            ("application/json", BodyContentType::Json),
+            ("APPLICATION/JSON; CHARSET=utf-8", BodyContentType::Json),
+            (
+                "application/x-www-form-urlencoded",
+                BodyContentType::FormUrlencoded,
+            ),
+            (
+                "text/plain; charset=utf-8",
+                BodyContentType::Text("text/plain".to_string()),
+            ),
+            (
+                "text/x-markdown; charset=utf-8",
+                BodyContentType::Text("text/x-markdown".to_string()),
+            ),
+        ];
+
+        for (content_type, expected) in cases {
+            assert_eq!(content_type.parse::<BodyContentType>().unwrap(), expected);
+        }
+
+        assert!(
+            "application/problem+json"
+                .parse::<BodyContentType>()
+                .is_err()
+        );
+        assert!("not a media type".parse::<BodyContentType>().is_err());
+    }
+
+    #[test]
+    fn identify_json_media_types() {
+        assert!(is_json_media_type("application/json"));
+        assert!(is_json_media_type("APPLICATION/JSON; CHARSET=utf-8"));
+        assert!(!is_json_media_type("application/problem+json"));
+        assert!(!is_json_media_type("not a media type"));
     }
 }
