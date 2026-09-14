@@ -164,6 +164,16 @@ fn test_cli_gen() {
 }
 
 #[test]
+fn test_multipart_related() {
+    verify_apis("multipart-related-test.json");
+}
+
+#[test]
+fn test_query_param_defaults() {
+    verify_apis("query-param-defaults.json");
+}
+
+#[test]
 fn test_nexus_with_different_timeout() {
     const OPENAPI_FILE: &'static str = "nexus.json";
 
