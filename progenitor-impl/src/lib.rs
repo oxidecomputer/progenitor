@@ -396,6 +396,20 @@ impl Generator {
 
         let types = self.type_space.to_stream();
 
+        // Generate an enum for each response group that carries more than one type.
+        let response_modules = raw_methods
+            .iter()
+            .filter_map(|method| self.response_module(method))
+            .collect::<Vec<_>>();
+
+        let response_module = (!response_modules.is_empty()).then(|| {
+            quote! {
+                pub mod response {
+                    #(#response_modules)*
+                }
+            }
+        });
+
         let (inner_type, inner_fn_value) = match self.settings.inner_type.as_ref() {
             Some(inner_type) => (inner_type.clone(), quote! { &self.inner }),
             None => (quote! { () }, quote! { &() }),
@@ -463,6 +477,8 @@ impl Generator {
             pub mod types {
                 #types
             }
+
+            #response_module
 
             #[derive(Clone, Debug)]
             #[doc = #client_docstring]
