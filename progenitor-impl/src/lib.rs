@@ -399,16 +399,12 @@ impl Progenitor {
             })
             .collect::<Result<Vec<_>>>()?;
 
-        // The positional rendering path emits a futures stream method
-        // for each paginated operation; the builder path renders the
-        // same streams without consulting this flag. ATTN REVIEWER:
-        // that asymmetry predates this change and is reproduced here
-        // rather than corrected.
-        self.uses_futures = self.settings.interface == InterfaceStyle::Positional
-            && self
-                .raw_methods
-                .iter()
-                .any(|method| method.dropshot_paginated.is_some());
+        // Both interface styles emit a futures stream method for each
+        // paginated operation.
+        self.uses_futures = self
+            .raw_methods
+            .iter()
+            .any(|method| method.dropshot_paginated.is_some());
 
         self.typespace = Some(Rc::new(self.type_space.to_typespace()?));
 
