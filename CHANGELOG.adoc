@@ -24,6 +24,8 @@ https://github.com/oxidecomputer/progenitor/compare/v0.14.0\...v0.15.0[Full list
 * Stop activating schemars chrono/uuid1 features in progenitor (#1363)
 * CLI generation: merge summary and description into a single about (#1380)
 
+* Generate a response enum for an operation whose successes, or whose errors, carry more than one type, instead of panicking
+
 == 0.14.0 (released 2026-04-24)
 
 https://github.com/oxidecomputer/progenitor/compare/v0.13.0\...v0.14.0[Full list of commits]
