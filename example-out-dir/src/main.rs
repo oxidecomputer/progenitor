@@ -11,11 +11,9 @@ generate_api!(
 
 fn main() {
     let client = Client::new("https://example.com");
-    std::mem::drop(client.enrol(
-        "auth-token",
-        &types::EnrolBody {
-            host: "".to_string(),
-            key: "".to_string(),
-        },
-    ));
+    let body = types::EnrolBody {
+        host: String::new(),
+        key: String::new(),
+    };
+    let _future = client.enrol("auth-token", &body);
 }

@@ -4,6 +4,14 @@ use progenitor_client::{encode_path, ClientHooks, OperationInfo, RequestBuilderE
 pub use progenitor_client::{ByteStream, ClientInfo, Error, ResponseValue};
 /// Types used as operation parameters and responses.
 #[allow(clippy::all)]
+#[allow(
+    clippy::struct_field_names,
+    reason = "type definitions are emitted by typify"
+)]
+#[allow(
+    clippy::default_trait_access,
+    reason = "default expressions are emitted by typify"
+)]
 pub mod types {
     ///`UnoBody`
     #[derive(
@@ -118,7 +126,7 @@ pub mod types {
 }
 
 #[derive(Clone, Debug)]
-///Client for CLI gen test
+///Client for `CLI gen test`
 ///
 ///Test case to exercise CLI generation
 ///
@@ -134,6 +142,11 @@ impl Client {
     /// `baseurl` is the base URL provided to the internal
     /// `reqwest::Client`, and should include a scheme and hostname,
     /// as well as port and a path stem if applicable.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the default `reqwest::Client` cannot be built.
+    #[must_use]
     pub fn new(baseurl: &str) -> Self {
         #[cfg(not(target_arch = "wasm32"))]
         let client = {
@@ -153,6 +166,7 @@ impl Client {
     /// `baseurl` is the base URL provided to the internal
     /// `reqwest::Client`, and should include a scheme and hostname,
     /// as well as port and a path stem if applicable.
+    #[must_use]
     pub fn new_with_client(baseurl: &str, client: reqwest::Client) -> Self {
         Self {
             baseurl: baseurl.to_string(),
@@ -183,7 +197,12 @@ impl ClientHooks<()> for &Client {}
 impl Client {
     ///Sends a `GET` request to `/uno`
     ///
-    ///```ignore
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails. 
+    /// ```ignore
     /// let response = client.uno()
     ///    .gateway(gateway)
     ///    .body(body)
@@ -197,6 +216,21 @@ impl Client {
 
 /// Types for composing operation parameters.
 #[allow(clippy::all)]
+#[allow(
+    clippy::result_large_err,
+    reason = "generated methods preserve the public Error representation"
+)]
+#[cfg_attr(
+    target_arch = "wasm32",
+    allow(
+        clippy::future_not_send,
+        reason = "reqwest futures use browser-local state on wasm"
+    )
+)]
+#[allow(
+    clippy::match_same_arms,
+    reason = "generated status ranges remain explicit"
+)]
 pub mod builder {
     use super::types;
     #[allow(unused_imports)]
@@ -215,9 +249,13 @@ pub mod builder {
     }
 
     impl<'a> Uno<'a> {
+        #[allow(
+            clippy::missing_const_for_fn,
+            reason = "operation parameter defaults may require non-const initialization"
+        )]
         pub fn new(client: &'a super::Client) -> Self {
             Self {
-                client: client,
+                client,
                 gateway: Err("gateway was not initialized".to_string()),
                 body: Ok(::std::default::Default::default()),
             }
@@ -254,6 +292,11 @@ pub mod builder {
         }
 
         ///Sends a `GET` request to `/uno`
+        ///
+        ///# Errors
+        ///
+        ///Returns an error if request construction, transport, or response
+        /// decoding fails.
         pub async fn send(self) -> Result<ResponseValue<ByteStream>, Error<()>> {
             let Self {
                 client,
@@ -264,7 +307,7 @@ pub mod builder {
             let body = body
                 .and_then(|v| types::UnoBody::try_from(v).map_err(|e| e.to_string()))
                 .map_err(Error::InvalidRequest)?;
-            let url = format!("{}/uno", client.baseurl,);
+            let url = format!("{}/uno", client.baseurl);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),

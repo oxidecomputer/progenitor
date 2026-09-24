@@ -4,6 +4,14 @@ use progenitor_client::{encode_path, ClientHooks, OperationInfo, RequestBuilderE
 pub use progenitor_client::{ByteStream, ClientInfo, Error, ResponseValue};
 /// Types used as operation parameters and responses.
 #[allow(clippy::all)]
+#[allow(
+    clippy::struct_field_names,
+    reason = "type definitions are emitted by typify"
+)]
+#[allow(
+    clippy::default_trait_access,
+    reason = "default expressions are emitted by typify"
+)]
 pub mod types {
     ///`GetThingOrThingsId`
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
@@ -269,7 +277,7 @@ pub mod types {
 }
 
 #[derive(Clone, Debug)]
-///Client for Buildomat
+///Client for `Buildomat`
 ///
 ///Version: 1.0
 pub struct Client {
@@ -283,6 +291,11 @@ impl Client {
     /// `baseurl` is the base URL provided to the internal
     /// `reqwest::Client`, and should include a scheme and hostname,
     /// as well as port and a path stem if applicable.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the default `reqwest::Client` cannot be built.
+    #[must_use]
     pub fn new(baseurl: &str) -> Self {
         #[cfg(not(target_arch = "wasm32"))]
         let client = {
@@ -302,6 +315,7 @@ impl Client {
     /// `baseurl` is the base URL provided to the internal
     /// `reqwest::Client`, and should include a scheme and hostname,
     /// as well as port and a path stem if applicable.
+    #[must_use]
     pub fn new_with_client(baseurl: &str, client: reqwest::Client) -> Self {
         Self {
             baseurl: baseurl.to_string(),
@@ -330,10 +344,35 @@ impl ClientInfo<()> for Client {
 
 impl ClientHooks<()> for &Client {}
 #[allow(clippy::all)]
+#[allow(
+    clippy::too_many_arguments,
+    reason = "generated parameters mirror the OpenAPI operation"
+)]
+#[allow(
+    clippy::result_large_err,
+    reason = "generated methods preserve the public Error representation"
+)]
+#[cfg_attr(
+    target_arch = "wasm32",
+    allow(
+        clippy::future_not_send,
+        reason = "reqwest futures use browser-local state on wasm"
+    )
+)]
+#[allow(
+    clippy::match_same_arms,
+    reason = "generated status ranges remain explicit"
+)]
 impl Client {
     ///Sends a `POST` request to `/v1/control/hold`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn control_hold<'a>(&'a self) -> Result<ResponseValue<()>, Error<()>> {
-        let url = format!("{}/v1/control/hold", self.baseurl,);
+        let url = format!("{}/v1/control/hold", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
@@ -363,8 +402,14 @@ impl Client {
     }
 
     ///Sends a `POST` request to `/v1/control/resume`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn control_resume<'a>(&'a self) -> Result<ResponseValue<()>, Error<()>> {
-        let url = format!("{}/v1/control/resume", self.baseurl,);
+        let url = format!("{}/v1/control/resume", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
@@ -380,12 +425,18 @@ impl Client {
         self.post(&result, &info).await?;
         let response = result?;
         match response.status().as_u16() {
-            200u16 => Ok(ResponseValue::empty(response)),
+            200u16 => Ok(ResponseValue::empty(&response)),
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///Sends a `GET` request to `/v1/task/{Task}`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn task_get<'a>(
         &'a self,
         task: &'a str,
@@ -393,7 +444,7 @@ impl Client {
         let url = format!(
             "{}/v1/task/{}",
             self.baseurl,
-            encode_path(&task.to_string()),
+            encode_path(&task.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -424,10 +475,16 @@ impl Client {
     }
 
     ///Sends a `GET` request to `/v1/tasks`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn tasks_get<'a>(
         &'a self,
     ) -> Result<ResponseValue<::std::vec::Vec<types::Task>>, Error<()>> {
-        let url = format!("{}/v1/tasks", self.baseurl,);
+        let url = format!("{}/v1/tasks", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
@@ -457,11 +514,17 @@ impl Client {
     }
 
     ///Sends a `POST` request to `/v1/tasks`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn task_submit<'a>(
         &'a self,
         body: &'a types::TaskSubmit,
     ) -> Result<ResponseValue<types::TaskSubmitResult>, Error<()>> {
-        let url = format!("{}/v1/tasks", self.baseurl,);
+        let url = format!("{}/v1/tasks", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
@@ -492,6 +555,12 @@ impl Client {
     }
 
     ///Sends a `GET` request to `/v1/tasks/{task}/events`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn task_events_get<'a>(
         &'a self,
         task: &'a str,
@@ -500,7 +569,7 @@ impl Client {
         let url = format!(
             "{}/v1/tasks/{}/events",
             self.baseurl,
-            encode_path(&task.to_string()),
+            encode_path(&task.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -532,6 +601,12 @@ impl Client {
     }
 
     ///Sends a `GET` request to `/v1/tasks/{task}/outputs`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn task_outputs_get<'a>(
         &'a self,
         task: &'a str,
@@ -539,7 +614,7 @@ impl Client {
         let url = format!(
             "{}/v1/tasks/{}/outputs",
             self.baseurl,
-            encode_path(&task.to_string()),
+            encode_path(&task.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -570,6 +645,12 @@ impl Client {
     }
 
     ///Sends a `GET` request to `/v1/tasks/{task}/outputs/{output}`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn task_output_download<'a>(
         &'a self,
         task: &'a str,
@@ -579,7 +660,7 @@ impl Client {
             "{}/v1/tasks/{}/outputs/{}",
             self.baseurl,
             encode_path(&task.to_string()),
-            encode_path(&output.to_string()),
+            encode_path(&output.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -602,11 +683,17 @@ impl Client {
     }
 
     ///Sends a `POST` request to `/v1/users`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn user_create<'a>(
         &'a self,
         body: &'a types::UserCreate,
     ) -> Result<ResponseValue<types::UserCreateResult>, Error<()>> {
-        let url = format!("{}/v1/users", self.baseurl,);
+        let url = format!("{}/v1/users", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
@@ -637,8 +724,14 @@ impl Client {
     }
 
     ///Sends a `GET` request to `/v1/whoami`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn whoami<'a>(&'a self) -> Result<ResponseValue<types::WhoamiResult>, Error<()>> {
-        let url = format!("{}/v1/whoami", self.baseurl,);
+        let url = format!("{}/v1/whoami", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
@@ -668,11 +761,17 @@ impl Client {
     }
 
     ///Sends a `PUT` request to `/v1/whoami/name`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn whoami_put_name<'a>(
         &'a self,
         body: String,
     ) -> Result<ResponseValue<()>, Error<()>> {
-        let url = format!("{}/v1/whoami/name", self.baseurl,);
+        let url = format!("{}/v1/whoami/name", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
@@ -697,17 +796,23 @@ impl Client {
         self.post(&result, &info).await?;
         let response = result?;
         match response.status().as_u16() {
-            200u16 => Ok(ResponseValue::empty(response)),
+            200u16 => Ok(ResponseValue::empty(&response)),
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///Sends a `POST` request to `/v1/worker/bootstrap`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn worker_bootstrap<'a>(
         &'a self,
         body: &'a types::WorkerBootstrap,
     ) -> Result<ResponseValue<types::WorkerBootstrapResult>, Error<()>> {
-        let url = format!("{}/v1/worker/bootstrap", self.baseurl,);
+        let url = format!("{}/v1/worker/bootstrap", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
@@ -738,10 +843,16 @@ impl Client {
     }
 
     ///Sends a `GET` request to `/v1/worker/ping`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn worker_ping<'a>(
         &'a self,
     ) -> Result<ResponseValue<types::WorkerPingResult>, Error<()>> {
-        let url = format!("{}/v1/worker/ping", self.baseurl,);
+        let url = format!("{}/v1/worker/ping", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
@@ -771,6 +882,12 @@ impl Client {
     }
 
     ///Sends a `POST` request to `/v1/worker/task/{task}/append`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn worker_task_append<'a>(
         &'a self,
         task: &'a str,
@@ -779,7 +896,7 @@ impl Client {
         let url = format!(
             "{}/v1/worker/task/{}/append",
             self.baseurl,
-            encode_path(&task.to_string()),
+            encode_path(&task.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -801,12 +918,18 @@ impl Client {
         self.post(&result, &info).await?;
         let response = result?;
         match response.status().as_u16() {
-            201u16 => Ok(ResponseValue::empty(response)),
+            201u16 => Ok(ResponseValue::empty(&response)),
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///Sends a `POST` request to `/v1/worker/task/{task}/chunk`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn worker_task_upload_chunk<'a, B: Into<reqwest::Body>>(
         &'a self,
         task: &'a str,
@@ -815,7 +938,7 @@ impl Client {
         let url = format!(
             "{}/v1/worker/task/{}/chunk",
             self.baseurl,
-            encode_path(&task.to_string()),
+            encode_path(&task.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -851,6 +974,12 @@ impl Client {
     }
 
     ///Sends a `POST` request to `/v1/worker/task/{task}/complete`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn worker_task_complete<'a>(
         &'a self,
         task: &'a str,
@@ -859,7 +988,7 @@ impl Client {
         let url = format!(
             "{}/v1/worker/task/{}/complete",
             self.baseurl,
-            encode_path(&task.to_string()),
+            encode_path(&task.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -881,12 +1010,18 @@ impl Client {
         self.post(&result, &info).await?;
         let response = result?;
         match response.status().as_u16() {
-            200u16 => Ok(ResponseValue::empty(response)),
+            200u16 => Ok(ResponseValue::empty(&response)),
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///Sends a `POST` request to `/v1/worker/task/{task}/output`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn worker_task_add_output<'a>(
         &'a self,
         task: &'a str,
@@ -895,7 +1030,7 @@ impl Client {
         let url = format!(
             "{}/v1/worker/task/{}/output",
             self.baseurl,
-            encode_path(&task.to_string()),
+            encode_path(&task.to_string())
         );
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
@@ -917,16 +1052,22 @@ impl Client {
         self.post(&result, &info).await?;
         let response = result?;
         match response.status().as_u16() {
-            201u16 => Ok(ResponseValue::empty(response)),
+            201u16 => Ok(ResponseValue::empty(&response)),
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///Sends a `GET` request to `/v1/workers`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn workers_list<'a>(
         &'a self,
     ) -> Result<ResponseValue<types::WorkersResult>, Error<()>> {
-        let url = format!("{}/v1/workers", self.baseurl,);
+        let url = format!("{}/v1/workers", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
@@ -956,8 +1097,14 @@ impl Client {
     }
 
     ///Sends a `POST` request to `/v1/workers/recycle`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn workers_recycle<'a>(&'a self) -> Result<ResponseValue<()>, Error<()>> {
-        let url = format!("{}/v1/workers/recycle", self.baseurl,);
+        let url = format!("{}/v1/workers/recycle", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
@@ -973,17 +1120,23 @@ impl Client {
         self.post(&result, &info).await?;
         let response = result?;
         match response.status().as_u16() {
-            200u16 => Ok(ResponseValue::empty(response)),
+            200u16 => Ok(ResponseValue::empty(&response)),
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
 
     ///Sends a `GET` request to `/v1/things`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn get_thing_or_things<'a>(
         &'a self,
         id: Option<&'a types::GetThingOrThingsId>,
     ) -> Result<ResponseValue<::std::string::String>, Error<()>> {
-        let url = format!("{}/v1/things", self.baseurl,);
+        let url = format!("{}/v1/things", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
@@ -1014,11 +1167,17 @@ impl Client {
     }
 
     ///Sends a `GET` request to `/v1/header-arg`
+    ///
+    ///
+    ///# Errors
+    ///
+    ///Returns an error if request construction, transport, or response
+    /// decoding fails.
     pub async fn header_arg<'a>(
         &'a self,
         accept_language: Option<types::HeaderArgAcceptLanguage>,
     ) -> Result<ResponseValue<()>, Error<()>> {
-        let url = format!("{}/v1/header-arg", self.baseurl,);
+        let url = format!("{}/v1/header-arg", self.baseurl);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(2usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
@@ -1038,8 +1197,8 @@ impl Client {
         self.post(&result, &info).await?;
         let response = result?;
         match response.status().as_u16() {
-            200..=299 => Ok(ResponseValue::empty(response)),
-            _ => Err(Error::ErrorResponse(ResponseValue::empty(response))),
+            200..=299 => Ok(ResponseValue::empty(&response)),
+            _ => Err(Error::ErrorResponse(ResponseValue::empty(&response))),
         }
     }
 }

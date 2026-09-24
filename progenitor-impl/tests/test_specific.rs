@@ -24,7 +24,7 @@ fn generate_formatted(generator: &mut Generator, spec: &OpenAPI) -> String {
         wrap_comments: Some(true),
         ..Default::default()
     };
-    space_out_items(rustfmt_wrapper::rustfmt_config(rustfmt_config, content).unwrap()).unwrap()
+    space_out_items(&rustfmt_wrapper::rustfmt_config(rustfmt_config, content).unwrap()).unwrap()
 }
 
 #[allow(dead_code)]
@@ -83,7 +83,7 @@ fn test_renamed_parameters() {
     expectorate::assert_contents(
         format!("tests/output/src/{}.rs", "test_renamed_parameters"),
         &output,
-    )
+    );
 }
 
 #[endpoint {
@@ -114,7 +114,7 @@ fn test_freeform_response() {
     expectorate::assert_contents(
         format!("tests/output/src/{}.rs", "test_freeform_response"),
         &output,
-    )
+    );
 }
 
 #[derive(Deserialize, JsonSchema)]
@@ -129,11 +129,15 @@ struct BodyWithDefaults {
     something: Option<bool>,
 }
 
-fn forty_two() -> u32 {
+const fn forty_two() -> u32 {
     42
 }
 
-fn yes_yes() -> Option<bool> {
+#[allow(
+    clippy::unnecessary_wraps,
+    reason = "serde default must match the Option field type"
+)]
+const fn yes_yes() -> Option<bool> {
     Some(true)
 }
 
@@ -268,6 +272,10 @@ async fn test_stream_pagination() {
 
     // Test the positional client.
     #[allow(dead_code)]
+    #[allow(
+        clippy::items_after_statements,
+        reason = "keeps the included snapshot next to its test phase"
+    )]
     mod gen_client_positional {
         // This is weird: we're now `include!`ing the file we just used to
         // confirm the generated code is what we expect. If changes are made to
@@ -313,6 +321,10 @@ async fn test_stream_pagination() {
     server_ctx.page_pairs.lock().unwrap().clear();
 
     #[allow(dead_code, unused_imports)]
+    #[allow(
+        clippy::items_after_statements,
+        reason = "keeps the included snapshot next to its test phase"
+    )]
     mod gen_client_builder {
         // This is weird: we're now `include!`ing the file we just used to
         // confirm the generated code is what we expect. If changes are made to
