@@ -31,3 +31,31 @@ mod pre_hook_ref {
         pre_hook = crate::observe,
     );
 }
+
+use progenitor::progenitor_client::{ClientHooks, Error, OperationInfo};
+
+// With `hooks = Expected` the generated code does not include the default
+// `impl ClientHooks for &Client`; the user must implement the trait for
+// `Client` directly.
+mod hooks_expected {
+    progenitor::generate_api!(spec = "../sample_openapi/keeper.json", hooks = Expected);
+}
+
+impl ClientHooks for hooks_expected::Client {
+    async fn pre<E>(
+        &self,
+        _request: &mut reqwest::Request,
+        info: &OperationInfo,
+    ) -> Result<(), Error<E>> {
+        Err(Error::Custom(format!("pre: {}", info.operation_id)))
+    }
+}
+
+#[tokio::test]
+async fn test_hooks_expected_runs_user_impl() {
+    let client = hooks_expected::Client::new("http://127.0.0.1:0");
+    match client.ping("token").await {
+        Err(Error::Custom(msg)) => assert_eq!(msg, "pre: ping"),
+        other => panic!("unexpected result: {other:?}"),
+    }
+}

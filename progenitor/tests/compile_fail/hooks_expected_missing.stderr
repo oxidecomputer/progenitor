@@ -1,0 +1,19 @@
+error[E0277]: `client::Client` does not implement `ClientHooks<()>`
+  --> tests/compile_fail/hooks_expected_missing.rs:7:5
+   |
+ 7 | /     progenitor::generate_api!(
+ 8 | |         spec = "../../../../progenitor/tests/compile_fail/no-operations.json",
+ 9 | |         hooks = Expected,
+10 | |     );
+   | |_____^ missing `impl ClientHooks<()> for client::Client`
+   |
+help: the trait `ClientHooks` is not implemented for `client::Client`
+  --> tests/compile_fail/hooks_expected_missing.rs:7:5
+   |
+ 7 | /     progenitor::generate_api!(
+ 8 | |         spec = "../../../../progenitor/tests/compile_fail/no-operations.json",
+ 9 | |         hooks = Expected,
+10 | |     );
+   | |_____^
+   = note: clients generated with `hooks = Expected` require `impl ClientHooks<()> for client::Client`
+   = note: this error originates in the macro `progenitor::generate_api` (in Nightly builds, run with -Z macro-backtrace for more info)

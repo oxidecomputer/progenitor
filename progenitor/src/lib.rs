@@ -18,6 +18,7 @@ pub use progenitor_impl::CrateVers;
 pub use progenitor_impl::Error;
 pub use progenitor_impl::GenerationSettings;
 pub use progenitor_impl::Generator;
+pub use progenitor_impl::HooksMode;
 pub use progenitor_impl::InterfaceStyle;
 pub use progenitor_impl::TagStyle;
 pub use progenitor_impl::TypeImpl;

@@ -31,4 +31,5 @@ schemars = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }
 tokio = { workspace = true, features = ["macros"] }
+trybuild = { workspace = true }
 uuid = { workspace = true }

@@ -98,6 +98,11 @@ pub struct OperationInfo {
 /// some or all of the interfaces for the `Client` type (without the
 /// reference). This mechanism relies on so-called "auto-ref specialization".
 #[allow(async_fn_in_trait, unused)]
+#[diagnostic::on_unimplemented(
+    message = "`{Self}` does not implement `ClientHooks<{Inner}>`",
+    label = "missing `impl ClientHooks<{Inner}> for {Self}`",
+    note = "clients generated with `hooks = Expected` require `impl ClientHooks<{Inner}> for {Self}`"
+)]
 pub trait ClientHooks<Inner = ()>
 where
     Self: ClientInfo<Inner>,

@@ -81,6 +81,7 @@ generate_api!(
     spec = "path/to/openapi_document.json",      // The OpenAPI document
     interface = Builder,                         // Choose positional (default) or builder style
     tags = Separate,                             // Tags may be Merged or Separate (default)
+    hooks = Expected,                            // Require an impl of ClientHooks for Client (Optional by default)
     inner_type = my_client::InnerType,           // Client inner type available to pre and post hooks
     pre_hook = closure::or::path::to::function,  // Hook invoked before issuing the HTTP request
     post_hook = closure::or::path::to::function, // Hook invoked prior to receiving the HTTP response
