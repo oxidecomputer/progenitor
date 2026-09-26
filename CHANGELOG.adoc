@@ -15,7 +15,7 @@
 
 https://github.com/oxidecomputer/progenitor/compare/v0.15.0\...HEAD[Full list of commits]
 
-* Add `hooks = Expected` to require a user-provided `ClientHooks` impl
+* Add `hooks = Expected` to require a user-provided `ClientHooks` impl (#1429)
 
 == 0.15.0 (released 2026-09-10)
 
