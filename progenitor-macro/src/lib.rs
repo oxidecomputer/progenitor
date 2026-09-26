@@ -9,7 +9,8 @@ use std::{collections::HashMap, fs::File, path::PathBuf};
 use openapiv3::OpenAPI;
 use proc_macro::TokenStream;
 use progenitor_impl::{
-    CrateVers, GenerationSettings, Generator, InterfaceStyle, TagStyle, TypePatch, UnknownPolicy,
+    CrateVers, GenerationSettings, Generator, HooksMode, InterfaceStyle, TagStyle, TypePatch,
+    UnknownPolicy,
 };
 use quote::{ToTokens, quote};
 use schemars::schema::SchemaObject;
@@ -89,10 +90,12 @@ impl syn::parse::Parse for SpecSource {
 ///     spec = { path = "path/to/spec.json", relative_to = OutDir },
 ///     [ interface = ( Positional | Builder ), ]
 ///     [ tags = ( Merged | Separate ), ]
+///     [ inner_type = path::to::Type, ]
 ///     [ pre_hook = closure::or::path::to::function, ]
 ///     [ post_hook = closure::or::path::to::function, ]
 ///     [ pre_hook_async = closure::or::path::to::function, ]
 ///     [ post_hook_async = closure::or::path::to::function, ]
+///     [ hooks = ( Optional | Expected ), ]
 ///
 ///     [ derives = [ path::to::DeriveMacro ], ]
 ///
@@ -140,6 +143,11 @@ impl syn::parse::Parse for SpecSource {
 /// is specified) and a `&Result<reqwest::Response, reqwest::Error>`. This
 /// allows clients to examine responses, for example to log them. The optional
 /// `post_hook_async` is the `async` variant of the same.
+///
+/// The optional `hooks` may be `Optional` (the default) in which case a no-op
+/// `impl ClientHooks<Inner> for &Client` is emitted that may be overridden by
+/// implementing `ClientHooks<Inner>` for `Client`, or `Expected` in which case
+/// no default is emitted and that impl is required.
 ///
 /// Additional options control type generation:
 /// - `derives`: optional array of derive macro paths; the derive macros to be
@@ -192,6 +200,8 @@ struct MacroSettings {
     interface: InterfaceStyle,
     #[serde(default)]
     tags: TagStyle,
+    #[serde(default)]
+    hooks: HooksMode,
 
     inner_type: Option<ParseWrapper<syn::Type>>,
     pre_hook: Option<ParseWrapper<ClosureOrPath>>,
@@ -342,6 +352,7 @@ fn do_generate_api(item: TokenStream) -> Result<TokenStream, syn::Error> {
             spec,
             interface,
             tags,
+            hooks,
             inner_type,
             pre_hook,
             pre_hook_async,
@@ -362,6 +373,7 @@ fn do_generate_api(item: TokenStream) -> Result<TokenStream, syn::Error> {
         let mut settings = GenerationSettings::default();
         settings.with_interface(interface);
         settings.with_tag(tags);
+        settings.with_hooks(hooks);
         inner_type.map(|inner_type| settings.with_inner_type(inner_type.to_token_stream()));
         pre_hook.map(|pre_hook| settings.with_pre_hook(pre_hook.into_inner().0));
         pre_hook_async

@@ -1,4 +1,4 @@
-// Copyright 2025 Oxide Computer Company
+// Copyright 2026 Oxide Computer Company
 
 use std::{
     fs::File,
@@ -6,7 +6,8 @@ use std::{
 };
 
 use progenitor_impl::{
-    GenerationSettings, Generator, InterfaceStyle, TagStyle, TypeImpl, TypePatch, space_out_items,
+    GenerationSettings, Generator, HooksMode, InterfaceStyle, TagStyle, TypeImpl, TypePatch,
+    space_out_items,
 };
 
 use openapiv3::OpenAPI;
@@ -179,6 +180,19 @@ fn test_nexus_with_different_timeout() {
         format!("tests/output/src/{}_with_timeout.rs", openapi_stem),
         &output,
     );
+}
+
+// With `HooksMode::Expected` the generated code omits the default
+// `impl ClientHooks for &Client` and instead checks that the user has
+// implemented `ClientHooks` for `Client`.
+#[test]
+fn test_keeper_hooks_expected() {
+    let spec = load_api("../sample_openapi/keeper.json");
+
+    let mut generator =
+        Generator::new(GenerationSettings::default().with_hooks(HooksMode::Expected));
+    let output = generate_formatted(&mut generator, &spec);
+    expectorate::assert_contents("tests/output/src/keeper_hooks_expected.rs", &output);
 }
 
 // TODO this file is full of inconsistencies and incorrectly specified types.

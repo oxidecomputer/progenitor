@@ -100,3 +100,28 @@ pub enum Error<E = ()> {
     Custom(String),
 }
 ```
+
+## `ClientHooks`
+
+Generated clients call `ClientHooks::pre`, `exec`, and `post` around each
+request. Implement it for `Client` to change that behavior:
+
+```rust
+use progenitor_client::{ClientHooks, Error, OperationInfo};
+
+impl ClientHooks for api::Client {
+    async fn pre<E>(
+        &self,
+        request: &mut reqwest::Request,
+        info: &OperationInfo,
+    ) -> Result<(), Error<E>> {
+        log::debug!("{}: {} {}", info.operation_id, request.method(), request.url());
+        Ok(())
+    }
+}
+```
+
+By default (`hooks = Optional`) the generated code includes a no-op
+`impl ClientHooks<Inner> for &Client`; an impl for `Client` takes precedence,
+but forgetting it compiles and silently does nothing. With `hooks = Expected`
+no default impl is emitted and a missing impl is a compile error.

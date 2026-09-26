@@ -6,6 +6,7 @@ pub mod buildomat_positional;
 pub mod keeper_builder;
 pub mod keeper_builder_tagged;
 pub mod keeper_cli;
+pub mod keeper_hooks_expected;
 pub mod keeper_httpmock;
 pub mod keeper_positional;
 pub mod nexus_builder;
@@ -32,3 +33,6 @@ pub mod test_default_params_builder;
 pub mod test_default_params_positional;
 pub mod test_freeform_response;
 pub mod test_renamed_parameters;
+
+// Generated with `hooks = Expected`, so the client requires this impl.
+impl progenitor_client::ClientHooks for keeper_hooks_expected::Client {}

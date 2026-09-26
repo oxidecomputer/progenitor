@@ -50,7 +50,18 @@ jobs:
     - name: Build
       run: cargo build --locked --tests --verbose
     - name: Run tests
-      run: cargo test --locked --verbose
+      # The trybuild tests compare compiler diagnostics, which vary between
+      # toolchains; they run against stable in the trybuild job below.
+      run: cargo test --locked --verbose -- --exact --skip compile_fail
+
+  trybuild:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v7
+    - name: Install Rust
+      uses: dtolnay/rust-toolchain@stable
+    - name: Run trybuild tests
+      run: cargo test --locked --verbose -p progenitor --test compile_fail
 
   build-no-default-features:
     runs-on: ${{ matrix.os }}

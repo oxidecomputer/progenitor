@@ -60,6 +60,7 @@ pub struct Generator {
 pub struct GenerationSettings {
     interface: InterfaceStyle,
     tag: TagStyle,
+    hooks: HooksMode,
     inner_type: Option<TokenStream>,
     pre_hook: Option<TokenStream>,
     pre_hook_async: Option<TokenStream>,
@@ -114,6 +115,19 @@ impl Default for TagStyle {
     }
 }
 
+/// Whether the user must implement `progenitor_client::ClientHooks` for the
+/// generated `Client`.
+#[derive(Clone, Copy, Debug, Deserialize, PartialEq, Eq, Default)]
+pub enum HooksMode {
+    /// Emit `impl ClientHooks<Inner> for &Client {}`; an impl for
+    /// `Client` takes precedence via auto-ref specialization. The default.
+    #[default]
+    Optional,
+    /// Emit no default; a manual implementation of `ClientHooks<Inner>` is
+    /// required and its absence is a compile error.
+    Expected,
+}
+
 impl GenerationSettings {
     /// Create new generator settings with default values.
     pub fn new() -> Self {
@@ -129,6 +143,13 @@ impl GenerationSettings {
     /// Set the [TagStyle].
     pub fn with_tag(&mut self, tag: TagStyle) -> &mut Self {
         self.tag = tag;
+        self
+    }
+
+    /// Set the [HooksMode], i.e. whether the user is required to implement
+    /// `progenitor_client::ClientHooks` for the generated `Client`.
+    pub fn with_hooks(&mut self, hooks: HooksMode) -> &mut Self {
+        self.hooks = hooks;
         self
     }
 
@@ -437,6 +458,22 @@ impl Generator {
 
         let version_str = &spec.info.version;
 
+        let client_hooks = match self.settings.hooks {
+            HooksMode::Optional => quote! {
+                impl ClientHooks<#inner_type> for &Client {}
+            },
+            // The user must implement `ClientHooks<Inner>` for `Client`. Check
+            // that bound here so that a missing implementation is reported as
+            // a single, clear error rather than as a missing method at every
+            // call site in the generated code.
+            HooksMode::Expected => quote! {
+                const _: () = {
+                    #[allow(dead_code)]
+                    fn assert_client_hooks() where Client: ClientHooks<#inner_type> {}
+                };
+            },
+        };
+
         // The allow(unused_imports) on the `pub use` is necessary with Rust
         // 1.76+, in case the generated file is not at the top level of the
         // crate.
@@ -534,7 +571,7 @@ impl Generator {
                 }
             }
 
-            impl ClientHooks<#inner_type> for &Client {}
+            #client_hooks
 
             #operation_code
         };
