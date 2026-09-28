@@ -8,7 +8,7 @@ use dropshot::{
 use futures::StreamExt;
 use http::Response;
 use openapiv3::OpenAPI;
-use progenitor_impl::{GenerationSettings, InterfaceStyle, Progenitor, space_out_items};
+use progenitor_impl::{GenerationSettings, Generator, InterfaceStyle, space_out_items};
 use schemars::JsonSchema;
 use serde::Deserialize;
 use std::{
@@ -17,8 +17,8 @@ use std::{
     sync::{Arc, Mutex},
 };
 
-fn generate_formatted(progenitor: &Progenitor) -> String {
-    let content = progenitor.generate_tokens().unwrap();
+fn generate_formatted(progenitor: &Generator) -> String {
+    let content = progenitor.generate_sdk().into_stream();
     let rustfmt_config = rustfmt_wrapper::config::Config {
         normalize_doc_attributes: Some(true),
         wrap_comments: Some(true),
@@ -78,7 +78,7 @@ fn test_renamed_parameters() {
 
     let spec = serde_json::from_str::<OpenAPI>(out).unwrap();
 
-    let generator = Progenitor::build(&GenerationSettings::default(), &spec).unwrap();
+    let generator = Generator::build(&GenerationSettings::default(), &spec).unwrap();
     let output = generate_formatted(&generator);
     expectorate::assert_contents(
         format!("tests/output/src/{}.rs", "test_renamed_parameters"),
@@ -109,7 +109,7 @@ fn test_freeform_response() {
     let out = from_utf8(&out).unwrap();
     let spec = serde_json::from_str::<OpenAPI>(out).unwrap();
 
-    let generator = Progenitor::build(&GenerationSettings::default(), &spec).unwrap();
+    let generator = Generator::build(&GenerationSettings::default(), &spec).unwrap();
     let output = generate_formatted(&generator);
     expectorate::assert_contents(
         format!("tests/output/src/{}.rs", "test_freeform_response"),
@@ -163,14 +163,14 @@ fn test_default_params() {
     let out = from_utf8(&out).unwrap();
     let spec = serde_json::from_str::<OpenAPI>(out).unwrap();
 
-    let generator = Progenitor::build(&GenerationSettings::default(), &spec).unwrap();
+    let generator = Generator::build(&GenerationSettings::default(), &spec).unwrap();
     let output = generate_formatted(&generator);
     expectorate::assert_contents(
         format!("tests/output/src/{}.rs", "test_default_params_positional"),
         &output,
     );
 
-    let generator = Progenitor::build(
+    let generator = Generator::build(
         GenerationSettings::default().with_interface(InterfaceStyle::Builder),
         &spec,
     )
@@ -236,7 +236,7 @@ async fn test_stream_pagination() {
     let spec = serde_json::from_str::<OpenAPI>(out).unwrap();
 
     // Test both interface styles.
-    let generator = Progenitor::build(
+    let generator = Generator::build(
         GenerationSettings::new().with_interface(InterfaceStyle::Positional),
         &spec,
     )
@@ -246,7 +246,7 @@ async fn test_stream_pagination() {
         format!("tests/output/src/{TEST_NAME}_positional.rs"),
         &output,
     );
-    let generator = Progenitor::build(
+    let generator = Generator::build(
         GenerationSettings::new().with_interface(InterfaceStyle::Builder),
         &spec,
     )

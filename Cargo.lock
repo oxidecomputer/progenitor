@@ -1819,7 +1819,6 @@ dependencies = [
  "syn 3.0.6",
  "thiserror 2.0.20",
  "tokio",
- "typespace",
  "typify",
  "unicode-ident",
 ]
@@ -3058,12 +3057,14 @@ checksum = "562d481066bde0658276a35467c4af00bdc6ee726305698a55b86e61d7ad82bb"
 [[package]]
 name = "typespace"
 version = "0.0.1-alpha.1"
+source = "git+https://github.com/oxidecomputer/typespace?branch=main#391d823b72351a8b8d97856e2e5d0d0f529f2a1b"
 dependencies = [
  "codespace",
  "heck",
  "log",
  "proc-macro2",
  "quote",
+ "schemars",
  "serde",
  "serde_json",
  "strum",
@@ -3073,7 +3074,7 @@ dependencies = [
 
 [[package]]
 name = "typify"
-version = "0.7.0"
+version = "0.8.0"
 dependencies = [
  "typify-impl",
  "typify-macro",
@@ -3081,7 +3082,7 @@ dependencies = [
 
 [[package]]
 name = "typify-impl"
-version = "0.7.0"
+version = "0.8.0"
 dependencies = [
  "heck",
  "log",
@@ -3100,7 +3101,7 @@ dependencies = [
 
 [[package]]
 name = "typify-macro"
-version = "0.7.0"
+version = "0.8.0"
 dependencies = [
  "proc-macro2",
  "quote",

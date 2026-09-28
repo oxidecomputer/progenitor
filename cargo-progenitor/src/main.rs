@@ -6,10 +6,10 @@ use std::{
     path::{Path, PathBuf},
 };
 
-use anyhow::{Result, bail};
+use anyhow::Result;
 use clap::{Parser, ValueEnum};
 use openapiv3::OpenAPI;
-use progenitor::{GenerationSettings, InterfaceStyle, Progenitor, TagStyle};
+use progenitor::{GenerationSettings, Generator, InterfaceStyle, TagStyle};
 use progenitor_impl::space_out_items;
 
 fn is_non_release() -> bool {
@@ -116,95 +116,87 @@ fn main() -> Result<()> {
     let CargoCli::Progenitor(args) = CargoCli::parse();
     let api = load_api(&args.input)?;
 
-    let builder = Progenitor::build(
+    let builder = Generator::build(
         GenerationSettings::default()
             .with_interface(args.interface.into())
             .with_tag(args.tags.into()),
         &api,
     )?;
 
-    match builder.generate_tokens() {
-        Ok(api_code) => {
-            let typespace = builder.typespace();
+    let api_code = builder.generate_sdk().into_stream();
+    let typespace = builder.typespace();
 
-            println!("-----------------------------------------------------");
-            println!(" TYPE SPACE");
-            println!("-----------------------------------------------------");
-            // ATTN REVIEWER: typify's `Type::describe` produced a debug
-            // description of each type; typespace's nearest answer is
-            // `name`, which names a named type and renders the identifier
-            // of an unnamed one.
-            for (idx, typ) in typespace.iter_types().enumerate() {
-                println!("{:>4}  {}", idx, typ.name());
-            }
-            println!("-----------------------------------------------------");
-            println!();
+    println!("-----------------------------------------------------");
+    println!(" TYPE SPACE");
+    println!("-----------------------------------------------------");
+    // ATTN REVIEWER: typify's `Type::describe` produced a debug
+    // description of each type; typespace's nearest answer is
+    // `name`, which names a named type and renders the identifier
+    // of an unnamed one.
+    for (idx, typ) in typespace.iter_types().enumerate() {
+        println!("{:>4}  {}", idx, typ.name());
+    }
+    println!("-----------------------------------------------------");
+    println!();
 
-            let name = &args.name;
-            let version = &args.version;
+    let name = &args.name;
+    let version = &args.version;
 
-            // Create the top-level crate directory:
-            let root = PathBuf::from(&args.output);
-            std::fs::create_dir_all(&root)?;
+    // Create the top-level crate directory:
+    let root = PathBuf::from(&args.output);
+    std::fs::create_dir_all(&root)?;
 
-            // Write the Cargo.toml file:
-            let mut toml = root.clone();
-            toml.push("Cargo.toml");
+    // Write the Cargo.toml file:
+    let mut toml = root.clone();
+    toml.push("Cargo.toml");
 
-            let mut tomlout = format!(
-                "[package]\n\
-                name = \"{}\"\n\
-                version = \"{}\"\n\
-                edition = \"2024\"\n\
-                license = \"{}\"\n",
-                name, version, &args.license_name,
-            );
-            if let Some(registry_name) = args.registry_name {
-                tomlout.extend(format!("publish = [\"{}\"]\n", registry_name).chars());
-            }
-            tomlout.extend(
-                format!(
-                    "\n\
-                [dependencies]\n\
-                {}\n\
-                \n",
-                    dependencies(builder, args.include_client).join("\n"),
-                )
-                .chars(),
-            );
+    let mut tomlout = format!(
+        "[package]\n\
+            name = \"{}\"\n\
+            version = \"{}\"\n\
+            edition = \"2024\"\n\
+            license = \"{}\"\n",
+        name, version, &args.license_name,
+    );
+    if let Some(registry_name) = args.registry_name {
+        tomlout.extend(format!("publish = [\"{}\"]\n", registry_name).chars());
+    }
+    tomlout.extend(
+        format!(
+            "\n\
+            [dependencies]\n\
+            {}\n\
+            \n",
+            dependencies(builder, args.include_client).join("\n"),
+        )
+        .chars(),
+    );
 
-            save(&toml, tomlout.as_str())?;
+    save(&toml, tomlout.as_str())?;
 
-            // Create the src/ directory:
-            let mut src = root;
-            src.push("src");
-            std::fs::create_dir_all(&src)?;
+    // Create the src/ directory:
+    let mut src = root;
+    src.push("src");
+    std::fs::create_dir_all(&src)?;
 
-            // Create the Rust source file containing the generated client:
-            let lib_code = if args.include_client {
-                format!("mod progenitor_client;\n\n{}", api_code)
-            } else {
-                api_code.to_string()
-            };
-            let lib_code = reformat_code(lib_code);
+    // Create the Rust source file containing the generated client:
+    let lib_code = if args.include_client {
+        format!("mod progenitor_client;\n\n{}", api_code)
+    } else {
+        api_code.to_string()
+    };
+    let lib_code = reformat_code(lib_code);
 
-            let mut librs = src.clone();
-            librs.push("lib.rs");
-            save(librs, lib_code.as_str())?;
+    let mut librs = src.clone();
+    librs.push("lib.rs");
+    save(librs, lib_code.as_str())?;
 
-            // Create the Rust source file containing the support code:
-            if args.include_client {
-                let progenitor_client_code = progenitor_client::code();
-                let mut clientrs = src;
-                clientrs.push("progenitor_client.rs");
-                save(clientrs, progenitor_client_code)?;
-            }
-        }
-
-        Err(e) => {
-            println!("gen fail: {:?}", e);
-            bail!("generation experienced errors");
-        }
+    // Create the Rust source file containing the support code:
+    if args.include_client {
+        let progenitor_client_code = progenitor_client::code();
+        let mut clientrs = src;
+        clientrs.push("progenitor_client.rs");
+        save(clientrs, progenitor_client_code)?;
     }
 
     Ok(())
@@ -243,7 +235,7 @@ static DEPENDENCIES: Dependencies = Dependencies {
     uuid: "1.0",
 };
 
-pub fn dependencies(builder: Progenitor, include_client: bool) -> Vec<String> {
+pub fn dependencies(builder: Generator, include_client: bool) -> Vec<String> {
     let mut deps = vec![
         format!("bytes = \"{}\"", DEPENDENCIES.bytes),
         format!("futures-core = \"{}\"", DEPENDENCIES.futures),
@@ -258,7 +250,6 @@ pub fn dependencies(builder: Progenitor, include_client: bool) -> Vec<String> {
         format!("serde_urlencoded = \"{}\"", DEPENDENCIES.serde_urlencoded),
     ];
 
-    let type_space = builder.get_type_space();
     let mut needs_serde_json = false;
 
     if include_client {
@@ -279,16 +270,16 @@ pub fn dependencies(builder: Progenitor, include_client: bool) -> Vec<String> {
         deps.push(client_version_dep);
     }
 
-    if type_space.uses_regress() {
+    if builder.uses_regress() {
         deps.push(format!("regress = \"{}\"", DEPENDENCIES.regress));
     }
-    if type_space.uses_uuid() {
+    if builder.uses_uuid() {
         deps.push(format!(
             "uuid = {{ version = \"{}\", features = [\"serde\", \"v4\"] }}",
             DEPENDENCIES.uuid
         ));
     }
-    if type_space.uses_chrono() {
+    if builder.uses_chrono() {
         deps.push(format!(
             "chrono = {{ version = \"{}\", default-features=false, features = [\"serde\"] }}",
             DEPENDENCIES.chrono
@@ -301,7 +292,7 @@ pub fn dependencies(builder: Progenitor, include_client: bool) -> Vec<String> {
         deps.push(format!("base64 = \"{}\"", DEPENDENCIES.base64));
         deps.push(format!("rand = \"{}\"", DEPENDENCIES.rand));
     }
-    if type_space.uses_serde_json() || needs_serde_json {
+    if builder.uses_serde_json() || needs_serde_json {
         deps.push(format!("serde_json = \"{}\"", DEPENDENCIES.serde_json));
     }
     deps.sort_unstable();

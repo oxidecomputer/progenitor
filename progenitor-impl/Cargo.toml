@@ -22,7 +22,6 @@ serde_json = { workspace = true }
 syn = { workspace = true }
 thiserror = { workspace = true }
 codespace = { workspace = true }
-typespace = { workspace = true }
 typify = { workspace = true }
 unicode-ident = { workspace = true }
 

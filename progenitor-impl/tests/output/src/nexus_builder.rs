@@ -142,8 +142,8 @@ pub mod types {
             "BlockSize".to_string()
         }
 
-        fn json_schema(gen: &mut ::schemars::gen::SchemaGenerator) -> ::schemars::schema::Schema {
-            let mut schema = <i64 as ::schemars::JsonSchema>::json_schema(gen).into_object();
+        fn json_schema(g: &mut ::schemars::r#gen::SchemaGenerator) -> ::schemars::schema::Schema {
+            let mut schema = <i64 as ::schemars::JsonSchema>::json_schema(g).into_object();
             schema.enum_values = ::std::option::Option::Some(
                 [
                     ::serde_json::from_str("512").unwrap(),
@@ -1755,7 +1755,7 @@ pub mod types {
         ///User data for instance initialization systems (such as cloud-init).
         /// Must be a Base64-encoded string, as specified in RFC 4648 § 4 (+ and
         /// / characters with padding). Maximum 32 KiB unencoded data.
-        #[serde(default, skip_serializing_if = "::std::string::String::is_empty")]
+        #[serde(default)]
         pub user_data: ::std::string::String,
     }
 

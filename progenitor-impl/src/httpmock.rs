@@ -6,7 +6,7 @@ use proc_macro2::TokenStream;
 use quote::{ToTokens, format_ident, quote};
 
 use crate::{
-    Progenitor, Result,
+    Generator,
     method::{
         BodyContentType, HttpMethod, OperationParameter, OperationParameterKind,
         OperationParameterType, OperationResponse, OperationResponseStatus,
@@ -21,60 +21,13 @@ struct MockOp {
     then_impl: TokenStream,
 }
 
-/// The mocking extension rendered as its top-level pieces.
-struct MockParts {
-    operations: TokenStream,
-    ext: TokenStream,
-}
-
-impl Progenitor {
+impl Generator {
     /// Generate a strongly-typed mocking extension to the `httpmock` crate.
     ///
     /// The `crate_path` parameter should be a valid Rust path corresponding to
     /// the SDK. This can include `::` and instances of `-` in the crate name
     /// should be converted to `_`.
-    pub fn httpmock(&self, crate_path: &str) -> Result<TokenStream> {
-        let MockParts { operations, ext } = self.httpmock_parts(crate_path);
-        Ok(quote! {
-            pub mod operations {
-
-                //! [`When`](::httpmock::When) and [`Then`](::httpmock::Then)
-                //! wrappers for each operation. Each can be converted to
-                //! its inner type with a call to `into_inner()`. This can
-                //! be used to explicitly deviate from permitted values.
-
-                #operations
-            }
-
-            #ext
-        })
-    }
-
-    /// Generate the mocking extension as a structured
-    /// [codespace::Codespace].
-    ///
-    /// The root module holds the extension trait and its impl as items
-    /// and the wrappers as an `operations` submodule; codespace fixes
-    /// stream and file order (items first, then submodules), so the
-    /// stream form of this value lays them out in that order rather
-    /// than in [`Self::httpmock`] order.
     pub fn generate_httpmock(&self, crate_path: &str) -> codespace::Codespace {
-        let MockParts { operations, ext } = self.httpmock_parts(crate_path);
-        let mut cs = codespace::Codespace::default();
-        let root = cs.get_root_mod();
-        root.add_item("MockServerExt", ext);
-        let ops = root.get_mod("operations");
-        ops.add_docs(concat!(
-            " [`When`](::httpmock::When) and [`Then`](::httpmock::Then)\n",
-            " wrappers for each operation. Each can be converted to\n",
-            " its inner type with a call to `into_inner()`. This can\n",
-            " be used to explicitly deviate from permitted values.",
-        ));
-        ops.add_item("", operations);
-        cs
-    }
-
-    fn httpmock_parts(&self, crate_path: &str) -> MockParts {
         let raw_methods = &self.raw_methods;
 
         let methods = raw_methods
@@ -99,15 +52,23 @@ impl Progenitor {
         };
 
         let operations = quote! {
-            use #crate_path::*;
+            pub mod operations {
 
-            #(
-                pub struct #when(::httpmock::When);
-                #when_impl
+                //! [`When`](::httpmock::When) and [`Then`](::httpmock::Then)
+                //! wrappers for each operation. Each can be converted to
+                //! its inner type with a call to `into_inner()`. This can
+                //! be used to explicitly deviate from permitted values.
 
-                pub struct #then(::httpmock::Then);
-                #then_impl
-            )*
+                use #crate_path::*;
+
+                #(
+                    pub struct #when(::httpmock::When);
+                    #when_impl
+
+                    pub struct #then(::httpmock::Then);
+                    #then_impl
+                )*
+            }
         };
 
         let ext = quote! {
@@ -139,7 +100,11 @@ impl Progenitor {
             }
         };
 
-        MockParts { operations, ext }
+        let mut cs = codespace::Codespace::default();
+        let root = cs.get_root_mod();
+        root.add_item("", operations);
+        root.add_item("MockServerExt", ext);
+        cs
     }
 
     fn httpmock_method(&self, method: &crate::method::OperationMethod) -> MockOp {

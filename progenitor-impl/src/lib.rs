@@ -5,17 +5,21 @@
 #![deny(missing_docs)]
 
 use std::collections::{BTreeMap, HashMap, HashSet};
-use std::rc::Rc;
 
 use openapiv3::OpenAPI;
 use proc_macro2::TokenStream;
 use quote::quote;
 use serde::Deserialize;
 use thiserror::Error;
+use typify::typespace;
 use typify::{TypeSpace, TypeSpaceSettings};
 
 use crate::to_schema::ToSchema;
 
+/// The type-generation engine, re-exported so a consumer configuring
+/// [`GenerationSettings::map_typespace_settings`] names the same
+/// `typespace` this crate was built against.
+pub use typify;
 pub use typify::CrateVers;
 pub use typify::TypeSpaceImpl as TypeImpl;
 pub use typify::TypeSpacePatch as TypePatch;
@@ -23,10 +27,8 @@ pub use typify::UnknownPolicy;
 
 pub use codespace;
 
-/// The module that generated types are emitted into.
-///
-/// typespace makes the scope a per-query argument rather than a setting,
-/// so every identifier query passes this.
+/// The module that generated types are emitted into; every identifier
+/// query passes it as the scope.
 pub(crate) const TYPES_MOD: &str = "types";
 
 mod cli;
@@ -57,21 +59,31 @@ pub enum Error {
 pub type Result<T> = std::result::Result<T, Error>;
 
 /// OpenAPI client generator.
-pub struct Progenitor {
-    type_space: TypeSpace,
+pub struct Generator {
     settings: GenerationSettings,
     spec: OpenAPI,
     raw_methods: Vec<method::OperationMethod>,
-    typespace: Option<Rc<typespace::Typespace<typify::TypeId>>>,
+    /// The finalized type graph; built once, read by every code generator.
+    typespace: typespace::Typespace<typify::TypeId>,
     uses_futures: bool,
     uses_websockets: bool,
+    uses_chrono: bool,
+    uses_uuid: bool,
+    uses_regress: bool,
+    uses_serde_json: bool,
 }
 
-/// Deprecated name for [`Progenitor`].
-#[deprecated(note = "renamed to Progenitor")]
-pub type Generator = Progenitor;
+/// The type graph and operations under construction.
+///
+/// This is the only phase that inserts types or asks about them before
+/// finalization; [`Generator::build`] finalizes it once and keeps the
+/// result.
+pub(crate) struct Construction {
+    pub(crate) type_space: TypeSpace,
+    pub(crate) uses_websockets: bool,
+}
 
-/// Settings for [Progenitor].
+/// Settings for [Generator].
 #[derive(Default, Clone)]
 pub struct GenerationSettings {
     interface: InterfaceStyle,
@@ -82,10 +94,11 @@ pub struct GenerationSettings {
     pre_hook_async: Option<TokenStream>,
     post_hook: Option<TokenStream>,
     post_hook_async: Option<TokenStream>,
-    extra_derives: Vec<String>,
     extra_cli_bounds: Vec<String>,
 
-    map_type: Option<String>,
+    /// How generated types are rendered; typify's defaults, adjusted by
+    /// map_typespace_settings.
+    type_settings: TypeSpaceSettings,
     unknown_crates: UnknownPolicy,
     crates: BTreeMap<String, CrateSpec>,
 
@@ -221,9 +234,12 @@ impl GenerationSettings {
         self
     }
 
-    /// Additional derive macros applied to generated types.
-    pub fn with_derive(&mut self, derive: impl ToString) -> &mut Self {
-        self.extra_derives.push(derive.to_string());
+    /// Adjust the typespace settings used to generate types.
+    pub fn map_typespace_settings<F>(&mut self, f: F) -> &mut Self
+    where
+        F: FnOnce(typespace::settings::Settings) -> typespace::settings::Settings,
+    {
+        self.type_settings.map_typespace_settings(f);
         self
     }
 
@@ -297,18 +313,6 @@ impl GenerationSettings {
         self
     }
 
-    /// Set the type used for key-value maps. Common examples:
-    /// - [`std::collections::HashMap`] - **Default**
-    /// - [`std::collections::BTreeMap`]
-    /// - [`indexmap::IndexMap`]
-    ///
-    /// The requiremnets for a map type can be found in the
-    /// [typify::TypeSpaceSettings::with_map_type] documentation.
-    pub fn with_map_type<MT: ToString>(&mut self, map_type: MT) -> &mut Self {
-        self.map_type = Some(map_type.to_string());
-        self
-    }
-
     /// Set the underlying reqwest client's timeout
     pub fn with_timeout(&mut self, timeout: u64) -> &mut Self {
         self.timeout = Some(timeout);
@@ -316,13 +320,14 @@ impl GenerationSettings {
     }
 }
 
-impl Progenitor {
+impl Generator {
     /// Build a generator from settings and an OpenAPI document.
     pub fn build(settings: &GenerationSettings, spec: &OpenAPI) -> Result<Self> {
-        let mut type_settings = TypeSpaceSettings::default();
-        type_settings.with_struct_builder(settings.interface == InterfaceStyle::Builder);
-        settings.extra_derives.iter().for_each(|derive| {
-            let _ = type_settings.with_derive(derive.clone());
+        // The interface style decides whether types carry builders, so it
+        // is applied after anything the consumer set.
+        let mut type_settings = settings.type_settings.clone();
+        type_settings.map_typespace_settings(|typespace| {
+            typespace.with_struct_builder(settings.interface == InterfaceStyle::Builder)
         });
 
         // Control use of crates found in x-rust-type extension
@@ -351,27 +356,41 @@ impl Progenitor {
                 type_settings.with_conversion(schema.clone(), type_name, impls.iter().cloned());
             });
 
-        // Set the map type if specified.
-        if let Some(map_type) = &settings.map_type {
-            type_settings.with_map_type(map_type.clone());
-        }
-
-        let mut progenitor = Self {
+        let mut construction = Construction {
             type_space: TypeSpace::new(&type_settings),
-            settings: settings.clone(),
-            spec: spec.clone(),
-            raw_methods: Vec::new(),
-            typespace: None,
-            uses_futures: false,
             uses_websockets: false,
         };
-        progenitor.construct(spec)?;
-        Ok(progenitor)
-    }
+        let raw_methods = construction.construct(spec)?;
 
+        // Both interface styles emit a futures stream method for each
+        // paginated operation.
+        let uses_futures = raw_methods
+            .iter()
+            .any(|method| method.dropshot_paginated.is_some());
+
+        let Construction {
+            type_space,
+            uses_websockets,
+        } = construction;
+        Ok(Self {
+            settings: settings.clone(),
+            spec: spec.clone(),
+            raw_methods,
+            typespace: type_space.to_typespace()?,
+            uses_futures,
+            uses_websockets,
+            uses_chrono: type_space.uses_chrono(),
+            uses_uuid: type_space.uses_uuid(),
+            uses_regress: type_space.uses_regress(),
+            uses_serde_json: type_space.uses_serde_json(),
+        })
+    }
+}
+
+impl Construction {
     /// Walk the document: validate it, convert its component schemas,
-    /// process every operation, and finalize the type graph once.
-    fn construct(&mut self, spec: &OpenAPI) -> Result<()> {
+    /// and process every operation, inserting types as they are met.
+    fn construct(&mut self, spec: &OpenAPI) -> Result<Vec<method::OperationMethod>> {
         validate_openapi(spec)?;
 
         // Convert our components dictionary to schemars
@@ -384,8 +403,7 @@ impl Progenitor {
 
         self.type_space.add_ref_types(schemas)?;
 
-        self.raw_methods = spec
-            .paths
+        spec.paths
             .iter()
             .flat_map(|(path, ref_or_item)| {
                 // Exclude externally defined path items.
@@ -397,58 +415,35 @@ impl Progenitor {
             .map(|(path, method, operation, path_parameters)| {
                 self.process_operation(operation, &spec.components, path, method, path_parameters)
             })
-            .collect::<Result<Vec<_>>>()?;
-
-        // Both interface styles emit a futures stream method for each
-        // paginated operation.
-        self.uses_futures = self
-            .raw_methods
-            .iter()
-            .any(|method| method.dropshot_paginated.is_some());
-
-        self.typespace = Some(Rc::new(self.type_space.to_typespace()?));
-
-        Ok(())
+            .collect()
     }
+}
 
-    /// Emit a [TokenStream] containing the generated client code.
-    pub fn generate_tokens(&self) -> Result<TokenStream> {
-        let prelude = self.sdk_prelude();
-        let types = self.typespace().to_codespace().into_stream();
-        let client = self.sdk_client()?;
-        Ok(quote! {
-            #prelude
-
-            /// Types used as operation parameters and responses.
-            #[allow(clippy::all)]
-            pub mod types {
-                #types
-            }
-
-            #client
-        })
-    }
-
+impl Generator {
     /// Generate the SDK as a structured [codespace::Codespace].
     ///
     /// The root module holds the client items and a `types` submodule
-    /// holds the generated types. codespace fixes stream and file
-    /// order (items by key, then submodules), so the stream form of
-    /// this value lays items out in that order rather than in
-    /// [`Self::generate_tokens`] order.
+    /// holds the generated types; codespace fixes the order (items by
+    /// key, then submodules).
     pub fn generate_sdk(&self) -> codespace::Codespace {
         let mut cs = codespace::Codespace::default();
         let root = cs.get_root_mod();
         root.add_item("", self.sdk_prelude());
+        let types = self.typespace().to_codespace().into_stream();
+        let mod_types = quote! {
+            #[doc = " Types used as operation parameters and responses."]
+            #[allow(clippy::all)]
+            pub mod types {
+                #types
+            }
+        };
+        root.add_item(" ", mod_types);
         root.add_item(
             "Client",
             self.sdk_client()
                 .expect("rendering a constructed document does not fail"),
         );
-        let mut types = self.typespace().to_codespace().into_root_mod();
-        types.add_docs("Types used as operation parameters and responses.");
-        types.add_attr(quote! { allow(clippy::all) });
-        root.add_mod("types", types);
+
         cs
     }
 
@@ -457,6 +452,7 @@ impl Progenitor {
         // The allow(unused_imports) on the `pub use` is necessary with Rust
         // 1.76+, in case the generated file is not at the top level of the
         // crate.
+
         quote! {
             // Re-export types that are used by the public interface of Client.
             #[allow(unused_imports)]
@@ -476,8 +472,8 @@ impl Progenitor {
         }
     }
 
-    /// The client half of the SDK: the `Client` type, its impls, and
-    /// the operation code for the configured interface and tag styles.
+    /// The client half of the SDK: the `Client` type, its impls, and the
+    /// operation code for the configured interface and tag styles.
     fn sdk_client(&self) -> Result<TokenStream> {
         let raw_methods = &self.raw_methods;
         let operation_code = match (&self.settings.interface, &self.settings.tag) {
@@ -561,8 +557,7 @@ impl Progenitor {
             },
         };
 
-
-        let file = quote! {
+        let client = quote! {
             #[derive(Clone, Debug)]
             #[doc = #client_docstring]
             pub struct Client {
@@ -638,7 +633,7 @@ impl Progenitor {
             #operation_code
         };
 
-        Ok(file)
+        Ok(client)
     }
 
     fn generate_tokens_positional_merged(
@@ -769,20 +764,9 @@ impl Progenitor {
         Ok(out)
     }
 
-    /// Get the [TypeSpace] for schemas present in the OpenAPI specification.
-    pub fn get_type_space(&self) -> &TypeSpace {
-        &self.type_space
-    }
-
-    /// The finalized typespace snapshot for the bound document.
-    ///
-    /// [TypeSpace] itself no longer answers questions about individual
-    /// types; the finalized [typespace::Typespace] does. The snapshot is
-    /// produced once by [`Progenitor::build`]; this getter hands out the
-    /// shared reference.
-    pub fn typespace(&self) -> Rc<typespace::Typespace<typify::TypeId>> {
-        // build() fills the slot before a Progenitor can be observed.
-        Rc::clone(self.typespace.as_ref().expect("set by build"))
+    /// The finalized type graph, built once by [`Generator::build`].
+    pub fn typespace(&self) -> &typespace::Typespace<typify::TypeId> {
+        &self.typespace
     }
 
     /// Whether the generated client needs to use additional crates to support
@@ -795,6 +779,26 @@ impl Progenitor {
     /// websockets.
     pub fn uses_websockets(&self) -> bool {
         self.uses_websockets
+    }
+
+    /// Whether the generated code refers to the `chrono` crate.
+    pub fn uses_chrono(&self) -> bool {
+        self.uses_chrono
+    }
+
+    /// Whether the generated code refers to the `uuid` crate.
+    pub fn uses_uuid(&self) -> bool {
+        self.uses_uuid
+    }
+
+    /// Whether the generated code refers to the `regress` crate.
+    pub fn uses_regress(&self) -> bool {
+        self.uses_regress
+    }
+
+    /// Whether the generated code refers to the `serde_json` crate.
+    pub fn uses_serde_json(&self) -> bool {
+        self.uses_serde_json
     }
 }
 

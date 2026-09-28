@@ -9,10 +9,10 @@ use std::{
 use openapiv3::{Components, Parameter, ReferenceOr, Response, StatusCode};
 use proc_macro2::TokenStream;
 use quote::{ToTokens, format_ident, quote};
-use typify::TypeId;
+use typify::{TypeId, typespace};
 
 use crate::{
-    Error, Progenitor, Result, TagStyle,
+    Construction, Error, Generator, Result, TagStyle,
     template::PathTemplate,
     util::{Case, items, parameter_map, sanitize, unique_ident_from},
 };
@@ -282,7 +282,7 @@ impl OperationResponseKind {
     }
 }
 
-impl Progenitor {
+impl Construction {
     pub(crate) fn process_operation(
         &mut self,
         operation: &openapiv3::Operation,
@@ -315,7 +315,7 @@ impl Progenitor {
                         let schema = parameter_data.schema()?.to_schema();
 
                         let name = sanitize(
-                            &format!("{}-{}", operation_id, &parameter_data.name),
+                            &format!("{}-{}", operation_id, parameter_data.name),
                             Case::Pascal,
                         );
                         let typ = self.type_space.add_type_with_name(&schema, Some(name))?;
@@ -339,7 +339,7 @@ impl Progenitor {
                             &format!(
                                 "{}-{}",
                                 operation.operation_id.as_ref().unwrap(),
-                                &parameter_data.name,
+                                parameter_data.name,
                             ),
                             Case::Pascal,
                         );
@@ -349,8 +349,10 @@ impl Progenitor {
                         // If the type is itself optional, then we'll treat it
                         // as optional (irrespective of the `required` field on
                         // the parameter) and use the "inner" type.
-                        let (type_id, required) = match self.type_space.structure(&type_id) {
-                            typify::Structure::Option(inner_type_id) => (inner_type_id, false),
+                        let (type_id, required) = match self.type_space.inserted_type(&type_id) {
+                            Some(typespace::build::Type::Option(inner_type_id)) => {
+                                (inner_type_id.clone(), false)
+                            }
                             _ => (type_id, parameter_data.required),
                         };
 
@@ -371,7 +373,7 @@ impl Progenitor {
                             &format!(
                                 "{}-{}",
                                 operation.operation_id.as_ref().unwrap(),
-                                &parameter_data.name,
+                                parameter_data.name,
                             ),
                             Case::Pascal,
                         );
@@ -551,7 +553,9 @@ impl Progenitor {
             dropshot_websocket,
         })
     }
+}
 
+impl Generator {
     pub(crate) fn positional_method(
         &self,
         method: &OperationMethod,
@@ -1215,7 +1219,9 @@ impl Progenitor {
             .unwrap_or(OperationResponseKind::None);
         (response_items, response_type)
     }
+}
 
+impl Construction {
     // Validates all the necessary conditions for Dropshot pagination. Returns
     // the paginated item type data if all conditions are met.
     fn dropshot_pagination_data(
@@ -1281,10 +1287,12 @@ impl Progenitor {
             (Some(success), None) => success,
         };
 
-        let properties = match self.type_space.structure(success_response) {
-            typify::Structure::Struct(properties) => {
-                properties.into_iter().collect::<BTreeMap<_, _>>()
-            }
+        let properties = match self.type_space.inserted_type(success_response) {
+            Some(typespace::build::Type::Struct(details)) => details
+                .get_properties()
+                .iter()
+                .map(|property| (property.rust_name(), property.type_id()))
+                .collect::<BTreeMap<_, _>>(),
             _ => return None,
         };
 
@@ -1294,18 +1302,21 @@ impl Progenitor {
         }
 
         // We need a next_page property that's an Option<String>.
-        if let typify::Structure::Option(ref opt_id) =
-            self.type_space.structure(properties.get("next_page")?)
+        if let Some(typespace::build::Type::Option(opt_id)) =
+            self.type_space.inserted_type(properties.get("next_page")?)
         {
-            if !matches!(self.type_space.structure(opt_id), typify::Structure::String) {
+            if !matches!(
+                self.type_space.inserted_type(opt_id),
+                Some(typespace::build::Type::String)
+            ) {
                 return None;
             }
         } else {
             return None;
         }
 
-        match self.type_space.structure(properties.get("items")?) {
-            typify::Structure::Vec(item) => {
+        match self.type_space.inserted_type(properties.get("items")?) {
+            Some(typespace::build::Type::Vec(item)) => {
                 #[derive(serde::Deserialize, Default)]
                 struct DropshotPaginationFormat {
                     required: Vec<String>,
@@ -1315,14 +1326,16 @@ impl Progenitor {
                         .unwrap_or_default()
                         .required;
                 Some(DropshotPagination {
-                    item,
+                    item: item.clone(),
                     first_page_params,
                 })
             }
             _ => None,
         }
     }
+}
 
+impl Generator {
     /// Create the builder structs along with their impl bodies.
     ///
     /// Builder structs are generally of this form for a mandatory `param_1`
@@ -2020,7 +2033,9 @@ impl Progenitor {
 
         impl_body
     }
+}
 
+impl Construction {
     fn get_body_param(
         &mut self,
         operation: &openapiv3::Operation,

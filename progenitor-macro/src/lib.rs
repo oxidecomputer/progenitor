@@ -8,8 +8,9 @@ use std::{collections::HashMap, fs::File, path::PathBuf};
 
 use openapiv3::OpenAPI;
 use proc_macro::TokenStream;
+use progenitor_impl::typify::typespace::settings::{ContainerType, TraitSpec};
 use progenitor_impl::{
-    CrateVers, GenerationSettings, HooksMode, InterfaceStyle, Progenitor, TagStyle, TypePatch,
+    CrateVers, GenerationSettings, Generator, HooksMode, InterfaceStyle, TagStyle, TypePatch,
     UnknownPolicy,
 };
 use quote::{ToTokens, quote};
@@ -381,7 +382,31 @@ fn do_generate_api(item: TokenStream) -> Result<TokenStream, syn::Error> {
         post_hook.map(|post_hook| settings.with_post_hook(post_hook.into_inner().0));
         post_hook_async
             .map(|post_hook_async| settings.with_post_hook_async(post_hook_async.into_inner().0));
-        map_type.map(|map_type| settings.with_map_type(map_type.to_token_stream()));
+        // A derive names a trait typespace models or a foreign one; typespace
+        // tells them apart, and a bad name is an error at the derive's span.
+        let derives = derives
+            .into_iter()
+            .map(|derive| {
+                let path = derive.into_inner();
+                TraitSpec::parse(&path.to_token_stream().to_string()).map_err(|err| {
+                    syn::Error::new(syn::spanned::Spanned::span(&path), err.to_string())
+                })
+            })
+            .collect::<Result<Vec<_>, syn::Error>>()?;
+        settings.map_typespace_settings(|mut typespace| {
+            for derive in derives {
+                typespace = typespace.with_extra_required_trait(derive);
+            }
+            // A JSON map key is always string-like, so any container the
+            // path names can take the HashMap preset with that path.
+            if let Some(map_type) = map_type {
+                typespace = typespace.with_map_type(
+                    ContainerType::hash_map()
+                        .with_path(&map_type.into_inner().to_token_stream().to_string()),
+                );
+            }
+            typespace
+        });
 
         settings.with_unknown_crates(unknown_crates);
         crates.into_iter().for_each(
@@ -394,9 +419,6 @@ fn do_generate_api(item: TokenStream) -> Result<TokenStream, syn::Error> {
             },
         );
 
-        derives.into_iter().for_each(|derive| {
-            settings.with_derive(derive.to_token_stream());
-        });
         patch.into_iter().for_each(|(type_name, patch)| {
             settings.with_patch(type_name.to_token_stream().to_string(), &patch.into());
         });
@@ -448,19 +470,14 @@ fn do_generate_api(item: TokenStream) -> Result<TokenStream, syn::Error> {
         }
     };
 
-    let builder = Progenitor::build(&settings, &oapi).map_err(|e| {
+    let builder = Generator::build(&settings, &oapi).map_err(|e| {
         syn::Error::new(
             spec_path.span(),
             format!("generation error for {}: {}", spec_path.value(), e),
         )
     })?;
 
-    let code = builder.generate_tokens().map_err(|e| {
-        syn::Error::new(
-            spec_path.span(),
-            format!("generation error for {}: {}", spec_path.value(), e),
-        )
-    })?;
+    let code = builder.generate_sdk().into_stream();
 
     let output = quote! {
         // The progenitor_client is tautologically visible from macro

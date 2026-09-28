@@ -1391,7 +1391,7 @@ pub mod types {
         ///User data for instance initialization systems (such as cloud-init).
         /// Must be a Base64-encoded string, as specified in RFC 4648 § 4 (+ and
         /// / characters with padding). Maximum 32 KiB unencoded data.
-        #[serde(default, skip_serializing_if = "::std::string::String::is_empty")]
+        #[serde(default)]
         pub user_data: ::std::string::String,
     }
 

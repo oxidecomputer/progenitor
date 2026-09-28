@@ -12,9 +12,9 @@ fn main() {
     let file = File::open(src).unwrap();
     let spec = serde_json::from_reader(file).unwrap();
     let generator =
-        progenitor::Progenitor::build(&progenitor::GenerationSettings::default(), &spec).unwrap();
+        progenitor::Generator::build(&progenitor::GenerationSettings::default(), &spec).unwrap();
 
-    let tokens = generator.generate_tokens().unwrap();
+    let tokens = generator.generate_sdk().into_stream();
     let ast = syn::parse2(tokens).unwrap();
     let content = prettyplease::unparse(&ast);
 

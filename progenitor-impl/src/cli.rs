@@ -5,12 +5,12 @@ use std::collections::BTreeMap;
 use heck::ToKebabCase;
 use proc_macro2::TokenStream;
 use quote::{format_ident, quote};
-use typespace::TypespaceTrait;
-use typespace::view::{StructProperty, TypeDetails, VariantDetails};
 use typify::TypeId;
+use typify::typespace::TypespaceTrait;
+use typify::typespace::view::{StructProperty, TypeDetails, VariantDetails};
 
 use crate::{
-    Progenitor, Result,
+    Generator,
     method::{OperationParameterKind, OperationParameterType, OperationResponseStatus},
     util::{Case, sanitize},
 };
@@ -21,54 +21,9 @@ struct CliOperation {
     execute_trait: TokenStream,
 }
 
-/// The CLI rendered as its top-level pieces.
-struct CliParts {
-    prelude: TokenStream,
-    cli: TokenStream,
-    config: TokenStream,
-    command: TokenStream,
-}
-
-impl Progenitor {
+impl Generator {
     /// Generate a `clap`-based CLI.
-    pub fn cli(&self, crate_name: &str) -> Result<TokenStream> {
-        let CliParts {
-            prelude,
-            cli,
-            config,
-            command,
-        } = self.cli_parts(crate_name);
-        Ok(quote! {
-            #prelude
-            #cli
-            #config
-            #command
-        })
-    }
-
-    /// Generate the CLI as a structured [codespace::Codespace].
-    ///
-    /// The root module holds the CLI items; codespace fixes their
-    /// stream and file order (by item key), so the stream form of this
-    /// value lays items out in that order rather than in [`Self::cli`]
-    /// order.
     pub fn generate_cli(&self, crate_name: &str) -> codespace::Codespace {
-        let CliParts {
-            prelude,
-            cli,
-            config,
-            command,
-        } = self.cli_parts(crate_name);
-        let mut cs = codespace::Codespace::default();
-        let root = cs.get_root_mod();
-        root.add_item("", prelude);
-        root.add_item("Cli", cli);
-        root.add_item("CliConfig", config);
-        root.add_item("CliCommand", command);
-        cs
-    }
-
-    fn cli_parts(&self, crate_name: &str) -> CliParts {
         let raw_methods = &self.raw_methods;
 
         let methods = raw_methods
@@ -206,12 +161,13 @@ impl Progenitor {
             }
         };
 
-        CliParts {
-            prelude,
-            cli,
-            config,
-            command,
-        }
+        let mut cs = codespace::Codespace::default();
+        let root = cs.get_root_mod();
+        root.add_item("", prelude);
+        root.add_item("Cli A", cli);
+        root.add_item("Cli B", config);
+        root.add_item("Cli C", command);
+        cs
     }
 
     fn cli_method(&self, method: &crate::method::OperationMethod) -> CliOperation {
@@ -624,10 +580,10 @@ impl Progenitor {
             prop_type
         };
 
-        let scalar = prop_type.has_impl(TypespaceTrait::FromStr);
+        let parses_from_str = prop_type.has_impl(TypespaceTrait::FromStr);
 
         let prop_name = name.to_kebab_case();
-        if scalar && !args.has_arg(&prop_name) {
+        if parses_from_str && !args.has_arg(&prop_name) {
             let volitionality = if required {
                 Volitionality::RequiredIfNoBody
             } else {
@@ -683,7 +639,7 @@ fn clap_arg(
     arg_name: &str,
     volitionality: Volitionality,
     description: &Option<String>,
-    arg_type: &typespace::view::Type<'_, TypeId>,
+    arg_type: &typify::typespace::view::Type<'_, TypeId>,
 ) -> TokenStream {
     let help = description.as_ref().map(|description| {
         quote! {

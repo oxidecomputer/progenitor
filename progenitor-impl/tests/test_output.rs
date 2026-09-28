@@ -6,12 +6,13 @@ use std::{
 };
 
 use progenitor_impl::{
-    GenerationSettings, HooksMode, InterfaceStyle, Progenitor, TagStyle, TypeImpl, TypePatch,
+    GenerationSettings, Generator, HooksMode, InterfaceStyle, TagStyle, TypeImpl, TypePatch,
     space_out_items,
 };
 
 use openapiv3::OpenAPI;
 use proc_macro2::TokenStream;
+use typify::typespace::TypespaceTrait;
 
 fn load_api<P>(p: P) -> OpenAPI
 where
@@ -27,8 +28,8 @@ where
     }
 }
 
-fn generate_formatted(progenitor: &Progenitor) -> String {
-    let content = progenitor.generate_tokens().unwrap();
+fn generate_formatted(progenitor: &Generator) -> String {
+    let content = progenitor.generate_sdk().into_stream();
     reformat_code(content)
 }
 
@@ -51,7 +52,7 @@ fn verify_apis(openapi_file: &str) {
     let spec = load_api(in_path);
 
     // Positional generation.
-    let generator = Progenitor::build(&GenerationSettings::default(), &spec).unwrap();
+    let generator = Generator::build(&GenerationSettings::default(), &spec).unwrap();
     let output = generate_formatted(&generator);
     expectorate::assert_contents(
         format!("tests/output/src/{}_positional.rs", openapi_stem),
@@ -59,11 +60,11 @@ fn verify_apis(openapi_file: &str) {
     );
 
     // Builder generation with derives and patches.
-    let generator = Progenitor::build(
+    let generator = Generator::build(
         GenerationSettings::default()
             .with_interface(InterfaceStyle::Builder)
             .with_tag(TagStyle::Merged)
-            .with_derive("schemars::JsonSchema")
+            .map_typespace_settings(|s| s.with_required_trait(TypespaceTrait::JsonSchema))
             .with_patch("Name", TypePatch::default().with_derive("Hash"))
             .with_conversion(
                 schemars::schema::SchemaObject {
@@ -84,7 +85,7 @@ fn verify_apis(openapi_file: &str) {
     );
 
     // Builder generation with tags.
-    let generator = Progenitor::build(
+    let generator = Generator::build(
         GenerationSettings::default()
             .with_interface(InterfaceStyle::Builder)
             .with_cli_bounds("std::clone::Clone")
@@ -100,16 +101,16 @@ fn verify_apis(openapi_file: &str) {
 
     // CLI generation.
     let tokens = generator
-        .cli(&format!("crate::{openapi_stem}_builder"))
-        .unwrap();
+        .generate_cli(&format!("crate::{openapi_stem}_builder"))
+        .into_stream();
     let output = reformat_code(tokens);
 
     expectorate::assert_contents(format!("tests/output/src/{}_cli.rs", openapi_stem), &output);
 
     // httpmock generation.
     let code = generator
-        .httpmock(&format!("crate::{openapi_stem}_builder"))
-        .unwrap();
+        .generate_httpmock(&format!("crate::{openapi_stem}_builder"))
+        .into_stream();
 
     // TODO pending #368
     let output = rustfmt_wrapper::rustfmt_config(
@@ -179,7 +180,7 @@ fn test_nexus_with_different_timeout() {
     let spec = load_api(in_path);
 
     let generator =
-        Progenitor::build(GenerationSettings::default().with_timeout(75), &spec).unwrap();
+        Generator::build(GenerationSettings::default().with_timeout(75), &spec).unwrap();
     let output = generate_formatted(&generator);
     expectorate::assert_contents(
         format!("tests/output/src/{}_with_timeout.rs", openapi_stem),
@@ -194,9 +195,12 @@ fn test_nexus_with_different_timeout() {
 fn test_keeper_hooks_expected() {
     let spec = load_api("../sample_openapi/keeper.json");
 
-    let mut generator =
-        Generator::new(GenerationSettings::default().with_hooks(HooksMode::Expected));
-    let output = generate_formatted(&mut generator, &spec);
+    let generator = Generator::build(
+        GenerationSettings::default().with_hooks(HooksMode::Expected),
+        &spec,
+    )
+    .unwrap();
+    let output = generate_formatted(&generator);
     expectorate::assert_contents("tests/output/src/keeper_hooks_expected.rs", &output);
 }
 
