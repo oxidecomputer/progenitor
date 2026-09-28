@@ -53,6 +53,8 @@ pub enum Error {
     InvalidExtension(String),
     #[error("internal error {0}")]
     InternalError(String),
+    #[error("unsupported generation settings: {0}")]
+    UnsupportedSettings(String),
 }
 
 #[allow(missing_docs)]
@@ -323,6 +325,15 @@ impl GenerationSettings {
 impl Generator {
     /// Build a generator from settings and an OpenAPI document.
     pub fn build(settings: &GenerationSettings, spec: &OpenAPI) -> Result<Self> {
+        if matches!(
+            (&settings.interface, &settings.tag),
+            (InterfaceStyle::Positional, TagStyle::Separate)
+        ) {
+            return Err(Error::UnsupportedSettings(
+                "positional arguments with separate tags".to_string(),
+            ));
+        }
+
         // The interface style decides whether types carry builders, so it
         // is applied after anything the consumer set.
         let mut type_settings = settings.type_settings.clone();
@@ -438,11 +449,7 @@ impl Generator {
             }
         };
         root.add_item(" ", mod_types);
-        root.add_item(
-            "Client",
-            self.sdk_client()
-                .expect("rendering a constructed document does not fail"),
-        );
+        root.add_item("Client", self.sdk_client());
 
         cs
     }
@@ -474,14 +481,13 @@ impl Generator {
 
     /// The client half of the SDK: the `Client` type, its impls, and the
     /// operation code for the configured interface and tag styles.
-    fn sdk_client(&self) -> Result<TokenStream> {
+    fn sdk_client(&self) -> TokenStream {
         let raw_methods = &self.raw_methods;
         let operation_code = match (&self.settings.interface, &self.settings.tag) {
             (InterfaceStyle::Positional, TagStyle::Merged) => self
                 .generate_tokens_positional_merged(raw_methods, self.settings.inner_type.is_some()),
-            (InterfaceStyle::Positional, TagStyle::Separate) => {
-                unimplemented!("positional arguments with separate tags are currently unsupported")
-            }
+            // Refused by Generator::build.
+            (InterfaceStyle::Positional, TagStyle::Separate) => unreachable!(),
             (InterfaceStyle::Builder, TagStyle::Merged) => {
                 self.generate_tokens_builder_merged(raw_methods, self.settings.inner_type.is_some())
             }
@@ -498,7 +504,7 @@ impl Generator {
                     self.settings.inner_type.is_some(),
                 )
             }
-        }?;
+        };
 
         let (inner_type, inner_fn_value) = match self.settings.inner_type.as_ref() {
             Some(inner_type) => (inner_type.clone(), quote! { &self.inner }),
@@ -633,24 +639,24 @@ impl Generator {
             #operation_code
         };
 
-        Ok(client)
+        client
     }
 
     fn generate_tokens_positional_merged(
         &self,
         input_methods: &[method::OperationMethod],
         has_inner: bool,
-    ) -> Result<TokenStream> {
+    ) -> TokenStream {
         let methods = input_methods
             .iter()
             .map(|method| self.positional_method(method, has_inner))
-            .collect::<Result<Vec<_>>>()?;
+            .collect::<Vec<_>>();
 
         // The allow(unused_imports) on the `pub use` is necessary with Rust
         // 1.76+, in case the generated file is not at the top level of the
         // crate.
 
-        let out = quote! {
+        quote! {
             #[allow(clippy::all)]
             impl Client {
                 #(#methods)*
@@ -661,26 +667,25 @@ impl Generator {
                 #[allow(unused_imports)]
                 pub use super::Client;
             }
-        };
-        Ok(out)
+        }
     }
 
     fn generate_tokens_builder_merged(
         &self,
         input_methods: &[method::OperationMethod],
         has_inner: bool,
-    ) -> Result<TokenStream> {
+    ) -> TokenStream {
         let builder_struct = input_methods
             .iter()
             .map(|method| self.builder_struct(method, TagStyle::Merged, has_inner))
-            .collect::<Result<Vec<_>>>()?;
+            .collect::<Vec<_>>();
 
         let builder_methods = input_methods
             .iter()
             .map(|method| self.builder_impl(method))
             .collect::<Vec<_>>();
 
-        let out = quote! {
+        quote! {
             impl Client {
                 #(#builder_methods)*
             }
@@ -708,9 +713,7 @@ impl Generator {
             pub mod prelude {
                 pub use self::super::Client;
             }
-        };
-
-        Ok(out)
+        }
     }
 
     fn generate_tokens_builder_separate(
@@ -718,11 +721,11 @@ impl Generator {
         input_methods: &[method::OperationMethod],
         tag_info: BTreeMap<&String, &openapiv3::Tag>,
         has_inner: bool,
-    ) -> Result<TokenStream> {
+    ) -> TokenStream {
         let builder_struct = input_methods
             .iter()
             .map(|method| self.builder_struct(method, TagStyle::Separate, has_inner))
-            .collect::<Result<Vec<_>>>()?;
+            .collect::<Vec<_>>();
 
         let (traits_and_impls, trait_preludes) = self.builder_tags(input_methods, &tag_info);
 
@@ -730,7 +733,7 @@ impl Generator {
         // 1.76+, in case the generated file is not at the top level of the
         // crate.
 
-        let out = quote! {
+        quote! {
             #traits_and_impls
 
             /// Types for composing operation parameters.
@@ -759,9 +762,7 @@ impl Generator {
                 pub use super::Client;
                 #trait_preludes
             }
-        };
-
-        Ok(out)
+        }
     }
 
     /// The finalized type graph, built once by [`Generator::build`].

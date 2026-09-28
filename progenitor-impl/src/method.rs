@@ -560,7 +560,7 @@ impl Generator {
         &self,
         method: &OperationMethod,
         has_inner: bool,
-    ) -> Result<TokenStream> {
+    ) -> TokenStream {
         let operation_id = format_ident!("{}", method.operation_id);
         let typespace = self.typespace();
 
@@ -614,7 +614,7 @@ impl Generator {
             success: success_type,
             error: error_type,
             body,
-        } = self.method_sig_body(method, quote! { Self }, quote! { self }, has_inner)?;
+        } = self.method_sig_body(method, quote! { Self }, quote! { self }, has_inner);
 
         let method_impl = quote! {
             #[doc = #doc_comment]
@@ -754,12 +754,10 @@ impl Generator {
             }
         });
 
-        let all = quote! {
+        quote! {
             #method_impl
             #stream_impl
-        };
-
-        Ok(all)
+        }
     }
 
     /// Common code generation between positional and builder interface-styles.
@@ -771,7 +769,7 @@ impl Generator {
         client_type: TokenStream,
         client_value: TokenStream,
         has_inner: bool,
-    ) -> Result<MethodSigBody> {
+    ) -> MethodSigBody {
         let param_names = method
             .params
             .iter()
@@ -1009,16 +1007,9 @@ impl Generator {
                         ))
                     }
                 }
-                OperationResponseKind::Upgrade => {
-                    if response.status_code == OperationResponseStatus::Default {
-                        return quote! {}; // catch-all handled below
-                    } else {
-                        todo!(
-                            "non-default error response handling for \
-                                upgrade requests is not yet implemented"
-                        );
-                    }
-                }
+                // An upgrade is only ever a 101 response, which is never
+                // an error status.
+                OperationResponseKind::Upgrade => unreachable!(),
             };
 
             quote! { #pat => { #decode } }
@@ -1161,11 +1152,11 @@ impl Generator {
         };
 
         let typespace = self.typespace();
-        Ok(MethodSigBody {
+        MethodSigBody {
             success: response_type.into_tokens(&typespace),
             error: error_type.into_tokens(&typespace),
             body: body_impl,
-        })
+        }
     }
 
     /// Extract responses that match criteria specified by the `filter`. The
@@ -1416,7 +1407,7 @@ impl Generator {
         method: &OperationMethod,
         tag_style: TagStyle,
         has_inner: bool,
-    ) -> Result<TokenStream> {
+    ) -> TokenStream {
         let struct_name = sanitize(&method.operation_id, Case::Pascal);
         let struct_ident = format_ident!("{}", struct_name);
 
@@ -1445,22 +1436,22 @@ impl Generator {
                     if let (OperationParameterKind::Body(_), Some(builder_name)) =
                         (&param.kind, ty.builder_ident(Some(crate::TYPES_MOD)))
                     {
-                        Ok(quote! { Result<#builder_name, String> })
+                        quote! { Result<#builder_name, String> }
                     } else if param.kind.is_required() {
                         let t = ty.ident_in(crate::TYPES_MOD);
-                        Ok(quote! { Result<#t, String> })
+                        quote! { Result<#t, String> }
                     } else {
                         let t = ty.ident_in(crate::TYPES_MOD);
-                        Ok(quote! { Result<Option<#t>, String> })
+                        quote! { Result<Option<#t>, String> }
                     }
                 }
 
                 OperationParameterType::RawBody => {
                     cloneable = false;
-                    Ok(quote! { Result<reqwest::Body, String> })
+                    quote! { Result<reqwest::Body, String> }
                 }
             })
-            .collect::<Result<Vec<_>>>()?;
+            .collect::<Vec<_>>();
 
         // Generate the default value value for each parameter. For optional
         // parameters it's just `Ok(None)`. For builders it's
@@ -1478,21 +1469,21 @@ impl Generator {
                     if let (OperationParameterKind::Body(_), Some(_)) =
                         (&param.kind, ty.builder_ident(Some(crate::TYPES_MOD)))
                     {
-                        Ok(quote! { Ok(::std::default::Default::default()) })
+                        quote! { Ok(::std::default::Default::default()) }
                     } else if param.kind.is_required() {
                         let err_msg = format!("{} was not initialized", param.name);
-                        Ok(quote! { Err(#err_msg.to_string()) })
+                        quote! { Err(#err_msg.to_string()) }
                     } else {
-                        Ok(quote! { Ok(None) })
+                        quote! { Ok(None) }
                     }
                 }
 
                 OperationParameterType::RawBody => {
                     let err_msg = format!("{} was not initialized", param.name);
-                    Ok(quote! { Err(#err_msg.to_string()) })
+                    quote! { Err(#err_msg.to_string()) }
                 }
             })
-            .collect::<Result<Vec<_>>>()?;
+            .collect::<Vec<_>>();
 
         // For builders we map `Ok` values to perform a `try_from` to attempt
         // to convert the builder into the desired type. No "finalization" is
@@ -1505,17 +1496,17 @@ impl Generator {
                     let ty = typespace.get_type(type_id);
                     if ty.builder_ident(Some(crate::TYPES_MOD)).is_some() {
                         let type_name = ty.ident_in(crate::TYPES_MOD);
-                        Ok(quote! {
+                        quote! {
                             .and_then(|v| #type_name::try_from(v)
                                 .map_err(|e| e.to_string()))
-                        })
+                        }
                     } else {
-                        Ok(quote! {})
+                        quote! {}
                     }
                 }
-                OperationParameterType::RawBody => Ok(quote! {}),
+                OperationParameterType::RawBody => quote! {},
             })
-            .collect::<Result<Vec<_>>>()?;
+            .collect::<Vec<_>>();
 
         // For each parameter, we need an impl for the builder to let consumers
         // provide a value.
@@ -1543,7 +1534,7 @@ impl Generator {
                                     ty.name(),
                                     param.name,
                                 );
-                                Ok(quote! {
+                                quote! {
                                     pub fn #param_name<V>(
                                         mut self,
                                         value: V,
@@ -1555,7 +1546,7 @@ impl Generator {
                                             .map_err(|_| #err_msg.to_string());
                                         self
                                     }
-                                })
+                                }
                             }
                             (None, false) => {
                                 let typ = ty.ident_in(crate::TYPES_MOD);
@@ -1564,7 +1555,7 @@ impl Generator {
                                     ty.name(),
                                     param.name,
                                 );
-                                Ok(quote! {
+                                quote! {
                                     pub fn #param_name<V>(
                                         mut self,
                                         value: V,
@@ -1575,7 +1566,7 @@ impl Generator {
                                             .map_err(|_| #err_msg.to_string());
                                         self
                                     }
-                                })
+                                }
                             }
 
                             // For builder-capable bodies we offer a `body()`
@@ -1591,7 +1582,7 @@ impl Generator {
                                     ty.name(),
                                     param.name,
                                 );
-                                Ok(quote! {
+                                quote! {
                                     pub fn body<V>(mut self, value: V) -> Self
                                     where
                                         V: std::convert::TryInto<#typ>,
@@ -1612,7 +1603,7 @@ impl Generator {
                                         self.body = self.body.map(f);
                                         self
                                     }
-                                })
+                                }
                             }
                         }
                     }
@@ -1622,7 +1613,7 @@ impl Generator {
                             let err_msg =
                                 format!("conversion to `reqwest::Body` for {} failed", param.name,);
 
-                            Ok(quote! {
+                            quote! {
                                 pub fn #param_name<B>(mut self, value: B) -> Self
                                     where B: std::convert::TryInto<reqwest::Body>
                                 {
@@ -1630,13 +1621,13 @@ impl Generator {
                                         .map_err(|_| #err_msg.to_string());
                                     self
                                 }
-                            })
+                            }
                         }
                         OperationParameterKind::Body(BodyContentType::Text(_)) => {
                             let err_msg =
                                 format!("conversion to `String` for {} failed", param.name,);
 
-                            Ok(quote! {
+                            quote! {
                                 pub fn #param_name<V>(mut self, value: V) -> Self
                                     where V: std::convert::TryInto<String>
                                 {
@@ -1646,13 +1637,13 @@ impl Generator {
                                         .map(|v| v.into());
                                     self
                                 }
-                            })
+                            }
                         }
                         _ => unreachable!(),
                     },
                 }
             })
-            .collect::<Result<Vec<_>>>()?;
+            .collect::<Vec<_>>();
 
         let MethodSigBody {
             success,
@@ -1663,7 +1654,7 @@ impl Generator {
             quote! { super::Client },
             quote! { #client_ident },
             has_inner,
-        )?;
+        );
 
         let send_doc = format!(
             "Sends a `{}` request to `{}`",
@@ -1858,7 +1849,7 @@ impl Generator {
             }
         };
 
-        Ok(quote! {
+        quote! {
             #[doc = #struct_doc]
             #derive
             pub struct #struct_ident<'a> {
@@ -1878,7 +1869,7 @@ impl Generator {
                 #send_impl
                 #stream_impl
             }
-        })
+        }
     }
 
     fn builder_helper(&self, method: &OperationMethod) -> BuilderImpl {
