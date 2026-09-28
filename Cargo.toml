@@ -59,7 +59,7 @@ syn = { version = "3.0.2" }
 thiserror = "2.0.18"
 tokio = { version = "1.52.3", features = ["rt", "net"] }
 trybuild = "1.0.99"
-typify = { path = "../typify/typify" }
+typify = "0.10.0-alpha.1"
 codespace = "0.0.1-alpha.2"
 url = "2.5.8"
 unicode-ident = "1.0.24"
