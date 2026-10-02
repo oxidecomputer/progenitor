@@ -9,10 +9,10 @@ use std::{
 use openapiv3::{Components, Parameter, ReferenceOr, Response, StatusCode};
 use proc_macro2::TokenStream;
 use quote::{ToTokens, format_ident, quote};
-use typify::{TypeId, TypeSpace};
+use typify::{TypeId, typespace};
 
 use crate::{
-    Error, Generator, Result, TagStyle,
+    Construction, Error, Generator, Result, TagStyle,
     template::PathTemplate,
     util::{Case, items, parameter_map, sanitize, unique_ident_from},
 };
@@ -263,10 +263,10 @@ pub(crate) enum OperationResponseKind {
 }
 
 impl OperationResponseKind {
-    pub fn into_tokens(self, type_space: &TypeSpace) -> TokenStream {
+    pub fn into_tokens(self, typespace: &typespace::Typespace<TypeId>) -> TokenStream {
         match self {
             OperationResponseKind::Type(ref type_id) => {
-                let type_name = type_space.get_type(type_id).unwrap().ident();
+                let type_name = typespace.get_type(type_id).ident_in(crate::TYPES_MOD);
                 quote! { #type_name }
             }
             OperationResponseKind::None => {
@@ -282,7 +282,7 @@ impl OperationResponseKind {
     }
 }
 
-impl Generator {
+impl Construction {
     pub(crate) fn process_operation(
         &mut self,
         operation: &openapiv3::Operation,
@@ -315,7 +315,7 @@ impl Generator {
                         let schema = parameter_data.schema()?.to_schema();
 
                         let name = sanitize(
-                            &format!("{}-{}", operation_id, &parameter_data.name),
+                            &format!("{}-{}", operation_id, parameter_data.name),
                             Case::Pascal,
                         );
                         let typ = self.type_space.add_type_with_name(&schema, Some(name))?;
@@ -339,25 +339,22 @@ impl Generator {
                             &format!(
                                 "{}-{}",
                                 operation.operation_id.as_ref().unwrap(),
-                                &parameter_data.name,
+                                parameter_data.name,
                             ),
                             Case::Pascal,
                         );
 
                         let type_id = self.type_space.add_type_with_name(&schema, Some(name))?;
 
-                        let ty = self.type_space.get_type(&type_id).unwrap();
-
                         // If the type is itself optional, then we'll treat it
                         // as optional (irrespective of the `required` field on
                         // the parameter) and use the "inner" type.
-                        let details = ty.details();
-                        let (type_id, required) =
-                            if let typify::TypeDetails::Option(inner_type_id) = details {
-                                (inner_type_id, false)
-                            } else {
-                                (type_id, parameter_data.required)
-                            };
+                        let (type_id, required) = match self.type_space.inserted_type(&type_id) {
+                            Some(typespace::build::Type::Option(inner_type_id)) => {
+                                (inner_type_id.clone(), false)
+                            }
+                            _ => (type_id, parameter_data.required),
+                        };
 
                         Ok(OperationParameter {
                             name: sanitize(&parameter_data.name, Case::Snake),
@@ -376,7 +373,7 @@ impl Generator {
                             &format!(
                                 "{}-{}",
                                 operation.operation_id.as_ref().unwrap(),
-                                &parameter_data.name,
+                                parameter_data.name,
                             ),
                             Case::Pascal,
                         );
@@ -556,13 +553,16 @@ impl Generator {
             dropshot_websocket,
         })
     }
+}
 
+impl Generator {
     pub(crate) fn positional_method(
-        &mut self,
+        &self,
         method: &OperationMethod,
         has_inner: bool,
-    ) -> Result<TokenStream> {
+    ) -> TokenStream {
         let operation_id = format_ident!("{}", method.operation_id);
+        let typespace = self.typespace();
 
         // Render each parameter as it will appear in the method signature.
         let params = method
@@ -571,17 +571,13 @@ impl Generator {
             .map(|param| {
                 let name = format_ident!("{}", param.name);
                 let typ = match (&param.typ, param.kind.is_optional()) {
-                    (OperationParameterType::Type(type_id), false) => self
-                        .type_space
+                    (OperationParameterType::Type(type_id), false) => typespace
                         .get_type(type_id)
-                        .unwrap()
-                        .parameter_ident_with_lifetime("a"),
+                        .parameter_ident(Some(crate::TYPES_MOD), Some("a")),
                     (OperationParameterType::Type(type_id), true) => {
-                        let t = self
-                            .type_space
+                        let t = typespace
                             .get_type(type_id)
-                            .unwrap()
-                            .parameter_ident_with_lifetime("a");
+                            .parameter_ident(Some(crate::TYPES_MOD), Some("a"));
                         quote! { Option<#t> }
                     }
                     (OperationParameterType::RawBody, false) => match &param.kind {
@@ -618,7 +614,7 @@ impl Generator {
             success: success_type,
             error: error_type,
             body,
-        } = self.method_sig_body(method, quote! { Self }, quote! { self }, has_inner)?;
+        } = self.method_sig_body(method, quote! { Self }, quote! { self }, has_inner);
 
         let method_impl = quote! {
             #[doc = #doc_comment]
@@ -634,9 +630,6 @@ impl Generator {
         };
 
         let stream_impl = method.dropshot_paginated.as_ref().map(|page_data| {
-            // We're now using futures.
-            self.uses_futures = true;
-
             let stream_id = format_ident!("{}_stream", method.operation_id);
 
             // The parameters are the same as those to the paged method, but
@@ -691,8 +684,8 @@ impl Generator {
             // The item type that we've saved (by picking apart the original
             // function's return type) will be the Item type parameter for the
             // Stream type we return.
-            let item = self.type_space.get_type(&page_data.item).unwrap();
-            let item_type = item.ident();
+            let item = typespace.get_type(&page_data.item);
+            let item_type = item.ident_in(crate::TYPES_MOD);
 
             let doc_comment = make_stream_doc_comment(method);
 
@@ -761,12 +754,10 @@ impl Generator {
             }
         });
 
-        let all = quote! {
+        quote! {
             #method_impl
             #stream_impl
-        };
-
-        Ok(all)
+        }
     }
 
     /// Common code generation between positional and builder interface-styles.
@@ -778,7 +769,7 @@ impl Generator {
         client_type: TokenStream,
         client_value: TokenStream,
         has_inner: bool,
-    ) -> Result<MethodSigBody> {
+    ) -> MethodSigBody {
         let param_names = method
             .params
             .iter()
@@ -1016,16 +1007,9 @@ impl Generator {
                         ))
                     }
                 }
-                OperationResponseKind::Upgrade => {
-                    if response.status_code == OperationResponseStatus::Default {
-                        return quote! {}; // catch-all handled below
-                    } else {
-                        todo!(
-                            "non-default error response handling for \
-                                upgrade requests is not yet implemented"
-                        );
-                    }
-                }
+                // An upgrade is only ever a 101 response, which is never
+                // an error status.
+                OperationResponseKind::Upgrade => unreachable!(),
             };
 
             quote! { #pat => { #decode } }
@@ -1167,11 +1151,12 @@ impl Generator {
             }
         };
 
-        Ok(MethodSigBody {
-            success: response_type.into_tokens(&self.type_space),
-            error: error_type.into_tokens(&self.type_space),
+        let typespace = self.typespace();
+        MethodSigBody {
+            success: response_type.into_tokens(&typespace),
+            error: error_type.into_tokens(&typespace),
             body: body_impl,
-        })
+        }
     }
 
     /// Extract responses that match criteria specified by the `filter`. The
@@ -1225,7 +1210,9 @@ impl Generator {
             .unwrap_or(OperationResponseKind::None);
         (response_items, response_type)
     }
+}
 
+impl Construction {
     // Validates all the necessary conditions for Dropshot pagination. Returns
     // the paginated item type data if all conditions are met.
     fn dropshot_pagination_data(
@@ -1291,13 +1278,14 @@ impl Generator {
             (Some(success), None) => success,
         };
 
-        let typ = self.type_space.get_type(success_response).ok()?;
-        let details = match typ.details() {
-            typify::TypeDetails::Struct(details) => details,
+        let properties = match self.type_space.inserted_type(success_response) {
+            Some(typespace::build::Type::Struct(details)) => details
+                .get_properties()
+                .iter()
+                .map(|property| (property.rust_name(), property.type_id()))
+                .collect::<BTreeMap<_, _>>(),
             _ => return None,
         };
-
-        let properties = details.properties().collect::<BTreeMap<_, _>>();
 
         // There should be exactly two properties: items and next_page
         if properties.len() != 2 {
@@ -1305,15 +1293,12 @@ impl Generator {
         }
 
         // We need a next_page property that's an Option<String>.
-        if let typify::TypeDetails::Option(ref opt_id) = self
-            .type_space
-            .get_type(properties.get("next_page")?)
-            .ok()?
-            .details()
+        if let Some(typespace::build::Type::Option(opt_id)) =
+            self.type_space.inserted_type(properties.get("next_page")?)
         {
             if !matches!(
-                self.type_space.get_type(opt_id).ok()?.details(),
-                typify::TypeDetails::String
+                self.type_space.inserted_type(opt_id),
+                Some(typespace::build::Type::String)
             ) {
                 return None;
             }
@@ -1321,13 +1306,8 @@ impl Generator {
             return None;
         }
 
-        match self
-            .type_space
-            .get_type(properties.get("items")?)
-            .ok()?
-            .details()
-        {
-            typify::TypeDetails::Vec(item) => {
+        match self.type_space.inserted_type(properties.get("items")?) {
+            Some(typespace::build::Type::Vec(item)) => {
                 #[derive(serde::Deserialize, Default)]
                 struct DropshotPaginationFormat {
                     required: Vec<String>,
@@ -1337,14 +1317,16 @@ impl Generator {
                         .unwrap_or_default()
                         .required;
                 Some(DropshotPagination {
-                    item,
+                    item: item.clone(),
                     first_page_params,
                 })
             }
             _ => None,
         }
     }
+}
 
+impl Generator {
     /// Create the builder structs along with their impl bodies.
     ///
     /// Builder structs are generally of this form for a mandatory `param_1`
@@ -1421,11 +1403,11 @@ impl Generator {
     /// `send()` method above to fetch each page of results to assemble the
     /// items into a single `impl Stream`.
     pub(crate) fn builder_struct(
-        &mut self,
+        &self,
         method: &OperationMethod,
         tag_style: TagStyle,
         has_inner: bool,
-    ) -> Result<TokenStream> {
+    ) -> TokenStream {
         let struct_name = sanitize(&method.operation_id, Case::Pascal);
         let struct_ident = format_ident!("{}", struct_name);
 
@@ -1437,6 +1419,7 @@ impl Generator {
             .collect::<Vec<_>>();
 
         let client_ident = unique_ident_from("client", &param_names);
+        let typespace = self.typespace();
 
         let mut cloneable = true;
 
@@ -1446,29 +1429,29 @@ impl Generator {
             .iter()
             .map(|param| match &param.typ {
                 OperationParameterType::Type(type_id) => {
-                    let ty = self.type_space.get_type(type_id)?;
+                    let ty = typespace.get_type(type_id);
 
                     // For body parameters only, if there's a builder we'll
                     // nest that within this builder.
                     if let (OperationParameterKind::Body(_), Some(builder_name)) =
-                        (&param.kind, ty.builder())
+                        (&param.kind, ty.builder_ident(Some(crate::TYPES_MOD)))
                     {
-                        Ok(quote! { Result<#builder_name, String> })
+                        quote! { Result<#builder_name, String> }
                     } else if param.kind.is_required() {
-                        let t = ty.ident();
-                        Ok(quote! { Result<#t, String> })
+                        let t = ty.ident_in(crate::TYPES_MOD);
+                        quote! { Result<#t, String> }
                     } else {
-                        let t = ty.ident();
-                        Ok(quote! { Result<Option<#t>, String> })
+                        let t = ty.ident_in(crate::TYPES_MOD);
+                        quote! { Result<Option<#t>, String> }
                     }
                 }
 
                 OperationParameterType::RawBody => {
                     cloneable = false;
-                    Ok(quote! { Result<reqwest::Body, String> })
+                    quote! { Result<reqwest::Body, String> }
                 }
             })
-            .collect::<Result<Vec<_>>>()?;
+            .collect::<Vec<_>>();
 
         // Generate the default value value for each parameter. For optional
         // parameters it's just `Ok(None)`. For builders it's
@@ -1479,27 +1462,28 @@ impl Generator {
             .iter()
             .map(|param| match &param.typ {
                 OperationParameterType::Type(type_id) => {
-                    let ty = self.type_space.get_type(type_id)?;
+                    let ty = typespace.get_type(type_id);
 
                     // Fill in the appropriate initial value for the
                     // param_types generated above.
-                    if let (OperationParameterKind::Body(_), Some(_)) = (&param.kind, ty.builder())
+                    if let (OperationParameterKind::Body(_), Some(_)) =
+                        (&param.kind, ty.builder_ident(Some(crate::TYPES_MOD)))
                     {
-                        Ok(quote! { Ok(::std::default::Default::default()) })
+                        quote! { Ok(::std::default::Default::default()) }
                     } else if param.kind.is_required() {
                         let err_msg = format!("{} was not initialized", param.name);
-                        Ok(quote! { Err(#err_msg.to_string()) })
+                        quote! { Err(#err_msg.to_string()) }
                     } else {
-                        Ok(quote! { Ok(None) })
+                        quote! { Ok(None) }
                     }
                 }
 
                 OperationParameterType::RawBody => {
                     let err_msg = format!("{} was not initialized", param.name);
-                    Ok(quote! { Err(#err_msg.to_string()) })
+                    quote! { Err(#err_msg.to_string()) }
                 }
             })
-            .collect::<Result<Vec<_>>>()?;
+            .collect::<Vec<_>>();
 
         // For builders we map `Ok` values to perform a `try_from` to attempt
         // to convert the builder into the desired type. No "finalization" is
@@ -1509,20 +1493,20 @@ impl Generator {
             .iter()
             .map(|param| match &param.typ {
                 OperationParameterType::Type(type_id) => {
-                    let ty = self.type_space.get_type(type_id)?;
-                    if ty.builder().is_some() {
-                        let type_name = ty.ident();
-                        Ok(quote! {
+                    let ty = typespace.get_type(type_id);
+                    if ty.builder_ident(Some(crate::TYPES_MOD)).is_some() {
+                        let type_name = ty.ident_in(crate::TYPES_MOD);
+                        quote! {
                             .and_then(|v| #type_name::try_from(v)
                                 .map_err(|e| e.to_string()))
-                        })
+                        }
                     } else {
-                        Ok(quote! {})
+                        quote! {}
                     }
                 }
-                OperationParameterType::RawBody => Ok(quote! {}),
+                OperationParameterType::RawBody => quote! {},
             })
-            .collect::<Result<Vec<_>>>()?;
+            .collect::<Vec<_>>();
 
         // For each parameter, we need an impl for the builder to let consumers
         // provide a value.
@@ -1533,21 +1517,24 @@ impl Generator {
                 let param_name = format_ident!("{}", param.name);
                 match &param.typ {
                     OperationParameterType::Type(type_id) => {
-                        let ty = self.type_space.get_type(type_id)?;
-                        match (ty.builder(), param.kind.is_optional()) {
+                        let ty = typespace.get_type(type_id);
+                        match (
+                            ty.builder_ident(Some(crate::TYPES_MOD)),
+                            param.kind.is_optional(),
+                        ) {
                             // TODO right now optional body parameters are not
                             // addressed
                             (Some(_), true) => {
                                 unreachable!()
                             }
                             (None, true) => {
-                                let typ = ty.ident();
+                                let typ = ty.ident_in(crate::TYPES_MOD);
                                 let err_msg = format!(
                                     "conversion to `{}` for {} failed",
                                     ty.name(),
                                     param.name,
                                 );
-                                Ok(quote! {
+                                quote! {
                                     pub fn #param_name<V>(
                                         mut self,
                                         value: V,
@@ -1559,16 +1546,16 @@ impl Generator {
                                             .map_err(|_| #err_msg.to_string());
                                         self
                                     }
-                                })
+                                }
                             }
                             (None, false) => {
-                                let typ = ty.ident();
+                                let typ = ty.ident_in(crate::TYPES_MOD);
                                 let err_msg = format!(
                                     "conversion to `{}` for {} failed",
                                     ty.name(),
                                     param.name,
                                 );
-                                Ok(quote! {
+                                quote! {
                                     pub fn #param_name<V>(
                                         mut self,
                                         value: V,
@@ -1579,7 +1566,7 @@ impl Generator {
                                             .map_err(|_| #err_msg.to_string());
                                         self
                                     }
-                                })
+                                }
                             }
 
                             // For builder-capable bodies we offer a `body()`
@@ -1589,13 +1576,13 @@ impl Generator {
                             // builder itself.
                             (Some(builder_name), false) => {
                                 assert_eq!(param.name, "body");
-                                let typ = ty.ident();
+                                let typ = ty.ident_in(crate::TYPES_MOD);
                                 let err_msg = format!(
                                     "conversion to `{}` for {} failed: {{}}",
                                     ty.name(),
                                     param.name,
                                 );
-                                Ok(quote! {
+                                quote! {
                                     pub fn body<V>(mut self, value: V) -> Self
                                     where
                                         V: std::convert::TryInto<#typ>,
@@ -1616,7 +1603,7 @@ impl Generator {
                                         self.body = self.body.map(f);
                                         self
                                     }
-                                })
+                                }
                             }
                         }
                     }
@@ -1626,7 +1613,7 @@ impl Generator {
                             let err_msg =
                                 format!("conversion to `reqwest::Body` for {} failed", param.name,);
 
-                            Ok(quote! {
+                            quote! {
                                 pub fn #param_name<B>(mut self, value: B) -> Self
                                     where B: std::convert::TryInto<reqwest::Body>
                                 {
@@ -1634,13 +1621,13 @@ impl Generator {
                                         .map_err(|_| #err_msg.to_string());
                                     self
                                 }
-                            })
+                            }
                         }
                         OperationParameterKind::Body(BodyContentType::Text(_)) => {
                             let err_msg =
                                 format!("conversion to `String` for {} failed", param.name,);
 
-                            Ok(quote! {
+                            quote! {
                                 pub fn #param_name<V>(mut self, value: V) -> Self
                                     where V: std::convert::TryInto<String>
                                 {
@@ -1650,13 +1637,13 @@ impl Generator {
                                         .map(|v| v.into());
                                     self
                                 }
-                            })
+                            }
                         }
                         _ => unreachable!(),
                     },
                 }
             })
-            .collect::<Result<Vec<_>>>()?;
+            .collect::<Vec<_>>();
 
         let MethodSigBody {
             success,
@@ -1667,7 +1654,7 @@ impl Generator {
             quote! { super::Client },
             quote! { #client_ident },
             has_inner,
-        )?;
+        );
 
         let send_doc = format!(
             "Sends a `{}` request to `{}`",
@@ -1705,9 +1692,6 @@ impl Generator {
         };
 
         let stream_impl = method.dropshot_paginated.as_ref().map(|page_data| {
-            // We're now using futures.
-            self.uses_futures = true;
-
             let step_params = method.params.iter().filter_map(|param| {
                 if param.api_name.as_str() != "limit"
                     && matches!(param.kind, OperationParameterKind::Query(_))
@@ -1727,8 +1711,8 @@ impl Generator {
             // The item type that we've saved (by picking apart the original
             // function's return type) will be the Item type parameter for the
             // Stream impl we return.
-            let item = self.type_space.get_type(&page_data.item).unwrap();
-            let item_type = item.ident();
+            let item = typespace.get_type(&page_data.item);
+            let item_type = item.ident_in(crate::TYPES_MOD);
 
             let stream_doc = format!(
                 "Streams `{}` requests to `{}`",
@@ -1865,7 +1849,7 @@ impl Generator {
             }
         };
 
-        Ok(quote! {
+        quote! {
             #[doc = #struct_doc]
             #derive
             pub struct #struct_ident<'a> {
@@ -1885,7 +1869,7 @@ impl Generator {
                 #send_impl
                 #stream_impl
             }
-        })
+        }
     }
 
     fn builder_helper(&self, method: &OperationMethod) -> BuilderImpl {
@@ -2040,7 +2024,9 @@ impl Generator {
 
         impl_body
     }
+}
 
+impl Construction {
     fn get_body_param(
         &mut self,
         operation: &openapiv3::Operation,

@@ -3,17 +3,16 @@
 use std::collections::BTreeMap;
 
 use heck::ToKebabCase;
-use openapiv3::OpenAPI;
 use proc_macro2::TokenStream;
 use quote::{format_ident, quote};
-use typify::{Type, TypeEnumVariant, TypeSpaceImpl, TypeStructPropInfo};
+use typify::TypeId;
+use typify::typespace::TypespaceTrait;
+use typify::typespace::view::{StructProperty, TypeDetails, VariantDetails};
 
 use crate::{
-    Generator, Result,
+    Generator,
     method::{OperationParameterKind, OperationParameterType, OperationResponseStatus},
-    to_schema::ToSchema,
     util::{Case, sanitize},
-    validate_openapi,
 };
 
 struct CliOperation {
@@ -24,33 +23,8 @@ struct CliOperation {
 
 impl Generator {
     /// Generate a `clap`-based CLI.
-    pub fn cli(&mut self, spec: &OpenAPI, crate_name: &str) -> Result<TokenStream> {
-        validate_openapi(spec)?;
-
-        // Convert our components dictionary to schemars
-        let schemas = spec.components.iter().flat_map(|components| {
-            components
-                .schemas
-                .iter()
-                .map(|(name, ref_or_schema)| (name.clone(), ref_or_schema.to_schema()))
-        });
-
-        self.type_space.add_ref_types(schemas)?;
-
-        let raw_methods = spec
-            .paths
-            .iter()
-            .flat_map(|(path, ref_or_item)| {
-                // Exclude externally defined path items.
-                let item = ref_or_item.as_item().unwrap();
-                item.iter().map(move |(method, operation)| {
-                    (path.as_str(), method, operation, &item.parameters)
-                })
-            })
-            .map(|(path, method, operation, path_parameters)| {
-                self.process_operation(operation, &spec.components, path, method, path_parameters)
-            })
-            .collect::<Result<Vec<_>>>()?;
+    pub fn generate_cli(&self, crate_name: &str) -> codespace::Codespace {
+        let raw_methods = &self.raw_methods;
 
         let methods = raw_methods
             .iter()
@@ -88,10 +62,12 @@ impl Generator {
             .map(|b| syn::parse_str::<syn::Path>(b).unwrap())
             .collect::<Vec<_>>();
 
-        let code = quote! {
+        let prelude = quote! {
             use #crate_path::*;
             use anyhow::Context as _;
+        };
 
+        let cli = quote! {
             pub struct Cli<T: CliConfig> {
                 client: Client,
                 config: T,
@@ -131,7 +107,9 @@ impl Generator {
 
                 #(#execute_ops)*
             }
+        };
 
+        let config = quote! {
             pub trait CliConfig {
                 fn success_item<T>(&self, value: &ResponseValue<T>)
                 where
@@ -156,7 +134,9 @@ impl Generator {
 
                 #(#trait_ops)*
             }
+        };
 
+        let command = quote! {
             #[derive(Copy, Clone, Debug)]
             pub enum CliCommand {
                 #(#cli_variants,)*
@@ -179,13 +159,19 @@ impl Generator {
                     }
                 }
             }
-
         };
 
-        Ok(code)
+        let mut cs = codespace::Codespace::default();
+        let root = cs.get_root_mod();
+        root.add_item("", prelude);
+        root.add_item("Cli A", cli);
+        root.add_item("Cli B", config);
+        root.add_item("Cli C", command);
+        cs
     }
 
-    fn cli_method(&mut self, method: &crate::method::OperationMethod) -> CliOperation {
+    fn cli_method(&self, method: &crate::method::OperationMethod) -> CliOperation {
+        let typespace = self.typespace();
         let CliArg {
             parser: parser_args,
             consumer: consumer_args,
@@ -302,7 +288,7 @@ impl Generator {
             Some(_) => {
                 let success_type = match success_kind {
                     crate::method::OperationResponseKind::Type(type_id) => {
-                        self.type_space.get_type(&type_id).unwrap().ident()
+                        typespace.get_type(&type_id).ident_in(crate::TYPES_MOD)
                     }
                     crate::method::OperationResponseKind::None => quote! { () },
                     crate::method::OperationResponseKind::Raw => todo!(),
@@ -392,6 +378,7 @@ impl Generator {
     }
 
     fn cli_method_args(&self, method: &crate::method::OperationMethod) -> CliArg {
+        let typespace = self.typespace();
         let mut args = CliOperationArgs::default();
 
         let first_page_required_set = method
@@ -426,7 +413,7 @@ impl Generator {
             let OperationParameterType::Type(arg_type_id) = &param.typ else {
                 unreachable!("query and path parameters must be typed")
             };
-            let arg_type = self.type_space.get_type(arg_type_id).unwrap();
+            let arg_type = typespace.get_type(arg_type_id);
 
             let arg_name = param.name.to_kebab_case();
 
@@ -440,8 +427,8 @@ impl Generator {
             let OperationParameterType::Type(arg_type_id) = &param.typ else {
                 panic!()
             };
-            let arg_type = self.type_space.get_type(arg_type_id).unwrap();
-            let arg_type_name = arg_type.ident();
+            let arg_type = typespace.get_type(arg_type_id);
+            let arg_type_name = arg_type.ident_in(crate::TYPES_MOD);
 
             let consumer = quote! {
                 if let Some(value) =
@@ -471,11 +458,11 @@ impl Generator {
 
         if let Some(body_type_id) = maybe_body_type_id {
             args.body_present();
-            let body_type = self.type_space.get_type(body_type_id).unwrap();
+            let body_type = typespace.get_type(body_type_id);
             let details = body_type.details();
 
             match details {
-                typify::TypeDetails::Struct(struct_info) => {
+                TypeDetails::Struct(struct_info) => {
                     for prop_info in struct_info.properties_info() {
                         self.cli_method_body_arg(&mut args, prop_info)
                     }
@@ -530,8 +517,8 @@ impl Generator {
         let consumer_args = args.args.values().map(|CliArg { consumer, .. }| consumer);
 
         let body_json_consumer = maybe_body_type_id.map(|body_type_id| {
-            let body_type = self.type_space.get_type(body_type_id).unwrap();
-            let body_type_ident = body_type.ident();
+            let body_type = typespace.get_type(body_type_id);
+            let body_type_ident = body_type.ident_in(crate::TYPES_MOD);
             quote! {
                 if let Some(value) =
                     matches.get_one::<std::path::PathBuf>("json-body")
@@ -557,15 +544,20 @@ impl Generator {
         CliArg { parser, consumer }
     }
 
-    fn cli_method_body_arg(&self, args: &mut CliOperationArgs, prop_info: TypeStructPropInfo<'_>) {
-        let TypeStructPropInfo {
+    fn cli_method_body_arg(
+        &self,
+        args: &mut CliOperationArgs,
+        prop_info: StructProperty<'_, TypeId>,
+    ) {
+        let StructProperty {
             name,
             description,
             required,
             type_id,
         } = prop_info;
 
-        let prop_type = self.type_space.get_type(&type_id).unwrap();
+        let typespace = self.typespace();
+        let prop_type = typespace.get_type(&type_id);
 
         // TODO this is maybe a kludge--not completely sure of the right way to
         // handle option types. On one hand, we could want types from this
@@ -575,13 +567,12 @@ impl Generator {
         // sense, meaning that we need to include `"foo": null` rather than
         // omitting the field. Back to the first hand: is that last point just
         // a serde issue rather than an interface one?
-        let maybe_inner_type =
-            if let typify::TypeDetails::Option(inner_type_id) = prop_type.details() {
-                let inner_type = self.type_space.get_type(&inner_type_id).unwrap();
-                Some(inner_type)
-            } else {
-                None
-            };
+        let maybe_inner_type = if let TypeDetails::Option(inner_type_id) = prop_type.details() {
+            let inner_type = typespace.get_type(&inner_type_id);
+            Some(inner_type)
+        } else {
+            None
+        };
 
         let prop_type = if let Some(inner_type) = maybe_inner_type {
             inner_type
@@ -589,10 +580,10 @@ impl Generator {
             prop_type
         };
 
-        let scalar = prop_type.has_impl(TypeSpaceImpl::FromStr);
+        let parses_from_str = prop_type.has_impl(TypespaceTrait::FromStr);
 
         let prop_name = name.to_kebab_case();
-        if scalar && !args.has_arg(&prop_name) {
+        if parses_from_str && !args.has_arg(&prop_name) {
             let volitionality = if required {
                 Volitionality::RequiredIfNoBody
             } else {
@@ -605,8 +596,8 @@ impl Generator {
                 &prop_type,
             );
 
-            let prop_fn = format_ident!("{}", sanitize(name, Case::Snake));
-            let prop_type_ident = prop_type.ident();
+            let prop_fn = format_ident!("{}", sanitize(&name, Case::Snake));
+            let prop_type_ident = prop_type.ident_in(crate::TYPES_MOD);
             let consumer = quote! {
                 if let Some(value) =
                     matches.get_one::<#prop_type_ident>(
@@ -648,25 +639,25 @@ fn clap_arg(
     arg_name: &str,
     volitionality: Volitionality,
     description: &Option<String>,
-    arg_type: &Type,
+    arg_type: &typify::typespace::view::Type<'_, TypeId>,
 ) -> TokenStream {
     let help = description.as_ref().map(|description| {
         quote! {
             .help(#description)
         }
     });
-    let arg_type_name = arg_type.ident();
+    let arg_type_name = arg_type.ident_in(crate::TYPES_MOD);
 
     // For enums that have **only** simple variants, we do some slightly
     // fancier argument handling to expose the possible values. In particular,
     // we use clap's `PossibleValuesParser` with each variant converted to a
     // string. Then we use TypedValueParser::map to translate that into the
     // actual type of the enum.
-    let maybe_enum_parser = if let typify::TypeDetails::Enum(e) = arg_type.details() {
+    let maybe_enum_parser = if let TypeDetails::Enum(e) = arg_type.details() {
         let maybe_var_names = e
             .variants()
             .map(|(var_name, var_details)| {
-                if let TypeEnumVariant::Simple = var_details {
+                if let VariantDetails::Unit = var_details {
                     Some(format_ident!("{}", var_name))
                 } else {
                     None
