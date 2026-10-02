@@ -129,10 +129,6 @@ fn main() -> Result<()> {
     println!("-----------------------------------------------------");
     println!(" TYPE SPACE");
     println!("-----------------------------------------------------");
-    // ATTN REVIEWER: typify's `Type::describe` produced a debug
-    // description of each type; typespace's nearest answer is
-    // `name`, which names a named type and renders the identifier
-    // of an unnamed one.
     for (idx, typ) in typespace.iter_types().enumerate() {
         println!("{:>4}  {}", idx, typ.name());
     }
