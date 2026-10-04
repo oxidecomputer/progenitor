@@ -67,12 +67,6 @@ pub struct Generator {
     raw_methods: Vec<method::OperationMethod>,
     /// The finalized type graph; built once, read by every code generator.
     typespace: typespace::Typespace<typify::TypeId>,
-    uses_futures: bool,
-    uses_websockets: bool,
-    uses_chrono: bool,
-    uses_uuid: bool,
-    uses_regress: bool,
-    uses_serde_json: bool,
 }
 
 /// The type graph and operations under construction.
@@ -82,7 +76,6 @@ pub struct Generator {
 /// result.
 pub(crate) struct Construction {
     pub(crate) type_space: TypeSpace,
-    pub(crate) uses_websockets: bool,
 }
 
 /// Settings for [Generator].
@@ -369,31 +362,14 @@ impl Generator {
 
         let mut construction = Construction {
             type_space: TypeSpace::new(&type_settings),
-            uses_websockets: false,
         };
         let raw_methods = construction.construct(spec)?;
 
-        // Both interface styles emit a futures stream method for each
-        // paginated operation.
-        let uses_futures = raw_methods
-            .iter()
-            .any(|method| method.dropshot_paginated.is_some());
-
-        let Construction {
-            type_space,
-            uses_websockets,
-        } = construction;
         Ok(Self {
             settings: settings.clone(),
             spec: spec.clone(),
             raw_methods,
-            typespace: type_space.to_typespace()?,
-            uses_futures,
-            uses_websockets,
-            uses_chrono: type_space.uses_chrono(),
-            uses_uuid: type_space.uses_uuid(),
-            uses_regress: type_space.uses_regress(),
-            uses_serde_json: type_space.uses_serde_json(),
+            typespace: construction.type_space.to_typespace()?,
         })
     }
 }
@@ -435,21 +411,39 @@ impl Generator {
     ///
     /// The root module holds the client items and a `types` submodule
     /// holds the generated types; codespace fixes the order (items by
-    /// key, then submodules).
+    /// key, then submodules). The codespace tracks the crates the SDK
+    /// depends on; see [`codespace::Codespace::dependencies`].
     pub fn generate_sdk(&self) -> codespace::Codespace {
         let mut cs = codespace::Codespace::default();
         let root = cs.get_root_mod();
         root.add_item("", self.sdk_prelude());
-        let types = self.typespace().to_codespace().into_stream();
-        let mod_types = quote! {
-            #[doc = " Types used as operation parameters and responses."]
-            #[allow(clippy::all)]
-            pub mod types {
-                #types
-            }
-        };
-        root.add_item(" ", mod_types);
         root.add_item("Client", self.sdk_client());
+        let types = cs
+            .add_mod_from_codespace("types", self.typespace().to_codespace())
+            .expect("the types are the first registrations and cannot conflict");
+        types.add_docs(" Types used as operation parameters and responses.");
+        types.add_attr(quote! { allow(clippy::all) });
+        // The types precede the client, as they did before codespace held
+        // them as a module.
+        cs.get_root_mod().set_mod_key("types", " ");
+
+        let paginated = self
+            .raw_methods
+            .iter()
+            .any(|method| method.dropshot_paginated.is_some());
+        let websockets = self
+            .raw_methods
+            .iter()
+            .any(|method| method.dropshot_websocket);
+        let client_dependencies = paginated
+            .then(|| codespace::Dependency::new("futures"))
+            .into_iter()
+            .chain(websockets.then(|| codespace::Dependency::new("base64")))
+            .chain(websockets.then(|| codespace::Dependency::new("rand")));
+        for dep in client_dependencies {
+            cs.add_dependency(dep)
+                .expect("every crate is registered at any version, so none conflicts");
+        }
 
         cs
     }
@@ -768,38 +762,6 @@ impl Generator {
     /// The finalized type graph, built once by [`Generator::build`].
     pub fn typespace(&self) -> &typespace::Typespace<typify::TypeId> {
         &self.typespace
-    }
-
-    /// Whether the generated client needs to use additional crates to support
-    /// futures.
-    pub fn uses_futures(&self) -> bool {
-        self.uses_futures
-    }
-
-    /// Whether the generated client needs to use additional crates to support
-    /// websockets.
-    pub fn uses_websockets(&self) -> bool {
-        self.uses_websockets
-    }
-
-    /// Whether the generated code refers to the `chrono` crate.
-    pub fn uses_chrono(&self) -> bool {
-        self.uses_chrono
-    }
-
-    /// Whether the generated code refers to the `uuid` crate.
-    pub fn uses_uuid(&self) -> bool {
-        self.uses_uuid
-    }
-
-    /// Whether the generated code refers to the `regress` crate.
-    pub fn uses_regress(&self) -> bool {
-        self.uses_regress
-    }
-
-    /// Whether the generated code refers to the `serde_json` crate.
-    pub fn uses_serde_json(&self) -> bool {
-        self.uses_serde_json
     }
 }
 

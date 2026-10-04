@@ -29,7 +29,7 @@ pub(crate) struct OperationMethod {
     pub params: Vec<OperationParameter>,
     pub responses: Vec<OperationResponse>,
     pub dropshot_paginated: Option<DropshotPagination>,
-    dropshot_websocket: bool,
+    pub(crate) dropshot_websocket: bool,
 }
 
 pub enum HttpMethod {
@@ -402,9 +402,6 @@ impl Construction {
             .collect::<Result<Vec<_>>>()?;
 
         let dropshot_websocket = operation.extensions.get("x-dropshot-websocket").is_some();
-        if dropshot_websocket {
-            self.uses_websockets = true;
-        }
 
         if let Some(body_param) = self.get_body_param(operation, components)? {
             params.push(body_param);
