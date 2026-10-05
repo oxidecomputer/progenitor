@@ -3058,7 +3058,9 @@ checksum = "562d481066bde0658276a35467c4af00bdc6ee726305698a55b86e61d7ad82bb"
 
 [[package]]
 name = "typespace"
-version = "0.0.1-alpha.2"
+version = "0.0.1-alpha.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5ac9bd6fcb72ab3ddfb1b9b20e28520f697df23a4b4340562685e7b6a8e8dc44"
 dependencies = [
  "codespace",
  "heck",
@@ -3075,7 +3077,9 @@ dependencies = [
 
 [[package]]
 name = "typify"
-version = "0.10.0-alpha.1"
+version = "0.10.0-alpha.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "eab6c063fb5fa80e7d13d5ee5f2a3294f6184c6937fa71dfd3d5bf90487f8e73"
 dependencies = [
  "typify-impl",
  "typify-macro",
@@ -3083,7 +3087,9 @@ dependencies = [
 
 [[package]]
 name = "typify-impl"
-version = "0.10.0-alpha.1"
+version = "0.10.0-alpha.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d58fca239430de5323149f851919910aa6617c092fc752edcdf0b0d7cf3035f6"
 dependencies = [
  "heck",
  "log",
@@ -3102,7 +3108,9 @@ dependencies = [
 
 [[package]]
 name = "typify-macro"
-version = "0.10.0-alpha.1"
+version = "0.10.0-alpha.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "fa6f37d48f0fde68d2607781b376ab88970c9825598c71f3c868b5c6bdff8638"
 dependencies = [
  "proc-macro2",
  "quote",
