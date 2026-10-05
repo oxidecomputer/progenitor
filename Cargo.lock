@@ -387,7 +387,9 @@ dependencies = [
 
 [[package]]
 name = "codespace"
-version = "0.0.1-alpha.2"
+version = "0.0.1-alpha.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a9b10f68d82f8de01589cd0ab1a21cddaf271b2a936d0bb2518c56a3498efe2f"
 dependencies = [
  "proc-macro2",
  "quote",
