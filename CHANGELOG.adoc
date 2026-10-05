@@ -13,6 +13,8 @@
 
 == Unreleased changes (release date TBD)
 
+* Treat HTTP 408 Request Timeout as retryable (#1435)
+
 https://github.com/oxidecomputer/progenitor/compare/v0.15.0\...HEAD[Full list of commits]
 
 * Add `hooks = Expected` to require a user-provided `ClientHooks` impl (#1429)
