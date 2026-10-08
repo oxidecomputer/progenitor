@@ -427,22 +427,24 @@ impl Generator {
         // them as a module.
         cs.get_root_mod().set_mod_key("types", " ");
 
-        let paginated = self
+        if self
             .raw_methods
             .iter()
-            .any(|method| method.dropshot_paginated.is_some());
-        let websockets = self
+            .any(|method| method.dropshot_paginated.is_some())
+        {
+            cs.add_dependency(codespace::Dependency::new("futures"))
+                .unwrap();
+        }
+
+        if self
             .raw_methods
             .iter()
-            .any(|method| method.dropshot_websocket);
-        let client_dependencies = paginated
-            .then(|| codespace::Dependency::new("futures"))
-            .into_iter()
-            .chain(websockets.then(|| codespace::Dependency::new("base64")))
-            .chain(websockets.then(|| codespace::Dependency::new("rand")));
-        for dep in client_dependencies {
-            cs.add_dependency(dep)
-                .expect("every crate is registered at any version, so none conflicts");
+            .any(|method| method.dropshot_websocket)
+        {
+            cs.add_dependency(codespace::Dependency::new("base64"))
+                .unwrap();
+            cs.add_dependency(codespace::Dependency::new("rand"))
+                .unwrap();
         }
 
         cs
