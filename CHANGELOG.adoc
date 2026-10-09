@@ -13,10 +13,14 @@
 
 == Unreleased changes (release date TBD)
 
+https://github.com/oxidecomputer/progenitor/compare/v0.15.1\...HEAD[Full list of commits]
+
+== 0.15.1 (released 2026-10-09)
+
 * Treat HTTP 408 Request Timeout as retryable (#1435)
 * Add `hooks = Expected` to require a user-provided `ClientHooks` impl (#1429)
 
-https://github.com/oxidecomputer/progenitor/compare/v0.15.0\...HEAD[Full list of commits]
+https://github.com/oxidecomputer/progenitor/compare/v0.15.0\...v0.15.1[Full list of commits]
 
 == 0.15.0 (released 2026-09-10)
 
