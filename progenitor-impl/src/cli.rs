@@ -10,7 +10,7 @@ use typify::{Type, TypeEnumVariant, TypeSpaceImpl, TypeStructPropInfo};
 
 use crate::{
     Generator, Result,
-    method::{OperationParameterKind, OperationParameterType, OperationResponseStatus},
+    method::{OperationParameterKind, OperationParameterType},
     to_schema::ToSchema,
     util::{Case, sanitize},
     validate_openapi,
@@ -234,15 +234,15 @@ impl Generator {
         let op_name = format_ident!("{}", &method.operation_id);
 
         let (_, success_kind) =
-            self.extract_responses(method, OperationResponseStatus::is_success_or_default);
-        let (_, error_kind) =
-            self.extract_responses(method, OperationResponseStatus::is_error_or_default);
+            self.extract_responses(method, crate::method::ResponseGroup::Success);
+        let (_, error_kind) = self.extract_responses(method, crate::method::ResponseGroup::Error);
 
         let execute_and_output = match method.dropshot_paginated {
             // Normal, one-shot API calls.
             None => {
                 let success_output = match success_kind {
-                    crate::method::OperationResponseKind::Type(_) => {
+                    crate::method::OperationResponseKind::Type(_)
+                    | crate::method::OperationResponseKind::MultiType { .. } => {
                         quote! {
                             {
                                 self.config.success_item(&r);
@@ -270,6 +270,7 @@ impl Generator {
 
                 let error_output = match error_kind {
                     crate::method::OperationResponseKind::Type(_)
+                    | crate::method::OperationResponseKind::MultiType { .. }
                     | crate::method::OperationResponseKind::None => {
                         quote! {
                             {
@@ -307,9 +308,14 @@ impl Generator {
                     crate::method::OperationResponseKind::None => quote! { () },
                     crate::method::OperationResponseKind::Raw => todo!(),
                     crate::method::OperationResponseKind::Upgrade => todo!(),
+                    crate::method::OperationResponseKind::MultiType { .. } => todo!(
+                        "a paginated operation cannot have more than one \
+                         successful response type"
+                    ),
                 };
                 let error_output = match error_kind {
                     crate::method::OperationResponseKind::Type(_)
+                    | crate::method::OperationResponseKind::MultiType { .. }
                     | crate::method::OperationResponseKind::None => {
                         quote! {
                             {
