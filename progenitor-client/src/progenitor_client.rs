@@ -377,6 +377,7 @@ impl<E> Error<E> {
     /// The following are considered retryable:
     ///
     /// * Communication errors (connection reset, timeout, etc.)
+    /// * 408 Request Timeout
     /// * 429 Too Many Requests
     /// * 502 Bad Gateway
     /// * 503 Service Unavailable
@@ -548,7 +549,8 @@ where
 fn is_retryable_status(status: reqwest::StatusCode) -> bool {
     matches!(
         status,
-        reqwest::StatusCode::TOO_MANY_REQUESTS
+        reqwest::StatusCode::REQUEST_TIMEOUT
+            | reqwest::StatusCode::TOO_MANY_REQUESTS
             | reqwest::StatusCode::BAD_GATEWAY
             | reqwest::StatusCode::SERVICE_UNAVAILABLE
             | reqwest::StatusCode::GATEWAY_TIMEOUT
