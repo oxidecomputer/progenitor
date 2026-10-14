@@ -132,6 +132,10 @@ impl Generator {
                 where
                     T: #(#cli_bounds+)* schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
 
+                fn json_body_schema<T>(&self)
+                where
+                    T: #(#cli_bounds+)* schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
+
                 #(#trait_ops)*
             }
         };
@@ -499,10 +503,11 @@ impl Generator {
                         .help(#help)
                 )
                 .arg(
-                    ::clap::Arg::new("json-body-template")
-                        .long("json-body-template")
+                    ::clap::Arg::new("json-body-schema")
+                        .long("json-body-schema")
+                        .exclusive(true)
                         .action(::clap::ArgAction::SetTrue)
-                        .help("XXX")
+                        .help("Print the schema for the JSON body and exit.")
                 )
             }
         });
@@ -520,6 +525,11 @@ impl Generator {
             let body_type = typespace.get_type(body_type_id);
             let body_type_ident = body_type.ident_in(crate::TYPES_MOD);
             quote! {
+                if matches.get_flag("json-body-schema") {
+                    self.config.json_body_schema::<#body_type_ident>();
+                    return Ok(());
+                }
+
                 if let Some(value) =
                     matches.get_one::<std::path::PathBuf>("json-body")
                 {
