@@ -1816,6 +1816,7 @@ dependencies = [
  "http",
  "hyper",
  "indexmap",
+ "mime",
  "openapiv3",
  "proc-macro2",
  "progenitor-client",
