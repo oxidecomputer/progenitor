@@ -9,6 +9,7 @@ repository = "https://github.com/oxidecomputer/progenitor.git"
 readme = "../README.md"
 keywords = ["openapi", "openapiv3", "sdk", "generator", "proc_macro"]
 categories = ["api-bindings", "compilers"]
+rust-version = "1.88.0"
 
 [features]
 default = ["macro"]
