@@ -4,13 +4,38 @@ pub mod operations {
     #![doc = r" its inner type with a call to `into_inner()`. This can"]
     #![doc = r" be used to explicitly deviate from permitted values."]
     use crate::cli_gen_builder::*;
-    #[doc = r" Apply decoded query parameter pairs to the matcher."]
-    fn apply_query_param_pairs(
+    #[doc = r" Match the query parameter `name` against exactly the pairs"]
+    #[doc = r" that the client would send for `value`. Each pair must"]
+    #[doc = r" appear as many times as the client would send it, and no"]
+    #[doc = r" other values may be present for those keys. If the client"]
+    #[doc = r" would send nothing, the parameter must be absent."]
+    fn match_query_param<T: ::serde::Serialize>(
         mut when: ::httpmock::When,
-        pairs: &[(String, String)],
+        name: &str,
+        value: &T,
     ) -> ::httpmock::When {
-        for (key, value) in pairs {
-            when = when.query_param(key, value);
+        let pairs = ::progenitor_client::query_param_pairs(name, value)
+            .expect("failed to serialize query param");
+        if pairs.is_empty() {
+            return when.query_param_missing(name);
+        }
+
+        let exact = |s: &str| format!("^{}$", regex::escape(s));
+        let mut key_counts = ::std::collections::BTreeMap::<&str, usize>::new();
+        let mut pair_counts = ::std::collections::BTreeMap::<(&str, &str), usize>::new();
+        for (key, value) in &pairs {
+            *key_counts.entry(key.as_str()).or_default() += 1;
+            *pair_counts
+                .entry((key.as_str(), value.as_str()))
+                .or_default() += 1;
+        }
+
+        for ((key, value), count) in pair_counts {
+            when = when.query_param_count(exact(key), exact(value), count);
+        }
+
+        for (key, count) in key_counts {
+            when = when.query_param_count(exact(key), "(?s).*", count);
         }
 
         when
@@ -31,9 +56,7 @@ pub mod operations {
         }
 
         pub fn gateway(self, value: &str) -> Self {
-            let expected_pairs = ::progenitor_client::query_param_pairs("gateway", &value)
-                .expect("failed to serialize query param");
-            Self(apply_query_param_pairs(self.0, &expected_pairs))
+            Self(match_query_param(self.0, "gateway", &value))
         }
 
         pub fn body(self, value: &types::UnoBody) -> Self {
