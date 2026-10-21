@@ -72,6 +72,50 @@ impl Generator {
         let then = methods.iter().map(|op| &op.then).collect::<Vec<_>>();
         let then_impl = methods.iter().map(|op| &op.then_impl).collect::<Vec<_>>();
 
+        // Only emit the query parameter helper if some operation uses it.
+        let has_query_params = raw_methods.iter().any(|method| {
+            method
+                .params
+                .iter()
+                .any(|param| matches!(param.kind, OperationParameterKind::Query(_)))
+        });
+        let query_helper = has_query_params.then(|| {
+            quote! {
+                /// Match the query parameter `name` against exactly the pairs
+                /// that the client would send for `value`. Each pair must
+                /// appear as many times as the client would send it, and no
+                /// other values may be present for those keys. If the client
+                /// would send nothing, the parameter must be absent.
+                fn match_query_param<T: ::serde::Serialize>(
+                    mut when: ::httpmock::When,
+                    name: &str,
+                    value: &T,
+                ) -> ::httpmock::When {
+                    let pairs = ::progenitor_client::query_param_pairs(name, value)
+                        .expect("failed to serialize query param");
+                    if pairs.is_empty() {
+                        return when.query_param_missing(name);
+                    }
+
+                    let exact = |s: &str| format!("^{}$", regex::escape(s));
+                    let mut key_counts = ::std::collections::BTreeMap::<&str, usize>::new();
+                    let mut pair_counts =
+                        ::std::collections::BTreeMap::<(&str, &str), usize>::new();
+                    for (key, value) in &pairs {
+                        *key_counts.entry(key.as_str()).or_default() += 1;
+                        *pair_counts.entry((key.as_str(), value.as_str())).or_default() += 1;
+                    }
+                    for ((key, value), count) in pair_counts {
+                        when = when.query_param_count(exact(key), exact(value), count);
+                    }
+                    for (key, count) in key_counts {
+                        when = when.query_param_count(exact(key), "(?s).*", count);
+                    }
+                    when
+                }
+            }
+        });
+
         let crate_path = syn::TypePath {
             attrs: Default::default(),
             qself: None,
@@ -88,6 +132,8 @@ impl Generator {
                 //! be used to explicitly deviate from permitted values.
 
                 use #crate_path::*;
+
+                #query_helper
 
                 #(
                     pub struct #when(::httpmock::When);
@@ -191,7 +237,7 @@ impl Generator {
                     OperationParameterKind::Query(true) => (
                         true,
                         quote! {
-                            Self(self.0.query_param(#api_name, value.to_string()))
+                            Self(match_query_param(self.0, #api_name, &value))
                         },
                     ),
                     OperationParameterKind::Header(true) => (
@@ -205,10 +251,7 @@ impl Generator {
                         false,
                         quote! {
                             if let Some(value) = value.into() {
-                                Self(self.0.query_param(
-                                    #api_name,
-                                    value.to_string(),
-                                ))
+                                Self(match_query_param(self.0, #api_name, &value))
                             } else {
                                 Self(self.0.query_param_missing(#api_name))
                             }

@@ -4,6 +4,43 @@ pub mod operations {
     #![doc = r" its inner type with a call to `into_inner()`. This can"]
     #![doc = r" be used to explicitly deviate from permitted values."]
     use crate::param_collision_builder::*;
+    #[doc = r" Match the query parameter `name` against exactly the pairs"]
+    #[doc = r" that the client would send for `value`. Each pair must"]
+    #[doc = r" appear as many times as the client would send it, and no"]
+    #[doc = r" other values may be present for those keys. If the client"]
+    #[doc = r" would send nothing, the parameter must be absent."]
+    fn match_query_param<T: ::serde::Serialize>(
+        mut when: ::httpmock::When,
+        name: &str,
+        value: &T,
+    ) -> ::httpmock::When {
+        let pairs = ::progenitor_client::query_param_pairs(name, value)
+            .expect("failed to serialize query param");
+        if pairs.is_empty() {
+            return when.query_param_missing(name);
+        }
+
+        let exact = |s: &str| format!("^{}$", regex::escape(s));
+        let mut key_counts = ::std::collections::BTreeMap::<&str, usize>::new();
+        let mut pair_counts = ::std::collections::BTreeMap::<(&str, &str), usize>::new();
+        for (key, value) in &pairs {
+            *key_counts.entry(key.as_str()).or_default() += 1;
+            *pair_counts
+                .entry((key.as_str(), value.as_str()))
+                .or_default() += 1;
+        }
+
+        for ((key, value), count) in pair_counts {
+            when = when.query_param_count(exact(key), exact(value), count);
+        }
+
+        for (key, count) in key_counts {
+            when = when.query_param_count(exact(key), "(?s).*", count);
+        }
+
+        when
+    }
+
     pub struct KeyGetWhen(::httpmock::When);
     impl KeyGetWhen {
         pub fn new(inner: ::httpmock::When) -> Self {
@@ -24,23 +61,23 @@ pub mod operations {
         }
 
         pub fn client(self, value: bool) -> Self {
-            Self(self.0.query_param("client", value.to_string()))
+            Self(match_query_param(self.0, "client", &value))
         }
 
         pub fn request(self, value: bool) -> Self {
-            Self(self.0.query_param("request", value.to_string()))
+            Self(match_query_param(self.0, "request", &value))
         }
 
         pub fn response(self, value: bool) -> Self {
-            Self(self.0.query_param("response", value.to_string()))
+            Self(match_query_param(self.0, "response", &value))
         }
 
         pub fn result(self, value: bool) -> Self {
-            Self(self.0.query_param("result", value.to_string()))
+            Self(match_query_param(self.0, "result", &value))
         }
 
         pub fn url(self, value: bool) -> Self {
-            Self(self.0.query_param("url", value.to_string()))
+            Self(match_query_param(self.0, "url", &value))
         }
     }
 
