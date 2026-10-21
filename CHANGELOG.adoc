@@ -31,6 +31,8 @@ https://github.com/oxidecomputer/progenitor/compare/v0.15.0\...v0.15.1[Full list
 
 https://github.com/oxidecomputer/progenitor/compare/v0.14.0\...v0.15.0[Full list of commits]
 
+* Generate a response enum for an operation whose successes, or whose errors, carry more than one type, instead of panicking
+
 == 0.14.0 (released 2026-04-24)
 
 * Add CliCommand::operation_id() to get the original operationId (#1336)
