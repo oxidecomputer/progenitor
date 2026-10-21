@@ -447,20 +447,6 @@ pub mod types {
         }
     }
 
-    impl ::std::convert::TryFrom<&str> for Slot {
-        type Error = <u8 as ::std::str::FromStr>::Err;
-        fn try_from(value: &str) -> ::std::result::Result<Self, Self::Error> {
-            value.parse()
-        }
-    }
-
-    impl ::std::convert::TryFrom<String> for Slot {
-        type Error = <u8 as ::std::str::FromStr>::Err;
-        fn try_from(value: String) -> ::std::result::Result<Self, Self::Error> {
-            value.parse()
-        }
-    }
-
     ///`VolumeConstructionRequest`
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     #[serde(tag = "type")]

@@ -6,9 +6,10 @@ use std::{
     path::{Path, PathBuf},
 };
 
-use anyhow::{Result, bail};
+use anyhow::Result;
 use clap::{Parser, ValueEnum};
 use openapiv3::OpenAPI;
+use progenitor::codespace::{Codespace, Dependency};
 use progenitor::{GenerationSettings, Generator, InterfaceStyle, TagStyle};
 use progenitor_impl::space_out_items;
 
@@ -116,91 +117,79 @@ fn main() -> Result<()> {
     let CargoCli::Progenitor(args) = CargoCli::parse();
     let api = load_api(&args.input)?;
 
-    let mut builder = Generator::new(
+    let builder = Generator::build(
         GenerationSettings::default()
             .with_interface(args.interface.into())
             .with_tag(args.tags.into()),
+        &api,
+    )?;
+
+    let mut sdk = builder.generate_sdk();
+    populate_dependencies(&mut sdk, args.include_client)?;
+    let typespace = builder.typespace();
+
+    println!("-----------------------------------------------------");
+    println!(" TYPE SPACE");
+    println!("-----------------------------------------------------");
+    for (idx, typ) in typespace.iter_types().enumerate() {
+        println!("{:>4}  {}", idx, typ.name());
+    }
+    println!("-----------------------------------------------------");
+    println!();
+
+    let name = &args.name;
+    let version = &args.version;
+
+    // Create the top-level crate directory:
+    let root = PathBuf::from(&args.output);
+    std::fs::create_dir_all(&root)?;
+
+    // Write the Cargo.toml file:
+    let mut toml = root.clone();
+    toml.push("Cargo.toml");
+
+    let mut tomlout = format!(
+        "[package]\n\
+            name = \"{}\"\n\
+            version = \"{}\"\n\
+            edition = \"2024\"\n\
+            license = \"{}\"\n",
+        name, version, &args.license_name,
     );
+    if let Some(registry_name) = args.registry_name {
+        tomlout.extend(format!("publish = [\"{}\"]\n", registry_name).chars());
+    }
+    tomlout.push('\n');
+    tomlout.push_str(&sdk.to_toml_dependencies());
+    tomlout.push('\n');
 
-    match builder.generate_tokens(&api) {
-        Ok(api_code) => {
-            let type_space = builder.get_type_space();
+    save(&toml, tomlout.as_str())?;
 
-            println!("-----------------------------------------------------");
-            println!(" TYPE SPACE");
-            println!("-----------------------------------------------------");
-            for (idx, type_entry) in type_space.iter_types().enumerate() {
-                let n = type_entry.describe();
-                println!("{:>4}  {}", idx, n);
-            }
-            println!("-----------------------------------------------------");
-            println!();
+    let api_code = sdk.into_stream();
 
-            let name = &args.name;
-            let version = &args.version;
+    // Create the src/ directory:
+    let mut src = root;
+    src.push("src");
+    std::fs::create_dir_all(&src)?;
 
-            // Create the top-level crate directory:
-            let root = PathBuf::from(&args.output);
-            std::fs::create_dir_all(&root)?;
+    // Create the Rust source file containing the generated client:
+    let lib_code = if args.include_client {
+        format!("mod progenitor_client;\n\n{}", api_code)
+    } else {
+        api_code.to_string()
+    };
+    let lib_code = reformat_code(lib_code);
 
-            // Write the Cargo.toml file:
-            let mut toml = root.clone();
-            toml.push("Cargo.toml");
+    let mut librs = src.clone();
+    librs.push("lib.rs");
+    save(librs, lib_code.as_str())?;
 
-            let mut tomlout = format!(
-                "[package]\n\
-                name = \"{}\"\n\
-                version = \"{}\"\n\
-                edition = \"2024\"\n\
-                license = \"{}\"\n",
-                name, version, &args.license_name,
-            );
-            if let Some(registry_name) = args.registry_name {
-                tomlout.extend(format!("publish = [\"{}\"]\n", registry_name).chars());
-            }
-            tomlout.extend(
-                format!(
-                    "\n\
-                [dependencies]\n\
-                {}\n\
-                \n",
-                    dependencies(builder, args.include_client).join("\n"),
-                )
-                .chars(),
-            );
-
-            save(&toml, tomlout.as_str())?;
-
-            // Create the src/ directory:
-            let mut src = root;
-            src.push("src");
-            std::fs::create_dir_all(&src)?;
-
-            // Create the Rust source file containing the generated client:
-            let lib_code = if args.include_client {
-                format!("mod progenitor_client;\n\n{}", api_code)
-            } else {
-                api_code.to_string()
-            };
-            let lib_code = reformat_code(lib_code);
-
-            let mut librs = src.clone();
-            librs.push("lib.rs");
-            save(librs, lib_code.as_str())?;
-
-            // Create the Rust source file containing the support code:
-            if args.include_client {
-                let progenitor_client_code = progenitor_client::code();
-                let mut clientrs = src;
-                clientrs.push("progenitor_client.rs");
-                save(clientrs, progenitor_client_code)?;
-            }
-        }
-
-        Err(e) => {
-            println!("gen fail: {:?}", e);
-            bail!("generation experienced errors");
-        }
+    // Create the Rust source file containing the support code:
+    if args.include_client {
+        let progenitor_client_code = progenitor_client::code();
+        let mut clientrs = src;
+        clientrs.push("progenitor_client.rs");
+        save(clientrs, progenitor_client_code)?;
     }
 
     Ok(())
@@ -214,10 +203,12 @@ struct Dependencies {
     bytes: &'static str,
     chrono: &'static str,
     futures: &'static str,
+    json_serde: &'static str,
     percent_encoding: &'static str,
     rand: &'static str,
     regress: &'static str,
     reqwest: &'static str,
+    schemars: &'static str,
     serde: &'static str,
     serde_json: &'static str,
     serde_urlencoded: &'static str,
@@ -229,41 +220,45 @@ static DEPENDENCIES: Dependencies = Dependencies {
     bytes: "1.9",
     chrono: "0.4",
     futures: "0.3",
+    json_serde: "0.0.1-alpha.3",
     percent_encoding: "2.3",
     rand: "0.8",
     regress: "0.10",
     reqwest: "0.13",
+    schemars: "0.8",
     serde: "1.0",
     serde_json: "1.0",
     serde_urlencoded: "0.7",
     uuid: "1.0",
 };
 
-pub fn dependencies(builder: Generator, include_client: bool) -> Vec<String> {
-    let mut deps = vec![
-        format!("bytes = \"{}\"", DEPENDENCIES.bytes),
-        format!("futures-core = \"{}\"", DEPENDENCIES.futures),
-        format!(
-            "reqwest = {{ version = \"{}\", default-features=false, features = [\"json\", \"query\", \"stream\"] }}",
-            DEPENDENCIES.reqwest,
-        ),
-        format!(
-            "serde = {{ version = \"{}\", features = [\"derive\"] }}",
-            DEPENDENCIES.serde,
-        ),
-        format!("serde_urlencoded = \"{}\"", DEPENDENCIES.serde_urlencoded),
-    ];
-
-    let type_space = builder.get_type_space();
-    let mut needs_serde_json = false;
+/// Register on the SDK's codespace what every generated client needs and
+/// the versions this generator is tested against for the crates the
+/// code says it needs, so that the codespace writes the whole
+/// `[dependencies]` section.
+///
+/// A crate this generator has no pin for, such as one named by an
+/// `x-rust-type` extension or a crate path override, is declared as the
+/// code asks. A pin that disagrees with what the code asks is an error.
+pub fn populate_dependencies(sdk: &mut Codespace, include_client: bool) -> Result<()> {
+    // What every generated client needs, whatever the document says.
+    sdk.add_dependency(pinned("bytes", DEPENDENCIES.bytes))?;
+    sdk.add_dependency(pinned("futures-core", DEPENDENCIES.futures))?;
+    sdk.add_dependency(Dependency {
+        default_features: Some(false),
+        features: features(["json", "query", "stream"]),
+        ..pinned("reqwest", DEPENDENCIES.reqwest)
+    })?;
+    sdk.add_dependency(Dependency {
+        features: features(["derive"]),
+        ..pinned("serde", DEPENDENCIES.serde)
+    })?;
+    sdk.add_dependency(pinned("serde_urlencoded", DEPENDENCIES.serde_urlencoded))?;
 
     if include_client {
         // code included from progenitor-client needs extra dependencies
-        deps.push(format!(
-            "percent-encoding = \"{}\"",
-            DEPENDENCIES.percent_encoding
-        ));
-        needs_serde_json = true;
+        sdk.add_dependency(pinned("percent-encoding", DEPENDENCIES.percent_encoding))?;
+        sdk.add_dependency(pinned("serde_json", DEPENDENCIES.serde_json))?;
     } else {
         let crate_version =
             if let (false, Some(value)) = (is_non_release(), option_env!("CARGO_PKG_VERSION")) {
@@ -271,37 +266,57 @@ pub fn dependencies(builder: Generator, include_client: bool) -> Vec<String> {
             } else {
                 "*"
             };
-        let client_version_dep = format!("progenitor-client = \"{}\"", crate_version);
-        deps.push(client_version_dep);
+        sdk.add_dependency(pinned("progenitor-client", crate_version))?;
     }
 
-    if type_space.uses_regress() {
-        deps.push(format!("regress = \"{}\"", DEPENDENCIES.regress));
+    // The pins for whatever else the code asked for.
+    let pins = sdk
+        .dependencies()
+        .filter_map(|dep| pin_for(&dep.name))
+        .collect::<Vec<_>>();
+    for pin in pins {
+        sdk.add_dependency(pin)?;
     }
-    if type_space.uses_uuid() {
-        deps.push(format!(
-            "uuid = {{ version = \"{}\", features = [\"serde\", \"v4\"] }}",
-            DEPENDENCIES.uuid
-        ));
+    Ok(())
+}
+
+/// A dependency on `name` at the version this generator is tested against.
+fn pinned(name: &str, version: &str) -> Dependency {
+    Dependency {
+        version: version.parse().expect("the pinned versions parse"),
+        ..Dependency::new(name)
     }
-    if type_space.uses_chrono() {
-        deps.push(format!(
-            "chrono = {{ version = \"{}\", default-features=false, features = [\"serde\"] }}",
-            DEPENDENCIES.chrono
-        ));
-    }
-    if builder.uses_futures() {
-        deps.push(format!("futures = \"{}\"", DEPENDENCIES.futures));
-    }
-    if builder.uses_websockets() {
-        deps.push(format!("base64 = \"{}\"", DEPENDENCIES.base64));
-        deps.push(format!("rand = \"{}\"", DEPENDENCIES.rand));
-    }
-    if type_space.uses_serde_json() || needs_serde_json {
-        deps.push(format!("serde_json = \"{}\"", DEPENDENCIES.serde_json));
-    }
-    deps.sort_unstable();
-    deps
+}
+
+fn features<const N: usize>(names: [&str; N]) -> Vec<String> {
+    names.iter().map(|name| name.to_string()).collect()
+}
+
+/// The version and features this generator is tested against for a crate
+/// the generated code may name; `None` for a crate it has no pin for,
+/// such as one named by an `x-rust-type` extension or a crate path
+/// override, which is declared as the code asks.
+fn pin_for(name: &str) -> Option<Dependency> {
+    let pin = match name {
+        "serde_json" => pinned("serde_json", DEPENDENCIES.serde_json),
+        "regress" => pinned("regress", DEPENDENCIES.regress),
+        "uuid" => Dependency {
+            features: features(["serde", "v4"]),
+            ..pinned("uuid", DEPENDENCIES.uuid)
+        },
+        "chrono" => Dependency {
+            default_features: Some(false),
+            features: features(["serde"]),
+            ..pinned("chrono", DEPENDENCIES.chrono)
+        },
+        "futures" => pinned("futures", DEPENDENCIES.futures),
+        "base64" => pinned("base64", DEPENDENCIES.base64),
+        "rand" => pinned("rand", DEPENDENCIES.rand),
+        "schemars" => pinned("schemars", DEPENDENCIES.schemars),
+        "json-serde" => pinned("json-serde", DEPENDENCIES.json_serde),
+        _ => return None,
+    };
+    Some(pin)
 }
 
 fn load_api<P>(p: P) -> Result<OpenAPI>
