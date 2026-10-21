@@ -96,4 +96,10 @@ impl CliCommand {
     pub fn iter() -> impl Iterator<Item = CliCommand> {
         vec![CliCommand::ListWidgets].into_iter()
     }
+
+    pub fn operation_id(&self) -> &'static str {
+        match self {
+            CliCommand::ListWidgets => "list_widgets",
+        }
+    }
 }
