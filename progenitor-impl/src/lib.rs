@@ -31,6 +31,17 @@ pub use codespace;
 /// query passes it as the scope.
 pub(crate) const TYPES_MOD: &str = "types";
 
+// Ordering keys for items in the generated Codespace.
+
+/// Top level `use` statements.
+const USES_KEY: &str = "";
+/// The `prelude` module, which re-exports the `Client` and extension traits.
+const PRELUDE_KEY: &str = "  prelude";
+/// The `types` module, which holds the generated types.
+const TYPES_KEY: &str = " types";
+/// The `Client` type, its impls, and the operation code.
+const CLIENT_KEY: &str = "Client";
+
 mod cli;
 mod httpmock;
 mod method;
@@ -409,23 +420,46 @@ impl Construction {
 impl Generator {
     /// Generate the SDK as a structured [codespace::Codespace].
     ///
-    /// The root module holds the client items and a `types` submodule
-    /// holds the generated types; codespace fixes the order (items by
-    /// key, then submodules). The codespace tracks the crates the SDK
-    /// depends on; see [`codespace::Codespace::dependencies`].
+    /// The root module holds the client items, including the inline `prelude`
+    /// module. Submodules hold the generated types (`types`) and, for the
+    /// builder interface, the operation builders (`builder`); codespace fixes
+    /// the order (items by key, then submodules). The codespace tracks the
+    /// crates the SDK depends on; see [`codespace::Codespace::dependencies`].
     pub fn generate_sdk(&self) -> codespace::Codespace {
         let mut cs = codespace::Codespace::default();
-        let root = cs.get_root_mod();
-        root.add_item("", self.sdk_prelude());
-        root.add_item("Client", self.sdk_client());
+
+        // Re-export types that are used by the public interface of Client.
+        // The allow(unused_imports) on the `pub use` is necessary with Rust
+        // 1.76+, in case the generated file is not at the top level of the
+        // crate.
+        cs.add_item(
+            USES_KEY,
+            quote! {
+                #[allow(unused_imports)]
+                pub use progenitor_client::{
+                    ByteStream,
+                    ClientInfo,
+                    Error,
+                    ResponseValue,
+                };
+                #[allow(unused_imports)]
+                use progenitor_client::{
+                    encode_path,
+                    ClientHooks,
+                    OperationInfo,
+                    RequestBuilderExt,
+                };
+            },
+        );
+        self.sdk_client(&mut cs);
+        self.sdk_operations(&mut cs);
+
         let types = cs
             .add_mod_from_codespace("types", self.typespace().to_codespace())
             .expect("the types are the first registrations and cannot conflict");
         types.add_docs(" Types used as operation parameters and responses.");
         types.add_attr(quote! { allow(clippy::all) });
-        // The types precede the client, as they did before codespace held
-        // them as a module.
-        cs.get_root_mod().set_mod_key("types", " ");
+        cs.get_root_mod().set_mod_key("types", TYPES_KEY);
 
         if self
             .raw_methods
@@ -450,42 +484,18 @@ impl Generator {
         cs
     }
 
-    /// The `use` items that lead the SDK.
-    fn sdk_prelude(&self) -> TokenStream {
-        // The allow(unused_imports) on the `pub use` is necessary with Rust
-        // 1.76+, in case the generated file is not at the top level of the
-        // crate.
-
-        quote! {
-            // Re-export types that are used by the public interface of Client.
-            #[allow(unused_imports)]
-            pub use progenitor_client::{
-                ByteStream,
-                ClientInfo,
-                Error,
-                ResponseValue,
-            };
-            #[allow(unused_imports)]
-            use progenitor_client::{
-                encode_path,
-                ClientHooks,
-                OperationInfo,
-                RequestBuilderExt,
-            };
-        }
-    }
-
-    /// The client half of the SDK: the `Client` type, its impls, and the
-    /// operation code for the configured interface and tag styles.
-    fn sdk_client(&self) -> TokenStream {
+    /// Add the operation code for the configured interface and tag styles.
+    fn sdk_operations(&self, cs: &mut codespace::Codespace) {
         let raw_methods = &self.raw_methods;
-        let operation_code = match (&self.settings.interface, &self.settings.tag) {
-            (InterfaceStyle::Positional, TagStyle::Merged) => self
-                .generate_tokens_positional_merged(raw_methods, self.settings.inner_type.is_some()),
+        let has_inner = self.settings.inner_type.is_some();
+        match (&self.settings.interface, &self.settings.tag) {
+            (InterfaceStyle::Positional, TagStyle::Merged) => {
+                self.sdk_positional_merged(cs, raw_methods, has_inner)
+            }
             // Refused by Generator::build.
             (InterfaceStyle::Positional, TagStyle::Separate) => unreachable!(),
             (InterfaceStyle::Builder, TagStyle::Merged) => {
-                self.generate_tokens_builder_merged(raw_methods, self.settings.inner_type.is_some())
+                self.sdk_builder_merged(cs, raw_methods, has_inner)
             }
             (InterfaceStyle::Builder, TagStyle::Separate) => {
                 let tag_info = self
@@ -494,14 +504,13 @@ impl Generator {
                     .iter()
                     .map(|tag| (&tag.name, tag))
                     .collect::<BTreeMap<_, _>>();
-                self.generate_tokens_builder_separate(
-                    raw_methods,
-                    tag_info,
-                    self.settings.inner_type.is_some(),
-                )
+                self.sdk_builder_separate(cs, raw_methods, tag_info, has_inner)
             }
-        };
+        }
+    }
 
+    /// Add the `Client` type and its impls.
+    fn sdk_client(&self, cs: &mut codespace::Codespace) {
         let (inner_type, inner_fn_value) = match self.settings.inner_type.as_ref() {
             Some(inner_type) => (inner_type.clone(), quote! { &self.inner }),
             None => (quote! { () }, quote! { &() }),
@@ -631,46 +640,53 @@ impl Generator {
             }
 
             #client_hooks
-
-            #operation_code
         };
 
-        client
+        cs.add_item(CLIENT_KEY, client);
     }
 
-    fn generate_tokens_positional_merged(
+    fn sdk_positional_merged(
         &self,
+        cs: &mut codespace::Codespace,
         input_methods: &[method::OperationMethod],
         has_inner: bool,
-    ) -> TokenStream {
+    ) {
         let methods = input_methods
             .iter()
             .map(|method| self.positional_method(method, has_inner))
             .collect::<Vec<_>>();
 
+        cs.add_item(
+            CLIENT_KEY,
+            quote! {
+                #[allow(clippy::all)]
+                impl Client {
+                    #(#methods)*
+                }
+            },
+        );
+
         // The allow(unused_imports) on the `pub use` is necessary with Rust
         // 1.76+, in case the generated file is not at the top level of the
         // crate.
-
-        quote! {
-            #[allow(clippy::all)]
-            impl Client {
-                #(#methods)*
-            }
-
-            /// Items consumers will typically use such as the Client.
-            pub mod prelude {
-                #[allow(unused_imports)]
-                pub use super::Client;
-            }
-        }
+        cs.add_item(
+            PRELUDE_KEY,
+            quote! {
+                /// Items consumers will typically use such as the Client.
+                pub mod prelude {
+                    #[allow(unused_imports)]
+                    pub use super::Client;
+                }
+            },
+        );
     }
 
-    fn generate_tokens_builder_merged(
+    fn sdk_builder_merged(
         &self,
+        cs: &mut codespace::Codespace,
         input_methods: &[method::OperationMethod],
         has_inner: bool,
-    ) -> TokenStream {
+    ) {
         let builder_struct = input_methods
             .iter()
             .map(|method| self.builder_struct(method, TagStyle::Merged, has_inner))
@@ -681,14 +697,35 @@ impl Generator {
             .map(|method| self.builder_impl(method))
             .collect::<Vec<_>>();
 
-        quote! {
-            impl Client {
-                #(#builder_methods)*
-            }
+        cs.add_item(
+            CLIENT_KEY,
+            quote! {
+                impl Client {
+                    #(#builder_methods)*
+                }
+            },
+        );
+        Self::add_builder_mod(cs, builder_struct);
+        cs.add_item(
+            PRELUDE_KEY,
+            quote! {
+                /// Items consumers will typically use such as the Client.
+                pub mod prelude {
+                    pub use self::super::Client;
+                }
+            },
+        );
+    }
 
-            /// Types for composing operation parameters.
-            #[allow(clippy::all)]
-            pub mod builder {
+    /// Add the `builder` module to the root: the operation builder types
+    /// with the `use` items they need from the root.
+    fn add_builder_mod(cs: &mut codespace::Codespace, builder_struct: Vec<TokenStream>) {
+        let mut builder = codespace::Mod::default();
+        builder.add_docs(" Types for composing operation parameters.");
+        builder.add_attr(quote! { allow(clippy::all) });
+        builder.add_item(
+            "",
+            quote! {
                 use super::types;
                 #[allow(unused_imports)]
                 use super::{
@@ -703,21 +740,21 @@ impl Generator {
                 };
 
                 #(#builder_struct)*
-            }
-
-            /// Items consumers will typically use such as the Client.
-            pub mod prelude {
-                pub use self::super::Client;
-            }
-        }
+            },
+        );
+        cs.add_mod("builder", builder);
+        // The builders follow the client, as they did when the module was
+        // inline.
+        cs.get_root_mod().set_mod_key("builder", CLIENT_KEY);
     }
 
-    fn generate_tokens_builder_separate(
+    fn sdk_builder_separate(
         &self,
+        cs: &mut codespace::Codespace,
         input_methods: &[method::OperationMethod],
         tag_info: BTreeMap<&String, &openapiv3::Tag>,
         has_inner: bool,
-    ) -> TokenStream {
+    ) {
         let builder_struct = input_methods
             .iter()
             .map(|method| self.builder_struct(method, TagStyle::Separate, has_inner))
@@ -725,40 +762,24 @@ impl Generator {
 
         let (traits_and_impls, trait_preludes) = self.builder_tags(input_methods, &tag_info);
 
+        cs.add_item(CLIENT_KEY, traits_and_impls);
+        Self::add_builder_mod(cs, builder_struct);
+
         // The allow(unused_imports) on the `pub use` is necessary with Rust
         // 1.76+, in case the generated file is not at the top level of the
         // crate.
-
-        quote! {
-            #traits_and_impls
-
-            /// Types for composing operation parameters.
-            #[allow(clippy::all)]
-            pub mod builder {
-                use super::types;
-                #[allow(unused_imports)]
-                use super::{
-                    encode_path,
-                    ByteStream,
-                    ClientInfo,
-                    ClientHooks,
-                    Error,
-                    OperationInfo,
-                    RequestBuilderExt,
-                    ResponseValue,
-                };
-
-                #(#builder_struct)*
-            }
-
-            /// Items consumers will typically use such as the Client and
-            /// extension traits.
-            pub mod prelude {
-                #[allow(unused_imports)]
-                pub use super::Client;
-                #trait_preludes
-            }
-        }
+        cs.add_item(
+            PRELUDE_KEY,
+            quote! {
+                /// Items consumers will typically use such as the Client and
+                /// extension traits.
+                pub mod prelude {
+                    #[allow(unused_imports)]
+                    pub use super::Client;
+                    #trait_preludes
+                }
+            },
+        );
     }
 
     /// The finalized type graph, built once by [`Generator::build`].

@@ -2,6 +2,28 @@
 use progenitor_client::{encode_path, ClientHooks, OperationInfo, RequestBuilderExt};
 #[allow(unused_imports)]
 pub use progenitor_client::{ByteStream, ClientInfo, Error, ResponseValue};
+/// Items consumers will typically use such as the Client and
+/// extension traits.
+pub mod prelude {
+    #[allow(unused_imports)]
+    pub use super::Client;
+    pub use super::ClientDisksExt;
+    pub use super::ClientHiddenExt;
+    pub use super::ClientImagesExt;
+    pub use super::ClientInstancesExt;
+    pub use super::ClientLoginExt;
+    pub use super::ClientMetricsExt;
+    pub use super::ClientOrganizationsExt;
+    pub use super::ClientPolicyExt;
+    pub use super::ClientProjectsExt;
+    pub use super::ClientRolesExt;
+    pub use super::ClientSessionExt;
+    pub use super::ClientSilosExt;
+    pub use super::ClientSnapshotsExt;
+    pub use super::ClientSystemExt;
+    pub use super::ClientVpcsExt;
+}
+
 /// Types used as operation parameters and responses.
 #[allow(clippy::all)]
 pub mod types {
@@ -42637,26 +42659,4 @@ pub mod builder {
             }
         }
     }
-}
-
-/// Items consumers will typically use such as the Client and
-/// extension traits.
-pub mod prelude {
-    #[allow(unused_imports)]
-    pub use super::Client;
-    pub use super::ClientDisksExt;
-    pub use super::ClientHiddenExt;
-    pub use super::ClientImagesExt;
-    pub use super::ClientInstancesExt;
-    pub use super::ClientLoginExt;
-    pub use super::ClientMetricsExt;
-    pub use super::ClientOrganizationsExt;
-    pub use super::ClientPolicyExt;
-    pub use super::ClientProjectsExt;
-    pub use super::ClientRolesExt;
-    pub use super::ClientSessionExt;
-    pub use super::ClientSilosExt;
-    pub use super::ClientSnapshotsExt;
-    pub use super::ClientSystemExt;
-    pub use super::ClientVpcsExt;
 }
