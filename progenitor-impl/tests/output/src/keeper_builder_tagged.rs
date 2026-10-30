@@ -2,6 +2,13 @@
 use progenitor_client::{encode_path, ClientHooks, OperationInfo, RequestBuilderExt};
 #[allow(unused_imports)]
 pub use progenitor_client::{ByteStream, ClientInfo, Error, ResponseValue};
+/// Items consumers will typically use such as the Client and
+/// extension traits.
+pub mod prelude {
+    #[allow(unused_imports)]
+    pub use super::Client;
+}
+
 /// Types used as operation parameters and responses.
 #[allow(clippy::all)]
 pub mod types {
@@ -1573,11 +1580,4 @@ pub mod builder {
             }
         }
     }
-}
-
-/// Items consumers will typically use such as the Client and
-/// extension traits.
-pub mod prelude {
-    #[allow(unused_imports)]
-    pub use super::Client;
 }
