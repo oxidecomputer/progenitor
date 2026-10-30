@@ -2,19 +2,16 @@
 
 //! Generation of mocking extensions for `httpmock`
 
-use openapiv3::OpenAPI;
 use proc_macro2::TokenStream;
 use quote::{ToTokens, format_ident, quote};
 
 use crate::{
-    Generator, Result,
+    Generator,
     method::{
         BodyContentType, HttpMethod, OperationParameter, OperationParameterKind,
         OperationParameterType, OperationResponse, OperationResponseStatus,
     },
-    to_schema::ToSchema,
     util::{Case, sanitize},
-    validate_openapi,
 };
 
 struct MockOp {
@@ -30,33 +27,8 @@ impl Generator {
     /// The `crate_path` parameter should be a valid Rust path corresponding to
     /// the SDK. This can include `::` and instances of `-` in the crate name
     /// should be converted to `_`.
-    pub fn httpmock(&mut self, spec: &OpenAPI, crate_path: &str) -> Result<TokenStream> {
-        validate_openapi(spec)?;
-
-        // Convert our components dictionary to schemars
-        let schemas = spec.components.iter().flat_map(|components| {
-            components
-                .schemas
-                .iter()
-                .map(|(name, ref_or_schema)| (name.clone(), ref_or_schema.to_schema()))
-        });
-
-        self.type_space.add_ref_types(schemas)?;
-
-        let raw_methods = spec
-            .paths
-            .iter()
-            .flat_map(|(path, ref_or_item)| {
-                // Exclude externally defined path items.
-                let item = ref_or_item.as_item().unwrap();
-                item.iter().map(move |(method, operation)| {
-                    (path.as_str(), method, operation, &item.parameters)
-                })
-            })
-            .map(|(path, method, operation, path_parameters)| {
-                self.process_operation(operation, &spec.components, path, method, path_parameters)
-            })
-            .collect::<Result<Vec<_>>>()?;
+    pub fn generate_httpmock(&self, crate_path: &str) -> codespace::Codespace {
+        let raw_methods = &self.raw_methods;
 
         let methods = raw_methods
             .iter()
@@ -79,7 +51,7 @@ impl Generator {
                 .unwrap_or_else(|_| panic!("{} is not a valid identifier", crate_path)),
         };
 
-        let code = quote! {
+        let operations = quote! {
             pub mod operations {
 
                 //! [`When`](::httpmock::When) and [`Then`](::httpmock::Then)
@@ -97,7 +69,9 @@ impl Generator {
                     #then_impl
                 )*
             }
+        };
 
+        let ext = quote! {
             /// An extension trait for [`MockServer`](::httpmock::MockServer) that
             /// adds a method for each operation. These are the equivalent of
             /// type-checked [`mock()`](::httpmock::MockServer::mock) calls.
@@ -125,10 +99,16 @@ impl Generator {
                 )*
             }
         };
-        Ok(code)
+
+        let mut cs = codespace::Codespace::default();
+        let root = cs.get_root_mod();
+        root.add_item("", operations);
+        root.add_item("MockServerExt", ext);
+        cs
     }
 
-    fn httpmock_method(&mut self, method: &crate::method::OperationMethod) -> MockOp {
+    fn httpmock_method(&self, method: &crate::method::OperationMethod) -> MockOp {
+        let typespace = self.typespace();
         let when_name = sanitize(&format!("{}-when", method.operation_id), Case::Pascal);
         let when = format_ident!("{}", when_name).to_token_stream();
         let then_name = sanitize(&format!("{}-then", method.operation_id), Case::Pascal);
@@ -158,11 +138,9 @@ impl Generator {
                  description: _,
              }| {
                 let arg_type_name = match typ {
-                    OperationParameterType::Type(arg_type_id) => self
-                        .type_space
+                    OperationParameterType::Type(arg_type_id) => typespace
                         .get_type(arg_type_id)
-                        .unwrap()
-                        .parameter_ident(),
+                        .parameter_ident(Some(crate::TYPES_MOD), None),
                     OperationParameterType::RawBody => match kind {
                         OperationParameterKind::Body(BodyContentType::OctetStream) => quote! {
                             ::serde_json::Value
@@ -317,8 +295,8 @@ impl Generator {
              }| {
                 let (value_param, value_use) = match typ {
                     crate::method::OperationResponseKind::Type(arg_type_id) => {
-                        let arg_type = self.type_space.get_type(arg_type_id).unwrap();
-                        let arg_type_ident = arg_type.parameter_ident();
+                        let arg_type = typespace.get_type(arg_type_id);
+                        let arg_type_ident = arg_type.parameter_ident(Some(crate::TYPES_MOD), None);
                         (
                             quote! {
                                 value: #arg_type_ident,
