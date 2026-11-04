@@ -160,6 +160,11 @@ fn test_param_collision() {
 }
 
 #[test]
+fn test_multiple_responses() {
+    verify_apis("multiple-responses.json");
+}
+
+#[test]
 fn test_cli_gen() {
     verify_apis("cli-gen.json");
 }

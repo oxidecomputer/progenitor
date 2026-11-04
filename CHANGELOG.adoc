@@ -13,6 +13,8 @@
 
 == Unreleased changes (release date TBD)
 
+* Support operations whose success or error responses have more than one type by generating an enum with a variant per type (#344, #950)
+
 https://github.com/oxidecomputer/progenitor/compare/v0.15.1\...HEAD[Full list of commits]
 
 == 0.15.1 (released 2026-10-09)

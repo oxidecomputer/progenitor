@@ -1,0 +1,353 @@
+#[allow(unused_imports)]
+use progenitor_client::{encode_path, ClientHooks, OperationInfo, RequestBuilderExt};
+#[allow(unused_imports)]
+pub use progenitor_client::{ByteStream, ClientInfo, Error, ResponseValue};
+/// Types used as operation parameters and responses.
+#[allow(clippy::all)]
+pub mod types {
+    ///`BadRequest`
+    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    pub struct BadRequest {
+        pub message: ::std::string::String,
+    }
+
+    ///`InternalError`
+    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    pub struct InternalError {
+        pub request_id: ::std::string::String,
+    }
+
+    ///`Progress`
+    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    pub struct Progress {
+        pub percent: u8,
+    }
+
+    ///`Thing`
+    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    pub struct Thing {
+        pub name: ::std::string::String,
+    }
+
+    /// Error types.
+    pub mod error {
+        /// Error from a `TryFrom` or `FromStr` implementation.
+        pub struct ConversionError(::std::borrow::Cow<'static, str>);
+        impl ::std::error::Error for ConversionError {}
+        impl ::std::fmt::Display for ConversionError {
+            fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> Result<(), ::std::fmt::Error> {
+                ::std::fmt::Display::fmt(&self.0, f)
+            }
+        }
+
+        impl ::std::fmt::Debug for ConversionError {
+            fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> Result<(), ::std::fmt::Error> {
+                ::std::fmt::Debug::fmt(&self.0, f)
+            }
+        }
+
+        impl From<&'static str> for ConversionError {
+            fn from(value: &'static str) -> Self {
+                Self(value.into())
+            }
+        }
+
+        impl From<String> for ConversionError {
+            fn from(value: String) -> Self {
+                Self(value.into())
+            }
+        }
+    }
+
+    #[allow(unused_imports)]
+    use super::{types, ByteStream};
+    ///Success responses for `get_thing`
+    #[derive(Debug)]
+    pub enum GetThingResponses {
+        ///Status 200
+        Thing(types::Thing),
+        ///Status 202
+        Response202(::serde_json::Map<::std::string::String, ::serde_json::Value>),
+    }
+
+    ///Error responses for `get_thing`
+    #[derive(Debug)]
+    pub enum GetThingErrorResponses {
+        ///Status 400
+        BadRequest(types::BadRequest),
+        ///Status 404
+        Empty,
+        ///Status 500, 503
+        InternalError(types::InternalError),
+    }
+
+    ///Success responses for `put_thing`
+    #[derive(Debug)]
+    pub enum PutThingResponses {
+        ///Status 201
+        Thing(types::Thing),
+        ///Status 204
+        Empty,
+        ///Status default
+        InternalError(types::InternalError),
+    }
+
+    ///Success responses for `get_thing_contents`
+    pub enum GetThingContentsResponses {
+        ///Status 200
+        Stream(ByteStream),
+        ///Status 202
+        Progress(types::Progress),
+    }
+
+    impl ::std::fmt::Debug for GetThingContentsResponses {
+        fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+            match self {
+                Self::Stream(_) => f.debug_tuple("Stream").finish_non_exhaustive(),
+                Self::Progress(value) => f.debug_tuple("Progress").field(value).finish(),
+            }
+        }
+    }
+}
+
+#[derive(Clone, Debug)]
+///Client for Multiple response types
+///
+///Operations whose success or error responses have more than one type
+///
+///Version: 1.0.0
+pub struct Client {
+    pub(crate) baseurl: String,
+    pub(crate) client: reqwest::Client,
+}
+
+impl Client {
+    /// Create a new client.
+    ///
+    /// `baseurl` is the base URL provided to the internal
+    /// `reqwest::Client`, and should include a scheme and hostname,
+    /// as well as port and a path stem if applicable.
+    pub fn new(baseurl: &str) -> Self {
+        #[cfg(not(target_arch = "wasm32"))]
+        let client = {
+            let dur = ::std::time::Duration::from_secs(15u64);
+            reqwest::ClientBuilder::new()
+                .connect_timeout(dur)
+                .timeout(dur)
+        };
+        #[cfg(target_arch = "wasm32")]
+        let client = reqwest::ClientBuilder::new();
+        Self::new_with_client(baseurl, client.build().unwrap())
+    }
+
+    /// Construct a new client with an existing `reqwest::Client`,
+    /// allowing more control over its configuration.
+    ///
+    /// `baseurl` is the base URL provided to the internal
+    /// `reqwest::Client`, and should include a scheme and hostname,
+    /// as well as port and a path stem if applicable.
+    pub fn new_with_client(baseurl: &str, client: reqwest::Client) -> Self {
+        Self {
+            baseurl: baseurl.to_string(),
+            client,
+        }
+    }
+}
+
+impl ClientInfo<()> for Client {
+    fn api_version() -> &'static str {
+        "1.0.0"
+    }
+
+    fn baseurl(&self) -> &str {
+        self.baseurl.as_str()
+    }
+
+    fn client(&self) -> &reqwest::Client {
+        &self.client
+    }
+
+    fn inner(&self) -> &() {
+        &()
+    }
+}
+
+impl ClientHooks<()> for &Client {}
+#[allow(clippy::all)]
+impl Client {
+    ///Sends a `GET` request to `/things/{id}`
+    pub async fn get_thing<'a>(
+        &'a self,
+        id: &'a str,
+    ) -> Result<ResponseValue<types::GetThingResponses>, Error<types::GetThingErrorResponses>> {
+        let url = format!("{}/things/{}", self.baseurl, encode_path(&id.to_string()),);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
+        #[allow(unused_mut)]
+        let mut request = self
+            .client
+            .get(url)
+            .header(
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .headers(header_map)
+            .build()?;
+        let info = OperationInfo {
+            operation_id: "get_thing",
+        };
+        self.pre(&mut request, &info).await?;
+        let result = self.exec(request, &info).await;
+        self.post(&result, &info).await?;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => {
+                let value: ResponseValue<types::Thing> =
+                    ResponseValue::from_response(response).await?;
+                value.map(types::GetThingResponses::Thing)
+            }
+            202u16 => {
+                let value: ResponseValue<
+                    ::serde_json::Map<::std::string::String, ::serde_json::Value>,
+                > = ResponseValue::from_response(response).await?;
+                value.map(types::GetThingResponses::Response202)
+            }
+            400u16 => {
+                let value: ResponseValue<types::BadRequest> =
+                    ResponseValue::from_response(response).await?;
+                value
+                    .map(types::GetThingErrorResponses::BadRequest)
+                    .and_then(|value| Err(Error::ErrorResponse(value)))
+            }
+            404u16 => {
+                let value = ResponseValue::empty(response);
+                value
+                    .map(|()| types::GetThingErrorResponses::Empty)
+                    .and_then(|value| Err(Error::ErrorResponse(value)))
+            }
+            500u16 => {
+                let value: ResponseValue<types::InternalError> =
+                    ResponseValue::from_response(response).await?;
+                value
+                    .map(types::GetThingErrorResponses::InternalError)
+                    .and_then(|value| Err(Error::ErrorResponse(value)))
+            }
+            503u16 => {
+                let value: ResponseValue<types::InternalError> =
+                    ResponseValue::from_response(response).await?;
+                value
+                    .map(types::GetThingErrorResponses::InternalError)
+                    .and_then(|value| Err(Error::ErrorResponse(value)))
+            }
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    ///Sends a `PUT` request to `/things/{id}`
+    pub async fn put_thing<'a>(
+        &'a self,
+        id: &'a str,
+        body: &'a types::Thing,
+    ) -> Result<ResponseValue<types::PutThingResponses>, Error<types::InternalError>> {
+        let url = format!("{}/things/{}", self.baseurl, encode_path(&id.to_string()),);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
+        #[allow(unused_mut)]
+        let mut request = self
+            .client
+            .put(url)
+            .header(
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .json(&body)
+            .headers(header_map)
+            .build()?;
+        let info = OperationInfo {
+            operation_id: "put_thing",
+        };
+        self.pre(&mut request, &info).await?;
+        let result = self.exec(request, &info).await;
+        self.post(&result, &info).await?;
+        let response = result?;
+        match response.status().as_u16() {
+            201u16 => {
+                let value: ResponseValue<types::Thing> =
+                    ResponseValue::from_response(response).await?;
+                value.map(types::PutThingResponses::Thing)
+            }
+            204u16 => {
+                let value = ResponseValue::empty(response);
+                value.map(|()| types::PutThingResponses::Empty)
+            }
+            200..=299 => {
+                let value: ResponseValue<types::InternalError> =
+                    ResponseValue::from_response(response).await?;
+                value.map(types::PutThingResponses::InternalError)
+            }
+            _ => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    ///Sends a `GET` request to `/things/{id}/contents`
+    pub async fn get_thing_contents<'a>(
+        &'a self,
+        id: &'a str,
+    ) -> Result<ResponseValue<types::GetThingContentsResponses>, Error<()>> {
+        let url = format!(
+            "{}/things/{}/contents",
+            self.baseurl,
+            encode_path(&id.to_string()),
+        );
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
+        #[allow(unused_mut)]
+        let mut request = self
+            .client
+            .get(url)
+            .header(
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .headers(header_map)
+            .build()?;
+        let info = OperationInfo {
+            operation_id: "get_thing_contents",
+        };
+        self.pre(&mut request, &info).await?;
+        let result = self.exec(request, &info).await;
+        self.post(&result, &info).await?;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => {
+                let value = ResponseValue::stream(response);
+                value.map(types::GetThingContentsResponses::Stream)
+            }
+            202u16 => {
+                let value: ResponseValue<types::Progress> =
+                    ResponseValue::from_response(response).await?;
+                value.map(types::GetThingContentsResponses::Progress)
+            }
+            404u16 => Err(Error::ErrorResponse(ResponseValue::empty(response))),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+}
+
+/// Items consumers will typically use such as the Client.
+pub mod prelude {
+    #[allow(unused_imports)]
+    pub use super::Client;
+}

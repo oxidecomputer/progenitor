@@ -61,6 +61,32 @@ impl<T: std::fmt::Debug> std::fmt::Debug for ResponseValue<T> { .. }
 It can be used as the type `T` in most instances and extracted as a `T` using
 `into_inner()`.
 
+### Operations with more than one response type
+
+When an operation's success responses (or its error responses) don't all share
+one type, the generated method uses an enum with a variant per type. The enum
+is named for the operation (`GetThingResponses` for success responses,
+`GetThingErrorResponses` for error responses) and lives in the `types` module.
+Variants for named types take the type's name; a response without a body is
+`Empty`, a non-JSON body is `Stream`, and other types are named for their status
+code (e.g. `Response202`). Use `status()` on the `ResponseValue` to tell apart
+status codes that share a variant.
+
+```rust
+match client.get_thing("id").await {
+    Ok(response) => match response.into_inner() {
+        types::GetThingResponses::Thing(thing) => { .. }
+        types::GetThingResponses::Response202(_) => { .. }
+    },
+    Err(Error::ErrorResponse(response)) => match response.into_inner() {
+        types::GetThingErrorResponses::BadRequest(bad) => { .. }
+        types::GetThingErrorResponses::Empty => { .. }
+        types::GetThingErrorResponses::InternalError(e) => { .. }
+    },
+    Err(e) => { .. }
+}
+```
+
 ## `Error<E>`
 
 There are seven sub-categories of error covered by the error type variants:
