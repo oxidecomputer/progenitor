@@ -33,10 +33,11 @@ impl<T: CliConfig> Cli<T> {
                     .help("Path to a file that contains the full json body."),
             )
             .arg(
-                ::clap::Arg::new("json-body-template")
-                    .long("json-body-template")
+                ::clap::Arg::new("json-body-schema")
+                    .long("json-body-schema")
+                    .exclusive(true)
                     .action(::clap::ArgAction::SetTrue)
-                    .help("XXX"),
+                    .help("Print the schema for the JSON body and exit."),
             )
     }
 
@@ -54,6 +55,11 @@ impl<T: CliConfig> Cli<T> {
         let mut request = self.client.uno();
         if let Some(value) = matches.get_one::<::std::string::String>("gateway") {
             request = request.gateway(value.clone());
+        }
+
+        if matches.get_flag("json-body-schema") {
+            self.config.json_body_schema::<types::UnoBody>();
+            return Ok(());
         }
 
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
@@ -96,6 +102,9 @@ pub trait CliConfig {
     where
         T: std::clone::Clone + schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
     fn list_end_error<T>(&self, value: &Error<T>)
+    where
+        T: std::clone::Clone + schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
+    fn json_body_schema<T>(&self)
     where
         T: std::clone::Clone + schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
     fn execute_uno(

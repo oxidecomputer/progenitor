@@ -2,6 +2,12 @@
 use progenitor_client::{encode_path, ClientHooks, OperationInfo, RequestBuilderExt};
 #[allow(unused_imports)]
 pub use progenitor_client::{ByteStream, ClientInfo, Error, ResponseValue};
+/// Items consumers will typically use such as the Client.
+pub mod prelude {
+    #[allow(unused_imports)]
+    pub use super::Client;
+}
+
 /// Types used as operation parameters and responses.
 #[allow(clippy::all)]
 pub mod types {
@@ -447,20 +453,6 @@ pub mod types {
         }
     }
 
-    impl ::std::convert::TryFrom<&str> for Slot {
-        type Error = <u8 as ::std::str::FromStr>::Err;
-        fn try_from(value: &str) -> ::std::result::Result<Self, Self::Error> {
-            value.parse()
-        }
-    }
-
-    impl ::std::convert::TryFrom<String> for Slot {
-        type Error = <u8 as ::std::str::FromStr>::Err;
-        fn try_from(value: String) -> ::std::result::Result<Self, Self::Error> {
-            value.parse()
-        }
-    }
-
     ///`VolumeConstructionRequest`
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     #[serde(tag = "type")]
@@ -885,10 +877,4 @@ impl Client {
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
-}
-
-/// Items consumers will typically use such as the Client.
-pub mod prelude {
-    #[allow(unused_imports)]
-    pub use super::Client;
 }
