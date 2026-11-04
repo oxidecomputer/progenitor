@@ -416,6 +416,7 @@ impl Generator {
         }?;
 
         let types = self.type_space.to_stream();
+        let response_types = self.response_enum_types(&raw_methods);
 
         let (inner_type, inner_fn_value) = match self.settings.inner_type.as_ref() {
             Some(inner_type) => (inner_type.clone(), quote! { &self.inner }),
@@ -499,6 +500,7 @@ impl Generator {
             #[allow(clippy::all)]
             pub mod types {
                 #types
+                #response_types
             }
 
             #[derive(Clone, Debug)]

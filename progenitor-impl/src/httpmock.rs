@@ -340,6 +340,9 @@ impl Generator {
                         },
                     ),
                     crate::method::OperationResponseKind::Upgrade => Default::default(),
+                    crate::method::OperationResponseKind::Enum(_) => {
+                        unreachable!("individual responses have a single kind")
+                    }
                 };
 
                 match status_code {

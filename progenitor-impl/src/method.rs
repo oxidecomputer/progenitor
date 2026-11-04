@@ -260,6 +260,10 @@ pub(crate) enum OperationResponseKind {
     None,
     Raw,
     Upgrade,
+    /// More than one of the kinds above for the same class of responses
+    /// (success or error); the value is the name of a generated enum with one
+    /// variant per kind.
+    Enum(String),
 }
 
 impl OperationResponseKind {
@@ -278,8 +282,19 @@ impl OperationResponseKind {
             OperationResponseKind::Upgrade => {
                 quote! { reqwest::Upgraded }
             }
+            OperationResponseKind::Enum(name) => {
+                let type_name = format_ident!("{}", name);
+                quote! { types::#type_name }
+            }
         }
     }
+}
+
+/// A variant of a generated response enum (see [`OperationResponseKind::Enum`]).
+pub(crate) struct ResponseEnumVariant {
+    pub kind: OperationResponseKind,
+    pub ident: proc_macro2::Ident,
+    pub status_codes: Vec<String>,
 }
 
 impl Generator {
@@ -939,6 +954,7 @@ impl Generator {
         let (success_response_items, response_type) =
             self.extract_responses(method, OperationResponseStatus::is_success_or_default);
 
+        let success_variants = self.response_enum_variants(&success_response_items);
         let success_response_matches = success_response_items.iter().map(|response| {
             let pat = match &response.status_code {
                 OperationResponseStatus::Code(code) => quote! { #code },
@@ -946,6 +962,17 @@ impl Generator {
                     quote! { 200 ..= 299 }
                 }
             };
+
+            if let OperationResponseKind::Enum(_) = &response_type {
+                let decode = self.response_enum_decode(
+                    &response_type,
+                    &success_variants,
+                    &response.typ,
+                    &response_ident,
+                    false,
+                );
+                return quote! { #pat => { #decode } };
+            }
 
             let decode = match &response.typ {
                 OperationResponseKind::Type(_) => {
@@ -968,6 +995,9 @@ impl Generator {
                         ResponseValue::upgrade(#response_ident).await
                     }
                 }
+                OperationResponseKind::Enum(_) => {
+                    unreachable!("individual responses have a single kind")
+                }
             };
 
             quote! { #pat => { #decode } }
@@ -977,6 +1007,7 @@ impl Generator {
         let (error_response_items, error_type) =
             self.extract_responses(method, OperationResponseStatus::is_error_or_default);
 
+        let error_variants = self.response_enum_variants(&error_response_items);
         let error_response_matches = error_response_items.iter().map(|response| {
             let pat = match &response.status_code {
                 OperationResponseStatus::Code(code) => {
@@ -992,6 +1023,27 @@ impl Generator {
                     quote! { _ }
                 }
             };
+
+            if let OperationResponseKind::Enum(_) = &error_type {
+                if response.typ == OperationResponseKind::Upgrade {
+                    if response.status_code == OperationResponseStatus::Default {
+                        return quote! {}; // catch-all handled below
+                    } else {
+                        todo!(
+                            "non-default error response handling for \
+                                upgrade requests is not yet implemented"
+                        );
+                    }
+                }
+                let decode = self.response_enum_decode(
+                    &error_type,
+                    &error_variants,
+                    &response.typ,
+                    &response_ident,
+                    true,
+                );
+                return quote! { #pat => { #decode } };
+            }
 
             let decode = match &response.typ {
                 OperationResponseKind::Type(_) => {
@@ -1026,26 +1078,32 @@ impl Generator {
                         );
                     }
                 }
+                OperationResponseKind::Enum(_) => {
+                    unreachable!("individual responses have a single kind")
+                }
             };
 
             quote! { #pat => { #decode } }
         });
 
-        let accept_header = matches!(
-            (&response_type, &error_type),
-            (OperationResponseKind::Type(_), _)
-                | (OperationResponseKind::None, OperationResponseKind::Type(_))
-        )
-        .then(|| {
-            quote! {
-                    .header(
-                        ::reqwest::header::ACCEPT,
-                        ::reqwest::header::HeaderValue::from_static(
-                            "application/json",
-                        ),
-                    )
-            }
-        });
+        let success_json = success_response_items
+            .iter()
+            .any(|response| matches!(response.typ, OperationResponseKind::Type(_)));
+        let error_json = error_response_items
+            .iter()
+            .any(|response| matches!(response.typ, OperationResponseKind::Type(_)));
+        let accept_header = (success_json
+            || (response_type == OperationResponseKind::None && error_json))
+            .then(|| {
+                quote! {
+                        .header(
+                            ::reqwest::header::ACCEPT,
+                            ::reqwest::header::HeaderValue::from_static(
+                                "application/json",
+                            ),
+                        )
+                }
+            });
 
         // Generate the catch-all case for other statuses. If the operation
         // specifies a default response, we've already generated a default
@@ -1215,15 +1273,286 @@ impl Generator {
             .map(|response| response.typ.clone())
             .collect::<BTreeSet<_>>();
 
-        // TODO to deal with multiple response types, we'll need to create an
-        // enum type with variants for each of the response types.
-        assert!(response_types.len() <= 1);
-        let response_type = response_types
-            .into_iter()
-            .next()
-            // TODO should this be OperationResponseType::Raw?
-            .unwrap_or(OperationResponseKind::None);
+        let response_type = if response_types.len() > 1 {
+            // Responses of different kinds are represented by a generated
+            // enum with one variant per kind. A set of responses with more
+            // than one kind always includes at least one explicit status code
+            // (a lone `default` has a single kind), so the presence of an
+            // error code tells us whether these are error responses.
+            let is_error = response_items.iter().any(|response| {
+                matches!(
+                    response.status_code,
+                    OperationResponseStatus::Code(400..=599)
+                        | OperationResponseStatus::Range(4..=5)
+                )
+            });
+            OperationResponseKind::Enum(self.response_enum_name(method, is_error))
+        } else {
+            response_types
+                .into_iter()
+                .next()
+                // TODO should this be OperationResponseType::Raw?
+                .unwrap_or(OperationResponseKind::None)
+        };
         (response_items, response_type)
+    }
+
+    /// The name of the enum generated for an operation whose success (or
+    /// error) responses have more than one type, e.g. `GetThingResponses` or
+    /// `GetThingErrorResponses`.
+    fn response_enum_name(&self, method: &OperationMethod, is_error: bool) -> String {
+        let suffix = if is_error {
+            "error-responses"
+        } else {
+            "responses"
+        };
+        let base = sanitize(&format!("{}-{}", method.operation_id, suffix), Case::Pascal);
+
+        // Avoid colliding with a type from the API description.
+        let mut name = base.clone();
+        let mut n = 0;
+        while self.type_space.iter_types().any(|typ| typ.name() == name) {
+            n += 1;
+            name = format!("{}{}", base, n);
+        }
+        name
+    }
+
+    /// The variants of the enum for a set of responses with more than one
+    /// type (or an empty list if they all have the same type). Variants for
+    /// named types use the type's name; others are named for the kind of
+    /// response (`Empty`, `Stream`, `Upgrade`) or for the status code of the
+    /// first response that uses them (e.g. `Response304`).
+    pub(crate) fn response_enum_variants(
+        &self,
+        response_items: &[&OperationResponse],
+    ) -> Vec<ResponseEnumVariant> {
+        let mut variants = Vec::<ResponseEnumVariant>::new();
+        for response in response_items {
+            let status_code = match &response.status_code {
+                OperationResponseStatus::Code(code) => code.to_string(),
+                OperationResponseStatus::Range(r) => format!("{}XX", r),
+                OperationResponseStatus::Default => "default".to_string(),
+            };
+            if let Some(variant) = variants
+                .iter_mut()
+                .find(|variant| variant.kind == response.typ)
+            {
+                variant.status_codes.push(status_code);
+                continue;
+            }
+
+            let preferred = match &response.typ {
+                OperationResponseKind::Type(type_id) => {
+                    let typ = self.type_space.get_type(type_id).unwrap();
+                    match typ.details() {
+                        typify::TypeDetails::Struct(_)
+                        | typify::TypeDetails::Enum(_)
+                        | typify::TypeDetails::Newtype(_) => {
+                            Some(sanitize(&typ.name(), Case::Pascal))
+                        }
+                        _ => None,
+                    }
+                }
+                OperationResponseKind::None => Some("Empty".to_string()),
+                OperationResponseKind::Raw => Some("Stream".to_string()),
+                OperationResponseKind::Upgrade => Some("Upgrade".to_string()),
+                OperationResponseKind::Enum(_) => {
+                    unreachable!("individual responses have a single kind")
+                }
+            };
+            let fallback = match &response.status_code {
+                OperationResponseStatus::Default => "ResponseDefault".to_string(),
+                _ => format!("Response{}", status_code),
+            };
+            let name = preferred
+                .filter(|name| variants.iter().all(|variant| variant.ident != name))
+                .unwrap_or(fallback);
+
+            variants.push(ResponseEnumVariant {
+                kind: response.typ.clone(),
+                ident: format_ident!("{}", name),
+                status_codes: vec![status_code],
+            });
+        }
+
+        if variants.len() > 1 {
+            variants
+        } else {
+            Vec::new()
+        }
+    }
+
+    /// Generate the code that decodes a response of the given kind into the
+    /// generated enum for the operation's success or error responses.
+    fn response_enum_decode(
+        &self,
+        enum_type: &OperationResponseKind,
+        variants: &[ResponseEnumVariant],
+        kind: &OperationResponseKind,
+        response_ident: &proc_macro2::Ident,
+        is_error: bool,
+    ) -> TokenStream {
+        let enum_type = enum_type.clone().into_tokens(&self.type_space);
+        let variant = &variants
+            .iter()
+            .find(|variant| &variant.kind == kind)
+            .expect("every response kind has a variant")
+            .ident;
+        let value = match kind {
+            OperationResponseKind::Type(type_id) => {
+                let type_ident = self.type_space.get_type(type_id).unwrap().ident();
+                quote! {
+                    let value: ResponseValue<#type_ident> =
+                        ResponseValue::from_response(#response_ident).await?;
+                }
+            }
+            OperationResponseKind::None => quote! {
+                let value = ResponseValue::empty(#response_ident);
+            },
+            OperationResponseKind::Raw => quote! {
+                let value = ResponseValue::stream(#response_ident);
+            },
+            OperationResponseKind::Upgrade => quote! {
+                let value = ResponseValue::upgrade(#response_ident).await?;
+            },
+            OperationResponseKind::Enum(_) => {
+                unreachable!("individual responses have a single kind")
+            }
+        };
+        let constructor = match kind {
+            OperationResponseKind::None => quote! { |()| #enum_type::#variant },
+            _ => quote! { #enum_type::#variant },
+        };
+        if is_error {
+            quote! {
+                #value
+                value
+                    .map(#constructor)
+                    .and_then(|value| Err(Error::ErrorResponse(value)))
+            }
+        } else {
+            quote! {
+                #value
+                value.map(#constructor)
+            }
+        }
+    }
+
+    /// Generate the enum types for operations whose success or error
+    /// responses have more than one type. These are emitted into the `types`
+    /// module.
+    pub(crate) fn response_enum_types(&self, methods: &[OperationMethod]) -> TokenStream {
+        let filters: [fn(&OperationResponseStatus) -> bool; 2] = [
+            OperationResponseStatus::is_success_or_default,
+            OperationResponseStatus::is_error_or_default,
+        ];
+        let enums = methods
+            .iter()
+            .flat_map(|method| filters.iter().map(move |filter| (method, filter)))
+            .filter_map(|(method, filter)| {
+                let (items, kind) = self.extract_responses(method, *filter);
+                let OperationResponseKind::Enum(name) = kind else {
+                    return None;
+                };
+                let name = format_ident!("{}", name);
+                let variants = self.response_enum_variants(&items);
+                let has_stream = variants
+                    .iter()
+                    .any(|variant| variant.kind == OperationResponseKind::Raw);
+
+                let variant_defs = variants.iter().map(|variant| {
+                    let ident = &variant.ident;
+                    let doc = format!("Status {}", variant.status_codes.join(", "));
+                    let value = match &variant.kind {
+                        OperationResponseKind::Type(type_id) => {
+                            let ident = self.type_space.get_type(type_id).unwrap().ident();
+                            quote! { (#ident) }
+                        }
+                        OperationResponseKind::None => quote! {},
+                        OperationResponseKind::Raw => quote! { (ByteStream) },
+                        OperationResponseKind::Upgrade => quote! { (reqwest::Upgraded) },
+                        OperationResponseKind::Enum(_) => unreachable!(),
+                    };
+                    quote! {
+                        #[doc = #doc]
+                        #ident #value,
+                    }
+                });
+
+                // ByteStream doesn't implement Debug (required by
+                // `ResponseValue::map`), so in that case we provide an
+                // implementation rather than deriving it.
+                let (derive, debug_impl) = if has_stream {
+                    let arms = variants.iter().map(|variant| {
+                        let ident = &variant.ident;
+                        let label = ident.to_string();
+                        match &variant.kind {
+                            OperationResponseKind::None => quote! {
+                                Self::#ident => f.write_str(#label),
+                            },
+                            OperationResponseKind::Raw => quote! {
+                                Self::#ident(_) => f.debug_tuple(#label).finish_non_exhaustive(),
+                            },
+                            _ => quote! {
+                                Self::#ident(value) => f.debug_tuple(#label).field(value).finish(),
+                            },
+                        }
+                    });
+                    (
+                        quote! {},
+                        quote! {
+                            impl ::std::fmt::Debug for #name {
+                                fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+                                    match self {
+                                        #(#arms)*
+                                    }
+                                }
+                            }
+                        },
+                    )
+                } else {
+                    (quote! { #[derive(Debug)] }, quote! {})
+                };
+
+                let class = if items.iter().any(|response| {
+                    matches!(
+                        response.status_code,
+                        OperationResponseStatus::Code(400..=599)
+                            | OperationResponseStatus::Range(4..=5)
+                    )
+                }) {
+                    "Error"
+                } else {
+                    "Success"
+                };
+                let doc = format!(
+                    "{} responses for `{}`",
+                    class, method.operation_id,
+                );
+
+                Some(quote! {
+                    #[doc = #doc]
+                    #derive
+                    pub enum #name {
+                        #(#variant_defs)*
+                    }
+
+                    #debug_impl
+                })
+            })
+            .collect::<Vec<_>>();
+
+        if enums.is_empty() {
+            quote! {}
+        } else {
+            quote! {
+                #[allow(unused_imports)]
+                use super::{types, ByteStream};
+
+                #(#enums)*
+            }
+        }
     }
 
     // Validates all the necessary conditions for Dropshot pagination. Returns
@@ -1272,7 +1601,21 @@ impl Generator {
             return None;
         }
 
-        // There must be exactly one successful response type.
+        // There must be exactly one successful response type (and no
+        // successful responses of other kinds such as an empty body).
+        if responses.iter().any(|response| {
+            matches!(
+                (&response.status_code, &response.typ),
+                (
+                    OperationResponseStatus::Code(200..=299) | OperationResponseStatus::Range(2),
+                    OperationResponseKind::None
+                        | OperationResponseKind::Raw
+                        | OperationResponseKind::Upgrade
+                )
+            )
+        }) {
+            return None;
+        }
         let mut success_response_items =
             responses
                 .iter()

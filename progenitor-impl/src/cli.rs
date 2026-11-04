@@ -259,7 +259,8 @@ impl Generator {
                         }
                     }
                     crate::method::OperationResponseKind::Raw
-                    | crate::method::OperationResponseKind::Upgrade => {
+                    | crate::method::OperationResponseKind::Upgrade
+                    | crate::method::OperationResponseKind::Enum(_) => {
                         quote! {
                             {
                                 todo!()
@@ -279,7 +280,8 @@ impl Generator {
                         }
                     }
                     crate::method::OperationResponseKind::Raw
-                    | crate::method::OperationResponseKind::Upgrade => {
+                    | crate::method::OperationResponseKind::Upgrade
+                    | crate::method::OperationResponseKind::Enum(_) => {
                         quote! {
                             {
                                 todo!()
@@ -307,6 +309,7 @@ impl Generator {
                     crate::method::OperationResponseKind::None => quote! { () },
                     crate::method::OperationResponseKind::Raw => todo!(),
                     crate::method::OperationResponseKind::Upgrade => todo!(),
+                    crate::method::OperationResponseKind::Enum(_) => todo!(),
                 };
                 let error_output = match error_kind {
                     crate::method::OperationResponseKind::Type(_)
@@ -319,7 +322,8 @@ impl Generator {
                         }
                     }
                     crate::method::OperationResponseKind::Raw
-                    | crate::method::OperationResponseKind::Upgrade => {
+                    | crate::method::OperationResponseKind::Upgrade
+                    | crate::method::OperationResponseKind::Enum(_) => {
                         quote! {
                             {
                                 todo!()
