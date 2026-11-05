@@ -7,6 +7,6 @@ include!(concat!(env!("OUT_DIR"), "/codegen.rs"));
 #[cfg(target_arch = "wasm32")]
 #[wasm_bindgen_test::wasm_bindgen_test]
 fn test_client_new() {
-    let client = Client::new("http://foo/bar");
+    let client = Client::new("http://foo/bar").expect("failed to create client");
     assert!(client.baseurl == "http://foo/bar");
 }
