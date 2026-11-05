@@ -4,7 +4,7 @@
 include!(concat!(env!("OUT_DIR"), "/codegen.rs"));
 
 fn main() {
-    let client = Client::new("https://foo/bar");
+    let client = Client::new("https://foo/bar").expect("failed to create client");
     let _ = client.enrol(
         "auth-token",
         &types::EnrolBody {

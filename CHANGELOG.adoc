@@ -13,6 +13,8 @@
 
 == Unreleased changes (release date TBD)
 
+* `Client::new` returns `Result<Self, reqwest::Error>` rather than panicking on an error (#1440)
+
 https://github.com/oxidecomputer/progenitor/compare/v0.15.1\...HEAD[Full list of commits]
 
 == 0.15.1 (released 2026-10-09)

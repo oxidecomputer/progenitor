@@ -1,4 +1,4 @@
-// Copyright 2024 Oxide Computer Company
+// Copyright 2026 Oxide Computer Company
 
 use dropshot::{
     ApiDescription, Body, ConfigDropshot, ConfigLogging, ConfigLoggingLevel, EmptyScanParams,
@@ -281,7 +281,7 @@ async fn test_stream_pagination() {
         include!("output/src/test_stream_pagination_positional.rs");
     }
 
-    let client = gen_client_positional::Client::new(&server_addr);
+    let client = gen_client_positional::Client::new(&server_addr).expect("failed to create client");
 
     let page_limit = 10.try_into().unwrap();
     let mut stream = client.paginated_u32s_stream(Some(page_limit));
@@ -326,7 +326,7 @@ async fn test_stream_pagination() {
         include!("output/src/test_stream_pagination_builder.rs");
     }
 
-    let client = gen_client_builder::Client::new(&server_addr);
+    let client = gen_client_builder::Client::new(&server_addr).expect("failed to create client");
 
     let mut stream = client.paginated_u32s().limit(page_limit).stream();
 
