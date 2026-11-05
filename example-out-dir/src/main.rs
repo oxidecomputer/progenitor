@@ -10,7 +10,7 @@ generate_api!(
 );
 
 fn main() {
-    let client = Client::new("https://example.com");
+    let client = Client::new("https://example.com").expect("failed to create client");
     std::mem::drop(client.enrol(
         "auth-token",
         &types::EnrolBody {

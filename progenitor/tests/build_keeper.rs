@@ -4,7 +4,7 @@ mod positional {
     progenitor::generate_api!("../sample_openapi/keeper.json");
 
     fn _ignore() {
-        let _ = Client::new("").enrol(
+        let _ = Client::new("").unwrap().enrol(
             "auth token",
             &types::EnrolBody {
                 host: "".to_string(),
@@ -23,6 +23,7 @@ mod builder_untagged {
 
     fn _ignore() {
         let _ = Client::new("")
+            .unwrap()
             .enrol()
             .authorization("")
             .body(types::EnrolBody {
@@ -42,6 +43,7 @@ mod builder_tagged {
 
     fn _ignore() {
         let _ = Client::new("")
+            .unwrap()
             .enrol()
             .authorization("")
             .body(types::EnrolBody {
