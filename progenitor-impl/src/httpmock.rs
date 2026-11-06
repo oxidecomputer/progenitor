@@ -330,6 +330,9 @@ impl Generator {
                         )
                     }
                     crate::method::OperationResponseKind::None => Default::default(),
+                    crate::method::OperationResponseKind::MultiType { .. } => {
+                        unreachable!("We're going trough the responses one at a time, we can't get more than one'")
+                    }
                     crate::method::OperationResponseKind::Raw => (
                         quote! {
                             value: ::serde_json::Value,
