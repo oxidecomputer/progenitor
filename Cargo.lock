@@ -190,12 +190,6 @@ dependencies = [
 
 [[package]]
 name = "base64"
-version = "0.22.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "72b3254f16251a8381aa12e40e3c4d2f0199f8c6508fbecb9d91f575e0fbb8c6"
-
-[[package]]
-name = "base64"
 version = "0.23.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ac07cdecf99051d9a5238b80f35af32cdeba5b336e55d957b318b50137e18da5"
@@ -584,14 +578,14 @@ dependencies = [
 
 [[package]]
 name = "dropshot"
-version = "0.17.1"
+version = "0.18.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "803c4a57fd2a611df2ddd7069a62a565253368ee96ad4e5ac2e74e625dcf8430"
+checksum = "4a9e64e150bf661306cc9fa32c25996cb37025edebcbe55e80669750aa90b703"
 dependencies = [
  "async-compression",
  "async-stream",
  "async-trait",
- "base64 0.22.1",
+ "base64",
  "bytes",
  "camino",
  "chrono",
@@ -610,7 +604,6 @@ dependencies = [
  "paste",
  "percent-encoding",
  "rustls",
- "rustls-pemfile",
  "schemars",
  "scopeguard",
  "semver",
@@ -636,17 +629,17 @@ dependencies = [
 
 [[package]]
 name = "dropshot_endpoint"
-version = "0.17.1"
+version = "0.18.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5f176851eb52822c728ad7a1c5aea0e3c95e68d9876cfa06ae32d5018730acb4"
+checksum = "c7dfe21674cd808e8b344cc9d3ea107108846effc782c535ddf0bd2753443226"
 dependencies = [
  "heck",
  "proc-macro2",
  "quote",
  "semver",
  "serde",
- "serde_tokenstream 0.2.3",
- "syn 2.0.119",
+ "serde_tokenstream",
+ "syn 3.0.9",
 ]
 
 [[package]]
@@ -726,14 +719,14 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "39cab71617ae0d63f51a36d69f866391735b51691dbda63cf6f96d042b63efeb"
 dependencies = [
  "libc",
- "windows-sys 0.59.0",
+ "windows-sys 0.61.2",
 ]
 
 [[package]]
 name = "example-build"
 version = "0.0.1"
 dependencies = [
- "base64 0.23.1",
+ "base64",
  "chrono",
  "prettyplease",
  "progenitor",
@@ -773,7 +766,7 @@ dependencies = [
 name = "example-wasm"
 version = "0.1.0"
 dependencies = [
- "base64 0.23.1",
+ "base64",
  "chrono",
  "prettyplease",
  "progenitor",
@@ -1138,7 +1131,7 @@ version = "0.1.21"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ddc03d96684f9226b8a787cdb71488417b53ab5ea8fdb1dac946cb9431cc8bff"
 dependencies = [
- "base64 0.23.1",
+ "base64",
  "bytes",
  "futures-channel",
  "futures-util",
@@ -1313,7 +1306,7 @@ checksum = "3640c1c38b8e4e43584d8df18be5fc6b0aa314ce6ebf51b53313d4306cca8e46"
 dependencies = [
  "hermit-abi",
  "libc",
- "windows-sys 0.59.0",
+ "windows-sys 0.61.2",
 ]
 
 [[package]]
@@ -1579,7 +1572,7 @@ version = "0.50.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7957b9740744892f114936ab4a57b3f487491bbeafaf8083688b16841a4240e5"
 dependencies = [
- "windows-sys 0.59.0",
+ "windows-sys 0.61.2",
 ]
 
 [[package]]
@@ -1772,7 +1765,7 @@ dependencies = [
 name = "progenitor"
 version = "0.15.1"
 dependencies = [
- "base64 0.23.1",
+ "base64",
  "chrono",
  "futures",
  "percent-encoding",
@@ -1846,7 +1839,7 @@ dependencies = [
  "schemars",
  "serde",
  "serde_json",
- "serde_tokenstream 0.3.0",
+ "serde_tokenstream",
  "serde_yaml",
  "syn 3.0.9",
 ]
@@ -1905,7 +1898,7 @@ dependencies = [
  "once_cell",
  "socket2",
  "tracing",
- "windows-sys 0.59.0",
+ "windows-sys 0.61.2",
 ]
 
 [[package]]
@@ -2002,7 +1995,7 @@ version = "0.13.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "16a1cfa75cc186dd73d5818e510e042e40927bccc9c236b061cea97e1eb08029"
 dependencies = [
- "base64 0.23.1",
+ "base64",
  "bytes",
  "encoding_rs",
  "futures-core",
@@ -2105,7 +2098,7 @@ dependencies = [
  "errno",
  "libc",
  "linux-raw-sys 0.12.1",
- "windows-sys 0.59.0",
+ "windows-sys 0.61.2",
 ]
 
 [[package]]
@@ -2136,15 +2129,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "rustls-pemfile"
-version = "2.2.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "dce314e5fee3f39953d46bb63bb8a46d40c2f8fb7cc5a3b6cab2bde9721d6e50"
-dependencies = [
- "rustls-pki-types",
-]
-
-[[package]]
 name = "rustls-pki-types"
 version = "1.15.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2172,7 +2156,7 @@ dependencies = [
  "security-framework",
  "security-framework-sys",
  "webpki-root-certs",
- "windows-sys 0.59.0",
+ "windows-sys 0.61.2",
 ]
 
 [[package]]
@@ -2365,18 +2349,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "4e7523beb55eece201a2356bee0bbca0d1ab466c14c07703b2e0ee6d42cb0c2c"
 dependencies = [
  "serde_core",
-]
-
-[[package]]
-name = "serde_tokenstream"
-version = "0.2.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d7c49585c52c01f13c5c2ebb333f14f6885d76daa768d8a037d28017ec538c69"
-dependencies = [
- "proc-macro2",
- "quote",
- "serde",
- "syn 2.0.119",
 ]
 
 [[package]]
@@ -2667,7 +2639,7 @@ dependencies = [
  "getrandom 0.4.3",
  "once_cell",
  "rustix 1.1.5",
- "windows-sys 0.59.0",
+ "windows-sys 0.61.2",
 ]
 
 [[package]]
@@ -2676,7 +2648,7 @@ version = "1.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d8c27177b12a6399ffc08b98f76f7c9a1f4fe9fc967c784c5a071fa8d93cf7e1"
 dependencies = [
- "windows-sys 0.59.0",
+ "windows-sys 0.61.2",
 ]
 
 [[package]]
@@ -3069,7 +3041,7 @@ dependencies = [
  "semver",
  "serde",
  "serde_json",
- "serde_tokenstream 0.3.0",
+ "serde_tokenstream",
  "syn 3.0.9",
  "typify-impl",
 ]
@@ -3348,7 +3320,7 @@ version = "0.1.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c2a7b1c03c876122aa43f3020e6c3c3ee5c05081c9a00739faf7503aeba10d22"
 dependencies = [
- "windows-sys 0.59.0",
+ "windows-sys 0.61.2",
 ]
 
 [[package]]
