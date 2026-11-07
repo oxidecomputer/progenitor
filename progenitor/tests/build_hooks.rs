@@ -53,7 +53,7 @@ impl ClientHooks for hooks_expected::Client {
 
 #[tokio::test]
 async fn test_hooks_expected_runs_user_impl() {
-    let client = hooks_expected::Client::new("http://127.0.0.1:0");
+    let client = hooks_expected::Client::new("http://127.0.0.1:0").unwrap();
     match client.ping("token").await {
         Err(Error::Custom(msg)) => assert_eq!(msg, "pre: ping"),
         other => panic!("unexpected result: {other:?}"),

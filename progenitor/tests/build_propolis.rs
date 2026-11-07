@@ -14,6 +14,7 @@ use propolis_client::Client;
 pub fn _ignore() {
     let _ = async {
         let _upgraded: reqwest::Upgraded = Client::new("")
+            .unwrap()
             .instance_serial()
             .send()
             .await

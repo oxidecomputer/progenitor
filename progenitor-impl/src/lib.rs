@@ -583,10 +583,13 @@ impl Generator {
                 /// `baseurl` is the base URL provided to the internal
                 /// `reqwest::Client`, and should include a scheme and hostname,
                 /// as well as port and a path stem if applicable.
+                ///
+                /// Returns an error if the `reqwest::Client` cannot be built,
+                /// for example when the TLS backend fails to initialize.
                 pub fn new(
                     baseurl: &str,
                     #inner_parameter
-                ) -> Self {
+                ) -> Result<Self, reqwest::Error> {
                     #[cfg(not(target_arch = "wasm32"))]
                     let client = {
                         let dur = ::std::time::Duration::from_secs(#client_timeout);
@@ -599,7 +602,7 @@ impl Generator {
                     #[cfg(target_arch = "wasm32")]
                     let client = reqwest::ClientBuilder::new();
 
-                    Self::new_with_client(baseurl, client.build().unwrap(), #inner_value)
+                    Ok(Self::new_with_client(baseurl, client.build()?, #inner_value))
                 }
 
                 /// Construct a new client with an existing `reqwest::Client`,

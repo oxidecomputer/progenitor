@@ -11,7 +11,7 @@ mod positional {
 
     fn _ignore() {
         let _ = async {
-            let client = Client::new("");
+            let client = Client::new("").unwrap();
             let org = types::Name::try_from("org").unwrap();
             let project = types::Name::try_from("project").unwrap();
             let instance = types::Name::try_from("instance").unwrap();
@@ -61,7 +61,7 @@ mod builder_untagged {
         // Verify the replacement above.
         let _ignore = nexus_client::types::IpNet::V4("".parse().unwrap());
 
-        let client = Client::new("");
+        let client = Client::new("").unwrap();
         let stream = client
             .instance_disk_list()
             .organization_name("org")
@@ -88,7 +88,7 @@ mod builder_tagged {
     use self::nexus_client::types;
 
     async fn _ignore() {
-        let client = Client::new("");
+        let client = Client::new("").unwrap();
         let stream = client
             .instance_disk_list()
             .organization_name("org")
@@ -110,6 +110,7 @@ mod builder_tagged {
     #[should_panic = "called `Result::unwrap()` on an `Err` value: Invalid Request: conversion to `SiloCreate` for body failed: no value supplied for description"]
     async fn test_decent_error_from_body_builder() {
         let _ = Client::new("")
+            .unwrap()
             .silo_create()
             .body(types::SiloCreate::builder())
             .send()
