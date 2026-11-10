@@ -355,3 +355,86 @@ async fn test_stream_pagination() {
 
     server.close().await.expect("failed to close server");
 }
+
+/// Two response types in one group (the error group in this case).
+#[test]
+fn test_multiple_response_types() {
+    let spec = serde_json::from_value::<OpenAPI>(serde_json::json!({
+        "openapi": "3.0.3",
+        "info": { "title": "multiple response types", "version": "1.0.0" },
+        "paths": {
+            "/ready": {
+                "get": {
+                    "operationId": "get_ready",
+                    "responses": {
+                        "200": {
+                            "description": "ready",
+                            "content": { "application/json": {
+                                "schema": { "$ref": "#/components/schemas/Readiness" } } }
+                        },
+                        "503": {
+                            "description": "not ready, with the detail of why",
+                            "content": { "application/json": {
+                                "schema": { "$ref": "#/components/schemas/Readiness" } } }
+                        },
+                        "500": {
+                            "description": "failed",
+                            "content": { "application/json": {
+                                "schema": { "$ref": "#/components/schemas/Error" } } }
+                        }
+                    }
+                }
+            },
+            "/thing": {
+                "put": {
+                    "operationId": "put_thing",
+                    "responses": {
+                        "200": {
+                            "description": "the thing as it now stands",
+                            "content": { "application/json": {
+                                "schema": { "$ref": "#/components/schemas/Thing" } } }
+                        },
+                        "202": {
+                            "description": "accepted, and being applied",
+                            "content": { "application/json": {
+                                "schema": { "$ref": "#/components/schemas/Accepted" } } }
+                        },
+                        "204": { "description": "nothing to change" }
+                    }
+                }
+            }
+        },
+        "components": {
+            "schemas": {
+                "Readiness": {
+                    "type": "object",
+                    "properties": { "ready": { "type": "boolean" } },
+                    "required": [ "ready" ]
+                },
+                "Error": {
+                    "type": "object",
+                    "properties": { "message": { "type": "string" } },
+                    "required": [ "message" ]
+                },
+                "Thing": {
+                    "type": "object",
+                    "properties": { "name": { "type": "string" } },
+                    "required": [ "name" ]
+                },
+                "Accepted": {
+                    "type": "object",
+                    "properties": { "job": { "type": "string" } },
+                    "required": [ "job" ]
+                }
+            }
+        }
+    }))
+    .unwrap();
+
+    let mut generator = Generator::default();
+    let output = generate_formatted(&mut generator, &spec);
+    expectorate::assert_contents(
+        format!("tests/output/src/{}.rs", "test_multiple_response_types"),
+        &output,
+    )
+}
