@@ -1,6 +1,6 @@
 [package]
 name = "progenitor-impl"
-version = "0.16.0"
+version = "0.17.0-alpha.1"
 edition.workspace = true
 rust-version.workspace = true
 license.workspace = true
@@ -21,6 +21,7 @@ serde = { workspace = true }
 serde_json = { workspace = true }
 syn = { workspace = true }
 thiserror = { workspace = true }
+codespace = { workspace = true }
 typify = { workspace = true }
 unicode-ident = { workspace = true }
 

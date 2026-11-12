@@ -249,7 +249,7 @@ dependencies = [
 
 [[package]]
 name = "cargo-progenitor"
-version = "0.16.0"
+version = "0.17.0-alpha.1"
 dependencies = [
  "anyhow",
  "assert_cmd",
@@ -378,6 +378,19 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c0f78a02292a74a88ac736019ab962ece0bc380e3f977bf72e376c5d78ff0678"
 dependencies = [
  "cc",
+]
+
+[[package]]
+name = "codespace"
+version = "0.0.1-alpha.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a9b10f68d82f8de01589cd0ab1a21cddaf271b2a936d0bb2518c56a3498efe2f"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "semver",
+ "syn 3.0.9",
+ "version-ranges",
 ]
 
 [[package]]
@@ -1763,7 +1776,7 @@ dependencies = [
 
 [[package]]
 name = "progenitor"
-version = "0.16.0"
+version = "0.17.0-alpha.1"
 dependencies = [
  "base64",
  "chrono",
@@ -1785,7 +1798,7 @@ dependencies = [
 
 [[package]]
 name = "progenitor-client"
-version = "0.16.0"
+version = "0.17.0-alpha.1"
 dependencies = [
  "bytes",
  "futures-core",
@@ -1800,8 +1813,9 @@ dependencies = [
 
 [[package]]
 name = "progenitor-impl"
-version = "0.16.0"
+version = "0.17.0-alpha.1"
 dependencies = [
+ "codespace",
  "dropshot",
  "expectorate",
  "futures",
@@ -1830,7 +1844,7 @@ dependencies = [
 
 [[package]]
 name = "progenitor-macro"
-version = "0.16.0"
+version = "0.17.0-alpha.1"
 dependencies = [
  "openapiv3",
  "proc-macro2",
@@ -2549,6 +2563,27 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7da8b5736845d9f2fcb837ea5d9e2628564b3b043a70948a3f0b778838c5fb4f"
 
 [[package]]
+name = "strum"
+version = "0.28.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "9628de9b8791db39ceda2b119bbe13134770b56c138ec1d3af810d045c04f9bd"
+dependencies = [
+ "strum_macros",
+]
+
+[[package]]
+name = "strum_macros"
+version = "0.28.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ab85eea0270ee17587ed4156089e10b9e6880ee688791d45a905f5b1ca36f664"
+dependencies = [
+ "heck",
+ "proc-macro2",
+ "quote",
+ "syn 2.0.119",
+]
+
+[[package]]
 name = "subtle"
 version = "2.6.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3000,10 +3035,29 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b6f5e870be6c3b371b77fe0ee0bafb859fa4964b4404c27de1d380043c4dda20"
 
 [[package]]
-name = "typify"
-version = "0.8.0"
+name = "typespace"
+version = "0.0.1-alpha.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "71187d2e983363e9a6ca884f7b061620bc6da4316902058e74bbc9d61c347696"
+checksum = "4a6d2e65af738a56413ffeec4a912246a37cbc3e95e7bf5241d971bdce10ae47"
+dependencies = [
+ "codespace",
+ "heck",
+ "log",
+ "proc-macro2",
+ "quote",
+ "schemars",
+ "serde",
+ "serde_json",
+ "strum",
+ "syn 3.0.9",
+ "thiserror 2.0.21",
+]
+
+[[package]]
+name = "typify"
+version = "0.10.0-alpha.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b96a0d41e55c21fa2d06a672c7306dac957197c16ab527d0cdf6c33b910126fc"
 dependencies = [
  "typify-impl",
  "typify-macro",
@@ -3011,9 +3065,9 @@ dependencies = [
 
 [[package]]
 name = "typify-impl"
-version = "0.8.0"
+version = "0.10.0-alpha.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1cbc3132686085f84a068ad86fc281cb3d566dd940c8911fd3562013851e9ae8"
+checksum = "b487fba77e13eee8caea824dc8c8c94457cb08040ea60ae3e26a649e504a6281"
 dependencies = [
  "heck",
  "log",
@@ -3026,14 +3080,15 @@ dependencies = [
  "serde_json",
  "syn 3.0.9",
  "thiserror 2.0.21",
+ "typespace",
  "unicode-ident",
 ]
 
 [[package]]
 name = "typify-macro"
-version = "0.8.0"
+version = "0.10.0-alpha.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b3a7f8d08ec85254fb8b383a6c66fe43b81f7f6b288fa71eb365f0867fc8f3a6"
+checksum = "2c697dad0e4ddb1b73a0bf780cd44c6487a986afc8b0826fe2e11a067c81b528"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -3110,6 +3165,16 @@ dependencies = [
  "js-sys",
  "serde_core",
  "wasm-bindgen",
+]
+
+[[package]]
+name = "version-ranges"
+version = "0.1.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "31e9bd4e9c9ff6a2a9b5969462ba26216af3e010df0377dad8320ab515262ef8"
+dependencies = [
+ "semver",
+ "smallvec",
 ]
 
 [[package]]
