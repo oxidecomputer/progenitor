@@ -1,5 +1,5 @@
 #[allow(unused_imports)]
-use progenitor_client::{encode_path, ClientHooks, OperationInfo, RequestBuilderExt};
+use progenitor_client::{encode_path, ClientHooks, OperationInfo, QueryParam, RequestBuilderExt};
 #[allow(unused_imports)]
 pub use progenitor_client::{ByteStream, ClientInfo, Error, ResponseValue};
 /// Types used as operation parameters and responses.
@@ -141,9 +141,9 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
-            .query(&progenitor_client::QueryParam::new("if", &if_))
-            .query(&progenitor_client::QueryParam::new("in", &in_))
-            .query(&progenitor_client::QueryParam::new("use", &use_))
+            .query(&QueryParam::new("if", &if_))
+            .query(&QueryParam::new("in", &in_))
+            .query(&QueryParam::new("use", &use_))
             .headers(header_map)
             .build()?;
         let info = OperationInfo {

@@ -1,5 +1,5 @@
 #[allow(unused_imports)]
-use progenitor_client::{encode_path, ClientHooks, OperationInfo, RequestBuilderExt};
+use progenitor_client::{encode_path, ClientHooks, OperationInfo, QueryParam, RequestBuilderExt};
 #[allow(unused_imports)]
 pub use progenitor_client::{ByteStream, ClientInfo, Error, ResponseValue};
 /// Types used as operation parameters and responses.
@@ -134,11 +134,11 @@ impl Client {
         let mut _request = self
             .client
             .get(_url)
-            .query(&progenitor_client::QueryParam::new("client", &client))
-            .query(&progenitor_client::QueryParam::new("request", &request))
-            .query(&progenitor_client::QueryParam::new("response", &response))
-            .query(&progenitor_client::QueryParam::new("result", &result))
-            .query(&progenitor_client::QueryParam::new("url", &url))
+            .query(&QueryParam::new("client", &client))
+            .query(&QueryParam::new("request", &request))
+            .query(&QueryParam::new("response", &response))
+            .query(&QueryParam::new("result", &result))
+            .query(&QueryParam::new("url", &url))
             .headers(header_map)
             .build()?;
         let info = OperationInfo {

@@ -1,5 +1,5 @@
 #[allow(unused_imports)]
-use progenitor_client::{encode_path, ClientHooks, OperationInfo, RequestBuilderExt};
+use progenitor_client::{encode_path, ClientHooks, OperationInfo, QueryParam, RequestBuilderExt};
 #[allow(unused_imports)]
 pub use progenitor_client::{ByteStream, ClientInfo, Error, ResponseValue};
 /// Types used as operation parameters and responses.
@@ -20780,8 +20780,8 @@ pub mod builder {
     use super::types;
     #[allow(unused_imports)]
     use super::{
-        encode_path, ByteStream, ClientHooks, ClientInfo, Error, OperationInfo, RequestBuilderExt,
-        ResponseValue,
+        encode_path, ByteStream, ClientHooks, ClientInfo, Error, OperationInfo, QueryParam,
+        RequestBuilderExt, ResponseValue,
     };
     ///Builder for [`ClientDisksExt::disk_view_by_id`]
     ///
@@ -21876,12 +21876,9 @@ pub mod builder {
                     ::reqwest::header::ACCEPT,
                     ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .query(&progenitor_client::QueryParam::new("limit", &limit))
-                .query(&progenitor_client::QueryParam::new(
-                    "page_token",
-                    &page_token,
-                ))
-                .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+                .query(&QueryParam::new("limit", &limit))
+                .query(&QueryParam::new("page_token", &page_token))
+                .query(&QueryParam::new("sort_by", &sort_by))
                 .headers(header_map)
                 .build()?;
             let info = OperationInfo {
@@ -22450,12 +22447,9 @@ pub mod builder {
                     ::reqwest::header::ACCEPT,
                     ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .query(&progenitor_client::QueryParam::new("limit", &limit))
-                .query(&progenitor_client::QueryParam::new(
-                    "page_token",
-                    &page_token,
-                ))
-                .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+                .query(&QueryParam::new("limit", &limit))
+                .query(&QueryParam::new("page_token", &page_token))
+                .query(&QueryParam::new("sort_by", &sort_by))
                 .headers(header_map)
                 .build()?;
             let info = OperationInfo {
@@ -23138,12 +23132,9 @@ pub mod builder {
                     ::reqwest::header::ACCEPT,
                     ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .query(&progenitor_client::QueryParam::new("limit", &limit))
-                .query(&progenitor_client::QueryParam::new(
-                    "page_token",
-                    &page_token,
-                ))
-                .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+                .query(&QueryParam::new("limit", &limit))
+                .query(&QueryParam::new("page_token", &page_token))
+                .query(&QueryParam::new("sort_by", &sort_by))
                 .headers(header_map)
                 .build()?;
             let info = OperationInfo {
@@ -23725,12 +23716,9 @@ pub mod builder {
                     ::reqwest::header::ACCEPT,
                     ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .query(&progenitor_client::QueryParam::new("limit", &limit))
-                .query(&progenitor_client::QueryParam::new(
-                    "page_token",
-                    &page_token,
-                ))
-                .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+                .query(&QueryParam::new("limit", &limit))
+                .query(&QueryParam::new("page_token", &page_token))
+                .query(&QueryParam::new("sort_by", &sort_by))
                 .headers(header_map)
                 .build()?;
             let info = OperationInfo {
@@ -24290,16 +24278,10 @@ pub mod builder {
                     ::reqwest::header::ACCEPT,
                     ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .query(&progenitor_client::QueryParam::new("end_time", &end_time))
-                .query(&progenitor_client::QueryParam::new("limit", &limit))
-                .query(&progenitor_client::QueryParam::new(
-                    "page_token",
-                    &page_token,
-                ))
-                .query(&progenitor_client::QueryParam::new(
-                    "start_time",
-                    &start_time,
-                ))
+                .query(&QueryParam::new("end_time", &end_time))
+                .query(&QueryParam::new("limit", &limit))
+                .query(&QueryParam::new("page_token", &page_token))
+                .query(&QueryParam::new("start_time", &start_time))
                 .headers(header_map)
                 .build()?;
             let info = OperationInfo {
@@ -24484,12 +24466,9 @@ pub mod builder {
                     ::reqwest::header::ACCEPT,
                     ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .query(&progenitor_client::QueryParam::new("limit", &limit))
-                .query(&progenitor_client::QueryParam::new(
-                    "page_token",
-                    &page_token,
-                ))
-                .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+                .query(&QueryParam::new("limit", &limit))
+                .query(&QueryParam::new("page_token", &page_token))
+                .query(&QueryParam::new("sort_by", &sort_by))
                 .headers(header_map)
                 .build()?;
             let info = OperationInfo {
@@ -25002,12 +24981,9 @@ pub mod builder {
                     ::reqwest::header::ACCEPT,
                     ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .query(&progenitor_client::QueryParam::new("limit", &limit))
-                .query(&progenitor_client::QueryParam::new(
-                    "page_token",
-                    &page_token,
-                ))
-                .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+                .query(&QueryParam::new("limit", &limit))
+                .query(&QueryParam::new("page_token", &page_token))
+                .query(&QueryParam::new("sort_by", &sort_by))
                 .headers(header_map)
                 .build()?;
             let info = OperationInfo {
@@ -25537,12 +25513,9 @@ pub mod builder {
                     ::reqwest::header::ACCEPT,
                     ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .query(&progenitor_client::QueryParam::new("limit", &limit))
-                .query(&progenitor_client::QueryParam::new(
-                    "page_token",
-                    &page_token,
-                ))
-                .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+                .query(&QueryParam::new("limit", &limit))
+                .query(&QueryParam::new("page_token", &page_token))
+                .query(&QueryParam::new("sort_by", &sort_by))
                 .headers(header_map)
                 .build()?;
             let info = OperationInfo {
@@ -26250,12 +26223,9 @@ pub mod builder {
                     ::reqwest::header::ACCEPT,
                     ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .query(&progenitor_client::QueryParam::new("limit", &limit))
-                .query(&progenitor_client::QueryParam::new(
-                    "page_token",
-                    &page_token,
-                ))
-                .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+                .query(&QueryParam::new("limit", &limit))
+                .query(&QueryParam::new("page_token", &page_token))
+                .query(&QueryParam::new("sort_by", &sort_by))
                 .headers(header_map)
                 .build()?;
             let info = OperationInfo {
@@ -27100,15 +27070,9 @@ pub mod builder {
                     ::reqwest::header::ACCEPT,
                     ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .query(&progenitor_client::QueryParam::new(
-                    "from_start",
-                    &from_start,
-                ))
-                .query(&progenitor_client::QueryParam::new("max_bytes", &max_bytes))
-                .query(&progenitor_client::QueryParam::new(
-                    "most_recent",
-                    &most_recent,
-                ))
+                .query(&QueryParam::new("from_start", &from_start))
+                .query(&QueryParam::new("max_bytes", &max_bytes))
+                .query(&QueryParam::new("most_recent", &most_recent))
                 .headers(header_map)
                 .build()?;
             let info = OperationInfo {
@@ -27888,12 +27852,9 @@ pub mod builder {
                     ::reqwest::header::ACCEPT,
                     ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .query(&progenitor_client::QueryParam::new("limit", &limit))
-                .query(&progenitor_client::QueryParam::new(
-                    "page_token",
-                    &page_token,
-                ))
-                .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+                .query(&QueryParam::new("limit", &limit))
+                .query(&QueryParam::new("page_token", &page_token))
+                .query(&QueryParam::new("sort_by", &sort_by))
                 .headers(header_map)
                 .build()?;
             let info = OperationInfo {
@@ -28407,12 +28368,9 @@ pub mod builder {
                     ::reqwest::header::ACCEPT,
                     ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .query(&progenitor_client::QueryParam::new("limit", &limit))
-                .query(&progenitor_client::QueryParam::new(
-                    "page_token",
-                    &page_token,
-                ))
-                .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+                .query(&QueryParam::new("limit", &limit))
+                .query(&QueryParam::new("page_token", &page_token))
+                .query(&QueryParam::new("sort_by", &sort_by))
                 .headers(header_map)
                 .build()?;
             let info = OperationInfo {
@@ -29323,12 +29281,9 @@ pub mod builder {
                     ::reqwest::header::ACCEPT,
                     ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .query(&progenitor_client::QueryParam::new("limit", &limit))
-                .query(&progenitor_client::QueryParam::new(
-                    "page_token",
-                    &page_token,
-                ))
-                .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+                .query(&QueryParam::new("limit", &limit))
+                .query(&QueryParam::new("page_token", &page_token))
+                .query(&QueryParam::new("sort_by", &sort_by))
                 .headers(header_map)
                 .build()?;
             let info = OperationInfo {
@@ -30066,12 +30021,9 @@ pub mod builder {
                     ::reqwest::header::ACCEPT,
                     ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .query(&progenitor_client::QueryParam::new("limit", &limit))
-                .query(&progenitor_client::QueryParam::new(
-                    "page_token",
-                    &page_token,
-                ))
-                .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+                .query(&QueryParam::new("limit", &limit))
+                .query(&QueryParam::new("page_token", &page_token))
+                .query(&QueryParam::new("sort_by", &sort_by))
                 .headers(header_map)
                 .build()?;
             let info = OperationInfo {
@@ -30866,12 +30818,9 @@ pub mod builder {
                     ::reqwest::header::ACCEPT,
                     ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .query(&progenitor_client::QueryParam::new("limit", &limit))
-                .query(&progenitor_client::QueryParam::new(
-                    "page_token",
-                    &page_token,
-                ))
-                .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+                .query(&QueryParam::new("limit", &limit))
+                .query(&QueryParam::new("page_token", &page_token))
+                .query(&QueryParam::new("sort_by", &sort_by))
                 .headers(header_map)
                 .build()?;
             let info = OperationInfo {
@@ -31610,12 +31559,9 @@ pub mod builder {
                     ::reqwest::header::ACCEPT,
                     ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .query(&progenitor_client::QueryParam::new("limit", &limit))
-                .query(&progenitor_client::QueryParam::new(
-                    "page_token",
-                    &page_token,
-                ))
-                .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+                .query(&QueryParam::new("limit", &limit))
+                .query(&QueryParam::new("page_token", &page_token))
+                .query(&QueryParam::new("sort_by", &sort_by))
                 .headers(header_map)
                 .build()?;
             let info = OperationInfo {
@@ -31886,11 +31832,8 @@ pub mod builder {
                     ::reqwest::header::ACCEPT,
                     ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .query(&progenitor_client::QueryParam::new("limit", &limit))
-                .query(&progenitor_client::QueryParam::new(
-                    "page_token",
-                    &page_token,
-                ))
+                .query(&QueryParam::new("limit", &limit))
+                .query(&QueryParam::new("page_token", &page_token))
                 .headers(header_map)
                 .build()?;
             let info = OperationInfo {
@@ -32160,12 +32103,9 @@ pub mod builder {
                     ::reqwest::header::ACCEPT,
                     ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .query(&progenitor_client::QueryParam::new("limit", &limit))
-                .query(&progenitor_client::QueryParam::new(
-                    "page_token",
-                    &page_token,
-                ))
-                .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+                .query(&QueryParam::new("limit", &limit))
+                .query(&QueryParam::new("page_token", &page_token))
+                .query(&QueryParam::new("sort_by", &sort_by))
                 .headers(header_map)
                 .build()?;
             let info = OperationInfo {
@@ -32313,12 +32253,9 @@ pub mod builder {
                     ::reqwest::header::ACCEPT,
                     ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .query(&progenitor_client::QueryParam::new("limit", &limit))
-                .query(&progenitor_client::QueryParam::new(
-                    "page_token",
-                    &page_token,
-                ))
-                .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+                .query(&QueryParam::new("limit", &limit))
+                .query(&QueryParam::new("page_token", &page_token))
+                .query(&QueryParam::new("sort_by", &sort_by))
                 .headers(header_map)
                 .build()?;
             let info = OperationInfo {
@@ -32907,12 +32844,9 @@ pub mod builder {
                     ::reqwest::header::ACCEPT,
                     ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .query(&progenitor_client::QueryParam::new("limit", &limit))
-                .query(&progenitor_client::QueryParam::new(
-                    "page_token",
-                    &page_token,
-                ))
-                .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+                .query(&QueryParam::new("limit", &limit))
+                .query(&QueryParam::new("page_token", &page_token))
+                .query(&QueryParam::new("sort_by", &sort_by))
                 .headers(header_map)
                 .build()?;
             let info = OperationInfo {
@@ -33290,12 +33224,9 @@ pub mod builder {
                     ::reqwest::header::ACCEPT,
                     ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .query(&progenitor_client::QueryParam::new("limit", &limit))
-                .query(&progenitor_client::QueryParam::new(
-                    "page_token",
-                    &page_token,
-                ))
-                .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+                .query(&QueryParam::new("limit", &limit))
+                .query(&QueryParam::new("page_token", &page_token))
+                .query(&QueryParam::new("sort_by", &sort_by))
                 .headers(header_map)
                 .build()?;
             let info = OperationInfo {
@@ -33443,12 +33374,9 @@ pub mod builder {
                     ::reqwest::header::ACCEPT,
                     ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .query(&progenitor_client::QueryParam::new("limit", &limit))
-                .query(&progenitor_client::QueryParam::new(
-                    "page_token",
-                    &page_token,
-                ))
-                .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+                .query(&QueryParam::new("limit", &limit))
+                .query(&QueryParam::new("page_token", &page_token))
+                .query(&QueryParam::new("sort_by", &sort_by))
                 .headers(header_map)
                 .build()?;
             let info = OperationInfo {
@@ -33667,12 +33595,9 @@ pub mod builder {
                     ::reqwest::header::ACCEPT,
                     ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .query(&progenitor_client::QueryParam::new("limit", &limit))
-                .query(&progenitor_client::QueryParam::new(
-                    "page_token",
-                    &page_token,
-                ))
-                .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+                .query(&QueryParam::new("limit", &limit))
+                .query(&QueryParam::new("page_token", &page_token))
+                .query(&QueryParam::new("sort_by", &sort_by))
                 .headers(header_map)
                 .build()?;
             let info = OperationInfo {
@@ -33909,12 +33834,9 @@ pub mod builder {
                     ::reqwest::header::ACCEPT,
                     ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .query(&progenitor_client::QueryParam::new("limit", &limit))
-                .query(&progenitor_client::QueryParam::new(
-                    "page_token",
-                    &page_token,
-                ))
-                .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+                .query(&QueryParam::new("limit", &limit))
+                .query(&QueryParam::new("page_token", &page_token))
+                .query(&QueryParam::new("sort_by", &sort_by))
                 .headers(header_map)
                 .build()?;
             let info = OperationInfo {
@@ -34062,12 +33984,9 @@ pub mod builder {
                     ::reqwest::header::ACCEPT,
                     ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .query(&progenitor_client::QueryParam::new("limit", &limit))
-                .query(&progenitor_client::QueryParam::new(
-                    "page_token",
-                    &page_token,
-                ))
-                .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+                .query(&QueryParam::new("limit", &limit))
+                .query(&QueryParam::new("page_token", &page_token))
+                .query(&QueryParam::new("sort_by", &sort_by))
                 .headers(header_map)
                 .build()?;
             let info = OperationInfo {
@@ -34439,12 +34358,9 @@ pub mod builder {
                     ::reqwest::header::ACCEPT,
                     ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .query(&progenitor_client::QueryParam::new("limit", &limit))
-                .query(&progenitor_client::QueryParam::new(
-                    "page_token",
-                    &page_token,
-                ))
-                .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+                .query(&QueryParam::new("limit", &limit))
+                .query(&QueryParam::new("page_token", &page_token))
+                .query(&QueryParam::new("sort_by", &sort_by))
                 .headers(header_map)
                 .build()?;
             let info = OperationInfo {
@@ -34918,11 +34834,8 @@ pub mod builder {
                     ::reqwest::header::ACCEPT,
                     ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .query(&progenitor_client::QueryParam::new("limit", &limit))
-                .query(&progenitor_client::QueryParam::new(
-                    "page_token",
-                    &page_token,
-                ))
+                .query(&QueryParam::new("limit", &limit))
+                .query(&QueryParam::new("page_token", &page_token))
                 .headers(header_map)
                 .build()?;
             let info = OperationInfo {
@@ -35285,11 +35198,8 @@ pub mod builder {
                     ::reqwest::header::ACCEPT,
                     ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .query(&progenitor_client::QueryParam::new("limit", &limit))
-                .query(&progenitor_client::QueryParam::new(
-                    "page_token",
-                    &page_token,
-                ))
+                .query(&QueryParam::new("limit", &limit))
+                .query(&QueryParam::new("page_token", &page_token))
                 .headers(header_map)
                 .build()?;
             let info = OperationInfo {
@@ -35621,17 +35531,11 @@ pub mod builder {
                     ::reqwest::header::ACCEPT,
                     ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .query(&progenitor_client::QueryParam::new("end_time", &end_time))
-                .query(&progenitor_client::QueryParam::new("id", &id))
-                .query(&progenitor_client::QueryParam::new("limit", &limit))
-                .query(&progenitor_client::QueryParam::new(
-                    "page_token",
-                    &page_token,
-                ))
-                .query(&progenitor_client::QueryParam::new(
-                    "start_time",
-                    &start_time,
-                ))
+                .query(&QueryParam::new("end_time", &end_time))
+                .query(&QueryParam::new("id", &id))
+                .query(&QueryParam::new("limit", &limit))
+                .query(&QueryParam::new("page_token", &page_token))
+                .query(&QueryParam::new("start_time", &start_time))
                 .headers(header_map)
                 .build()?;
             let info = OperationInfo {
@@ -35869,12 +35773,9 @@ pub mod builder {
                     ::reqwest::header::ACCEPT,
                     ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .query(&progenitor_client::QueryParam::new("limit", &limit))
-                .query(&progenitor_client::QueryParam::new(
-                    "page_token",
-                    &page_token,
-                ))
-                .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+                .query(&QueryParam::new("limit", &limit))
+                .query(&QueryParam::new("page_token", &page_token))
+                .query(&QueryParam::new("sort_by", &sort_by))
                 .headers(header_map)
                 .build()?;
             let info = OperationInfo {
@@ -36093,12 +35994,9 @@ pub mod builder {
                     ::reqwest::header::ACCEPT,
                     ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .query(&progenitor_client::QueryParam::new("limit", &limit))
-                .query(&progenitor_client::QueryParam::new(
-                    "page_token",
-                    &page_token,
-                ))
-                .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+                .query(&QueryParam::new("limit", &limit))
+                .query(&QueryParam::new("page_token", &page_token))
+                .query(&QueryParam::new("sort_by", &sort_by))
                 .headers(header_map)
                 .build()?;
             let info = OperationInfo {
@@ -36488,12 +36386,9 @@ pub mod builder {
                     ::reqwest::header::ACCEPT,
                     ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .query(&progenitor_client::QueryParam::new("limit", &limit))
-                .query(&progenitor_client::QueryParam::new(
-                    "page_token",
-                    &page_token,
-                ))
-                .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+                .query(&QueryParam::new("limit", &limit))
+                .query(&QueryParam::new("page_token", &page_token))
+                .query(&QueryParam::new("sort_by", &sort_by))
                 .headers(header_map)
                 .build()?;
             let info = OperationInfo {
@@ -37337,12 +37232,9 @@ pub mod builder {
                     ::reqwest::header::ACCEPT,
                     ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .query(&progenitor_client::QueryParam::new("limit", &limit))
-                .query(&progenitor_client::QueryParam::new(
-                    "page_token",
-                    &page_token,
-                ))
-                .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+                .query(&QueryParam::new("limit", &limit))
+                .query(&QueryParam::new("page_token", &page_token))
+                .query(&QueryParam::new("sort_by", &sort_by))
                 .headers(header_map)
                 .build()?;
             let info = OperationInfo {
@@ -37580,12 +37472,9 @@ pub mod builder {
                     ::reqwest::header::ACCEPT,
                     ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .query(&progenitor_client::QueryParam::new("limit", &limit))
-                .query(&progenitor_client::QueryParam::new(
-                    "page_token",
-                    &page_token,
-                ))
-                .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+                .query(&QueryParam::new("limit", &limit))
+                .query(&QueryParam::new("page_token", &page_token))
+                .query(&QueryParam::new("sort_by", &sort_by))
                 .headers(header_map)
                 .build()?;
             let info = OperationInfo {
@@ -37790,11 +37679,8 @@ pub mod builder {
                     ::reqwest::header::ACCEPT,
                     ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .query(&progenitor_client::QueryParam::new("limit", &limit))
-                .query(&progenitor_client::QueryParam::new(
-                    "page_token",
-                    &page_token,
-                ))
+                .query(&QueryParam::new("limit", &limit))
+                .query(&QueryParam::new("page_token", &page_token))
                 .headers(header_map)
                 .build()?;
             let info = OperationInfo {
@@ -37941,12 +37827,9 @@ pub mod builder {
                     ::reqwest::header::ACCEPT,
                     ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .query(&progenitor_client::QueryParam::new("limit", &limit))
-                .query(&progenitor_client::QueryParam::new(
-                    "page_token",
-                    &page_token,
-                ))
-                .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+                .query(&QueryParam::new("limit", &limit))
+                .query(&QueryParam::new("page_token", &page_token))
+                .query(&QueryParam::new("sort_by", &sort_by))
                 .headers(header_map)
                 .build()?;
             let info = OperationInfo {
@@ -38124,17 +38007,11 @@ pub mod builder {
                     ::reqwest::header::ACCEPT,
                     ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .query(&progenitor_client::QueryParam::new("limit", &limit))
-                .query(&progenitor_client::QueryParam::new(
-                    "organization",
-                    &organization,
-                ))
-                .query(&progenitor_client::QueryParam::new(
-                    "page_token",
-                    &page_token,
-                ))
-                .query(&progenitor_client::QueryParam::new("project", &project))
-                .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+                .query(&QueryParam::new("limit", &limit))
+                .query(&QueryParam::new("organization", &organization))
+                .query(&QueryParam::new("page_token", &page_token))
+                .query(&QueryParam::new("project", &project))
+                .query(&QueryParam::new("sort_by", &sort_by))
                 .headers(header_map)
                 .build()?;
             let info = OperationInfo {
@@ -38295,11 +38172,8 @@ pub mod builder {
                     ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
-                .query(&progenitor_client::QueryParam::new(
-                    "organization",
-                    &organization,
-                ))
-                .query(&progenitor_client::QueryParam::new("project", &project))
+                .query(&QueryParam::new("organization", &organization))
+                .query(&QueryParam::new("project", &project))
                 .headers(header_map)
                 .build()?;
             let info = OperationInfo {
@@ -38404,11 +38278,8 @@ pub mod builder {
                     ::reqwest::header::ACCEPT,
                     ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .query(&progenitor_client::QueryParam::new(
-                    "organization",
-                    &organization,
-                ))
-                .query(&progenitor_client::QueryParam::new("project", &project))
+                .query(&QueryParam::new("organization", &organization))
+                .query(&QueryParam::new("project", &project))
                 .headers(header_map)
                 .build()?;
             let info = OperationInfo {
@@ -38513,11 +38384,8 @@ pub mod builder {
                     ::reqwest::header::ACCEPT,
                     ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .query(&progenitor_client::QueryParam::new(
-                    "organization",
-                    &organization,
-                ))
-                .query(&progenitor_client::QueryParam::new("project", &project))
+                .query(&QueryParam::new("organization", &organization))
+                .query(&QueryParam::new("project", &project))
                 .headers(header_map)
                 .build()?;
             let info = OperationInfo {
@@ -38649,17 +38517,11 @@ pub mod builder {
                     ::reqwest::header::ACCEPT,
                     ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .query(&progenitor_client::QueryParam::new("limit", &limit))
-                .query(&progenitor_client::QueryParam::new(
-                    "organization",
-                    &organization,
-                ))
-                .query(&progenitor_client::QueryParam::new(
-                    "page_token",
-                    &page_token,
-                ))
-                .query(&progenitor_client::QueryParam::new("project", &project))
-                .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+                .query(&QueryParam::new("limit", &limit))
+                .query(&QueryParam::new("organization", &organization))
+                .query(&QueryParam::new("page_token", &page_token))
+                .query(&QueryParam::new("project", &project))
+                .query(&QueryParam::new("sort_by", &sort_by))
                 .headers(header_map)
                 .build()?;
             let info = OperationInfo {
@@ -38820,11 +38682,8 @@ pub mod builder {
                     ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
-                .query(&progenitor_client::QueryParam::new(
-                    "organization",
-                    &organization,
-                ))
-                .query(&progenitor_client::QueryParam::new("project", &project))
+                .query(&QueryParam::new("organization", &organization))
+                .query(&QueryParam::new("project", &project))
                 .headers(header_map)
                 .build()?;
             let info = OperationInfo {
@@ -38929,11 +38788,8 @@ pub mod builder {
                     ::reqwest::header::ACCEPT,
                     ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .query(&progenitor_client::QueryParam::new(
-                    "organization",
-                    &organization,
-                ))
-                .query(&progenitor_client::QueryParam::new("project", &project))
+                .query(&QueryParam::new("organization", &organization))
+                .query(&QueryParam::new("project", &project))
                 .headers(header_map)
                 .build()?;
             let info = OperationInfo {
@@ -39038,11 +38894,8 @@ pub mod builder {
                     ::reqwest::header::ACCEPT,
                     ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .query(&progenitor_client::QueryParam::new(
-                    "organization",
-                    &organization,
-                ))
-                .query(&progenitor_client::QueryParam::new("project", &project))
+                .query(&QueryParam::new("organization", &organization))
+                .query(&QueryParam::new("project", &project))
                 .headers(header_map)
                 .build()?;
             let info = OperationInfo {
@@ -39192,17 +39045,11 @@ pub mod builder {
                     ::reqwest::header::ACCEPT,
                     ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .query(&progenitor_client::QueryParam::new("limit", &limit))
-                .query(&progenitor_client::QueryParam::new(
-                    "organization",
-                    &organization,
-                ))
-                .query(&progenitor_client::QueryParam::new(
-                    "page_token",
-                    &page_token,
-                ))
-                .query(&progenitor_client::QueryParam::new("project", &project))
-                .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+                .query(&QueryParam::new("limit", &limit))
+                .query(&QueryParam::new("organization", &organization))
+                .query(&QueryParam::new("page_token", &page_token))
+                .query(&QueryParam::new("project", &project))
+                .query(&QueryParam::new("sort_by", &sort_by))
                 .headers(header_map)
                 .build()?;
             let info = OperationInfo {
@@ -39382,11 +39229,8 @@ pub mod builder {
                     ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
-                .query(&progenitor_client::QueryParam::new(
-                    "organization",
-                    &organization,
-                ))
-                .query(&progenitor_client::QueryParam::new("project", &project))
+                .query(&QueryParam::new("organization", &organization))
+                .query(&QueryParam::new("project", &project))
                 .headers(header_map)
                 .build()?;
             let info = OperationInfo {
@@ -39518,11 +39362,8 @@ pub mod builder {
                     ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
-                .query(&progenitor_client::QueryParam::new(
-                    "organization",
-                    &organization,
-                ))
-                .query(&progenitor_client::QueryParam::new("project", &project))
+                .query(&QueryParam::new("organization", &organization))
+                .query(&QueryParam::new("project", &project))
                 .headers(header_map)
                 .build()?;
             let info = OperationInfo {
@@ -39654,11 +39495,8 @@ pub mod builder {
                     ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
-                .query(&progenitor_client::QueryParam::new(
-                    "organization",
-                    &organization,
-                ))
-                .query(&progenitor_client::QueryParam::new("project", &project))
+                .query(&QueryParam::new("organization", &organization))
+                .query(&QueryParam::new("project", &project))
                 .headers(header_map)
                 .build()?;
             let info = OperationInfo {
@@ -39763,11 +39601,8 @@ pub mod builder {
                     ::reqwest::header::ACCEPT,
                     ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .query(&progenitor_client::QueryParam::new(
-                    "organization",
-                    &organization,
-                ))
-                .query(&progenitor_client::QueryParam::new("project", &project))
+                .query(&QueryParam::new("organization", &organization))
+                .query(&QueryParam::new("project", &project))
                 .headers(header_map)
                 .build()?;
             let info = OperationInfo {
@@ -39919,20 +39754,11 @@ pub mod builder {
                     ::reqwest::header::ACCEPT,
                     ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .query(&progenitor_client::QueryParam::new(
-                    "from_start",
-                    &from_start,
-                ))
-                .query(&progenitor_client::QueryParam::new("max_bytes", &max_bytes))
-                .query(&progenitor_client::QueryParam::new(
-                    "most_recent",
-                    &most_recent,
-                ))
-                .query(&progenitor_client::QueryParam::new(
-                    "organization",
-                    &organization,
-                ))
-                .query(&progenitor_client::QueryParam::new("project", &project))
+                .query(&QueryParam::new("from_start", &from_start))
+                .query(&QueryParam::new("max_bytes", &max_bytes))
+                .query(&QueryParam::new("most_recent", &most_recent))
+                .query(&QueryParam::new("organization", &organization))
+                .query(&QueryParam::new("project", &project))
                 .headers(header_map)
                 .build()?;
             let info = OperationInfo {
@@ -40034,11 +39860,8 @@ pub mod builder {
             let mut request = client
                 .client
                 .get(url)
-                .query(&progenitor_client::QueryParam::new(
-                    "organization",
-                    &organization,
-                ))
-                .query(&progenitor_client::QueryParam::new("project", &project))
+                .query(&QueryParam::new("organization", &organization))
+                .query(&QueryParam::new("project", &project))
                 .headers(header_map)
                 .header(::reqwest::header::CONNECTION, "Upgrade")
                 .header(::reqwest::header::UPGRADE, "websocket")
@@ -40153,11 +39976,8 @@ pub mod builder {
                     ::reqwest::header::ACCEPT,
                     ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .query(&progenitor_client::QueryParam::new(
-                    "organization",
-                    &organization,
-                ))
-                .query(&progenitor_client::QueryParam::new("project", &project))
+                .query(&QueryParam::new("organization", &organization))
+                .query(&QueryParam::new("project", &project))
                 .headers(header_map)
                 .build()?;
             let info = OperationInfo {
@@ -40262,11 +40082,8 @@ pub mod builder {
                     ::reqwest::header::ACCEPT,
                     ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .query(&progenitor_client::QueryParam::new(
-                    "organization",
-                    &organization,
-                ))
-                .query(&progenitor_client::QueryParam::new("project", &project))
+                .query(&QueryParam::new("organization", &organization))
+                .query(&QueryParam::new("project", &project))
                 .headers(header_map)
                 .build()?;
             let info = OperationInfo {
@@ -40368,12 +40185,9 @@ pub mod builder {
                     ::reqwest::header::ACCEPT,
                     ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .query(&progenitor_client::QueryParam::new("limit", &limit))
-                .query(&progenitor_client::QueryParam::new(
-                    "page_token",
-                    &page_token,
-                ))
-                .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+                .query(&QueryParam::new("limit", &limit))
+                .query(&QueryParam::new("page_token", &page_token))
+                .query(&QueryParam::new("sort_by", &sort_by))
                 .headers(header_map)
                 .build()?;
             let info = OperationInfo {
@@ -41052,16 +40866,10 @@ pub mod builder {
                     ::reqwest::header::ACCEPT,
                     ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .query(&progenitor_client::QueryParam::new("limit", &limit))
-                .query(&progenitor_client::QueryParam::new(
-                    "organization",
-                    &organization,
-                ))
-                .query(&progenitor_client::QueryParam::new(
-                    "page_token",
-                    &page_token,
-                ))
-                .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+                .query(&QueryParam::new("limit", &limit))
+                .query(&QueryParam::new("organization", &organization))
+                .query(&QueryParam::new("page_token", &page_token))
+                .query(&QueryParam::new("sort_by", &sort_by))
                 .headers(header_map)
                 .build()?;
             let info = OperationInfo {
@@ -41206,10 +41014,7 @@ pub mod builder {
                     ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
-                .query(&progenitor_client::QueryParam::new(
-                    "organization",
-                    &organization,
-                ))
+                .query(&QueryParam::new("organization", &organization))
                 .headers(header_map)
                 .build()?;
             let info = OperationInfo {
@@ -41299,10 +41104,7 @@ pub mod builder {
                     ::reqwest::header::ACCEPT,
                     ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .query(&progenitor_client::QueryParam::new(
-                    "organization",
-                    &organization,
-                ))
+                .query(&QueryParam::new("organization", &organization))
                 .headers(header_map)
                 .build()?;
             let info = OperationInfo {
@@ -41419,10 +41221,7 @@ pub mod builder {
                     ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
-                .query(&progenitor_client::QueryParam::new(
-                    "organization",
-                    &organization,
-                ))
+                .query(&QueryParam::new("organization", &organization))
                 .headers(header_map)
                 .build()?;
             let info = OperationInfo {
@@ -41512,10 +41311,7 @@ pub mod builder {
                     ::reqwest::header::ACCEPT,
                     ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .query(&progenitor_client::QueryParam::new(
-                    "organization",
-                    &organization,
-                ))
+                .query(&QueryParam::new("organization", &organization))
                 .headers(header_map)
                 .build()?;
             let info = OperationInfo {
@@ -41607,10 +41403,7 @@ pub mod builder {
                     ::reqwest::header::ACCEPT,
                     ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .query(&progenitor_client::QueryParam::new(
-                    "organization",
-                    &organization,
-                ))
+                .query(&QueryParam::new("organization", &organization))
                 .headers(header_map)
                 .build()?;
             let info = OperationInfo {
@@ -41731,10 +41524,7 @@ pub mod builder {
                     ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .json(&body)
-                .query(&progenitor_client::QueryParam::new(
-                    "organization",
-                    &organization,
-                ))
+                .query(&QueryParam::new("organization", &organization))
                 .headers(header_map)
                 .build()?;
             let info = OperationInfo {
@@ -41837,12 +41627,9 @@ pub mod builder {
                     ::reqwest::header::ACCEPT,
                     ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .query(&progenitor_client::QueryParam::new("limit", &limit))
-                .query(&progenitor_client::QueryParam::new(
-                    "page_token",
-                    &page_token,
-                ))
-                .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+                .query(&QueryParam::new("limit", &limit))
+                .query(&QueryParam::new("page_token", &page_token))
+                .query(&QueryParam::new("sort_by", &sort_by))
                 .headers(header_map)
                 .build()?;
             let info = OperationInfo {
@@ -41992,12 +41779,9 @@ pub mod builder {
                     ::reqwest::header::ACCEPT,
                     ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .query(&progenitor_client::QueryParam::new("limit", &limit))
-                .query(&progenitor_client::QueryParam::new(
-                    "page_token",
-                    &page_token,
-                ))
-                .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+                .query(&QueryParam::new("limit", &limit))
+                .query(&QueryParam::new("page_token", &page_token))
+                .query(&QueryParam::new("sort_by", &sort_by))
                 .headers(header_map)
                 .build()?;
             let info = OperationInfo {
@@ -42406,12 +42190,9 @@ pub mod builder {
                     ::reqwest::header::ACCEPT,
                     ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .query(&progenitor_client::QueryParam::new("limit", &limit))
-                .query(&progenitor_client::QueryParam::new(
-                    "page_token",
-                    &page_token,
-                ))
-                .query(&progenitor_client::QueryParam::new("sort_by", &sort_by))
+                .query(&QueryParam::new("limit", &limit))
+                .query(&QueryParam::new("page_token", &page_token))
+                .query(&QueryParam::new("sort_by", &sort_by))
                 .headers(header_map)
                 .build()?;
             let info = OperationInfo {
