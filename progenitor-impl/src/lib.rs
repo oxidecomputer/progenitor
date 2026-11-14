@@ -447,6 +447,7 @@ impl Generator {
                     encode_path,
                     ClientHooks,
                     OperationInfo,
+                    QueryParam,
                     RequestBuilderExt,
                 };
             },
@@ -738,6 +739,7 @@ impl Generator {
                     ClientHooks,
                     Error,
                     OperationInfo,
+                    QueryParam,
                     RequestBuilderExt,
                     ResponseValue,
                 };

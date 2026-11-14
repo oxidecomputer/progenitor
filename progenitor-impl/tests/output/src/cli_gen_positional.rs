@@ -1,5 +1,5 @@
 #[allow(unused_imports)]
-use progenitor_client::{encode_path, ClientHooks, OperationInfo, RequestBuilderExt};
+use progenitor_client::{encode_path, ClientHooks, OperationInfo, QueryParam, RequestBuilderExt};
 #[allow(unused_imports)]
 pub use progenitor_client::{ByteStream, ClientInfo, Error, ResponseValue};
 /// Items consumers will typically use such as the Client.
@@ -105,7 +105,7 @@ impl Client {
             .client
             .get(url)
             .json(&body)
-            .query(&progenitor_client::QueryParam::new("gateway", &gateway))
+            .query(&QueryParam::new("gateway", &gateway))
             .headers(header_map)
             .build()?;
         let info = OperationInfo {
