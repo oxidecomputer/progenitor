@@ -800,7 +800,7 @@ impl Generator {
                     let qn = &param.api_name;
                     let qn_ident = format_ident!("{}", &param.name);
                     Some(quote! {
-                        &progenitor_client::QueryParam::new(#qn, &#qn_ident)
+                        &QueryParam::new(#qn, &#qn_ident)
                     })
                 }
                 _ => None,

@@ -1,5 +1,5 @@
 #[allow(unused_imports)]
-use progenitor_client::{encode_path, ClientHooks, OperationInfo, RequestBuilderExt};
+use progenitor_client::{encode_path, ClientHooks, OperationInfo, QueryParam, RequestBuilderExt};
 #[allow(unused_imports)]
 pub use progenitor_client::{ByteStream, ClientInfo, Error, ResponseValue};
 /// Types used as operation parameters and responses.
@@ -136,8 +136,8 @@ pub mod builder {
     use super::types;
     #[allow(unused_imports)]
     use super::{
-        encode_path, ByteStream, ClientHooks, ClientInfo, Error, OperationInfo, RequestBuilderExt,
-        ResponseValue,
+        encode_path, ByteStream, ClientHooks, ClientInfo, Error, OperationInfo, QueryParam,
+        RequestBuilderExt, ResponseValue,
     };
     ///Builder for [`Client::key_get`]
     ///
@@ -257,11 +257,11 @@ pub mod builder {
             let mut _request = _client
                 .client
                 .get(_url)
-                .query(&progenitor_client::QueryParam::new("client", &client))
-                .query(&progenitor_client::QueryParam::new("request", &request))
-                .query(&progenitor_client::QueryParam::new("response", &response))
-                .query(&progenitor_client::QueryParam::new("result", &result))
-                .query(&progenitor_client::QueryParam::new("url", &url))
+                .query(&QueryParam::new("client", &client))
+                .query(&QueryParam::new("request", &request))
+                .query(&QueryParam::new("response", &response))
+                .query(&QueryParam::new("result", &result))
+                .query(&QueryParam::new("url", &url))
                 .headers(header_map)
                 .build()?;
             let info = OperationInfo {

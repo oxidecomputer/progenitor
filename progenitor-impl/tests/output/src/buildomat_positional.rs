@@ -1,5 +1,5 @@
 #[allow(unused_imports)]
-use progenitor_client::{encode_path, ClientHooks, OperationInfo, RequestBuilderExt};
+use progenitor_client::{encode_path, ClientHooks, OperationInfo, QueryParam, RequestBuilderExt};
 #[allow(unused_imports)]
 pub use progenitor_client::{ByteStream, ClientInfo, Error, ResponseValue};
 /// Types used as operation parameters and responses.
@@ -518,7 +518,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
-            .query(&progenitor_client::QueryParam::new("minseq", &minseq))
+            .query(&QueryParam::new("minseq", &minseq))
             .headers(header_map)
             .build()?;
         let info = OperationInfo {
@@ -1000,7 +1000,7 @@ impl Client {
                 ::reqwest::header::ACCEPT,
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
-            .query(&progenitor_client::QueryParam::new("id", &id))
+            .query(&QueryParam::new("id", &id))
             .headers(header_map)
             .build()?;
         let info = OperationInfo {

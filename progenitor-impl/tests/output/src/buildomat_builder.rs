@@ -1,5 +1,5 @@
 #[allow(unused_imports)]
-use progenitor_client::{encode_path, ClientHooks, OperationInfo, RequestBuilderExt};
+use progenitor_client::{encode_path, ClientHooks, OperationInfo, QueryParam, RequestBuilderExt};
 #[allow(unused_imports)]
 pub use progenitor_client::{ByteStream, ClientInfo, Error, ResponseValue};
 /// Types used as operation parameters and responses.
@@ -2110,8 +2110,8 @@ pub mod builder {
     use super::types;
     #[allow(unused_imports)]
     use super::{
-        encode_path, ByteStream, ClientHooks, ClientInfo, Error, OperationInfo, RequestBuilderExt,
-        ResponseValue,
+        encode_path, ByteStream, ClientHooks, ClientInfo, Error, OperationInfo, QueryParam,
+        RequestBuilderExt, ResponseValue,
     };
     ///Builder for [`Client::control_hold`]
     ///
@@ -2451,7 +2451,7 @@ pub mod builder {
                     ::reqwest::header::ACCEPT,
                     ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .query(&progenitor_client::QueryParam::new("minseq", &minseq))
+                .query(&QueryParam::new("minseq", &minseq))
                 .headers(header_map)
                 .build()?;
             let info = OperationInfo {
@@ -3391,7 +3391,7 @@ pub mod builder {
                     ::reqwest::header::ACCEPT,
                     ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
-                .query(&progenitor_client::QueryParam::new("id", &id))
+                .query(&QueryParam::new("id", &id))
                 .headers(header_map)
                 .build()?;
             let info = OperationInfo {
