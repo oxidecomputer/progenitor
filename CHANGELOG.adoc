@@ -13,6 +13,8 @@
 
 == Unreleased changes (release date TBD)
 
+* Fix accidental dependency on progenitor-client for macro clients (#1452)
+
 https://github.com/oxidecomputer/progenitor/compare/v0.16.0\...HEAD[Full list of commits]
 
 == 0.16.0 (released 2026-11-07)
