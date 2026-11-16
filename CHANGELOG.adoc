@@ -16,6 +16,7 @@
 https://github.com/oxidecomputer/progenitor/compare/v0.17.0-alpha.1\...HEAD[Full list of commits]
 
 * Fix accidental dependency on progenitor-client for macro clients (#1452)
+* Update typify to 0.10.0 (typespace 0.1.1, codespace 0.1.0)
 
 == 0.17.0-alpha.1 (released 2026-11-07)
 
