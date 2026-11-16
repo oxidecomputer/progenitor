@@ -4,7 +4,10 @@
 
 #![deny(missing_docs)]
 
-use std::{collections::HashMap, fs::File, path::PathBuf};
+use std::{
+    collections::HashMap,
+    path::{Path, PathBuf},
+};
 
 use openapiv3::OpenAPI;
 use proc_macro::TokenStream;
@@ -334,8 +337,8 @@ fn is_crate(s: &str) -> bool {
     !s.contains(|cc: char| !cc.is_alphanumeric() && cc != '_' && cc != '-')
 }
 
-fn open_file(path: PathBuf, span: proc_macro2::Span) -> Result<File, syn::Error> {
-    File::open(path.clone()).map_err(|e| {
+fn read_file(path: &Path, span: proc_macro2::Span) -> Result<Vec<u8>, syn::Error> {
+    std::fs::read(path).map_err(|e| {
         let path_str = path.to_string_lossy();
         syn::Error::new(span, format!("couldn't read file {}: {}", path_str, e))
     })
@@ -456,18 +459,15 @@ fn do_generate_api(item: TokenStream) -> Result<TokenStream, syn::Error> {
     let path = base_dir.join(spec_path.value());
     let path_str = path.to_string_lossy();
 
-    let mut f = open_file(path.clone(), spec_path.span())?;
-    let oapi: OpenAPI = match serde_json::from_reader(f) {
+    let contents = read_file(&path, spec_path.span())?;
+    let oapi: OpenAPI = match serde_json::from_slice(&contents) {
         Ok(json_value) => json_value,
-        _ => {
-            f = open_file(path.clone(), spec_path.span())?;
-            serde_yaml::from_reader(f).map_err(|e| {
-                syn::Error::new(
-                    spec_path.span(),
-                    format!("failed to parse {}: {}", path_str, e),
-                )
-            })?
-        }
+        _ => serde_yaml::from_slice(&contents).map_err(|e| {
+            syn::Error::new(
+                spec_path.span(),
+                format!("failed to parse {}: {}", path_str, e),
+            )
+        })?,
     };
 
     let builder = Generator::build(&settings, &oapi).map_err(|e| {
