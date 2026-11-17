@@ -731,12 +731,10 @@ dependencies = [
  "prettyplease",
  "progenitor",
  "progenitor-client",
- "rand",
  "reqwest",
  "serde",
  "serde_json",
  "syn 3.0.10",
- "uuid",
 ]
 
 [[package]]

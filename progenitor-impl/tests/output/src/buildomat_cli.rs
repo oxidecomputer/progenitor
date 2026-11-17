@@ -328,12 +328,19 @@ impl<T: CliConfig> Cli<T> {
     }
 
     pub fn cli_get_thing_or_things() -> ::clap::Command {
-        ::clap::Command::new("").arg(
-            ::clap::Arg::new("id")
-                .long("id")
-                .value_parser(::clap::value_parser!(types::GetThingOrThingsId))
-                .required(false),
-        )
+        ::clap::Command::new("")
+            .arg(
+                ::clap::Arg::new("id")
+                    .long("id")
+                    .value_parser(::clap::value_parser!(types::GetThingOrThingsId))
+                    .required(false),
+            )
+            .arg(
+                ::clap::Arg::new("name")
+                    .long("name")
+                    .value_parser(::clap::value_parser!(types::GetThingOrThingsName))
+                    .required(false),
+            )
     }
 
     pub fn cli_header_arg() -> ::clap::Command {
@@ -866,6 +873,10 @@ impl<T: CliConfig> Cli<T> {
         let mut request = self.client.get_thing_or_things();
         if let Some(value) = matches.get_one::<types::GetThingOrThingsId>("id") {
             request = request.id(value.clone());
+        }
+
+        if let Some(value) = matches.get_one::<types::GetThingOrThingsName>("name") {
+            request = request.name(value.clone());
         }
 
         self.config

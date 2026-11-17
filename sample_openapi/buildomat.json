@@ -494,6 +494,21 @@
                 }
               ]
             }
+          },
+          {
+            "in": "query",
+            "name": "name",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "things": {
+                  "type": "string"
+                },
+                "stranger-things": {
+                  "type": "string"
+                }
+              }
+            }
           }
         ],
         "responses": {
