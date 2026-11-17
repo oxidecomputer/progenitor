@@ -1510,7 +1510,8 @@ impl Generator {
             .map(|param| match &param.typ {
                 OperationParameterType::Type(type_id) => {
                     let ty = self.type_space.get_type(type_id)?;
-                    if ty.builder().is_some() {
+                    if let (OperationParameterKind::Body(_), Some(_)) = (&param.kind, ty.builder())
+                    {
                         let type_name = ty.ident();
                         Ok(quote! {
                             .and_then(|v| #type_name::try_from(v)
@@ -1534,52 +1535,15 @@ impl Generator {
                 match &param.typ {
                     OperationParameterType::Type(type_id) => {
                         let ty = self.type_space.get_type(type_id)?;
-                        match (ty.builder(), param.kind.is_optional()) {
+                        match (
+                            ty.builder(),
+                            param.kind.is_optional(),
+                            matches!(param.kind, OperationParameterKind::Body(_)),
+                        ) {
                             // TODO right now optional body parameters are not
                             // addressed
-                            (Some(_), true) => {
+                            (_, true, true) => {
                                 unreachable!()
-                            }
-                            (None, true) => {
-                                let typ = ty.ident();
-                                let err_msg = format!(
-                                    "conversion to `{}` for {} failed",
-                                    ty.name(),
-                                    param.name,
-                                );
-                                Ok(quote! {
-                                    pub fn #param_name<V>(
-                                        mut self,
-                                        value: V,
-                                    ) -> Self
-                                        where V: std::convert::TryInto<#typ>,
-                                    {
-                                        self.#param_name = value.try_into()
-                                            .map(Some)
-                                            .map_err(|_| #err_msg.to_string());
-                                        self
-                                    }
-                                })
-                            }
-                            (None, false) => {
-                                let typ = ty.ident();
-                                let err_msg = format!(
-                                    "conversion to `{}` for {} failed",
-                                    ty.name(),
-                                    param.name,
-                                );
-                                Ok(quote! {
-                                    pub fn #param_name<V>(
-                                        mut self,
-                                        value: V,
-                                    ) -> Self
-                                        where V: std::convert::TryInto<#typ>,
-                                    {
-                                        self.#param_name = value.try_into()
-                                            .map_err(|_| #err_msg.to_string());
-                                        self
-                                    }
-                                })
                             }
 
                             // For builder-capable bodies we offer a `body()`
@@ -1587,7 +1551,7 @@ impl Generator {
                             // a builder **from** the body type). We also offer
                             // a `body_map()` method that operates on the
                             // builder itself.
-                            (Some(builder_name), false) => {
+                            (Some(builder_name), false, true) => {
                                 assert_eq!(param.name, "body");
                                 let typ = ty.ident();
                                 let err_msg = format!(
@@ -1614,6 +1578,48 @@ impl Generator {
                                             -> #builder_name,
                                     {
                                         self.body = self.body.map(f);
+                                        self
+                                    }
+                                })
+                            }
+
+                            (_, true, _) => {
+                                let typ = ty.ident();
+                                let err_msg = format!(
+                                    "conversion to `{}` for {} failed",
+                                    ty.name(),
+                                    param.name,
+                                );
+                                Ok(quote! {
+                                    pub fn #param_name<V>(
+                                        mut self,
+                                        value: V,
+                                    ) -> Self
+                                        where V: std::convert::TryInto<#typ>,
+                                    {
+                                        self.#param_name = value.try_into()
+                                            .map(Some)
+                                            .map_err(|_| #err_msg.to_string());
+                                        self
+                                    }
+                                })
+                            }
+                            (_, false, _) => {
+                                let typ = ty.ident();
+                                let err_msg = format!(
+                                    "conversion to `{}` for {} failed",
+                                    ty.name(),
+                                    param.name,
+                                );
+                                Ok(quote! {
+                                    pub fn #param_name<V>(
+                                        mut self,
+                                        value: V,
+                                    ) -> Self
+                                        where V: std::convert::TryInto<#typ>,
+                                    {
+                                        self.#param_name = value.try_into()
+                                            .map_err(|_| #err_msg.to_string());
                                         self
                                     }
                                 })
