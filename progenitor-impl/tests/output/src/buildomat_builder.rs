@@ -26,6 +26,31 @@ pub mod types {
         }
     }
 
+    ///`GetThingOrThingsName`
+    #[derive(
+        :: serde :: Deserialize,
+        :: serde :: Serialize,
+        Clone,
+        Debug,
+        Default,
+        schemars :: JsonSchema,
+    )]
+    pub struct GetThingOrThingsName {
+        #[serde(
+            rename = "stranger-things",
+            skip_serializing_if = "::std::option::Option::is_none"
+        )]
+        pub stranger_things: ::std::option::Option<::std::string::String>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        pub things: ::std::option::Option<::std::string::String>,
+    }
+
+    impl GetThingOrThingsName {
+        pub fn builder() -> builder::GetThingOrThingsName {
+            Default::default()
+        }
+    }
+
     ///`HeaderArgAcceptLanguage`
     #[derive(
         :: serde :: Deserialize,
@@ -407,6 +432,71 @@ pub mod types {
 
     /// Types for composing complex structures.
     pub mod builder {
+        #[derive(Clone, Debug)]
+        pub struct GetThingOrThingsName {
+            stranger_things: ::std::result::Result<
+                ::std::option::Option<::std::string::String>,
+                ::std::string::String,
+            >,
+            things: ::std::result::Result<
+                ::std::option::Option<::std::string::String>,
+                ::std::string::String,
+            >,
+        }
+
+        impl ::std::default::Default for GetThingOrThingsName {
+            fn default() -> Self {
+                Self {
+                    stranger_things: Ok(Default::default()),
+                    things: Ok(Default::default()),
+                }
+            }
+        }
+
+        impl GetThingOrThingsName {
+            pub fn stranger_things<T>(mut self, value: T) -> Self
+            where
+                T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+                T::Error: ::std::fmt::Display,
+            {
+                self.stranger_things = value.try_into().map_err(|e| {
+                    format!("error converting supplied value for stranger_things: {e}")
+                });
+                self
+            }
+            pub fn things<T>(mut self, value: T) -> Self
+            where
+                T: ::std::convert::TryInto<::std::option::Option<::std::string::String>>,
+                T::Error: ::std::fmt::Display,
+            {
+                self.things = value
+                    .try_into()
+                    .map_err(|e| format!("error converting supplied value for things: {e}"));
+                self
+            }
+        }
+
+        impl ::std::convert::TryFrom<GetThingOrThingsName> for super::GetThingOrThingsName {
+            type Error = super::error::ConversionError;
+            fn try_from(
+                value: GetThingOrThingsName,
+            ) -> ::std::result::Result<Self, super::error::ConversionError> {
+                Ok(Self {
+                    stranger_things: value.stranger_things?,
+                    things: value.things?,
+                })
+            }
+        }
+
+        impl ::std::convert::From<super::GetThingOrThingsName> for GetThingOrThingsName {
+            fn from(value: super::GetThingOrThingsName) -> Self {
+                Self {
+                    stranger_things: Ok(value.stranger_things),
+                    things: Ok(value.things),
+                }
+            }
+        }
+
         #[derive(Clone, Debug)]
         pub struct ObjWithOptionArray {
             stranger_things: ::std::result::Result<
@@ -2089,6 +2179,7 @@ impl Client {
     ///```ignore
     /// let response = client.get_thing_or_things()
     ///    .id(id)
+    ///    .name(name)
     ///    .send()
     ///    .await;
     /// ```
@@ -3357,6 +3448,7 @@ pub mod builder {
     pub struct GetThingOrThings<'a> {
         client: &'a super::Client,
         id: Result<Option<types::GetThingOrThingsId>, String>,
+        name: Result<Option<types::GetThingOrThingsName>, String>,
     }
 
     impl<'a> GetThingOrThings<'a> {
@@ -3364,6 +3456,7 @@ pub mod builder {
             Self {
                 client: client,
                 id: Ok(None),
+                name: Ok(None),
             }
         }
 
@@ -3378,10 +3471,22 @@ pub mod builder {
             self
         }
 
+        pub fn name<V>(mut self, value: V) -> Self
+        where
+            V: std::convert::TryInto<types::GetThingOrThingsName>,
+        {
+            self.name = value
+                .try_into()
+                .map(Some)
+                .map_err(|_| "conversion to `GetThingOrThingsName` for name failed".to_string());
+            self
+        }
+
         ///Sends a `GET` request to `/v1/things`
         pub async fn send(self) -> Result<ResponseValue<::std::string::String>, Error<()>> {
-            let Self { client, id } = self;
+            let Self { client, id, name } = self;
             let id = id.map_err(Error::InvalidRequest)?;
+            let name = name.map_err(Error::InvalidRequest)?;
             let url = format!("{}/v1/things", client.baseurl,);
             let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
             header_map.append(
@@ -3397,6 +3502,7 @@ pub mod builder {
                     ::reqwest::header::HeaderValue::from_static("application/json"),
                 )
                 .query(&QueryParam::new("id", &id))
+                .query(&QueryParam::new("name", &name))
                 .headers(header_map)
                 .build()?;
             let info = OperationInfo {

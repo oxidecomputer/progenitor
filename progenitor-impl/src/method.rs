@@ -1491,7 +1491,9 @@ impl Generator {
             .map(|param| match &param.typ {
                 OperationParameterType::Type(type_id) => {
                     let ty = typespace.get_type(type_id);
-                    if ty.builder_ident(Some(crate::TYPES_MOD)).is_some() {
+                    if let (OperationParameterKind::Body(_), Some(_)) =
+                        (&param.kind, ty.builder_ident(Some(crate::TYPES_MOD)))
+                    {
                         let type_name = ty.ident_in(crate::TYPES_MOD);
                         quote! {
                             .and_then(|v| #type_name::try_from(v)
@@ -1518,52 +1520,12 @@ impl Generator {
                         match (
                             ty.builder_ident(Some(crate::TYPES_MOD)),
                             param.kind.is_optional(),
+                            matches!(param.kind, OperationParameterKind::Body(_)),
                         ) {
                             // TODO right now optional body parameters are not
                             // addressed
-                            (Some(_), true) => {
+                            (_, true, true) => {
                                 unreachable!()
-                            }
-                            (None, true) => {
-                                let typ = ty.ident_in(crate::TYPES_MOD);
-                                let err_msg = format!(
-                                    "conversion to `{}` for {} failed",
-                                    ty.name(),
-                                    param.name,
-                                );
-                                quote! {
-                                    pub fn #param_name<V>(
-                                        mut self,
-                                        value: V,
-                                    ) -> Self
-                                        where V: std::convert::TryInto<#typ>,
-                                    {
-                                        self.#param_name = value.try_into()
-                                            .map(Some)
-                                            .map_err(|_| #err_msg.to_string());
-                                        self
-                                    }
-                                }
-                            }
-                            (None, false) => {
-                                let typ = ty.ident_in(crate::TYPES_MOD);
-                                let err_msg = format!(
-                                    "conversion to `{}` for {} failed",
-                                    ty.name(),
-                                    param.name,
-                                );
-                                quote! {
-                                    pub fn #param_name<V>(
-                                        mut self,
-                                        value: V,
-                                    ) -> Self
-                                        where V: std::convert::TryInto<#typ>,
-                                    {
-                                        self.#param_name = value.try_into()
-                                            .map_err(|_| #err_msg.to_string());
-                                        self
-                                    }
-                                }
                             }
 
                             // For builder-capable bodies we offer a `body()`
@@ -1571,7 +1533,7 @@ impl Generator {
                             // a builder **from** the body type). We also offer
                             // a `body_map()` method that operates on the
                             // builder itself.
-                            (Some(builder_name), false) => {
+                            (Some(builder_name), false, true) => {
                                 assert_eq!(param.name, "body");
                                 let typ = ty.ident_in(crate::TYPES_MOD);
                                 let err_msg = format!(
@@ -1598,6 +1560,33 @@ impl Generator {
                                             -> #builder_name,
                                     {
                                         self.body = self.body.map(f);
+                                        self
+                                    }
+                                }
+                            }
+
+                            (_, optional, _) => {
+                                let typ = ty.ident_in(crate::TYPES_MOD);
+                                let err_msg = format!(
+                                    "conversion to `{}` for {} failed",
+                                    ty.name(),
+                                    param.name,
+                                );
+                                let map_some = optional.then(|| {
+                                    quote! {
+                                        .map(Some)
+                                    }
+                                });
+                                quote! {
+                                    pub fn #param_name<V>(
+                                        mut self,
+                                        value: V,
+                                    ) -> Self
+                                        where V: std::convert::TryInto<#typ>,
+                                    {
+                                        self.#param_name = value.try_into()
+                                            #map_some
+                                            .map_err(|_| #err_msg.to_string());
                                         self
                                     }
                                 }

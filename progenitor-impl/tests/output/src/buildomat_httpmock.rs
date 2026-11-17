@@ -761,6 +761,17 @@ pub mod operations {
                 Self(self.0.query_param_missing("id"))
             }
         }
+
+        pub fn name<'a, T>(self, value: T) -> Self
+        where
+            T: Into<Option<&'a types::GetThingOrThingsName>>,
+        {
+            if let Some(value) = value.into() {
+                Self(self.0.query_param("name", value.to_string()))
+            } else {
+                Self(self.0.query_param_missing("name"))
+            }
+        }
     }
 
     pub struct GetThingOrThingsThen(::httpmock::Then);

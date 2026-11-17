@@ -25,6 +25,18 @@ pub mod types {
         }
     }
 
+    ///`GetThingOrThingsName`
+    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, Default)]
+    pub struct GetThingOrThingsName {
+        #[serde(
+            rename = "stranger-things",
+            skip_serializing_if = "::std::option::Option::is_none"
+        )]
+        pub stranger_things: ::std::option::Option<::std::string::String>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        pub things: ::std::option::Option<::std::string::String>,
+    }
+
     ///`HeaderArgAcceptLanguage`
     #[derive(
         :: serde :: Deserialize,
@@ -991,6 +1003,7 @@ impl Client {
     pub async fn get_thing_or_things<'a>(
         &'a self,
         id: Option<&'a types::GetThingOrThingsId>,
+        name: Option<&'a types::GetThingOrThingsName>,
     ) -> Result<ResponseValue<::std::string::String>, Error<()>> {
         let url = format!("{}/v1/things", self.baseurl,);
         let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
@@ -1007,6 +1020,7 @@ impl Client {
                 ::reqwest::header::HeaderValue::from_static("application/json"),
             )
             .query(&QueryParam::new("id", &id))
+            .query(&QueryParam::new("name", &name))
             .headers(header_map)
             .build()?;
         let info = OperationInfo {
