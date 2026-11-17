@@ -1807,10 +1807,11 @@ pub mod types {
         fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             static PATTERN: ::std::sync::LazyLock<::regress::Regex> =
                 ::std::sync::LazyLock::new(|| {
-                    ::regress::Regex::new(
+                    ::regress::Regex::with_flags(
                         "^(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\\.\
                          ){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])/\
                          ([8-9]|1[0-9]|2[0-9]|3[0-2])$",
+                        "u",
                     )
                     .unwrap()
                 });
@@ -1884,9 +1885,10 @@ pub mod types {
         fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             static PATTERN: ::std::sync::LazyLock<::regress::Regex> =
                 ::std::sync::LazyLock::new(|| {
-                    ::regress::Regex::new(
+                    ::regress::Regex::with_flags(
                         "^([fF][dD])[0-9a-fA-F]{2}:(([0-9a-fA-F]{1,4}:){6}[0-9a-fA-F]{1,\
                          4}|([0-9a-fA-F]{1,4}:){1,6}:)\\/([1-9]|[1-9][0-9]|1[0-1][0-9]|12[0-8])$",
+                        "u",
                     )
                     .unwrap()
                 });
@@ -1967,7 +1969,7 @@ pub mod types {
             }
             static PATTERN: ::std::sync::LazyLock<::regress::Regex> =
                 ::std::sync::LazyLock::new(|| {
-                    ::regress::Regex::new("^[0-9]{1,5}(-[0-9]{1,5})?$").unwrap()
+                    ::regress::Regex::with_flags("^[0-9]{1,5}(-[0-9]{1,5})?$", "u").unwrap()
                 });
             if PATTERN.find(value).is_none() {
                 return Err("doesn't match pattern \"^[0-9]{1,5}(-[0-9]{1,5})?$\"".into());
@@ -2032,7 +2034,8 @@ pub mod types {
             }
             static PATTERN: ::std::sync::LazyLock<::regress::Regex> =
                 ::std::sync::LazyLock::new(|| {
-                    ::regress::Regex::new("^([0-9a-fA-F]{2}:){5}[0-9a-fA-F]{2}$").unwrap()
+                    ::regress::Regex::with_flags("^([0-9a-fA-F]{2}:){5}[0-9a-fA-F]{2}$", "u")
+                        .unwrap()
                 });
             if PATTERN.find(value).is_none() {
                 return Err(
@@ -2115,7 +2118,7 @@ pub mod types {
             }
             static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(
                 || {
-                    :: regress :: Regex :: new ("^(?![0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$)^[a-z][a-z0-9-]*[a-zA-Z0-9]$") . unwrap ()
+                    :: regress :: Regex :: with_flags ("^(?![0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$)^[a-z][a-z0-9-]*[a-zA-Z0-9]$" , "u") . unwrap ()
                 },
             );
             if PATTERN.find(value).is_none() {
@@ -2908,7 +2911,9 @@ pub mod types {
                 return Err("longer than 63 characters".into());
             }
             static PATTERN: ::std::sync::LazyLock<::regress::Regex> =
-                ::std::sync::LazyLock::new(|| ::regress::Regex::new("[a-z-]+\\.[a-z-]+").unwrap());
+                ::std::sync::LazyLock::new(|| {
+                    ::regress::Regex::with_flags("[a-z-]+\\.[a-z-]+", "u").unwrap()
+                });
             if PATTERN.find(value).is_none() {
                 return Err("doesn't match pattern \"[a-z-]+\\.[a-z-]+\"".into());
             }
@@ -3277,7 +3282,7 @@ pub mod types {
         fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             static PATTERN: ::std::sync::LazyLock<::regress::Regex> =
                 ::std::sync::LazyLock::new(|| {
-                    ::regress::Regex::new("^\\d+\\.\\d+\\.\\d+([\\-\\+].+)?$").unwrap()
+                    ::regress::Regex::with_flags("^\\d+\\.\\d+\\.\\d+([\\-\\+].+)?$", "u").unwrap()
                 });
             if PATTERN.find(value).is_none() {
                 return Err("doesn't match pattern \"^\\d+\\.\\d+\\.\\d+([\\-\\+].+)?$\"".into());
@@ -3855,8 +3860,9 @@ pub mod types {
         fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             static PATTERN: ::std::sync::LazyLock<::regress::Regex> =
                 ::std::sync::LazyLock::new(|| {
-                    ::regress::Regex::new(
+                    ::regress::Regex::with_flags(
                         "(([a-z]+[a-z0-9]*)(_([a-z0-9]+))*):(([a-z]+[a-z0-9]*)(_([a-z0-9]+))*)",
+                        "u",
                     )
                     .unwrap()
                 });
@@ -4195,7 +4201,7 @@ pub mod types {
             }
             static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(
                 || {
-                    :: regress :: Regex :: new ("^(?![0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$)^[a-z][a-z0-9-]*[a-zA-Z0-9]$") . unwrap ()
+                    :: regress :: Regex :: with_flags ("^(?![0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$)^[a-z][a-z0-9-]*[a-zA-Z0-9]$" , "u") . unwrap ()
                 },
             );
             if PATTERN.find(value).is_none() {
