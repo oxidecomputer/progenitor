@@ -439,9 +439,11 @@ impl Generator {
     ///
     /// The root module holds the client items, including the inline `prelude`
     /// module. Submodules hold the generated types (`types`) and, for the
-    /// builder interface, the operation builders (`builder`); codespace fixes
-    /// the order (items by key, then submodules). The codespace tracks the
-    /// crates the SDK depends on; see [`codespace::Codespace::dependencies`].
+    /// builder interface, the operation builders (`builder`). Both submodules
+    /// are keyed to sort among the root items, so the token stream holds the
+    /// `use` items, `prelude`, `types`, the `Client` items, and then
+    /// `builder`. The codespace tracks the crates the SDK depends on; see
+    /// [`codespace::Codespace::dependencies`].
     pub fn generate_sdk(&self) -> codespace::Codespace {
         let mut cs = codespace::Codespace::default();
 
