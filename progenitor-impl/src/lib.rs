@@ -188,7 +188,8 @@ impl GenerationSettings {
         self
     }
 
-    /// Client inner type available to pre and post hooks.
+    /// Client inner type available to `progenitor_client::ClientHooks`
+    /// implementations through `self.inner()`.
     pub fn with_inner_type(&mut self, inner_type: TokenStream) -> &mut Self {
         self.inner_type = Some(inner_type);
         self
@@ -199,6 +200,10 @@ impl GenerationSettings {
     /// * `pre_hook(&request::Client) -> ()` without an inner type, or
     /// * `pre_hook(&InnerType, &request::Client) -> ()`
     ///   if an inner type was specified using [`with_inner_type()`](Self::with_inner_type).
+    #[deprecated(
+        since = "0.17.0",
+        note = "implement `progenitor_client::ClientHooks::pre` instead"
+    )]
     pub fn with_pre_hook(&mut self, pre_hook: TokenStream) -> &mut Self {
         self.pre_hook = Some(pre_hook);
         self
@@ -212,6 +217,10 @@ impl GenerationSettings {
     ///
     /// Returning an error result will abort the call with
     /// an `Error::PreHookError` (type declared in generated code).
+    #[deprecated(
+        since = "0.17.0",
+        note = "implement `progenitor_client::ClientHooks::pre` instead"
+    )]
     pub fn with_pre_hook_async(&mut self, pre_hook: TokenStream) -> &mut Self {
         self.pre_hook_async = Some(pre_hook);
         self
@@ -222,6 +231,10 @@ impl GenerationSettings {
     /// * `post_hook(&Result<reqwest::Response,reqwest::Error>) -> ()` without an inner type, or
     /// * `post_hook(&InnerType, &Result<reqwest::Response,reqwest::Error>) -> ()`
     ///   if an inner type was specified using [`with_inner_type()`](Self::with_inner_type).
+    #[deprecated(
+        since = "0.17.0",
+        note = "implement `progenitor_client::ClientHooks::post` instead"
+    )]
     pub fn with_post_hook(&mut self, post_hook: TokenStream) -> &mut Self {
         self.post_hook = Some(post_hook);
         self
@@ -235,6 +248,10 @@ impl GenerationSettings {
     ///
     /// Returning an error result will abort the call with
     /// an `Error::PostHookError` (type declared in generated code).
+    #[deprecated(
+        since = "0.17.0",
+        note = "implement `progenitor_client::ClientHooks::post` instead"
+    )]
     pub fn with_post_hook_async(&mut self, post_hook: TokenStream) -> &mut Self {
         self.post_hook_async = Some(post_hook);
         self

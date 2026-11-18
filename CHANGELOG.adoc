@@ -18,6 +18,30 @@ https://github.com/oxidecomputer/progenitor/compare/v0.17.0-alpha.1\...HEAD[Full
 * Update typify to 0.10.1 (typespace 0.1.2, codespace 0.1.0)
 * Fix a panic in builder-style generation for object-type query parameters (#1456)
 * Read the OpenAPI document in one call in `progenitor-macro` (#1454)
+* Deprecate the `pre_hook`, `pre_hook_async`, `post_hook`, and `post_hook_async` settings (and the matching `GenerationSettings::with_*` methods) in favor of `ClientHooks` (#1457)
+
+=== Migrating from the hook settings
+
+The body of a pre hook moves into `ClientHooks::pre` and the body of a post
+hook into `ClientHooks::post`, implemented for the generated `Client`. Both
+methods are async and take the same request or response the hook did, plus an
+`&OperationInfo`. The inner type is the trait's type parameter, reached
+through `self.inner()`. A hook that returned `Result<_, E>` maps its error to
+`Error::Custom(e.to_string())`, which is what the generated code did for it.
+
+[source,rust]
+----
+impl ClientHooks<Inner> for Client {
+    async fn pre<E>(
+        &self,
+        req: &mut reqwest::Request,
+        _info: &OperationInfo,
+    ) -> Result<(), Error<E>> {
+        // the former pre_hook body, with `inner` as `self.inner()`
+        Ok(())
+    }
+}
+----
 
 == 0.17.0-alpha.1 (released 2026-11-07)
 

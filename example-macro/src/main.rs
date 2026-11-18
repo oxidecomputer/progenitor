@@ -1,5 +1,8 @@
 // Copyright 2022 Oxide Computer Company
 
+// This example exercises the legacy hooks.
+#![allow(deprecated)]
+
 use progenitor::generate_api;
 
 generate_api!(
