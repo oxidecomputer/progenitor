@@ -389,7 +389,7 @@ dependencies = [
  "proc-macro2",
  "quote",
  "semver",
- "syn 3.0.9",
+ "syn 3.0.10",
  "version-ranges",
 ]
 
@@ -3047,7 +3047,7 @@ dependencies = [
  "serde",
  "serde_json",
  "strum",
- "syn 3.0.9",
+ "syn 3.0.10",
  "thiserror 2.0.21",
 ]
 
