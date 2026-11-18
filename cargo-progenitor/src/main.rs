@@ -220,7 +220,7 @@ static DEPENDENCIES: Dependencies = Dependencies {
     bytes: "1.9",
     chrono: "0.4",
     futures: "0.3",
-    json_serde: "1.1.0",
+    json_serde: "1.1",
     percent_encoding: "2.3",
     rand: "0.8",
     regress: "0.10",
