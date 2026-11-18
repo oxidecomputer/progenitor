@@ -254,12 +254,45 @@ impl PartialOrd for OperationResponseStatus {
     }
 }
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
+pub(crate) enum ResponseGroup {
+    Success,
+    Error,
+}
+
+impl ResponseGroup {
+    fn includes(self, status: &OperationResponseStatus) -> bool {
+        match self {
+            ResponseGroup::Success => status.is_success_or_default(),
+            ResponseGroup::Error => status.is_error_or_default(),
+        }
+    }
+
+    fn type_name(self) -> &'static str {
+        match self {
+            ResponseGroup::Success => "Success",
+            ResponseGroup::Error => "Error",
+        }
+    }
+
+    fn to_doc_string(self) -> &'static str {
+        match self {
+            ResponseGroup::Success => "successful",
+            ResponseGroup::Error => "error",
+        }
+    }
+}
+
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone)]
 pub(crate) enum OperationResponseKind {
     Type(TypeId),
     None,
     Raw,
     Upgrade,
+    MultiType {
+        operation: String,
+        group: ResponseGroup,
+    },
 }
 
 impl OperationResponseKind {
@@ -278,6 +311,57 @@ impl OperationResponseKind {
             OperationResponseKind::Upgrade => {
                 quote! { reqwest::Upgraded }
             }
+            OperationResponseKind::MultiType {
+                ref operation,
+                group,
+            } => {
+                let path = response_enum_path(operation, group);
+                quote! { #path }
+            }
+        }
+    }
+}
+
+/// A path to the variant of `kind`'s enum that holds a given status, or `None`
+/// when the group needs no enum and a body is returned unwrapped.
+fn response_enum_variant_path(
+    kind: &OperationResponseKind,
+) -> Option<impl Fn(&OperationResponseStatus) -> TokenStream + use<>> {
+    let OperationResponseKind::MultiType { operation, group } = kind else {
+        return None;
+    };
+    let enum_path = response_enum_path(operation, *group);
+
+    Some(move |status: &OperationResponseStatus| {
+        let variant_ident = response_variant_ident(status);
+        quote! { #enum_path::#variant_ident }
+    })
+}
+
+fn response_enum_path(operation: &str, group: ResponseGroup) -> TokenStream {
+    let module_ident = response_module_ident(operation);
+    let enum_ident = format_ident!("{}", group.type_name());
+    quote! { response::#module_ident::#enum_ident }
+}
+
+fn response_module_ident(operation: &str) -> proc_macro2::Ident {
+    format_ident!("{}", sanitize(operation, Case::Snake))
+}
+
+fn response_variant_ident(status: &OperationResponseStatus) -> proc_macro2::Ident {
+    match status {
+        OperationResponseStatus::Code(code) => format_ident!("Status{}", code),
+        OperationResponseStatus::Range(range) => format_ident!("Status{}xx", range),
+        OperationResponseStatus::Default => format_ident!("Default"),
+    }
+}
+
+impl OperationResponseStatus {
+    fn to_doc_string(&self) -> String {
+        match self {
+            OperationResponseStatus::Code(code) => code.to_string(),
+            OperationResponseStatus::Range(range) => format!("{}xx", range),
+            OperationResponseStatus::Default => "default".to_string(),
         }
     }
 }
@@ -937,8 +1021,9 @@ impl Generator {
         assert!(body_func.clone().count() <= 1);
 
         let (success_response_items, response_type) =
-            self.extract_responses(method, OperationResponseStatus::is_success_or_default);
+            self.extract_responses(method, ResponseGroup::Success);
 
+        let success_variant = response_enum_variant_path(&response_type);
         let success_response_matches = success_response_items.iter().map(|response| {
             let pat = match &response.status_code {
                 OperationResponseStatus::Code(code) => quote! { #code },
@@ -947,26 +1032,48 @@ impl Generator {
                 }
             };
 
-            let decode = match &response.typ {
-                OperationResponseKind::Type(_) => {
+            let variant = success_variant
+                .as_ref()
+                .map(|path| path(&response.status_code));
+
+            let decode = match (&response.typ, &variant) {
+                (OperationResponseKind::Type(_), None) => {
                     quote! {
                         ResponseValue::from_response(#response_ident).await
                     }
                 }
-                OperationResponseKind::None => {
+                (OperationResponseKind::Type(_), Some(variant)) => {
+                    let typ = response.typ.clone().into_tokens(&self.type_space);
+                    quote! {
+                        Ok(
+                            ResponseValue::<#typ>::from_response(#response_ident)
+                                .await?
+                                .map(#variant)
+                        )
+                    }
+                }
+                (OperationResponseKind::None, None) => {
                     quote! {
                         Ok(ResponseValue::empty(#response_ident))
                     }
                 }
-                OperationResponseKind::Raw => {
+                (OperationResponseKind::None, Some(variant)) => {
+                    quote! {
+                        Ok(ResponseValue::empty(#response_ident).map(|()| #variant))
+                    }
+                }
+                (OperationResponseKind::Raw, _) => {
                     quote! {
                         Ok(ResponseValue::stream(#response_ident))
                     }
                 }
-                OperationResponseKind::Upgrade => {
+                (OperationResponseKind::Upgrade, _) => {
                     quote! {
                         ResponseValue::upgrade(#response_ident).await
                     }
+                }
+                (OperationResponseKind::MultiType { .. }, _) => {
+                    unreachable!("MultiType describes a group of responses, never one of them")
                 }
             };
 
@@ -975,8 +1082,9 @@ impl Generator {
 
         // Errors...
         let (error_response_items, error_type) =
-            self.extract_responses(method, OperationResponseStatus::is_error_or_default);
+            self.extract_responses(method, ResponseGroup::Error);
 
+        let error_variant = response_enum_variant_path(&error_type);
         let error_response_matches = error_response_items.iter().map(|response| {
             let pat = match &response.status_code {
                 OperationResponseStatus::Code(code) => {
@@ -993,8 +1101,12 @@ impl Generator {
                 }
             };
 
-            let decode = match &response.typ {
-                OperationResponseKind::Type(_) => {
+            let variant = error_variant
+                .as_ref()
+                .map(|path| path(&response.status_code));
+
+            let decode = match (&response.typ, &variant) {
+                (OperationResponseKind::Type(_), None) => {
                     quote! {
                         Err(Error::ErrorResponse(
                             ResponseValue::from_response(#response_ident)
@@ -1002,21 +1114,39 @@ impl Generator {
                         ))
                     }
                 }
-                OperationResponseKind::None => {
+                (OperationResponseKind::Type(_), Some(variant)) => {
+                    let typ = response.typ.clone().into_tokens(&self.type_space);
+                    quote! {
+                        Err(Error::ErrorResponse(
+                            ResponseValue::<#typ>::from_response(#response_ident)
+                                .await?
+                                .map(#variant)
+                        ))
+                    }
+                }
+                (OperationResponseKind::None, None) => {
                     quote! {
                         Err(Error::ErrorResponse(
                             ResponseValue::empty(#response_ident)
                         ))
                     }
                 }
-                OperationResponseKind::Raw => {
+                (OperationResponseKind::None, Some(variant)) => {
+                    quote! {
+                        Err(Error::ErrorResponse(
+                            ResponseValue::empty(#response_ident)
+                                .map(|()| #variant)
+                        ))
+                    }
+                }
+                (OperationResponseKind::Raw, _) => {
                     quote! {
                         Err(Error::ErrorResponse(
                             ResponseValue::stream(#response_ident)
                         ))
                     }
                 }
-                OperationResponseKind::Upgrade => {
+                (OperationResponseKind::Upgrade, _) => {
                     if response.status_code == OperationResponseStatus::Default {
                         return quote! {}; // catch-all handled below
                     } else {
@@ -1025,6 +1155,9 @@ impl Generator {
                                 upgrade requests is not yet implemented"
                         );
                     }
+                }
+                (OperationResponseKind::MultiType { .. }, _) => {
+                    unreachable!("MultiType describes a group of responses, never one of them")
                 }
             };
 
@@ -1174,19 +1307,18 @@ impl Generator {
         })
     }
 
-    /// Extract responses that match criteria specified by the `filter`. The
-    /// result is a `Vec<OperationResponse>` that enumerates the cases matching
-    /// the filter, and a `TokenStream` that represents the generated type for
-    /// those cases.
+    /// Extract the responses of one `group`. The result is a `Vec<OperationResponse>`
+    /// that enumerates the cases for that group, and a `TokenStream` that represents
+    /// the generated type for those cases.
     pub(crate) fn extract_responses<'a>(
         &self,
         method: &'a OperationMethod,
-        filter: fn(&OperationResponseStatus) -> bool,
+        group: ResponseGroup,
     ) -> (Vec<&'a OperationResponse>, OperationResponseKind) {
         let mut response_items = method
             .responses
             .iter()
-            .filter(|response| filter(&response.status_code))
+            .filter(|response| group.includes(&response.status_code))
             .collect::<Vec<_>>();
         response_items.sort();
 
@@ -1215,15 +1347,104 @@ impl Generator {
             .map(|response| response.typ.clone())
             .collect::<BTreeSet<_>>();
 
-        // TODO to deal with multiple response types, we'll need to create an
-        // enum type with variants for each of the response types.
-        assert!(response_types.len() <= 1);
-        let response_type = response_types
-            .into_iter()
-            .next()
-            // TODO should this be OperationResponseType::Raw?
-            .unwrap_or(OperationResponseKind::None);
+        let response_type = match response_types.len() {
+            0 => OperationResponseKind::None,
+            1 => response_types.into_iter().next().unwrap(),
+            _ if response_types.iter().any(|typ| {
+                matches!(
+                    typ,
+                    OperationResponseKind::Raw | OperationResponseKind::Upgrade
+                )
+            }) =>
+            {
+                todo!(
+                    "operation {} mixes a raw or upgraded response with a typed \
+                     one in its {:?} responses, which is not yet supported",
+                    method.operation_id,
+                    group,
+                )
+            }
+
+            _ => OperationResponseKind::MultiType {
+                operation: method.operation_id.clone(),
+                group,
+            },
+        };
+
         (response_items, response_type)
+    }
+
+    /// Return a module containing an enum definition for each group of `method` that is a
+    /// OperationResponseKind::MultiType, None if none exist.
+    pub(crate) fn response_module(&self, method: &OperationMethod) -> Option<TokenStream> {
+        let enums = [ResponseGroup::Success, ResponseGroup::Error]
+            .into_iter()
+            .filter_map(|group| self.response_enum(method, group))
+            .collect::<Vec<_>>();
+
+        if enums.is_empty() {
+            return None;
+        }
+
+        let module_ident = response_module_ident(&method.operation_id);
+        let doc = format!("Response types of `{}`.", method.operation_id);
+
+        Some(quote! {
+            #[doc = #doc]
+            pub mod #module_ident {
+                #[allow(unused_imports)]
+                use super::super::types;
+
+                #(#enums)*
+            }
+        })
+    }
+
+    /// Return an enum definition for `group` if it is a OperationResponseKind::MultiType,
+    /// None otherwise.
+    pub(crate) fn response_enum(
+        &self,
+        method: &OperationMethod,
+        group: ResponseGroup,
+    ) -> Option<TokenStream> {
+        let (response_items, kind) = self.extract_responses(method, group);
+        let OperationResponseKind::MultiType { group, .. } = kind else {
+            return None;
+        };
+        let enum_ident = format_ident!("{}", group.type_name());
+
+        let variants = response_items.iter().map(|response| {
+            let variant_ident = response_variant_ident(&response.status_code);
+            let doc = format!("Answered with `{}`.", response.status_code.to_doc_string());
+            match &response.typ {
+                OperationResponseKind::Type(_) => {
+                    let typ = response.typ.clone().into_tokens(&self.type_space);
+                    quote! {
+                        #[doc = #doc]
+                        #variant_ident(#typ)
+                    }
+                }
+                _ => quote! {
+                    #[doc = #doc]
+                    #variant_ident
+                },
+            }
+        });
+
+        let doc = format!(
+            "The {} responses of `{}`, which carry more than one type.",
+            group.to_doc_string(),
+            method.operation_id,
+        );
+
+        Some(quote! {
+            #[doc = #doc]
+            #[derive(Clone, Debug, serde::Serialize)]
+            #[serde(untagged)]
+            pub enum #enum_ident {
+                #(#variants),*
+            }
+        })
     }
 
     // Validates all the necessary conditions for Dropshot pagination. Returns
