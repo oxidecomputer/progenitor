@@ -606,7 +606,7 @@ impl Generator {
                 &prop_type,
             );
 
-            let prop_fn = format_ident!("{}", sanitize(&name, Case::Snake));
+            let prop_fn = format_ident!("{}", sanitize(name, Case::Snake));
             let prop_type_ident = prop_type.ident_in(crate::TYPES_MOD);
             let consumer = quote! {
                 if let Some(value) =

@@ -1150,8 +1150,8 @@ impl Generator {
 
         let typespace = self.typespace();
         MethodSigBody {
-            success: response_type.into_tokens(&typespace),
-            error: error_type.into_tokens(&typespace),
+            success: response_type.into_tokens(typespace),
+            error: error_type.into_tokens(typespace),
             body: body_impl,
         }
     }
