@@ -128,6 +128,16 @@ pub mod types {
         }
     }
 
+    impl ::std::str::FromStr for BlockSize {
+        type Err = self::error::ConversionError;
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+            value
+                .parse::<i64>()
+                .map_err(|e| ::std::string::ToString::to_string(&e).into())
+                .and_then(Self::try_from)
+        }
+    }
+
     impl ::std::convert::TryFrom<i64> for BlockSize {
         type Error = self::error::ConversionError;
         fn try_from(value: i64) -> ::std::result::Result<Self, self::error::ConversionError> {
