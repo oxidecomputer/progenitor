@@ -436,7 +436,10 @@ fn do_generate_api(item: TokenStream) -> Result<TokenStream, syn::Error> {
             .into_iter()
             .map(|derive| {
                 let path = derive.into_inner();
-                TraitSpec::parse(&path.to_token_stream().to_string()).map_err(|err| {
+                // A modeled trait matches only its exact path, so drop the
+                // spaces that rendering the tokens puts around `::`.
+                let spec = path.to_token_stream().to_string().replace(' ', "");
+                TraitSpec::parse(&spec).map_err(|err| {
                     syn::Error::new(syn::spanned::Spanned::span(&path), err.to_string())
                 })
             })
