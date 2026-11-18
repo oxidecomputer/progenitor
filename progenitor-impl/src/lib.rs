@@ -476,7 +476,7 @@ impl Generator {
 
         let types = cs
             .add_mod_from_codespace("types", self.typespace().to_codespace())
-            .expect("the types are the first registrations and cannot conflict");
+            .expect("no dependencies are registered before the types, so none conflict");
         types.add_docs(" Types used as operation parameters and responses.");
         types.add_attr(quote! { allow(clippy::all) });
         cs.get_root_mod().set_mod_key("types", TYPES_KEY);
