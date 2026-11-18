@@ -107,7 +107,7 @@ Progenitor includes an interface appropriate for use in a
 [`build.rs`](https://doc.rust-lang.org/cargo/reference/build-scripts.html)
 file. While slightly more onerous than the macro, a builder has the advantage of making the generated code visible.
 The capability of generating a CLI and `httpmock` helpers is only available using `build.rs`
-and the `Generator` functions `cli` and `httpmock` respectively.
+and the `Generator` functions `generate_cli` and `generate_httpmock` respectively.
 
 The `build.rs` file should look something like this:
 
@@ -117,9 +117,13 @@ fn main() {
     println!("cargo:rerun-if-changed={}", src);
     let file = std::fs::File::open(src).unwrap();
     let spec = serde_json::from_reader(file).unwrap();
-    let mut generator = progenitor::Generator::default();
+    let generator = progenitor::Generator::build(
+        &progenitor::GenerationSettings::default(),
+        &spec,
+    )
+    .unwrap();
 
-    let tokens = generator.generate_tokens(&spec).unwrap();
+    let tokens = generator.generate_sdk().into_stream();
     let ast = syn::parse2(tokens).unwrap();
     let content = prettyplease::unparse(&ast);
 
@@ -368,10 +372,10 @@ fn main() {
     println!("cargo:rerun-if-changed={}", src);
     let file = std::fs::File::open(src).unwrap();
     let spec = serde_json::from_reader(file).unwrap();
-    let mut binding = GenerationSettings::default();
-    let settings = binding.with_interface(InterfaceStyle::Builder);
-    let mut generator = progenitor::Generator::new(&settings);
-    let tokens = generator.generate_tokens(&spec).unwrap();
+    let mut settings = GenerationSettings::default();
+    settings.with_interface(InterfaceStyle::Builder);
+    let generator = progenitor::Generator::build(&settings, &spec).unwrap();
+    let tokens = generator.generate_sdk().into_stream();
     let ast = syn::parse2(tokens).unwrap();
     let content = prettyplease::unparse(&ast);
 

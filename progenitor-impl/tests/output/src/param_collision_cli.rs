@@ -134,6 +134,9 @@ pub trait CliConfig {
     fn list_end_error<T>(&self, value: &Error<T>)
     where
         T: std::clone::Clone + schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
+    fn json_body_schema<T>(&self)
+    where
+        T: std::clone::Clone + schemars::JsonSchema + serde::Serialize + std::fmt::Debug;
     fn execute_key_get(
         &self,
         matches: &::clap::ArgMatches,

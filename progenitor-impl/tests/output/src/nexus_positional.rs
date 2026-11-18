@@ -2,6 +2,12 @@
 use progenitor_client::{encode_path, ClientHooks, OperationInfo, QueryParam, RequestBuilderExt};
 #[allow(unused_imports)]
 pub use progenitor_client::{ByteStream, ClientInfo, Error, ResponseValue};
+/// Items consumers will typically use such as the Client.
+pub mod prelude {
+    #[allow(unused_imports)]
+    pub use super::Client;
+}
+
 /// Types used as operation parameters and responses.
 #[allow(clippy::all)]
 pub mod types {
@@ -148,20 +154,6 @@ pub mod types {
         type Err = <u64 as ::std::str::FromStr>::Err;
         fn from_str(value: &str) -> ::std::result::Result<Self, Self::Err> {
             Ok(Self(value.parse()?))
-        }
-    }
-
-    impl ::std::convert::TryFrom<&str> for ByteCount {
-        type Error = <u64 as ::std::str::FromStr>::Err;
-        fn try_from(value: &str) -> ::std::result::Result<Self, Self::Error> {
-            value.parse()
-        }
-    }
-
-    impl ::std::convert::TryFrom<String> for ByteCount {
-        type Error = <u64 as ::std::str::FromStr>::Err;
-        fn try_from(value: String) -> ::std::result::Result<Self, Self::Error> {
-            value.parse()
         }
     }
 
@@ -1376,20 +1368,6 @@ pub mod types {
         }
     }
 
-    impl ::std::convert::TryFrom<&str> for InstanceCpuCount {
-        type Error = <u16 as ::std::str::FromStr>::Err;
-        fn try_from(value: &str) -> ::std::result::Result<Self, Self::Error> {
-            value.parse()
-        }
-    }
-
-    impl ::std::convert::TryFrom<String> for InstanceCpuCount {
-        type Error = <u16 as ::std::str::FromStr>::Err;
-        fn try_from(value: String) -> ::std::result::Result<Self, Self::Error> {
-            value.parse()
-        }
-    }
-
     ///Create-time parameters for an
     /// [`Instance`](omicron_common::api::external::Instance)
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
@@ -1820,12 +1798,20 @@ pub mod types {
     impl ::std::str::FromStr for Ipv4Net {
         type Err = self::error::ConversionError;
         fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+            ::std::convert::TryFrom::try_from(value)
+        }
+    }
+
+    impl ::std::convert::TryFrom<&str> for Ipv4Net {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             static PATTERN: ::std::sync::LazyLock<::regress::Regex> =
                 ::std::sync::LazyLock::new(|| {
-                    ::regress::Regex::new(
+                    ::regress::Regex::with_flags(
                         "^(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\\.\
                          ){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])/\
                          ([8-9]|1[0-9]|2[0-9]|3[0-2])$",
+                        "u",
                     )
                     .unwrap()
                 });
@@ -1840,19 +1826,12 @@ pub mod types {
         }
     }
 
-    impl ::std::convert::TryFrom<&str> for Ipv4Net {
-        type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
-            value.parse()
-        }
-    }
-
     impl ::std::convert::TryFrom<::std::string::String> for Ipv4Net {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
         ) -> ::std::result::Result<Self, self::error::ConversionError> {
-            value.parse()
+            ::std::convert::TryFrom::try_from(value.as_str())
         }
     }
 
@@ -1861,8 +1840,7 @@ pub mod types {
         where
             D: ::serde::Deserializer<'de>,
         {
-            ::std::string::String::deserialize(deserializer)?
-                .parse()
+            ::std::convert::TryFrom::try_from(::std::string::String::deserialize(deserializer)?)
                 .map_err(|e: self::error::ConversionError| {
                     <D::Error as ::serde::de::Error>::custom(e.to_string())
                 })
@@ -1898,11 +1876,19 @@ pub mod types {
     impl ::std::str::FromStr for Ipv6Net {
         type Err = self::error::ConversionError;
         fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+            ::std::convert::TryFrom::try_from(value)
+        }
+    }
+
+    impl ::std::convert::TryFrom<&str> for Ipv6Net {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             static PATTERN: ::std::sync::LazyLock<::regress::Regex> =
                 ::std::sync::LazyLock::new(|| {
-                    ::regress::Regex::new(
+                    ::regress::Regex::with_flags(
                         "^([fF][dD])[0-9a-fA-F]{2}:(([0-9a-fA-F]{1,4}:){6}[0-9a-fA-F]{1,\
                          4}|([0-9a-fA-F]{1,4}:){1,6}:)\\/([1-9]|[1-9][0-9]|1[0-1][0-9]|12[0-8])$",
+                        "u",
                     )
                     .unwrap()
                 });
@@ -1917,19 +1903,12 @@ pub mod types {
         }
     }
 
-    impl ::std::convert::TryFrom<&str> for Ipv6Net {
-        type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
-            value.parse()
-        }
-    }
-
     impl ::std::convert::TryFrom<::std::string::String> for Ipv6Net {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
         ) -> ::std::result::Result<Self, self::error::ConversionError> {
-            value.parse()
+            ::std::convert::TryFrom::try_from(value.as_str())
         }
     }
 
@@ -1938,8 +1917,7 @@ pub mod types {
         where
             D: ::serde::Deserializer<'de>,
         {
-            ::std::string::String::deserialize(deserializer)?
-                .parse()
+            ::std::convert::TryFrom::try_from(::std::string::String::deserialize(deserializer)?)
                 .map_err(|e: self::error::ConversionError| {
                     <D::Error as ::serde::de::Error>::custom(e.to_string())
                 })
@@ -1976,6 +1954,13 @@ pub mod types {
     impl ::std::str::FromStr for L4PortRange {
         type Err = self::error::ConversionError;
         fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+            ::std::convert::TryFrom::try_from(value)
+        }
+    }
+
+    impl ::std::convert::TryFrom<&str> for L4PortRange {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             if value.chars().count() > 11usize {
                 return Err("longer than 11 characters".into());
             }
@@ -1984,7 +1969,7 @@ pub mod types {
             }
             static PATTERN: ::std::sync::LazyLock<::regress::Regex> =
                 ::std::sync::LazyLock::new(|| {
-                    ::regress::Regex::new("^[0-9]{1,5}(-[0-9]{1,5})?$").unwrap()
+                    ::regress::Regex::with_flags("^[0-9]{1,5}(-[0-9]{1,5})?$", "u").unwrap()
                 });
             if PATTERN.find(value).is_none() {
                 return Err("doesn't match pattern \"^[0-9]{1,5}(-[0-9]{1,5})?$\"".into());
@@ -1993,19 +1978,12 @@ pub mod types {
         }
     }
 
-    impl ::std::convert::TryFrom<&str> for L4PortRange {
-        type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
-            value.parse()
-        }
-    }
-
     impl ::std::convert::TryFrom<::std::string::String> for L4PortRange {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
         ) -> ::std::result::Result<Self, self::error::ConversionError> {
-            value.parse()
+            ::std::convert::TryFrom::try_from(value.as_str())
         }
     }
 
@@ -2014,8 +1992,7 @@ pub mod types {
         where
             D: ::serde::Deserializer<'de>,
         {
-            ::std::string::String::deserialize(deserializer)?
-                .parse()
+            ::std::convert::TryFrom::try_from(::std::string::String::deserialize(deserializer)?)
                 .map_err(|e: self::error::ConversionError| {
                     <D::Error as ::serde::de::Error>::custom(e.to_string())
                 })
@@ -2042,6 +2019,13 @@ pub mod types {
     impl ::std::str::FromStr for MacAddr {
         type Err = self::error::ConversionError;
         fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+            ::std::convert::TryFrom::try_from(value)
+        }
+    }
+
+    impl ::std::convert::TryFrom<&str> for MacAddr {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             if value.chars().count() > 17usize {
                 return Err("longer than 17 characters".into());
             }
@@ -2050,7 +2034,8 @@ pub mod types {
             }
             static PATTERN: ::std::sync::LazyLock<::regress::Regex> =
                 ::std::sync::LazyLock::new(|| {
-                    ::regress::Regex::new("^([0-9a-fA-F]{2}:){5}[0-9a-fA-F]{2}$").unwrap()
+                    ::regress::Regex::with_flags("^([0-9a-fA-F]{2}:){5}[0-9a-fA-F]{2}$", "u")
+                        .unwrap()
                 });
             if PATTERN.find(value).is_none() {
                 return Err(
@@ -2061,19 +2046,12 @@ pub mod types {
         }
     }
 
-    impl ::std::convert::TryFrom<&str> for MacAddr {
-        type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
-            value.parse()
-        }
-    }
-
     impl ::std::convert::TryFrom<::std::string::String> for MacAddr {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
         ) -> ::std::result::Result<Self, self::error::ConversionError> {
-            value.parse()
+            ::std::convert::TryFrom::try_from(value.as_str())
         }
     }
 
@@ -2082,8 +2060,7 @@ pub mod types {
         where
             D: ::serde::Deserializer<'de>,
         {
-            ::std::string::String::deserialize(deserializer)?
-                .parse()
+            ::std::convert::TryFrom::try_from(::std::string::String::deserialize(deserializer)?)
                 .map_err(|e: self::error::ConversionError| {
                     <D::Error as ::serde::de::Error>::custom(e.to_string())
                 })
@@ -2129,12 +2106,19 @@ pub mod types {
     impl ::std::str::FromStr for Name {
         type Err = self::error::ConversionError;
         fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+            ::std::convert::TryFrom::try_from(value)
+        }
+    }
+
+    impl ::std::convert::TryFrom<&str> for Name {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             if value.chars().count() > 63usize {
                 return Err("longer than 63 characters".into());
             }
             static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(
                 || {
-                    :: regress :: Regex :: new ("^(?![0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$)^[a-z][a-z0-9-]*[a-zA-Z0-9]$") . unwrap ()
+                    :: regress :: Regex :: with_flags ("^(?![0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$)^[a-z][a-z0-9-]*[a-zA-Z0-9]$" , "u") . unwrap ()
                 },
             );
             if PATTERN.find(value).is_none() {
@@ -2144,19 +2128,12 @@ pub mod types {
         }
     }
 
-    impl ::std::convert::TryFrom<&str> for Name {
-        type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
-            value.parse()
-        }
-    }
-
     impl ::std::convert::TryFrom<::std::string::String> for Name {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
         ) -> ::std::result::Result<Self, self::error::ConversionError> {
-            value.parse()
+            ::std::convert::TryFrom::try_from(value.as_str())
         }
     }
 
@@ -2165,8 +2142,7 @@ pub mod types {
         where
             D: ::serde::Deserializer<'de>,
         {
-            ::std::string::String::deserialize(deserializer)?
-                .parse()
+            ::std::convert::TryFrom::try_from(::std::string::String::deserialize(deserializer)?)
                 .map_err(|e: self::error::ConversionError| {
                     <D::Error as ::serde::de::Error>::custom(e.to_string())
                 })
@@ -2628,17 +2604,17 @@ pub mod types {
     impl ::std::str::FromStr for Password {
         type Err = self::error::ConversionError;
         fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
-            if value.chars().count() > 512usize {
-                return Err("longer than 512 characters".into());
-            }
-            Ok(Self(value.to_string()))
+            ::std::convert::TryFrom::try_from(value)
         }
     }
 
     impl ::std::convert::TryFrom<&str> for Password {
         type Error = self::error::ConversionError;
         fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
-            value.parse()
+            if value.chars().count() > 512usize {
+                return Err("longer than 512 characters".into());
+            }
+            Ok(Self(value.to_string()))
         }
     }
 
@@ -2647,7 +2623,7 @@ pub mod types {
         fn try_from(
             value: ::std::string::String,
         ) -> ::std::result::Result<Self, self::error::ConversionError> {
-            value.parse()
+            ::std::convert::TryFrom::try_from(value.as_str())
         }
     }
 
@@ -2656,8 +2632,7 @@ pub mod types {
         where
             D: ::serde::Deserializer<'de>,
         {
-            ::std::string::String::deserialize(deserializer)?
-                .parse()
+            ::std::convert::TryFrom::try_from(::std::string::String::deserialize(deserializer)?)
                 .map_err(|e: self::error::ConversionError| {
                     <D::Error as ::serde::de::Error>::custom(e.to_string())
                 })
@@ -2925,22 +2900,24 @@ pub mod types {
     impl ::std::str::FromStr for RoleName {
         type Err = self::error::ConversionError;
         fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
-            if value.chars().count() > 63usize {
-                return Err("longer than 63 characters".into());
-            }
-            static PATTERN: ::std::sync::LazyLock<::regress::Regex> =
-                ::std::sync::LazyLock::new(|| ::regress::Regex::new("[a-z-]+\\.[a-z-]+").unwrap());
-            if PATTERN.find(value).is_none() {
-                return Err("doesn't match pattern \"[a-z-]+\\.[a-z-]+\"".into());
-            }
-            Ok(Self(value.to_string()))
+            ::std::convert::TryFrom::try_from(value)
         }
     }
 
     impl ::std::convert::TryFrom<&str> for RoleName {
         type Error = self::error::ConversionError;
         fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
-            value.parse()
+            if value.chars().count() > 63usize {
+                return Err("longer than 63 characters".into());
+            }
+            static PATTERN: ::std::sync::LazyLock<::regress::Regex> =
+                ::std::sync::LazyLock::new(|| {
+                    ::regress::Regex::with_flags("[a-z-]+\\.[a-z-]+", "u").unwrap()
+                });
+            if PATTERN.find(value).is_none() {
+                return Err("doesn't match pattern \"[a-z-]+\\.[a-z-]+\"".into());
+            }
+            Ok(Self(value.to_string()))
         }
     }
 
@@ -2949,7 +2926,7 @@ pub mod types {
         fn try_from(
             value: ::std::string::String,
         ) -> ::std::result::Result<Self, self::error::ConversionError> {
-            value.parse()
+            ::std::convert::TryFrom::try_from(value.as_str())
         }
     }
 
@@ -2958,8 +2935,7 @@ pub mod types {
         where
             D: ::serde::Deserializer<'de>,
         {
-            ::std::string::String::deserialize(deserializer)?
-                .parse()
+            ::std::convert::TryFrom::try_from(::std::string::String::deserialize(deserializer)?)
                 .map_err(|e: self::error::ConversionError| {
                     <D::Error as ::serde::de::Error>::custom(e.to_string())
                 })
@@ -3297,9 +3273,16 @@ pub mod types {
     impl ::std::str::FromStr for SemverVersion {
         type Err = self::error::ConversionError;
         fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+            ::std::convert::TryFrom::try_from(value)
+        }
+    }
+
+    impl ::std::convert::TryFrom<&str> for SemverVersion {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             static PATTERN: ::std::sync::LazyLock<::regress::Regex> =
                 ::std::sync::LazyLock::new(|| {
-                    ::regress::Regex::new("^\\d+\\.\\d+\\.\\d+([\\-\\+].+)?$").unwrap()
+                    ::regress::Regex::with_flags("^\\d+\\.\\d+\\.\\d+([\\-\\+].+)?$", "u").unwrap()
                 });
             if PATTERN.find(value).is_none() {
                 return Err("doesn't match pattern \"^\\d+\\.\\d+\\.\\d+([\\-\\+].+)?$\"".into());
@@ -3308,19 +3291,12 @@ pub mod types {
         }
     }
 
-    impl ::std::convert::TryFrom<&str> for SemverVersion {
-        type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
-            value.parse()
-        }
-    }
-
     impl ::std::convert::TryFrom<::std::string::String> for SemverVersion {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
         ) -> ::std::result::Result<Self, self::error::ConversionError> {
-            value.parse()
+            ::std::convert::TryFrom::try_from(value.as_str())
         }
     }
 
@@ -3329,8 +3305,7 @@ pub mod types {
         where
             D: ::serde::Deserializer<'de>,
         {
-            ::std::string::String::deserialize(deserializer)?
-                .parse()
+            ::std::convert::TryFrom::try_from(::std::string::String::deserialize(deserializer)?)
                 .map_err(|e: self::error::ConversionError| {
                     <D::Error as ::serde::de::Error>::custom(e.to_string())
                 })
@@ -3876,10 +3851,18 @@ pub mod types {
     impl ::std::str::FromStr for TimeseriesName {
         type Err = self::error::ConversionError;
         fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+            ::std::convert::TryFrom::try_from(value)
+        }
+    }
+
+    impl ::std::convert::TryFrom<&str> for TimeseriesName {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             static PATTERN: ::std::sync::LazyLock<::regress::Regex> =
                 ::std::sync::LazyLock::new(|| {
-                    ::regress::Regex::new(
+                    ::regress::Regex::with_flags(
                         "(([a-z]+[a-z0-9]*)(_([a-z0-9]+))*):(([a-z]+[a-z0-9]*)(_([a-z0-9]+))*)",
+                        "u",
                     )
                     .unwrap()
                 });
@@ -3893,19 +3876,12 @@ pub mod types {
         }
     }
 
-    impl ::std::convert::TryFrom<&str> for TimeseriesName {
-        type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
-            value.parse()
-        }
-    }
-
     impl ::std::convert::TryFrom<::std::string::String> for TimeseriesName {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
         ) -> ::std::result::Result<Self, self::error::ConversionError> {
-            value.parse()
+            ::std::convert::TryFrom::try_from(value.as_str())
         }
     }
 
@@ -3914,8 +3890,7 @@ pub mod types {
         where
             D: ::serde::Deserializer<'de>,
         {
-            ::std::string::String::deserialize(deserializer)?
-                .parse()
+            ::std::convert::TryFrom::try_from(::std::string::String::deserialize(deserializer)?)
                 .map_err(|e: self::error::ConversionError| {
                     <D::Error as ::serde::de::Error>::custom(e.to_string())
                 })
@@ -4214,12 +4189,19 @@ pub mod types {
     impl ::std::str::FromStr for UserId {
         type Err = self::error::ConversionError;
         fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+            ::std::convert::TryFrom::try_from(value)
+        }
+    }
+
+    impl ::std::convert::TryFrom<&str> for UserId {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
             if value.chars().count() > 63usize {
                 return Err("longer than 63 characters".into());
             }
             static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(
                 || {
-                    :: regress :: Regex :: new ("^(?![0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$)^[a-z][a-z0-9-]*[a-zA-Z0-9]$") . unwrap ()
+                    :: regress :: Regex :: with_flags ("^(?![0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$)^[a-z][a-z0-9-]*[a-zA-Z0-9]$" , "u") . unwrap ()
                 },
             );
             if PATTERN.find(value).is_none() {
@@ -4229,19 +4211,12 @@ pub mod types {
         }
     }
 
-    impl ::std::convert::TryFrom<&str> for UserId {
-        type Error = self::error::ConversionError;
-        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
-            value.parse()
-        }
-    }
-
     impl ::std::convert::TryFrom<::std::string::String> for UserId {
         type Error = self::error::ConversionError;
         fn try_from(
             value: ::std::string::String,
         ) -> ::std::result::Result<Self, self::error::ConversionError> {
-            value.parse()
+            ::std::convert::TryFrom::try_from(value.as_str())
         }
     }
 
@@ -4250,8 +4225,7 @@ pub mod types {
         where
             D: ::serde::Deserializer<'de>,
         {
-            ::std::string::String::deserialize(deserializer)?
-                .parse()
+            ::std::convert::TryFrom::try_from(::std::string::String::deserialize(deserializer)?)
                 .map_err(|e: self::error::ConversionError| {
                     <D::Error as ::serde::de::Error>::custom(e.to_string())
                 })
@@ -16996,10 +16970,4 @@ impl Client {
             _ => Err(Error::UnexpectedResponse(response)),
         }
     }
-}
-
-/// Items consumers will typically use such as the Client.
-pub mod prelude {
-    #[allow(unused_imports)]
-    pub use super::Client;
 }

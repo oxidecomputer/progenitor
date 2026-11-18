@@ -3,11 +3,11 @@
 # Update the change log to reflect the new release and set us up for the next release.
 pre-release-replacements = [
   # First, replace the current "Unreleased changes" header with one reflecting the new release version and date.
-  {file="../CHANGELOG.adoc", search="Unreleased changes \\(release date TBD\\)", replace="{{version}} (released {{date}})", exactly=1},
+  {file="../CHANGELOG.adoc", search="Unreleased changes \\(release date TBD\\)", replace="{{version}} (released {{date}})", exactly=1, prerelease=true},
   # Update the link to the list of raw commits in the formerly "Unreleased changes" section.  It should end at the tag for the newly-released version.
-  {file="../CHANGELOG.adoc", search="\\\\.\\.\\.HEAD", replace="\\...{{tag_name}}", exactly=1},
+  {file="../CHANGELOG.adoc", search="\\\\.\\.\\.HEAD", replace="\\...{{tag_name}}", exactly=1, prerelease=true},
   # Next, append a new "Unreleased changes" header beneath the sentinel line.
-  {file="../CHANGELOG.adoc", search="// cargo-release: next header goes here \\(do not change this line\\)", replace="// cargo-release: next header goes here (do not change this line)\n\n== Unreleased changes (release date TBD)\n\nhttps://github.com/oxidecomputer/progenitor/compare/{{tag_name}}\\...HEAD[Full list of commits]", exactly=1},
+  {file="../CHANGELOG.adoc", search="// cargo-release: next header goes here \\(do not change this line\\)", replace="// cargo-release: next header goes here (do not change this line)\n\n== Unreleased changes (release date TBD)\n\nhttps://github.com/oxidecomputer/progenitor/compare/{{tag_name}}\\...HEAD[Full list of commits]", exactly=1, prerelease=true},
 ]
 
 pre-release-commit-message = "release progenitor {{version}}"
