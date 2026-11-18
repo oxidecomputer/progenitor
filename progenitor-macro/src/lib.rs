@@ -131,7 +131,7 @@ impl syn::parse::Parse for SpecSource {
 /// is `Merged`.
 ///
 /// The optional `inner_type` is for ancillary data, stored with the generated
-/// client that can be used by the pre- and post-hooks.
+/// client that can be used by `ClientHooks` implementations.
 ///
 /// The optional `pre_hook` is either a closure (that must be within
 /// parentheses: `(fn |[inner,] request| { .. })`) or a path to a function. The
@@ -344,13 +344,19 @@ fn read_file(path: &Path, span: proc_macro2::Span) -> Result<Vec<u8>, syn::Error
     })
 }
 
+#[allow(deprecated)]
 fn do_generate_api(item: TokenStream) -> Result<TokenStream, syn::Error> {
-    let (spec_source, settings) = if let Ok(spec) = syn::parse::<LitStr>(item.clone()) {
+    let (spec_source, settings, legacy_hooks) = if let Ok(spec) = syn::parse::<LitStr>(item.clone())
+    {
         let spec_source = SpecSource {
             path: spec,
             relative_to: RelativeTo::ManifestDir,
         };
-        (spec_source, GenerationSettings::default())
+        (
+            spec_source,
+            GenerationSettings::default(),
+            proc_macro2::TokenStream::new(),
+        )
     } else {
         let MacroSettings {
             spec,
@@ -379,6 +385,42 @@ fn do_generate_api(item: TokenStream) -> Result<TokenStream, syn::Error> {
         settings.with_tag(tags);
         settings.with_hooks(hooks);
         inner_type.map(|inner_type| settings.with_inner_type(inner_type.to_token_stream()));
+
+        // The legacy hook keys still work. Each one that appears also
+        // emits a call to a `#[deprecated]` function spanned at the hook's
+        // value, so the compiler reports the warning at the user's
+        // `generate_api!` invocation.
+        let legacy_hooks = [
+            ("pre_hook", pre_hook.as_ref()),
+            ("pre_hook_async", pre_hook_async.as_ref()),
+            ("post_hook", post_hook.as_ref()),
+            ("post_hook_async", post_hook_async.as_ref()),
+        ]
+        .into_iter()
+        .filter_map(|(name, hook)| hook.map(|hook| (name, hook)))
+        .map(|(name, hook)| {
+            let span = hook
+                .0
+                .clone()
+                .into_iter()
+                .next()
+                .map_or_else(proc_macro2::Span::call_site, |tt| tt.span());
+            let func = quote::format_ident!("{}", name);
+            let call = quote::format_ident!("{}", name, span = span);
+            let note = format!(
+                "`{name}` is deprecated; implement \
+                 `progenitor_client::ClientHooks` instead"
+            );
+            quote! {
+                const _: () = {
+                    #[deprecated(note = #note)]
+                    const fn #func() {}
+                    #call();
+                };
+            }
+        })
+        .collect::<proc_macro2::TokenStream>();
+
         pre_hook.map(|pre_hook| settings.with_pre_hook(pre_hook.into_inner().0));
         pre_hook_async
             .map(|pre_hook_async| settings.with_pre_hook_async(pre_hook_async.into_inner().0));
@@ -437,7 +479,7 @@ fn do_generate_api(item: TokenStream) -> Result<TokenStream, syn::Error> {
         if let Some(timeout) = timeout {
             settings.with_timeout(timeout);
         }
-        (spec, settings)
+        (spec, settings, legacy_hooks)
     };
 
     let spec_path = spec_source.path;
@@ -485,6 +527,8 @@ fn do_generate_api(item: TokenStream) -> Result<TokenStream, syn::Error> {
         use progenitor::progenitor_client;
 
         #code
+
+        #legacy_hooks
 
         // Force a rebuild when the given file is modified.
         const _: &str = include_str!(#path_str);

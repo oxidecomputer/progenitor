@@ -1,16 +1,34 @@
-// Copyright 2022 Oxide Computer Company
+// Copyright 2026 Oxide Computer Company
 
 use progenitor::generate_api;
 
 generate_api!(
     spec = "../sample_openapi/keeper.json",
-    pre_hook = (|request| {
-        println!("doing this {:?}", request);
-    }),
-    pre_hook_async = crate::add_auth_headers,
-    post_hook = crate::all_done,
     derives = [schemars::JsonSchema],
 );
+
+// Modify the client behavior by executing code before and after each server
+// request.
+impl ClientHooks for Client {
+    async fn pre<E>(
+        &self,
+        request: &mut reqwest::Request,
+        _info: &OperationInfo,
+    ) -> std::result::Result<(), Error<E>> {
+        println!("doing this {:?}", request);
+        add_auth_headers(request).await?;
+        Ok(())
+    }
+
+    async fn post<E>(
+        &self,
+        result: &reqwest::Result<reqwest::Response>,
+        _info: &OperationInfo,
+    ) -> std::result::Result<(), Error<E>> {
+        all_done(result);
+        Ok(())
+    }
+}
 
 async fn add_auth_headers(
     req: &mut reqwest::Request,
