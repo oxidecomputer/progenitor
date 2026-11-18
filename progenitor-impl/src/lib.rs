@@ -43,6 +43,7 @@ const TYPES_KEY: &str = " types";
 const CLIENT_KEY: &str = "Client";
 
 mod cli;
+mod dependencies;
 mod httpmock;
 mod method;
 mod template;
@@ -442,8 +443,10 @@ impl Generator {
     /// builder interface, the operation builders (`builder`). Both submodules
     /// are keyed to sort among the root items, so the token stream holds the
     /// `use` items, `prelude`, `types`, the `Client` items, and then
-    /// `builder`. The codespace tracks the crates the SDK depends on; see
-    /// [`codespace::Codespace::dependencies`].
+    /// `builder`.
+    ///
+    /// The codespace tracks the crates the SDK names, at the versions this
+    /// generator is tested against; see [`codespace::Codespace::dependencies`].
     pub fn generate_sdk(&self) -> codespace::Codespace {
         let mut cs = codespace::Codespace::default();
 
@@ -481,25 +484,22 @@ impl Generator {
         types.add_attr(quote! { allow(clippy::all) });
         cs.get_root_mod().set_mod_key("types", TYPES_KEY);
 
-        if self
+        let paginated = self
             .raw_methods
             .iter()
-            .any(|method| method.dropshot_paginated.is_some())
-        {
-            cs.add_dependency(codespace::Dependency::new("futures"))
-                .unwrap();
-        }
-
-        if self
+            .any(|method| method.dropshot_paginated.is_some());
+        let websocket = self
             .raw_methods
             .iter()
-            .any(|method| method.dropshot_websocket)
-        {
-            cs.add_dependency(codespace::Dependency::new("base64"))
-                .unwrap();
-            cs.add_dependency(codespace::Dependency::new("rand"))
-                .unwrap();
-        }
+            .any(|method| method.dropshot_websocket);
+        dependencies::register(
+            &mut cs,
+            ["progenitor-client", "reqwest"]
+                .into_iter()
+                .chain(paginated.then_some("futures"))
+                .chain(websocket.then_some("base64"))
+                .chain(websocket.then_some("rand")),
+        );
 
         cs
     }
