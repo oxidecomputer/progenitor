@@ -440,13 +440,10 @@ impl Generator {
     ///
     /// The root module holds the client items, including the inline `prelude`
     /// module. Submodules hold the generated types (`types`) and, for the
-    /// builder interface, the operation builders (`builder`). Both submodules
-    /// are keyed to sort among the root items, so the token stream holds the
-    /// `use` items, `prelude`, `types`, the `Client` items, and then
-    /// `builder`.
+    /// builder interface, the operation builders (`builder`).
     ///
-    /// The codespace tracks the crates the SDK names, at the versions this
-    /// generator is tested against; see [`codespace::Codespace::dependencies`].
+    /// The codespace tracks dependencies of the generated SDK; see
+    /// [`codespace::Codespace::dependencies`].
     pub fn generate_sdk(&self) -> codespace::Codespace {
         let mut cs = codespace::Codespace::default();
 
@@ -484,22 +481,22 @@ impl Generator {
         types.add_attr(quote! { allow(clippy::all) });
         cs.get_root_mod().set_mod_key("types", TYPES_KEY);
 
-        let paginated = self
+        dependencies::register(&mut cs, ["progenitor-client", "reqwest"]);
+
+        if self
             .raw_methods
             .iter()
-            .any(|method| method.dropshot_paginated.is_some());
-        let websocket = self
+            .any(|method| method.dropshot_paginated.is_some())
+        {
+            dependencies::register(&mut cs, ["futures"]);
+        }
+        if self
             .raw_methods
             .iter()
-            .any(|method| method.dropshot_websocket);
-        dependencies::register(
-            &mut cs,
-            ["progenitor-client", "reqwest"]
-                .into_iter()
-                .chain(paginated.then_some("futures"))
-                .chain(websocket.then_some("base64"))
-                .chain(websocket.then_some("rand")),
-        );
+            .any(|method| method.dropshot_websocket)
+        {
+            dependencies::register(&mut cs, ["base64", "rand"]);
+        }
 
         cs
     }

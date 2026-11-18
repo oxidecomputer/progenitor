@@ -24,8 +24,7 @@ struct CliOperation {
 impl Generator {
     /// Generate a `clap`-based CLI.
     ///
-    /// The codespace tracks the crates the CLI names other than the SDK, at the
-    /// versions this generator is tested against; see
+    /// The codespace tracks dependencies; see
     /// [`codespace::Codespace::dependencies`].
     pub fn generate_cli(&self, crate_name: &str) -> codespace::Codespace {
         let raw_methods = &self.raw_methods;
@@ -176,22 +175,22 @@ impl Generator {
         root.add_item("Cli B", config);
         root.add_item("Cli C", command);
 
-        let paginated = raw_methods
+        crate::dependencies::register(&mut cs, ["anyhow", "clap", "schemars", "serde"]);
+
+        if raw_methods
             .iter()
-            .any(|method| method.dropshot_paginated.is_some());
-        let json_body = raw_methods.iter().any(|method| {
+            .any(|method| method.dropshot_paginated.is_some())
+        {
+            crate::dependencies::register(&mut cs, ["futures"]);
+        }
+        if raw_methods.iter().any(|method| {
             method.params.iter().any(|param| {
                 matches!(param.kind, OperationParameterKind::Body(_))
                     && matches!(param.typ, OperationParameterType::Type(_))
             })
-        });
-        crate::dependencies::register(
-            &mut cs,
-            ["anyhow", "clap", "schemars", "serde"]
-                .into_iter()
-                .chain(paginated.then_some("futures"))
-                .chain(json_body.then_some("serde_json")),
-        );
+        }) {
+            crate::dependencies::register(&mut cs, ["serde_json"]);
+        }
 
         cs
     }

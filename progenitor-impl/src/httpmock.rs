@@ -28,8 +28,7 @@ impl Generator {
     /// the SDK. This can include `::` and instances of `-` in the crate name
     /// should be converted to `_`.
     ///
-    /// The codespace tracks the crates the mocks name other than the SDK, at
-    /// the versions this generator is tested against; see
+    /// The codespace tracks dependencies; see
     /// [`codespace::Codespace::dependencies`].
     pub fn generate_httpmock(&self, crate_path: &str) -> codespace::Codespace {
         let raw_methods = &self.raw_methods;
@@ -109,7 +108,9 @@ impl Generator {
         root.add_item("", operations);
         root.add_item("MockServerExt", ext);
 
-        let raw_json = raw_methods.iter().any(|method| {
+        // Do any methods have raw body parameters or raw responses? If so, we
+        // need to add `serde_json` to the dependencies.
+        if raw_methods.iter().any(|method| {
             method.params.iter().any(|param| {
                 matches!(
                     (&param.typ, &param.kind),
@@ -122,13 +123,10 @@ impl Generator {
                 .responses
                 .iter()
                 .any(|response| matches!(response.typ, OperationResponseKind::Raw))
-        });
-        crate::dependencies::register(
-            &mut cs,
-            ["httpmock", "regex"]
-                .into_iter()
-                .chain(raw_json.then_some("serde_json")),
-        );
+        }) {
+            crate::dependencies::register(&mut cs, ["serde_json"]);
+        }
+        crate::dependencies::register(&mut cs, ["httpmock", "regex"]);
 
         cs
     }

@@ -195,10 +195,9 @@ fn main() -> Result<()> {
     Ok(())
 }
 
-/// The generated crate's dependencies: those the SDK's codespace registered,
-/// except that with `--include-client` the progenitor-client code is a module
-/// of the crate, so the crate takes on that code's dependencies in place of
-/// progenitor-client.
+/// The generated crate's dependencies, except that with `--include-client` the
+/// progenitor-client code is a module of the crate, so the crate takes on that
+/// code's dependencies in place of progenitor-client.
 fn dependencies(sdk: &Codespace, include_client: bool) -> Result<Codespace> {
     let mut deps = Codespace::default();
     for dep in sdk

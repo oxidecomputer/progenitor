@@ -155,10 +155,7 @@ impl syn::parse::Parse for SpecSource {
 ///
 /// Additional options control type generation:
 /// - `derives`: optional array of trait paths that every generated type must
-///   implement. A trait that typespace models (such as `PartialEq` or `Hash`)
-///   is required of every type, and generation fails if a type cannot
-///   implement it. Any other path is emitted as a derive on every generated
-///   type. A path that does not parse as a trait is an error at that path.
+///   implement.
 ///
 /// - `struct_builder`: optional boolean; (if true) generates a `::builder()`
 ///   method for each generated struct that can be used to specify each
