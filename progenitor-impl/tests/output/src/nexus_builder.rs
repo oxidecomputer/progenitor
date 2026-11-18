@@ -121,6 +121,16 @@ pub mod types {
         }
     }
 
+    impl ::std::str::FromStr for BlockSize {
+        type Err = self::error::ConversionError;
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+            value
+                .parse::<i64>()
+                .map_err(|e| ::std::string::ToString::to_string(&e).into())
+                .and_then(Self::try_from)
+        }
+    }
+
     impl ::std::convert::TryFrom<i64> for BlockSize {
         type Error = self::error::ConversionError;
         fn try_from(value: i64) -> ::std::result::Result<Self, self::error::ConversionError> {
@@ -151,9 +161,9 @@ pub mod types {
             let mut schema = <i64 as ::schemars::JsonSchema>::json_schema(g).into_object();
             schema.enum_values = ::std::option::Option::Some(
                 [
-                    ::serde_json::from_str("512").unwrap(),
-                    ::serde_json::from_str("2048").unwrap(),
-                    ::serde_json::from_str("4096").unwrap(),
+                    ::serde_json::Value::Number(::serde_json::Number::from(512i64)),
+                    ::serde_json::Value::Number(::serde_json::Number::from(2048i64)),
+                    ::serde_json::Value::Number(::serde_json::Number::from(4096i64)),
                 ]
                 .into_iter()
                 .collect(),
@@ -2235,17 +2245,7 @@ pub mod types {
     }
 
     ///An IPv4 subnet, including prefix and subnet mask
-    #[derive(
-        :: serde :: Serialize,
-        Clone,
-        Debug,
-        Eq,
-        Hash,
-        Ord,
-        PartialEq,
-        PartialOrd,
-        schemars :: JsonSchema,
-    )]
+    #[derive(:: serde :: Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
     #[serde(transparent)]
     pub struct Ipv4Net(::std::string::String);
     impl ::std::ops::Deref for Ipv4Net {
@@ -2313,6 +2313,24 @@ pub mod types {
         }
     }
 
+    impl ::schemars::JsonSchema for Ipv4Net {
+        fn schema_name() -> ::std::string::String {
+            "Ipv4Net".to_string()
+        }
+
+        fn json_schema(g: &mut ::schemars::r#gen::SchemaGenerator) -> ::schemars::schema::Schema {
+            let mut schema =
+                <::std::string::String as ::schemars::JsonSchema>::json_schema(g).into_object();
+            schema.string().pattern = ::std::option::Option::Some(
+                "^(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\\.\
+                 ){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])/\
+                 ([8-9]|1[0-9]|2[0-9]|3[0-2])$"
+                    .to_string(),
+            );
+            schema.into()
+        }
+    }
+
     ///A non-decreasing IPv4 address range, inclusive of both ends.
     ///
     ///The first address must be less than or equal to the last address.
@@ -2331,17 +2349,7 @@ pub mod types {
     }
 
     ///An IPv6 subnet, including prefix and subnet mask
-    #[derive(
-        :: serde :: Serialize,
-        Clone,
-        Debug,
-        Eq,
-        Hash,
-        Ord,
-        PartialEq,
-        PartialOrd,
-        schemars :: JsonSchema,
-    )]
+    #[derive(:: serde :: Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
     #[serde(transparent)]
     pub struct Ipv6Net(::std::string::String);
     impl ::std::ops::Deref for Ipv6Net {
@@ -2408,6 +2416,23 @@ pub mod types {
         }
     }
 
+    impl ::schemars::JsonSchema for Ipv6Net {
+        fn schema_name() -> ::std::string::String {
+            "Ipv6Net".to_string()
+        }
+
+        fn json_schema(g: &mut ::schemars::r#gen::SchemaGenerator) -> ::schemars::schema::Schema {
+            let mut schema =
+                <::std::string::String as ::schemars::JsonSchema>::json_schema(g).into_object();
+            schema.string().pattern = ::std::option::Option::Some(
+                "^([fF][dD])[0-9a-fA-F]{2}:(([0-9a-fA-F]{1,4}:){6}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,\
+                 4}:){1,6}:)\\/([1-9]|[1-9][0-9]|1[0-1][0-9]|12[0-8])$"
+                    .to_string(),
+            );
+            schema.into()
+        }
+    }
+
     ///A non-decreasing IPv6 address range, inclusive of both ends.
     ///
     ///The first address must be less than or equal to the last address.
@@ -2427,17 +2452,7 @@ pub mod types {
 
     ///An inclusive-inclusive range of IP ports. The second port may be omitted
     /// to represent a single port
-    #[derive(
-        :: serde :: Serialize,
-        Clone,
-        Debug,
-        Eq,
-        Hash,
-        Ord,
-        PartialEq,
-        PartialOrd,
-        schemars :: JsonSchema,
-    )]
+    #[derive(:: serde :: Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
     #[serde(transparent)]
     pub struct L4PortRange(::std::string::String);
     impl ::std::ops::Deref for L4PortRange {
@@ -2501,18 +2516,24 @@ pub mod types {
         }
     }
 
+    impl ::schemars::JsonSchema for L4PortRange {
+        fn schema_name() -> ::std::string::String {
+            "L4PortRange".to_string()
+        }
+
+        fn json_schema(g: &mut ::schemars::r#gen::SchemaGenerator) -> ::schemars::schema::Schema {
+            let mut schema =
+                <::std::string::String as ::schemars::JsonSchema>::json_schema(g).into_object();
+            schema.string().min_length = ::std::option::Option::Some(1u32);
+            schema.string().max_length = ::std::option::Option::Some(11u32);
+            schema.string().pattern =
+                ::std::option::Option::Some("^[0-9]{1,5}(-[0-9]{1,5})?$".to_string());
+            schema.into()
+        }
+    }
+
     ///A Media Access Control address, in EUI-48 format
-    #[derive(
-        :: serde :: Serialize,
-        Clone,
-        Debug,
-        Eq,
-        Hash,
-        Ord,
-        PartialEq,
-        PartialOrd,
-        schemars :: JsonSchema,
-    )]
+    #[derive(:: serde :: Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
     #[serde(transparent)]
     pub struct MacAddr(::std::string::String);
     impl ::std::ops::Deref for MacAddr {
@@ -2579,6 +2600,22 @@ pub mod types {
         }
     }
 
+    impl ::schemars::JsonSchema for MacAddr {
+        fn schema_name() -> ::std::string::String {
+            "MacAddr".to_string()
+        }
+
+        fn json_schema(g: &mut ::schemars::r#gen::SchemaGenerator) -> ::schemars::schema::Schema {
+            let mut schema =
+                <::std::string::String as ::schemars::JsonSchema>::json_schema(g).into_object();
+            schema.string().min_length = ::std::option::Option::Some(17u32);
+            schema.string().max_length = ::std::option::Option::Some(17u32);
+            schema.string().pattern =
+                ::std::option::Option::Some("^([0-9a-fA-F]{2}:){5}[0-9a-fA-F]{2}$".to_string());
+            schema.into()
+        }
+    }
+
     ///A `Measurement` is a timestamped datum from a single metric
     #[derive(
         :: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, schemars :: JsonSchema,
@@ -2615,17 +2652,7 @@ pub mod types {
     ///Names must begin with a lower case ASCII letter, be composed exclusively
     /// of lowercase ASCII, uppercase ASCII, numbers, and '-', and may not end
     /// with a '-'. Names cannot be a UUID though they may contain a UUID.
-    #[derive(
-        :: serde :: Serialize,
-        Clone,
-        Debug,
-        Eq,
-        Hash,
-        Ord,
-        PartialEq,
-        PartialOrd,
-        schemars :: JsonSchema,
-    )]
+    #[derive(:: serde :: Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
     #[serde(transparent)]
     pub struct Name(::std::string::String);
     impl ::std::ops::Deref for Name {
@@ -2684,6 +2711,20 @@ pub mod types {
                 .map_err(|e: self::error::ConversionError| {
                     <D::Error as ::serde::de::Error>::custom(e.to_string())
                 })
+        }
+    }
+
+    impl ::schemars::JsonSchema for Name {
+        fn schema_name() -> ::std::string::String {
+            "Name".to_string()
+        }
+
+        fn json_schema(g: &mut ::schemars::r#gen::SchemaGenerator) -> ::schemars::schema::Schema {
+            let mut schema =
+                <::std::string::String as ::schemars::JsonSchema>::json_schema(g).into_object();
+            schema.string().max_length = ::std::option::Option::Some(63u32);
+            schema . string () . pattern = :: std :: option :: Option :: Some ("^(?![0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$)^[a-z][a-z0-9-]*[a-zA-Z0-9]$" . to_string ()) ;
+            schema.into()
         }
     }
 
@@ -3219,17 +3260,7 @@ pub mod types {
     }
 
     ///Passwords may be subject to additional constraints.
-    #[derive(
-        :: serde :: Serialize,
-        Clone,
-        Debug,
-        Eq,
-        Hash,
-        Ord,
-        PartialEq,
-        PartialOrd,
-        schemars :: JsonSchema,
-    )]
+    #[derive(:: serde :: Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
     #[serde(transparent)]
     pub struct Password(::std::string::String);
     impl ::std::ops::Deref for Password {
@@ -3280,6 +3311,19 @@ pub mod types {
                 .map_err(|e: self::error::ConversionError| {
                     <D::Error as ::serde::de::Error>::custom(e.to_string())
                 })
+        }
+    }
+
+    impl ::schemars::JsonSchema for Password {
+        fn schema_name() -> ::std::string::String {
+            "Password".to_string()
+        }
+
+        fn json_schema(g: &mut ::schemars::r#gen::SchemaGenerator) -> ::schemars::schema::Schema {
+            let mut schema =
+                <::std::string::String as ::schemars::JsonSchema>::json_schema(g).into_object();
+            schema.string().max_length = ::std::option::Option::Some(512u32);
+            schema.into()
         }
     }
 
@@ -3620,17 +3664,7 @@ pub mod types {
     }
 
     ///Role names consist of two string components separated by dot (".").
-    #[derive(
-        :: serde :: Serialize,
-        Clone,
-        Debug,
-        Eq,
-        Hash,
-        Ord,
-        PartialEq,
-        PartialOrd,
-        schemars :: JsonSchema,
-    )]
+    #[derive(:: serde :: Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
     #[serde(transparent)]
     pub struct RoleName(::std::string::String);
     impl ::std::ops::Deref for RoleName {
@@ -3688,6 +3722,20 @@ pub mod types {
                 .map_err(|e: self::error::ConversionError| {
                     <D::Error as ::serde::de::Error>::custom(e.to_string())
                 })
+        }
+    }
+
+    impl ::schemars::JsonSchema for RoleName {
+        fn schema_name() -> ::std::string::String {
+            "RoleName".to_string()
+        }
+
+        fn json_schema(g: &mut ::schemars::r#gen::SchemaGenerator) -> ::schemars::schema::Schema {
+            let mut schema =
+                <::std::string::String as ::schemars::JsonSchema>::json_schema(g).into_object();
+            schema.string().max_length = ::std::option::Option::Some(63u32);
+            schema.string().pattern = ::std::option::Option::Some("[a-z-]+\\.[a-z-]+".to_string());
+            schema.into()
         }
     }
 
@@ -4084,17 +4132,7 @@ pub mod types {
     }
 
     ///`SemverVersion`
-    #[derive(
-        :: serde :: Serialize,
-        Clone,
-        Debug,
-        Eq,
-        Hash,
-        Ord,
-        PartialEq,
-        PartialOrd,
-        schemars :: JsonSchema,
-    )]
+    #[derive(:: serde :: Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
     #[serde(transparent)]
     pub struct SemverVersion(::std::string::String);
     impl ::std::ops::Deref for SemverVersion {
@@ -4149,6 +4187,20 @@ pub mod types {
                 .map_err(|e: self::error::ConversionError| {
                     <D::Error as ::serde::de::Error>::custom(e.to_string())
                 })
+        }
+    }
+
+    impl ::schemars::JsonSchema for SemverVersion {
+        fn schema_name() -> ::std::string::String {
+            "SemverVersion".to_string()
+        }
+
+        fn json_schema(g: &mut ::schemars::r#gen::SchemaGenerator) -> ::schemars::schema::Schema {
+            let mut schema =
+                <::std::string::String as ::schemars::JsonSchema>::json_schema(g).into_object();
+            schema.string().pattern =
+                ::std::option::Option::Some("^\\d+\\.\\d+\\.\\d+([\\-\\+].+)?$".to_string());
+            schema.into()
         }
     }
 
@@ -4821,17 +4873,7 @@ pub mod types {
     ///Names are constructed by concatenating the target and metric names with
     /// ':'. Target and metric names must be lowercase alphanumeric characters
     /// with '_' separating words.
-    #[derive(
-        :: serde :: Serialize,
-        Clone,
-        Debug,
-        Eq,
-        Hash,
-        Ord,
-        PartialEq,
-        PartialOrd,
-        schemars :: JsonSchema,
-    )]
+    #[derive(:: serde :: Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
     #[serde(transparent)]
     pub struct TimeseriesName(::std::string::String);
     impl ::std::ops::Deref for TimeseriesName {
@@ -4893,6 +4935,21 @@ pub mod types {
                 .map_err(|e: self::error::ConversionError| {
                     <D::Error as ::serde::de::Error>::custom(e.to_string())
                 })
+        }
+    }
+
+    impl ::schemars::JsonSchema for TimeseriesName {
+        fn schema_name() -> ::std::string::String {
+            "TimeseriesName".to_string()
+        }
+
+        fn json_schema(g: &mut ::schemars::r#gen::SchemaGenerator) -> ::schemars::schema::Schema {
+            let mut schema =
+                <::std::string::String as ::schemars::JsonSchema>::json_schema(g).into_object();
+            schema.string().pattern = ::std::option::Option::Some(
+                "(([a-z]+[a-z0-9]*)(_([a-z0-9]+))*):(([a-z]+[a-z0-9]*)(_([a-z0-9]+))*)".to_string(),
+            );
+            schema.into()
         }
     }
 
@@ -5251,17 +5308,7 @@ pub mod types {
     ///Names must begin with a lower case ASCII letter, be composed exclusively
     /// of lowercase ASCII, uppercase ASCII, numbers, and '-', and may not end
     /// with a '-'. Names cannot be a UUID though they may contain a UUID.
-    #[derive(
-        :: serde :: Serialize,
-        Clone,
-        Debug,
-        Eq,
-        Hash,
-        Ord,
-        PartialEq,
-        PartialOrd,
-        schemars :: JsonSchema,
-    )]
+    #[derive(:: serde :: Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
     #[serde(transparent)]
     pub struct UserId(::std::string::String);
     impl ::std::ops::Deref for UserId {
@@ -5320,6 +5367,20 @@ pub mod types {
                 .map_err(|e: self::error::ConversionError| {
                     <D::Error as ::serde::de::Error>::custom(e.to_string())
                 })
+        }
+    }
+
+    impl ::schemars::JsonSchema for UserId {
+        fn schema_name() -> ::std::string::String {
+            "UserId".to_string()
+        }
+
+        fn json_schema(g: &mut ::schemars::r#gen::SchemaGenerator) -> ::schemars::schema::Schema {
+            let mut schema =
+                <::std::string::String as ::schemars::JsonSchema>::json_schema(g).into_object();
+            schema.string().max_length = ::std::option::Option::Some(63u32);
+            schema . string () . pattern = :: std :: option :: Option :: Some ("^(?![0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$)^[a-z][a-z0-9-]*[a-zA-Z0-9]$" . to_string ()) ;
+            schema.into()
         }
     }
 
