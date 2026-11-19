@@ -1,0 +1,42 @@
+openapi: 3.0.3
+info: {title: Conditional requests, version: '1'}
+paths:
+  /item:
+    get:
+      operationId: get_item
+      parameters:
+        - {name: If-None-Match, in: header, schema: {type: string}}
+      responses:
+        '200': {description: Current item, content: {application/json: {schema: {type: string}}}}
+        '304': {$ref: '#/components/responses/NotModified'}
+        '404': {description: Missing item}
+  /plain:
+    get:
+      operationId: get_plain
+      responses:
+        '200': {description: Current item, content: {application/json: {schema: {type: string}}}}
+  /pages:
+    get:
+      operationId: get_pages
+      x-dropshot-pagination: {required: []}
+      parameters:
+        - {name: page_token, in: query, schema: {type: string}}
+        - {name: limit, in: query, schema: {type: integer, format: uint32, minimum: 1}}
+      responses:
+        '200':
+          description: Page
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [items]
+                properties:
+                  items: {type: array, items: {type: string}}
+                  next_page: {type: string}
+        '304': {$ref: '#/components/responses/NotModified'}
+components:
+  responses:
+    NotModified:
+      description: Cached representation still current
+      headers:
+        ETag: {schema: {type: string}}

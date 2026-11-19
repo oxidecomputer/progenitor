@@ -100,6 +100,7 @@ impl syn::parse::Parse for SpecSource {
 ///     [ pre_hook_async = closure::or::path::to::function, ]
 ///     [ post_hook_async = closure::or::path::to::function, ]
 ///     [ hooks = ( Optional | Expected ), ]
+///     [ conditional_responses = true | false, ]
 ///
 ///     [ derives = [ path::to::DeriveMacro ], ]
 ///
@@ -121,6 +122,10 @@ impl syn::parse::Parse for SpecSource {
 /// - `ManifestDir`: relative to `CARGO_MANIFEST_DIR`. This is the default when
 ///   the spec is provided as a string path.
 /// - `OutDir`: relative to `OUT_DIR` (useful for build script outputs).
+///
+/// With `conditional_responses = true`, operations that explicitly declare a bodyless
+/// 304 return `ConditionalResponse<T>`. Match `Modified` to read the fresh value or
+/// `NotModified` to reuse a cached value and inspect the response headers.
 ///
 /// The optional `interface` lets you specify either a `Positional` argument or
 /// `Builder` argument style; `Positional` is the default.
@@ -206,6 +211,8 @@ struct MacroSettings {
     tags: TagStyle,
     #[serde(default)]
     hooks: HooksMode,
+    #[serde(default)]
+    conditional_responses: bool,
 
     inner_type: Option<ParseWrapper<syn::Type>>,
     pre_hook: Option<ParseWrapper<ClosureOrPath>>,
@@ -363,6 +370,7 @@ fn do_generate_api(item: TokenStream) -> Result<TokenStream, syn::Error> {
             interface,
             tags,
             hooks,
+            conditional_responses,
             inner_type,
             pre_hook,
             pre_hook_async,
@@ -384,6 +392,7 @@ fn do_generate_api(item: TokenStream) -> Result<TokenStream, syn::Error> {
         settings.with_interface(interface);
         settings.with_tag(tags);
         settings.with_hooks(hooks);
+        settings.with_conditional_responses(conditional_responses);
         inner_type.map(|inner_type| settings.with_inner_type(inner_type.to_token_stream()));
 
         // The legacy hook keys still work. Each one that appears also

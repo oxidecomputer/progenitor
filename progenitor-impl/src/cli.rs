@@ -299,11 +299,22 @@ impl Generator {
                     }
                 };
 
+                let success_arms = if self.has_not_modified(method) {
+                    quote! {
+                        Ok(ConditionalResponse::Modified(r)) => #success_output
+                        Ok(ConditionalResponse::NotModified(r)) => {
+                            self.config.success_no_item(&ResponseValue::empty(r));
+                            Ok(())
+                        }
+                    }
+                } else {
+                    quote! { Ok(r) => #success_output }
+                };
                 quote! {
                     let result = request.send().await;
 
                     match result {
-                        Ok(r) => #success_output
+                        #success_arms
                         Err(r) => #error_output
                     }
                 }

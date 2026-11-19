@@ -87,6 +87,14 @@ generate_api!(
 );
 ```
 
+For conditional requests, `conditional_responses = true` generates a
+`ConditionalResponse<T>` for operations that declare a bodyless `304`.
+`Modified` carries the ordinary `ResponseValue<T>`. `NotModified` carries the
+HTTP response so you can read its `ETag` and reuse your cached value. Item
+streams require a page body and return an error with the original `304`.
+Build scripts can use `with_conditional_responses(true)` and `cargo progenitor`
+accepts `--conditional-responses`.
+
 Note that the macro will be re-evaluated when the `spec` OpenAPI document
 changes (when its mtime is updated).
 
