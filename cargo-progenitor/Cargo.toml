@@ -18,12 +18,13 @@ progenitor-client = { workspace = true }
 progenitor-impl = { workspace = true }
 
 anyhow = { workspace = true }
-assert_cmd = { workspace = true }
-clap = { workspace = true }
-clap-cargo = { workspace = true }
+clap = { workspace = true, features = ["derive"] }
 env_logger = { workspace = true }
-expectorate = { workspace = true }
 openapiv3 = { workspace = true }
 rustfmt-wrapper = { workspace = true }
 serde_json = { workspace = true }
 serde_yaml = { workspace = true }
+
+[dev-dependencies]
+assert_cmd = { workspace = true }
+expectorate = { workspace = true }
