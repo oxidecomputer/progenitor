@@ -195,8 +195,8 @@ cargo run --bin cargo-progenitor -- progenitor -i sample_openapi/keeper.json -o 
 
 This will produce a package in the specified directory.
 
-Options `--license` and `--registry-name` may also be used to improve metadata
-before publishing the static crate.
+Options `--license-nam` and `--registry-name` may also be used to improve
+metadata before publishing the static crate.
 
 The output will use the published `progenitor-client` crate by default
 if progenitor is built in release mode. When built in debug mode, the
