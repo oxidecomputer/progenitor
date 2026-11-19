@@ -56,22 +56,22 @@ Similarly, if there is a `format` field set to `uuid`:
 
 ```toml
 [dependencies]
-uuid = { version = "1.0.0", features = ["serde", "v4"] }
+uuid = { version = "1.0.0", features = ["serde"] }
 ```
 
 And if there are any websocket channel endpoints:
 
 ```toml
 [dependencies]
-base64 = "0.21"
-rand = "0.8"
+base64 = "0.23"
+rand = "0.10"
 ```
 
 If types include regular expression validation:
 
 ```toml
 [dependencies]
-regress = "0.4.1"
+regress = "0.12"
 ```
 
 The macro has some additional fancy options to control the generated code:
@@ -80,17 +80,17 @@ The macro has some additional fancy options to control the generated code:
 generate_api!(
     spec = "path/to/openapi_document.json",      // The OpenAPI document
     interface = Builder,                         // Choose positional (default) or builder style
-    tags = Separate,                             // Tags may be Merged or Separate (default)
+    tags = Separate,                             // Tags may be Merged (default) or Separate
     hooks = Expected,                            // Require an impl of ClientHooks for Client (Optional by default)
     inner_type = my_client::InnerType,           // Client inner type available to ClientHooks (via self.inner())
-    derives = [ schemars::JsonSchema ],          // Additional derive macros applied to generated types
+    derives = [ schemars::JsonSchema ],          // Traits required of every generated type
 );
 ```
 
 Note that the macro will be re-evaluated when the `spec` OpenAPI document
 changes (when its mtime is updated).
 
-If you derive `schemars::JsonSchema` on generated types (see `derives = [ ...
+If you require `schemars::JsonSchema` of generated types (see `derives = [ ...
 ]` in the macro example above), add a dependency on `schemars` and enable the
 necessary features for each formatted type that appears in your spec. For example:
 
@@ -150,16 +150,18 @@ serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 
 [build-dependencies]
-prettyplease = "0.2.22"
+prettyplease = "0.3"
 progenitor = { git = "https://github.com/oxidecomputer/progenitor" }
 serde_json = "1.0"
-syn = "2.0"
+syn = "3.0"
 ```
 
 (`chrono`, `uuid`, `base64`, and `rand` as above)
 
-Note that `progenitor` is used by `build.rs`, but the generated code required
-`progenitor-client`.
+Note that `progenitor` is used by `build.rs`, but the generated code requires
+`progenitor-client`. The `Codespace` that `generate_sdk` returns lists the
+crates the generated code needs, with versions and features, in
+`dependencies()`.
 
 ### Static Crate
 
@@ -193,8 +195,8 @@ cargo run --bin cargo-progenitor -- progenitor -i sample_openapi/keeper.json -o 
 
 This will produce a package in the specified directory.
 
-Options `--license` and `--registry-name` may also be used to improve metadata
-before publishing the static crate.
+Options `--license-nam` and `--registry-name` may also be used to improve
+metadata before publishing the static crate.
 
 The output will use the published `progenitor-client` crate by default
 if progenitor is built in release mode. When built in debug mode, the
@@ -208,13 +210,10 @@ Here is an excerpt from the emitted `Cargo.toml`:
 
 ```toml
 [dependencies]
-bytes = "1.9"
-chrono = { version = "0.4", default-features=false, features = ["serde"] }
-futures-core = "0.3"
-progenitor-client = "0.9.1"
-reqwest = { version = "0.13", default-features=false, features = ["json", "query", "stream"] }
+chrono = { version = "0.4", default-features = false, features = ["serde"] }
+progenitor-client = "0.17.0"
+reqwest = { version = "0.13", default-features = false, features = ["json", "query"] }
 serde = { version = "1.0", features = ["derive"] }
-serde_urlencoded = "0.7"
 ```
 
 Here's another example of dependencies with `--include-client true`:
@@ -222,10 +221,10 @@ Here's another example of dependencies with `--include-client true`:
 ```toml
 [dependencies]
 bytes = "1.9"
-chrono = { version = "0.4", default-features=false, features = ["serde"] }
+chrono = { version = "0.4", default-features = false, features = ["serde"] }
 futures-core = "0.3"
 percent-encoding = "2.3"
-reqwest = { version = "0.13", default-features=false, features = ["json", "query", "stream"] }
+reqwest = { version = "0.13", default-features = false, features = ["json", "query", "stream"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 serde_urlencoded = "0.7"
@@ -370,8 +369,8 @@ fn main() {
     println!("cargo:rerun-if-changed={}", src);
     let file = std::fs::File::open(src).unwrap();
     let spec = serde_json::from_reader(file).unwrap();
-    let mut settings = GenerationSettings::default();
-    settings.with_interface(InterfaceStyle::Builder);
+    let mut settings = progenitor::GenerationSettings::default();
+    settings.with_interface(progenitor::InterfaceStyle::Builder);
     let generator = progenitor::Generator::build(&settings, &spec).unwrap();
     let tokens = generator.generate_sdk().into_stream();
     let ast = syn::parse2(tokens).unwrap();

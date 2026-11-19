@@ -23,6 +23,9 @@ struct CliOperation {
 
 impl Generator {
     /// Generate a `clap`-based CLI.
+    ///
+    /// The codespace tracks dependencies; see
+    /// [`codespace::Codespace::dependencies`].
     pub fn generate_cli(&self, crate_name: &str) -> codespace::Codespace {
         let raw_methods = &self.raw_methods;
 
@@ -171,6 +174,24 @@ impl Generator {
         root.add_item("Cli A", cli);
         root.add_item("Cli B", config);
         root.add_item("Cli C", command);
+
+        crate::dependencies::register(&mut cs, ["anyhow", "clap", "schemars", "serde"]);
+
+        if raw_methods
+            .iter()
+            .any(|method| method.dropshot_paginated.is_some())
+        {
+            crate::dependencies::register(&mut cs, ["futures"]);
+        }
+        if raw_methods.iter().any(|method| {
+            method.params.iter().any(|param| {
+                matches!(param.kind, OperationParameterKind::Body(_))
+                    && matches!(param.typ, OperationParameterType::Type(_))
+            })
+        }) {
+            crate::dependencies::register(&mut cs, ["serde_json"]);
+        }
+
         cs
     }
 

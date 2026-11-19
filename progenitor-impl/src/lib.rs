@@ -43,6 +43,7 @@ const TYPES_KEY: &str = " types";
 const CLIENT_KEY: &str = "Client";
 
 mod cli;
+mod dependencies;
 mod httpmock;
 mod method;
 mod template;
@@ -439,9 +440,10 @@ impl Generator {
     ///
     /// The root module holds the client items, including the inline `prelude`
     /// module. Submodules hold the generated types (`types`) and, for the
-    /// builder interface, the operation builders (`builder`); codespace fixes
-    /// the order (items by key, then submodules). The codespace tracks the
-    /// crates the SDK depends on; see [`codespace::Codespace::dependencies`].
+    /// builder interface, the operation builders (`builder`).
+    ///
+    /// The codespace tracks dependencies of the generated SDK; see
+    /// [`codespace::Codespace::dependencies`].
     pub fn generate_sdk(&self) -> codespace::Codespace {
         let mut cs = codespace::Codespace::default();
 
@@ -474,29 +476,26 @@ impl Generator {
 
         let types = cs
             .add_mod_from_codespace("types", self.typespace().to_codespace())
-            .expect("the types are the first registrations and cannot conflict");
+            .expect("no dependencies are registered before the types, so none conflict");
         types.add_docs(" Types used as operation parameters and responses.");
         types.add_attr(quote! { allow(clippy::all) });
         cs.get_root_mod().set_mod_key("types", TYPES_KEY);
+
+        dependencies::register(&mut cs, ["progenitor-client", "reqwest"]);
 
         if self
             .raw_methods
             .iter()
             .any(|method| method.dropshot_paginated.is_some())
         {
-            cs.add_dependency(codespace::Dependency::new("futures"))
-                .unwrap();
+            dependencies::register(&mut cs, ["futures"]);
         }
-
         if self
             .raw_methods
             .iter()
             .any(|method| method.dropshot_websocket)
         {
-            cs.add_dependency(codespace::Dependency::new("base64"))
-                .unwrap();
-            cs.add_dependency(codespace::Dependency::new("rand"))
-                .unwrap();
+            dependencies::register(&mut cs, ["base64", "rand"]);
         }
 
         cs

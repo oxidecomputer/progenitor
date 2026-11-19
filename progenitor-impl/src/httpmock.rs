@@ -9,7 +9,7 @@ use crate::{
     Generator,
     method::{
         BodyContentType, HttpMethod, OperationParameter, OperationParameterKind,
-        OperationParameterType, OperationResponse, OperationResponseStatus,
+        OperationParameterType, OperationResponse, OperationResponseKind, OperationResponseStatus,
     },
     util::{Case, sanitize},
 };
@@ -27,6 +27,9 @@ impl Generator {
     /// The `crate_path` parameter should be a valid Rust path corresponding to
     /// the SDK. This can include `::` and instances of `-` in the crate name
     /// should be converted to `_`.
+    ///
+    /// The codespace tracks dependencies; see
+    /// [`codespace::Codespace::dependencies`].
     pub fn generate_httpmock(&self, crate_path: &str) -> codespace::Codespace {
         let raw_methods = &self.raw_methods;
 
@@ -104,6 +107,27 @@ impl Generator {
         let root = cs.get_root_mod();
         root.add_item("", operations);
         root.add_item("MockServerExt", ext);
+
+        // Do any methods have raw body parameters or raw responses? If so, we
+        // need to add `serde_json` to the dependencies.
+        if raw_methods.iter().any(|method| {
+            method.params.iter().any(|param| {
+                matches!(
+                    (&param.typ, &param.kind),
+                    (
+                        OperationParameterType::RawBody,
+                        OperationParameterKind::Body(BodyContentType::OctetStream)
+                    )
+                )
+            }) || method
+                .responses
+                .iter()
+                .any(|response| matches!(response.typ, OperationResponseKind::Raw))
+        }) {
+            crate::dependencies::register(&mut cs, ["serde_json"]);
+        }
+        crate::dependencies::register(&mut cs, ["httpmock", "regex"]);
+
         cs
     }
 

@@ -154,8 +154,8 @@ impl syn::parse::Parse for SpecSource {
 /// no default is emitted and that impl is required.
 ///
 /// Additional options control type generation:
-/// - `derives`: optional array of derive macro paths; the derive macros to be
-///   applied to all generated types
+/// - `derives`: optional array of trait paths that every generated type must
+///   implement.
 ///
 /// - `struct_builder`: optional boolean; (if true) generates a `::builder()`
 ///   method for each generated struct that can be used to specify each
@@ -433,7 +433,10 @@ fn do_generate_api(item: TokenStream) -> Result<TokenStream, syn::Error> {
             .into_iter()
             .map(|derive| {
                 let path = derive.into_inner();
-                TraitSpec::parse(&path.to_token_stream().to_string()).map_err(|err| {
+                // A modeled trait matches only its exact path, so drop the
+                // spaces that rendering the tokens puts around `::`.
+                let spec = path.to_token_stream().to_string().replace(' ', "");
+                TraitSpec::parse(&spec).map_err(|err| {
                     syn::Error::new(syn::spanned::Spanned::span(&path), err.to_string())
                 })
             })

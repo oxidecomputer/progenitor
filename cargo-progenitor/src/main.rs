@@ -124,8 +124,8 @@ fn main() -> Result<()> {
         &api,
     )?;
 
-    let mut sdk = builder.generate_sdk();
-    populate_dependencies(&mut sdk, args.include_client)?;
+    let sdk = builder.generate_sdk();
+    let deps = dependencies(&sdk, args.include_client)?;
     let typespace = builder.typespace();
 
     println!("-----------------------------------------------------");
@@ -160,7 +160,7 @@ fn main() -> Result<()> {
         tomlout.extend(format!("publish = [\"{}\"]\n", registry_name).chars());
     }
     tomlout.push('\n');
-    tomlout.push_str(&sdk.to_toml_dependencies());
+    tomlout.push_str(&deps.to_toml_dependencies());
     tomlout.push('\n');
 
     save(&toml, tomlout.as_str())?;
@@ -195,89 +195,41 @@ fn main() -> Result<()> {
     Ok(())
 }
 
-// Indirect dependencies may or may not be preserved in built's output so we
-// manually encode the versions. We need to take care to update this
-// particularly when generated code depends on particular dependency versions.
-struct Dependencies {
-    base64: &'static str,
-    bytes: &'static str,
-    chrono: &'static str,
-    futures: &'static str,
-    json_serde: &'static str,
-    percent_encoding: &'static str,
-    rand: &'static str,
-    regress: &'static str,
-    reqwest: &'static str,
-    schemars: &'static str,
-    serde: &'static str,
-    serde_json: &'static str,
-    serde_urlencoded: &'static str,
-    uuid: &'static str,
-}
+/// The generated crate's dependencies, except that with `--include-client` the
+/// progenitor-client code is a module of the crate, so the crate takes on that
+/// code's dependencies in place of progenitor-client.
+fn dependencies(sdk: &Codespace, include_client: bool) -> Result<Codespace> {
+    let mut deps = Codespace::default();
+    for dep in sdk
+        .dependencies()
+        .filter(|dep| !include_client || dep.name != "progenitor-client")
+    {
+        deps.add_dependency(dep.clone())?;
+    }
 
-static DEPENDENCIES: Dependencies = Dependencies {
-    base64: "0.22",
-    bytes: "1.9",
-    chrono: "0.4",
-    futures: "0.3",
-    json_serde: "1.1.0",
-    percent_encoding: "2.3",
-    rand: "0.8",
-    regress: "0.10",
-    reqwest: "0.13",
-    schemars: "0.8",
-    serde: "1.0",
-    serde_json: "1.0",
-    serde_urlencoded: "0.7",
-    uuid: "1.0",
-};
-
-/// Register on the SDK's codespace what every generated client needs and
-/// the versions this generator is tested against for the crates the
-/// code says it needs, so that the codespace writes the whole
-/// `[dependencies]` section.
-///
-/// A crate this generator has no pin for, such as one named by an
-/// `x-rust-type` extension or a crate path override, is declared as the
-/// code asks. A pin that disagrees with what the code asks is an error.
-pub fn populate_dependencies(sdk: &mut Codespace, include_client: bool) -> Result<()> {
-    // What every generated client needs, whatever the document says.
-    sdk.add_dependency(pinned("bytes", DEPENDENCIES.bytes))?;
-    sdk.add_dependency(pinned("futures-core", DEPENDENCIES.futures))?;
-    sdk.add_dependency(Dependency {
-        default_features: Some(false),
-        features: features(["json", "query", "stream"]),
-        ..pinned("reqwest", DEPENDENCIES.reqwest)
-    })?;
-    sdk.add_dependency(Dependency {
-        features: features(["derive"]),
-        ..pinned("serde", DEPENDENCIES.serde)
-    })?;
-    sdk.add_dependency(pinned("serde_urlencoded", DEPENDENCIES.serde_urlencoded))?;
-
+    // Indirect dependencies may or may not be preserved in built's output so we
+    // manually encode the versions. We need to take care to update this
+    // particularly when generated code depends on particular dependency
+    // versions.
     if include_client {
         // code included from progenitor-client needs extra dependencies
-        sdk.add_dependency(pinned("percent-encoding", DEPENDENCIES.percent_encoding))?;
-        sdk.add_dependency(pinned("serde_json", DEPENDENCIES.serde_json))?;
-    } else {
-        let crate_version =
-            if let (false, Some(value)) = (is_non_release(), option_env!("CARGO_PKG_VERSION")) {
-                value
-            } else {
-                "*"
-            };
-        sdk.add_dependency(pinned("progenitor-client", crate_version))?;
+        deps.add_dependency(pinned("bytes", "1.9"))?;
+        deps.add_dependency(pinned("futures-core", "0.3"))?;
+        deps.add_dependency(pinned("percent-encoding", "2.3"))?;
+        deps.add_dependency(Dependency {
+            default_features: Some(false),
+            features: ["json", "query", "stream"]
+                .iter()
+                .map(|feature| feature.to_string())
+                .collect(),
+            ..pinned("reqwest", "0.13")
+        })?;
+        deps.add_dependency(pinned("serde", "1.0"))?;
+        deps.add_dependency(pinned("serde_json", "1.0"))?;
+        deps.add_dependency(pinned("serde_urlencoded", "0.7"))?;
     }
 
-    // The pins for whatever else the code asked for.
-    let pins = sdk
-        .dependencies()
-        .filter_map(|dep| pin_for(&dep.name))
-        .collect::<Vec<_>>();
-    for pin in pins {
-        sdk.add_dependency(pin)?;
-    }
-    Ok(())
+    Ok(deps)
 }
 
 /// A dependency on `name` at the version this generator is tested against.
@@ -286,37 +238,6 @@ fn pinned(name: &str, version: &str) -> Dependency {
         version: version.parse().expect("the pinned versions parse"),
         ..Dependency::new(name)
     }
-}
-
-fn features<const N: usize>(names: [&str; N]) -> Vec<String> {
-    names.iter().map(|name| name.to_string()).collect()
-}
-
-/// The version and features this generator is tested against for a crate
-/// the generated code may name; `None` for a crate it has no pin for,
-/// such as one named by an `x-rust-type` extension or a crate path
-/// override, which is declared as the code asks.
-fn pin_for(name: &str) -> Option<Dependency> {
-    let pin = match name {
-        "serde_json" => pinned("serde_json", DEPENDENCIES.serde_json),
-        "regress" => pinned("regress", DEPENDENCIES.regress),
-        "uuid" => Dependency {
-            features: features(["serde", "v4"]),
-            ..pinned("uuid", DEPENDENCIES.uuid)
-        },
-        "chrono" => Dependency {
-            default_features: Some(false),
-            features: features(["serde"]),
-            ..pinned("chrono", DEPENDENCIES.chrono)
-        },
-        "futures" => pinned("futures", DEPENDENCIES.futures),
-        "base64" => pinned("base64", DEPENDENCIES.base64),
-        "rand" => pinned("rand", DEPENDENCIES.rand),
-        "schemars" => pinned("schemars", DEPENDENCIES.schemars),
-        "json-serde" => pinned("json-serde", DEPENDENCIES.json_serde),
-        _ => return None,
-    };
-    Some(pin)
 }
 
 fn load_api<P>(p: P) -> Result<OpenAPI>
