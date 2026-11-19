@@ -96,6 +96,7 @@ pub struct GenerationSettings {
     interface: InterfaceStyle,
     tag: TagStyle,
     hooks: HooksMode,
+    conditional_responses: bool,
     inner_type: Option<TokenStream>,
     pre_hook: Option<TokenStream>,
     pre_hook_async: Option<TokenStream>,
@@ -173,6 +174,13 @@ impl GenerationSettings {
     /// Set the [InterfaceStyle].
     pub fn with_interface(&mut self, interface: InterfaceStyle) -> &mut Self {
         self.interface = interface;
+        self
+    }
+
+    /// Return a `ConditionalResponse<T>` from operations that explicitly declare
+    /// a bodyless 304 response. Disabled by default.
+    pub fn with_conditional_responses(&mut self, enabled: bool) -> &mut Self {
+        self.conditional_responses = enabled;
         self
     }
 
@@ -471,6 +479,25 @@ impl Generator {
                 };
             },
         );
+        if self
+            .raw_methods
+            .iter()
+            .any(|method| self.has_not_modified(method))
+        {
+            cs.add_item(
+                CLIENT_KEY,
+                quote! {
+                    /// The outcome of an operation with a declared 304 Not Modified response.
+                    #[derive(Debug)]
+                    pub enum ConditionalResponse<T> {
+                        /// The ordinary success response, with its body and headers.
+                        Modified(ResponseValue<T>),
+                        /// Reuse the cached representation. The response carries its status and headers.
+                        NotModified(reqwest::Response),
+                    }
+                },
+            );
+        }
         self.sdk_client(&mut cs);
         self.sdk_operations(&mut cs);
 
