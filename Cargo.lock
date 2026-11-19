@@ -254,7 +254,6 @@ dependencies = [
  "anyhow",
  "assert_cmd",
  "clap",
- "clap-cargo",
  "env_logger",
  "expectorate",
  "openapiv3",
@@ -329,16 +328,6 @@ checksum = "aa8876b300ab35ba921adea3dfd70157a46249b33f95c9084ae5709785478946"
 dependencies = [
  "clap_builder",
  "clap_derive",
-]
-
-[[package]]
-name = "clap-cargo"
-version = "0.19.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ac0fb996b5acdd543c8b8ff723c719715d437fdce607ac1fda01c977f568020d"
-dependencies = [
- "anstyle",
- "clap",
 ]
 
 [[package]]
@@ -786,7 +775,6 @@ dependencies = [
  "serde",
  "serde_json",
  "syn 3.0.10",
- "uuid",
  "wasm-bindgen-test",
 ]
 
