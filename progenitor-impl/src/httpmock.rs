@@ -10,6 +10,7 @@ use crate::{
     method::{
         BodyContentType, HttpMethod, OperationParameter, OperationParameterKind,
         OperationParameterType, OperationResponse, OperationResponseKind, OperationResponseStatus,
+        header_value_string,
     },
     util::{Case, sanitize},
 };
@@ -177,6 +178,9 @@ impl Generator {
                 };
 
                 let name_ident = format_ident!("{}", name);
+                let header_value =
+                    header_value_string(quote! { value }, typ.list_item_type(typespace).is_some());
+
                 let (required, handler) = match kind {
                     OperationParameterKind::Path => {
                         let re_fmt = method.path.as_wildcard_param(api_name);
@@ -199,7 +203,7 @@ impl Generator {
                     OperationParameterKind::Header(true) => (
                         true,
                         quote! {
-                            Self(self.0.header(#api_name, value.to_string()))
+                            Self(self.0.header(#api_name, #header_value))
                         },
                     ),
 
@@ -222,7 +226,7 @@ impl Generator {
                             if let Some(value) = value.into() {
                                 Self(self.0.header(
                                     #api_name,
-                                    value.to_string()
+                                    #header_value
                                 ))
                             } else {
                                 Self(self.0.header_missing(#api_name))
