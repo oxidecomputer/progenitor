@@ -165,6 +165,11 @@ fn test_param_collision() {
 }
 
 #[test]
+fn test_param_arrays() {
+    verify_apis("param-arrays.json");
+}
+
+#[test]
 fn test_cli_gen() {
     verify_apis("cli-gen.json");
 }
