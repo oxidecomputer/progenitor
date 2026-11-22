@@ -11,6 +11,65 @@ pub mod prelude {
 /// Types used as operation parameters and responses.
 #[allow(clippy::all)]
 pub mod types {
+    ///`ListThingsXCodesItem`
+    #[derive(:: serde :: Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+    #[serde(transparent)]
+    pub struct ListThingsXCodesItem(::std::string::String);
+    impl ::std::ops::Deref for ListThingsXCodesItem {
+        type Target = ::std::string::String;
+        fn deref(&self) -> &::std::string::String {
+            &self.0
+        }
+    }
+
+    impl ::std::convert::From<ListThingsXCodesItem> for ::std::string::String {
+        fn from(value: ListThingsXCodesItem) -> Self {
+            value.0
+        }
+    }
+
+    impl ::std::str::FromStr for ListThingsXCodesItem {
+        type Err = self::error::ConversionError;
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+            ::std::convert::TryFrom::try_from(value)
+        }
+    }
+
+    impl ::std::convert::TryFrom<&str> for ListThingsXCodesItem {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+            static PATTERN: ::std::sync::LazyLock<::regress::Regex> =
+                ::std::sync::LazyLock::new(|| {
+                    ::regress::Regex::with_flags("^[a-z]+$", "u").unwrap()
+                });
+            if PATTERN.find(value).is_none() {
+                return Err("doesn't match pattern \"^[a-z]+$\"".into());
+            }
+            Ok(Self(value.to_string()))
+        }
+    }
+
+    impl ::std::convert::TryFrom<::std::string::String> for ListThingsXCodesItem {
+        type Error = self::error::ConversionError;
+        fn try_from(
+            value: ::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+            ::std::convert::TryFrom::try_from(value.as_str())
+        }
+    }
+
+    impl<'de> ::serde::Deserialize<'de> for ListThingsXCodesItem {
+        fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+        where
+            D: ::serde::Deserializer<'de>,
+        {
+            ::std::convert::TryFrom::try_from(::std::string::String::deserialize(deserializer)?)
+                .map_err(|e: self::error::ConversionError| {
+                    <D::Error as ::serde::de::Error>::custom(e.to_string())
+                })
+        }
+    }
+
     ///`ThingKind`
     #[derive(
         :: serde :: Deserialize,
@@ -171,27 +230,41 @@ impl Client {
     ///Arguments:
     /// - `kinds`: kinds of thing to include
     /// - `tags`: tags that each thing must have
+    /// - `x_codes`: codes whose items are constrained strings
     /// - `x_labels`: labels for the request
     /// - `x_shard_ids`: shards to read from
     pub async fn list_things<'a>(
         &'a self,
         kinds: &'a ::std::vec::Vec<types::ThingKind>,
         tags: Option<&'a ::std::vec::Vec<::std::string::String>>,
+        x_codes: Option<&'a ::std::vec::Vec<types::ListThingsXCodesItem>>,
         x_labels: Option<&'a ::std::vec::Vec<::std::string::String>>,
         x_shard_ids: &'a ::std::vec::Vec<u32>,
     ) -> Result<ResponseValue<::std::vec::Vec<::std::string::String>>, Error<()>> {
         let url = format!("{}/things", self.baseurl,);
-        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(3usize);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(4usize);
         header_map.append(
             ::reqwest::header::HeaderName::from_static("api-version"),
             ::reqwest::header::HeaderValue::from_static(Self::api_version()),
         );
+        if let Some(value) = x_codes {
+            header_map.append(
+                "x-codes",
+                value
+                    .iter()
+                    .map(|v| v.to_string())
+                    .collect::<::std::vec::Vec<_>>()
+                    .join(",")
+                    .try_into()?,
+            );
+        }
+
         if let Some(value) = x_labels {
             header_map.append(
                 "x-labels",
                 value
                     .iter()
-                    .map(::std::string::ToString::to_string)
+                    .map(|v| v.to_string())
                     .collect::<::std::vec::Vec<_>>()
                     .join(",")
                     .try_into()?,
@@ -202,7 +275,7 @@ impl Client {
             "x-shard-ids",
             x_shard_ids
                 .iter()
-                .map(::std::string::ToString::to_string)
+                .map(|v| v.to_string())
                 .collect::<::std::vec::Vec<_>>()
                 .join(",")
                 .try_into()?,

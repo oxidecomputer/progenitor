@@ -2165,13 +2165,15 @@ impl Construction {
 
 /// The string a header parameter is sent as. OpenAPI 3.0.3 gives header
 /// parameters only the simple style, which joins the items of an array with
-/// commas, so `["a", "b"]` is sent as `a,b`.
+/// commas, so `["a", "b"]` is sent as `a,b`. Each item is converted with a
+/// method call, as a scalar header is, so an item type that only derefs to
+/// `String` works too.
 pub(crate) fn header_value_string(value: TokenStream, is_list: bool) -> TokenStream {
     if is_list {
         quote! {
             #value
                 .iter()
-                .map(::std::string::ToString::to_string)
+                .map(|v| v.to_string())
                 .collect::<::std::vec::Vec<_>>()
                 .join(",")
         }

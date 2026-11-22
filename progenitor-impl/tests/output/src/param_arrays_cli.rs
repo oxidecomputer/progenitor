@@ -41,6 +41,14 @@ impl<T: CliConfig> Cli<T> {
                     .help("tags that each thing must have"),
             )
             .arg(
+                ::clap::Arg::new("x-codes")
+                    .long("x-codes")
+                    .value_parser(::clap::value_parser!(types::ListThingsXCodesItem))
+                    .action(::clap::ArgAction::Append)
+                    .required(false)
+                    .help("codes whose items are constrained strings"),
+            )
+            .arg(
                 ::clap::Arg::new("x-labels")
                     .long("x-labels")
                     .value_parser(::clap::value_parser!(::std::string::String))
@@ -83,6 +91,14 @@ impl<T: CliConfig> Cli<T> {
                 values
                     .cloned()
                     .collect::<::std::vec::Vec<::std::string::String>>(),
+            );
+        }
+
+        if let Some(values) = matches.get_many::<types::ListThingsXCodesItem>("x-codes") {
+            request = request.x_codes(
+                values
+                    .cloned()
+                    .collect::<::std::vec::Vec<types::ListThingsXCodesItem>>(),
             );
         }
 

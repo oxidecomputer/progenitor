@@ -56,6 +56,18 @@
                 "format": "uint32"
               }
             }
+          },
+          {
+            "in": "header",
+            "name": "x-codes",
+            "description": "codes whose items are constrained strings",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[a-z]+$"
+              }
+            }
           }
         ],
         "responses": {

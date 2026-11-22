@@ -7,6 +7,7 @@ mod positional {
         let _ = Client::new("").unwrap().list_things(
             &vec![types::ThingKind::Widget],
             Some(&vec!["tag".to_string()]),
+            None,
             Some(&vec!["label".to_string()]),
             &vec![1, 2],
         );

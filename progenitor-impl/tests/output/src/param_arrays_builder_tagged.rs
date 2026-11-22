@@ -12,6 +12,65 @@ pub mod prelude {
 /// Types used as operation parameters and responses.
 #[allow(clippy::all)]
 pub mod types {
+    ///`ListThingsXCodesItem`
+    #[derive(:: serde :: Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+    #[serde(transparent)]
+    pub struct ListThingsXCodesItem(::std::string::String);
+    impl ::std::ops::Deref for ListThingsXCodesItem {
+        type Target = ::std::string::String;
+        fn deref(&self) -> &::std::string::String {
+            &self.0
+        }
+    }
+
+    impl ::std::convert::From<ListThingsXCodesItem> for ::std::string::String {
+        fn from(value: ListThingsXCodesItem) -> Self {
+            value.0
+        }
+    }
+
+    impl ::std::str::FromStr for ListThingsXCodesItem {
+        type Err = self::error::ConversionError;
+        fn from_str(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+            ::std::convert::TryFrom::try_from(value)
+        }
+    }
+
+    impl ::std::convert::TryFrom<&str> for ListThingsXCodesItem {
+        type Error = self::error::ConversionError;
+        fn try_from(value: &str) -> ::std::result::Result<Self, self::error::ConversionError> {
+            static PATTERN: ::std::sync::LazyLock<::regress::Regex> =
+                ::std::sync::LazyLock::new(|| {
+                    ::regress::Regex::with_flags("^[a-z]+$", "u").unwrap()
+                });
+            if PATTERN.find(value).is_none() {
+                return Err("doesn't match pattern \"^[a-z]+$\"".into());
+            }
+            Ok(Self(value.to_string()))
+        }
+    }
+
+    impl ::std::convert::TryFrom<::std::string::String> for ListThingsXCodesItem {
+        type Error = self::error::ConversionError;
+        fn try_from(
+            value: ::std::string::String,
+        ) -> ::std::result::Result<Self, self::error::ConversionError> {
+            ::std::convert::TryFrom::try_from(value.as_str())
+        }
+    }
+
+    impl<'de> ::serde::Deserialize<'de> for ListThingsXCodesItem {
+        fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+        where
+            D: ::serde::Deserializer<'de>,
+        {
+            ::std::convert::TryFrom::try_from(::std::string::String::deserialize(deserializer)?)
+                .map_err(|e: self::error::ConversionError| {
+                    <D::Error as ::serde::de::Error>::custom(e.to_string())
+                })
+        }
+    }
+
     ///`ThingKind`
     #[derive(
         :: serde :: Deserialize,
@@ -171,12 +230,14 @@ impl Client {
     ///Arguments:
     /// - `kinds`: kinds of thing to include
     /// - `tags`: tags that each thing must have
+    /// - `x_codes`: codes whose items are constrained strings
     /// - `x_labels`: labels for the request
     /// - `x_shard_ids`: shards to read from
     ///```ignore
     /// let response = client.list_things()
     ///    .kinds(kinds)
     ///    .tags(tags)
+    ///    .x_codes(x_codes)
     ///    .x_labels(x_labels)
     ///    .x_shard_ids(x_shard_ids)
     ///    .send()
@@ -204,6 +265,7 @@ pub mod builder {
         client: &'a super::Client,
         kinds: Result<::std::vec::Vec<types::ThingKind>, String>,
         tags: Result<Option<::std::vec::Vec<::std::string::String>>, String>,
+        x_codes: Result<Option<::std::vec::Vec<types::ListThingsXCodesItem>>, String>,
         x_labels: Result<Option<::std::vec::Vec<::std::string::String>>, String>,
         x_shard_ids: Result<::std::vec::Vec<u32>, String>,
     }
@@ -214,6 +276,7 @@ pub mod builder {
                 client: client,
                 kinds: Err("kinds was not initialized".to_string()),
                 tags: Ok(None),
+                x_codes: Ok(None),
                 x_labels: Ok(None),
                 x_shard_ids: Err("x_shard_ids was not initialized".to_string()),
             }
@@ -236,6 +299,17 @@ pub mod builder {
             self.tags = value.try_into().map(Some).map_err(|_| {
                 "conversion to `:: std :: vec :: Vec < :: std :: string :: String >` for tags \
                  failed"
+                    .to_string()
+            });
+            self
+        }
+
+        pub fn x_codes<V>(mut self, value: V) -> Self
+        where
+            V: std::convert::TryInto<::std::vec::Vec<types::ListThingsXCodesItem>>,
+        {
+            self.x_codes = value.try_into().map(Some).map_err(|_| {
+                "conversion to `:: std :: vec :: Vec < ListThingsXCodesItem >` for x_codes failed"
                     .to_string()
             });
             self
@@ -271,25 +345,38 @@ pub mod builder {
                 client,
                 kinds,
                 tags,
+                x_codes,
                 x_labels,
                 x_shard_ids,
             } = self;
             let kinds = kinds.map_err(Error::InvalidRequest)?;
             let tags = tags.map_err(Error::InvalidRequest)?;
+            let x_codes = x_codes.map_err(Error::InvalidRequest)?;
             let x_labels = x_labels.map_err(Error::InvalidRequest)?;
             let x_shard_ids = x_shard_ids.map_err(Error::InvalidRequest)?;
             let url = format!("{}/things", client.baseurl,);
-            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(3usize);
+            let mut header_map = ::reqwest::header::HeaderMap::with_capacity(4usize);
             header_map.append(
                 ::reqwest::header::HeaderName::from_static("api-version"),
                 ::reqwest::header::HeaderValue::from_static(super::Client::api_version()),
             );
+            if let Some(value) = x_codes {
+                header_map.append(
+                    "x-codes",
+                    value
+                        .iter()
+                        .map(|v| v.to_string())
+                        .collect::<::std::vec::Vec<_>>()
+                        .join(",")
+                        .try_into()?,
+                );
+            }
             if let Some(value) = x_labels {
                 header_map.append(
                     "x-labels",
                     value
                         .iter()
-                        .map(::std::string::ToString::to_string)
+                        .map(|v| v.to_string())
                         .collect::<::std::vec::Vec<_>>()
                         .join(",")
                         .try_into()?,
@@ -299,7 +386,7 @@ pub mod builder {
                 "x-shard-ids",
                 x_shard_ids
                     .iter()
-                    .map(::std::string::ToString::to_string)
+                    .map(|v| v.to_string())
                     .collect::<::std::vec::Vec<_>>()
                     .join(",")
                     .try_into()?,

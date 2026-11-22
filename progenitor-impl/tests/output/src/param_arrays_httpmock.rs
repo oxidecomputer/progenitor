@@ -33,6 +33,26 @@ pub mod operations {
             }
         }
 
+        pub fn x_codes<'a, T>(self, value: T) -> Self
+        where
+            T: Into<Option<&'a ::std::vec::Vec<types::ListThingsXCodesItem>>>,
+        {
+            if let Some(value) = value.into() {
+                Self(
+                    self.0.header(
+                        "x-codes",
+                        value
+                            .iter()
+                            .map(|v| v.to_string())
+                            .collect::<::std::vec::Vec<_>>()
+                            .join(","),
+                    ),
+                )
+            } else {
+                Self(self.0.header_missing("x-codes"))
+            }
+        }
+
         pub fn x_labels<'a, T>(self, value: T) -> Self
         where
             T: Into<Option<&'a ::std::vec::Vec<::std::string::String>>>,
@@ -43,7 +63,7 @@ pub mod operations {
                         "x-labels",
                         value
                             .iter()
-                            .map(::std::string::ToString::to_string)
+                            .map(|v| v.to_string())
                             .collect::<::std::vec::Vec<_>>()
                             .join(","),
                     ),
@@ -59,7 +79,7 @@ pub mod operations {
                     "x-shard-ids",
                     value
                         .iter()
-                        .map(::std::string::ToString::to_string)
+                        .map(|v| v.to_string())
                         .collect::<::std::vec::Vec<_>>()
                         .join(","),
                 ),
