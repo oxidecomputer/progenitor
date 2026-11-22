@@ -655,25 +655,16 @@ impl Generator {
                 }
             });
 
-            // The values passed to get subsequent pages are...
-            // - the state variable for the page_token
-            // - None for all other query parameters
-            // - The initial inputs for non-query parameters
+            // Subsequent pages get the state variable for the page_token and
+            // the initial inputs for every other parameter. Dropshot reads a
+            // request with a page_token as the next page and ignores the scan
+            // parameters, but other query parameters, which an endpoint takes
+            // through a second `Query` next to its `PaginationParams`, have to
+            // be sent on every request.
             let step_params = method.params.iter().map(|param| {
                 if param.api_name.as_str() == "page_token" {
                     quote! { state.as_deref() }
-                } else if param.api_name.as_str() != "limit"
-                    && matches!(param.kind, OperationParameterKind::Query(_))
-                {
-                    // Query parameters (other than "page_token" and "limit")
-                    // are None; having page_token as Some(_) is mutually
-                    // exclusive with other query parameters.
-                    quote! { None }
                 } else {
-                    // Non-query parameters are passed in; this is necessary
-                    // e.g. to specify the right path. (We don't really expect
-                    // to see a body parameter here, but we pass it through
-                    // regardless.)
                     format_ident!("{}", param.name).to_token_stream()
                 }
             });
@@ -1678,21 +1669,20 @@ impl Generator {
         };
 
         let stream_impl = method.dropshot_paginated.as_ref().map(|page_data| {
-            let step_params = method.params.iter().filter_map(|param| {
-                if param.api_name.as_str() != "limit"
-                    && matches!(param.kind, OperationParameterKind::Query(_))
-                {
-                    // Query parameters (other than "limit") are None; having
-                    // page_token as Some(_), as we will during the loop below,
-                    // is mutually exclusive with other query parameters.
+            // Only page_token is reset, and the loop below fills it in. Every
+            // other parameter keeps its value, as in the positional stream,
+            // because query parameters outside the scan parameters have to be
+            // sent with every page.
+            let step_params = method
+                .params
+                .iter()
+                .filter(|param| param.api_name.as_str() == "page_token")
+                .map(|param| {
                     let name = format_ident!("{}", param.name);
-                    Some(quote! {
+                    quote! {
                         #name: Ok(None)
-                    })
-                } else {
-                    None
-                }
-            });
+                    }
+                });
 
             // The item type that we've saved (by picking apart the original
             // function's return type) will be the Item type parameter for the
@@ -1717,8 +1707,8 @@ impl Generator {
                     use ::futures::TryStreamExt;
 
                     // This is the builder template we'll use for iterative
-                    // steps past the first; it has all query params set to
-                    // None (the step will fill in page_token).
+                    // steps past the first. It keeps every parameter but
+                    // page_token, which each step fills in.
                     let next = Self {
                         #( #step_params, )*
                         ..self.clone()

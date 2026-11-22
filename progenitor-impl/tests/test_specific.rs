@@ -364,3 +364,117 @@ async fn test_stream_pagination() {
 
     server.close().await.expect("failed to close server");
 }
+
+// Dropshot documents a second `Query` extractor next to `PaginationParams` as
+// the way to accept "additional query parameters besides the pagination
+// parameters", and says those "must be supplied on each invocation". Omicron's
+// `silo_metric`, `system_metric`, `alert_class_list` and `alert_delivery_list`
+// use this pattern. The generated stream must keep sending them.
+#[derive(Deserialize, JsonSchema)]
+struct EvenFilter {
+    /// Only return even numbers.
+    even: Option<bool>,
+}
+
+#[endpoint {
+    method = GET,
+    path = "/",
+}]
+async fn filtered_u32s(
+    rqctx: RequestContext<Arc<PaginatedU32sContext>>,
+    query_params: Query<PaginationParams<EmptyScanParams, u32>>,
+    filter: Query<EvenFilter>,
+) -> Result<HttpResponseOk<ResultsPage<u32>>, HttpError> {
+    let ctx = rqctx.context();
+    let page_params = query_params.into_inner();
+    let even = filter.into_inner().even.unwrap_or(false);
+    let limit = usize::try_from(rqctx.page_limit(&page_params)?.get()).unwrap();
+    let start = match page_params.page {
+        dropshot::WhichPage::First(EmptyScanParams {}) => 0,
+        dropshot::WhichPage::Next(last) => last + 1,
+    };
+    let values = ctx
+        .all_values
+        .clone()
+        .filter(|v| *v >= start && (!even || v % 2 == 0))
+        .take(limit)
+        .collect();
+    Ok(HttpResponseOk(
+        ResultsPage::new(values, &(), |&x, &()| x).unwrap(),
+    ))
+}
+
+#[tokio::test]
+async fn test_stream_pagination_extra_params() {
+    const TEST_NAME: &str = "test_stream_pagination_extra_params";
+
+    let mut api = ApiDescription::new();
+    api.register(filtered_u32s).unwrap();
+    let mut out = Vec::new();
+    api.openapi(TEST_NAME, semver::Version::new(1, 0, 0))
+        .write(&mut out)
+        .unwrap();
+    let spec = serde_json::from_str::<OpenAPI>(from_utf8(&out).unwrap()).unwrap();
+
+    for (style, suffix) in [
+        (InterfaceStyle::Positional, "positional"),
+        (InterfaceStyle::Builder, "builder"),
+    ] {
+        let mut generator =
+            Generator::build(GenerationSettings::new().with_interface(style), &spec).unwrap();
+        let output = generate_formatted(&mut generator);
+        expectorate::assert_contents(format!("tests/output/src/{TEST_NAME}_{suffix}.rs"), &output);
+    }
+
+    let config_dropshot = ConfigDropshot {
+        bind_address: SocketAddr::from((Ipv4Addr::LOCALHOST, 0)),
+        ..Default::default()
+    };
+    let log = ConfigLogging::StderrTerminal {
+        level: ConfigLoggingLevel::Warn,
+    }
+    .to_logger(TEST_NAME)
+    .unwrap();
+    let server_ctx = Arc::new(PaginatedU32sContext {
+        all_values: 0..35,
+        page_pairs: Mutex::default(),
+    });
+    let server = HttpServerStarter::new(&config_dropshot, api, server_ctx, &log)
+        .unwrap()
+        .start();
+    let server_addr = format!("http://{}", server.local_addr());
+    let expected = (0..35).filter(|v| v % 2 == 0).collect::<Vec<u32>>();
+    let page_limit = 5.try_into().unwrap();
+
+    #[allow(dead_code)]
+    mod gen_client_positional {
+        include!("output/src/test_stream_pagination_extra_params_positional.rs");
+    }
+    let client = gen_client_positional::Client::new(&server_addr).unwrap();
+    let got = client
+        .filtered_u32s_stream(Some(true), Some(page_limit))
+        .map(|r| r.unwrap())
+        .collect::<Vec<_>>()
+        .await;
+    assert_eq!(
+        expected, got,
+        "positional stream dropped `even` after page 1"
+    );
+
+    #[allow(dead_code, unused_imports)]
+    mod gen_client_builder {
+        include!("output/src/test_stream_pagination_extra_params_builder.rs");
+    }
+    let client = gen_client_builder::Client::new(&server_addr).unwrap();
+    let got = client
+        .filtered_u32s()
+        .even(true)
+        .limit(page_limit)
+        .stream()
+        .map(|r| r.unwrap())
+        .collect::<Vec<_>>()
+        .await;
+    assert_eq!(expected, got, "builder stream dropped `even` after page 1");
+
+    server.close().await.unwrap();
+}

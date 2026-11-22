@@ -1,0 +1,186 @@
+#[allow(unused_imports)]
+use progenitor_client::{encode_path, ClientHooks, OperationInfo, QueryParam, RequestBuilderExt};
+#[allow(unused_imports)]
+pub use progenitor_client::{ByteStream, ClientInfo, Error, ResponseValue};
+/// Items consumers will typically use such as the Client.
+pub mod prelude {
+    #[allow(unused_imports)]
+    pub use super::Client;
+}
+
+/// Types used as operation parameters and responses.
+#[allow(clippy::all)]
+pub mod types {
+    ///Error information from a response.
+    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    pub struct Error {
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        pub error_code: ::std::option::Option<::std::string::String>,
+        pub message: ::std::string::String,
+        pub request_id: ::std::string::String,
+    }
+
+    ///A single page of results
+    #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
+    pub struct Uint32ResultsPage {
+        ///list of items on this page of results
+        pub items: ::std::vec::Vec<u32>,
+        ///token used to fetch the next page of results (if any)
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        pub next_page: ::std::option::Option<::std::string::String>,
+    }
+}
+
+#[derive(Clone, Debug)]
+///Client for test_stream_pagination_extra_params
+///
+///Version: 1.0.0
+pub struct Client {
+    pub(crate) baseurl: String,
+    pub(crate) client: reqwest::Client,
+}
+
+impl Client {
+    /// Create a new client.
+    ///
+    /// `baseurl` is the base URL provided to the internal
+    /// `reqwest::Client`, and should include a scheme and hostname,
+    /// as well as port and a path stem if applicable.
+    ///
+    /// Returns an error if the `reqwest::Client` cannot be built,
+    /// for example when the TLS backend fails to initialize.
+    pub fn new(baseurl: &str) -> Result<Self, reqwest::Error> {
+        #[cfg(not(target_arch = "wasm32"))]
+        let client = {
+            let dur = ::std::time::Duration::from_secs(15u64);
+            reqwest::ClientBuilder::new()
+                .connect_timeout(dur)
+                .timeout(dur)
+        };
+        #[cfg(target_arch = "wasm32")]
+        let client = reqwest::ClientBuilder::new();
+        Ok(Self::new_with_client(baseurl, client.build()?))
+    }
+
+    /// Construct a new client with an existing `reqwest::Client`,
+    /// allowing more control over its configuration.
+    ///
+    /// `baseurl` is the base URL provided to the internal
+    /// `reqwest::Client`, and should include a scheme and hostname,
+    /// as well as port and a path stem if applicable.
+    pub fn new_with_client(baseurl: &str, client: reqwest::Client) -> Self {
+        Self {
+            baseurl: baseurl.to_string(),
+            client,
+        }
+    }
+}
+
+impl ClientInfo<()> for Client {
+    fn api_version() -> &'static str {
+        "1.0.0"
+    }
+
+    fn baseurl(&self) -> &str {
+        self.baseurl.as_str()
+    }
+
+    fn client(&self) -> &reqwest::Client {
+        &self.client
+    }
+
+    fn inner(&self) -> &() {
+        &()
+    }
+}
+
+impl ClientHooks<()> for &Client {}
+#[allow(clippy::all)]
+impl Client {
+    ///Sends a `GET` request to `/`
+    ///
+    ///Arguments:
+    /// - `even`: Only return even numbers.
+    /// - `limit`: Maximum number of items returned by a single call
+    /// - `page_token`: Token returned by previous call to retrieve the
+    ///   subsequent page
+    pub async fn filtered_u32s<'a>(
+        &'a self,
+        even: Option<bool>,
+        limit: Option<::std::num::NonZeroU32>,
+        page_token: Option<&'a str>,
+    ) -> Result<ResponseValue<types::Uint32ResultsPage>, Error<types::Error>> {
+        let url = format!("{}/", self.baseurl,);
+        let mut header_map = ::reqwest::header::HeaderMap::with_capacity(1usize);
+        header_map.append(
+            ::reqwest::header::HeaderName::from_static("api-version"),
+            ::reqwest::header::HeaderValue::from_static(Self::api_version()),
+        );
+        #[allow(unused_mut)]
+        let mut request = self
+            .client
+            .get(url)
+            .header(
+                ::reqwest::header::ACCEPT,
+                ::reqwest::header::HeaderValue::from_static("application/json"),
+            )
+            .query(&QueryParam::new("even", &even))
+            .query(&QueryParam::new("limit", &limit))
+            .query(&QueryParam::new("page_token", &page_token))
+            .headers(header_map)
+            .build()?;
+        let info = OperationInfo {
+            operation_id: "filtered_u32s",
+        };
+        self.pre(&mut request, &info).await?;
+        let result = self.exec(request, &info).await;
+        self.post(&result, &info).await?;
+        let response = result?;
+        match response.status().as_u16() {
+            200u16 => ResponseValue::from_response(response).await,
+            400u16..=499u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            500u16..=599u16 => Err(Error::ErrorResponse(
+                ResponseValue::from_response(response).await?,
+            )),
+            _ => Err(Error::UnexpectedResponse(response)),
+        }
+    }
+
+    ///Sends repeated `GET` requests to `/` until there are no more results.
+    ///
+    ///Arguments:
+    /// - `even`: Only return even numbers.
+    /// - `limit`: Maximum number of items returned by a single call
+    pub fn filtered_u32s_stream<'a>(
+        &'a self,
+        even: Option<bool>,
+        limit: Option<::std::num::NonZeroU32>,
+    ) -> impl futures::Stream<Item = Result<u32, Error<types::Error>>> + Unpin + 'a {
+        use futures::StreamExt;
+        use futures::TryFutureExt;
+        use futures::TryStreamExt;
+        self.filtered_u32s(even, limit, None)
+            .map_ok(move |page| {
+                let page = page.into_inner();
+                let first = futures::stream::iter(page.items).map(Ok);
+                let rest = futures::stream::try_unfold(page.next_page, move |state| async move {
+                    if state.is_none() {
+                        Ok(None)
+                    } else {
+                        self.filtered_u32s(even, limit, state.as_deref())
+                            .map_ok(|page| {
+                                let page = page.into_inner();
+                                Some((futures::stream::iter(page.items).map(Ok), page.next_page))
+                            })
+                            .await
+                    }
+                })
+                .try_flatten();
+                first.chain(rest)
+            })
+            .try_flatten_stream()
+            .boxed()
+    }
+}

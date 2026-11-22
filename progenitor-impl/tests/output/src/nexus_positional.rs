@@ -5708,7 +5708,7 @@ impl Client {
                     if state.is_none() {
                         Ok(None)
                     } else {
-                        self.group_list(limit, state.as_deref(), None)
+                        self.group_list(limit, state.as_deref(), sort_by)
                             .map_ok(|page| {
                                 let page = page.into_inner();
                                 Some((futures::stream::iter(page.items).map(Ok), page.next_page))
@@ -6020,7 +6020,7 @@ impl Client {
                     if state.is_none() {
                         Ok(None)
                     } else {
-                        self.organization_list(limit, state.as_deref(), None)
+                        self.organization_list(limit, state.as_deref(), sort_by)
                             .map_ok(|page| {
                                 let page = page.into_inner();
                                 Some((futures::stream::iter(page.items).map(Ok), page.next_page))
@@ -6431,7 +6431,7 @@ impl Client {
                     if state.is_none() {
                         Ok(None)
                     } else {
-                        self.project_list(organization_name, limit, state.as_deref(), None)
+                        self.project_list(organization_name, limit, state.as_deref(), sort_by)
                             .map_ok(|page| {
                                 let page = page.into_inner();
                                 Some((futures::stream::iter(page.items).map(Ok), page.next_page))
@@ -6769,7 +6769,7 @@ impl Client {
                             project_name,
                             limit,
                             state.as_deref(),
-                            None,
+                            sort_by,
                         )
                         .map_ok(|page| {
                             let page = page.into_inner();
@@ -7070,10 +7070,10 @@ impl Client {
                         project_name,
                         disk_name,
                         metric_name,
-                        None,
+                        end_time,
                         limit,
                         state.as_deref(),
-                        None,
+                        start_time,
                     )
                     .map_ok(|page| {
                         let page = page.into_inner();
@@ -7192,7 +7192,7 @@ impl Client {
                             project_name,
                             limit,
                             state.as_deref(),
-                            None,
+                            sort_by,
                         )
                         .map_ok(|page| {
                             let page = page.into_inner();
@@ -7474,7 +7474,7 @@ impl Client {
                             project_name,
                             limit,
                             state.as_deref(),
-                            None,
+                            sort_by,
                         )
                         .map_ok(|page| {
                             let page = page.into_inner();
@@ -7769,7 +7769,7 @@ impl Client {
                         instance_name,
                         limit,
                         state.as_deref(),
-                        None,
+                        sort_by,
                     )
                     .map_ok(|page| {
                         let page = page.into_inner();
@@ -8117,7 +8117,7 @@ impl Client {
                         instance_name,
                         limit,
                         state.as_deref(),
-                        None,
+                        sort_by,
                     )
                     .map_ok(|page| {
                         let page = page.into_inner();
@@ -8917,7 +8917,7 @@ impl Client {
                             project_name,
                             limit,
                             state.as_deref(),
-                            None,
+                            sort_by,
                         )
                         .map_ok(|page| {
                             let page = page.into_inner();
@@ -9192,7 +9192,7 @@ impl Client {
                             project_name,
                             limit,
                             state.as_deref(),
-                            None,
+                            sort_by,
                         )
                         .map_ok(|page| {
                             let page = page.into_inner();
@@ -9640,7 +9640,7 @@ impl Client {
                         vpc_name,
                         limit,
                         state.as_deref(),
-                        None,
+                        sort_by,
                     )
                     .map_ok(|page| {
                         let page = page.into_inner();
@@ -9998,7 +9998,7 @@ impl Client {
                         router_name,
                         limit,
                         state.as_deref(),
-                        None,
+                        sort_by,
                     )
                     .map_ok(|page| {
                         let page = page.into_inner();
@@ -10352,7 +10352,7 @@ impl Client {
                         vpc_name,
                         limit,
                         state.as_deref(),
-                        None,
+                        sort_by,
                     )
                     .map_ok(|page| {
                         let page = page.into_inner();
@@ -10706,7 +10706,7 @@ impl Client {
                         subnet_name,
                         limit,
                         state.as_deref(),
-                        None,
+                        sort_by,
                     )
                     .map_ok(|page| {
                         let page = page.into_inner();
@@ -11060,7 +11060,7 @@ impl Client {
                     if state.is_none() {
                         Ok(None)
                     } else {
-                        self.session_me_groups(limit, state.as_deref(), None)
+                        self.session_me_groups(limit, state.as_deref(), sort_by)
                             .map_ok(|page| {
                                 let page = page.into_inner();
                                 Some((futures::stream::iter(page.items).map(Ok), page.next_page))
@@ -11156,7 +11156,7 @@ impl Client {
                     if state.is_none() {
                         Ok(None)
                     } else {
-                        self.session_sshkey_list(limit, state.as_deref(), None)
+                        self.session_sshkey_list(limit, state.as_deref(), sort_by)
                             .map_ok(|page| {
                                 let page = page.into_inner();
                                 Some((futures::stream::iter(page.items).map(Ok), page.next_page))
@@ -11538,7 +11538,7 @@ impl Client {
                     if state.is_none() {
                         Ok(None)
                     } else {
-                        self.certificate_list(limit, state.as_deref(), None)
+                        self.certificate_list(limit, state.as_deref(), sort_by)
                             .map_ok(|page| {
                                 let page = page.into_inner();
                                 Some((futures::stream::iter(page.items).map(Ok), page.next_page))
@@ -11773,7 +11773,7 @@ impl Client {
                     if state.is_none() {
                         Ok(None)
                     } else {
-                        self.physical_disk_list(limit, state.as_deref(), None)
+                        self.physical_disk_list(limit, state.as_deref(), sort_by)
                             .map_ok(|page| {
                                 let page = page.into_inner();
                                 Some((futures::stream::iter(page.items).map(Ok), page.next_page))
@@ -11865,7 +11865,7 @@ impl Client {
                     if state.is_none() {
                         Ok(None)
                     } else {
-                        self.rack_list(limit, state.as_deref(), None)
+                        self.rack_list(limit, state.as_deref(), sort_by)
                             .map_ok(|page| {
                                 let page = page.into_inner();
                                 Some((futures::stream::iter(page.items).map(Ok), page.next_page))
@@ -12006,7 +12006,7 @@ impl Client {
                     if state.is_none() {
                         Ok(None)
                     } else {
-                        self.sled_list(limit, state.as_deref(), None)
+                        self.sled_list(limit, state.as_deref(), sort_by)
                             .map_ok(|page| {
                                 let page = page.into_inner();
                                 Some((futures::stream::iter(page.items).map(Ok), page.next_page))
@@ -12157,7 +12157,7 @@ impl Client {
                     if state.is_none() {
                         Ok(None)
                     } else {
-                        self.sled_physical_disk_list(sled_id, limit, state.as_deref(), None)
+                        self.sled_physical_disk_list(sled_id, limit, state.as_deref(), sort_by)
                             .map_ok(|page| {
                                 let page = page.into_inner();
                                 Some((futures::stream::iter(page.items).map(Ok), page.next_page))
@@ -12258,7 +12258,7 @@ impl Client {
                     if state.is_none() {
                         Ok(None)
                     } else {
-                        self.system_image_list(limit, state.as_deref(), None)
+                        self.system_image_list(limit, state.as_deref(), sort_by)
                             .map_ok(|page| {
                                 let page = page.into_inner();
                                 Some((futures::stream::iter(page.items).map(Ok), page.next_page))
@@ -12494,7 +12494,7 @@ impl Client {
                     if state.is_none() {
                         Ok(None)
                     } else {
-                        self.ip_pool_list(limit, state.as_deref(), None)
+                        self.ip_pool_list(limit, state.as_deref(), sort_by)
                             .map_ok(|page| {
                                 let page = page.into_inner();
                                 Some((futures::stream::iter(page.items).map(Ok), page.next_page))
@@ -13333,7 +13333,7 @@ impl Client {
                     if state.is_none() {
                         Ok(None)
                     } else {
-                        self.saga_list(limit, state.as_deref(), None)
+                        self.saga_list(limit, state.as_deref(), sort_by)
                             .map_ok(|page| {
                                 let page = page.into_inner();
                                 Some((futures::stream::iter(page.items).map(Ok), page.next_page))
@@ -13475,7 +13475,7 @@ impl Client {
                     if state.is_none() {
                         Ok(None)
                     } else {
-                        self.silo_list(limit, state.as_deref(), None)
+                        self.silo_list(limit, state.as_deref(), sort_by)
                             .map_ok(|page| {
                                 let page = page.into_inner();
                                 Some((futures::stream::iter(page.items).map(Ok), page.next_page))
@@ -13722,12 +13722,17 @@ impl Client {
                     if state.is_none() {
                         Ok(None)
                     } else {
-                        self.silo_identity_provider_list(silo_name, limit, state.as_deref(), None)
-                            .map_ok(|page| {
-                                let page = page.into_inner();
-                                Some((futures::stream::iter(page.items).map(Ok), page.next_page))
-                            })
-                            .await
+                        self.silo_identity_provider_list(
+                            silo_name,
+                            limit,
+                            state.as_deref(),
+                            sort_by,
+                        )
+                        .map_ok(|page| {
+                            let page = page.into_inner();
+                            Some((futures::stream::iter(page.items).map(Ok), page.next_page))
+                        })
+                        .await
                     }
                 })
                 .try_flatten();
@@ -14199,7 +14204,7 @@ impl Client {
                     if state.is_none() {
                         Ok(None)
                     } else {
-                        self.silo_users_list(silo_name, limit, state.as_deref(), None)
+                        self.silo_users_list(silo_name, limit, state.as_deref(), sort_by)
                             .map_ok(|page| {
                                 let page = page.into_inner();
                                 Some((futures::stream::iter(page.items).map(Ok), page.next_page))
@@ -14344,7 +14349,7 @@ impl Client {
                     if state.is_none() {
                         Ok(None)
                     } else {
-                        self.system_user_list(limit, state.as_deref(), None)
+                        self.system_user_list(limit, state.as_deref(), sort_by)
                             .map_ok(|page| {
                                 let page = page.into_inner();
                                 Some((futures::stream::iter(page.items).map(Ok), page.next_page))
@@ -14573,7 +14578,7 @@ impl Client {
                     if state.is_none() {
                         Ok(None)
                     } else {
-                        self.user_list(limit, state.as_deref(), None)
+                        self.user_list(limit, state.as_deref(), sort_by)
                             .map_ok(|page| {
                                 let page = page.into_inner();
                                 Some((futures::stream::iter(page.items).map(Ok), page.next_page))
@@ -14675,7 +14680,7 @@ impl Client {
                     if state.is_none() {
                         Ok(None)
                     } else {
-                        self.disk_list_v1(limit, None, state.as_deref(), None, None)
+                        self.disk_list_v1(limit, organization, state.as_deref(), project, sort_by)
                             .map_ok(|page| {
                                 let page = page.into_inner();
                                 Some((futures::stream::iter(page.items).map(Ok), page.next_page))
@@ -14925,12 +14930,18 @@ impl Client {
                     if state.is_none() {
                         Ok(None)
                     } else {
-                        self.instance_list_v1(limit, None, state.as_deref(), None, None)
-                            .map_ok(|page| {
-                                let page = page.into_inner();
-                                Some((futures::stream::iter(page.items).map(Ok), page.next_page))
-                            })
-                            .await
+                        self.instance_list_v1(
+                            limit,
+                            organization,
+                            state.as_deref(),
+                            project,
+                            sort_by,
+                        )
+                        .map_ok(|page| {
+                            let page = page.into_inner();
+                            Some((futures::stream::iter(page.items).map(Ok), page.next_page))
+                        })
+                        .await
                     }
                 })
                 .try_flatten();
@@ -15185,10 +15196,10 @@ impl Client {
                         self.instance_disk_list_v1(
                             instance,
                             limit,
-                            None,
+                            organization,
                             state.as_deref(),
-                            None,
-                            None,
+                            project,
+                            sort_by,
                         )
                         .map_ok(|page| {
                             let page = page.into_inner();
@@ -15717,7 +15728,7 @@ impl Client {
                     if state.is_none() {
                         Ok(None)
                     } else {
-                        self.organization_list_v1(limit, state.as_deref(), None)
+                        self.organization_list_v1(limit, state.as_deref(), sort_by)
                             .map_ok(|page| {
                                 let page = page.into_inner();
                                 Some((futures::stream::iter(page.items).map(Ok), page.next_page))
@@ -16091,7 +16102,7 @@ impl Client {
                     if state.is_none() {
                         Ok(None)
                     } else {
-                        self.project_list_v1(limit, None, state.as_deref(), None)
+                        self.project_list_v1(limit, organization, state.as_deref(), sort_by)
                             .map_ok(|page| {
                                 let page = page.into_inner();
                                 Some((futures::stream::iter(page.items).map(Ok), page.next_page))
@@ -16473,7 +16484,7 @@ impl Client {
                     if state.is_none() {
                         Ok(None)
                     } else {
-                        self.system_component_version_list(limit, state.as_deref(), None)
+                        self.system_component_version_list(limit, state.as_deref(), sort_by)
                             .map_ok(|page| {
                                 let page = page.into_inner();
                                 Some((futures::stream::iter(page.items).map(Ok), page.next_page))
@@ -16566,7 +16577,7 @@ impl Client {
                     if state.is_none() {
                         Ok(None)
                     } else {
-                        self.update_deployments_list(limit, state.as_deref(), None)
+                        self.update_deployments_list(limit, state.as_deref(), sort_by)
                             .map_ok(|page| {
                                 let page = page.into_inner();
                                 Some((futures::stream::iter(page.items).map(Ok), page.next_page))
@@ -16832,7 +16843,7 @@ impl Client {
                     if state.is_none() {
                         Ok(None)
                     } else {
-                        self.system_update_list(limit, state.as_deref(), None)
+                        self.system_update_list(limit, state.as_deref(), sort_by)
                             .map_ok(|page| {
                                 let page = page.into_inner();
                                 Some((futures::stream::iter(page.items).map(Ok), page.next_page))
