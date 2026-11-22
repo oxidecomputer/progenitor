@@ -1227,8 +1227,9 @@ impl Construction {
             return None;
         }
 
-        // All query parameters must be optional since page_token may not be
-        // specified in conjunction with other query parameters.
+        // Streams are generated only when every query parameter is optional.
+        // Each page after the first sends the same query parameters along
+        // with page_token, and dropshot ignores the scan parameters there.
         if !parameters.iter().all(|param| match &param.kind {
             OperationParameterKind::Query(required) => !required,
             _ => true,
