@@ -183,8 +183,7 @@ pub mod types {
         pub time_modified: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
-    ///Create-time parameters for a
-    /// [`Certificate`](crate::external_api::views::Certificate)
+    ///Create-time parameters for a [`Certificate`](crate::external_api::views::Certificate)
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct CertificateCreate {
         ///PEM file containing public certificate chain
@@ -462,8 +461,7 @@ pub mod types {
         pub time_modified: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
-    ///Create-time parameters for a
-    /// [`Disk`](omicron_common::api::external::Disk)
+    ///Create-time parameters for a [`Disk`](omicron_common::api::external::Disk)
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct DiskCreate {
         pub description: ::std::string::String,
@@ -474,9 +472,7 @@ pub mod types {
         pub size: ByteCount,
     }
 
-    ///TODO-v1: Delete this Parameters for the
-    /// [`Disk`](omicron_common::api::external::Disk) to be attached or detached
-    /// to an instance
+    ///TODO-v1: Delete this Parameters for the [`Disk`](omicron_common::api::external::Disk) to be attached or detached to an instance
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct DiskIdentifier {
         pub name: Name,
@@ -910,8 +906,7 @@ pub mod types {
         pub version: ::std::string::String,
     }
 
-    ///Create-time parameters for an
-    /// [`GlobalImage`](crate::external_api::views::GlobalImage)
+    ///Create-time parameters for an [`GlobalImage`](crate::external_api::views::GlobalImage)
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct GlobalImageCreate {
         ///block size in bytes
@@ -1283,8 +1278,7 @@ pub mod types {
         pub version: ::std::option::Option<::std::string::String>,
     }
 
-    ///Create-time parameters for an
-    /// [`Image`](crate::external_api::views::Image)
+    ///Create-time parameters for an [`Image`](crate::external_api::views::Image)
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct ImageCreate {
         ///block size in bytes
@@ -1378,8 +1372,7 @@ pub mod types {
         }
     }
 
-    ///Create-time parameters for an
-    /// [`Instance`](omicron_common::api::external::Instance)
+    ///Create-time parameters for an [`Instance`](omicron_common::api::external::Instance)
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct InstanceCreate {
         pub description: ::std::string::String,
@@ -1433,8 +1426,7 @@ pub mod types {
         },
     }
 
-    ///Migration parameters for an
-    /// [`Instance`](omicron_common::api::external::Instance)
+    ///Migration parameters for an [`Instance`](omicron_common::api::external::Instance)
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct InstanceMigrate {
         pub dst_sled_id: ::uuid::Uuid,
@@ -2363,8 +2355,7 @@ pub mod types {
         pub vpc_id: ::uuid::Uuid,
     }
 
-    ///Create-time parameters for a
-    /// [`NetworkInterface`](omicron_common::api::external::NetworkInterface)
+    ///Create-time parameters for a [`NetworkInterface`](omicron_common::api::external::NetworkInterface)
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct NetworkInterfaceCreate {
         pub description: ::std::string::String,
@@ -2389,8 +2380,7 @@ pub mod types {
         pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    ///Parameters for updating a
-    /// [`NetworkInterface`](omicron_common::api::external::NetworkInterface).
+    ///Parameters for updating a [`NetworkInterface`](omicron_common::api::external::NetworkInterface).
     ///
     ///Note that modifying IP addresses for an interface is not yet supported,
     /// a new interface must be created instead.
@@ -2481,8 +2471,7 @@ pub mod types {
         pub time_modified: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
-    ///Create-time parameters for an
-    /// [`Organization`](crate::external_api::views::Organization)
+    ///Create-time parameters for an [`Organization`](crate::external_api::views::Organization)
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct OrganizationCreate {
         pub description: ::std::string::String,
@@ -2584,8 +2573,7 @@ pub mod types {
         pub role_name: OrganizationRole,
     }
 
-    ///Updateable properties of an
-    /// [`Organization`](crate::external_api::views::Organization)
+    ///Updateable properties of an [`Organization`](crate::external_api::views::Organization)
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, Default)]
     pub struct OrganizationUpdate {
         #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -2749,8 +2737,7 @@ pub mod types {
         pub time_modified: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
-    ///Create-time parameters for a
-    /// [`Project`](crate::external_api::views::Project)
+    ///Create-time parameters for a [`Project`](crate::external_api::views::Project)
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct ProjectCreate {
         pub description: ::std::string::String,
@@ -2852,8 +2839,7 @@ pub mod types {
         pub role_name: ProjectRole,
     }
 
-    ///Updateable properties of a
-    /// [`Project`](crate::external_api::views::Project)
+    ///Updateable properties of a [`Project`](crate::external_api::views::Project)
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, Default)]
     pub struct ProjectUpdate {
         #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -3614,8 +3600,7 @@ pub mod types {
         pub time_modified: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
-    ///Create-time parameters for a
-    /// [`Snapshot`](crate::external_api::views::Snapshot)
+    ///Create-time parameters for a [`Snapshot`](crate::external_api::views::Snapshot)
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct SnapshotCreate {
         pub description: ::std::string::String,
@@ -3723,8 +3708,7 @@ pub mod types {
         pub time_modified: ::chrono::DateTime<::chrono::offset::Utc>,
     }
 
-    ///Create-time parameters for an
-    /// [`SshKey`](crate::external_api::views::SshKey)
+    ///Create-time parameters for an [`SshKey`](crate::external_api::views::SshKey)
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct SshKeyCreate {
         pub description: ::std::string::String,
@@ -4728,8 +4712,7 @@ pub mod types {
         pub vpc_id: ::uuid::Uuid,
     }
 
-    ///Create-time parameters for a
-    /// [`VpcRouter`](crate::external_api::views::VpcRouter)
+    ///Create-time parameters for a [`VpcRouter`](crate::external_api::views::VpcRouter)
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct VpcRouterCreate {
         pub description: ::std::string::String,
@@ -4802,8 +4785,7 @@ pub mod types {
         pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    ///Updateable properties of a
-    /// [`VpcRouter`](crate::external_api::views::VpcRouter)
+    ///Updateable properties of a [`VpcRouter`](crate::external_api::views::VpcRouter)
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, Default)]
     pub struct VpcRouterUpdate {
         #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -4835,8 +4817,7 @@ pub mod types {
         pub vpc_id: ::uuid::Uuid,
     }
 
-    ///Create-time parameters for a
-    /// [`VpcSubnet`](crate::external_api::views::VpcSubnet)
+    ///Create-time parameters for a [`VpcSubnet`](crate::external_api::views::VpcSubnet)
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug)]
     pub struct VpcSubnetCreate {
         pub description: ::std::string::String,
@@ -4866,8 +4847,7 @@ pub mod types {
         pub next_page: ::std::option::Option<::std::string::String>,
     }
 
-    ///Updateable properties of a
-    /// [`VpcSubnet`](crate::external_api::views::VpcSubnet)
+    ///Updateable properties of a [`VpcSubnet`](crate::external_api::views::VpcSubnet)
     #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, Default)]
     pub struct VpcSubnetUpdate {
         #[serde(skip_serializing_if = "::std::option::Option::is_none")]
