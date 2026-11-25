@@ -17,6 +17,8 @@ Options:
           Target crate license [default: "SPECIFY A LICENSE BEFORE PUBLISHING"]
       --interface <INTERFACE>
           SDK interface style [default: positional] [possible values: positional, builder]
+      --conditional-responses
+          Return a typed outcome for declared 304 Not Modified responses
       --tags <TAGS>
           SDK tag style [default: merged] [possible values: merged, separate]
       --include-client <INCLUDE_CLIENT>

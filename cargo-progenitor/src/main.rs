@@ -49,6 +49,9 @@ struct Args {
     /// SDK interface style
     #[clap(value_enum, long, default_value_t = InterfaceArg::Positional)]
     interface: InterfaceArg,
+    /// Return a typed outcome for declared 304 Not Modified responses
+    #[clap(long)]
+    conditional_responses: bool,
     /// SDK tag style
     #[clap(value_enum, long, default_value_t = TagArg::Merged)]
     tags: TagArg,
@@ -120,6 +123,7 @@ fn main() -> Result<()> {
     let builder = Generator::build(
         GenerationSettings::default()
             .with_interface(args.interface.into())
+            .with_conditional_responses(args.conditional_responses)
             .with_tag(args.tags.into()),
         &api,
     )?;

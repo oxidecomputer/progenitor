@@ -619,7 +619,7 @@ impl Generator {
                 &'a self,
                 #(#params),*
             ) -> Result<
-                ResponseValue<#success_type>,
+                #success_type,
                 Error<#error_type>,
             > {
                 #body
@@ -627,6 +627,7 @@ impl Generator {
         };
 
         let stream_impl = method.dropshot_paginated.as_ref().map(|page_data| {
+            let require_page_body = self.require_page_body(method);
             let stream_id = format_ident!("{}_stream", method.operation_id);
 
             // The parameters are the same as those to the paged method, but
@@ -702,6 +703,7 @@ impl Generator {
                     // Execute the operation with the basic parameters
                     // (omitting page_token) to get the first page.
                     self.#operation_id( #(#first_params,)* )
+                        #require_page_body
                         .map_ok(move |page| {
                             let page = page.into_inner();
 
@@ -728,6 +730,7 @@ impl Generator {
                                         self.#operation_id(
                                             #(#step_params,)*
                                         )
+                                        #require_page_body
                                         .map_ok(|page| {
                                             let page = page.into_inner();
                                             Some((
@@ -755,6 +758,34 @@ impl Generator {
             #method_impl
             #stream_impl
         }
+    }
+
+    pub(crate) fn has_not_modified(&self, method: &OperationMethod) -> bool {
+        self.settings.conditional_responses
+            && method.responses.iter().any(|response| {
+                response.status_code == OperationResponseStatus::Code(304)
+                    && response.typ == OperationResponseKind::None
+            })
+    }
+
+    fn conditional_response_type(&self, method: &OperationMethod) -> Option<TokenStream> {
+        self.has_not_modified(method)
+            .then(|| match self.settings.interface {
+                crate::InterfaceStyle::Positional => quote! { ConditionalResponse },
+                crate::InterfaceStyle::Builder => quote! { super::ConditionalResponse },
+            })
+    }
+
+    // An item stream has no cached page from which to yield items or read the next token.
+    fn require_page_body(&self, method: &OperationMethod) -> Option<TokenStream> {
+        self.conditional_response_type(method).map(|ty| {
+            quote! {
+                .and_then(|response| std::future::ready(match response {
+                    #ty::Modified(page) => Ok(page),
+                    #ty::NotModified(response) => Err(Error::UnexpectedResponse(response)),
+                }))
+            }
+        })
     }
 
     /// Common code generation between positional and builder interface-styles.
@@ -927,6 +958,12 @@ impl Generator {
         let (success_response_items, response_type) =
             self.extract_responses(method, OperationResponseStatus::is_success_or_default);
 
+        let conditional_response = self.conditional_response_type(method);
+        let not_modified_arm = conditional_response.as_ref().map(|ty| {
+            quote! {
+                304 => Ok(#ty::NotModified(#response_ident)),
+            }
+        });
         let success_response_matches = success_response_items.iter().map(|response| {
             let pat = match &response.status_code {
                 OperationResponseStatus::Code(code) => quote! { #code },
@@ -958,7 +995,11 @@ impl Generator {
                 }
             };
 
-            quote! { #pat => { #decode } }
+            if let Some(ty) = &conditional_response {
+                quote! { #pat => { (#decode).map(#ty::Modified) } }
+            } else {
+                quote! { #pat => { #decode } }
+            }
         });
 
         // Errors...
@@ -1130,6 +1171,7 @@ impl Generator {
                 //         .map(OperationXResponse::ResponseTypeB)
                 // }
                 #(#success_response_matches)*
+                #not_modified_arm
 
                 // This is almost identical to the success types except
                 // they are wrapped in Error::ErrorResponse...
@@ -1149,8 +1191,13 @@ impl Generator {
         };
 
         let typespace = self.typespace();
+        let inner = response_type.into_tokens(typespace);
+        let success = match conditional_response {
+            Some(ty) => quote! { #ty<#inner> },
+            None => quote! { ResponseValue<#inner> },
+        };
         MethodSigBody {
-            success: response_type.into_tokens(typespace),
+            success,
             error: error_type.into_tokens(typespace),
             body: body_impl,
         }
@@ -1650,7 +1697,7 @@ impl Generator {
         let send_impl = quote! {
             #[doc = #send_doc]
             pub async fn send(self) -> Result<
-                ResponseValue<#success>,
+                #success,
                 Error<#error>,
             > {
                 // Destructure the builder for convenience.
@@ -1678,6 +1725,7 @@ impl Generator {
         };
 
         let stream_impl = method.dropshot_paginated.as_ref().map(|page_data| {
+            let require_page_body = self.require_page_body(method);
             let step_params = method.params.iter().filter_map(|param| {
                 if param.api_name.as_str() != "limit"
                     && matches!(param.kind, OperationParameterKind::Query(_))
@@ -1725,6 +1773,7 @@ impl Generator {
                     };
 
                     self.send()
+                        #require_page_body
                         .map_ok(move |page| {
                             let page = page.into_inner();
 
@@ -1752,6 +1801,7 @@ impl Generator {
                                             ..next.clone()
                                         }
                                         .send()
+                                        #require_page_body
                                         .map_ok(|page| {
                                             let page = page.into_inner();
                                             Some((
