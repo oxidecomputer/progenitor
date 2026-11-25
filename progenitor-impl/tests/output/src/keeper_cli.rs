@@ -48,7 +48,10 @@ impl<T: CliConfig> Cli<T> {
                     .value_name("JSON-FILE")
                     .required(false)
                     .value_parser(::clap::value_parser!(std::path::PathBuf))
-                    .help("Path to a file that contains the full json body."),
+                    .help(
+                        "Path to a file that contains the full json body, or '-' to read from \
+                         stdin.",
+                    ),
             )
             .arg(
                 ::clap::Arg::new("json-body-schema")
@@ -114,7 +117,10 @@ impl<T: CliConfig> Cli<T> {
                     .value_name("JSON-FILE")
                     .required(true)
                     .value_parser(::clap::value_parser!(std::path::PathBuf))
-                    .help("Path to a file that contains the full json body."),
+                    .help(
+                        "Path to a file that contains the full json body, or '-' to read from \
+                         stdin.",
+                    ),
             )
             .arg(
                 ::clap::Arg::new("json-body-schema")
@@ -140,7 +146,10 @@ impl<T: CliConfig> Cli<T> {
                     .value_name("JSON-FILE")
                     .required(true)
                     .value_parser(::clap::value_parser!(std::path::PathBuf))
-                    .help("Path to a file that contains the full json body."),
+                    .help(
+                        "Path to a file that contains the full json body, or '-' to read from \
+                         stdin.",
+                    ),
             )
             .arg(
                 ::clap::Arg::new("json-body-schema")
@@ -180,7 +189,10 @@ impl<T: CliConfig> Cli<T> {
                     .value_name("JSON-FILE")
                     .required(true)
                     .value_parser(::clap::value_parser!(std::path::PathBuf))
-                    .help("Path to a file that contains the full json body."),
+                    .help(
+                        "Path to a file that contains the full json body, or '-' to read from \
+                         stdin.",
+                    ),
             )
             .arg(
                 ::clap::Arg::new("json-body-schema")
@@ -226,8 +238,15 @@ impl<T: CliConfig> Cli<T> {
         }
 
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
-            let body_txt = std::fs::read_to_string(value)
-                .with_context(|| format!("failed to read {}", value.display()))?;
+            let body_txt = if value.as_os_str() == "-" {
+                let mut buf = String::new();
+                std::io::Read::read_to_string(&mut std::io::stdin(), &mut buf)
+                    .context("failed to read from stdin")?;
+                buf
+            } else {
+                std::fs::read_to_string(value)
+                    .with_context(|| format!("failed to read {}", value.display()))?
+            };
             let body_value = serde_json::from_str::<types::EnrolBody>(&body_txt)
                 .with_context(|| format!("failed to parse {}", value.display()))?;
             request = request.body(body_value);
@@ -313,8 +332,15 @@ impl<T: CliConfig> Cli<T> {
         }
 
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
-            let body_txt = std::fs::read_to_string(value)
-                .with_context(|| format!("failed to read {}", value.display()))?;
+            let body_txt = if value.as_os_str() == "-" {
+                let mut buf = String::new();
+                std::io::Read::read_to_string(&mut std::io::stdin(), &mut buf)
+                    .context("failed to read from stdin")?;
+                buf
+            } else {
+                std::fs::read_to_string(value)
+                    .with_context(|| format!("failed to read {}", value.display()))?
+            };
             let body_value = serde_json::from_str::<types::ReportFinishBody>(&body_txt)
                 .with_context(|| format!("failed to parse {}", value.display()))?;
             request = request.body(body_value);
@@ -346,8 +372,15 @@ impl<T: CliConfig> Cli<T> {
         }
 
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
-            let body_txt = std::fs::read_to_string(value)
-                .with_context(|| format!("failed to read {}", value.display()))?;
+            let body_txt = if value.as_os_str() == "-" {
+                let mut buf = String::new();
+                std::io::Read::read_to_string(&mut std::io::stdin(), &mut buf)
+                    .context("failed to read from stdin")?;
+                buf
+            } else {
+                std::fs::read_to_string(value)
+                    .with_context(|| format!("failed to read {}", value.display()))?
+            };
             let body_value = serde_json::from_str::<types::ReportOutputBody>(&body_txt)
                 .with_context(|| format!("failed to parse {}", value.display()))?;
             request = request.body(body_value);
@@ -389,8 +422,15 @@ impl<T: CliConfig> Cli<T> {
         }
 
         if let Some(value) = matches.get_one::<std::path::PathBuf>("json-body") {
-            let body_txt = std::fs::read_to_string(value)
-                .with_context(|| format!("failed to read {}", value.display()))?;
+            let body_txt = if value.as_os_str() == "-" {
+                let mut buf = String::new();
+                std::io::Read::read_to_string(&mut std::io::stdin(), &mut buf)
+                    .context("failed to read from stdin")?;
+                buf
+            } else {
+                std::fs::read_to_string(value)
+                    .with_context(|| format!("failed to read {}", value.display()))?
+            };
             let body_value = serde_json::from_str::<types::ReportStartBody>(&body_txt)
                 .with_context(|| format!("failed to parse {}", value.display()))?;
             request = request.body(body_value);
