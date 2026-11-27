@@ -40,7 +40,7 @@ jobs:
             toolchain: stable
           - rust-version: msrv
             # Keep this in sync with rust-version in Cargo.toml
-            toolchain: "1.97"
+            toolchain: "1.88"
     steps:
     - uses: actions/checkout@v7
     - name: Install nightly rustfmt

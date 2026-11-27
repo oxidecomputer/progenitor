@@ -779,8 +779,10 @@ pub mod types {
     )]
     #[serde(tag = "state", content = "instance")]
     pub enum DiskState {
+        ///Disk is being initialized
         #[serde(rename = "creating")]
         Creating,
+        ///Disk is ready but detached from any Instance
         #[serde(rename = "detached")]
         Detached,
         ///Disk is being attached to the given Instance
@@ -792,8 +794,10 @@ pub mod types {
         ///Disk is being detached from the given Instance
         #[serde(rename = "detaching")]
         Detaching(::uuid::Uuid),
+        ///Disk has been destroyed
         #[serde(rename = "destroyed")]
         Destroyed,
+        ///Disk is unavailable
         #[serde(rename = "faulted")]
         Faulted,
     }
@@ -1658,6 +1662,8 @@ pub mod types {
         Url { url: ::std::string::String },
         #[serde(rename = "snapshot")]
         Snapshot { id: ::uuid::Uuid },
+        ///Boot the Alpine ISO that ships with the Propolis zone. Intended for
+        /// development purposes only.
         #[serde(rename = "you_can_boot_anything_as_long_as_its_alpine")]
         YouCanBootAnythingAsLongAsItsAlpine,
     }
@@ -1824,8 +1830,12 @@ pub mod types {
         /// designated the primary interface for the instance.
         #[serde(rename = "create")]
         Create(::std::vec::Vec<NetworkInterfaceCreate>),
+        ///The default networking configuration for an instance is to create a
+        /// single primary interface with an automatically-assigned IP address.
+        /// The IP will be pulled from the Project's default VPC / VPC Subnet.
         #[serde(rename = "default")]
         Default,
+        ///No network interfaces at all will be created for the instance.
         #[serde(rename = "none")]
         None,
     }
@@ -5377,6 +5387,7 @@ pub mod types {
         ///Sets the user's password to the provided value
         #[serde(rename = "password")]
         Password(Password),
+        ///Invalidates any current password (disabling password authentication)
         #[serde(rename = "invalid_password")]
         InvalidPassword,
     }
