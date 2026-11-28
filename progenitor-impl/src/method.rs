@@ -108,6 +108,26 @@ pub enum OperationParameterType {
     RawBody,
 }
 
+impl OperationParameterType {
+    /// The item type when this is an array or a set. Header and query
+    /// parameters of these types are sent, mocked and parsed from the command
+    /// line one item at a time.
+    pub(crate) fn list_item_type(
+        &self,
+        typespace: &typespace::Typespace<TypeId>,
+    ) -> Option<TypeId> {
+        let OperationParameterType::Type(type_id) = self else {
+            return None;
+        };
+        match typespace.get_type(type_id).details() {
+            typespace::view::TypeDetails::Vec(item) | typespace::view::TypeDetails::Set(item) => {
+                Some(item)
+            }
+            _ => None,
+        }
+    }
+}
+
 #[derive(Debug, PartialEq, Eq)]
 pub enum OperationParameterKind {
     Path,
@@ -802,19 +822,22 @@ impl Generator {
                 OperationParameterKind::Header(required) => {
                     let hn = &param.api_name;
                     let hn_ident = format_ident!("{}", &param.name);
+                    let is_list = param.typ.list_item_type(self.typespace()).is_some();
                     let res = if *required {
+                        let value = header_value_string(quote! { #hn_ident }, is_list);
                         quote! {
                             header_map.append(
                                 #hn,
-                                #hn_ident.to_string().try_into()?
+                                #value.try_into()?
                             );
                         }
                     } else {
+                        let value = header_value_string(quote! { value }, is_list);
                         quote! {
                             if let Some(value) = #hn_ident {
                                 header_map.append(
                                     #hn,
-                                    value.to_string().try_into()?
+                                    #value.try_into()?
                                 );
                             }
                         }
@@ -2137,6 +2160,25 @@ impl Construction {
             typ,
             kind: OperationParameterKind::Body(content_type),
         }))
+    }
+}
+
+/// The string a header parameter is sent as. OpenAPI 3.0.3 gives header
+/// parameters only the simple style, which joins the items of an array with
+/// commas, so `["a", "b"]` is sent as `a,b`. Each item is converted with a
+/// method call, as a scalar header is, so an item type that only derefs to
+/// `String` works too.
+pub(crate) fn header_value_string(value: TokenStream, is_list: bool) -> TokenStream {
+    if is_list {
+        quote! {
+            #value
+                .iter()
+                .map(|v| v.to_string())
+                .collect::<::std::vec::Vec<_>>()
+                .join(",")
+        }
+    } else {
+        quote! { #value.to_string() }
     }
 }
 

@@ -445,24 +445,56 @@ impl Generator {
             // There should be no conflicting path or query parameters.
             assert!(!args.has_arg(&arg_name));
 
-            let parser = clap_arg(&arg_name, volitionality, &param.description, &arg_type);
+            // An array parameter is a flag that may be repeated, with each
+            // occurrence parsed as one item.
+            let item_type = param
+                .typ
+                .list_item_type(typespace)
+                .map(|item_type_id| typespace.get_type(&item_type_id));
+
+            let parser = match &item_type {
+                Some(item_type) => clap_arg(
+                    &arg_name,
+                    volitionality,
+                    &param.description,
+                    item_type,
+                    true,
+                ),
+                None => clap_arg(
+                    &arg_name,
+                    volitionality,
+                    &param.description,
+                    &arg_type,
+                    false,
+                ),
+            };
 
             let arg_fn_name = sanitize(&param.name, Case::Snake);
             let arg_fn = format_ident!("{}", arg_fn_name);
-            let OperationParameterType::Type(arg_type_id) = &param.typ else {
-                panic!()
-            };
-            let arg_type = typespace.get_type(arg_type_id);
             let arg_type_name = arg_type.ident_in(crate::TYPES_MOD);
 
-            let consumer = quote! {
-                if let Some(value) =
-                    matches.get_one::<#arg_type_name>(#arg_name)
-                {
-                    // clone here in case the arg type doesn't impl
-                    // From<&T>
-                    request = request.#arg_fn(value.clone());
+            let consumer = match &item_type {
+                Some(item_type) => {
+                    let item_type_name = item_type.ident_in(crate::TYPES_MOD);
+                    quote! {
+                        if let Some(values) =
+                            matches.get_many::<#item_type_name>(#arg_name)
+                        {
+                            request = request.#arg_fn(
+                                values.cloned().collect::<#arg_type_name>()
+                            );
+                        }
+                    }
                 }
+                None => quote! {
+                    if let Some(value) =
+                        matches.get_one::<#arg_type_name>(#arg_name)
+                    {
+                        // clone here in case the arg type doesn't impl
+                        // From<&T>
+                        request = request.#arg_fn(value.clone());
+                    }
+                },
             };
 
             args.add_arg(arg_name, CliArg { parser, consumer })
@@ -625,6 +657,7 @@ impl Generator {
                 volitionality,
                 &description.map(str::to_string),
                 &prop_type,
+                false,
             );
 
             let prop_fn = format_ident!("{}", sanitize(name, Case::Snake));
@@ -666,12 +699,20 @@ enum Volitionality {
     RequiredIfNoBody,
 }
 
+/// Build the clap argument for a flag. With `multiple`, `arg_type` is the item
+/// type and the flag may be repeated, once per item.
 fn clap_arg(
     arg_name: &str,
     volitionality: Volitionality,
     description: &Option<String>,
     arg_type: &typify::typespace::view::Type<'_, TypeId>,
+    multiple: bool,
 ) -> TokenStream {
+    let action = multiple.then(|| {
+        quote! {
+            .action(::clap::ArgAction::Append)
+        }
+    });
     let help = description.as_ref().map(|description| {
         quote! {
             .help(#description)
@@ -733,6 +774,7 @@ fn clap_arg(
         ::clap::Arg::new(#arg_name)
             .long(#arg_name)
             .value_parser(#value_parser)
+            #action
             #required
             #help
     }
